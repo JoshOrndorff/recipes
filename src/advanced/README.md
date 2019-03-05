@@ -1,7 +1,12 @@
 # Advanced Substrate Patterns
 > Rust patterns with external components
 
-*To Do*
+*To Do* 
+* merge with `Misc`
+* add something similar to `Gotham`'s opinionated tutorial on the path someone should take when building with Substrate (`event` declarations in the context of `business logic` this time?)
+* add (patterns) from below
+
+(Patterns)
 * Storage/IPFS
 * asynchronous patterns with event emittance...
 * [use this to go over declaring a module caveats](https://hackmd.io/5DwOW4qLScicUkBYtnO5uQ?view)
@@ -19,7 +24,7 @@
 * [Rust State Machine Patterns 10/12/2016 by Hoverbear](https://hoverbear.org/2016/10/12/rust-state-machine-pattern/)
 *  For creating type-safe `Future`s from state machines: [fitzgen/state_machine_future](https://github.com/fitzgen/state_machine_future)
 
-```
+```rust
 trait SharedFunctionality {
     fn get_shared_value(&self) -> usize;
 }

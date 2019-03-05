@@ -2,7 +2,7 @@
 
 A simple adding machine which checks for overflow and emits an event with the result, without using storage.
 
-First, modify `lib.rs`. Add `type Event = Event;` to the trait implementation and add `Event` to `construct_runtime!()
+First, modify `lib.rs`. Add `type Event = Event;` to the trait implementation and add `Event` to `construct_runtime!()`
 
 ```rust
 impl runtime_example::Trait for Runtime {
@@ -14,7 +14,7 @@ RuntimeExample: runtime_example::{Module, Call, Event},
 ...
 ```
 
-In the module file,
+In the module
 
 ```rust
 use srml_support::dispatch::Result;

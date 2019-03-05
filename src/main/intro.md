@@ -1,7 +1,10 @@
-# Summary
+# Preppin' the Kitchen
+> *Table of Contents*
 
-[Background Information](./main/start.md)
-- [Table of Contents](./main/intro.md)
+Jump around as much as you want; this book is not designed to be read in chronological order...
+
+[Appetizer](./main/start.md)
+- [*You are Here*](./main/intro.md)
     - [Setting Up Substrate](./main/setup.md)
     - [Key Ingedients](./main/macro.md)
 - [Storage](./storage/README.md)
@@ -11,7 +14,7 @@
     - [Higher Order Arrays](./storage/arrays.md)
     - [List](./storage/list.md)
     - [String](./storage/string.md)
-- [Event](./event/README.md)
+- [Events](./event/README.md)
     - [Adding Machine](./event/adder.md)
     - [Permissioned Function with Generic Event](./permissioned.md)
 - [Security](./security/README.md)
