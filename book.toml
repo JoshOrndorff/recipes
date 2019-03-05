@@ -3,4 +3,4 @@ authors = ["Amar Singh"]
 multilingual = false
 src = "src"
 title = "Substrate Cookbook"
-description = "Recipes for building with Substrate"
+description = "Recipes for cookin' with Substrate"

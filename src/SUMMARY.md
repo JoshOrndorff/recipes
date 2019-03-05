@@ -16,4 +16,4 @@
 - [Advanced Patterns](./advanced/README.md)
 - [MISC (TO ORGANIZE!)](./misc/README.md)
     - [Type Stuff](./misc/type.md)
-- [More Resources](./old/library.md)
+- [Dessert](./old/library.md)

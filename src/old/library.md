@@ -1,27 +1,28 @@
-# Substrate Builders Library
-> open source projects building on Substrate
+# Dessert
 
-## Privacy
+* [Conference Talks, Panels, and Podcasts](#listen)
+* [Articles, Essays, and Papers](#read)
+* [Code, Code, and More Code](#code)
+    * [Open Source Substrate Projects](#project)
+
+## Videos and Podcasts <a name = "listen"><a>
+
+> use the thing I prepared internally for Parity
+
+## Writing <a name = "read"><a>
+
+> this is great because I'm going to be able to write stuff and place it at the top of this queue...shill my own work
+
+## Code <a name = "code"><a>
+
+* just use my stars and the resources I've already found
+
+### Substrate Open Source Projects <a name = "project"><a>
+> get that map here
 
 * LayerX/zero-chain
-
-## Smart Contract Platforms
-
 * Edgeware
-
-## Governance
-
 * Radical Markets
 * Aragon
 
-## Integration
-
-* IPFS
-* Bridges
-* Libp2p
-
-## Parity-Samples
-> [Parity-Samples]()
-
-* [Cryptokitties Collectables](https://shawntabrizi.github.io/substrate-collectables-workshop)
-* [Token Curated Registry](https://github.com/parity-samples/substrate-tcr)
+### Polkadot
