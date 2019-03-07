@@ -16,9 +16,9 @@
     - [Permissioned Function with Generic Event](./event/permissioned.md)
 - [Module Menu](./module/README.md)
     - [`fees`](./module/fees.md)
+- [Dessert](./main/library.md)
 <!-- - [Safety and Security](./security/README.md)
     - [Verify First, Write Last](./security/declarative.md)
 - [Advanced Patterns](./advanced/README.md)
     - [still organizing](./misc/README.md)
     - [Type Stuff](./misc/type.md) -->
-- [Dessert](./main/library.md)

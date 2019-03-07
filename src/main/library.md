@@ -62,7 +62,7 @@
 * [`paritytech/wasm-utils`](https://github.com/paritytech/wasm-utils)
 
 ## Cryptography (/Privacy) <a name = "crypto"></a>
-* [`LayerXcom/bellman-substrate`]((https://github.com/LayerXcom/bellman-substrate) - A library for supporting zk-SNARKs to Substrate
+* [`LayerXcom/bellman-substrate`](https://github.com/LayerXcom/bellman-substrate) - A library for supporting zk-SNARKs to Substrate
 * [`LayerXcom/zero-chain`](https://github.com/LayerXcom/zero-chain)  - A privacy-oriented blockchain on Substrate
 * [`paritytech/substrate-bip39`](https://github.com/paritytech/substrate-bip39)  - deriving secret keys for Ristretto compressed Ed25519 (should be compatible with Ed25519 at this time) from BIP39 phrases
 * [`paritytech/schnorrkel-js`](https://github.com/paritytech/schnorrkel-js) - a Javascript wrapper for schnorrkel signatures on Ristretto using WebAssembly.
