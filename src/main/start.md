@@ -4,20 +4,21 @@
 
 The Substrate Cookbook is a collection of simple examples and code patterns that demonstrate good practices when building with **[Substrate](https://github.com/paritytech/substrate)** and the **[Substrate Runtime Module Library](https://github.com/paritytech/substrate/tree/master/srml) (SRML)**. 
 
-Both additions (in the form of pull requests) and requests (in the form of issues) are welcome. If you wish to contribute, see the [GitHub repository]().
+Both additions (pull requests) and requests (issues) are welcome. If you wish to contribute, see the [GitHub repository](https://github.com/AmarRSingh/SubstrateCookbook).
+<!-- TODO: fix `.travis.yml`; add contribution guidelines in `CONTRIBUTING.md` -->
 
-<!-- Accepting Contributions (requires not storing permissions in the `.travis.yml`) -->
+## Substrate Resources
 
-If you're looking for a list of Substrate-related code repos, start with [Dessert](./library.md).
+To learn more about Substrate please go to the [official documentation](https://docs.substrate.dev/docs/what-is-substrate). If you're looking for a list of Substrate-related code repos, start with [Dessert](./library.md).
 
-> *It is highly recommended to follow the Substrate [Cryptokitties Collectables Workshop](https://shawntabrizi.github.io/substrate-collectables-workshop/) and [TCR tutorial](https://github.com/parity-samples/substrate-tcr) to see these code patterns in action!*
+**New to Substrate?** Check out the blog posts: [What is Substrate?](https://www.parity.io/what-is-substrate/), [Substrate in a nutshell](https://www.parity.io/substrate-in-a-nutshell/).
 
-To learn more about Substrate please go to the [official documentation](https://docs.substrate.dev/docs/what-is-substrate).
+## Thanks
 
-**If you're new to Substrate, check out the blog posts: [What is Substrate?](https://www.parity.io/what-is-substrate/), [Substrate in a nutshell](https://www.parity.io/substrate-in-a-nutshell/).**
+Thanks to the following for suggestions and content contribution: ltfschoen, shawntabrizi and gautamdhameja
 
+## License
 
-
-> None of the code included in this book has been formally audited -- copy/paste at your own risk!  [WTFP](http://www.wtfpl.net/)
+This work is licensed under both the [Creative Commons Share Attribution-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by-sa/4.0/) and the [MIT License](https://opensource.org/licenses/MIT).
 
 **Happy Coding :)**
