@@ -1,5 +1,4 @@
 # Dessert
-> code, code and more code!
 
 * [Substrate](#substr8)
 * [Tutorials](#tutorials)
@@ -22,7 +21,7 @@
 * [`paritytech/rhododendron`](https://github.com/paritytech/rhododendron) - Asynchronously safe BFT consensus, implementation in Rust
 
 ## Tutorials <a name = "tutorials"></a>
-> [parity-samples]()
+> [parity-samples](https://github.com/parity-samples)
 
 * [`shawntabrizi/substrate-collectables-workshop`](https://github.com/shawntabrizi/substrate-collectables-workshop) - A guided tutorial for building a collectable dApp chain on Parity Substrate
 * [`parity-samples/substrate-tcr`](https://github.com/parity-samples/substrate-tcr) - A Parity Substrate runtime implementation of a simple Token Curated Registry (TCR)

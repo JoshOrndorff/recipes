@@ -1,13 +1,16 @@
 # Key Ingredients
-> consider branching into multiple other files
 
-## Structure
+To develop efficiently with Substrate, it is important to be familiar with the basic structure of application development.
 
-Go through all the parts of [this](https://github.com/paritytech/substrate/blob/HEAD/srml/example/src/lib.rs) and discuss the comments basically...
+> follow the example file [here](https://github.com/paritytech/substrate/blob/HEAD/srml/example/src/lib.rs)
 
-Break down the structure of the file...
+Really consider how to present
+* macros
+* traits
+* common modules
+* link to specific functionality (including code patterns)
 
-## Macros
+## Important Macros
 > could split into two other files (under the Key Ingredients heading (double nested chapter))
 
 * short definition of a macro; from` `0 to 1`
