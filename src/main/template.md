@@ -1,14 +1,21 @@
 # Key Ingredients
+>  ASSUME NO BACKGROUND KNOWLEDGE HERE AND THEN PRESENT THE `EXAMPLE` CODE
 
 To develop efficiently with Substrate, it is important to be familiar with the basic structure of application development.
 
 > follow the example file [here](https://github.com/paritytech/substrate/blob/HEAD/srml/example/src/lib.rs)
+
+> Go through
 
 Really consider how to present
 * macros
 * traits
 * common modules
 * link to specific functionality (including code patterns)
+
+> I want to present the links to the Rust-related concepts -- discuss what I consider to be assumed knowledge.
+
+> put the Substrate book
 
 ## Important Macros
 > could split into two other files (under the Key Ingredients heading (double nested chapter))
