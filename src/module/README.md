@@ -1,7 +1,11 @@
 # Module Menu
 
-The Substrate Runtime Module Library is a modular and extensible toolkit that is useful for building blockchains with Substrate and Polkadot.
+The [Substrate Runtime Module Library (SRML)](https://github.com/paritytech/substrate/tree/master/srml) is a modular and extensible toolkit for building blockchains with Substrate and Polkadot. This section provides examples to leverage and extend the functionalities provided in the SRML.
 
-> analyze the modules at a high level (this is an open issue; provide a graph of interactions)
+For ease of mental organization, the Substrate Cookbook presents the SRML in the context of 4 categories:
+* **[System](./system/README.md)** - {[`system`](https://github.com/paritytech/substrate/tree/master/srml/system), [`support`](https://github.com/paritytech/substrate/tree/master/srml/support), [`executive`](https://github.com/paritytech/substrate/tree/master/srml/executive), [`indices`](https://github.com/paritytech/substrate/tree/master/srml/indices), [`timestamp`](https://github.com/paritytech/substrate/tree/master/srml/timestamp)}
+* **[Governance](./governance/README.md)** - {[`council`](https://github.com/paritytech/substrate/tree/master/srml/council), [`democracy`](https://github.com/paritytech/substrate/tree/master/srml/democracy), [`sudo`](https://github.com/paritytech/substrate/tree/master/srml/sudo), [`upgrade-key`](https://github.com/paritytech/substrate/tree/master/srml/upgrade-key), [`session`](https://github.com/paritytech/substrate/tree/master/srml/session)}
+* **[Consensus](./consensus/README.md)** - {[`contract`](https://github.com/paritytech/substrate/tree/master/srml/contract), [`consensus`](https://github.com/paritytech/substrate/tree/master/srml/consensus), [`aura`](https://github.com/paritytech/substrate/tree/master/srml/aura), [`rhododendron`](https://github.com/paritytech/rhododendron), [`grandpa`](https://github.com/paritytech/substrate/tree/master/srml/grandpa), [`finality-tracker`](https://github.com/paritytech/substrate/tree/master/srml/finality-tracker)}
+* **[Economics](./system/README.md)** - {[`assets`](https://github.com/paritytech/substrate/tree/master/srml/assets), [`balances`](https://github.com/paritytech/substrate/tree/master/srml/balances), [`fees`](https://github.com/paritytech/substrate/tree/master/srml/fees), [`staking`](https://github.com/paritytech/substrate/tree/master/srml/staking), [`treasury`](https://github.com/paritytech/substrate/tree/master/srml/treasury)}
 
-> [Luke's Notes](https://hackmd.io/nr6kPD2sR4urmljtvHs0CQ?view#Session-Module)
+**Note**: Most modules defy this strict taxonomy and cross-category interaction is very common. Likewise, future SRML development is not confined to this categorization!

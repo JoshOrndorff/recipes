@@ -1,5 +1,3 @@
-> As modern protocol development explores informal tradeoffs and enables increased flexibility, developers must reassess how to optimize blockchain interaction based on their application's requirements.
-
 Today's DApp developers are forced to accept the tradeoffs made by existing blockchains. In many cases, the design choices made by general purpose platforms place constraints on DApp implementations. With only a few options, many developers struggle to align the specific privacy, security, scalability, and governance requirements of their DApp with existing protocols.
 
 Deploying a DApp on a **public smart contract platform** provides security through network effects, but often sacrifices privacy as well as scalability. When a DApp like [Cryptokitties experiences heightened demand](https://media.consensys.net/the-inside-story-of-the-cryptokitties-congestion-crisis-499b35d119cc), state bloat can render interaction prohibitively expensive for all other contracts deployed on-chain.
@@ -10,7 +8,7 @@ To uphold privacy and delegate trust to a closed participant set, developers can
 
 For all applications built on blockchains, upgradability remains an ongoing concern. As development in the space continues at an increasingly rapid pace, it is wishful thinking to pretend that DApp deployments will be static.
 
-> While [proxy contract patterns](https://blog.zeppelinos.org/proxy-patterns/) provide a workaround for smart contract upgrades, they circumvent the problem at hand by launching new contracts and updating the proxy accordingly. This approach is unwieldy and only works in the absence of a sustainable model for [managing state bloat](https://www.ethnews.com/to-alleviate-ethereum-state-bloat-developers-consider-charging-rent).  
+While [proxy contract patterns](https://blog.zeppelinos.org/proxy-patterns/) provide a workaround for smart contract upgrades, they circumvent the problem at hand by launching new contracts and updating the proxy accordingly. This approach is unwieldy and only works in the absence of a sustainable model for [managing state bloat](https://www.ethnews.com/to-alleviate-ethereum-state-bloat-developers-consider-charging-rent).  
 
 ## Iterate with Substrate
 
@@ -44,7 +42,7 @@ Additionally, public smart contract blockchains foster [rich composability](http
 
 Even so, developers that use Substrate to scale to production must remain aware of the delicate balance between *resources used* and *price paid*. [Any resource used by a transaction (extrinsic) must be explicitly paid for within the module](LINKTOGUIDE). Although this can add complexity to the in-module fee structure, it is a necessary cost for alleviating state bloat and safeguarding against economic attacks.
 
-In the Substrate Cookbook, we'll review best practices for development with Substrate. For more resources, check out the [Substrate on Github](https://github.com/paritytech/substrate/), the [official documentation](https://substrate.readme.io/docs/what-is-substrate), and [examples prepared by the Parity-Samples team](https://github.com/parity-samples).
+In the Substrate Cookbook, we'll review best practices for development with Substrate. For more resources, check out [Substrate on Github](https://github.com/paritytech/substrate/), the [official documentation](https://substrate.readme.io/docs/what-is-substrate), and [examples prepared by the Parity-Samples team](https://github.com/parity-samples).
 
 ### Great Videos to Get Started
 * [Web3 Summit: Spin Up Your Own Blockchain with Substrate in Less Than 30 minutes](https://www.youtube.com/watch?v=0IoUZdDi5Is&feature=youtu.be&t=)
