@@ -12,7 +12,6 @@ Likewise, economic security requires a robust in-module fee structure. The best 
 > This style of programming is also known as [Declarative Smart Contracts](https://www.tokendaily.co/blog/declarative-smart-contracts) and [Condition-Oriented Programming (COP)](https://www.parity.io/condition-oriented-programming/).
 
 Economic security audits will start with a review of the implementation of the traits in this module, thereby necessitating close attention to its logic. After going through the code, we'll discuss patterns for use in other modules.
-
 ## Module Logic <a name = "annot8"></a>
 
 Let's start with storage. The module requires implementations of the module's Trait to specify a `transaction_base_fee` and `transaction_byte_fee` upon configuration.

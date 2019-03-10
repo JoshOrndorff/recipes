@@ -1,6 +1,7 @@
 # Summary
 
 - [Introduction](./main/start.md)
+- [Motivation](./main/motivation.md)
 - [Setting Up Substrate](./main/setup.md)
     - [Polkadot UI](./main/ui.md)
     - [Key Ingedients](./main/template.md)
@@ -17,7 +18,7 @@
     - [Permissioned Function with Generic Event](./event/permissioned.md)
 - [Module Menu](./module/README.md)
     - [fees](./module/fees.md)
-- [Dessert](./main/library.md)
+- [Open Source Dessert](./main/library.md)
 <!-- - [Safety and Security](./security/README.md)
     - [Verify First, Write Last](./security/declarative.md)
 - [Advanced Patterns](./advanced/README.md)
