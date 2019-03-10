@@ -27,7 +27,7 @@ Modify the `construct_runtime!()` macro to include `RuntimeExample` at the end:
 ```rust
 /// lib.rs
 construct_runtime!(
-	pumodify the `construct_runtime!()` macro to include `RuntimeExample` at the end:b enum Runtime with Log(InternalLog: DigestItem<Hash, Ed25519AuthorityId>) where
+	pub enum Runtime with Log(InternalLog: DigestItem<Hash, Ed25519AuthorityId>) where
 		Block = Block,
 		NodeBlock = opaque::Block,
 		UncheckedExtrinsic = UncheckedExtrinsic

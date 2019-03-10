@@ -8,9 +8,9 @@ To declare an event, use the [`decl_event`](https://github.com/paritytech/substr
 
 ## Recipes <a name ="recipes"></a>
 
-* [Dummy Event](./event/basic.md)
-* [Adding Machine](./event/adder.md)
-* [Permissioned Generic Event](./event/permissioned.md)
+* [Dummy Event](./basic.md)
+* [Adding Machine](./adder.md)
+* [Permissioned Generic Event](./permissioned.md)
 
 ## Examples in the <a href="https://github.com/paritytech/substrate/tree/master/srml">SRML Source Code</a>
 

@@ -1,16 +1,16 @@
-# Dessert
+# Dessert 🍫  
 
-* [Substrate](#substr8)
-* [Tutorials](#tutorials)
-* [User Interface](#ui)
-* [Off-Chain Interaction](#offchain)
-* [Polkadot](#polkadot)
-* [Smart Contracts](#contracts)
-* [WASM](#wasm)
-* [Cryptography (/Privacy)](#crypto)
-* [More Open Source Projects](#oss)
+* [Substrate 🍩](#substr8)
+* [Tutorials 🍮](#tutorials)
+* [User Interface 🍦](#ui)
+* [Off-Chain Interaction 🍨](#offchain)
+* [Polkadot 🎂](#polkadot)
+* [Smart Contracts 🍬](#contracts)
+* [WASM 🍭](#wasm)
+* [Cryptography 🍰](#crypto)
+* [More Open Source Projects 🍪](#oss)
 
-## Substrate <a name = "substr8"><a>
+## Substrate 🍩 <a name = "substr8"><a>
 
 **Set Up**
 * [`paritytech/substrate-up`](https://github.com/paritytech/substrate-up) - Scripts for working with new Substrate projects
@@ -20,7 +20,7 @@
 * [`paritytech/finality-grandpa`](https://github.com/paritytech/finality-grandpa) - finality gadget for blockchains using common prefix agreement
 * [`paritytech/rhododendron`](https://github.com/paritytech/rhododendron) - Asynchronously safe BFT consensus, implementation in Rust
 
-## Tutorials <a name = "tutorials"></a>
+## Tutorials 🍮 <a name = "tutorials"></a>
 > [parity-samples](https://github.com/parity-samples)
 
 * [`shawntabrizi/substrate-collectables-workshop`](https://github.com/shawntabrizi/substrate-collectables-workshop) - A guided tutorial for building a collectable dApp chain on Parity Substrate
@@ -28,29 +28,29 @@
 * [`parity-samples/substrate-tcr-ui`](https://github.com/parity-samples/substrate-tcr-ui) - A react.js frontend for Substrate TCR runtime
 * [`shawntabrizi/substrate-package`](https://github.com/shawntabrizi/substrate-package) - A stable package of the substrate-node-template and substrate-ui
 
-## User Interaction <a name = "ui"></a>
+## User Interface 🍦 <a name = "ui"></a>
 
 * [`paritytech/oo7`](https://github.com/paritytech/oo7) - The Bonds framework along with associated modules
 * [`paritytech/substrate-light-ui`](https://github.com/paritytech/substrate-light-ui) - User interface optimized for the Substrate light client
 * [`paritytech/apps`](https://github.com/paritytech/apps) - Basic Polkadot/Substrate UI for interacting with a node
 * [`paritytech/substrate-ui`](https://github.com/paritytech/substrate-ui) - Bondy Polkadot UI
 
-## Off-Chain Interaction <a name = "offchain"></a>
+## Off-Chain Interaction  🍨 <a name = "offchain"></a>
 * [`PACTCare/starlog`](https://github.com/PACTCare/Starlog) - Starlog: IPFS Metadata Blockchain based on Substrate
 * [`parity-samples/substrate-events-listener`](https://github.com/parity-samples/substrate-events-listener) - Dockerized websocket listener for substrate events; also writes filtered event data to configured storage
 * [`parity-samples/substrate-proof-of-existence`](https://github.com/parity-samples/substrate-proof-of-existence) - Proof of Existence Blockchain built on Parity's Substrate
 
-## Polkadot <a name = "polkadot"></a>
+## Polkadot 🎂 <a name = "polkadot"></a>
 * [`paritytech/cumulus`](https://github.com/paritytech/cumulus) - Write Parachains on Substrate
 * [`paritytech/polkadot`](https://github.com/paritytech/polkadot) - Polkadot Node Implementation
 * [`paritytech/substrate-telemetry`](https://github.com/paritytech/substrate-telemetry) - Polkadot telemetry service
 
-## Smart Contracts <a name = "contracts"></a>
+## Smart Contracts 🍬 <a name = "contracts"></a>
 * [`hicommonwealth/edgeware-node`](https://github.com/hicommonwealth/edgeware-node) - Substrate node implementing all our edgeware features
 * [`paritytech/fleetwood`](https://github.com/paritytech/fleetwood) - Testbed repo for trying out ideas of what a smart contract API in Rust would look like
 * [`parity-samples/substrate-erc721`](https://github.com/parity-samples/substrate-erc721) - An implementation of ERC721 built on Parity Substrate
 
-## WebAssembly <a name = "wasm"></a>
+## WebAssembly 🍭<a name = "wasm"></a>
 * [`paritytech/wasmi`](https://github.com/paritytech/wasmi) - Wasm interpreter in Rust https://paritytech.github.io/wasmi/
 * [`paritytech/pwasm-token-example`](https://github.com/paritytech/pwasm-token-example) - A simple ERC-20 compatible token contract written in Rust compiled into WebAssembly
 * [`paritytech/pwasm-tutorial`](https://github.com/paritytech/pwasm-tutorial) - A step-by-step tutorial on how to write contracts in Wasm for Kovan
@@ -61,13 +61,13 @@
 * [`paritytech/pwasm-ethereum`](https://github.com/paritytech/pwasm-ethereum)
 * [`paritytech/wasm-utils`](https://github.com/paritytech/wasm-utils)
 
-## Cryptography (/Privacy) <a name = "crypto"></a>
+## Cryptography 🍰 <a name = "crypto"></a>
 * [`LayerXcom/bellman-substrate`](https://github.com/LayerXcom/bellman-substrate) - A library for supporting zk-SNARKs to Substrate
 * [`LayerXcom/zero-chain`](https://github.com/LayerXcom/zero-chain)  - A privacy-oriented blockchain on Substrate
 * [`paritytech/substrate-bip39`](https://github.com/paritytech/substrate-bip39)  - deriving secret keys for Ristretto compressed Ed25519 (should be compatible with Ed25519 at this time) from BIP39 phrases
 * [`paritytech/schnorrkel-js`](https://github.com/paritytech/schnorrkel-js) - a Javascript wrapper for schnorrkel signatures on Ristretto using WebAssembly.
 
-## More Open Source Projects <a name = "oss"></a>
+## More Open Source Projects 🍪 <a name = "oss"></a>
 
 **Decentralized Asset Management**
 *  [`chainx-org/ChainX`](https://github.com/chainx-org/ChainX) - Fully Decentralized Cross-chain Crypto Asset Management on Polkadot [chainx](https://chainx.org), [development notes](https://hackmd.io/p_v1M8WGRyy9PggYiKA_Xw#)

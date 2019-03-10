@@ -1,4 +1,4 @@
-Today's DApp developers are forced to accept the tradeoffs made by existing blockchains. In many cases, the design choices made by general purpose platforms place constraints on DApp implementations. With only a few options, many developers struggle to align the specific privacy, security, scalability, and governance requirements of their DApp with existing protocols.
+Today's DApp developers are forced to accept the tradeoffs made by existing blockchains. With only a few options, devs struggle to align the specific privacy, security, scalability, and governance requirements of their DApp with existing protocols.
 
 Deploying a DApp on a **public smart contract platform** provides security through network effects, but often sacrifices privacy as well as scalability. When a DApp like [Cryptokitties experiences heightened demand](https://media.consensys.net/the-inside-story-of-the-cryptokitties-congestion-crisis-499b35d119cc), state bloat can render interaction prohibitively expensive for all other contracts deployed on-chain.
 
