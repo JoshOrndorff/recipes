@@ -12,9 +12,9 @@ While [proxy contract patterns](https://blog.zeppelinos.org/proxy-patterns/) pro
 
 ## Iterate with Substrate
 
-**[Substrate](https://www.parity.io/what-is-substrate/)** provides DApp developers with a toolbox to implement a custom blockchain catered to the specific requirements of their application. By leveraging the Substrate Runtime Module Library ([SRML](https://github.com/paritytech/substrate)), developers can selectively choose the features that are useful for their application. 
+**[Substrate](https://www.parity.io/what-is-substrate/)** provides DApp developers with a toolbox to implement a custom blockchain catered to the specific requirements of their application. By leveraging the Substrate Runtime Module Library ([SRML](https://github.com/paritytech/substrate/tree/master/srml)), developers can selectively choose the features that are useful for their application. 
 
-In this way, Substrate empowers developers with increased flexibility without forcing them to build everything from the ground up. Substrate comes fully stocked with cryptographic primitives, [light client functionality](https://www.parity.io/what-is-a-light-client/), [networking support](https://www.parity.io/why-libp2p/), and modern consensus algorithms (as well as [tons of other cool stuff](https://www.parity.io/what-is-substrate/)). 
+In this way, Substrate empowers developers with increased flexibility without forcing them to build everything from the ground up. Substrate comes fully stocked with cryptographic primitives, [light client functionality](https://www.parity.io/what-is-a-light-client/), [networking support](https://www.parity.io/why-libp2p/), and modern consensus algorithms (as well as [tons of other cool stuff](https://www.parity.io/substrate-in-a-nutshell/)). 
 
 ### Our Chain, Our Rules
 Developers who build DAppchains with Substrate determine their own tradeoffs.

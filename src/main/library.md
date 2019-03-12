@@ -27,6 +27,7 @@
 * [`parity-samples/substrate-tcr`](https://github.com/parity-samples/substrate-tcr) - A Parity Substrate runtime implementation of a simple Token Curated Registry (TCR)
 * [`parity-samples/substrate-tcr-ui`](https://github.com/parity-samples/substrate-tcr-ui) - A react.js frontend for Substrate TCR runtime
 * [`shawntabrizi/substrate-package`](https://github.com/shawntabrizi/substrate-package) - A stable package of the substrate-node-template and substrate-ui
+* [`lsaether/sr-bonded-token`](https://github.com/lsaether/sr-bonded-token/blob/master/Tutorial.md) - Token Bonding Curve tutorial with Substrate
 
 ## User Interface 🍦 <a name = "ui"></a>
 
@@ -77,6 +78,9 @@
 
 **Identity Registration and Verification**
 * [`hicommonwealth/edge-identity`](https://github.com/hicommonwealth/edge-identity) - Identity registration and verification for substrate chains
+
+**Token Economics**
+* [`isaether/sr-bonded-curve](https://github.com/lsaether/sr-bonded-token)
 
 **Robotics**
 * [`airalab/substrate-node-robonomics`](https://github.com/airalab/substrate-node-robonomics) - Substrate Node for Robonomics network [telemetry](https://telemetry.polkadot.io/#/Robonomics)

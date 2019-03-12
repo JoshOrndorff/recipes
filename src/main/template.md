@@ -1,5 +1,4 @@
 # Key Ingredients
->  ASSUME NO BACKGROUND KNOWLEDGE HERE AND THEN PRESENT THE `EXAMPLE` CODE
 
 To develop efficiently with Substrate, it is important to be familiar with the basic structure of application development.
 

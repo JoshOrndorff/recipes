@@ -48,7 +48,7 @@ Finally, you need to create a new file called `runtime_example.rs` in the same f
 
 ## Updating Your Runtime
 
-You can paste any of the runtime samples below into that `runtime_examples.rs` file and compile the new runtime binaries with:
+You can paste runtime samples from this Cookbook into the `runtime_examples.rs` file and compile the new runtime binaries with:
 
 ```bash
 cd substrate-example

@@ -4,6 +4,7 @@
 - [Motivation](./main/motivation.md)
 - [Setting Up Substrate](./main/setup.md)
     - [Polkadot UI](./main/ui.md)
+    - [Minimal Configuration](./main/chainspec.md)
     - [Key Ingedients](./main/template.md)
 - [Storage Recipes](./storage/README.md)
     - [Single Value](./storage/value.md)
