@@ -20,15 +20,9 @@ Generally speaking, you may store arbitrary data, as long as its data type is se
 * [`List`](./list.md)
 * [`String`](./string.md)
 
-*Off-Chain Storage Patterms*
-* `TODO`: caching, database interaction, etc.
+<!-- *Off-Chain Storage Patterms*
+* `TODO`: caching, database interaction, etc. -->
 
-## Examples in the <a href="https://github.com/paritytech/substrate/tree/master/srml">SRML Source Code</a>
+## More Docs
 
-* [SRML EXAMPLES HERE](https://wiki.parity.io/decl_storage)
-
-### TODO
-
-* clean up existing examples and format in a coherent way
-* off-chain patterns for storage and database interaction
-* include page on the srml examples of `decl_storage` (reference relevant patterns)
+* [Wiki Documentation for the SRML Source Code](https://wiki.parity.io/decl_storage)
