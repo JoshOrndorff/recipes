@@ -11,6 +11,7 @@
 * [More Open Source Projects 🍪](#oss)
 
 ## Substrate 🍩 <a name = "substr8"><a>
+[`nczhu/awesome-substrate`](https://github.com/nczhu/awesome-substrate)
 
 **Set Up**
 * [`paritytech/substrate-up`](https://github.com/paritytech/substrate-up) - Scripts for working with new Substrate projects
@@ -21,13 +22,15 @@
 * [`paritytech/rhododendron`](https://github.com/paritytech/rhododendron) - Asynchronously safe BFT consensus, implementation in Rust
 
 ## Tutorials 🍮 <a name = "tutorials"></a>
-> [parity-samples](https://github.com/parity-samples)
+[parity-samples](https://github.com/parity-samples)
 
 * [`shawntabrizi/substrate-collectables-workshop`](https://github.com/shawntabrizi/substrate-collectables-workshop) - A guided tutorial for building a collectable dApp chain on Parity Substrate
 * [`parity-samples/substrate-tcr`](https://github.com/parity-samples/substrate-tcr) - A Parity Substrate runtime implementation of a simple Token Curated Registry (TCR)
 * [`parity-samples/substrate-tcr-ui`](https://github.com/parity-samples/substrate-tcr-ui) - A react.js frontend for Substrate TCR runtime
 * [`shawntabrizi/substrate-package`](https://github.com/shawntabrizi/substrate-package) - A stable package of the substrate-node-template and substrate-ui
 * [`lsaether/sr-bonded-token`](https://github.com/lsaether/sr-bonded-token/blob/master/Tutorial.md) - Token Bonding Curve tutorial with Substrate
+* [`yjkimjunior/ParkingSpaceSubstrate`](https://github.com/yjkimjunior/ParkingSpaceSubstrate)
+* [`osuketh/apple-store-substrate`](https://github.com/osuketh/apple-store-substrate)
 
 ## User Interface 🍦 <a name = "ui"></a>
 
@@ -63,6 +66,8 @@
 * [`paritytech/wasm-utils`](https://github.com/paritytech/wasm-utils)
 
 ## Cryptography 🍰 <a name = "crypto"></a>
+* [`mixbytes/substrate-module-multisig`](https://github.com/mixbytes/substrate-module-multisig)
+* [`filiplazovic/substrate-merkle-tree`](https://github.com/filiplazovic/substrate-merkle-tree)
 * [`LayerXcom/bellman-substrate`](https://github.com/LayerXcom/bellman-substrate) - A library for supporting zk-SNARKs to Substrate
 * [`LayerXcom/zero-chain`](https://github.com/LayerXcom/zero-chain)  - A privacy-oriented blockchain on Substrate
 * [`paritytech/substrate-bip39`](https://github.com/paritytech/substrate-bip39)  - deriving secret keys for Ristretto compressed Ed25519 (should be compatible with Ed25519 at this time) from BIP39 phrases
@@ -78,6 +83,9 @@
 
 **Identity Registration and Verification**
 * [`hicommonwealth/edge-identity`](https://github.com/hicommonwealth/edge-identity) - Identity registration and verification for substrate chains
+
+**User Governed Video Platform**
+* [`Joystream/substrate-runtime-joystream`](https://github.com/Joystream/substrate-runtime-joystream)
 
 **Token Economics**
 * [`isaether/sr-bonded-curve](https://github.com/lsaether/sr-bonded-token)
