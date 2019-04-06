@@ -17,7 +17,6 @@
     - [Adding Machine](./event/adder.md)
     - [Permissioned Function with Generic Event](./event/permissioned.md)
 - [Testing](./testing/README.md)
-    - [THINK OF NAME](./testing/mock.md)
     - [Unit Testing for TDD](./testing/unit.md)
     - [Fuzzing](./testing/fuzzing.md)
 - [Tricks For Kids](./tricks/README.md)

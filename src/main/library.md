@@ -88,7 +88,7 @@
 * [`Joystream/substrate-runtime-joystream`](https://github.com/Joystream/substrate-runtime-joystream)
 
 **Token Economics**
-* [`isaether/sr-bonded-curve](https://github.com/lsaether/sr-bonded-token)
+* [`isaether/sr-bonded-curve`](https://github.com/lsaether/sr-bonded-token)
 
 **Robotics**
 * [`airalab/substrate-node-robonomics`](https://github.com/airalab/substrate-node-robonomics) - Substrate Node for Robonomics network [telemetry](https://telemetry.polkadot.io/#/Robonomics)
