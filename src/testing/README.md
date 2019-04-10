@@ -7,6 +7,7 @@ Although the Rust compiler ensures safe memory management, it cannot formally ve
 *Jump Ahead to...*
 * [Unit Testing](./unit.md)
 * [Fuzzing](./fuzzing.md)
+* [Benchmarking](./benching.md)
 
 ## Scaffolding
 
