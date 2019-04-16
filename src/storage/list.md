@@ -1,4 +1,4 @@
-# Imlementing Lists with Maps
+# Implementing Lists with Maps
 
 Substrate does not natively support a list type since it may encourage dangerous habits. Unless explicitly guarded against, a list will add unbounded `O(N)` complexity to an operation that will only charge `O(1)` fees. This opens an economic attack vector on your chain. **To learn more, check out [the section on economic security]().**
 
@@ -21,13 +21,13 @@ This code allows us to store a list of participants in our runtime represented b
 * How to verify that an element exists before removing/mutating it?
 
 This section strives to answer those questions with snippets from relevant code samples:
-* [Adding/Removing Elements in an Unordered List]()
-* [Swap and Pop for Ordered Lists]()
-    * [Using Linked Map for Simplified Runtime Logic]()
-* [Using Double Map]()
-* [Necessary Underflow/Overflow Checks]()
+* [Adding/Removing Elements in an Unordered List](#unbounded)
+* [Swap and Pop for Ordered Lists](#swappop)
+* [Linked Map for Simplified Runtime Logic](#linkedmap)
+* [Double Map](#doublemap)
+* [Necessary Underflow/Overflow Checks](#safety)
 
-## Adding/Removing Elements in an Unbounded List
+## Adding/Removing Elements in an Unbounded List <a name = "unbounded"></a>
 
 If the size of our list is not relevant to how we access data, the implementation is straightforward. 
 
@@ -104,7 +104,7 @@ ensure!(<Proposals<T>>::exists(index), "proposal does not exist at the provided 
 
 For a more extensive and complete example of this pattern, see [SunshineDAO](https://github.com/AmarRSingh/SunshineDAO/runtime/src/dao.rs).
 
-## Swap and Pop for Ordered Lists
+## Swap and Pop for Ordered Lists <a name = "swappop"></a>
 
 When we want to preserve storage such that our list doesn't continue growing even after we remove elements, we can invoke the **swap and pop** method:
 1. swap the element to be removed with the element at the head of our *list* (the element with the highest index in our map)
@@ -140,7 +140,7 @@ decl_module! {
 }
 ```
 
-### linked_map
+### Linked Map <a name = "linkedmap></a>
 
 To trade performance for simpler code, utilize the `linked_map` data structure. By implementing [`EnumarableStorageMap`](https://crates.parity.io/srml_support/storage/trait.EnumerableStorageMap.html) in addition to [`StorageMap`](https://crates.parity.io/srml_support/storage/trait.StorageMap.html), `linked_map` provides a method `head` which yields the head of the *list*, thereby making it unnecessary to also store the `LargestIndex`. The `enumerate` method also returns an `Iterator` ordered according to when (key, value) pairs were inserted into the map.
 
@@ -180,6 +180,8 @@ decl_module! {
 ```
 
 The only caveat is that this implementation incurs some performance costs (vs solely using `StorageMap` and `StorageValue`) because `linked_map` heap allocates the entire map as an iterator in order to implement the [`enumerate` method](https://crates.parity.io/srml_support/storage/trait.EnumerableStorageMap.html#tymethod.enumerate).
+
+### Double Map <a name = "d>
 
 <!-- * double_map -->
 

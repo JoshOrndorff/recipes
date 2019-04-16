@@ -12,8 +12,8 @@ Generally speaking, you may store arbitrary data, as long as its data type is se
 
 *Common Patterns*
 * [Single Value](./value.md)
-* [Mapping](./mapping.md)
-* [List](./list.md)
+* **[Mapping](./mapping.md)**
+* **[List](./list.md)**
 * [Generic Structs](./structs.md)
 * [Higher Order Arrays](./arrays.md)
 

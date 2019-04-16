@@ -11,3 +11,5 @@
     * isolate specific pattern
     * show the full file (w/ necessary imports)
     * any necessary imports/inclusions in other files (final version)
+
+* **Contribution (section)**: https://github.com/LayneHaber/contributing-template

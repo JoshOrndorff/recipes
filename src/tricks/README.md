@@ -1,7 +1,7 @@
-#  🎉Silly Rabbit 🐰🎊
+#  🎉Tricks for Kids 🐰🎊
 
-**UNDER CONSTRUCTION**
-
-* [Offline Interactions via Inherents](./inherent.md)
-* [Common Proposal Pattens](./proposals.md)
-* [Rust Asynchronous Primitives](./futures.md)
+* [Offline Interaction](./inherent.md)
+* [Proposal Pattens](./proposals.md)
+* [Balance Transfers](./balances.md)
+* [Economic Security](./econsecurity.md)
+<!-- * [Rust Asynchronous Primitives](./futures.md) -->
