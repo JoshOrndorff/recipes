@@ -1,6 +1,6 @@
 # Mapping
 
-In the context of blockchains, mappings are a very powerful primitive. A *stateful* cryptocurrency might store a mapping between accounts and balances (see [example](#ex)). In this way, mappings prove useful when representing "owned" data. By tracking ownership with maps, we can easily manage permissions for modifying values specific to individual users or groups.
+Mappings are a very powerful primitive. A *stateful* cryptocurrency might store a mapping between accounts and balances (see [simple token](#ex)). Likewise, mappings prove useful when representing *owned* data. By tracking ownership with maps, we can easily manage permissions for modifying values specific to individual users or groups.
 
 Within a specific module, a key-value mapping (between `u32` types) can be stored with this syntax:
 
@@ -14,7 +14,7 @@ decl_storage! {
 
 ## Basic Interaction
 
-To interact with a storage map, it is necessary to import the `support::StorageMap` type (see example code with the necessary import statement [below](#ex)). Functions used to access a `StorageValue` are defined [in `srml/support`](https://github.com/paritytech/substrate/blob/master/srml/support/src/storage/generator.rs#L185):
+To interact with a storage map, it is necessary to import the `support::StorageMap` type. Functions used to access a `StorageValue` are defined in [`srml/support`](https://github.com/paritytech/substrate/blob/master/srml/support/src/storage/generator.rs):
 
 ```rust
 /// Get the prefix key in storage.
@@ -48,41 +48,92 @@ fn remove<S: Storage>(key: &K, storage: &S) {
 fn mutate<R, F: FnOnce(&mut Self::Query) -> R, S: Storage>(key: &K, f: F, storage: &S) -> R;
 ```
 
-To "insert" a `(key, value)` pair into a `StorageMap` named `MyMap`:
+To insert a `(key, value)` pair into a `StorageMap` named `MyMap`:
 
 ```rust
 <MyMap<T>>::insert(key, value);
 ```
 
-To "query" the `MyMap` for the `value` corresponding to a `key`:
+To query `MyMap` for the `value` corresponding to a `key`:
 
 ```rust
 let value = <MyMap<T>>::get(key);
 ```
 
-## Account => Value <a name = "ex"></a>
+## Simple Token <a name = "ex"></a>
 
-Here is an example of a module that stores a mapping between `AccountId` keys to `u32` values and provides a function `set_account_value` to enable an account owner to set their corresponding value.
+If we want to implement a simple token transfer with Substrate, we need to 
+1. set total supply
+2. establish ownership upon configuration of circulating tokens
+3. coordinate token transfers with our runtime functions
 
 ```rust
-use srml_support::{StorageMap, dispatch::Result};
-use system::ensure_signed;
-
-pub trait Trait: system::Trait {}
-
-decl_module! {
-	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
-		fn set_account_value(origin, value: u32) -> Result {
-			let sender = ensure_signed(origin)?;
-			<MyMap<T>>::insert(sender.clone(), value);
-			Ok(())
-		}
-	}
-}
-
 decl_storage! {
-	trait Store for Module<T: Trait> as RuntimeExampleStorage {
-		MyMap: map T::AccountId => u32;
-	}
+  trait Store for Module<T: Trait> as Template {
+    pub TotalSupply get(total_supply): u64 = 21000000;
+
+    pub BalanceOf get(balance_of): map T::AccountId => u64;
+
+    Init get(is_init): bool;
+  }
 }
 ```
+
+We should also set an event for when token transfers occur to notify clients
+
+```rust
+decl_event!(
+    pub enum Event<T> where AccountId = <T as system::Trait>::AccountId {
+        // event for transfer of tokens
+        // from, to, value
+        Transfer(AccountId, AccountId, u64),
+    }
+);
+```
+
+To integrate this logic into our module, we could write the following code:
+
+```rust
+decl_module! {
+  pub struct Module<T: Trait> for enum Call where origin: T::Origin {
+      // initialize the default event for this module
+      fn deposit_event<T>() = default;
+
+      // initialize the token
+      // transfers the total_supply amout to the caller
+      fn init(origin) -> Result {
+        let sender = ensure_signed(origin)?;
+        ensure!(Self::is_init() == false, "Already initialized.");
+
+        <BalanceOf<T>>::insert(sender, Self::total_supply());
+
+        <Init<T>>::put(true);
+
+        Ok(())
+      }
+
+      // transfer tokens from one account to another
+      fn transfer(_origin, to: T::AccountId, value: u64) -> Result {
+        let sender = ensure_signed(_origin)?;
+        let sender_balance = Self::balance_of(sender.clone());
+        ensure!(sender_balance >= value, "Not enough balance.");
+
+        let updated_from_balance = sender_balance.checked_sub(value).ok_or("overflow in calculating balance")?;
+        let receiver_balance = Self::balance_of(to.clone());
+        let updated_to_balance = receiver_balance.checked_add(value).ok_or("overflow in calculating balance")?;
+        
+        // reduce sender's balance
+        <BalanceOf<T>>::insert(sender.clone(), updated_from_balance);
+
+        // increase receiver's balance
+        <BalanceOf<T>>::insert(to.clone(), updated_to_balance);
+
+        Self::deposit_event(RawEvent::Transfer(sender, to, value));
+        
+        Ok(())
+      }
+  }
+}
+```
+
+The full code from this example can be found [here]([gautamdhameja/substrate-demo](https://github.com/gautamdhameja/substrate-demo/blob/master/runtime/src/template.rs))
