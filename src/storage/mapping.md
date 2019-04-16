@@ -70,11 +70,11 @@ If we want to implement a simple token transfer with Substrate, we need to
 ```rust
 decl_storage! {
   trait Store for Module<T: Trait> as Template {
-    pub TotalSupply get(total_supply): u64 = 21000000;
+    pub TotalSupply get(total_supply): u64 = 21000000; // (1)
 
-    pub BalanceOf get(balance_of): map T::AccountId => u64;
+    pub BalanceOf get(balance_of): map T::AccountId => u64; // (3)
 
-    Init get(is_init): bool;
+    Init get(is_init): bool; // (2)
   }
 }
 ```
@@ -136,4 +136,4 @@ decl_module! {
 }
 ```
 
-The full code from this example can be found [here]([gautamdhameja/substrate-demo](https://github.com/gautamdhameja/substrate-demo/blob/master/runtime/src/template.rs))
+The full code from this example can be found [here](https://github.com/gautamdhameja/substrate-demo/blob/master/runtime/src/template.rs).

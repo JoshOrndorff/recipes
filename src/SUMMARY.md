@@ -17,8 +17,6 @@
     - [Adding Machine](./event/adder.md)
     - [Permissioned Function with Generic Event](./event/permissioned.md)
 - [Testing](./testing/README.md)
-    - [Unit Testing for TDD](./testing/unit.md)
-    - [Fuzzing](./testing/fuzzing.md)
 - [Tricks](./tricks/README.md)
     - [Offline Interaction](./tricks/inherent.md)
     - [Proposal Patterns](./tricks/proposals.md)
