@@ -181,7 +181,7 @@ decl_module! {
 
 The only caveat is that this implementation incurs some performance costs (vs solely using `StorageMap` and `StorageValue`) because `linked_map` heap allocates the entire map as an iterator in order to implement the [`enumerate` method](https://crates.parity.io/srml_support/storage/trait.EnumerableStorageMap.html#tymethod.enumerate).
 
-### Double Map <a name = "d>
+### Double Map <a name = "doublemap"></a>
 
 <!-- * double_map -->
 

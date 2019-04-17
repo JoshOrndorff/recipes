@@ -60,7 +60,7 @@ To query `MyMap` for the `value` corresponding to a `key`:
 let value = <MyMap<T>>::get(key);
 ```
 
-## Simple Token <a name = "ex"></a>
+## Simple Token Transfer <a name = "ex"></a>
 
 If we want to implement a simple token transfer with Substrate, we need to 
 1. set total supply

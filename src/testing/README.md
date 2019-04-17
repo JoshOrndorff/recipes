@@ -161,7 +161,7 @@ pub type Timestamp = timestamp::Module<Test>;
 pub type Staking = Module<Test>;
 ```
 
-### Configuring Test Environment
+### Setting up the Testing Environment
 
 All of the types publicly declared at the bottom of `mock.rs` are imported in `test.rs` along with any other traits that will be used in the unit testing and any necessary comparison operators. We'll continue with using [`srml/staking/src/mock.rs`] as an example:
 
