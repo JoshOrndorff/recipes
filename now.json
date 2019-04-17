@@ -1,4 +1,4 @@
 {
     "alias": ["substrate.recipes"],
-    "builds": [{"src": "*.rs", "use": "@now/rust"}]
+    "builds": [{"src": "*.toml", "use": "@now/rust"}]
 }
