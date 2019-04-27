@@ -18,7 +18,7 @@
     - [Permissioned Function with Generic Event](./event/permissioned.md)
 - [Testing](./testing/README.md)
 - [Tricks](./tricks/README.md)
-    - [Set De-Duplication](./tricks/set_deduplication.md)
+    - [Verifying Member Uniqueness](./tricks/set_deduplication.md)
     - [Offline Interaction](./tricks/inherent.md)
     - [Proposal Patterns](./tricks/proposals.md)
     - [Balance Transfers](./tricks/balances.md)
