@@ -24,11 +24,14 @@
 ## Tutorials 🍮 <a name = "tutorials"></a>
 [parity-samples](https://github.com/parity-samples)
 
+* [`shawntabrizi/substrate-contracts-workshop`](https://github.com/shawntabrizi/substrate-contracts-workshop) - smart contract programming on Substrate
+* [`paritytech/ink`](https://github.com/paritytech/ink) - Substrate smart contract DSL
 * [`shawntabrizi/substrate-collectables-workshop`](https://github.com/shawntabrizi/substrate-collectables-workshop) - A guided tutorial for building a collectable dApp chain on Parity Substrate
 * [`parity-samples/substrate-tcr`](https://github.com/parity-samples/substrate-tcr) - A Parity Substrate runtime implementation of a simple Token Curated Registry (TCR)
 * [`parity-samples/substrate-tcr-ui`](https://github.com/parity-samples/substrate-tcr-ui) - A react.js frontend for Substrate TCR runtime
 * [`shawntabrizi/substrate-package`](https://github.com/shawntabrizi/substrate-package) - A stable package of the substrate-node-template and substrate-ui
 * [`lsaether/sr-bonded-token`](https://github.com/lsaether/sr-bonded-token/blob/master/Tutorial.md) - Token Bonding Curve tutorial with Substrate
+* [`nczhu/collateral`](https://github.com/nczhu/collateral) collateralize NFTs
 * [`yjkimjunior/ParkingSpaceSubstrate`](https://github.com/yjkimjunior/ParkingSpaceSubstrate)
 * [`osuketh/apple-store-substrate`](https://github.com/osuketh/apple-store-substrate)
 
@@ -40,11 +43,14 @@
 * [`paritytech/substrate-ui`](https://github.com/paritytech/substrate-ui) - Bondy Polkadot UI
 
 ## Off-Chain Interaction  🍨 <a name = "offchain"></a>
+
 * [`PACTCare/starlog`](https://github.com/PACTCare/Starlog) - Starlog: IPFS Metadata Blockchain based on Substrate
 * [`parity-samples/substrate-events-listener`](https://github.com/parity-samples/substrate-events-listener) - Dockerized websocket listener for substrate events; also writes filtered event data to configured storage
 * [`parity-samples/substrate-proof-of-existence`](https://github.com/parity-samples/substrate-proof-of-existence) - Proof of Existence Blockchain built on Parity's Substrate
+* [`stakedtechnologies/Plasma`](https://github.com/stakedtechnologies/Plasm) - add Plasma functions to the Substrate chain
 
 ## Polkadot 🎂 <a name = "polkadot"></a>
+
 * [`paritytech/cumulus`](https://github.com/paritytech/cumulus) - Write Parachains on Substrate
 * [`paritytech/polkadot`](https://github.com/paritytech/polkadot) - Polkadot Node Implementation
 * [`paritytech/substrate-telemetry`](https://github.com/paritytech/substrate-telemetry) - Polkadot telemetry service

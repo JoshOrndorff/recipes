@@ -70,7 +70,7 @@ decl_module! {
             let largest_index = Self::largest_index::get();
             <Proposals<T>>::insert(largest_index, prop);
 
-            Ok();
+            Ok(());
         }
     }
 }
@@ -89,7 +89,7 @@ decl_module! {
             // remove proposal at the given index
             <Proposals<T>>::remove(index);
 
-            Ok();
+            Ok(());
         }
     }
 }
@@ -134,7 +134,7 @@ decl_module! {
             <Proposals<T>>::remove(largest_index);
             <LargestIndex<T>>::mutate(|count| count - 1);
 
-            Ok();
+            Ok(());
         }
     }
 }
@@ -173,7 +173,7 @@ decl_module! {
             <Proposals<T>>::insert(index, <Proposals<T>>::get(head_index));
             <Proposals<T>>::remove(head_index);
 
-            Ok();
+            Ok(());
         }
     }
 }
