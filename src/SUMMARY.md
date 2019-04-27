@@ -23,5 +23,5 @@
     - [Proposal Patterns](./tricks/proposals.md)
     - [Balance Transfers](./tricks/balances.md)
     - [Economic Security](./tricks/econsecurity.md)
-    - [Optimization Tips](./tricks)/optimizations.md
+    - [Optimization Tips](./tricks/optimizations.md)
 - [Open Source Dessert](./main/library.md)
