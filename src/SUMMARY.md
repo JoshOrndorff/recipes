@@ -19,7 +19,7 @@
 - [Module Menu](./module_menu/README.md)
 - [Testing](./testing/README.md)
 - [Advanced Patterns](./advanced/README.md)
-    - [Economic Security Best Practices](./advanced/econsecurity.md)
+    - [Economic Security](./advanced/econsecurity.md)
     - [Transaction Ordering](./advanced/ordering.md)
     - [Offline Interaction](./advanced/inherent.md)
     - [DAO Proposal Patterns](./advanced/proposals.md)
