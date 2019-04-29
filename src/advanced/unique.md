@@ -1,6 +1,6 @@
 # Verifying Member Uniqueness
 
-There are certain advantageous patterns for verifying the uniqueness of an item in a set. In the [`utxo-workshop`](https://github.com/nczhu/utxo-workshop), we saw in the `check_transaction` function how we could ensure there were no two of the same utxo's by collecting all of them into a BTreeMap and then checking for equality between the BTreeMap (which, like a set, does not add additional of the same element)  and the original set (which could include duplicates). This constituents a check that the set of UTXOs selected are all unique and not repeated.
+There are certain advantageous patterns for verifying the uniqueness of an item in a set. In the [`utxo-workshop`](https://github.com/nczhu/utxo-workshop), we saw in the `check_transaction` function how we could ensure there were no two of the same utxo's by collecting all of them into a BTreeMap and then checking for equality between the BTreeMap (which, like a set, does not add additional of the same element)  and the original set (which could include duplicates). This constitutes a check that the set of UTXOs selected are all unique and not repeated.
 
 However, this pattern can easily be extracted and applied in all situations for which membership uniqueness needs to be checked for some vector. In the context of the [`utxo-workshop`](https://github.com/nczhu/utxo-workshop), we have:
 
