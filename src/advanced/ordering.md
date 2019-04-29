@@ -97,3 +97,5 @@ impl runtime_api::TaggedTransactionQueue<Block> for Runtime {
     }
 }
 ```
+
+*Read more about the [transaction lifecycle](https://docs.substrate.dev/docs/transaction-lifecycle-in-substrate) in Substrate*

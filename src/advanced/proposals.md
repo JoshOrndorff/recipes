@@ -4,6 +4,8 @@
 * ways of increasing the pace
 * more research on speed
 
+* as you write and reflect on this, consider a better design for all the conditional paths in your current code...
+
 * start with security assumptions
 * keep it simple stupid
     * start with a simple design that works and then iterate with increased complexity
