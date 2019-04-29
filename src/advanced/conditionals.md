@@ -1,6 +1,6 @@
 # Robust Path Handling
 
-In the [`utxo-workshop`](https://github.com/nczhu/utxo-workshop), the code introduces an enum in order to manage a data race scenario in which a transaction could arrive before some transactions that it `require`s. To see this pattern in action, let's start at the `check_transaction` runtime function:
+In the [`utxo-workshop`](https://github.com/nczhu/utxo-workshop), the code utilizes an enum in order to manage a data race scenario in which a transaction could arrive before some transactions that it `require`s. To see this pattern in action, let's start at the `check_transaction` runtime function:
 
 The `check_transaction` function  returns `CheckResult<'_>`.
 ```rust
@@ -44,4 +44,4 @@ if missing_utxo.is_empty() {
 }
 ```
 
-This pattern demonstrates a *trick* that we can use to safely handle the common data race that occurs when a conditional transaction arrives in the transaction pool before the arrival of a transaction that it `require`s. We can easily extract this pattern to more safely handle common paths in our code for which we may not want to panic, but it may also be preferrable to pause processing.
+This pattern demonstrates a *trick* that we can use to safely handle the common data race that occurs when a conditional transaction arrives in the transaction pool before the arrival of a transaction that it `require`s. *We can easily extract this pattern to more safely handle common paths in our code for which we may not want to panic, but it may also be preferrable to pause processing.*

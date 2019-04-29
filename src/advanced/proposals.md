@@ -1,5 +1,9 @@
 # Proposal Patterns
 
+* lock-in vs instant withdrawal
+* ways of increasing the pace
+* more research on speed
+
 * start with security assumptions
 * keep it simple stupid
     * start with a simple design that works and then iterate with increased complexity
