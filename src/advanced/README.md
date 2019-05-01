@@ -1,7 +1,7 @@
 #  🎉Advanced Patterns 🐰🎊
 
 - [Economic Security](./advanced/econsecurity.md)
-- [Incentive Model](./advanced/incentive.md)
+- [Incentive Design](./advanced/incentive.md)
 - [Scheduling Collateralization](./advanced/lock.md)
 - [Transaction Ordering](./advanced/ordering.md)
 - [Offline Interaction](./advanced/inherent.md)
