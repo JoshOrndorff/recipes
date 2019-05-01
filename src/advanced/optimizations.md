@@ -12,6 +12,16 @@ It's noticeably faster to iterate over a slice rather than a `vec!`.
 
 * `.iter.map(|x| x.0.into()).collect`
 
+## SmallVec
+
+//! # Small Vector Optimization
+//!
+//! By default, the value-set for each key in the map uses the `smallvec` crate to keep a
+//! maximum of one element stored inline with the map, as opposed to separately heap-allocated
+//! with a plain `Vec`. Operations such as `Fit` and `Replace` will automatically switch
+//! back to the inline storage if possible. This is ideal for maps that mostly use one
+//! element per key, as it can improvate memory locality with less indirection.
+
 ### MISC NOTES
 
 * MAPS USE BLAKE2

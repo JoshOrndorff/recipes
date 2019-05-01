@@ -17,13 +17,13 @@ In the context of [SunshineDAO](https://github.com/AmarRSingh/SunshineDAO) (and 
 
 ## Dilution Safety Mechanisms
 
-*Instant withdrawals* protect members from experiencing the outcome of proposals that they vehemently oppose. In the worst case scenario, a faction of the DAO that controls greater than the required threshold submits a proposal to grant themselves some ridiculous number of new shares, thereby diluting the shares of all other members (we could call this the [*Zuck* attack](https://www.youtube.com/watch?v=Kk1sjbNcCxI)). The *instant withdrawal* mechanism enables the faction under attack to exit the DAO while preserving their share ownership (because they can exit during the grace period before the proposal's execution). 
+*Instant withdrawals* protect members from experiencing the outcome of proposals that they vehemently oppose. In the worst case scenario, a faction of the DAO that controls greater than the required threshold submits a proposal to grant themselves some ridiculous number of new shares, thereby diluting the shares of all other members (I've seen this attack [before](https://www.youtube.com/watch?v=Kk1sjbNcCxI)). The *instant withdrawal* mechanism enables the faction under attack to exit the DAO while preserving their share ownership (because they can exit during the grace period before the proposal's execution). 
 
-Let's consider a more common scenario in which a contentious vote results in the exit of the opposing half, thereby increasing the funding burden on the remaining DAO members. For our example, let's assume that the DAO maintains 100 outstanding shares backed by 100M DOTs. If a new share is requested without posting any additional stake, and the vote is split 50/50 with 100% voter turnout, the 50 that voted against the proposal could ragequit. Under this scenario, the funding burden for the remaining members increases from 1% to 2% (1/100 to 1/50) in accordance with share dilution. 
+Let's consider a more common scenario in which a contentious vote results in the exit of the opposing half, thereby increasing the funding burden on the remaining DAO members. For our example, let's assume that the DAO maintains 100 outstanding shares backed by 100M DOTs. If a new share is requested without posting any additional stake, and the vote is split 50/50 with 100% voter turnout, the 50 that voted against the proposal could leave during the grace period. Under this scenario, the funding burden for the remaining members increases from 1% to 2% (1/100 to 1/50) in accordance with share dilution. 
 
-In fact, a larger proposal can lead to a run on the DAO under the previously presented scenario. With a run on the DAO in mind, we place an additional constraint on proposals: **if a proposal's passage instigates member exit indicative of significant dilution, it shall not pass!** This protects the DAO against scenarios in which a contentious vote leaves a small subset of the DAO significantly diluted.
+In fact, a larger proposal can lead to a run on the DAO (mass exit paranoia) under the previously presented scenario. With this nsigma event in mind, we place an additional constraint on proposals: **if a proposal's passage instigates member exit indicative of significant dilution, it shall not pass!** This protects the DAO against scenarios in which a contentious vote leaves a small subset of the DAO significantly diluted.
 
-How is causation determined between the proposal's passage and member exodus? Actually, our actions are predicated on the surrounding circumstances so we will halt any large proposal when member exit has made share issuance particularly dilutive. With this in mind, we can bound dilution for yes voters in the `vote` function. For every `yes` vote in which `approve == true`, we reset `proposal.maxVotes` to `total_shares` if `total_shares` has increased.
+How is causation determined between the proposal's passage and member exodus? Actually, our actions are predicated on the surrounding circumstances so we will halt any large proposal when mass member exit has made share issuance particularly dilutive. With this in mind, we can bound dilution for yes voters in the `vote` function. For every `yes` vote in which `approve == true`, we reset `proposal.maxVotes` to `total_shares` if `total_shares` has increased.
 
 ```rust
 if approve {
@@ -54,7 +54,7 @@ ensure!(
 );
 ```
 
-We may be able to improve this design by noting how `TotalSharesRequested`, which represents the number of outstanding requested shares, provides a proxy for share issuance demand. Likewise, we could include it as an input for our `DilutionBound` mechanism. However, parameterization is already kind of confusing. At this point, it is worth reflecting more on how this choice is presented to other devs experimenting with organizational structures on the blockchain...NEEDS WORK!
+We may be able to improve this design by noting how `TotalSharesRequested`, which represents the number of outstanding requested shares, provides a proxy for share issuance demand. Likewise, we could include it as an input for our `DilutionBound` mechanism. However, parameterization is already relatively confusing!
 
 ## Balancing Instant Withdrawals and Lock-In Voting
 

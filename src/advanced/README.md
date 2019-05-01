@@ -1,11 +1,10 @@
 #  🎉Advanced Patterns 🐰🎊
 
 - [Economic Security](./advanced/econsecurity.md)
-- [Transaction Ordering](./advanced/ordering.md)
-- [Offline Interaction](./advanced/inherent.md)
-- [DAO Proposal Invariants](./advanced/proposals.md)
 - [Incentive Model](./advanced/incentive.md)
 - [Scheduling Collateralization](./advanced/lock.md)
+- [Transaction Ordering](./advanced/ordering.md)
+- [Offline Interaction](./advanced/inherent.md)
 - [Verifying Set Member Uniqueness](./advanced/unique.md)
 - [Special Struct Fields](./advanced/special_fields.md)
 - [Robust Path Handling](./advanced/conditionals.md)
