@@ -3,11 +3,12 @@
 Substrate's runtime is different in many ways from other conventional development environments. Rather than opting for safety by limiting the flexibility of the underlying implementation, Substrate grants developer's low-level, fine-grain control over implementation details. Although this increased flexibility allows for efficient, modular, and extensible applications, it also places more responsibility on developers to verify the safety of their logic.
 
 With this in mind, there are a few informal rules that developers should follow when building with Substrate. These rules do not hold for every situation; Substrate's bare metal abstractions are designed to foster optimization in context.
-
 1. Modules should be independent pieces of code without unnecessary, significant external dependencies.
 2. [First Verify, Then Write](#fw)
-3. [Robust In-Module Fee Structure](#robust)
-4. [Dilution Safety Mechanism](#dilution)
+
+Substrate developers also need to be especially cognizent economic security. Unlike smart contract platforms, Substrate does not add the gas abstraction for fees and it is therefore up to the Substrate developer to incorporate a robust in-module fee structure when appropriate.
+1. [UTXO Processing, A Robust In-Module Fee Structure](#utxo)
+2. [Dilution Safety Mechanism](#dilution)
 
 ## First Verify, Then Write <a name = "fw"></a>
 
@@ -36,7 +37,7 @@ fn propose(origin, applicant: AccountId, shares: u32, tokenTribute: BalanceOf<T>
 
 When a check needs to be made, but ownership of local variables does not need to be persisted, the developer should create a local scope to test the given variant before proceeding. An example of this pattern would be similar to [membership uniqueness](./unique.md) in which the given check is verified within closed scopes to minimize the persistence of `BTreeMap<T>` for example.
 
-## Robust In-Module Fee Structure <a name = "robust"></a>
+## UTXO Processing, A Robust In-Module Fee Structure <a name = "utxo"></a>
 
 Substrate developers need to **stay cognizant of the price paid for resource usage** within the runtime. This can be unintuitive for former smart contract developers previously abstracting out the cost of individual operations and relying on conditional reversion.
 

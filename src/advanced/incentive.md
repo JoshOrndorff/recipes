@@ -12,7 +12,7 @@ No, blockchain has not officially solved the tragedy of the commons, but I still
 
 Between now and then, I think it's important for us to constantly keep *accessibility* in mind as a design criterion. Above all else, we should reflect on the *hidden costs* of our mechanism and consider how to communicate these costs transparently to all active and potential users.
 
-The most obvious example in [SunshineDAO](https://github.com/AmarRSingh/SunshineDAO) is the share dilution that occurs when *some* proposals are accepted and executed. 
+The most obvious example in [SunshineDAO](https://github.com/AmarRSingh/SunshineDAO) is the share dilution that occurs when *some* proposals are accepted and executed. As an example, grant proposals may request share ownership without committing stake above a transaction fee (the proposal bond). In this case, the minting of shares to satisfy the accepted proposal would dilute existing members. Without making them explicitly aware of this possibility, the DAO risks volatility and collapse (mass member exit). Therefore, 
 
 * picture for inflation
 
