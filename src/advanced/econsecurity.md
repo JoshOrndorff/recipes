@@ -1,14 +1,13 @@
-# Economic Security
+# Safety First!
+
+> insert some comic about keeping all hands and legs inside the vehicle at all times, Substrate as a rollercoaster...
 
 Substrate's runtime is different in many ways from other conventional development environments. Rather than opting for safety by limiting the flexibility of the underlying implementation, Substrate grants developer's low-level, fine-grain control over implementation details. Although this increased flexibility allows for efficient, modular, and extensible applications, it also places more responsibility on developers to verify the safety of their logic.
 
-With this in mind, there are a few informal rules that developers should follow when building with Substrate. These rules do not hold for every situation; Substrate's bare metal abstractions are designed to foster optimization in context.
+With this in mind, there are two key rules that developers should keep in mind when building with Substrate. These rules do not hold for every situation; Substrate's bare metal abstractions are designed to foster optimization in context.
+
 1. Modules should be independent pieces of code without unnecessary, significant external dependencies.
 2. [First Verify, Then Write](#fw)
-
-Substrate developers also need to be especially cognizent economic security. Unlike smart contract platforms, Substrate does not add the gas abstraction for fees and it is therefore up to the Substrate developer to incorporate a robust in-module fee structure when appropriate.
-1. [UTXO Processing, A Robust In-Module Fee Structure](#utxo)
-2. [Dilution Safety Mechanism](#dilution)
 
 ## First Verify, Then Write <a name = "fw"></a>
 
@@ -41,7 +40,7 @@ When a check needs to be made, but ownership of local variables does not need to
 
 Substrate developers need to **stay cognizant of the price paid for resource usage** within the runtime. This can be unintuitive for former smart contract developers previously abstracting out the cost of individual operations and relying on conditional reversion.
 
-Substrate is a bit more hands-on. When storage changes occur within a runtime function, they are not automatically reverted if the function panics thereafter. For this reason, it is imperative that any resource used by a transaction must explicitly be paid for within the module. For more details, check out [the tcr tutorial's best practices](https://docs.substrate.dev/docs/tcr-tutorial-best-practices): *If the resources used might be dependent on transaction parameters or pre-existing on-chain state, then your in-module fee structure must adapt accordingly.*
+Indeed, Substrate is a bit more hands-on. When storage changes occur within a runtime function, they are not automatically reverted if the function panics thereafter. For this reason, it is imperative that any resource used by a transaction must explicitly be paid for within the module. For more details, check out [the tcr tutorial's best practices](https://docs.substrate.dev/docs/tcr-tutorial-best-practices): *If the resources used might be dependent on transaction parameters or pre-existing on-chain state, then your in-module fee structure must adapt accordingly.*
 
 So how do we design a robust in-module fee structure? In the [`utxo-workshop`](https://github.com/nczhu/utxo-workshop), the difference between inputs and outputs for valid transactions is distributed evenly among the authority set. This pattern demonstrates one approach for incentivizing validation via a floating transaction fee which varies in cost according to the value of the native currency and the relative size/activity of the validator set.
 
