@@ -1,19 +1,19 @@
 # Incentive Design
+> this introduction is *rough*
 
 The first rule of incentive design is sometimes just *don't*...Just like in the real world, human coordination does not always require explicit incentive mechanisms guided by fees and reward payouts. In more cases than not, the mutual benefits of an interaction drive coordination; adding an explicit fee structure may be redundant and unnecessary for these cases.
 
 In all honesty, it seems to me that modern human coordination is often still limited by primitive [group thresholds](http://www.lifewithalacrity.com/2008/09/group-threshold.html). We still operate through intermediate entities. National and state laws still limit our ability to coordinate on an increasingly global scale. 
 
-By aligning stakeholder incentives through dynamic reward/fee structures, I think blockchain can foster significant innovation as it pertains to humanity's coordination.
+By aligning stakeholder incentives through dynamic reward/fee structures, I think blockchain can foster significant innovation as it pertains to humanity's coordination. No, blockchain has not officially solved the tragedy of the commons, but I still maintain an unwavering, naive optimism that, some day, a mechanism built on a blockchain will alleviate some free rider problem. 
 
-* [Minimizing Hidden Costs]()
-* [Closed Incentive Loop -- SunshineDAO]()
-* [Dilution Safety Mechanism]()
-* [Closed Incentive Loop -- UTXO]()
+* [Minimizing Hidden Costs](#hide)
+* [Dilution Safety Mechanism](#dilute) 
+* [Closed Incentive Loops](#closed) _________________
+* [Example: SunshineDAO](#sun) _________________
+* [Example: UTXO](#utxo) ___
 
-## Minimizing Hidden Costs
-
-No, blockchain has not officially solved the tragedy of the commons, but I still maintain an unwavering, naive optimism that, some day, a mechanism built on a blockchain will alleviate some free rider problem. 
+## Minimizing Hidden Costs <a name = "hide"></a>
 
 Between now and then, I think it's important for us to constantly keep *accessibility* in mind as a design criterion. Above all else, we should reflect on the *hidden costs* of our mechanism and consider how to communicate these costs transparently to all active and potential users.
 
@@ -24,23 +24,7 @@ The most obvious example in [SunshineDAO](https://github.com/AmarRSingh/Sunshine
 
 * This is the most obvious source of inflation, but if we create an open incentive structure, then we could mint new shares as a reward for DAO actors, but that would also act as a cost to all other members and this complexity is not at all transparent...
 
-## SunshineDAO Closed Incentive Loop
-
-Sustained stakeholder interaction is nontrivial in a digital context (*see [AGP vote turnouts](https://forum.aragon.org/t/evaluating-the-agp-1-voting-results-makes-me-think-we-need-an-aragon-community-token-act/290)*). Although we will not cover voter incentives here, we will introduce a **closed fee structure designed to** 
-1. mitigate proposal spam
-2. remove stale entries
-
-* trash analogy here...we don't want to issue shares because we want to minimize hidden costs
-
-
-* use `Currency` in lieu of importing `balances`
-
-* bond patterns (from `SunshineDAO`)
-* reserve, unreserve, transfer
-
-* awareness of bribery / collusive actor dynamics means that you have to think of the scenario in which the processer is the proposal sponsor -- do we want to make this not allowed? or would we prefer to make it so that this isn't advantageous!
-
-## Dilution Safety Mechanisms <a name = "dilution"></a>
+## Dilution Safety Mechanisms <a name = "dilute"></a>
 
 *Instant withdrawals* protect DAO members from experiencing the outcome of proposals that they vehemently oppose. In the worst case scenario, a faction of the DAO that controls greater than the required threshold submits a proposal to grant themselves some ridiculous number of new shares, thereby diluting the shares of all other members (I've seen this attack [before](https://www.youtube.com/watch?v=Kk1sjbNcCxI)). The *instant withdrawal* mechanism enables the minority faction under attack to exit the DAO while preserving their share ownership (because they can exit during the grace period before the proposal's execution). 
 
@@ -81,7 +65,23 @@ ensure!(
 
 We may be able to improve this design by noting how `TotalSharesRequested`, which represents the number of outstanding requested shares, provides a proxy for share issuance demand. Likewise, we could include it as an input for our `DilutionBound` mechanism. However, parameterization is already relatively confusing!
 
-## UTXO Processing, A Robust In-Module Fee Structure <a name = "utxo"></a>
+### SunshineDAO Closed Incentive Loop <a name = "sun"></a>
+
+Sustained stakeholder interaction is nontrivial in a digital context (*see [AGP vote turnouts](https://forum.aragon.org/t/evaluating-the-agp-1-voting-results-makes-me-think-we-need-an-aragon-community-token-act/290)*). Although we will not cover voter incentives here, we will introduce a **closed fee structure designed to** 
+1. mitigate proposal spam
+2. remove stale entries
+
+* trash analogy here...we don't want to issue shares because we want to minimize hidden costs
+
+* use `Currency` in lieu of importing `balances`
+
+* bond patterns (from `SunshineDAO`)
+* reserve, unreserve, transfer
+
+* awareness of bribery / collusive actor dynamics means that you have to think of the scenario in which the processer is the proposal sponsor -- do we want to make this not allowed? or would we prefer to make it so that this isn't advantageous!
+
+
+### UTXO Processing, A Robust In-Module Fee Structure <a name = "utxo"></a>
 
 Substrate developers need to **stay cognizant of the price paid for resource usage** within the runtime. This can be unintuitive for former smart contract developers previously abstracting out the cost of individual operations and relying on conditional reversion.
 

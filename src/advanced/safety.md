@@ -1,8 +1,10 @@
 # Safety First
 
-Substrate's runtime is different in many ways from other conventional development environments. Unlike conventional software development kits that abstract away low-level decisions, Substrate grants developer's close-to-the-metal, fine-grain control over the final implementation. While this increased flexibility will drive efficient, modular, and extensible applications, it also requires greater oversight from developers who must carefully verify the safety of their code. 
+> something like the Rust cartoon of the guy who was DD, but that guy is wearing a Substrate shirt or something?
 
-With this in mind, there are two key rules that developers should keep in mind when building with Substrate. These rules may not hold in every situation; Substrate offers unique optimization *in context*.
+Substrate's runtime is different in many ways from other development environments. Unlike conventional software development kits that abstract away low-level decisions, Substrate grants developer's close-to-the-metal, fine-grain control over the implementation. Increased flexibility should foster efficient, modular, and extensible applications. However, to quote the late Uncle Ben, *with great power comes great responsibility*.
+
+Developers building with Substrate have to exercise incredible caution. Indeed, the the cost of err scales with the amount of capital secured by the application. To keep things simple at first, there are two base rules to keep in back of your mind when building with Substrate. These rules may not hold in every situation; Substrate offers unique optimization *in context*.
 
 1. Modules should be independent pieces of code without unnecessary, significant external dependencies.
 2. First Verify, Then Write
