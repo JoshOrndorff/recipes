@@ -19,7 +19,7 @@
 - [Module Menu](./module_menu/README.md)
 - [Testing](./testing/README.md)
 - [Advanced Patterns](./advanced/README.md)
-    - [Safety First!](./advanced/safety.md)
+    - [Safety First](./advanced/safety.md)
     - [Incentive Model](./advanced/incentive.md)
     - [Scheduling Collateralization](./advanced/lock.md)
     - [Transaction Ordering](./advanced/ordering.md)

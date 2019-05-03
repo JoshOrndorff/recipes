@@ -9,28 +9,26 @@ The first rule of incentive design is sometimes just *don't*...Just like in the 
 By aligning stakeholder incentives through dynamic reward/fee structures, I believe blockchain can catalyze human coordination on an increasingly global scale. These are the stakes; now, let's talk incentive design.
 
 * [Minimizing Hidden Costs](#hide)
-* [Closed Incentive Loops](#closed) _________________
+* [Closed Incentive Loops](#closed)
 * [Ex1. UTXO](#utxo)
-* [Ex2. SunshineDAO](#sun) ___
+* [Ex2. SunshineDAO](#sun)
 * [Bonus: Dilution Safety for SunshineDAO](#dilute) 
 
 ## Minimizing Hidden Costs <a name = "hide"></a>
 
-As Substrate developers, it is important to reflect on the *hidden costs* of our mechanism and consider how to communicate these costs transparently to all active and potential users
-* We don't want this to turn into a system where the rules are one-sided and only benefit a select group of people
+As Substrate developers, it is important to reflect on the *hidden costs* of our mechanisms and consider how to communicate these costs transparently to all active and potential users. Above all else, we do not want to create another system where the few familiar with the rules thrive while most struggle with basic interaction (*see modern capitalism*).
 
+To not repeat the mistakes of the past, it is important for us to recognize instances of abusive mechanism design. For this we look no further than [inflation](https://mises.org/library/how-central-banking-increased-inequality). The [Cantillon Effect](https://www.aier.org/article/sound-money-project/cantillon-effects-and-money-neutrality) describes the phenomenon wherein minting more currency benefits those that receive it first because market prices do not immediately reflect an increase in supply. 
 
-* minimizing inflationary spending...cautionary tale and link to article; [cantillon effect](https://www.aier.org/article/sound-money-project/cantillon-effects-and-money-neutrality)
+> *The first recipient of the new supply of money is in the convenient position of being able to spend extra dollars before prices have increased. But whoever is last in line receives his share of new dollars after prices have increased. This is why when the Treasury’s deficit is monetized, inflation is referred to as a non-legislated tax. In these cases, the government has seized purchasing power (rather than physical bills) from its citizens without congressional approval.* ~ [Cantillon Effects and Monetary Neutrality](https://www.aier.org/article/sound-money-project/cantillon-effects-and-money-neutrality)
 
-> *The Cantillon Effect refers to the change in relative prices resulting from a change in money supply. The change in relative prices occurs because the change in money supply has a specific injection point and therefore a specific flow path through the economy. The first recipient of the new supply of money is in the convenient position of being able to spend extra dollars before prices have increased. But whoever is last in line receives his share of new dollars after prices have increased. This is why when the Treasury’s deficit is monetized, inflation is referred to as a non-legislated tax. In these cases, the government has seized purchasing power (rather than physical bills) from its citizens without congressional approval.* ~ [Cantillon Effects and Monetary Neutrality](https://www.aier.org/article/sound-money-project/cantillon-effects-and-money-neutrality)
+This doesn't mean that inflation or central banks are *evil*, but we do need to be increasingly wary of the dilutive effects of minting new tokens/shares/currency. To be clear, the problem is NOT that inflation enforces a tax on public wealth by extracting purchasing power, but rather that this action is entirely swept under the rug as *neutral* monetary policy. **Hidden costs like inflation threaten the economic sovereignty of participants and discredit the mechanism's legitimacy.**
 
-* this isn't to say that inflation is evil, we just need to be wary of hand-wavy terms that are used to hide rent fees from users/participants and redistribute money because that's all that inflation is...
-* we don't want to create a system in which the few who wrote the rules thrive while the rest aren't even aware they're being taken advantage of...
-
-Moreover, transparency isn't a criteria just because it's *the right way* to do things. Complex mechanism design adds [mental overhead](https://nakamotoinstitute.org/static/docs/micropayments-and-mental-transaction-costs.pdf), thereby limiting the population of users and rendering simulation increasingly unrealistic. The latter point 
-
+> Transparency isn't a criteria just because it's *the right way* to do things. Hidden costs increase complexity and add [mental overhead](https://nakamotoinstitute.org/static/docs/micropayments-and-mental-transaction-costs.pdf), thereby limiting the actual population of users and rendering multi-agent simulation increasingly unrealistic. 
 
 ## Closed Incentive Loop <a name = "closed"></a>
+
+
 
 * minimize inflation `=>` closed incentive loop
 
