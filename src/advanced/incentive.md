@@ -1,12 +1,11 @@
 # Incentive Design
-
-The first rule of incentive design is sometimes just *don't*...Just like in the real world, human coordination does not always require explicit mechanisms guided by fees and reward payouts. In more cases than not, the mutual benefits of an interaction drive coordination; adding an explicit fee structure may be redundant and unnecessary.
-
 > **Progress cannot always be monotonic because solutions to problems create new problems** -*Steven Pinker*
 
-*With that said*, we haven't really scaled human coordination. Although the internet has facilitated communication across borders and timezones, the tragedy of the commons (aka free rider problem) still limits our ability to work together beyond primitive [group thresholds](http://www.lifewithalacrity.com/2008/09/group-threshold.html). If you're not immediately convinced, consider any system for provisioning public goods -- social security, humanitarian aid, immigration, education, or even blockchain infrastructure maintenance. **Despite a relative abundance of resources, we consistently struggle to coordinate efficient and meaningful allocation to those in need.**
+The first rule of incentive design is sometimes just *don't*. Just like in the real world, human coordination does not always require explicit mechanisms guided by fees and reward payouts. In more cases than not, the mutual benefits of an interaction drive coordination; adding an explicit fee structure may be redundant and unnecessary.
 
-By aligning stakeholder incentives through dynamic reward/fee structures, I believe blockchain can catalyze human coordination on an increasingly global scale. These are the stakes; now, let's talk incentive design.
+With that said, we haven't really scaled human coordination. Although the internet has facilitated communication across borders and timezones, the tragedy of the commons (aka free rider problem) still limits our ability to collaborate in groups larger than [primitive thresholds](http://www.lifewithalacrity.com/2008/09/group-threshold.html). If you're not immediately convinced, consider any (broken) system for provisioning public goods -- social security, humanitarian aid, immigration, education, or even blockchain infrastructure maintenance. **Despite a relative abundance of resources, we consistently struggle to coordinate efficient and meaningful allocation to those in need.**
+
+By aligning stakeholder incentives through dynamic reward/fee structures, I believe blockchain can catalyze human coordination on an increasingly global scale. Now, let's talk incentive design.
 
 * [Minimizing Hidden Costs](#hide)
 * [Closed Incentive Loops](#closed)
@@ -16,19 +15,28 @@ By aligning stakeholder incentives through dynamic reward/fee structures, I beli
 
 ## Minimizing Hidden Costs <a name = "hide"></a>
 
-As Substrate developers, it is important to reflect on the *hidden costs* of our mechanisms and consider how to communicate these costs transparently to all active and potential users. Above all else, we do not want to create another system where the few familiar with the rules thrive while most struggle with basic interaction (*see modern capitalism*).
+As Substrate developers, it is important to reflect on the *hidden costs* of our mechanisms and consider how to communicate these costs transparently to all active and potential users. Above all else, we do not want to create another system where the few that are familiar with the rules thrive while most struggle with basic interaction (*see modern capitalism*).
 
-To not repeat the mistakes of the past, it is important for us to recognize instances of abusive mechanism design. For this we look no further than [inflation](https://mises.org/library/how-central-banking-increased-inequality). The [Cantillon Effect](https://www.aier.org/article/sound-money-project/cantillon-effects-and-money-neutrality) describes the phenomenon wherein minting more currency benefits those that receive it first because market prices do not immediately reflect an increase in supply. 
+To not repeat the mistakes of the past, it is important for us to recognize instances of abusive mechanism design. For this we may look no further than [inflation](https://mises.org/library/how-central-banking-increased-inequality). The [Cantillon Effect](https://www.aier.org/article/sound-money-project/cantillon-effects-and-money-neutrality) describes the phenomenon wherein minting more currency benefits those that receive it first because market prices do not immediately reflect an increase in supply. 
 
 > *The first recipient of the new supply of money is in the convenient position of being able to spend extra dollars before prices have increased. But whoever is last in line receives his share of new dollars after prices have increased. This is why when the Treasury’s deficit is monetized, inflation is referred to as a non-legislated tax. In these cases, the government has seized purchasing power (rather than physical bills) from its citizens without congressional approval.* ~ [Cantillon Effects and Monetary Neutrality](https://www.aier.org/article/sound-money-project/cantillon-effects-and-money-neutrality)
 
-This doesn't mean that inflation or central banks are *evil*, but we do need to be increasingly wary of the dilutive effects of minting new tokens/shares/currency. To be clear, the problem is NOT that inflation enforces a tax on public wealth by extracting purchasing power, but rather that this action is entirely swept under the rug as *neutral* monetary policy. **Hidden costs like inflation threaten the economic sovereignty of participants and discredit the mechanism's legitimacy.**
+This does NOT mean that inflation or central banks are inherently *evil*, but rather that we need to be increasingly wary of the dilutive effects of minting new tokens/shares/currency. To be clear, the problem is NOT that inflation enforces a tax on public wealth by extracting purchasing power, but rather that this action is entirely swept under the rug as *neutral* monetary policy. **Hidden costs like inflation threaten the economic sovereignty of participants and discredit the mechanism's legitimacy.**
 
-> Transparency isn't a criteria just because it's *the right way* to do things. Hidden costs increase complexity and add [mental overhead](https://nakamotoinstitute.org/static/docs/micropayments-and-mental-transaction-costs.pdf), thereby limiting the actual population of users and rendering multi-agent simulation increasingly unrealistic. 
+Transparency isn't a criteria just because it's *the right way* to do things. Hidden costs increase complexity and add [mental overhead](https://nakamotoinstitute.org/static/docs/micropayments-and-mental-transaction-costs.pdf), thereby limiting the diversity of users and rendering simulation increasingly unrealistic. 
+
+<!-- **Should Go Through This Somewhere; maybe cache this and tweet storm it later?**
+As an example, let's consider the scenario in which a DAO receives thousands of proposals to mint new shares in a short time period. While calculating expected dilution from the acceptance of a single proposal is not unbearable, the complexity blows up when users consider the probability of a proposal's acceptance in the context of all the other submitted proposals. To make such a system work, significant UI innovation must occur to make the hidden costs of inflation clear to DAO members(**`*`**)
+* Even then, the inherent unpredictability of proposal acceptance makes it extremely unlikely that any coordination DAO will ever work...the proof goes something like this; let's say we have a system that *perfectly* predicts the probability of proposal passage; this system will influence the proposal passage, thereby changing the true probabilities in inherently unpredictable ways
+* one system we could borrow from would be something like the Fed where guidance is given by the DAO members regarding the areas they would like to fund and how much funding they would like to provide. -->
 
 ## Closed Incentive Loop <a name = "closed"></a>
 
+To minimize hidden costs like inflation, we structure incentives as a closed loop in which fees cover rewards. 
 
+In the [`utxo-workshop`](https://github.com/nczhu/utxo-workshop), the difference between inputs and outputs are distributed evenly among the validator set. 
+
+* While Bitcoin mints its native asset to incentivize mining, this doesn't make the snese 
 
 * minimize inflation `=>` closed incentive loop
 
@@ -39,8 +47,9 @@ The most obvious example in [SunshineDAO](https://github.com/AmarRSingh/Sunshine
 Pursuing accessibility extends beyond 
 
 *Closed Incentive Loops High-Level Overview*
-* with examples, first we'll show how this is done at the application level with Sunshine DAO
-* then protocol level with UTXO
+* with examples, first we'll show how this is done at the protocol level with UTXO
+* then application level with Sunshine DAO 
+
 
 ## UTXO <a name = "utxo"></a>
 

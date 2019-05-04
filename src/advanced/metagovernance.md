@@ -9,3 +9,10 @@
 
 * Transaction Fees and How They Flow in a Closed System
 * Dilution Bound?
+
+## Protocol Engineering vs Mechanism Design (cached here?)
+
+* make a distinction between protocol and application level; maybe describe how Bitcoin works...it is an engineered Cantillon effect; modern block reward proposals have similar intentions, but the real problem with this at the application level is that it hides a tax on user's funds...
+* segway into the UTXO example with this...
+
+* maybe make the title more specific...
