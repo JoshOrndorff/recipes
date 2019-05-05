@@ -1,6 +1,8 @@
 # Metagovernance of Dilution Bound and Other Metrics
 > *researching now*
 
+* should use modeling for this I think...needs more research rather than implementation
+
 * lots of metadata requires for all items, but we need to limit storage overhead so I think that's where clever handling comes into play...
 
 * governing all of these parameters in a consummable way
@@ -9,6 +11,8 @@
 
 * Transaction Fees and How They Flow in a Closed System
 * Dilution Bound?
+
+* Shawn's article on `Sudo`
 
 ## Protocol Engineering vs Mechanism Design (cached here?)
 

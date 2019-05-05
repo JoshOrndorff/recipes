@@ -32,24 +32,18 @@ As an example, let's consider the scenario in which a DAO receives thousands of 
 
 ## Closed Incentive Loop <a name = "closed"></a>
 
-To minimize hidden costs like inflation, we structure incentives as a closed loop in which fees cover rewards. 
+**To minimize hidden costs like inflation, we structure incentives as a closed loop in which fees cover rewards.**  
 
-In the [`utxo-workshop`](https://github.com/nczhu/utxo-workshop), the difference between inputs and outputs are distributed evenly among the validator set. 
+Not every system follows this rule; Bitcoin incentivizes the sustained security of the blockchain by minting new UTXOs to the *winning* miner upon commiting the discovered block. Ceteris paribus, this constant inflation deteriorates the purchasing power of other Bitcoin holders for every new block added to the chain, but, in practice, Bitcoin's price is *resistant* to changes in supply (at least in the short-term).
 
-* While Bitcoin mints its native asset to incentivize mining, this doesn't make the snese 
+By designing our mechanisms as closed incentive loops, we opt for a [different](() "NOT best for every application") approach that prioritizes the economic sovereignty of passive actors. In the [`utxo-workshop`](https://github.com/nczhu/utxo-workshop), the difference between transaction inputs and outputs are distributed evenly among the validator set. In [`SunshineDAO`](https://github.com/4meta5/SunshineDAO), we bond proposals for both the sponsor and the applicant to fund rewards for proposal processing. By paying for rewards with fees, neither of these examples rely on inflationary funding. This choice is preferrable as it minimizes the hidden costs to passive holders.
 
-* minimize inflation `=>` closed incentive loop
+* [UTXO Closed Loop](#utxo)
+* [SunshineDAO Closed Loop](#sun)
 
-The most obvious example in [SunshineDAO](https://github.com/AmarRSingh/SunshineDAO) is the share dilution that occurs when *some* proposals are accepted and executed. As an example, grant proposals may request share ownership without committing stake above a transaction fee (the proposal bond). In this case, the minting of shares to satisfy the accepted proposal would dilute existing members. Without making them explicitly aware of this possibility, the DAO risks volatility and collapse (mass member exit). Therefore,
+At the same time, not all mechanisms that incorporate closed incentive loops are exempt from inflationary risks. The most obvious example in [SunshineDAO](https://github.com/AmarRSingh/SunshineDAO) is the share dilution that occurs when *some* proposals are accepted and executed. As an example, grant proposals may request share ownership without committing stake above a transaction fee (the proposal bond). In this case, the minting of shares to satisfy the accepted proposal dilutes the ownership of existing members. Without making them explicitly aware of this possibility, the DAO risks volatility and collapse (mass member exit).
 
-* This is the most obvious source of inflation, but if we create an open incentive structure, then we could mint new shares as a reward for DAO actors, but that would also act as a cost to all other members and this complexity is not at all transparent...
-
-Pursuing accessibility extends beyond 
-
-*Closed Incentive Loops High-Level Overview*
-* with examples, first we'll show how this is done at the protocol level with UTXO
-* then application level with Sunshine DAO 
-
+* [SunshineDAO Dilution Safety](#dilute)
 
 ## UTXO <a name = "utxo"></a>
 
@@ -103,12 +97,18 @@ Sustained stakeholder interaction is nontrivial in a digital context (*see [AGP 
 1. mitigate proposal spam
 2. remove stale entries
 
-* trash analogy here...we don't want to issue shares because we want to minimize hidden costs
+* trash analogy here
+* we don't want to issue shares because we want to minimize hidden costs
+
+* so get right into the code here...
 
 * use `Currency` in lieu of importing `balances`
 
 * bond patterns (from `SunshineDAO`)
 * reserve, unreserve, transfer
+
+* *an alternative bonding approach* is covered in scheduling collateralization
+* what is preferrable? Good question to know the answer to...might depend on the DApp's assumptions
 
 * awareness of bribery / collusive actor dynamics means that you have to think of the scenario in which the processer is the proposal sponsor -- do we want to make this not allowed? or would we prefer to make it so that this isn't advantageous!
 
