@@ -92,26 +92,92 @@ fn spend_leftover(authorities: &[H256]) {
 ```
 
 ## SunshineDAO <a name = "sun"></a>
+> *Context*: SunshineDAO is a fund coordination DAO. Proposals to the DAO request share issuance and, optionally, stake capital. By burning shares, a member of the DAO redeems capital held by the DAO (in proportion to the number of shares they burn). For more information, see the [github](https://github.come/4meta5/SunshineDAO). Also, the `Currency` trait is used for making balance transfers -- see [the official docs](https://docs.substrate.dev/docs/substrate-runtime-recipes#section-make-a-balance-transfer) for more details.
 
-Sustained stakeholder interaction is nontrivial in a digital context (*see [AGP vote turnouts](https://forum.aragon.org/t/evaluating-the-agp-1-voting-results-makes-me-think-we-need-an-aragon-community-token-act/290)*). Although we will not cover voter incentives here, we will introduce a **closed fee structure designed to** 
-1. mitigate proposal spam
-2. remove stale entries
+Imagine that our DAO has a pool of pending proposals. Each proposal requires sponsorship by a member of the DAO. As more proposals are submitted, the pool's size increases, and it becomes more difficult for voting members to keep track of the current state. To alleviate state bloat, stale proposals that have not passed in the defined voting period must be removed from the pool and successful proposals should be executed. Moreover, a cost should be attached to proposal submissions to prevent spam.
 
-* trash analogy here
-* we don't want to issue shares because we want to minimize hidden costs
+In summary, we need to guide actor incentives to
+1. sponsor proposals
+2. remove stale proposals
+3. process successful proposals
+4. mitigate proposal spam
 
-* so get right into the code here...
+Fortunately, we can use **(4)** to fund **(1)**, **(2)**, and **(3)**, thereby constructing a closed incentive loop. Specifically, we require a bond ( collateral) from both the applicant and the sponsoring member to submit a proposal. Within the `decl_module` block, we have a `propose` function which includes this logic.
 
-* use `Currency` in lieu of importing `balances`
+```rust
+// SunshineDAO/runtime/src/dao.rs `decl_module{}`
+fn propose(origin, applicant: AccountId, shares: u32, tokenTribute: BalanceOf<T>) -> Result {
+    let who = ensure_signed(origin)?;
+    ensure!(Self::is_member(&who), "proposer is not a member of Dao");
 
-* bond patterns (from `SunshineDAO`)
-* reserve, unreserve, transfer
+    // reserve member's bond for proposal
+    T::Currency::reserve(&who, Self::proposal_bond())
+        .map_err(|_| "balance of proposer is too low")?;
+    // reserve applicant's tokenTribute for proposal
+    T::Currency::reserve(&applicant, tokenTribute)
+        .map_err(|_| "balance of applicant is too low")?;
+}
+```
 
-* *an alternative bonding approach* is covered in scheduling collateralization
-* what is preferrable? Good question to know the answer to...might depend on the DApp's assumptions
+If the proposal is aborted within a short period after submission, then the bonds can be returned without penalty. 
 
-* awareness of bribery / collusive actor dynamics means that you have to think of the scenario in which the processer is the proposal sponsor -- do we want to make this not allowed? or would we prefer to make it so that this isn't advantageous!
+```rust
+// SunshineDAO/runtime/src/dao.rs `decl_module{}`
+fn abort(origin, hash: Vec<u8>) -> Result {
+    // check that the abort is within the window
+    ensure!(
+        proposal.startTime + Self::abort_window() >= <system::Module<T>>::block_number(),
+        "it is past the abort window"
+    );
 
+    // return the proposalBond back to the proposer because they aborted
+    T::Currency::unreserve(&proposal.proposer, Self::proposal_bond());
+    // and the tokenTribute to the applicant
+    T::Currency::unreserve(&proposal.applicant, proposal.tokenTribute);
+}
+```
+
+However, if the proposal does not pass, then the bonds for both parties is transferred to the member that processes the proposal (thereby incentivizing **(2)** with our solution to **(4)**). 
+
+```rust
+// SunshineDAO/runtime/src/dao.rs `decl_module{}`
+fn process(origin, hash: Vec<u8>) -> Result {
+    // IF NOT PASS
+    // transfer the proposalBond back to the proposer
+    T::Currency::unreserve(&proposal.proposer, Self::proposal_bond());
+    // transfer proposer's proposal bond to the processer
+    T::Currency::transfer(&proposal.proposer, &who, Self::proposal_bond());
+    // return the applicant's tokenTribute
+    T::Currency::unreserve(&proposal.applicant, proposal.tokenTribute);
+    // transfer applicant's proposal fee to the processer
+    T::Currency::transfer(&proposal.applicant, &who, Self::proposal_fee());
+}
+```
+
+If the proposal passes, the sponsor's bond is returned, and the applicant's bond is split between the sponsor and the processing member (**(4)** => **(1)**, **(3)**).
+
+```rust
+// SunshineDAO/runtime/src/dao.rs `decl_module{}`
+fn process(origin, hash: Vec<u8>) -> Result {
+    // IF PASS
+    // transfer the proposalBond back to the proposer
+    T::Currency::unreserve(&proposal.proposer, Self::proposal_bond());
+    // and the applicant's tokenTribute
+    T::Currency::unreserve(&proposal.applicant, proposal.tokenTribute);
+
+    // split the proposal fee between the proposer and the processer
+    let txfee = Self::proposal_fee().checked_mul(0.5);
+    T::Currency::make_transfer(&proposal.applicant, &who, txfee);
+    T::Currency::make_transfer(&proposal.applicant, &proposal.proposer, txfee);
+}
+```
+
+The basic bonding pattern used in this example follows this pattern:
+* Bonding stake => `T::Currency::reserve`
+* Unbonding stake => `T::Currency::unreserve`
+* Transferring bond => `T::Currency::make_transfer`
+
+There is an alternative to this `reserve => unreserve (=>) transfer` bonding pattern covered in [Scheduling Collateralization](./lock.md).
 
 ## Bonus: Dilution Safety Mechanisms <a name = "dilute"></a>
 

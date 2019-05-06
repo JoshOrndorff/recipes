@@ -1,1 +1,3 @@
 # Scheduling Collateralization
+
+*in progress* :)
