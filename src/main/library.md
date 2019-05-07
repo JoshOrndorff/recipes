@@ -82,7 +82,7 @@
 ## More Open Source Projects 🍪 <a name = "oss"></a>
 
 **Fund Coordination DAO**
-* [`4meta5/SunshineDAO](https://github.com/4meta5/SunshineDAO)
+* [`4meta5/SunshineDAO`](https://github.com/4meta5/SunshineDAO)
 
 **Decentralized Asset Management**
 *  [`chainx-org/ChainX`](https://github.com/chainx-org/ChainX) - Fully Decentralized Cross-chain Crypto Asset Management on Polkadot [chainx](https://chainx.org), [development notes](https://hackmd.io/p_v1M8WGRyy9PggYiKA_Xw#)
