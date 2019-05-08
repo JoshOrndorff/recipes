@@ -6,7 +6,6 @@
 - [Transaction Ordering](./advanced/ordering.md)
 - [Offline Interaction](./advanced/inherent.md)
 - [Verifying Set Member Uniqueness](./advanced/unique.md)
-- [Special Struct Fields](./advanced/special_fields.md)
 - [Robust Path Handling](./advanced/conditionals.md)
 - [Optimization Tricks](./advanced/optimizations.md)
 

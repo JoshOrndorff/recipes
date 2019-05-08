@@ -1,10 +1,10 @@
 # Special Field Objects
 
-* to start, how much does it cost to keep all of a `struct`'s fields local rather than storing them elsewhere. There has to be some cost, but is it substantial enough to outweigh the incredible increase in readability and maintainability.
 
 ## Public vs Private
 
 * and do we maintain access to all of its methods in the runtime if it's declared outside the `decl_module` block
+* also for functions?
 
 ## [COMPACT]
 
@@ -32,6 +32,8 @@ TransactionOutput {
 Setting `salt` to something as inconspicuous as `BlockNumber` still ensures that there arent enough of the same output in each block to open the *replay attack* vector described above.
 
 ## Encrypted Nonce Pattern
+
+> also known as epoch reclamation
 
 Peer to peer nodes connect over an encrypted communication channels referred to as *privatization* in protocols like Libp2p. An encrypted connection can simply be bootstrapped from simple public key cryptography.
 
