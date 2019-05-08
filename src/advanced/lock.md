@@ -1,8 +1,8 @@
 # Scheduling Collateralization
 
-In the recipe on [incentive design](./incentive.md#sun), we covered a common bonding pattern also found in the [`srml/staking`](https://github.com/paritytech/substrate/tree/master/srml/staking) and [`srml/council`](https://github.com/paritytech/substrate/tree/master/srml/council) modules which bonds capital via the `reserve => unreserve => transfer` pattern. This pattern works, but there is another ways that we can lock up capital for a defined period of time when building with Substrate.
+In the [incentive design recipe](./incentive.md#sun), we covered a common bonding pattern also found in the [`srml/staking`](https://github.com/paritytech/substrate/tree/master/srml/staking) and [`srml/council`](https://github.com/paritytech/substrate/tree/master/srml/council) modules which bonds capital via the `reserve => unreserve (=>) transfer` pattern. This pattern works, but there is another way to lock up capital for a defined period of time when building with Substrate.
 
-In the [`utxo-workshop`](https://github.com/nczhu/utxo-workshop), unspent outputs can be locked up until a defined future block. A similar pattern is exercised in the [`collateral`](https://github.com/nczhu/collateral) example. *S/O [`nczhu`](https://github.com/nczhu) for mastering and applying the pattern in both of these examples*
+In the [`utxo-workshop`](https://github.com/nczhu/utxo-workshop), unspent outputs can be locked up until a defined future block. A similar pattern is exercised in the [`collateral`](https://github.com/nczhu/collateral) sample. *S/O [`nczhu`](https://github.com/nczhu) for mastering and applying the pattern in both of these examples*
 
 * [UTXO Locking](#lock)
 * [Managing Collateral](#collatz)
