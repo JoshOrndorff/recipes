@@ -25,6 +25,6 @@
     - [Transaction Ordering](./advanced/ordering.md)
     - [Offline Interaction](./advanced/inherent.md)
     - [Verifying Set Member Uniqueness](./advanced/unique.md)
-    - [Robust Path Handling](./advanced/conditionals.md)
+    - [Robust Conditional Paths](./advanced/conditionals.md)
     - [Optimization Tricks](./advanced/optimizations.md)
 - [Open Source Dessert](./main/library.md)
