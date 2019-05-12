@@ -1,1 +1,1 @@
-*[Live](http://substrate.recipes)*
+**[LIVE SITE](https://substrate.recipes)**
