@@ -1,7 +1,7 @@
 # Summary
 
 - [Introduction](./main/start.md)
-- [Motivation](./main/motivation.md)
+- [Getting Started](./main/motivation.md)
 - [Setting Up Substrate](./main/setup.md)
     - [Polkadot UI](./main/ui.md)
     - [Minimal Configuration](./main/chainspec.md)
