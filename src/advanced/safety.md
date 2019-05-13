@@ -82,25 +82,43 @@ let new_all_people_count = match all_people_count.checked_add(1) {
 
 Often times we may intend for keys to be unique identifiers that map to a specific storage item. In this case, it is necessary to check for collisions before adding new entries. Before adding a new item to the mapping, we can check if the unique id already has an associated storage item.
 
+In [SunshineDAO](https://github.com/4meta5/SunshineDAO), we use the hash of a proposal as the unique identifier in a `Proposals` map in the `decl_storage{}` block. Before adding a new proposal to the `Proposals` map, we check that the hash doesn't already have an associated value in the map. If it does, we do not allow subsequent storage changes because this would cause a key collision.
+
 ```rust
-ensure!(!<Value<T>>::exists(new_id), "This new id already exists");
+/// decl_module{} in runtime/src/dao.rs
+fn propose(origin, applicant: AccountId, shares: u32, tokenTribute: BalanceOf<T>) -> Result {
+    // check that applicant doesn't have a pending application
+	ensure!(!(Self::proposals::exists(&prop.base_hash)), "Key collision :(");
+    // .. more checks
+
+    //add proposal
+	Self::proposals::insert(prop.base_hash, prop);
+}
 ```
+
+For another example, see how the [Substrate collectables tutorial](https://shawntabrizi.com/substrate-collectables-workshop/#/2/generating-random-data?id=checking-for-collision) covers this pattern.
 
 ### Verifying Signed Messages <a name = "signed"></a>
 
-* [Checking for a Signed Message](https://shawntabrizi.github.io/substrate-collectables-workshop/#/1/storing-a-value?id=checking-for-a-signed-message)
-
-Sometimes, we use this to verify set membership. In the context of SunshineDAO, 
+It is often useful to designate some functions as permissioned and, therefore, accessible only by a defined group. In this case, we check that the transaction that invokes the function is signed before verifying that the signature corresponds to a member of the permissioned set. In [SunshineDAO](https://github.com/4meta5/SunshineDAO), all of the runtime module functions can only be called by members of the DAO. At the top of every runtime module function, the following check is included.
 
 ```rust
-/// going to add soon
+let who = ensure_signed(origin)?;
+ensure!(Self::is_member(&who), "sponsor is not a member of Dao");
 ```
+
+To read more about checking for signed messages, see the relevant section in the [Substrate collectables tutorial](https://shawntabrizi.github.io/substrate-collectables-workshop/#/1/storing-a-value?id=checking-for-a-signed-message).
 
 ## Logic Proofs <a name = "qed"></a>
 
-Because Substrate grants bare-metal control to developers, certain code patterns can expose potential panics at runtime. Panics at runtime could
+Because Substrate grants bare-metal control to developers, certain code patterns can expose panics at runtime. As mentioned in (2) of [criteria](#criteria), panics can cause irreversible storage changes, possibly even bricking the blockchain and rendering it useless. 
 
-* prove with `.except()`
-* look for examples in Substrate with the codefinder...
-* look at Shawn's cryptokitties...
-* [Adding Proofs for Unsafe and Panics](https://forum.parity.io/t/usage-of-unsafe-code/240)
+It is the responsibility of Substrate developers to ensure that their code doesn't panics after storage changes. In many cases, safety might be independently verified by the developer while writing the code. To facilitate auditability and better testing, Substrate developers should include a proof in an `.expect()` call that shows why the code's logic is safe and will not panic. Convention dictates formatting the call like so
+
+```rust
+<Object<T>>::method_call().expect("<proof of safety>; qed");
+```
+
+You can find more examples of this pattern in the [Substrate codebase](https://github.com/paritytech/substrate/search?q=expect). Indeed, including logic proofs is very important for writing readable, well-maintained code. By this point, it should be no surprise that this pattern is also discussed in the [Substrate collectables tutorial](https://shawntabrizi.com/substrate-collectables-workshop/#/3/buying-a-kitty?id=remember-quotverify-first-write-lastquot).
+
+> *QED stands for Quod Erat Demonstrandum which loosely translated means "that which was to be demonstrated"*
