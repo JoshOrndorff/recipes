@@ -1,9 +1,8 @@
 ## String Storage (as Bytemap) <a name = "string" ></a>
 
-Substrate doesn't directly support Strings. Runtime storage is for storing the state of the business logic for which the runtime operates. If arbitrary storage must be stored in the runtime, it is better to create a bytearray(`Vec<u8>`).
-> the better approach is to store a hash to a service like IPFS to then use to fetch data for the UI
+Runtime storage is for storing the state of the business logic for which the runtime operates. If arbitrary storage must be stored in the runtime, it is better to create a bytearray(`Vec<u8>`). With that said, Substrate doesn't directly support `String`. To achieve the same functionality, it is better to store a hash to a service like IPFS to then use the hash to fetch data for the UI (*recipe coming soon!*).
 
-Here's a workaround to store a string in the runtime using JavaScript to convert the string to hex and back.
+Here's a workaround to store a string in the runtime using JavaScript to convert the string to hex and back. You probably shouldn't do this...
 
 ```rust
 use srml_support::{StorageValue, dispatch::Result};
@@ -27,9 +26,9 @@ decl_storage! {
 }
 ```
 
-We store the string as a bytearray, which is inputted into the Polkadot UI as a hex string. These helper functions in JavaScript allow you to convert a string to hex and back right in the browser console.
+Store the string as a bytearray, which is inputted into the Polkadot UI as a hex string. These helper functions in JavaScript enable conversation from a string to hex and back, all in the browser console.
 
-```rust
+```javascript
 function toHex(s) {
     var s = unescape(encodeURIComponent(s))
     var h = '0x'

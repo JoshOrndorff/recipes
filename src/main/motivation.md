@@ -12,7 +12,7 @@ I've also written about Substrate on my [personal blog](https://4meta5.github.io
 You can read the book chronologically or jump around. Personally, I prefer jumping around, but people learn in different ways :)
 
 Regardless of the approach you take, it is useful to recognize that [coding is all about abstraction](https://youtu.be/05H4YsyPA-U?t=1789). To accelerate your progress, I recommend skimming the patterns in this book, composing them into interesting projects, and abstracting your own unique recipes. Feel free to reach out to me at <amar@parity.io> for guidance or, better yet, direct specific questions to the [Substrate technical channel](https://riot.im/app/#/room/#substrate-technical:matrix.org).
-## Chef's Recommendations
+## Chef's Choice
 
 My favorite recipes include
 

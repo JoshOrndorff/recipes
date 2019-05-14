@@ -1,6 +1,6 @@
 # Generic Structs
 
-In Rust, a `struct`, or structure, is a custom a custom data type that lets you name and package together multiple related values that make up a meaningful group. If you’re familiar with an object-oriented language, a `struct` is like an object’s data attributes (read more [here](https://doc.rust-lang.org/book/ch05-01-defining-structs.html)).
+In Rust, a `struct`, or structure, is a custom a custom data type that lets you name and package together multiple related values that make up a meaningful group. If you’re familiar with an object-oriented language, a `struct` is like an object’s data attributes (read more in [The Rust Book](https://doc.rust-lang.org/book/ch05-01-defining-structs.html)).
 
 To define a custom struct for the runtime, the following syntax may be used:
 
@@ -13,7 +13,7 @@ pub struct MyStruct<A, B> {
 }
 ```
 
-> In the code snippet above, we use the [derive macro](https://doc.rust-lang.org/rust-by-example/trait/derive.html) to ensure `MyStruct` conforms to shared behavior according to the specified [traits](https://doc.rust-lang.org/book/ch10-02-traits.html): `Encode, Decode, Default, Clone, PartialEq`
+In the code snippet above, the [derive macro](https://doc.rust-lang.org/rust-by-example/trait/derive.html) is declared to ensure `MyStruct` conforms to shared behavior according to the specified [traits](https://doc.rust-lang.org/book/ch10-02-traits.html): `Encode, Decode, Default, Clone, PartialEq`
 
 To use the `Encode` and `Decode` traits, it is necessary to import them from the `parity_codec_derive` crate:
 
@@ -21,7 +21,9 @@ To use the `Encode` and `Decode` traits, it is necessary to import them from the
 use parity_codec_derive::{Encode, Decode};
 ```
 
-By storing types in `MyStruct` as generic types, we can utilize custom Substrate types like `AccountId`, `Balance`, and `Hash`. For example, to store a mapping from `AccountId` to `MyStruct` with `some_generic` as the `Balance` type and `some_other_generic` as the `Hash` type:
+By storing types in `MyStruct` as generics, it is possible to access custom Substrate types like `AccountId`, `Balance`, and `Hash`. 
+
+For example, to store a mapping from `AccountId` to `MyStruct` with `some_generic` as the `Balance` type and `some_other_generic` as the `Hash` type:
 
 ```rust
 decl_storage! {
@@ -33,7 +35,7 @@ decl_storage! {
 
 ## Basic Interaction
 
-Once our struct is intialized in runtime storage, we can push values and modify it by using a module function:
+To push values and modify the map
 
 ```rust
 decl_module! {
@@ -55,7 +57,6 @@ decl_module! {
 ```
 
 ## Nested Structs
-> check out the [TCR Example](https://github.com/parity-samples/substrate-tcr/blob/master/runtime/src/tcr.rs#l21) which makes heavy use of this pattern!
 
 This basic runtime shows how to store custom, nested structs using a combination of Rust primitive types and Substrate specific types via generics.
 
@@ -109,7 +110,10 @@ decl_storage! {
 }
 ```
 
-## UI Interaction
-> [Recipes Link to section](https://docs.substrate.dev/docs/substrate-runtime-recipes#section-polkadot-ui)
+For more information, see [Gautam's Substrate TCR](https://github.com/parity-samples/substrate-tcr/blob/master/runtime/src/tcr.rs) and the [full TCR tutorial](https://docs.substrate.dev/docs/building-a-token-curated-registry-dappchain-using-substrate)
 
-To access the value of this struct via the UI, it is necessary to import the structure of the new type such that the UI understand how to decode it. See [the runtime recipes](https://substrate.readme.io/docs/substrate-runtime-recipes) or the [Cryptokitties Collectables Tutorial](https://shawntabrizi.github.io/substrate-collectables-workshop/#/1/viewing-a-structure) to configure with either Polkadot UI or Substrate UI.
+## UI Interaction
+
+To access the value of the struct via the User Interface (UI), it is necessary to import the structure of the new type such that the UI understand how to decode it. See [Cryptokitties Collectables Tutorial](https://shawntabrizi.github.io/substrate-collectables-workshop/#/1/viewing-a-structure) to configure accordingly with Polkadot UI or Substrate UI.
+
+*Read more in the [official docs](https://docs.substrate.dev/docs/substrate-runtime-recipes#section-polkadot-ui)*

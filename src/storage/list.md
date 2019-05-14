@@ -1,8 +1,8 @@
 # Implementing Lists with Maps
 
-Substrate does not natively support a list type since it may encourage dangerous habits. Unless explicitly guarded against, a list will add unbounded `O(N)` complexity to an operation that will only charge `O(1)` fees. This opens an economic attack vector on your chain. **To learn more, check out [the section on economic security]().**
+Substrate does not natively support a list type since it may encourage dangerous habits. Unless explicitly guarded against, a list will add unbounded `O(n)` complexity to an operation that will only charge `O(1)` fees ([Big O notation refresher](https://rob-bell.net/2009/06/a-beginners-guide-to-big-o-notation/)). This opens an economic attack vector on your chain. **To learn more, see [Safety First](../advanced/safety.md).**
 
-Fortunately, we can emulate a list with a mapping and a counter like so:
+Instead, emulate a list with a mapping and a counter like so:
 
 ```rust
 use support::{StorageValue, StorageMap};
@@ -15,25 +15,25 @@ decl_storage! {
 }
 ```
 
-This code allows us to store a list of participants in our runtime represented by `AccountId`s. Of course, this implementation leaves many unanswered questions such as
+This code allows us to store a list of participants in the runtime represented by `AccountId`s. Of course, this implementation leaves many unanswered questions such as
 * How to add and remove elements?
 * How to maintain order under mutating operations?
 * How to verify that an element exists before removing/mutating it?
 
-This section strives to answer those questions with snippets from relevant code samples:
+This recipe answers those questions with snippets from relevant code samples:
 * [Adding/Removing Elements in an Unordered List](#unbounded)
 * [Swap and Pop for Ordered Lists](#swappop)
 * [Linked Map for Simplified Runtime Logic](#linkedmap)
-* [Double Map](#doublemap)
-* [Necessary Underflow/Overflow Checks](#safety)
+
+**Note**: it is important to properly handle [overflow/underflow](../advanced/safety.md#overunder) and verify [other relevant conditions](../advanced/safety.md#check) when invoking this recipe
 
 ## Adding/Removing Elements in an Unbounded List <a name = "unbounded"></a>
 
-If the size of our list is not relevant to how we access data, the implementation is straightforward. 
+If the size of the list is not relevant, the implementation is straightforward. 
 
-For example, let's say that we have a list of `proposal`s (defined as a struct in our runtime). When a `proposal` expires, we remove it from our list, but it is not necessary to update the indices of other `proposal`s that have been added (*if* we perform checks that a proposal exists in the map before accessing it). 
+For example, let's say that there is a list of `proposal`s (maybe defined as a struct in the runtime). When a `proposal` expires, remove it from the list, but it is not necessary to update the indices of other `proposal`s that have been added. *Note that it is still necessary to [verify the existence](../advanced/safety.md#collision) of proposals in the map before attempting access.* 
 
-We can store our `proposal`s in a key-value mapping similar to the initial example:
+Store the `proposal`s in a key-value mapping
 
 ```rust
 #[cfg_attr(feature = "std", derive(Serialize, Deserialize, Debug))]
@@ -50,7 +50,7 @@ decl_storage! {
 }
 ```
 
-To add a `proposal`, we would increment the `largest_index` and add a `proposal` at that index:
+To add a `proposal`, increment the `largest_index` and insert a `proposal` at that index:
 
 ```rust
 decl_module! {
@@ -76,7 +76,7 @@ decl_module! {
 }
 ```
 
-To remove a `proposal`, we can simple invoke the `remove` method for the `StorageMap` type at the relevant index. In this case, we do not need to update the indices of other `proposal`s. This is because order does not matter for this sample.
+To remove a `proposal`, call the `remove` method for the `StorageMap` type at the relevant index. In this case, it isn't necessary to update the indices of other `proposal`s; order is not relevant.
 
 ```rust
 decl_module! {
@@ -95,23 +95,21 @@ decl_module! {
 }
 ```
 
-Because we are not updating the indices of other `proposal`s in our map, we have to check that a proposal exists before removing it, mutating it, or performing any other relevant operation.
+Because the code doesn't update the indices of other `proposal`s in the map, it is necessary to verify a proposal's existence before removing it, mutating it, or performing any other operation.
 
 ```rust
 // index is the `u32` that corresponds to the proposal in the `<Proposals<T>>` map
 ensure!(<Proposals<T>>::exists(index), "proposal does not exist at the provided index");
 ```
 
-For a more extensive and complete example of this pattern, see [SunshineDAO](https://github.com/AmarRSingh/SunshineDAO/runtime/src/dao.rs).
-
 ## Swap and Pop for Ordered Lists <a name = "swappop"></a>
 
-When we want to preserve storage such that our list doesn't continue growing even after we remove elements, we can invoke the **swap and pop** method:
-1. swap the element to be removed with the element at the head of our *list* (the element with the highest index in our map)
+To preserve storage so that the list doesn't continue growing even after removing elements, invoke the **swap and pop** algorithm:
+1. swap the element to be removed with the element at the head of the *list* (the element with the highest index in the map)
 2. remove the element recently placed at the highest index
 3. decrement the `LargestIndex` value. 
 
-Continuing with our example, we maintain the same logic for adding proposals (increment `LargestIndex` and insert entry at the head of our *list*).  However, we invoke the *swap and pop* algorithm when removing elements from our list:
+Use the *swap and pop* algorithm to remove elements from the list.
 
 ```rust
 decl_module! {
@@ -140,11 +138,13 @@ decl_module! {
 }
 ```
 
+*Keep the same logic for inserting proposals (increment `LargestIndex` and insert the entry at the head of the list)* 
+
 ### Linked Map <a name = "linkedmap></a>
 
-To trade performance for simpler code, utilize the `linked_map` data structure. By implementing [`EnumarableStorageMap`](https://crates.parity.io/srml_support/storage/trait.EnumerableStorageMap.html) in addition to [`StorageMap`](https://crates.parity.io/srml_support/storage/trait.StorageMap.html), `linked_map` provides a method `head` which yields the head of the *list*, thereby making it unnecessary to also store the `LargestIndex`. The `enumerate` method also returns an `Iterator` ordered according to when (key, value) pairs were inserted into the map.
+To trade performance for simpler code, utilize the `linked_map` data structure. By implementing [`EnumarableStorageMap`](https://crates.parity.io/srml_support/storage/trait.EnumerableStorageMap.html) in addition to [`StorageMap`](https://crates.parity.io/srml_support/storage/trait.StorageMap.html), `linked_map` provides a method `head` which yields the head of the *list*, thereby making it unnecessary to also store the `LargestIndex`. The `enumerate` method also returns an `Iterator` ordered according to when `(key, value)` pairs were inserted into the map.
 
-To use `linked_map`, we also need to import `EnumerableStorageMap`. Here is the new declaration in the `decl_storage` block:
+To use `linked_map`, import `EnumerableStorageMap`. Here is the new declaration in the `decl_storage` block:
 
 ```rust
 use support::{StorageMap, EnumerableStorageMap}; // no StorageValue necessary
@@ -157,7 +157,7 @@ decl_storage! {
 }
 ```
 
-Here is our new `remove_proposal` method
+Here is the new `remove_proposal` method:
 
 ```rust
 decl_module! {
@@ -180,13 +180,3 @@ decl_module! {
 ```
 
 The only caveat is that this implementation incurs some performance costs (vs solely using `StorageMap` and `StorageValue`) because `linked_map` heap allocates the entire map as an iterator in order to implement the [`enumerate` method](https://crates.parity.io/srml_support/storage/trait.EnumerableStorageMap.html#tymethod.enumerate).
-
-### Double Map <a name = "doublemap"></a>
-
-<!-- * double_map -->
-
-<!-- ## Necessary Underflow/Overflow Checks
-
-* put in section on economic security (not sure where to put this...)
-* **add something on checking for underflowing and overflowing**
-* just follow Shawn's tutorial for this... -->

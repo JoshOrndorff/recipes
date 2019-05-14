@@ -1,6 +1,6 @@
 # Mapping
 
-Mappings are a very powerful primitive. A *stateful* cryptocurrency might store a mapping between accounts and balances (see [simple token](#ex)). Likewise, mappings prove useful when representing *owned* data. By tracking ownership with maps, we can easily manage permissions for modifying values specific to individual users or groups.
+Mappings are a very powerful primitive. A *stateful* cryptocurrency might store a mapping between accounts and balances (see [token example](#token)). Likewise, mappings prove useful when representing *owned* data. By tracking ownership with maps, it is easy manage permissions for modifying values specific to individual users or groups.
 
 Within a specific module, a key-value mapping (between `u32` types) can be stored with this syntax:
 
@@ -60,12 +60,12 @@ To query `MyMap` for the `value` corresponding to a `key`:
 let value = <MyMap<T>>::get(key);
 ```
 
-## Simple Token Transfer <a name = "ex"></a>
+## Simple Token Transfer <a name = "token"></a>
 
-If we want to implement a simple token transfer with Substrate, we need to 
+To implement a simple token transfer with Substrate,
 1. set total supply
 2. establish ownership upon configuration of circulating tokens
-3. coordinate token transfers with our runtime functions
+3. coordinate token transfers with the runtime functions
 
 ```rust
 decl_storage! {
@@ -79,19 +79,18 @@ decl_storage! {
 }
 ```
 
-We should also set an event for when token transfers occur to notify clients
+Declare an event for when token transfers occur to notify clients
 
 ```rust
 decl_event!(
     pub enum Event<T> where AccountId = <T as system::Trait>::AccountId {
-        // event for transfer of tokens
-        // from, to, value
-        Transfer(AccountId, AccountId, u64),
+        // notifies upon token transfers
+        Transfer(AccountId, AccountId, u64), // (from, to, value)
     }
 );
 ```
 
-To integrate this logic into our module, we could write the following code:
+Integrate business logic into the module
 
 ```rust
 decl_module! {
@@ -136,4 +135,4 @@ decl_module! {
 }
 ```
 
-The full code from this example can be found [here](https://github.com/gautamdhameja/substrate-demo/blob/master/runtime/src/template.rs).
+s/o [Gautam's Substrate Demo](https://github.com/gautamdhameja/substrate-demo/blob/master/runtime/src/template.rs) for providing this recipe!

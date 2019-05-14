@@ -28,6 +28,7 @@
 * [`paritytech/ink`](https://github.com/paritytech/ink) - Substrate smart contract DSL
 * [`shawntabrizi/substrate-collectables-workshop`](https://github.com/shawntabrizi/substrate-collectables-workshop) - A guided tutorial for building a collectable dApp chain on Parity Substrate
 * [`parity-samples/substrate-tcr`](https://github.com/parity-samples/substrate-tcr) - A Parity Substrate runtime implementation of a simple Token Curated Registry (TCR)
+* [`gautamdhameja/substrate-poa`](https://github.com/gautamdhameja/substrate-poa) - A Substrate runtime which allows addition of new validators in a pure PoA fashion
 * [`parity-samples/substrate-tcr-ui`](https://github.com/parity-samples/substrate-tcr-ui) - A react.js frontend for Substrate TCR runtime
 * [`shawntabrizi/substrate-package`](https://github.com/shawntabrizi/substrate-package) - A stable package of the substrate-node-template and substrate-ui
 * [`lsaether/sr-bonded-token`](https://github.com/lsaether/sr-bonded-token/blob/master/Tutorial.md) - Token Bonding Curve tutorial with Substrate
