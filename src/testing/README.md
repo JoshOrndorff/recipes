@@ -1,24 +1,18 @@
 # Testing Substrate
 
-Although the Rust compiler ensures safe memory management, it cannot formally verify the correctness of a program's logic. Fortunately, Rust also comes with a convenient suite for writing unit and integration tests. When you initiate code with Cargo, generic test scaffolding is automatically generated to simplify the developer experience. Testing concepts and syntax are covered in depth in [Chapter 11 of the Rust Book](https://doc.rust-lang.org/book/ch11-00-testing.html).
-
-<!-- *Jump Ahead to...*
-* [Unit Testing](./unit.md)
-* [Fuzzing](./fuzzing.md) -->
-<!-- * [Benchmarking](./benching.md) -->
-<!-- https://hackmd.io/s/rkSSwtOKE -->
+Although the Rust compiler ensures safe memory management, it cannot formally verify the correctness of a program's logic. Fortunately, Rust also comes with a convenient suite for writing unit and integration tests. When you initiate code with Cargo, test scaffolding is automatically generated to simplify the developer experience. Testing concepts and syntax are covered in depth in [Chapter 11 of the Rust Book](https://doc.rust-lang.org/book/ch11-00-testing.html).
 
 ## Scaffolding
 
-To test a module in the context of Substrate, we have to do a little bit more work to set up our testing environment. Here, we'll go over the basic scaffolding necessary to test a module. If you just want the code, you can just use the [Substrate Node Template](https://github.com/shawntabrizi/substrate-package/blob/master/substrate-node-template/runtime/src/template.rs#L68). However, because most modules require some custom configuration, it is useful to understand the components that comprise the scaffolding.
+To test a module in the context of Substrate, there is bit more work required to set up our testing environment. Here, we'll introduce one scaffolding design pattern to test a module. If you just want the code, you can just use the `mod test{}` at the bottom of the [Substrate Node Template](https://github.com/shawntabrizi/substrate-package/blob/master/substrate-node-template/runtime/src/template.rs). However, because most modules require some custom configuration, it is useful to understand the components that comprise the scaffolding.
 
-Before we dive into the weeds, create a `mock.rs` and `test.rs` file in your runtime directory ([here](https://github.com/shawntabrizi/substrate-package/blob/master/substrate-node-template/runtime/src/)). At the top of `mock.rs` and `test.rs`, include the following compilation flag:
+Before we dive in, create a `mock.rs` and `test.rs` file in the runtime directory ([here](https://github.com/shawntabrizi/substrate-package/blob/master/substrate-node-template/runtime/src/)). At the top of `mock.rs` and `test.rs`, include the following compilation flag:
 
 ```rust
 #![cfg(test)]
 ```
 
-This basically tells the compiler to only run the tests if the `cargo test` command is invoked. For more information on this syntax, check out the [Rust reference guide](https://doc.rust-lang.org/reference/attributes.html#conditional-compilation) as well as [this tutorial by Philipp Oppermann](https://os.phil-opp.com/unit-testing/).
+This basically tells the compiler to only run the tests if the [`cargo test`](https://doc.rust-lang.org/cargo/guide/tests.html) command is invoked. For more information on this syntax, check out the [Rust reference guide](https://doc.rust-lang.org/reference/attributes.html#conditional-compilation) as well as [this unit testing tutorial by Philipp Oppermann](https://os.phil-opp.com/unit-testing/). Within the `mock.rs` file, we include the following imports
 
 ```rust
 use primitives::{BuildStorage, traits::IdentityLookup, testing::{Digest, DigestItem, Header, UintAuthorityId}};
@@ -27,7 +21,7 @@ use runtime_io;
 use substrate_primitives::{H256, Blake2Hasher};
 ```
 
-We also need to import the module configuration traits. For our module, we're going to import `Module` and `Trait`. We may also import `GenesisConfig` if some storage items are set to be configured in the genesis block (marked with `config()` in the `decl_storage` block).
+It is also necessary to import the module configuration traits. For this recipe,  import `Module` and `Trait`. We may also import `GenesisConfig` if some storage items are set to be configured in the genesis block (marked with `config()` in the `decl_storage` block).
 
 ```rust
 use crate::{GenesisConfig, Module, Trait};
@@ -35,7 +29,7 @@ use crate::{GenesisConfig, Module, Trait};
 
 ### Constructing a Mock Runtime
 
-To test our module, we need to construct a mock runtime. To do so, we must create a configuration type (`Test`) which implements each of the configuration traits of modules we want to use.
+To test the module, construct a mock runtime. To do so, create a configuration type called `Test` which implements the configuration traits.
 
 ```rust
 #[derive(Clone, PartialEq, Eq, Debug)]
@@ -44,7 +38,7 @@ pub struct Test;
 
 The [derive attribute](https://doc.rust-lang.org/edition-guide/rust-2018/macros/custom-derive.html) ensures that you don't have to manually implement the `Clone, PartialEq, Eq, Debug` traits; the compiler does this for you thereby ensuring that the `Test` type conforms to the behavior of these traits.
 
-Even so, this doesn't work for all traits. Indeed, there are a few traits that require manual implementation to effectively set up our testing environment in `test.rs`. In most case, these *implementations* are limited to specifying the type in your module that corresponds to the type in the imported module. For example, the [Staking module](https://github.com/paritytech/substrate/blob/master/srml/staking/src/mock.rs) implements the `balances` trait in its `mock.rs` file like so:
+Even so, this doesn't work for all traits. Indeed, there are a few traits that require manual implementation to set up the testing environment in `test.rs`. In most case, these *implementations* are limited to specifying the type in your module that corresponds to the type in the imported module. For example, the [Staking module](https://github.com/paritytech/substrate/blob/master/srml/staking/src/mock.rs) implements the `balances` trait in its `mock.rs` file like so:
 
 ```rust
 impl balances::Trait for Test {
@@ -60,7 +54,7 @@ impl balances::Trait for Test {
 
 > If the configuration logic is not overly complicated, the pattern that follows below can be forgone and replaced with something like [the test scaffolding in `srml/aura`](https://github.com/paritytech/substrate/blob/master/srml/aura/src/mock.rs).
 
-Next, define the an `ExtBuilder` struct that contains the configuration items from your module. In [`srml/staking`](https://github.com/paritytech/substrate/blob/master/srml/staking/src/mock.rs), this looks like
+Next, define an `ExtBuilder` struct that contains the configuration items from your module. In [`srml/staking`](https://github.com/paritytech/substrate/blob/master/srml/staking/src/mock.rs), this looks like
 
 ```rust
 pub struct ExtBuilder {
@@ -77,7 +71,7 @@ pub struct ExtBuilder {
 }
 ```
 
-It is useful for testing purposes to define default configuration values for each of the struct's fields. There is [a derive macro](https://doc.rust-lang.org/std/default/trait.Default.html) which could be invoked instead as an annotation on the `ExtBuilder` struct, but it assumes certain default values. From [`srml/staking`](https://github.com/paritytech/substrate/blob/master/srml/staking/src/mock.rs),
+It is useful for testing purposes to define default configuration values for each of the struct's fields. There is a [derive macro](https://doc.rust-lang.org/std/default/trait.Default.html) which could be invoked instead as an annotation on the `ExtBuilder` struct, but it assumes certain default values. From [`srml/staking`](https://github.com/paritytech/substrate/blob/master/srml/staking/src/mock.rs),
 
 ```rust
 impl Default for ExtBuilder {
@@ -142,7 +136,7 @@ impl ExtBuilder {
 }
 ```
 
-In addition, we define a `build` method for `ExtBuilder` to properly set all the configuration values in our runtime storage. If we are just using our default values, it is not more complicated than defining the following method:
+Next, define a `build` method for `ExtBuilder` to properly set all the configuration values in our runtime storage. If we are just using our default values, it is not more complicated than defining the following method:
 
 ```rust
 fn build() -> runtime_io::TestExternalities<Blake2Hasher> {
@@ -150,9 +144,9 @@ fn build() -> runtime_io::TestExternalities<Blake2Hasher> {
 }
 ```
 
-However, the logic for the `build` method in [`srml/staking`](https://github.com/paritytech/substrate/blob/master/srml/staking/src/mock.rs) is a tad bit more complicated in order to allow for a diversity of testing scenarios.
+However, the logic for the `build` method in [`srml/staking`](https://github.com/paritytech/substrate/blob/master/srml/staking/src/mock.rs) is slightly more complicated to allow for a diversity of testing scenarios.
 
-At the bottom of the `mock.rs` file, we publicly declare all of the modules that we're using in correspondence to the traits that were *implemented* for the `Test` struct. For [`srml/staking`](https://github.com/paritytech/substrate/blob/master/srml/staking/src/mock.rs),
+At the bottom of the `mock.rs` file, publicly declare all of the modules used in correspondence to the traits that were *implemented* for the `Test` struct. For [`srml/staking`](https://github.com/paritytech/substrate/blob/master/srml/staking/src/mock.rs),
 
 ```rust
 pub type System = system::Module<Test>;
@@ -164,7 +158,7 @@ pub type Staking = Module<Test>;
 
 ### Setting up the Testing Environment
 
-All of the types publicly declared at the bottom of `mock.rs` are imported in `test.rs` along with any other traits that will be used in the unit testing and any necessary comparison operators. We'll continue with using [`srml/staking/src/mock.rs`] as an example:
+All of the types publicly declared at the bottom of `mock.rs` are imported in `test.rs` along with any other traits that will be used in the unit testing and any necessary comparison operators. *We're still using [`srml/staking/src/mock.rs`](https://github.com/paritytech/substrate/blob/master/srml/staking/src/mock.rs) for the example*
 
 ```rust
 // don't forget this at the top of the file to indicate 
@@ -180,4 +174,4 @@ use mock::{Balances, Session, Staking, System, Timestamp, Test, ExtBuilder, Orig
 use srml_support::traits::{Currency, ReservableCurrency};
 ```
 
-<!-- Next, we'll demonstrate the proper syntax for [unit testing](./unit.md) in the `test.rs` file. -->
+Next, we'll cover unit testing using this set up; *the unit testing recipe is in progress :)*

@@ -1,6 +1,6 @@
 # Permissioned Function with Generic Event
 
-Here we provide a permissioned function which can only be called by the "owner". An event is emitted when the function is successfully run.
+This recipe contains a permissioned function which can only be called by the "owner". An event is emitted when the function is successfully executed.
 
 ```rust
 use srml_support::{StorageValue, dispatch::Result};

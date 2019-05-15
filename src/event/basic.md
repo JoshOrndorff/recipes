@@ -1,8 +1,9 @@
-# Dummy Event Declaration
+# Dummy Event
 
-To declare an event, use the `decl_event` macro
+To declare an event, use the [`decl_event`](https://crates.parity.io/srml_support/macro.decl_event.html) macro
 
 ```rust
+/// in module file
 decl_event!(
 	pub enum Event<T> where B = <T as balances::Trait>::Balance {
 		Dummy(B),
@@ -15,14 +16,16 @@ The `Dummy` event uses the generic type `B = <T as balances::Trait>::Balance`.
 The `decl_event` macro generates an `Event` type which needs to be exposed in the module. This type inherits some traits
 
 ```rust
+/// in module file
 pub trait Trait: balances::Trait {
     type Event: From<Event<Self>> to Into<<Self as system::Trait>::Event>;
 }
 ```
 
-To use events in the runtime, it is necessary to add a function to deposit the declared events. Within the `decl_module!` block, add a new function
+To use events in the runtime, it is necessary to add a function to deposit the declared events. Within the [`decl_module`](https://crates.parity.io/srml_support/macro.decl_module.html) block, add a new function
 
 ```rust
+/// in module file, decl_module block
 fn deposit_event<T>() = default();
 ```
 
@@ -31,7 +34,8 @@ fn deposit_event<T>() = default();
 After checking for the successful state transition in the body of a function, the requisite event should be deposited.
 
 ```rust
-fn accumulate_dummy(origin, increase_by: T::Balance) -> Result {
+/// in module file, decl_module block
+pub fn accumulate_dummy(origin, increase_by: T::Balance) -> Result {
     // This is a public call, so we ensure that the origin is some signed account.
     let _sender = ensure_signed(origin)?;
 
@@ -52,21 +56,19 @@ fn accumulate_dummy(origin, increase_by: T::Balance) -> Result {
 }
 ```
 
-Update the `lib.rs` file to include the new `Event<T>` type under the module's `Trait` implementation
+Update the runtime root `lib.rs` file to include the new `Event<T>` type under the module's `Trait` implementation
 
 ```rust
-// `lib.rs`
-...
+/// in root `lib.rs`
 impl mymodule::Trait for Runtime {
     type Event = Event<T>;
 }
 ```
 
-Include the `Event<T>` type in the module's definition in the `construct_runtime!` macro.
+Include the `Event<T>` type in the module's definition in the [`construct_runtime`](https://crates.parity.io/srml_support/macro.construct_runtime.html) macro block.
 
 ```rust
-// `lib.rs`
-...
+/// in root `lib.rs`
 construct_runtime!(
     pub enum Runtime for Log(InteralLog: DigestItem<Hash, Ed25519AuthorityId) where
         Block = Block,

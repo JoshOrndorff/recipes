@@ -1,7 +1,7 @@
 # Offline Interaction via Inherents
 *[Substrate Inherents Sample](https://github.com/gautamdhameja/substrate-inherents-sample)*
 
-Often times it is useful to incorporate off-chain data as inputs for processes validated on-chain. In these situations, it is useful to be familiar with [`substrate-inherents`](https://crates.parity.io/substrate_inherents/index.html).
+Often times, it might be necessary to incorporate off-chain data as inputs for processes validated on-chain. In these situations, it is useful to be familiar with [`substrate-inherents`](https://crates.parity.io/substrate_inherents/index.html).
 
 Once `substrate-inherents`is added as a dependency in the `cargo.toml` file and the module is declared publicly, the `Inherent` parameter should be added to the custom module definition in the `construct_runtime!`macro.
 
@@ -48,7 +48,7 @@ impl AuraInherentData for InherentData {
 }
 ```
 
-According to runtime convention, the module must also define an `InherentDataProvider` type and implement the `ProvideInherentData` trait. This implementation defines how the consensus engine specifies the inherent data to the runtime before block production time. Specifically, `ProvideInherent` indicates the required logic in `provide_inherent_data` to calculate the inherent data and store it in the `InherentData` storage. For the `aura` module, the `InherentDataProvider` is declared with the slot duration inherent data for Aura consensus. 
+According to runtime convention, the module must also define an [`InherentDataProvider`](https://crates.parity.io/substrate_inherents/struct.InherentDataProviders.html) type and implement the [`ProvideInherentData`](https://crates.parity.io/substrate_inherents/trait.ProvideInherentData.html) trait. This implementation defines how the consensus engine specifies the inherent data to the runtime before block production time. Specifically, [`ProvideInherent`](https://crates.parity.io/substrate_inherents/trait.ProvideInherent.html) indicates the required logic in `provide_inherent_data` to calculate the inherent data and store it in the [`InherentData`](https://crates.parity.io/substrate_inherents/struct.InherentData.html) storage. For the `aura` module, the `InherentDataProvider` is declared with the slot duration inherent data for Aura consensus. 
 
 ```rust
 /// Provides the slot duration inherent data for `Aura`.
@@ -104,5 +104,3 @@ impl ProvideInherentData for InherentDataProvider {
 ```
 
 *For a more comprehensive introduction, see the [Substrate inherents sample](https://github.com/gautamdhameja/substrate-inherents-sample)*
-
-<!-- ## OffChain Workers API -->

@@ -7,11 +7,12 @@ In the [`utxo-workshop`](https://github.com/nczhu/utxo-workshop), unspent output
 * [UTXO Locking](#lock)
 * [Managing Collateral](#collatz)
 
-## UTXO Locking
+## UTXO Locking <a name = "lock"></a>
 
-First, we define an enum to distinguish between locked and unlocked UTXOs.
+First, define an enum to distinguish between locked and unlocked UTXOs.
 
 ```rust
+/// utxo-workshop/runtime/src/utxo.rs
 /// A UTXO can be locked indefinitely or until a certain block height
 #[cfg_attr(feature = "std", derive(Serialize, Deserialize, Debug))]
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Encode, Decode, Hash)]
@@ -21,9 +22,10 @@ pub enum LockStatus<BlockNumber> {
 }
 ```
 
-In `decl_storage`, we define a map for specifying the locked UTXOs. This maps an unspent outputs public key (`H256`) to its `LockStatus`.
+In `decl_storage`, define a map for specifying the locked UTXOs. This maps an unspent outputs public key (`H256`) to its `LockStatus`.
 
 ```rust
+/// utxo-workshop/runtime/src/utxo.rs
 decl_storage {
     trait Store for Module<T: Trait> as Utxo {
         /// All UTXO that are locked
@@ -32,9 +34,10 @@ decl_storage {
 }
 ```
 
-We also need to specify a runtime function for adding UTXOs to the mapping. Before inserting an unspent output into the storage mapping, we check that the UTXO exists and is not already locked.
+Specify a runtime function for adding UTXOs to the mapping. Before inserting an unspent output into the storage mapping, check that the UTXO exists and is not already locked.
 
 ```rust
+/// utxo-workshop/runtime/src/utxo.rs
 impl<T: Trait> Module<T> {
     pub fn lock_utxo(hash: &H256, until: Option<T::BlockNumber>) -> Result {
         ensure!(!<LockedOutputs<T>>::exists(hash), "utxo is already locked");
@@ -55,9 +58,10 @@ impl<T: Trait> Module<T> {
 }
 ```
 
-Next, we add a runtime function to unlock UTXOs.
+Next, add a runtime function to unlock UTXOs.
 
 ```rust
+/// utxo-workshop/runtime/src/utxo.rs
 impl<T: Trait> Module<T> {
     pub fn unlock_utxo(hash: &H256) -> Result {
         ensure!(!<LockedOutputs<T>>::exists(hash), "utxo is not locked");
@@ -67,9 +71,10 @@ impl<T: Trait> Module<T> {
 }
 ```
 
-With this, we can verify that all of the unspent outputs that are claimed by transaction inputs are not locked in the `check_transaction` runtime function.
+Next, verify that all of the unspent outputs claimed by transaction inputs are not locked in the `check_transaction` runtime function.
 
 ```rust
+/// utxo-workshop/runtime/src/utxo.rs
 impl<T: Trait> Module<T> {
     pub fn check_transaction(transaction: &Transaction) -> CheckResult<'_> {
         for input in transaction.inputs.iter() {
@@ -85,6 +90,6 @@ impl<T: Trait> Module<T> {
 }
 ```
 
-## Collateral Management
+## Collateral Management <a name = "collatz"></a>
 
-*still in progress :)*
+*in progress :) -- see [`collateral`](https://github.com/nczhu/collateral) for a sneak peek of the recipe*

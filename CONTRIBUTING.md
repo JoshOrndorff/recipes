@@ -11,6 +11,8 @@
 
 I try to not use "we" or "our" because I feel like it encourages unncessary language. This isn't a steadfast rule, but I try to follow it.
 
+File issues and I'll help with formatting; if you're already confident, file a PR and I can help clean it up if necessary and add it to the book...
+
 * LINK TO OUTSIDE STUFF A LOT!
     * link to other sections often to illustrate how things work together
     * whenever you reference anything from an external source, link to it

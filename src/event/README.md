@@ -1,18 +1,18 @@
 # Event
 
-In Substrate, [transaction](https://docs.substrate.dev/docs/glossary#section-transaction) finality does not guarantee the execution of functions dependent on the given transaction. To verify that functions have executed successfully, emit an [event](https://docs.substrate.dev/docs/glossary#section-events) at the end of the function.
+In Substrate, [transaction](https://docs.substrate.dev/docs/glossary#section-transaction) finality does not guarantee the execution of functions dependent on the given transaction. To verify that functions have executed successfully, emit an [event](https://docs.substrate.dev/docs/glossary#section-events) at the bottom of the function body.
 
 > **Events** notify the off-chain world of successful state transitions
 
-To declare an event, use the [`decl_event`](https://github.com/paritytech/substrate/blob/HEAD/srml/example/src/lib.rs#L78) macro. Check out the [Dummy](./event/basic.md) event for more information regarding file structure and necessary inclusions in the runtime root `lib.rs`.
+To declare an event, use the [`decl_event`](https://crates.parity.io/srml_support/macro.decl_event.html) macro. See the [Dummy Event](./event/basic.md) for more information regarding file structure and necessary inclusions in the runtime root `lib.rs`.
 
-## Recipes <a name ="recipes"></a>
+## Recipes
 
 * [Dummy Event](./basic.md)
 * [Adding Machine](./adder.md)
 * [Permissioned Generic Event](./permissioned.md)
 
-## More Examples
+## More Resources
 
-* [Wiki Documentation for the SRML Source Code](https://wiki.parity.io/decl_event)
-* [Creating an Event (Cryptokitties Workshop)](https://shawntabrizi.github.io/substrate-collectables-workshop/#/2/creating-an-event)
+* [`decl_event` wiki docs](https://wiki.parity.io/decl_event)
+* [Substrate Collectables Tutorial: Creating Events](https://shawntabrizi.github.io/substrate-collectables-workshop/#/2/creating-an-event)
