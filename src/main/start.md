@@ -5,7 +5,7 @@ This book is built with [mdbook](https://rust-lang-nursery.github.io/mdBook/cont
 <!-- The repo is [open source](https://github.com/4meta5/SubstrateCookbook) and [open for contributions](https://github.com/4meta5/SubstrateCookbook/CONTRIBUTING.md). -->
 
 ### Thanks
-Thanks to the following for suggestions and content contribution: [gautamdhameja](https://github.com/gautamdhameja), [joepetrowski](https://github.com/joepetrowski), [ltfschoen](https://github.com/ltfschoen), [nczhu](https://github.com/nczhu), and [shawntabrizi](https://github.com/shawntabrizi)
+Thanks to the following for suggestions and content contribution: [gautamdhameja](https://github.com/gautamdhameja), [joepetrowski](https://github.com/joepetrowski), [ltfschoen](https://github.com/ltfschoen), [nczhu](https://github.com/nczhu), [shawntabrizi](https://github.com/shawntabrizi)
 
 ### License
 This work is licensed under both the [Creative Commons Share Attribution-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by-sa/4.0/) and the [MIT License](https://opensource.org/licenses/MIT).
