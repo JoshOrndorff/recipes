@@ -47,7 +47,7 @@ fn propose(origin, applicant: AccountId, shares: u32, tokenTribute: BalanceOf<T>
 
 When a check needs to be made, but ownership of locally declared variables does not need to be persisted, the developer should create a local scope to test the required variant before proceeding. An example of this pattern is how the [membership uniqueness](./unique.md) recipe verifies the nonexistence of duplicate UTXOs within closed scopes to minimize the persistence of `BTreeMap<T>`.
 
-For more in-depth explanations of this pattern, see the relevant section in the [Substrate Collectables tutorial](https://github.com/shawntabrizi/substrate-collectables-workshop/blob/master/3/buying-a-kitty.md#remember-verify-first-write-last) as well as [Gautam's Substrate Best Practices](https://docs.substrate.dev/docs/tcr-tutorial-best-practices). *This [github comment](https://github.com/shawntabrizi/substrate-collectables-workshop/pull/55#discussion_r258147961) is also very useful for visualizing the `verify first, write last` pattern in practice.*
+For more in-depth explanations of this pattern, see the relevant section in the [Substrate Collectables tutorial](https://github.com/shawntabrizi/substrate-collectables-workshop/blob/master/3/buying-a-kitty.md#remember-verify-first-write-last) as well as [Substrate Best Practices](https://docs.substrate.dev/docs/tcr-tutorial-best-practices). *This [github comment](https://github.com/shawntabrizi/substrate-collectables-workshop/pull/55#discussion_r258147961) is also very useful for visualizing the `verify first, write last` pattern in practice.*
 
 ## Common Necessary Checks <a name = "check"></a>
 
