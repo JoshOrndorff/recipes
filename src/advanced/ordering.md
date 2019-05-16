@@ -1,6 +1,6 @@
 # Transaction Ordering
 
-To customize the transaction ordering logic for a Substrate blockchain, use the `TaggedTransactionQueue` trait to specify the transaction queue logic and mitigate race conditions. The [docs](https://crates.parity.io/substrate_client/runtime_api/trait.TaggedTransactionQueue.html?search=) reveal that it is necessary to implement following function
+To customize the transaction ordering logic for a Substrate blockchain, use the [`TaggedTransactionQueue`](https://crates.parity.io/substrate_client/runtime_api/trait.TaggedTransactionQueue.html?search=) trait to specify the transaction queue logic and mitigate race conditions. To do so, implement the following function,
 
 ```rust
 fn validate_transaction(
@@ -10,7 +10,7 @@ fn validate_transaction(
 ) -> Result<TransactionValidity, Error>
 ```
 
-This function signature reveals that, in the event of a successful call, the return type must be `TransactionValidity`. Upon looking this type up [in the docs](https://crates.parity.io/sr_primitives/transaction_validity/enum.TransactionValidity.html), it is clear that this enum has three variants
+This function signature reveals that, in the event of a successful call, the return type must be [`TransactionValidity`](https://crates.parity.io/sr_primitives/transaction_validity/enum.TransactionValidity.html). This enum has three variants
 
 ```rust
 pub enum TransactionValidity {
@@ -25,7 +25,7 @@ pub enum TransactionValidity {
 }
 ```
 
-In the context of the `utxo-workshop`, specify the hashes of required transactions (`missing_utxos`) in the `requires` field while also specifying the list of transactions for which this utxo satisfies `requires` in the `provides` field. The `longevity` field is set somewhat arbitrarily, and the `priority` field serves simply to enforce an ordering on the set of transactions.  
+In the context of the [`utxo-workshop`](https://github.com/nczhu/utxo-workshop), specify the hashes of required transactions (`missing_utxos`) in the `requires` field while also specifying the list of transactions for which this utxo satisfies `requires` in the `provides` field. The `longevity` field is set somewhat arbitrarily for this example, and the `priority` field serves to enforce an ordering on the set of transactions.  
 
 ```rust
 impl runtime_api::TaggedTransactionQueue<Block> for Runtime {

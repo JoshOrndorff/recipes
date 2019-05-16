@@ -135,4 +135,4 @@ decl_module! {
 }
 ```
 
-s/o [Gautam's Substrate Demo](https://github.com/gautamdhameja/substrate-demo/blob/master/runtime/src/template.rs) for providing this recipe!
+s/o [`gautamdhameja/substrate-demo`](https://github.com/gautamdhameja/substrate-demo/blob/master/runtime/src/template.rs) for providing this recipe!

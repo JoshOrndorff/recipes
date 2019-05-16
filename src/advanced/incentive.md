@@ -90,7 +90,7 @@ fn spend_leftover(authorities: &[H256]) {
 ```
 
 ## SunshineDAO <a name = "sun"></a>
-> *Context*: SunshineDAO is a fund coordination DAO. Proposals to the DAO request share issuance and, optionally, stake capital. By burning shares, a member of the DAO redeems capital held by the DAO (in proportion to the number of shares they burn). For more information, see the [github](https://github.come/4meta5/SunshineDAO). Also, the `Currency` trait is utilized for making balance transfers -- see [the official docs](https://docs.substrate.dev/docs/substrate-runtime-recipes#section-make-a-balance-transfer) for more details.
+> *Context*: SunshineDAO is a fund coordination DAO. Proposals to the DAO request share issuance and, optionally, stake capital. By burning shares, a member of the DAO redeems capital held by the DAO (in proportion to the number of shares they burn). For more information, see the [github](https://github.come/4meta5/SunshineDAO).
 
 Imagine that our DAO has a pool of pending proposals. Each proposal requires sponsorship by a member of the DAO. As more proposals are submitted, the pool's size increases, and it becomes more difficult for voting members to keep track of the current state. To alleviate state bloat, stale proposals that have not passed in the defined voting period must be removed from the pool and successful proposals should be executed. Moreover, a cost should be attached to proposal submissions to prevent spam.
 
@@ -179,7 +179,7 @@ The basic bonding pattern used in this example follows this pattern:
 
 ## Dilution Safety Mechanism <a name = "dilute"></a>
 
-*Instant withdrawals* protect DAO members from experiencing the outcome of proposals that they vehemently oppose. In the worst case scenario, a faction of the DAO that controls greater than the required threshold submits a proposal to grant themselves some ridiculous number of new shares, thereby diluting the shares of all other members (*[deja vu](https://www.youtube.com/watch?v=Kk1sjbNcCxI)*). The instant withdrawal mechanism enables the minority faction under attack to exit the DAO while preserving their share ownership (because they can exit during the grace period before the proposal's execution). 
+*Instant withdrawals* protect DAO members from experiencing the outcome of proposals that they vehemently oppose. In the worst case scenario, a faction of the DAO that controls greater than the required threshold submits a proposal to grant themselves some ridiculous number of new shares, thereby diluting the shares of all other members (*[LOL](https://www.youtube.com/watch?v=Kk1sjbNcCxI)*). The instant withdrawal mechanism enables the minority faction under attack to exit the DAO while preserving their share ownership (because they can exit during the grace period before the proposal's execution). 
 
 Let's consider a more common scenario in which a contentious vote results in the exit of the opposing half, thereby increasing the funding burden on the remaining DAO members. For our example, let's assume that the DAO maintains 100 outstanding shares backed by 100M DOTs. If a new share is requested without posting any additional stake, and the vote is split 50/50 with 100% voter turnout, the 50 shares that voted against the proposal could leave during the grace period. Under this scenario, the funding burden for the remaining members increases from 1% to 2% (1/100 to 1/50) in accordance with share dilution. 
 

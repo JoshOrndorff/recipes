@@ -1,8 +1,8 @@
 # Implementing Lists with Maps
 
-Substrate does not natively support a list type since it may encourage dangerous habits. Unless explicitly guarded against, a list will add unbounded `O(n)` complexity to an operation that will only charge `O(1)` fees ([Big O notation refresher](https://rob-bell.net/2009/06/a-beginners-guide-to-big-o-notation/)). This opens an economic attack vector on your chain. **To learn more, see [Safety First](../advanced/safety.md).**
+Substrate does not natively support a list type since it may encourage dangerous habits. Unless explicitly guarded against, a list will add unbounded `O(n)` complexity to an operation that will only charge `O(1)` fees ([Big O notation refresher](https://rob-bell.net/2009/06/a-beginners-guide-to-big-o-notation/)). This opens an economic attack vector on your chain. *To learn more about economic security, see [Safety First](../advanced/safety.md).*
 
-Instead, emulate a list with a mapping and a counter like so:
+Emulate a list with a mapping and a counter like so:
 
 ```rust
 use support::{StorageValue, StorageMap};

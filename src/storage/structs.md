@@ -110,7 +110,7 @@ decl_storage! {
 }
 ```
 
-For more information, see [Gautam's Substrate TCR](https://github.com/parity-samples/substrate-tcr/blob/master/runtime/src/tcr.rs) and the [full TCR tutorial](https://docs.substrate.dev/docs/building-a-token-curated-registry-dappchain-using-substrate)
+For more information, see the [Substrate TCR](https://github.com/parity-samples/substrate-tcr/blob/master/runtime/src/tcr.rs) and the [full tutorial](https://docs.substrate.dev/docs/building-a-token-curated-registry-dappchain-using-substrate)
 
 ## UI Interaction
 

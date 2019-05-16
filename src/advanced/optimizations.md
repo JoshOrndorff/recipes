@@ -18,7 +18,7 @@ Runtime overhead in Substrate corresponds to the efficiency of the underlying Ru
 
 Before worrying about performance optimizations, focus on *optimizing* for readability, simplicity, and maintainability. The first step when building anything is achieving basic functionality. Only after establishing a minimal viable sample is it appropriate to consider performance-based enhancements. With that said, severe inefficiency does open attack vectors for Substrate runtimes (*see [the next section](#sec)*). Moreover, the tradeoff between optimization and simplicity is not always so clear... 
 
-*A common misconception is that optimized code is necessarily more complicated, and that therefore optimization always represents a trade-off. However, in practice, better factored code often runs faster and uses less memory as well. In this regard, optimization is closely related to refactoring, since in both cases we are paying into the code so that we may draw back out again later if we need to.* - http://wiki.c2.com/?PrematureOptimization
+*A common misconception is that optimized code is necessarily more complicated, and that therefore optimization always represents a trade-off. However, in practice, better factored code often runs faster and uses less memory as well. In this regard, optimization is closely related to refactoring, since in both cases we are paying into the code so that we may draw back out again later if we need to.* - [src](http://wiki.c2.com/?PrematureOptimization)
 
 **Rust API Guidelines**
 * [Official Rust API Guidelines](https://rust-lang-nursery.github.io/api-guidelines/about.html)
