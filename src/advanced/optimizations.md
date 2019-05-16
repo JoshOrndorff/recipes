@@ -72,6 +72,12 @@ The `.get()` call performs two checks:
 
 If bound checking has already been performed independently of the call, we can invoke `.getunchecked()` to access the element. Although this is `unsafe` to use, it is equivalent to C/C++ indexing, thereby improving performance when we already know the element's location.
 
+```rust
+for arr in array_of_arrays {
+    println!("{}", unsafe { arr.get_unchecked(1738) })
+}
+```
+
 **NOTE**: if we don't verify the input to `.getunchecked()`, the caller may access whatever is stored in the location even if it is a memory address outside the slice
 
 ## Fearless Concurrency && Asynchrony <a name = "more"></a>
