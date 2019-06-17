@@ -1,1 +1,1 @@
-**[LIVE SITE](https://substrate.recipes)**
+# <a href="substrate.dev/recipes">Substrate Recipes</a>

@@ -1,15 +1,11 @@
 # Dessert 🍫  
 
-Check out **[`awesome-substrate`](https://github.com/substrate-developer-hub/awesome-substrate)** for projects, events, and all the latest Substrate news!
+Check out **[awesome-substrate](https://github.com/substrate-developer-hub/awesome-substrate)** for projects, events, and all the latest Substrate news!
 
-## Featured Projects
-
-**[Substrate Developer Hub](https://github.com/substrate-developer-hub/)**
+## <a href="https://github.com/substrate-developer-hub/">Featured Tutorials</a>
 * [Substrate Contracts Workshop](https://github.com/substrate-developer-hub/substrate-contracts-workshop)
 * [UTXO Workshop](https://github.com/substrate-developer-hub/utxo-workshop)
 * [Substrate Contracts Workshop](https://github.com/substrate-developer-hub/substrate-contracts-workshop)
-
-
 
 <!-- 
 **Set Up**
