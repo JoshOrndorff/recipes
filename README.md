@@ -1,1 +1,1 @@
-# <a href="substrate.dev/recipes">Substrate Recipes</a>
+# <a href="https://substrate.dev/recipes">Substrate Recipes</a>
