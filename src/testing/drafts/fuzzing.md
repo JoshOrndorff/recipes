@@ -5,4 +5,5 @@ In his 1972 essay “The Humble Programmer,” Edsger W. Dijkstra said that “P
 Formal verification is hard, but fuzzing allows us to test inputs beyond the specific cases that we think up while testing...
 
 ## More Reading
+* [comparison of Rust mocking libraries](https://github.com/asomers/mock_shootout)
 * [fuzz.rs book](https://fuzz.rs/book/)

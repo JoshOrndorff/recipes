@@ -1,24 +1,34 @@
 # Contributing Guidelines
+
+**Recipes are not entire tutorials -- they are small patterns that may be extracted from tutorials**. The purpose of Substrate Cookbook is to identify best practies in Substrate runtime code and extract patterns that are useful outside of the context of the specific use case.
     
-* Basic Pattern to Follow:
-    * isolate specific pattern
-    * show the full file (w/ necessary imports)
-    * any necessary imports/inclusions in other files (final version)
+1. isolate specific pattern
+2. walk through logic in piecewise steps
+3. show/link to the full file in the used codebase
 
-* **Contribution (section)**: https://github.com/LayneHaber/contributing-template
+If you have want to get involved, feel free to open an [issue](https://github.com/substrate-developer-hub/recipes/issues/new) with any ideas/comments/questions.**The markdown for each recipe can be found by following the paths set in [SUMMARY.md](./src/SUMMARY.md)**.
 
-## Norms
+I'm going to spend more time working on samples over the next few weeks, but I'm in the process of improving this project as well.
 
-I try to not use "we" or "our" because I feel like it encourages unncessary language. This isn't a steadfast rule, but I try to follow it.
+## Common Etiquette
 
-File issues and I'll help with formatting; if you're already confident, file a PR and I can help clean it up if necessary and add it to the book...
+* try to not use "we" or "our" because it often is conducive to unncessary language
+* frequently link to outside content (home of the original code, blog/tutorial references, documentation for a specific method/trait/etc)
 
-* LINK TO OUTSIDE STUFF A LOT!
-    * link to other sections often to illustrate how things work together
-    * whenever you reference anything from an external source, link to it
-    * **whenever you add a reference to code, link to documentation**
-        * (I find it extremely annoying when I read about a macro or trait and have to look it up in the documentation directly)
-    
-## Rust Culture
+## Local Build Instructions
 
-don't be a jerk :)
+I recommend staging locally before making a PR. Don't forget to switch to a new branch before you make edits.
+
+1. install [`mdbook`](https://github.com/rust-lang-nursery/mdBook)
+
+```bash
+$ cargo install mdbook
+```
+
+2. build and open rendered book in default browser
+
+```bash
+$ mdbook build --open
+```
+
+3. If everything looks good, open a [Pull Request](https://github.com/substrate-developer-hub/recipes/compare)

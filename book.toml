@@ -1,6 +1,6 @@
 [book]
-authors = ["Amar Singh"]
+authors = ["4meta5"]
 multilingual = false
 src = "src"
-title = "Substrate Cookbook"
-description = "Recipes for cooking with Substrate"
+title = "Substrate Recipes"
+description = "Substrate runtime design patterns"

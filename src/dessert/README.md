@@ -1,18 +1,17 @@
 # Dessert 🍫  
 
-* [Substrate 🍩](#substr8)
-* [Tutorials 🍮](#tutorials)
-* [User Interface 🍦](#ui)
-* [Off-Chain Interaction 🍨](#offchain)
-* [Polkadot 🎂](#polkadot)
-* [Smart Contracts 🍬](#contracts)
-* [WASM 🍭](#wasm)
-* [Cryptography 🍰](#crypto)
-* [More Open Source Projects 🍪](#oss)
+Check out **[`awesome-substrate`](https://github.com/substrate-developer-hub/awesome-substrate)** for projects, events, and all the latest Substrate news!
 
-## Substrate 🍩 <a name = "substr8"><a>
-[`nczhu/awesome-substrate`](https://github.com/nczhu/awesome-substrate)
+## Featured Projects
 
+**[Substrate Developer Hub](https://github.com/substrate-developer-hub/)**
+* [Substrate Contracts Workshop](https://github.com/substrate-developer-hub/substrate-contracts-workshop)
+* [UTXO Workshop](https://github.com/substrate-developer-hub/utxo-workshop)
+* [Substrate Contracts Workshop](https://github.com/substrate-developer-hub/substrate-contracts-workshop)
+
+
+
+<!-- 
 **Set Up**
 * [`paritytech/substrate-up`](https://github.com/paritytech/substrate-up) - Scripts for working with new Substrate projects
 
@@ -24,8 +23,7 @@
 ## Tutorials 🍮 <a name = "tutorials"></a>
 [parity-samples](https://github.com/parity-samples)
 
-* [`shawntabrizi/substrate-contracts-workshop`](https://github.com/shawntabrizi/substrate-contracts-workshop) - smart contract programming on Substrate
-* [`paritytech/ink`](https://github.com/paritytech/ink) - Substrate smart contract DSL
+* [`substrate/substrate-contracts-workshop`](https://github.com/substrate-developer-hub/substrate-contracts-workshop)
 * [`shawntabrizi/substrate-collectables-workshop`](https://github.com/shawntabrizi/substrate-collectables-workshop) - A guided tutorial for building a collectable dApp chain on Parity Substrate
 * [`parity-samples/substrate-tcr`](https://github.com/parity-samples/substrate-tcr) - A Parity Substrate runtime implementation of a simple Token Curated Registry (TCR)
 * [`gautamdhameja/substrate-poa`](https://github.com/gautamdhameja/substrate-poa) - A Substrate runtime which allows addition of new validators in a pure PoA fashion
@@ -101,4 +99,4 @@
 * [`isaether/sr-bonded-curve`](https://github.com/lsaether/sr-bonded-token)
 
 **Robotics**
-* [`airalab/substrate-node-robonomics`](https://github.com/airalab/substrate-node-robonomics) - Substrate Node for Robonomics network [telemetry](https://telemetry.polkadot.io/#/Robonomics)
+* [`airalab/substrate-node-robonomics`](https://github.com/airalab/substrate-node-robonomics) - Substrate Node for Robonomics network [telemetry](https://telemetry.polkadot.io/#/Robonomics) -->
