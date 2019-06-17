@@ -140,7 +140,7 @@ decl_module! {
 
 *Keep the same logic for inserting proposals (increment `LargestIndex` and insert the entry at the head of the list)* 
 
-### Linked Map <a name = "linkedmap></a>
+### Linked Map <a name = "linkedmap"></a>
 
 To trade performance for simpler code, utilize the `linked_map` data structure. By implementing [`EnumarableStorageMap`](https://crates.parity.io/srml_support/storage/trait.EnumerableStorageMap.html) in addition to [`StorageMap`](https://crates.parity.io/srml_support/storage/trait.StorageMap.html), `linked_map` provides a method `head` which yields the head of the *list*, thereby making it unnecessary to also store the `LargestIndex`. The `enumerate` method also returns an `Iterator` ordered according to when `(key, value)` pairs were inserted into the map.
 
