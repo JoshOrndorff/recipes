@@ -58,6 +58,6 @@ cargo build --release
 Delete the old chain before you start the new one
 
 ```bash
-substrate purge-chain --dev
+./target/release/substrate-example purge-chain --dev
 ./target/release/substrate-example --dev
 ```
