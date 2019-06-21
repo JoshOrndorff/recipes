@@ -1,12 +1,14 @@
 #  🎉Advanced Patterns 🐰🎊
 
-- [Safety First](./safety.md)
-- [Incentive Design](./incentive.md)
-- [Scheduling Collateralization](./lock.md)
-- [Transaction Ordering](./ordering.md)
-- [Offline Interaction](./inherent.md)
-- [Verifying Set Member Uniqueness](./unique.md)
-- [Robust Conditional Paths](./conditionals.md)
-- [Optimization Tricks](./optimizations.md)
+This section will be replaced by three new sections:
+1. [Safety and Optimization](../safety/README.md)
+2. [DAO Design Patterns](../dao/README.md)
+3. [Protocol Engineering](../proto/README.md)
 
-*See the [dessert](../main/library.md) for more code samples and open source projects*
+I plan to make the formal transition once each section has at least 3 sections. This folder will now be used to plan possible future sections.
+
+## Possible Future Sections
+
+* Cryptography
+
+* move Optimization into its own section (split from Safety)

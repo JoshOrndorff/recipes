@@ -1,7 +1,13 @@
-# API Design
+# Ergonomic API
 
 * api design
 * traitify
+
+*optimize for readability and auditability before focusing only on increasing performance of critical sections (reference `safety/optimizations.md`*
+
+*reference `testing/unit.md` for test-based design which encourages ergonomicity*
+
+* can someone explain this put trait bounds on structs or don't put trait bounds on structs discussion? Some people just say to prefer `derive` attribute...
 
 ## Type Aliasing and Organization
 

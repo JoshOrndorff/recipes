@@ -1,4 +1,11 @@
-# Robust Path Handling
+## Robust Path Handling
+
+**NOTE**: *this recipe pairs well with [Robust Path Handling](./paths.md)*
+
+* `if let some`
+* `checked_sub` pattern from recent issue
+
+### Ergonomic Enums
 
 In the [`utxo-workshop`](https://github.com/nczhu/utxo-workshop), the code utilizes an [enum](https://doc.rust-lang.org/rust-by-example/custom_types/enum.html) to manage a data race scenario in which a transaction could arrive before some transactions that it `require`s. 
 

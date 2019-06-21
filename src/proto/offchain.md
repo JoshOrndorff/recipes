@@ -1,4 +1,10 @@
-# Offline Interaction via Inherents
+# Off-Chain Optimizations
+* off-chain workers by Gautam (TODO: ask him for help with this)
+
+
+
+
+# **OLD**::{Offline Interaction via Inherent}
 *[Substrate Inherents Sample](https://github.com/gautamdhameja/substrate-inherents-sample)*
 
 Often times, it might be necessary to incorporate off-chain data as inputs for processes validated on-chain. In these situations, it is useful to be familiar with [`substrate-inherents`](https://crates.parity.io/substrate_inherents/index.html).
