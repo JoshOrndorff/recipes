@@ -26,7 +26,7 @@
     - [Collisions and Overflows](./safety/flowcollide.md)
     - [Optimizations](./safety/optimizations.md)
 - [DAO Design Patterns](./dao/README.md)
-    - [Ergonomic APIs](./dao/ergo.md)
+    - [Ergonomic APIs](./dao/api.md)
     - [Incentive Design](./dao/incentive.md)
 - [Protocol Engineering](./proto/README.md)
 - [Open Source Dessert](./dessert/README.md)

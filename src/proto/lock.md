@@ -5,7 +5,6 @@ In the [incentive design recipe](./incentive.md#sun), we covered a common bondin
 In the [`utxo-workshop`](https://github.com/nczhu/utxo-workshop), unspent outputs can be locked up until a defined future block. A similar pattern is exercised in the [`collateral`](https://github.com/nczhu/collateral) sample.
 
 * [UTXO Locking](#lock)
-* [Managing Collateral](#collatz)
 
 ## UTXO Locking <a name = "lock"></a>
 
@@ -89,7 +88,3 @@ impl<T: Trait> Module<T> {
     }
 }
 ```
-
-## Collateral Management <a name = "collatz"></a>
-
-*in progress :) -- see [`collateral`](https://github.com/nczhu/collateral) for a sneak peek of the recipe*
