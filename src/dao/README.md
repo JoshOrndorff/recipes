@@ -1,7 +1,7 @@
 # DAO Design Patterns
 
-* [Ergonomic API Design](./api.md)
 * [Incentive Design](./incentive.md)
+* [Monetary Theory](./phi/README.md)
 
 ## Focus
 * incentive design
