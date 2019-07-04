@@ -1,9 +1,7 @@
 ## Robust Path Handling
 
-**NOTE**: *this recipe pairs well with [Robust Path Handling](./paths.md)*
-
 * `if let some`
-* `checked_sub` pattern from recent issue
+* `checked_sub` pattern from recent issue (link to safe-math, but put that pattern in here)
 
 ### Ergonomic Enums
 

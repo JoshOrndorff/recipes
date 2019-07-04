@@ -1,7 +1,11 @@
-# Collisions and Overflows
+# Safe Arithmetic
 
-* [checking for overflows/underflows](#overunder)
-* [preventing collision in key-value maps](#collision)
+* computers are notoriously bad with precision with small numbers
+* link to the inflation section wherein I will discuss some of this stuff
+
+## Perbill and Permill
+
+## Saturating Operations
 
 ## Checking for Overflows/Underflows <a name = "overunder"></a>
 
@@ -23,25 +27,3 @@ let new_all_people_count = match all_people_count.checked_add(1) {
     None => return Err("Overflow adding a new person"),
 };
 ```
-
-*See the [precise arithmetic](./precision.md) section for more on safe mathematical operations*
-
-## Collision in Key-Value Maps <a name = "collision"></a>
-
-Often times we may intend for keys to be unique identifiers that map to a specific storage item. In this case, it is necessary to check for collisions before adding new entries. Before adding a new item to the mapping, we can check if the unique id already has an associated storage item.
-
-In [SunshineDAO](https://github.com/4meta5/SunshineDAO), we use the hash of a proposal as the unique identifier in a `Proposals` map in the `decl_storage` block. Before adding a new proposal to the `Proposals` map, we check that the hash doesn't already have an associated value in the map. If it does, we do not allow subsequent storage changes because this would cause a key collision.
-
-```rust
-/// decl_module{} in runtime/src/dao.rs
-fn propose(origin, applicant: AccountId, shares: u32, tokenTribute: BalanceOf<T>) -> Result {
-    // check that a proposal associated with the given key does not already exist in the map
-	ensure!(!(Self::proposals::exists(&prop.base_hash)), "Key collision :(");
-    // .. more checks
-
-    //add proposal
-	Self::proposals::insert(prop.base_hash, prop);
-}
-```
-
-For another example, see how the [Substrate collectables tutorial](https://shawntabrizi.com/substrate-collectables-workshop/#/2/generating-random-data?id=checking-for-collision) covers this pattern.

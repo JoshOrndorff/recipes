@@ -7,7 +7,7 @@ Indeed, Substrate developers have to exercise incredible caution. The bare-metal
 * [Module Development Criteria](#criteria)
 - [ ] [Declarative Programming](./cop.md)
 - [ ] [Robust Path Handling](./paths.md)
-- [ ] [Collisions and Overflows](./flowcollide.md)
+- [ ] [Safe Arithmetic](./safemath.md)
 - [ ] [Optimizations](./optimizations.md)
 
 ## Module Development Criteria <a name = "criteria"></a>

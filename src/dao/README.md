@@ -1,7 +1,10 @@
 # DAO Design Patterns
 
+* [Minimal Viable DAO](./minimal.md)
 * [Incentive Design](./incentive.md)
-* [Monetary Theory](./phi/README.md)
+* [Dilution Safety](./dilution.md)
+
+I'm starting a secret project soon related to cryptoeconomic experimentation on Substrate. 
 
 ## Focus
 * incentive design
