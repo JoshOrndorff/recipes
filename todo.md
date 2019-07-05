@@ -1,9 +1,12 @@
 # VERSION 2 CHECKLIST
 
-**GOAL**: using the module template, create executables that go with each recipe, thereby allowing people to easily test and configure each recipe from scratch
-* **TODO**: think about how this will be structured
+## kitchen
+* add executables that correspond to every recipe section
 
-**DEADLINE**: Monday, July 8th
+* considering an executable folder that has the same structure as `src` with links back and forth...quite a lot of linking to do, but that's fine...
+
+**GOAL**: using the module template, create executables that go with each recipe, thereby allowing people to easily test and configure each recipe from scratch
+
 
 ### Module Menu
 

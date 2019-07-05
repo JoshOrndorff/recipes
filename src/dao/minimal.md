@@ -7,8 +7,6 @@
 * [Generic Proposals](#propose)
 * [1 Member 1 Vote](#vote)
 
-> *some note here about all the things we can and should build on top of it*
-
 ## Custom Origin Type <a name = "origin"></a>
 
 This module uses a special origin type to specify conditions for dispatching special extrinsics called `Proposal`s. 

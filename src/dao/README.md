@@ -4,12 +4,7 @@
 * [Incentive Design](./incentive.md)
 * [Dilution Safety](./dilution.md)
 
-I'm starting a secret project soon related to cryptoeconomic experimentation on Substrate. 
+## Room for Improvement
 
-## Focus
-* incentive design
-* coordination mechanisms like QV, Liberal Radicalism
-
-## TODO
-
-* split `incentive design` into multiple chapters
+* the examples here are very minimal
+* borrow from `sunshine/docs` rant on all of the open questions that need to be answered...
