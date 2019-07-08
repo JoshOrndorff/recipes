@@ -8,8 +8,8 @@ To declare an event, use the [`decl_event`](https://crates.parity.io/srml_suppor
 
 ## Recipes
 
-* [Dummy Event](./basic.md)
 * [Adding Machine](./adder.md)
+* [Incrementing Balances](./balance.md)
 * [Permissioned Generic Event](./permissioned.md)
 
 ## More Resources

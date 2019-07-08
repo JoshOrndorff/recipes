@@ -1,5 +1,10 @@
 # VERSION 2 CHECKLIST
 
+1. module template-ify everything (and update the `Summary.MD` file accordingly)
+* add a a link from each recipe to the relevant code in the kitchen?
+
+2. update everything else...
+
 ## kitchen
 * add executables that correspond to every recipe section
 
@@ -7,6 +12,12 @@
 
 **GOAL**: using the module template, create executables that go with each recipe, thereby allowing people to easily test and configure each recipe from scratch
 
+### Getting Started
+
+* template explainer via README
+* other stuff as well
+
+### Event Recipes
 
 ### Module Menu
 

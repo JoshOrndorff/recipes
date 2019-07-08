@@ -1,10 +1,10 @@
 # Kitchen
 
-The kitchen is for *cooking* recipes. It is structured very similarly to the main recipes build as specified in [src/SUMMARY](../src/SUMMARY.md).
+The kitchen is for *cooking* recipes. It is structured like the main recipes build as specified in [src/SUMMARY](../src/SUMMARY.md), except every code sample is stored as an executable via the [substrate-module-template](https://github.com/shawntabrizi/substrate-module-template).
 
 ## Directions
 
-* todo
+
 
 ## Using Recipes in External Projects
 

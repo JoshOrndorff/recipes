@@ -5,6 +5,27 @@ If you do not have `substrate` installed on your machine, run:
 curl https://getsubstrate.io -sSf | bash
 ```
 
+## Substrate Module Template
+
+* the difference between the **Runtime** template and the **Module** template
+
+* explain how the kitchen demonstrates how these patterns can be compiled
+* explain how these recipes can be imported and used in runtimes as well (see `HOWTO.md`)
+
+**NODE TEMPLATE**
+First, modify `lib.rs`. Add `type Event = Event;` to the trait implementation and add `Event` to [`construct_runtime`](https://crates.parity.io/srml_support/macro.construct_runtime.html)
+
+```rust
+/// root `lib.rs`
+impl runtime_example::Trait for Runtime {
+	type Event = Event;
+}
+
+...
+RuntimeExample: runtime_example::{Module, Call, Event},
+...
+```
+
 ## Create a Substrate Node Template
 
 To start, create an instance of the `substrate-node-template` using the following command:
@@ -45,6 +66,32 @@ construct_runtime!(
 ```
 
 Finally, you need to create a new file called `runtime_example.rs` in the same folder as `lib.rs`.
+
+#### CACHE...
+Update the runtime root `lib.rs` file to include the new `Event<T>` type under the module's `Trait` implementation
+
+```rust
+/// in root `lib.rs`
+impl mymodule::Trait for Runtime {
+    type Event = Event<T>;
+}
+```
+
+Include the `Event<T>` type in the module's definition in the [`construct_runtime`](https://crates.parity.io/srml_support/macro.construct_runtime.html) macro block.
+
+```rust
+/// in root `lib.rs`
+construct_runtime!(
+    pub enum Runtime for Log(InteralLog: DigestItem<Hash, Ed25519AuthorityId) where
+        Block = Block,
+        NodeBlock = opaque::Block,
+        InherentData = BasicInherentData
+    {
+        ...
+        MyModule: mymodule::{Module, Call, Storage, Event<T>},
+    }
+);
+```
 
 ## Updating Your Runtime
 

@@ -2,3 +2,7 @@ book
 k.md
 motivation.md
 **/*/*/drafts/
+
+# don't need to push the actual executable
+**/*/target
+**/*/Cargo.lock

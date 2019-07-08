@@ -2,7 +2,7 @@
 
 - [Introduction](./intro/README.md)
 - [Motivation](./intro/motivation.md)
-- [Setting Up Substrate](./setup/README.md)
+- [Getting Started](./setup/README.md)
     - [Polkadot UI](./setup/ui.md)
     - [Minimal Configuration](./setup/chainspec.md)
 - [Storage Recipes](./storage/README.md)
@@ -13,8 +13,8 @@
     - [Higher Order Arrays](./storage/arrays.md)
     - [String](./storage/string.md)
 - [Event Recipes](./event/README.md)
-    - [Dummy Event](./event/basic.md)
     - [Adding Machine](./event/adder.md)
+    - [Incrementing Balances](./event/balance.md)
     - [Permissioned Function with Generic Event](./event/permissioned.md)
 - [Module Menu](./module_menu/README.md)
 - [Testing](./testing/README.md)
