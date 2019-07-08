@@ -24,7 +24,7 @@ std = [
 ]
 ```
 
-The `decl_event` macro generates an `Event` type which needs to be exposed in the module. This type inherits the `balances` trait
+The `decl_event` macro generates an `Event` type which needs to be exposed in the module. This type inherits the `balances` trait. *See [single value storage](../storage/value.md) recipe for more information on Substrate specific types*
 
 ```rust
 /// in module file

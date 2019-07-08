@@ -1,6 +1,6 @@
 # Permissioned Function with Generic Event
 
-This recipe contains a permissioned function which can only be called by the "owner". An event is emitted when the function is successfully executed.
+This recipe contains a permissioned function which can only be called by the *Owner*. An event is emitted when the function is successfully executed.
 
 The imports are the same as previous event recipes and our `Trait` inherits from `system::Trait`, which is relatively standard.
 ```rust
@@ -57,5 +57,5 @@ fn transfer_ownership(origin, newOwner: T::AccountId) -> Result {
 }
 ```
 
-This recipe can be extended to create permissioned functions that limit invocations to members of groups.
+This recipe can be extended to create permissioned functions that limit invocations to members of specified groups.
 <!-- TODO: add link to the DAO tutorial for this... -->

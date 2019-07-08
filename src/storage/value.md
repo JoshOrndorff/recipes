@@ -122,3 +122,5 @@ pub trait Trait: balances::Trait {}
 ```
 
 This provides access to the types `Hash`, `AccountId`, and `Balance` anywhere that specifies the generic `<T: Trait>` using `T::<Type>`.
+
+For a practical example of this syntax, *see the [Incrementing Balance](../event/balance.md) event recipe.*

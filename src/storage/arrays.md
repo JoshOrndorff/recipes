@@ -17,8 +17,8 @@ SocialNetwork[AccountId].length()
 To emulate this data structure in the context of the Substrate runtime storage, use tuples and maps (declared in a `decl_storage!{}` block like previous examples):
 
 ```rust
-SocialNetwork get(my_friend): map (T::AccountId, u32) => T::AccountId;
-SocialNetwork get(friends_count): map T::AccountId => u32;
+MyFriend get(my_friend): map (T::AccountId, u32) => T::AccountId;
+FriendsCount get(friends_count): map T::AccountId => u32;
 ```
 
 Patterns that use mappings to emulate higher order data structures are common when managing runtime storage on Substrate. *To see this pattern in action, see the [Substrate Collectables Tutorial](https://shawntabrizi.github.io/substrate-collectables-workshop/#/2/owning-multiple-kitties?id=using-tuples-to-emulate-higher-order-arrays).*

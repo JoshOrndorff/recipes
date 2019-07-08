@@ -10,9 +10,9 @@ Generally speaking, you may store arbitrary data, as long as its data type is se
 
 ## Recipes
 * [Single Value](./value.md)
-* **[Mapping](./mapping.md)**
+* [Mapping](./mapping.md)
 * [List](./list.md)
-* **[Structs](./structs.md)**
+* [Structs](./structs.md)
 * [Higher Order Arrays](./arrays.md)
 
 *Anti-Pattern*

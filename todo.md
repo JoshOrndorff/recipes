@@ -19,6 +19,15 @@
 
 ### Event Recipes
 
+* Ok for now...
+
+### Storage Recipes
+
+**WEAK RECIPES**
+* update structs
+* update arrays `=>` look into the Twitter part of the 1st chapter of that book I read earlier...how did they do caching whenever a write request was made? Could I simulate this lol, would be cool...
+    * **also should I be using DoubleMap?**
+
 ### Module Menu
 
 - [ ] connecting the dots (between `node/executor` and `node/runtime`) (**H**)

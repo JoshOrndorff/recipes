@@ -15,10 +15,10 @@ pub struct MyStruct<A, B> {
 
 In the code snippet above, the [derive macro](https://doc.rust-lang.org/rust-by-example/trait/derive.html) is declared to ensure `MyStruct` conforms to shared behavior according to the specified [traits](https://doc.rust-lang.org/book/ch10-02-traits.html): `Encode, Decode, Default, Clone, PartialEq`
 
-To use the `Encode` and `Decode` traits, it is necessary to import them from the `parity_codec_derive` crate:
+To use the `Encode` and `Decode` traits, it is necessary to import them from `support::codec`:
 
 ```rust
-use parity_codec_derive::{Encode, Decode};
+use support::codec::{Encode, Decode};
 ```
 
 By storing types in `MyStruct` as generics, it is possible to access custom Substrate types like `AccountId`, `Balance`, and `Hash`. 
@@ -61,8 +61,6 @@ decl_module! {
 This basic runtime shows how to store custom, nested structs using a combination of Rust primitive types and Substrate specific types via generics.
 
 ```rust
-use srml_support::{StorageMap, dispatch::Result};
-
 pub trait Trait: balances::Trait {}
 
 #[derive(Encode, Decode, Default)]
@@ -114,6 +112,4 @@ For more information, see the [Substrate TCR](https://github.com/parity-samples/
 
 ## UI Interaction
 
-To access the value of the struct via the User Interface (UI), it is necessary to import the structure of the new type such that the UI understand how to decode it. See [Cryptokitties Collectables Tutorial](https://shawntabrizi.github.io/substrate-collectables-workshop/#/1/viewing-a-structure) to configure accordingly with Polkadot UI or Substrate UI.
-
-*Read more in the [official docs](https://docs.substrate.dev/docs/substrate-runtime-recipes#section-polkadot-ui)*
+To access the value of the struct via the User Interface (UI), it is necessary to import the structure of the new type such that the UI understand how to decode it. See [Cryptokitties Collectables Tutorial](https://shawntabrizi.github.io/substrate-collectables-workshop/#/1/viewing-a-structure) for directions on how to configure accordingly with Polkadot UI or Substrate UI.
