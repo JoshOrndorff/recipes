@@ -1,4 +1,4 @@
-# Mapping
+# Mapping Accounts to Balances
 
 Mappings are a very powerful primitive. A *stateful* cryptocurrency might store a mapping between accounts and balances (see [token example](#token)). Likewise, mappings prove useful when representing *owned* data. By tracking ownership with maps, it is easy manage permissions for modifying values specific to individual users or groups.
 
@@ -12,7 +12,7 @@ decl_storage! {
 }
 ```
 
-## Basic Interaction
+## Basic Map Usage
 
 To interact with a storage map, it is necessary to import the `support::StorageMap` type. Functions used to access a `StorageValue` are defined in [`srml/support`](https://github.com/paritytech/substrate/blob/master/srml/support/src/storage/generator.rs):
 

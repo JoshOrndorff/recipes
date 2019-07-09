@@ -8,19 +8,28 @@ If you're here, you probably already know about [Substrate](https://github.com/p
 
 ## How to Use This Book
 
+Start by cloning the repo on github:
+
+```bash
+git clone https://github.com/substrate-developer-hub/recipes
+```
+
+As you read through the book, practice compiling and testing recipes in `recipes/kitchen`. The truth is that you can't learn how to code by reading about it, or *at least I can't*. Play with the code in the kitchen, extract patterns, and apply them to a problem that you want to solve!
+
 You can read the book chronologically or jump around. Personally, I prefer jumping around, but people learn in different ways :)
 
-Regardless of the approach you take, it is useful to recognize that [coding is all about abstraction](https://youtu.be/05H4YsyPA-U?t=1789). To accelerate your progress, I recommend skimming the patterns in this book, composing them into interesting projects, and abstracting your own unique recipes. Feel free to reach out for guidance on [Stack Overflow](https://stackoverflow.com/questions/tagged/substrate) or in  the [Substrate technical Riot channel](https://riot.im/app/#/room/#substrate-technical:matrix.org).
+Regardless of the approach you take, it is useful to recognize that [coding is all about abstraction](https://youtu.be/05H4YsyPA-U?t=1789). To accelerate your progress, I recommend skimming the patterns in this book, composing them into interesting projects, and abstracting your own unique recipes. Feel free to reach out for guidance on [Stack Overflow](https://stackoverflow.com/questions/tagged/substrate) or in  the [Substrate Technical Riot channel](https://riot.im/app/#/room/#substrate-technical:matrix.org).
 
-## Chef's Choice
+## Chef's Choice 
 
 My favorite recipes include
 
-* [Mapping](../storage/mapping.md)
-* [Structs](../storage/structs.md)
+* [Simple Token Transfers (Maps)](../storage/mapping.md)
+* [Nested Structs](../storage/structs.md)
 * [Safety First](../advanced/safety.md)
 * [Incentive Design](../advanced/incentive.md)
 * [Optimization Tricks](../advanced/optimizations.md)
+
 ### Notable Substrate Tutorials and Projects
 **[Substrate Developer Hub](https://github.com/substrate-developer-hub)**
 

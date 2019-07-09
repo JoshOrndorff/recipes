@@ -5,32 +5,9 @@
 
 2. update everything else...
 
-## kitchen
-* add executables that correspond to every recipe section
+## intro
 
-* considering an executable folder that has the same structure as `src` with links back and forth...quite a lot of linking to do, but that's fine...
-
-**GOAL**: using the module template, create executables that go with each recipe, thereby allowing people to easily test and configure each recipe from scratch
-
-### Getting Started
-
-* template explainer via README
-* other stuff as well
-
-### Event Recipes
-
-* Ok for now...
-
-### Storage Recipes
-
-**WEAK RECIPES**
-* update structs
-* update arrays `=>` look into the Twitter part of the 1st chapter of that book I read earlier...how did they do caching whenever a write request was made? Could I simulate this lol, would be cool...
-    * **also should I be using DoubleMap?**
-
-### Module Menu
-
-- [ ] connecting the dots (between `node/executor` and `node/runtime`) (**H**)
+* change my favorite recipes section once this is all done
 
 ### DAO
 
@@ -42,14 +19,3 @@
 
 - [ ] `safemath` which includes `Perbill`, `Permill`, `saturating`, etc (**M**)
 - [ ] Robust Path Handling (**E**)
-
-### Protocol Engineering
-
-- [ ] Transaction Ordering (**E**)
-- [ ] Verifying Uniqueness (**E**)
-- [ ] Off-Chain Verification (**H**)
-
-### Testing
-
-- [ ] Scaffolding (**M**)
-- [ ] Unit Testing (**H**)

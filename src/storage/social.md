@@ -1,4 +1,5 @@
 # Higher Order Arrays with Tuples and Maps
+*[naive social network recipe below](#naive) below*
 
 To represent ownership of multiple items across multiple users, tuples can be used alongside maps in order to emulate arrays.
 
@@ -25,7 +26,7 @@ Patterns that use mappings to emulate higher order data structures are common wh
 
 ## Naive Social Network
 
-We can use the Substrate's storage to manage [whitelists and blacklists](https://stackoverflow.com/questions/1453285/what-is-whitelist-and-blacklist-data). This is especially useful in the context of social networks for adding/removing friends and blocking unfriendly participants.
+We can use this pattern to manage [whitelists and blacklists](https://stackoverflow.com/questions/1453285/what-is-whitelist-and-blacklist-data). This is especially useful in the context of social networks for adding/removing friends and blocking unfriendly participants.
 
 The relevant state transitions are encoded in the `decl_event` block
 
@@ -71,7 +72,7 @@ impl<T: Trait> Module<T> {
 }
 ```
 
-By returning `bool`, we can easily use these methods in `ensure!` statements to verify relevant state conditions before making requests in other runtime methods. For example, in the `remove_friend` runtime method, we need to ensure that the friend to be removed is an existing friend.
+By returning `bool`, we can easily use these methods in `ensure!` statements to verify relevant state conditions before making requests in the main runtime methods. For example, in the `remove_friend` runtime method, we need to ensure that the friend to be removed is an existing friend.
 
 ```rust
 ensure!(Self::friend_exists(user.clone(), old_friend.clone()), "old friend is not a friend");

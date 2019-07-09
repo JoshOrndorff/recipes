@@ -1,7 +1,9 @@
 ## Robust Path Handling
 
 * `if let some`
-* `checked_sub` pattern from recent issue (link to safe-math, but put that pattern in here)
+* `checked_sub` pattern from recent issue (link to safe-math, but put that pattern in here)...don't link, just natural flow...reference it though
+
+* abstract out the pattern and make it as generic as possible
 
 ### Ergonomic Enums
 

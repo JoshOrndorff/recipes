@@ -1,7 +1,11 @@
-book
+# todos are scattered in this files
 k.md
 motivation.md
+todo.md
 **/*/*/drafts/
+
+# local staging need not be pushed
+book
 
 # don't need to push the actual executable
 **/*/target

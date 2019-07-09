@@ -5,73 +5,46 @@ If you do not have `substrate` installed on your machine, run:
 curl https://getsubstrate.io -sSf | bash
 ```
 
-## Substrate Module Template
+## Substrate Templates
 
-* the difference between the **Runtime** template and the **Module** template
+[Substrate package](https://github.com/shawntabrizi/substrate-package) contains the UI, module, and runtime templates for building with Substrate. The [substrate-module-template](https://github.com/shawntabrizi/substrate-module-template) is the simplest path to experimenting with Substrate. Modules are modular pieces of code that can be composed within a single runtime. 
 
-* explain how the kitchen demonstrates how these patterns can be compiled
-* explain how these recipes can be imported and used in runtimes as well (see `HOWTO.md`)
+Likewise, the [substrate-node-template](https://github.com/shawntabrizi/substrate-package/tree/master/substrate-node-template) provides all necessary scaffolding for running a functional Substrate node. Each Substrate runtime contains multiple modules that comprise the logic of the defined Substrate blockchain.
 
-**NODE TEMPLATE**
-First, modify `lib.rs`. Add `type Event = Event;` to the trait implementation and add `Event` to [`construct_runtime`](https://crates.parity.io/srml_support/macro.construct_runtime.html)
+The [substrate-ui](https://github.com/shawntabrizi/substrate-package/tree/master/substrate-ui) provides a template for building a compatible UI that works with the node template.
 
-```rust
-/// root `lib.rs`
-impl runtime_example::Trait for Runtime {
-	type Event = Event;
-}
+*The recipes in this book focus primarily on generic patterns for Substrate modules, but there are plans to add more explanations for tinkering with the node.*
 
-...
-RuntimeExample: runtime_example::{Module, Call, Event},
-...
-```
+### Runtime Module
 
-## Create a Substrate Node Template
-
-To start, create an instance of the `substrate-node-template` using the following command:
+Clone the [substrate-module-template](https://github.com/shawntabrizi/substrate-module-template)
 
 ```bash
-substrate-node-new substrate-example <name>
+$ git clone https://github.com/shawntabrizi/substrate-module-template
 ```
 
-To extend the default implementation of the `substrate-node-template`, you will need to modify `substrate-example/runtime/src/lib.rs`.
+build with 
 
-Add these two lines after the initial declarations:
-
-```rust
-mod runtime_example;
-impl runtime_example::Trait for Runtime {}
+```bash
+$ cargo build
 ```
 
-Modify the `construct_runtime!()` macro to include `RuntimeExample` at the end:
+test with 
 
-```rust
-/// lib.rs
-construct_runtime!(
-	pub enum Runtime with Log(InternalLog: DigestItem<Hash, Ed25519AuthorityId>) where
-		Block = Block,
-		NodeBlock = opaque::Block,
-		UncheckedExtrinsic = UncheckedExtrinsic
-	{
-		System: system::{default, Log(ChangesTrieRoot)},
-		Timestamp: timestamp::{Module, Call, Storage, Config<T>, Inherent},
-		Consensus: consensus::{Module, Call, Storage, Config<T>, Log(AuthoritiesChange), Inherent},
-		Aura: aura::{Module},
-		Indices: indices,
-		Balances: balances,
-		Sudo: sudo,
-		RuntimeExample: runtime_example::{Module, Call, Storage},
-	}
-);
+```bash
+$ cargo test
 ```
 
-Finally, you need to create a new file called `runtime_example.rs` in the same folder as `lib.rs`.
+### Runtime Node
 
-#### CACHE...
+Clone the [substrate-node-template](https://github.com/shawntabrizi/substrate-package/tree/master/substrate-node-template) and add module logic to [`runtime/src/template.rs`](https://github.com/shawntabrizi/substrate-package/blob/master/substrate-node-template/runtime/src/template.rs).
+
 Update the runtime root `lib.rs` file to include the new `Event<T>` type under the module's `Trait` implementation
 
 ```rust
 /// in root `lib.rs`
+mod mymodule;
+
 impl mymodule::Trait for Runtime {
     type Event = Event<T>;
 }
@@ -93,16 +66,16 @@ construct_runtime!(
 );
 ```
 
-## Updating Your Runtime
+**Updating the Runtime**
 
-You can paste runtime samples from this Cookbook into the `runtime_examples.rs` file and compile the new runtime binaries with:
+Compile runtime binaries
 
 ```bash
-cd substrate-example
+cd runtime
 cargo build --release
 ```
 
-Delete the old chain before you start the new one
+Delete the old chain before you start the new one (*this is a very useful command sequence when building and testing runtimes*!)
 
 ```bash
 ./target/release/substrate-example purge-chain --dev
