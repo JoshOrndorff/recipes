@@ -9,15 +9,12 @@ More generally, blockchains provide an interface to store and interact with data
 Generally speaking, you may store arbitrary data, as long as its data type is serializable in Substrate i.e. implements [`Encode`](https://docs.rs/parity-codec/3.1.0/parity_codec/trait.Encode.html) and [`Decode`](https://docs.rs/parity-codec/3.1.0/parity_codec/trait.Decode.html#foreign-impls) traits.
 
 ## Recipes
-* [Single Value](./value.md)
-* [Mapping](./mapping.md)
-* [List](./list.md)
-* [Structs](./structs.md)
-* [Higher Order Arrays](./arrays.md)
+- [Single Value Storage](./value.md)
+- [Simple Token Transfer (Maps)](./mapping.md)
+- [Lists as Maps](./list.md)
+- [Nested Structs](./structs.md)
+- [Social Network (Higher Order Arrays)](./arrays.md)
 
-*Anti-Pattern*
-* [String](./string.md)
-
-## More Resources
+### More Resources
 
 * [`decl_storage` wiki docs](https://wiki.parity.io/decl_storage)
