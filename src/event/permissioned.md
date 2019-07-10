@@ -2,17 +2,13 @@
 
 This recipe contains a permissioned function which can only be called by the *Owner*. An event is emitted when the function is successfully executed.
 
-The imports are the same as previous event recipes and our `Trait` inherits from `system::Trait`, which is relatively standard.
+The imports are similar to previous event recipes with the additional import of the `support::StorageValue`.
 ```rust
-use srml_support::{StorageValue, dispatch::Result};
-use system::ensure_signed;
-
-pub trait Trait: system::Trait {
-    type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
-}
+// other imports
+use support::{StorageValue};
 ```
 
-In our [`decl_storage`](https://crates.parity.io/srml_support_procedural/macro.decl_storage.html) block, designate the `AccountId` of the owner that can invoke the permissioned function.
+In the [`decl_storage`](https://crates.parity.io/srml_support_procedural/macro.decl_storage.html) block, designate the `AccountId` of the owner that can invoke the permissioned function.
 
 ```rust
 decl_storage! {
@@ -22,7 +18,7 @@ decl_storage! {
 }
 ```
 
-When this `AccountId` is changed, it would be nice to emit an event to notify any relevant actors off-chain.
+When this `AccountId` is changed, it is useful to emit an event to notify any relevant actors off-chain.
 
 ```rust
 decl_event!(

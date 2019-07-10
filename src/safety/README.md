@@ -6,8 +6,6 @@ Indeed, Substrate developers have to exercise incredible caution. The bare-metal
 
 * [Module Development Criteria](#criteria)
 * [Declarative Programming](./cop.md)
-* [Robust Path Handling](./paths.md)
-* [Safe Arithmetic](./safemath.md)
 * [Optimizations](./optimizations.md)
 
 ## Testing

@@ -13,8 +13,6 @@ Likewise, the [substrate-node-template](https://github.com/shawntabrizi/substrat
 
 The [substrate-ui](https://github.com/shawntabrizi/substrate-package/tree/master/substrate-ui) provides a template for building a compatible UI that works with the node template.
 
-*The recipes in this book focus primarily on generic patterns for Substrate modules, but there are plans to add more explanations for tinkering with the node.*
-
 ### Runtime Module
 
 Clone the [substrate-module-template](https://github.com/shawntabrizi/substrate-module-template)

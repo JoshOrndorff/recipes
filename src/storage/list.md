@@ -25,7 +25,7 @@ This recipe answers those questions with snippets from relevant code samples:
 * [Swap and Pop for Ordered Lists](#swappop)
 * [Linked Map for Simplified Runtime Logic](#linkedmap)
 
-**Note**: it is important to properly handle [overflow/underflow](../advanced/safety.md#overunder) and verify [other relevant conditions](../advanced/safety.md#check) when invoking this recipe
+<!-- **Note**: it is important to properly handle [overflow/underflow](../advanced/safety.md#overunder) and verify [other relevant conditions](../advanced/safety.md#check) when invoking this recipe -->
 
 ## Adding/Removing Elements in an Unbounded List <a name = "unbounded"></a>
 

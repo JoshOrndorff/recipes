@@ -1,13 +1,10 @@
 # Adding Machine
 
-A simple adding machine which [checks for overflow](../advanced/safety.md#overunder) and emits an event with the result, without using storage.
+A simple adding machine which checks for overflow and emits an event with the result, without using storage.
 
 In the module file
 
 ```rust
-/// module file `runtime_example.rs`
-use srml_support::dispatch::Result;
-
 pub trait Trait: system::Trait {
     type Event: From<Event> + Into<<Self as system::Trait>::Event>;
 }
