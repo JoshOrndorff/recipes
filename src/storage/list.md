@@ -1,6 +1,6 @@
 # Implementing Lists with Maps
 
-Substrate does not natively support a list type since it may encourage dangerous habits. Unless explicitly guarded against, a list will add unbounded `O(n)` complexity to an operation that will only charge `O(1)` fees ([Big O notation refresher](https://rob-bell.net/2009/06/a-beginners-guide-to-big-o-notation/)). This opens an economic attack vector on your chain. *To learn more about economic security, see [Safety First](../advanced/safety.md).*
+Substrate does not natively support a list type since it may encourage dangerous habits. Unless explicitly guarded against, a list will add unbounded `O(n)` complexity to an operation that will only charge `O(1)` fees ([Big O notation refresher](https://rob-bell.net/2009/06/a-beginners-guide-to-big-o-notation/)). This opens an economic attack vector on your chain.
 
 Emulate a list with a mapping and a counter like so:
 
@@ -25,124 +25,91 @@ This recipe answers those questions with snippets from relevant code samples:
 * [Swap and Pop for Ordered Lists](#swappop)
 * [Linked Map for Simplified Runtime Logic](#linkedmap)
 
-**Note**: it is important to properly handle [overflow/underflow](../advanced/safety.md#overunder) and verify [other relevant conditions](../advanced/safety.md#check) when invoking this recipe
+<!-- **Note**: it is important to properly handle [overflow/underflow](../advanced/safety.md#overunder) and verify [other relevant conditions](../advanced/safety.md#check) when invoking this recipe -->
 
 ## Adding/Removing Elements in an Unbounded List <a name = "unbounded"></a>
 
-If the size of the list is not relevant, the implementation is straightforward. 
+If the size of the list is not relevant, the implementation is straightforward. *Note how it is still necessary to verify the existence of elements in the map before attempting access.* 
 
-For example, let's say that there is a list of `proposal`s (maybe defined as a struct in the runtime). When a `proposal` expires, remove it from the list, but it is not necessary to update the indices of other `proposal`s that have been added. *Note that it is still necessary to [verify the existence](../advanced/safety.md#collision) of proposals in the map before attempting access.* 
-
-Store the `proposal`s in a key-value mapping
+To add an `AccountId`, increment the `the_count` and insert an `AccountId` at that index:
 
 ```rust
-#[cfg_attr(feature = "std", derive(Serialize, Deserialize, Debug))]
-#[derive(Encode, Decode, Clone, PartialEq, Eq)]
-struct Proposal<Hash> {
-    details: Hash,
-}
+// decl_module block
+fn add_member(origin) -> Result {
+    let who = ensure_signed(origin)?;
 
-decl_storage! {
-    trait Store for Module<T: Trait> as Example {
-        Proposals get(proposals): map u32 => Proposal<T::Hash>;
-        LargestIndex get(largest_index): u32;
-    }
-}
+    // increment the counter
+    <TheCounter<T>>::mutate(|count| *count + 1);
+
+    // add member at the largest_index
+    let largest_index = <TheCounter<T>>::get();
+    <TheList<T>>::insert(largest_index, who.clone());
+
+    Self::deposit_event(RawEvent::MemberAdded(who));
+
+    Ok(())
+} 
 ```
 
-To add a `proposal`, increment the `largest_index` and insert a `proposal` at that index:
+To remove an `AccountId`, call the `remove` method for the `StorageMap` type at the relevant index. In this case, it isn't necessary to update the indices of other `proposal`s; order is not relevant.
 
 ```rust
-decl_module! {
-    pub struct Module<T: Trait> for enum Call where origin: T::Origin {
-        // other methods
+// decl_module block
+fn remove_member_unbounded(origin, index: u32) -> Result {
+    let who = ensure_signed(origin)?;
 
-        fn add_proposal(hash: Hash) -> Result {
-            // any necessary checks here
+    // verify existence
+    ensure!(<TheList<T>>::exists(index), "an element doesn't exist at this index");
+    let removed_member = <TheList<T>>::get(index);
+    <TheList<T>>::remove(index);
 
-            // instantiate new proposal
-            let prop = Proposal { details: hash.clone() };
+    Self::deposit_event(RawEvent::MemberRemoved(removed_member));
 
-            // increment largest index
-            <LargestIndex<T>>::mutate(|count| count + 1);
-
-            // add a proposal at largest_index
-            let largest_index = Self::largest_index::get();
-            <Proposals<T>>::insert(largest_index, prop);
-
-            Ok(());
-        }
-    }
+    Ok(())
 }
 ```
 
-To remove a `proposal`, call the `remove` method for the `StorageMap` type at the relevant index. In this case, it isn't necessary to update the indices of other `proposal`s; order is not relevant.
-
-```rust
-decl_module! {
-    pub struct Module<T: Trait> for enum Call where origin: T::Origin {
-        // other methods
-
-        fn remove_proposal(index: u32) -> Result {
-            // any necessary checks here
-
-            // remove proposal at the given index
-            <Proposals<T>>::remove(index);
-
-            Ok(());
-        }
-    }
-}
-```
-
-Because the code doesn't update the indices of other `proposal`s in the map, it is necessary to verify a proposal's existence before removing it, mutating it, or performing any other operation.
-
-```rust
-// index is the `u32` that corresponds to the proposal in the `<Proposals<T>>` map
-ensure!(<Proposals<T>>::exists(index), "proposal does not exist at the provided index");
-```
+Because the code doesn't update the indices of other `AccountId`s in the map, it is necessary to verify an `AccountId`'s existence before removing it, mutating it, or performing any other operation.
 
 ## Swap and Pop for Ordered Lists <a name = "swappop"></a>
 
 To preserve storage so that the list doesn't continue growing even after removing elements, invoke the **swap and pop** algorithm:
 1. swap the element to be removed with the element at the head of the *list* (the element with the highest index in the map)
 2. remove the element recently placed at the highest index
-3. decrement the `LargestIndex` value. 
+3. decrement the `TheCount` value. 
 
 Use the *swap and pop* algorithm to remove elements from the list.
 
 ```rust
-decl_module! {
-    pub struct Module<T: Trait> for enum Call where origin: T::Origin {
-        // other methods
+// decl_module block
+fn remove_member_ordered(origin, index: u32) -> Result {
+    let who = ensure_signed(origin)?;
 
-        fn remove_proposal(index: u32) -> Result {
-            // check that a proposal exists at the given index
-            ensure!(<Proposals<T>>::exists(index), "A proposal does not exist at this index");
+    ensure!(<TheList<T>>::exists(index), "an element doesn't exist at this index");
 
-            let largest_index = Self::largest_index::get();
-            let proposal_to_remove = <Proposals<T>>::take(index);
-            // swap
-            if index != largest_index {
-                let temp = <Proposals<T>>::take(largest_index);
-                <Proposals<T>>::insert(index, temp);
-                <Proposals<T>>::insert(largest_index, proposal_to_remove);
-            }
-            // pop
-            <Proposals<T>>::remove(largest_index);
-            <LargestIndex<T>>::mutate(|count| count - 1);
-
-            Ok(());
-        }
+    let largest_index = <TheCounter<T>>::get();
+    let member_to_remove = <TheList<T>>::take(index);
+    // swap
+    if index != largest_index {
+    let temp = <TheList<T>>::take(largest_index);
+    <TheList<T>>::insert(index, temp);
+    <TheList<T>>::insert(largest_index, member_to_remove.clone());
     }
+    // pop
+    <TheList<T>>::remove(largest_index);
+    <TheCounter<T>>::mutate(|count| *count - 1);
+
+    Self::deposit_event(RawEvent::MemberRemoved(member_to_remove.clone()));
+
+    Ok(())
 }
 ```
 
-*Keep the same logic for inserting proposals (increment `LargestIndex` and insert the entry at the head of the list)* 
+*Keep the same logic for inserting proposals (increment `TheCount` and insert the entry at the head of the list)* 
 
 ### Linked Map <a name = "linkedmap"></a>
 
-To trade performance for simpler code, utilize the `linked_map` data structure. By implementing [`EnumarableStorageMap`](https://crates.parity.io/srml_support/storage/trait.EnumerableStorageMap.html) in addition to [`StorageMap`](https://crates.parity.io/srml_support/storage/trait.StorageMap.html), `linked_map` provides a method `head` which yields the head of the *list*, thereby making it unnecessary to also store the `LargestIndex`. The `enumerate` method also returns an `Iterator` ordered according to when `(key, value)` pairs were inserted into the map.
+To trade performance for *relatively* simple code, utilize the `linked_map` data structure. By implementing [`EnumarableStorageMap`](https://crates.parity.io/srml_support/storage/trait.EnumerableStorageMap.html) in addition to [`StorageMap`](https://crates.parity.io/srml_support/storage/trait.StorageMap.html), `linked_map` provides a method `head` which yields the head of the *list*, thereby making it unnecessary to also store the `LargestIndex`. The `enumerate` method also returns an `Iterator` ordered according to when `(key, value)` pairs were inserted into the map.
 
 To use `linked_map`, import `EnumerableStorageMap`. Here is the new declaration in the `decl_storage` block:
 
@@ -151,31 +118,28 @@ use support::{StorageMap, EnumerableStorageMap}; // no StorageValue necessary
 
 decl_storage! {
     trait Store for Module<T: Trait> as Example {
-        Proposals get(proposals): linked_map u32 => Proposal<T::Hash>;
-        // no largest_index value necessary
+        LinkedList get(linked_list): linked_map u32 => T::AccountId;
+        LinkedCounter get(linked_counter): u32;
     }
 }
 ```
 
-Here is the new `remove_proposal` method:
+The `add_member_linked` method is logically equivalent to the previous `add` method. Here is the new `remove_member_linked` method:
 
 ```rust
-decl_module! {
-    pub struct Module<T: Trait> for enum Call where origin: T::Origin {
-        // other methods
+// decl_module block
+fn remove_member_linked(origin, index: u32) -> Result {
+    let who = ensure_signed(origin)?;
 
-        fn remove_proposal(index: u32) -> Result {
-            // check that a proposal exists at the given index
-            ensure!(<Proposals<T>>::exists(index), "A proposal does not exist at this index");
+    ensure!(<LinkedList<T>>::exists(index), "A member does not exist at this index");
 
-            let head_index = Self::proposals::head();
-            let proposal_to_remove = <Proposals<T>>::take(index);
-            <Proposals<T>>::insert(index, <Proposals<T>>::get(head_index));
-            <Proposals<T>>::remove(head_index);
+    let head_index = <LinkedList<T>>::head().unwrap();
+    let member_to_remove = <LinkedList<T>>::take(index);
+    let head_member = <LinkedList<T>>::get(head_index);
+    <LinkedList<T>>::insert(index, head_member);
+    <LinkedList<T>>::remove(head_index);
 
-            Ok(());
-        }
-    }
+    Ok(())
 }
 ```
 

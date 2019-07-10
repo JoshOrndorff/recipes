@@ -1,5 +1,7 @@
 # Benchmark
 
+* get help from Matt Rutherford for this...
+
 * flaming_fir and other benchmarking tools
 
 ## Cool Example

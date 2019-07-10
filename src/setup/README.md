@@ -5,57 +5,75 @@ If you do not have `substrate` installed on your machine, run:
 curl https://getsubstrate.io -sSf | bash
 ```
 
-## Create a Substrate Node Template
+## Substrate Templates
 
-To start, create an instance of the `substrate-node-template` using the following command:
+[Substrate package](https://github.com/shawntabrizi/substrate-package) contains the UI, module, and runtime templates for building with Substrate. The [substrate-module-template](https://github.com/shawntabrizi/substrate-module-template) is the simplest path to experimenting with Substrate. Modules are modular pieces of code that can be composed within a single runtime. 
+
+Likewise, the [substrate-node-template](https://github.com/shawntabrizi/substrate-package/tree/master/substrate-node-template) provides all necessary scaffolding for running a functional Substrate node. Each Substrate runtime contains multiple modules that comprise the logic of the defined Substrate blockchain.
+
+The [substrate-ui](https://github.com/shawntabrizi/substrate-package/tree/master/substrate-ui) provides a template for building a compatible UI that works with the node template.
+
+### Runtime Module
+
+Clone the [substrate-module-template](https://github.com/shawntabrizi/substrate-module-template)
 
 ```bash
-substrate-node-new substrate-example <name>
+$ git clone https://github.com/shawntabrizi/substrate-module-template
 ```
 
-To extend the default implementation of the `substrate-node-template`, you will need to modify `substrate-example/runtime/src/lib.rs`.
+build with 
 
-Add these two lines after the initial declarations:
-
-```rust
-mod runtime_example;
-impl runtime_example::Trait for Runtime {}
+```bash
+$ cargo build
 ```
 
-Modify the `construct_runtime!()` macro to include `RuntimeExample` at the end:
+test with 
+
+```bash
+$ cargo test
+```
+
+### Runtime Node
+
+Clone the [substrate-node-template](https://github.com/shawntabrizi/substrate-package/tree/master/substrate-node-template) and add module logic to [`runtime/src/template.rs`](https://github.com/shawntabrizi/substrate-package/blob/master/substrate-node-template/runtime/src/template.rs).
+
+Update the runtime root `lib.rs` file to include the new `Event<T>` type under the module's `Trait` implementation
 
 ```rust
-/// lib.rs
+/// in root `lib.rs`
+mod mymodule;
+
+impl mymodule::Trait for Runtime {
+    type Event = Event<T>;
+}
+```
+
+Include the `Event<T>` type in the module's definition in the [`construct_runtime`](https://crates.parity.io/srml_support/macro.construct_runtime.html) macro block.
+
+```rust
+/// in root `lib.rs`
 construct_runtime!(
-	pub enum Runtime with Log(InternalLog: DigestItem<Hash, Ed25519AuthorityId>) where
-		Block = Block,
-		NodeBlock = opaque::Block,
-		UncheckedExtrinsic = UncheckedExtrinsic
-	{
-		System: system::{default, Log(ChangesTrieRoot)},
-		Timestamp: timestamp::{Module, Call, Storage, Config<T>, Inherent},
-		Consensus: consensus::{Module, Call, Storage, Config<T>, Log(AuthoritiesChange), Inherent},
-		Aura: aura::{Module},
-		Indices: indices,
-		Balances: balances,
-		Sudo: sudo,
-		RuntimeExample: runtime_example::{Module, Call, Storage},
-	}
+    pub enum Runtime for Log(InteralLog: DigestItem<Hash, Ed25519AuthorityId) where
+        Block = Block,
+        NodeBlock = opaque::Block,
+        InherentData = BasicInherentData
+    {
+        ...
+        MyModule: mymodule::{Module, Call, Storage, Event<T>},
+    }
 );
 ```
 
-Finally, you need to create a new file called `runtime_example.rs` in the same folder as `lib.rs`.
+**Updating the Runtime**
 
-## Updating Your Runtime
-
-You can paste runtime samples from this Cookbook into the `runtime_examples.rs` file and compile the new runtime binaries with:
+Compile runtime binaries
 
 ```bash
-cd substrate-example
+cd runtime
 cargo build --release
 ```
 
-Delete the old chain before you start the new one
+Delete the old chain before you start the new one (*this is a very useful command sequence when building and testing runtimes*!)
 
 ```bash
 ./target/release/substrate-example purge-chain --dev

@@ -4,12 +4,12 @@ In Substrate, [transaction](https://docs.substrate.dev/docs/glossary#section-tra
 
 > **Events** notify the off-chain world of successful state transitions
 
-To declare an event, use the [`decl_event`](https://crates.parity.io/srml_support/macro.decl_event.html) macro. See the [Dummy Event](./event/basic.md) for more information regarding file structure and necessary inclusions in the runtime root `lib.rs`.
+To declare an event, use the [`decl_event`](https://crates.parity.io/srml_support/macro.decl_event.html) macro.
 
 ## Recipes
 
-* [Dummy Event](./basic.md)
 * [Adding Machine](./adder.md)
+* [Incrementing Balances](./balance.md)
 * [Permissioned Generic Event](./permissioned.md)
 
 ## More Resources
