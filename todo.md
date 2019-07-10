@@ -18,4 +18,5 @@
 ### Safety
 
 - [ ] `safemath` which includes `Perbill`, `Permill`, `saturating`, etc (**M**)
+    * ask for Kian and Guillame's review
 - [ ] Robust Path Handling (**E**)

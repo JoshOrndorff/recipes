@@ -86,4 +86,4 @@ fn insert_value(origin, hash: Hash, value: u32) {
 }
 ```
 
-*See how the [Substrate collectables tutorial](https://shawntabrizi.com/substrate-collectables-workshop/#/2/generating-random-data?id=checking-for-collision) covers this pattern.*
+*See how the [Substrate Collectables Tutorial](https://shawntabrizi.com/substrate-collectables-workshop/#/2/generating-random-data?id=checking-for-collision) covers this pattern.*

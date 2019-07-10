@@ -115,12 +115,18 @@ decl_storage! {
 
 # Substrate Specific Types <a name = "sub"></a>
 
-To access Substrate specific types, the module's `Trait` must inherit from the [SRML](https://github.com/paritytech/substrate/tree/master/srml). For example, to access the Substrate types `Hash`, `AccountId`, and `Balance`, it is sufficient to inherit the [`balances`](https://github.com/paritytech/substrate/tree/master/srml/balances) module:
+To access Substrate specific types, the module's `Trait` must inherit from the [SRML](https://github.com/paritytech/substrate/tree/master/srml). For example, to access the Substrate types `Hash`, `AccountId`, and `BlockNumber`, it is sufficient to inherit the [`system`](https://github.com/paritytech/substrate/tree/master/srml/system) module:
 
+```rust
+pub trait Trait: system::Trait {}
 ```
+
+This provides access to the types `Hash`, `AccountId`, and `BlockNumber` anywhere that specifies the generic `<T: Trait>` using `T::<Type>`. It also provides access to other useful types, declared in the `pub Trait {}` block in [`systems/src/lib.rs`](https://github.com/paritytech/substrate/blob/v1.0/srml/system/src/lib.rs).
+
+If access to the `Balances` type is required, then the trait bound should specify
+
+```rust
 pub trait Trait: balances::Trait {}
 ```
 
-This provides access to the types `Hash`, `AccountId`, and `Balance` anywhere that specifies the generic `<T: Trait>` using `T::<Type>`.
-
-For a practical example of this syntax, *see the [Incrementing Balance](../event/balance.md) event recipe.*
+Because the [`balances`](https://github.com/paritytech/substrate/tree/master/srml/balances) module also inherits the [`system`](https://github.com/paritytech/substrate/tree/master/srml/system) module, it grants access to all the types in `system` as well as those specified in the `pub Trait {}` block in [`balances/src/lib.rs`](https://github.com/paritytech/substrate/blob/v1.0/srml/balances/src/lib.rs). *For a practical example of this syntax, see the [Incrementing Balance](../event/balance.md) event recipe.*

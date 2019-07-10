@@ -10,7 +10,7 @@ Within a recipe's folder, run the following command to build
 cargo build
 ```
 
-I haven't written unit tests *yet*, but you can write tests in the [usual way](https://doc.rust-lang.org/rust-by-example/testing/unit_testing.html), except with a bit more [scaffolding](../src/testing/scaffolding.md).
+I haven't written unit tests *yet*, but you can write tests in the [usual way](https://doc.rust-lang.org/rust-by-example/testing/unit_testing.html), except with a bit more [scaffolding](https://www.shawntabrizi.com/substrate-collectables-workshop/#/5/setting-up-tests).
 
 ## Using Recipes in External Projects
 

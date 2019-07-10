@@ -5,6 +5,8 @@
 
 * abstract out the pattern and make it as generic as possible
 
+* I think this enum is also used in the context of Kian's pull request under my name...
+
 ### Ergonomic Enums
 
 In the [`utxo-workshop`](https://github.com/nczhu/utxo-workshop), the code utilizes an [enum](https://doc.rust-lang.org/rust-by-example/custom_types/enum.html) to manage a data race scenario in which a transaction could arrive before some transactions that it `require`s. 

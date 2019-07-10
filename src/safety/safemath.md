@@ -3,7 +3,7 @@
 * computers are notoriously bad with precision with small numbers
 * link to the inflation section wherein I will discuss some of this stuff
 
-## Perbill and Permill
+## Perbill and Permill Usage
 
 ## Saturating Operations
 

@@ -10,7 +10,13 @@ Indeed, Substrate developers have to exercise incredible caution. The bare-metal
 * [Safe Arithmetic](./safemath.md)
 * [Optimizations](./optimizations.md)
 
-> *Testing is also important and relevant* `=>` see this section of the Substrate Collectables tutorial for more information on testing...
+## Testing
+
+*Testing is not (yet) covered in the Substrate Recipes, but there is a great introduction to testing in the context of Substrate in the [Crypto Collectables Tutorial](https://www.shawntabrizi.com/substrate-collectables-workshop/#/5/setting-up-tests).* I also have enjoyed the following articles/papers on testing that apply to code organization more generally:
+* [Conditional Compilation and Rust Unit Testing](https://os.phil-opp.com/unit-testing/)
+* [Design for Testability](https://blog.nelhage.com/2016/03/design-for-testability/)
+* [How I Test](https://blog.nelhage.com/2016/12/how-i-test/)
+* [Simple Testing Can Prevent Most Critical Failures](https://www.usenix.org/system/files/conference/osdi14/osdi14-paper-yuan.pdf)
 
 ## Module Development Criteria <a name = "criteria"></a>
 
