@@ -36,6 +36,6 @@ Before anything else, I'd recommend starting with the [Substrate Collectables tu
 
 To learn more about how to build novel blockchains with Substrate, check out the [utxo-workshop](https://github.com/nczhu/utxo-workshop).
 
-If interested in token-based mechanisms, look no further than the [Substrate TCR](https://github.com/parity-samples/substrate-tcr). The [full tutorial](https://docs.substrate.dev/docs/building-a-token-curated-registry-dappchain-using-substrate) will teach you Substrate best practices.
+If interested in token-based mechanisms, look no further than the [Substrate TCR](https://github.com/substrate-developer-hub/substrate-tcr). The [full tutorial](https://substrate.dev/docs/en/tutorials/tcr/) covers Substrate best practices.
 
 If interested in smart contracts on Substrate, check out the [substrate-contracts-workshop](https://github.com/substrate-developer-hub/substrate-contracts-workshop).
