@@ -9,7 +9,7 @@ Unlike in smart contract development, the way to emulate these patterns is not t
 * [Aura](https://crates.parity.io/srml_aura/index.html) - manages offline reporting for Aura consensus
 * **[Balances](https://crates.parity.io/srml_balances/index.html)** - handles accounts and balances
 * [Consensus](https://crates.parity.io/srml_consensus/index.html) - manages the authority set for the native code
-* [Contract](https://crates.parity.io/srml_contract/index.html) - functionality for the runtime to deploy and execute WebAssembly smart contracts
+* **[Contracts](https://crates.parity.io/srml_contracts/index.html)** - functionality for the runtime to deploy and execute WebAssembly smart contracts
 * **[Council](https://crates.parity.io/srml_council/index.html)** - handles voting and maintenance of council members
 * **[Democracy](https://crates.parity.io/srml_democracy/index.html)** - handles administration of general stakeholder voting
 * [Executive](https://crates.parity.io/srml_executive/index.html) - dispatches incoming extrinsic calls to the respective modules in the runtime
