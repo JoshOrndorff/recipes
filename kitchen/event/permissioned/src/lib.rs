@@ -1,3 +1,5 @@
+#![cfg_attr(not(feature = "std"), no_std)]
+
 /// Permissioned Function with Generic Event
 /// a permissioned funtion which can only be called by the "owner". An event is emitted 
 /// when the function is successfully executed.

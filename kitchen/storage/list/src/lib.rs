@@ -1,3 +1,5 @@
+#![cfg_attr(not(feature = "std"), no_std)]
+
 /// List via Maps
 /// Substrate does not natively support a list type since it may encourage 
 /// dangerous habits. Unless explicitly guarded against, a list will add 
@@ -13,104 +15,104 @@ pub trait Trait: system::Trait {
 }
 
 decl_storage! {
-    trait Store for Module<T: Trait> as Example {
-        TheList get(the_list): map u32 => T::AccountId;
-        TheCounter get(the_counter): u32;
+	trait Store for Module<T: Trait> as Example {
+		TheList get(the_list): map u32 => T::AccountId;
+		TheCounter get(the_counter): u32;
 
-        LinkedList get(linked_list): linked_map u32 => T::AccountId;
-        LinkedCounter get(linked_counter): u32;
-    }
+		LinkedList get(linked_list): linked_map u32 => T::AccountId;
+		LinkedCounter get(linked_counter): u32;
+	}
 }
 
 decl_event!(
-    pub enum Event<T> where AccountId = <T as system::Trait>::AccountId {
-        // member with AccountId added
-        MemberAdded(AccountId),
-        // member with AccountId removed
-        MemberRemoved(AccountId),
-    }
+	pub enum Event<T> where AccountId = <T as system::Trait>::AccountId {
+		// member with AccountId added
+		MemberAdded(AccountId),
+		// member with AccountId removed
+		MemberRemoved(AccountId),
+	}
 );
 
 decl_module! {
-  pub struct Module<T: Trait> for enum Call where origin: T::Origin {
-    // initialize the default event for this module
-    fn deposit_event<T>() = default;
+	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
+		// initialize the default event for this module
+		fn deposit_event<T>() = default;
 
-    fn add_member(origin) -> Result {
-      let who = ensure_signed(origin)?;
+		fn add_member(origin) -> Result {
+			let who = ensure_signed(origin)?;
 
-      // increment the counter
-      <TheCounter<T>>::mutate(|count| *count + 1);
+			// increment the counter
+			<TheCounter<T>>::mutate(|count| *count + 1);
 
-      // add member at the largest_index
-      let largest_index = <TheCounter<T>>::get();
-      <TheList<T>>::insert(largest_index, who.clone());
+			// add member at the largest_index
+			let largest_index = <TheCounter<T>>::get();
+			<TheList<T>>::insert(largest_index, who.clone());
 
-      Self::deposit_event(RawEvent::MemberAdded(who));
+			Self::deposit_event(RawEvent::MemberAdded(who));
 
-      Ok(())
-    } 
+			Ok(())
+		} 
 
-    fn remove_member_unbounded(origin, index: u32) -> Result {
-      let who = ensure_signed(origin)?;
+		fn remove_member_unbounded(origin, index: u32) -> Result {
+			let who = ensure_signed(origin)?;
 
-      // verify existence
-      ensure!(<TheList<T>>::exists(index), "an element doesn't exist at this index");
-      let removed_member = <TheList<T>>::get(index);
-      <TheList<T>>::remove(index);
+			// verify existence
+			ensure!(<TheList<T>>::exists(index), "an element doesn't exist at this index");
+			let removed_member = <TheList<T>>::get(index);
+			<TheList<T>>::remove(index);
 
-      Self::deposit_event(RawEvent::MemberRemoved(removed_member));
+			Self::deposit_event(RawEvent::MemberRemoved(removed_member));
 
-      Ok(())
-    }
+			Ok(())
+		}
 
-    fn remove_member_ordered(origin, index: u32) -> Result {
-      let who = ensure_signed(origin)?;
+		fn remove_member_ordered(origin, index: u32) -> Result {
+			let who = ensure_signed(origin)?;
 
-      ensure!(<TheList<T>>::exists(index), "an element doesn't exist at this index");
+			ensure!(<TheList<T>>::exists(index), "an element doesn't exist at this index");
 
-      let largest_index = <TheCounter<T>>::get();
-      let member_to_remove = <TheList<T>>::take(index);
-      // swap
-      if index != largest_index {
-        let temp = <TheList<T>>::take(largest_index);
-        <TheList<T>>::insert(index, temp);
-        <TheList<T>>::insert(largest_index, member_to_remove.clone());
-      }
-      // pop
-      <TheList<T>>::remove(largest_index);
-      <TheCounter<T>>::mutate(|count| *count - 1);
+			let largest_index = <TheCounter<T>>::get();
+			let member_to_remove = <TheList<T>>::take(index);
+			// swap
+			if index != largest_index {
+				let temp = <TheList<T>>::take(largest_index);
+				<TheList<T>>::insert(index, temp);
+				<TheList<T>>::insert(largest_index, member_to_remove.clone());
+			}
+			// pop
+			<TheList<T>>::remove(largest_index);
+			<TheCounter<T>>::mutate(|count| *count - 1);
 
-      Self::deposit_event(RawEvent::MemberRemoved(member_to_remove.clone()));
+			Self::deposit_event(RawEvent::MemberRemoved(member_to_remove.clone()));
 
-      Ok(())
-    }
+			Ok(())
+		}
 
-    fn add_member_linked(origin) -> Result {
-      let who = ensure_signed(origin)?;
+		fn add_member_linked(origin) -> Result {
+			let who = ensure_signed(origin)?;
 
-      // increment the counter
-      <LinkedCounter<T>>::mutate(|count| *count + 1);
+			// increment the counter
+			<LinkedCounter<T>>::mutate(|count| *count + 1);
 
-      // add member at the largest_index
-      let largest_index = <LinkedCounter<T>>::get();
-      <TheList<T>>::insert(largest_index, who.clone());
+			// add member at the largest_index
+			let largest_index = <LinkedCounter<T>>::get();
+			<TheList<T>>::insert(largest_index, who.clone());
 
-      Ok(())
-    }
+			Ok(())
+		}
 
-    fn remove_member_linked(origin, index: u32) -> Result {
-      let who = ensure_signed(origin)?;
+		fn remove_member_linked(origin, index: u32) -> Result {
+			let who = ensure_signed(origin)?;
 
-      ensure!(<LinkedList<T>>::exists(index), "A member does not exist at this index");
+			ensure!(<LinkedList<T>>::exists(index), "A member does not exist at this index");
 
-      let head_index = <LinkedList<T>>::head().unwrap();
-      let member_to_remove = <LinkedList<T>>::take(index);
-      let head_member = <LinkedList<T>>::get(head_index);
-      <LinkedList<T>>::insert(index, head_member);
-      <LinkedList<T>>::remove(head_index);
+			let head_index = <LinkedList<T>>::head().unwrap();
+			let member_to_remove = <LinkedList<T>>::take(index);
+			let head_member = <LinkedList<T>>::get(head_index);
+			<LinkedList<T>>::insert(index, head_member);
+			<LinkedList<T>>::remove(head_index);
 
-      Ok(())
-    }
-  }
+			Ok(())
+		}
+	}
 }
