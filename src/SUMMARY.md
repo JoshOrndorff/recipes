@@ -18,3 +18,7 @@
     - [Declarative Programming](./safety/cop.md)
     - [Optimizations](./safety//optimizations.md)
 - [Open Source Dessert](./dessert/README.md)
+
+-----------
+
+[More Resources](./misc/resource.md)
