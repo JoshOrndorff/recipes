@@ -5,9 +5,11 @@ If you do not have `substrate` installed on your machine, run:
 curl https://getsubstrate.io -sSf | bash
 ```
 
+<!-- fast install with --fast -->
+
 ## Substrate Templates
 
-[Substrate package](https://github.com/shawntabrizi/substrate-package) contains the UI, module, and runtime templates for building with Substrate. The [substrate-module-template](https://github.com/shawntabrizi/substrate-module-template) is the simplest path to experimenting with Substrate. Modules are modular pieces of code that can be composed within a single runtime. 
+[substrate-package](https://github.com/shawntabrizi/substrate-package) contains the UI, module, and runtime templates for building with Substrate. The [substrate-module-template](https://github.com/shawntabrizi/substrate-module-template) is the simplest path to experimenting with Substrate. Modules are modular pieces of code that can be composed within a single runtime. 
 
 Likewise, the [substrate-node-template](https://github.com/shawntabrizi/substrate-package/tree/master/substrate-node-template) provides all necessary scaffolding for running a functional Substrate node. Each Substrate runtime contains multiple modules that comprise the logic of the defined Substrate blockchain.
 
@@ -73,7 +75,7 @@ cd runtime
 cargo build --release
 ```
 
-Delete the old chain before you start the new one (*this is a very useful command sequence when building and testing runtimes*!)
+Delete the old chain before you start the new one (*this is a very useful command sequence when building and testing runtimes*)
 
 ```bash
 ./target/release/substrate-example purge-chain --dev

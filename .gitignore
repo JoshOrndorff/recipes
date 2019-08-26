@@ -1,12 +1,14 @@
-# todos are scattered in this files
+# todos are scattered in these files
 k.md
 motivation.md
 todo.md
+**/deprecated
+**/*/drafts/
 **/*/*/drafts/
 
-# local staging need not be pushed
+# local staging; need not be pushed
 book
 
-# don't need to push the actual executable
+# need not push the executables
 **/*/target
 **/*/Cargo.lock
