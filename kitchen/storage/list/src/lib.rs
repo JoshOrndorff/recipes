@@ -42,10 +42,10 @@ decl_module! {
 			let who = ensure_signed(origin)?;
 
 			// increment the counter
-			<TheCounter<T>>::mutate(|count| *count + 1);
+			<TheCounter>::mutate(|count| *count + 1);
 
 			// add member at the largest_index
-			let largest_index = <TheCounter<T>>::get();
+			let largest_index = <TheCounter>::get();
 			<TheList<T>>::insert(largest_index, who.clone());
 
 			Self::deposit_event(RawEvent::MemberAdded(who));
@@ -71,7 +71,7 @@ decl_module! {
 
 			ensure!(<TheList<T>>::exists(index), "an element doesn't exist at this index");
 
-			let largest_index = <TheCounter<T>>::get();
+			let largest_index = <TheCounter>::get();
 			let member_to_remove = <TheList<T>>::take(index);
 			// swap
 			if index != largest_index {
@@ -81,7 +81,7 @@ decl_module! {
 			}
 			// pop
 			<TheList<T>>::remove(largest_index);
-			<TheCounter<T>>::mutate(|count| *count - 1);
+			<TheCounter>::mutate(|count| *count - 1);
 
 			Self::deposit_event(RawEvent::MemberRemoved(member_to_remove.clone()));
 
@@ -92,10 +92,10 @@ decl_module! {
 			let who = ensure_signed(origin)?;
 
 			// increment the counter
-			<LinkedCounter<T>>::mutate(|count| *count + 1);
+			<LinkedCounter>::mutate(|count| *count + 1);
 
 			// add member at the largest_index
-			let largest_index = <LinkedCounter<T>>::get();
+			let largest_index = <LinkedCounter>::get();
 			<TheList<T>>::insert(largest_index, who.clone());
 
 			Ok(())

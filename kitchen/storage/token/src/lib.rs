@@ -43,7 +43,7 @@ decl_module! {
 
 			<GetBalance<T>>::insert(sender, Self::total_supply());
 
-			<Init<T>>::put(true);
+			<Init>::put(true);
 
 			Ok(())
 		}
