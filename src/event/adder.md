@@ -1,5 +1,10 @@
 # Adding Machine
 
+
+> mention here how we can have the type `T` polymorphic over a type or not. We decide and this effects the runtime configuration which should also be duly noted...
+
+* could mention again the purpose of events as it tells us that the function did not have a panic between the beginning and end...This motivates a declarative programming style discussed later in the book
+
 A simple adding machine which checks for overflow and emits an event with the result, without using storage.
 
 In the module file
