@@ -1,4 +1,9 @@
-# Permissioned Function with Generic Event
+# Permissioned Methods
+
+* [Single Owner Access Control](#owner)
+* [Group Membership Authentication](#group)
+
+## Single Owner Access Control <a name = "owner"></a>
 
 This recipe contains a permissioned function which can only be called by the *Owner*. An event is emitted when the function is successfully executed.
 
@@ -53,5 +58,49 @@ fn transfer_ownership(origin, newOwner: T::AccountId) -> Result {
 }
 ```
 
-This recipe can be extended to create permissioned functions that limit invocations to members of specified groups.
-<!-- TODO: add link to the DAO tutorial for this... -->
+## Group Membership Authentication <a name = "group"></a>
+
+This recipe is extended to define permissioned functions which limit invocations to members of a group. The group's membership is managed in runtime storage:
+
+```rust
+// decl_storage block
+Members get(members): Vec<T::AccountId>;
+```
+
+Runtime methods `add_member` demonstrates how members can be added. In other projects, existing members might vote on new member applications instead of automatic admission.
+
+```rust
+fn add_member(origin) -> Result {
+    let new_member = ensure_signed(origin)?;
+    ensure!(!Self::is_member(&new_member), "already a member");
+
+    <Members<T>>::mutate(|mem| mem.push(new_member.clone())); // change to append after 3071 merged
+    Self::deposit_event(RawEvent::AddMember(new_member));
+    Ok(())
+}
+```
+
+The `remove_member` method is similar. The only difference is that we are removing the member rather than pushing a new member to the method.
+
+```rust
+fn remove_member(origin) -> Result {
+    let old_member = ensure_signed(origin)?;
+
+    ensure!(Self::is_member(&old_member), "not a member");
+    // keep all members except for the member in question
+    <Members<T>>::mutate(|mem| mem.retain(|m| m != &old_member));
+    Self::deposit_event(RawEvent::RemoveMember(old_member));
+    Ok(())
+}
+```
+
+The `ensure` checks are symmetric in the sense that `add_member` requires that the member in question is not already a member, while the `remove_member` method requires membership. To check membership within the runtime, we define the helper `is_member` method:
+
+```rust
+// impl<T: Trait> Module<T> block
+pub fn is_member(who: &T::AccountId) -> bool {
+    Self::members().contains(who)
+}
+```
+
+This example can easily be extended to define criteria for adding and removing members. A well-written example can be found in [`srml/collective`](https://github.com/paritytech/substrate/blob/master/srml/collective/src/lib.rs), which also uses a `Vec<AccountId>` to manage membership.

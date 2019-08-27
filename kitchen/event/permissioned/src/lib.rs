@@ -23,7 +23,7 @@ decl_event!(
 	pub enum Event<T> where AccountId = <T as system::Trait>::AccountId {
 		OwnershipTransferred(AccountId, AccountId),
         AddMember(AccountId),
-        ConfirmMember(AccountId),
+        RemoveMember(AccountId),
 	}
 );
 
@@ -56,11 +56,13 @@ decl_module! {
             Ok(())
         }
 
-        fn confirm_member(origin) -> Result {
-            let member_to_check = ensure_signed(origin)?;
+        fn remove_member(origin) -> Result {
+            let old_member = ensure_signed(origin)?;
 
-            ensure!(Self::is_member(&member_to_check), "not a member");
-            Self::deposit_event(RawEvent::ConfirmMember(member_to_check));
+            ensure!(Self::is_member(&old_member), "not a member");
+            // keep all members except for the member in question
+            <Members<T>>::mutate(|mem| mem.retain(|m| m != &old_member));
+            Self::deposit_event(RawEvent::RemoveMember(old_member));
             Ok(())
         }
 	}

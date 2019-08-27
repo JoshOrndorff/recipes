@@ -9,7 +9,7 @@ To declare an event, use the [`decl_event`](https://crates.parity.io/srml_suppor
 ## Recipes
 
 * [Simple Adding Machine](./adder.md)
-* [Membership Authentication](./permissioned.md)
+* [Permissioned Methods](./permissioned.md)
 * [Blockchain Event Loop](./loop.md)
 
 ## More Resources
