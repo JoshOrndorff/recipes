@@ -4,8 +4,7 @@ If you do not have `substrate` installed on your machine, run:
 ```bash
 curl https://getsubstrate.io -sSf | bash
 ```
-
-<!-- fast install with --fast -->
+<!-- fast install with --fast (should include?) -->
 
 ## Substrate Templates
 
