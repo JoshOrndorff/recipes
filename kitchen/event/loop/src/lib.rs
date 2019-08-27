@@ -11,15 +11,17 @@ use support::{
 };
 use system::ensure_signed;
 
-// type alias for counting actions
-pub type ActionIndex = u32;
+// type alias ordering task execution in `on_finalize`
+pub type PriorityScore = u32;
 
-// example of a minimal action struct
-#[derive(Encode, Decode, Clone, PartialEq, Eq)]
+// generic task struct
+#[derive(Encode, Decode, Clone, Eq, PartialEq, Ord, PartialOrd)]
 #[cfg_attr(feature = "std", derive(Debug))]
-pub struct Action<BlockNumber> {
-    index: ActionIndex,
-    time_of_proposal: BlockNumber,
+pub struct Task<BlockNumber> {
+    // the priority of the task relative to other tasks
+    priority_score: PriorityScore,
+    // time at which the task is initially queued
+    proposed_at: BlockNumber,
 }
 
 pub trait Trait: system::Trait {
@@ -27,7 +29,7 @@ pub trait Trait: system::Trait {
     type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
 
     // how frequently proposals are passed from the dispatchQ
-    type ActionFrequency: Get<Self::BlockNumber>;
+    type ExecutionFrequency: Get<Self::BlockNumber>;
 }
 
 decl_event!(
@@ -35,20 +37,19 @@ decl_event!(
     where 
         AccountId = <T as system::Trait>::AccountId,
         BlockNumber = <T as system::Trait>::BlockNumber,
-    {
-        ActionScheduled(AccountId, BlockNumber),
-        ActionExecuted(BlockNumber),
+    {   
+        // proposer's AccountId, BlockNumber at expected execution
+        TaskScheduled(AccountId, BlockNumber),
+        TaskExecuted(BlockNumber),
     }
 );
 
 decl_storage! {
     trait Store for Module<T: Trait> as eloop {
-        /// Total actions in existence
-        ActionCount get(action_count): ActionIndex;
-        /// Outstanding proposals getter
-        Actions get(proposals): map T::Hash => Option<Action<T::BlockNumber>>;
-        /// Dispatch Queue for actions
-        ActionQ get(dispatch_q): Vec<T::Hash>;
+        /// Outstanding tasks getter
+        Tasks get(tasks): map T::Hash => Option<Task<T::BlockNumber>>;
+        /// Dispatch Queue for tasks
+        TaskQ get(task_q): Vec<T::Hash>;
     }
 }
 
@@ -57,48 +58,62 @@ decl_module! {
         fn deposit_event<T>() = default;
 
         // frequency with which the ActionQ is executed
-        const ActionFrequency: T::BlockNumber = T::ActionFrequency::get();
+        const ExecutionFrequency: T::BlockNumber = T::ExecutionFrequency::get();
 
-        fn add_action(origin) -> Result {
+        fn schedule_task(origin, priority_score: PriorityScore) -> Result {
             let proposer = ensure_signed(origin)?;
 
-            // increment actioncount
-            let index: ActionIndex = <ActionCount>::get() + 1;
-            <ActionCount>::put(index);
             // get current time
-            let time_of_proposal = <system::Module<T>>::block_number();
-            let new_action = Action { index, time_of_proposal, };
-            // insert action into Q
-            let hash = <T as system::Trait>::Hashing::hash_of(&new_action);
-            // add to actions map
-            <Actions<T>>::insert(hash, new_action);
-            // add to Q for execution
-            <ActionQ<T>>::mutate(|acts| acts.push(hash));
-            // deposit event
-            Self::deposit_event(RawEvent::ActionScheduled(proposer, time_of_proposal));
+            let proposed_at = <system::Module<T>>::block_number();
 
+            // to emit an event regarding the expected execution time
+            let cached_frequency = T::ExecutionFrequency::get();
+            let mut expected_execution_time = proposed_at;
+            loop {
+                // the expected execution time is the next block number divisible by `ExecutionFrequency`
+                if (expected_execution_time % cached_frequency).is_zero() {
+                    break;
+                } else {
+                    expected_execution_time += 1.into();
+                }
+            }
+
+            //                          PriorityScore, proposed_at BlockNumber
+            let task_to_schedule = Task { priority_score, proposed_at };
+            // insert action into Q
+            let hash = <T as system::Trait>::Hashing::hash_of(&task_to_schedule);
+            // add to tasks map
+            <Tasks<T>>::insert(hash, task_to_schedule);
+            // add to TaskQ for scheduled execution
+            <TaskQ<T>>::mutate(|t| t.push(hash));
+
+            Self::deposit_event(RawEvent::TaskScheduled(proposer, expected_execution_time));
             Ok(())
         }
 
         fn on_finalize(n: T::BlockNumber) {
-            if (n % T::ActionFrequency::get()).is_zero() {
+            if (n % T::ExecutionFrequency::get()).is_zero() {
                 // execute from the dispatchQ
-                Self::execute_actions(n);
+                Self::execute_tasks(n);
             }
         }
     }
 }
 
 impl<T: Trait> Module<T> {
-    pub fn execute_actions(n: T::BlockNumber) {
-        <ActionQ<T>>::get().into_iter().for_each(|h| {
-            // this is where we might do something related to the action
-            <Actions<T>>::remove(h); // here, we just remove it from the map
-            // decrement action count
-            let new_count = <ActionCount>::get() - 1;
-            <ActionCount>::put(new_count);
+    pub fn execute_tasks(n: T::BlockNumber) {
+        let mut execute_q = Vec::new(); 
+        <TaskQ<T>>::get().into_iter().for_each(|h| {
+            execute_q.push(<Tasks<T>>::get(h));
+            // sort based on priority score and block number
+            execute_q.sort();
+            execute_q.iter().for_each(|t| {
+                // this is where each task is executed
+                // -- execution occurs in order based on sort()
+            });
+            <Tasks<T>>::remove(h); // here, we just remove executed tasks from the map
         });
-        <ActionQ<T>>::kill();
-        Self::deposit_event(RawEvent::ActionExecuted(n));
+        <TaskQ<T>>::kill();
+        Self::deposit_event(RawEvent::TaskExecuted(n));
     }
 }
