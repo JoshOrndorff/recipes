@@ -1,16 +1,11 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
-/// Naive Social Network with Higher Order Arrays
-///
-/// To represent ownership of multiple items across multiple users, tuples can 
-/// be used alongside maps in order to emulate arrays
-///
-/// Social Network Graphs may represent each user (`AccountId`) as a list of other friends
-/// `SocialNetwork[AccountId][Index] -> AccountId`
-/// To check the number of friends for an `AccountId`,
-/// SocialNetwork[AccountId].length()
+/// TODO:
+/// this is a really poor implementation
+/// brainstorm and rewrite `=>` create a profile struct for managing friend information
+/// use constant getters and softmax?
 
-use support::{ensure, decl_module, decl_storage, decl_event, StorageMap};
+use support::{ensure, decl_module, decl_storage, decl_event, StorageValue, StorageMap, EnumerableStorageMap, dispatch::Result};
 use system::ensure_signed;
 
 pub trait Trait: system::Trait {
@@ -103,19 +98,17 @@ decl_module! {
 impl<T: Trait> Module<T> {
 	pub fn friend_exists(current: T::AccountId, friend: T::AccountId) -> bool {
 		// search for friend in AllFriends vector
-		<AllFriends<T>>::get(current).iter()
-			.any(|&ref a| a == &friend)
+		<AllFriends<T>>::get(current).contains(&friend)
 	}
 
 	pub fn is_blocked(current: T::AccountId, other_user: T::AccountId) -> bool {
 		// search for friend in Blocked vector
-		<Blocked<T>>::get(current).iter()
-			.any(|&ref a| a == &other_user)
+		<Blocked<T>>::get(current).contains(&other_user)
 	}
 
 	pub fn get_friend_index(current: T::AccountId, friend: T::AccountId) -> Option<u32> {
 		// should never be called if the friend isn't a friend of current
-		// if so, it doesn't return, the runtime panics `=>` yike!
+		// if so, it doesn't return, the runtime panics `=>` yikes!
 		let current_count = <FriendsCount<T>>::get(current.clone());
 		for i in 0..current_count {
 			if friend == <MyFriend<T>>::get((current.clone(), i)) {

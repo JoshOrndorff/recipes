@@ -4,6 +4,10 @@ The [official Substrate documentation](https://docs.substrate.dev/docs/srml-over
 
 Unlike in smart contract development, the way to emulate these patterns is not to directly utilize these modules. Instead, the best approach either implements the same logic in the new context or utilizes a trait from [`srml/support`](https://github.com/paritytech/substrate/blob/master/srml/support/src/traits.rs) to guide the new implementation. By abstracting shared behavior from the runtime modules into [`srml/support`](https://github.com/paritytech/substrate/blob/master/srml/support/src/traits.rs), Substrate makes it easy to extract and enforce best practices in the unique runtime. You can find the trait documentation [here](https://crates.parity.io/srml_support/traits/index.html).
 
+**make this into a checklist**
+* add this as a label for issues
+* add emojis to the issues
+
 * [Aura](https://crates.parity.io/srml_aura/index.html) - manages offline reporting for Aura consensus
 * **[Balances](https://crates.parity.io/srml_balances/index.html)** - handles accounts and balances
 * [Consensus](https://crates.parity.io/srml_consensus/index.html) - manages the authority set for the native code
