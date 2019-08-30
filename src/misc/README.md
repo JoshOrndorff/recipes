@@ -2,10 +2,7 @@
 
 Substrate Recipes is a collection of simple code patterns that demonstrate best practices when building blockchains with **[Substrate](https://github.com/paritytech/substrate)**. The repo used to build this book is [open source](https://github.com/substrate-developer-hub/recipes) and [open for contributions](https://github.com/substrate-developer-hub/recipes/blob/master/CONTRIBUTING.md).
 
-* [What is Substrate?](#what)
-* [How to Use This Book](#how)
-
-## What is Substrate? <a name = "what"></a>
+## What is Substrate?
 
 [Substrate](https://github.com/paritytech/substrate) is a framework for building blockchains. To learn more about Substrate, see the [official documentation](https://substrate.dev). For a high level overview, see the following blog posts:
 
@@ -13,7 +10,7 @@ Substrate Recipes is a collection of simple code patterns that demonstrate best 
 * [Substrate in a nutshell](https://www.parity.io/substrate-in-a-nutshell/)
 * [A brief summary of everything Substrate and Polkadot](https://www.parity.io/a-brief-summary-of-everything-substrate-polkadot/)
 
-## How to Use This Book <a name = "how"></a>
+## How to Use This Book
 
 Start by cloning the repo on github:
 

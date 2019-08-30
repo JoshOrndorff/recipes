@@ -1,5 +1,4 @@
 # Higher Order Arrays with Tuples and Maps
-*[naive social network recipe below](#naive) below*
 
 To represent ownership of multiple items across multiple users, tuples can be used alongside maps in order to emulate arrays.
 
@@ -24,7 +23,7 @@ FriendsCount get(friends_count): map T::AccountId => u32;
 
 Patterns that use mappings to emulate higher order data structures are common when managing runtime storage on Substrate. 
 
-## Naive Social Network
+## Social Network
 
 We can use this pattern to manage [whitelists and blacklists](https://stackoverflow.com/questions/1453285/what-is-whitelist-and-blacklist-data). This is especially useful in the context of social networks for adding/removing friends and blocking unfriendly participants.
 
@@ -87,6 +86,6 @@ ensure!(!Self::is_blocked(user.clone(), blocked_user.clone()), "user is already 
 The full logic for this sample can be found in the [kitchen](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen) in `storage/arrays`.
 <!-- **TODO: update link once pushed** -->
 
-*To see another example of how to use tuplies to emulate higher order arrays, see the [Substrate Collectables Tutorial](https://shawntabrizi.github.io/substrate-collectables-workshop/#/2/owning-multiple-kitties?id=using-tuples-to-emulate-higher-order-arrays).*
+*To see another example of how to use tuples to emulate higher order arrays, see the [Substrate Collectables Tutorial](https://shawntabrizi.github.io/substrate-collectables-workshop/#/2/owning-multiple-kitties?id=using-tuples-to-emulate-higher-order-arrays).*
 
 **NOTE**: [DoubleMap](https://crates.parity.io/srml_support/storage/trait.StorageDoubleMap.html) is a map with two keys; this storage item may also be useful for implementing higher order arrays

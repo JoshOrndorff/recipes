@@ -1,9 +1,6 @@
 # Permissioned Methods
 
-* [Single Owner Access Control](#owner)
-* [Group Membership Authentication](#group)
-
-## Single Owner Access Control <a name = "owner"></a>
+## Single Owner Access Control
 
 This recipe contains a permissioned function which can only be called by the *Owner*. An event is emitted when the function is successfully executed.
 
@@ -58,7 +55,7 @@ fn transfer_ownership(origin, newOwner: T::AccountId) -> Result {
 }
 ```
 
-## Group Membership Authentication <a name = "group"></a>
+## Group Membership Authentication
 
 This recipe is extended to define permissioned functions which limit invocations to members of a group. The group's membership is managed in runtime storage:
 

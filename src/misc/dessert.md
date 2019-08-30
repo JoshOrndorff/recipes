@@ -4,6 +4,7 @@ Check out **[awesome-substrate](https://github.com/substrate-developer-hub/aweso
 
 ## <a href="https://github.com/substrate-developer-hub/">Featured Tutorials</a>
 * [Substrate Collectables Workshop](https://github.com/substrate-developer-hub/substrate-collectables-workshop)
+* [Substrate Verifiable Credentials Workshop](https://github.com/substrate-developer-hub/substrate-verifiable-credentials)
 * [Substrate TCR Tutorial](https://github.com/substrate-developer-hub/substrate-tcr)
 * [Substrate Contracts Workshop](https://github.com/substrate-developer-hub/substrate-contracts-workshop)
 
