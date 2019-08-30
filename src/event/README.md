@@ -6,11 +6,7 @@ In Substrate, [transaction](https://docs.substrate.dev/docs/glossary#section-tra
 
 To declare an event, use the [`decl_event`](https://crates.parity.io/srml_support/macro.decl_event.html) macro.
 
-## Recipes
-
-* [Adding Machine](./adder.md)
-* [Incrementing Balances](./balance.md)
-* [Permissioned Generic Event](./permissioned.md)
+* [Adding Machine Example](./adder.md)
 
 ## More Resources
 

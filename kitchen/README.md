@@ -2,6 +2,28 @@
 
 The kitchen is for *cooking* recipes. It is structured like the main recipes build as specified in [src/SUMMARY.md](../src/SUMMARY.md), except every code sample is stored as a library via the [substrate-module-template](https://github.com/shawntabrizi/substrate-module-template).
 
+**Event**: effectively logging, scheduling, and reacting to events defined in the `decl_event` block of the runtime.
+* [Adding Machine](./event/adder/)
+
+**Storage**: managing interactions with the on-chain storage via the `decl_storage` block in the runtime.
+* [Single Value Storage](./storage/value/)
+* [Configurable Module Constants](./storage/constants/)
+* [Lists as Maps](./storage/list/)
+
+**MISC**
+- [Nested Structs](./nstructs)
+- [Using Balances](./support/balances)
+- [Token Transfer](./token)
+- [Permissioned Methods](./permissioned)
+- [Blockchain Event Loop](./loop)
+- [Social Network](./social)
+
+<!-- **Support**: using traits from [`srml/support`](https://github.com/paritytech/substrate/tree/master/srml/support) to inherit shared behavior from existing runtime modules
+* [Using Balances](./support/balances/)
+
+ADD BACK WHEN THERE ARE MORE RECIPES THAN JUST THIS BALANCES STRUCT
+-->
+
 ## Directions
 
 Within a recipe's folder, run the following command to build
@@ -14,6 +36,6 @@ I haven't written unit tests *yet*, but you can write tests in the [usual way](h
 
 ## Using Recipes in External Projects
 
-Follow the [substrate-module-template directions](https://github.com/shawntabrizi/substrate-module-template) to use recipes in your personal projects. 
+Follow the [substrate-module-template](https://github.com/shawntabrizi/substrate-module-template) directions to use recipes in your personal projects. 
 
 **I recommend extracting patterns and applying them in the context of your application rather than directly importing the recipes** :)

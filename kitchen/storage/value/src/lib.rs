@@ -18,7 +18,7 @@ decl_module! {
 		fn set_value(origin, value: u32) -> Result {
 			// check sender signature to verify permissions
 			let sender = ensure_signed(origin)?; 
-			<MyValue<T>>::put(value);
+			<MyValue>::put(value);
 			Ok(())
 		}
 	}

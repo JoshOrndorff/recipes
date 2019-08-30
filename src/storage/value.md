@@ -56,15 +56,20 @@ fn kill<S: Storage>(storage: &S) {
 Therefore, the syntax to "put" `Value`:
 
 ```rust
-<MyValue<T>>::put(1738);
+<MyValue>::put(1738);
 ```
 
 and to "get" `Value`:
 
 ```rust
-let my_val = <MyValue<T>>::get();
+let my_val = <MyValue>::get();
 ```
 
+Note that we do not need the type `T` because the value is only of one type `u32`. If the `T` was polymorphic over more than one type, the syntax would include `T` in call like
+
+```rust
+<MyValue<T>>::put(178);
+```
 
 ## Getter Syntax <a name = "get"></a>
 
@@ -100,7 +105,7 @@ decl_module! {
         fn set_value(origin, value: u32) -> Result {
             // check sender signature to verify permissions
             let sender = ensure_signed(origin)?; 
-            <MyValue<T>>::put(value);
+            <MyValue>::put(value);
             Ok(())
         }
     }
@@ -112,21 +117,3 @@ decl_storage! {
     }
 }
 ```
-
-# Substrate Specific Types <a name = "sub"></a>
-
-To access Substrate specific types, the module's `Trait` must inherit from the [SRML](https://github.com/paritytech/substrate/tree/master/srml). For example, to access the Substrate types `Hash`, `AccountId`, and `BlockNumber`, it is sufficient to inherit the [`system`](https://github.com/paritytech/substrate/tree/master/srml/system) module:
-
-```rust
-pub trait Trait: system::Trait {}
-```
-
-This provides access to the types `Hash`, `AccountId`, and `BlockNumber` anywhere that specifies the generic `<T: Trait>` using `T::<Type>`. It also provides access to other useful types, declared in the `pub Trait {}` block in [`systems/src/lib.rs`](https://github.com/paritytech/substrate/blob/v1.0/srml/system/src/lib.rs).
-
-If access to the `Balances` type is required, then the trait bound should specify
-
-```rust
-pub trait Trait: balances::Trait {}
-```
-
-Because the [`balances`](https://github.com/paritytech/substrate/tree/master/srml/balances) module also inherits the [`system`](https://github.com/paritytech/substrate/tree/master/srml/system) module, it grants access to all the types in `system` as well as those specified in the `pub Trait {}` block in [`balances/src/lib.rs`](https://github.com/paritytech/substrate/blob/v1.0/srml/balances/src/lib.rs). *For a practical example of this syntax, see the [Incrementing Balance](../event/balance.md) event recipe.*
