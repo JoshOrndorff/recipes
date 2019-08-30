@@ -10,11 +10,8 @@ Arbitrary data may be stored, as long as its data type is serializable in Substr
 
 ## Recipes
 - [Single Value Storage](./value.md)
-- [Configurable Module Constants](./constants.md)
-- [Simple Token Transfer (Maps)](./mapping.md)
 - [Lists as Maps](./list.md)
-- [Nested Structs](./structs.md)
-- [Social Network (Higher Order Arrays)](./arrays.md)
+- [Configurable Module Constants](./constants.md)
 
 ### More Resources
 

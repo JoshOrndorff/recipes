@@ -9,7 +9,7 @@
     - [Maps](./storage/list.md)
     - [Configurable Constants](./storage/constants.md)
 - [Nested Structs](./common/structs.md)
-- [Using Balances](./tour/balances.md)
+- [Using Balances](./common/balances.md)
 - [Token Transfer](./common/token.md)
 - [Permissioned Methods](./common/permissioned.md)
 - [Blockchain Event Loop](./common/loop.md)

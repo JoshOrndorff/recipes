@@ -1,6 +1,6 @@
 # Scheduling Execution
 
-Blockchain-based applications use the block number as a proxy for time for scheduling events. For example, the [`srml/treasury`](https://github.com/paritytech/substrate/blob/master/srml/treasury/src/lib.rs) module schedules spending according to a `SpendPeriod` constant (*see [constants](../storage/constants.md) for more on configuring module*). Specifically, the runtime method `spend_funds()` is executed every block in which `block_number % SpendPeriod == 0` (i.e. every `SpendPeriod` blocks, spending occurs).
+Blockchain-based applications use the block number as a proxy for time for scheduling events. For example, the [`srml/treasury`](https://github.com/paritytech/substrate/blob/master/srml/treasury/src/lib.rs) module schedules spending according to a `SpendPeriod` constant (*see [constants](../storage/constants.md) to configure module constants*). Specifically, the runtime method `spend_funds()` is executed every block in which `block_number % SpendPeriod == 0` (i.e. every `SpendPeriod` blocks, spending occurs).
 
 ```rust
 // decl_module block
