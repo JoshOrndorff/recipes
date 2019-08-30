@@ -1,4 +1,4 @@
-# <a href="https://substrate.dev/recipes">Substrate Recipes</a>
+# <a href="https://substrate.dev/recipes">Substrate Recipes</a> 🍴😋🍴
 [![Build Status](https://travis-ci.org/substrate-developer-hub/recipes.svg?branch=master)](https://travis-ci.org/substrate-developer-hub/recipes)
 
 Simple code patterns that demonstrate best practices when building with **[Substrate](https://github.com/paritytech/substrate)**.

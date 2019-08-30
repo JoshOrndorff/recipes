@@ -16,3 +16,6 @@ let random_hash = (random_seed, sender, nonce).using_encoded(<T as system::Trait
 
 <Nonce<T>>::mutate(|n| *n += 1);
 ```
+
+
+**[Back to Recipes](https://substrate.dev/recipes/)**
