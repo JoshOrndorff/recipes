@@ -1,8 +1,6 @@
 //! Example of using balances in the runtime
 use support::traits::{Currency, LockableCurrency, ReservableCurrency};
-use support::{
-    decl_event, decl_module, dispatch::Result,
-};
+use support::{decl_event, decl_module, dispatch::Result};
 use system::ensure_signed;
 
 type BalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::Balance;
@@ -10,18 +8,18 @@ type BalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::Ac
 pub trait Trait: system::Trait + Sized {
     // overarching event type
     type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
-    
+
     /// Currency type for this module.
-	type Currency: Currency<Self::AccountId> + ReservableCurrency<Self::AccountId>;
+    type Currency: Currency<Self::AccountId> + ReservableCurrency<Self::AccountId>;
 }
 
 decl_event!(
     pub enum Event<T>
-    where 
+    where
         AccountId = <T as system::Trait>::AccountId,
         Balance = BalanceOf<T>,
         BlockNumber = <T as system::Trait>::BlockNumber,
-    {   
+    {
         LockFunds(AccountId, Balance, BlockNumber),
         UnlockFunds(AccountId, Balance, BlockNumber),
         // sender, receiver, amount, block number
@@ -40,7 +38,7 @@ decl_module! {
                     .map_err(|_| "locker can't afford to lock the amount requested")?;
 
             let now = <system::Module<T>>::block_number();
-            
+
             Self::deposit_event(RawEvent::LockFunds(locker, amount, now));
             Ok(())
         }

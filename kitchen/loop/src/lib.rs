@@ -7,7 +7,7 @@ use parity_scale_codec::{Decode, Encode};
 use runtime_primitives::traits::{Hash, Zero};
 use support::traits::Get;
 use support::{
-    decl_event, decl_module, decl_storage, dispatch::Result, ensure, StorageMap, StorageValue
+    decl_event, decl_module, decl_storage, dispatch::Result, ensure, StorageMap, StorageValue,
 };
 use system::ensure_signed;
 
@@ -34,10 +34,10 @@ pub trait Trait: system::Trait {
 
 decl_event!(
     pub enum Event<T>
-    where 
+    where
         AccountId = <T as system::Trait>::AccountId,
         BlockNumber = <T as system::Trait>::BlockNumber,
-    {   
+    {
         // proposer's AccountId, BlockNumber at expected execution
         TaskScheduled(AccountId, BlockNumber),
         TaskExecuted(BlockNumber),
@@ -102,7 +102,7 @@ decl_module! {
 
 impl<T: Trait> Module<T> {
     pub fn execute_tasks(n: T::BlockNumber) {
-        let mut execute_q = Vec::new(); 
+        let mut execute_q = Vec::new();
         <TaskQ<T>>::get().into_iter().for_each(|h| {
             execute_q.push(<Tasks<T>>::get(h));
             // sort based on priority score and block number

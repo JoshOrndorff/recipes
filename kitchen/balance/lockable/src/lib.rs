@@ -1,10 +1,13 @@
 /// staking/lib.rs simplified
 use support::{
-    decl_event, decl_module, decl_storage, dispatch::Result, ensure, StorageMap, StorageValue,
+    decl_event, decl_module, decl_storage,
+    dispatch::Result,
+    ensure,
     traits::{
-		Currency, OnFreeBalanceZero, OnDilution, LockIdentifier, LockableCurrency, ReservableCurrency,
-		WithdrawReasons, WithdrawReason, OnUnbalanced, Imbalance, Time, Get,
-	}
+        Currency, Get, Imbalance, LockIdentifier, LockableCurrency, OnDilution, OnFreeBalanceZero,
+        OnUnbalanced, ReservableCurrency, Time, WithdrawReason, WithdrawReasons,
+    },
+    StorageMap, StorageValue,
 };
 use system::ensure_signed;
 
@@ -12,13 +15,13 @@ const EXAMPLE_ID: LockIdentifier = *b"example ";
 
 type BalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::Balance;
 type PositiveImbalanceOf<T> =
-	<<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::PositiveImbalance;
+    <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::PositiveImbalance;
 type NegativeImbalanceOf<T> =
-	<<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::NegativeImbalance;
+    <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::NegativeImbalance;
 
 pub trait Trait: system::Trait {
     /// The lockable currency type
-    type Currency: LockableCurrency<Self::AccountId, Moment=Self::BlockNumber>;
+    type Currency: LockableCurrency<Self::AccountId, Moment = Self::BlockNumber>;
 
     /// The overarching event type
     type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
@@ -40,11 +43,11 @@ decl_event!(
     pub enum Event<T>
     where
         Balance = BalanceOf<T>,
-        <T as system::Trait>::AccountId,
+        <T as system::Trait>::AccountId
     {   
         Locked(AccountId, Balance),
         ExtendedLock(AccountId, Balance),
-        Unlocked(AccountId), // would be nice to get back balance here (more nuance)
+        Unlocked(AccountId),
         Burned(AccountId, Balance),
         Minted(AccountId, Balance),
         Diluted(Balance),

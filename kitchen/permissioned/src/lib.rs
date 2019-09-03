@@ -1,37 +1,39 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 /// Permissioned Function with Generic Event
-/// a permissioned funtion which can only be called by the "owner". An event is emitted 
+/// a permissioned funtion which can only be called by the "owner". An event is emitted
 /// when the function is successfully executed.
-
-use support::{ensure, decl_module, decl_storage, decl_event, StorageValue, dispatch::Result};
+use support::{decl_event, decl_module, decl_storage, dispatch::Result, ensure, StorageValue};
 use system::ensure_signed;
 
 pub trait Trait: system::Trait {
-	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
+    type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
 }
 
 decl_storage! {
-	trait Store for Module<T: Trait> as PGeneric {
-		Owner get(owner): T::AccountId;
+    trait Store for Module<T: Trait> as PGeneric {
+        Owner get(owner): T::AccountId;
 
         Members get(members): Vec<T::AccountId>;
-	}
+    }
 }
 
 decl_event!(
-	pub enum Event<T> where AccountId = <T as system::Trait>::AccountId {
-		OwnershipTransferred(AccountId, AccountId),
+    pub enum Event<T>
+    where
+        AccountId = <T as system::Trait>::AccountId,
+    {
+        OwnershipTransferred(AccountId, AccountId),
         AddMember(AccountId),
         RemoveMember(AccountId),
-	}
+    }
 );
 
 decl_module! {
-	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
-		fn deposit_event<T>() = default;
+    pub struct Module<T: Trait> for enum Call where origin: T::Origin {
+        fn deposit_event<T>() = default;
 
-		fn init_ownership(origin) -> Result {
+        fn init_ownership(origin) -> Result {
             ensure!(!<Owner<T>>::exists(), "Owner already exists");
             let sender = ensure_signed(origin)?;
             <Owner<T>>::put(&sender);
@@ -65,7 +67,7 @@ decl_module! {
             Self::deposit_event(RawEvent::RemoveMember(old_member));
             Ok(())
         }
-	}
+    }
 }
 
 impl<T: Trait> Module<T> {

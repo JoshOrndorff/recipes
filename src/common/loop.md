@@ -22,7 +22,7 @@ Similar to how the browser negotiates task preference according to the applicati
 
 Similar to how the browser gives preference to certain tasks within an event loop, we can define an order for task execution in `on_finalize` based on the logic within our application.
 
-In the associated [event loop recipe](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/event/loop) in the [kitchen](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/), a generic pattern is exposed for queueing `Task`s, which are defined as 
+In the associated [event loop recipe](https://github.com/substrate-developer-hub/recipes/blob/master/kitchen/loop/src/lib.rs) in the [kitchen](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/), a generic pattern is exposed for queueing `Task`s, which are defined as 
 
 ```rust
 #[derive(Encode, Decode, Clone, PartialEq, Eq)]
