@@ -1,5 +1,5 @@
 [package]
-name = "sunshine-readable"
+name = "lockable-example"
 version = "0.1.0"
 authors = ["4meta5"]
 edition = "2018"
