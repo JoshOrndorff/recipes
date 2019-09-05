@@ -9,7 +9,7 @@
     - [Maps](./storage/list.md)
     - [Configurable Constants](./storage/constants.md)
 - [Types and Traits](./types/README.md)
-    - [Using Balances](./types/currency.md)
+    - [Collateral Management](./types/collateral.md)
     - [Nested Structs](./types/structs.md)
 - [Design Patterns](./common/README.md)
     - [Permissioned Methods](./common/permissioned.md)

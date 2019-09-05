@@ -1,23 +1,17 @@
-/// staking/lib.rs simplified
+//! borrows collateral locking logic from staking/lib.rs
+// demonstrates https://crates.parity.io/srml_support/traits/trait.LockableCurrency.html
 use support::{
-    decl_event, decl_module, decl_storage,
+    decl_event, decl_module,
     dispatch::Result,
-    ensure,
     traits::{
-        Currency, Get, Imbalance, LockIdentifier, LockableCurrency, OnDilution, OnFreeBalanceZero,
-        OnUnbalanced, ReservableCurrency, Time, WithdrawReason, WithdrawReasons,
+        Currency, Get, LockIdentifier, LockableCurrency, WithdrawReason, WithdrawReasons,
     },
-    StorageMap, StorageValue,
 };
 use system::ensure_signed;
 
 const EXAMPLE_ID: LockIdentifier = *b"example ";
 
 type BalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::Balance;
-type PositiveImbalanceOf<T> =
-    <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::PositiveImbalance;
-type NegativeImbalanceOf<T> =
-    <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::NegativeImbalance;
 
 pub trait Trait: system::Trait {
     /// The lockable currency type
@@ -25,15 +19,6 @@ pub trait Trait: system::Trait {
 
     /// The overarching event type
     type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
-
-    /// Some tokens minted
-    type OnRewardMinted: OnDilution<BalanceOf<Self>>;
-
-    /// Handler for the unbalanced increment when rewarding a staker
-    type Reward: OnUnbalanced<PositiveImbalanceOf<Self>>;
-
-    /// Handler for the unbalanced reduction when slashing a staker
-    type Slash: OnUnbalanced<NegativeImbalanceOf<Self>>;
 
     /// Period for Single Lock Invocation (could be a voting or application period for proposals)
     type LockPeriod: Get<Self::BlockNumber>;
@@ -48,15 +33,12 @@ decl_event!(
         Locked(AccountId, Balance),
         ExtendedLock(AccountId, Balance),
         Unlocked(AccountId),
-        Burned(AccountId, Balance),
-        Minted(AccountId, Balance),
-        Diluted(Balance),
     }
 );
 
 decl_module! {
     pub struct Module<T: Trait> for enum Call where origin: T::Origin {
-        fn deposit_event<T>() = default;
+        fn deposit_event() = default;
 
         const LockPeriod: T::BlockNumber = T::LockPeriod::get();
 
@@ -65,7 +47,7 @@ decl_module! {
 
             T::Currency::set_lock(
                 EXAMPLE_ID,
-                user.clone(),
+                &user,
                 amount,
                 T::LockPeriod::get(),
                 WithdrawReasons::except(WithdrawReason::TransactionPayment),
@@ -81,20 +63,20 @@ decl_module! {
 
             T::Currency::extend_lock(
                 EXAMPLE_ID,
-                user.clone(),
+                &user,
                 amount,
                 T::LockPeriod::get(),
                 WithdrawReasons::except(WithdrawReason::TransactionPayment),
             );
 
-            Self::deposit_event(RawEvent::Unlocked(user, amount));
+            Self::deposit_event(RawEvent::ExtendedLock(user, amount));
             Ok(())
         }
 
-        fn unlock_all(origin, amount: BalanceOf<T>) -> Result {
+        fn unlock_all(origin) -> Result {
             let user = ensure_signed(origin)?;
 
-            T::Currency::remove_lock(EXAMPLE_ID, user.clone());
+            T::Currency::remove_lock(EXAMPLE_ID, &user);
 
             Self::deposit_event(RawEvent::Unlocked(user));
             Ok(())

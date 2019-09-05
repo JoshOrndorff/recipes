@@ -3,7 +3,7 @@
 The kitchen is for *cooking* recipes. It is structured like the main recipes build as specified in [src/SUMMARY.md](../src/SUMMARY.md), except every code sample is stored as a library via the [substrate-module-template](https://github.com/shawntabrizi/substrate-module-template).
 
 **Event**: effectively logging, scheduling, and reacting to events defined in the `decl_event` block of the runtime.
-* [Adding Machine](./event/adder/)
+* [Adding Machine](./adder/)
 
 **Storage**: managing interactions with the on-chain storage via the `decl_storage` block in the runtime.
 * [Single Value Storage](./storage/value/)
@@ -12,7 +12,7 @@ The kitchen is for *cooking* recipes. It is structured like the main recipes bui
 
 **MISC**
 - [Nested Structs](./nstructs)
-- [Using Balances](./support/balances)
+- [Currency Types and Locking Techniques](./collateral/)
 - [Token Transfer](./token)
 - [Permissioned Methods](./permissioned)
 - [Blockchain Event Loop](./loop)

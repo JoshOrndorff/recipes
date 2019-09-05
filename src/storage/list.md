@@ -1,4 +1,68 @@
-# Implementing Lists with Maps
+# Maps
+
+To use maps in the runtime storage, first import `StorageMap` from [`srml/support`](https://github.com/paritytech/substrate/blob/master/srml/support/)
+
+```rust
+use support::{StorageMap};
+```
+
+With this type, a key-value mapping (between `u32` types) can be stored in runtime storage using the following syntax
+
+```rust
+decl_storage! {
+	trait Store for Module<T: Trait> as Example {
+		MyMap: map u32 => u32;
+	}
+}
+```
+
+Functions used to access a `StorageValue` are defined in [`srml/support`](https://github.com/paritytech/substrate/blob/master/srml/support/src/storage/generator.rs):
+
+```rust
+/// Get the prefix key in storage.
+fn prefix() -> &'static [u8];
+
+/// Get the storage key used to fetch a value corresponding to a specific key.
+fn key_for(x: &K) -> Vec<u8>;
+
+/// true if the value is defined in storage.
+fn exists<S: Storage>(key: &K, storage: &S) -> bool {
+    storage.exists(&Self::key_for(key)[..])
+}
+
+/// Load the value associated with the given key from the map.
+fn get<S: Storage>(key: &K, storage: &S) -> Self::Query;
+
+/// Take the value under a key.
+fn take<S: Storage>(key: &K, storage: &S) -> Self::Query;
+
+/// Store a value to be associated with the given key from the map.
+fn insert<S: Storage>(key: &K, val: &V, storage: &S) {
+    storage.put(&Self::key_for(key)[..], val);
+}
+
+/// Remove the value under a key.
+fn remove<S: Storage>(key: &K, storage: &S) {
+    storage.kill(&Self::key_for(key)[..]);
+}
+
+/// Mutate the value under a key.
+fn mutate<R, F: FnOnce(&mut Self::Query) -> R, S: Storage>(key: &K, f: F, storage: &S) -> R;
+```
+
+To insert a `(key, value)` pair into a `StorageMap` named `MyMap`:
+
+```rust
+<MyMap<T>>::insert(key, value);
+```
+
+To query `MyMap` for the `value` corresponding to a `key`:
+
+```rust
+let value = <MyMap<T>>::get(key);
+```
+
+## Implementing Lists with Maps
 
 Substrate does not natively support a list type since it may encourage dangerous habits. Unless explicitly guarded against, a list will add unbounded `O(n)` complexity to an operation that will only charge `O(1)` fees ([Big O notation refresher](https://rob-bell.net/2009/06/a-beginners-guide-to-big-o-notation/)). This opens an economic attack vector on your chain.
 
