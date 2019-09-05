@@ -1,12 +1,12 @@
 # Currency Types and Locking Techniques
 
-To use the `Balance` type in our runtime, it is sufficient to import the [`Currency`](https://crates.parity.io/srml_support/traits/trait.Currency.html) trait.
+To use a balances type in the runtime, import the [`Currency`](https://crates.parity.io/srml_support/traits/trait.Currency.html) trait from `srml/support`
 
 ```rust
 use support::traits::Currency;
 ```
 
-The [`Currency`](https://crates.parity.io/srml_support/traits/trait.Currency.html) trait provides an abstraction over a fungible assets system. To use the behavior defined in [`Currency`](https://crates.parity.io/srml_support/traits/trait.Currency.html), it is sufficient to include `Currency` in the trait bounds of a module type.
+The [`Currency`](https://crates.parity.io/srml_support/traits/trait.Currency.html) trait provides an abstraction over a fungible assets system. To use the behavior defined in [`Currency`](https://crates.parity.io/srml_support/traits/trait.Currency.html), include it in the trait bounds of a module type.
 
 ```rust
 // included system::Trait inheritance because it's in my code
@@ -15,65 +15,24 @@ pub trait Trait: system::Trait {
 }
 ```
 
-By adding a type to our module that satisfies [`Currency`](https://crates.parity.io/srml_support/traits/trait.Currency.html) in the trait bound, it is possible to define other types via type aliasing so that runtime types [inherit fungibility and other useful behavior](https://crates.parity.io/srml_support/traits/trait.Currency.html).
+Defining a module type with this trait bound allows the runtime to access the provided methods of [`Currency`](https://crates.parity.io/srml_support/traits/trait.Currency.html). For example, it is straightforward to check the total issuance of the system:
+
+```rust
+// in decl_module block
+T::Currency::total_issuance();
+```
+
+As promised, it is also possible to type alias a balances type for use in the runtime:
 
 ```rust
 type BalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::Balance;
 ```
 
-Specifically, the new `BalanceOf` type can check the total issuance in the system 
+This new `BalanceOf<T>` type satisfies the type constraints of `Self::Balance` for the provided methods of [`Currency`](https://crates.parity.io/srml_support/traits/trait.Currency.html). This means that this type can be used for [transfer](https://crates.parity.io/srml_support/traits/trait.Currency.html#tymethod.transfer), [minting](https://crates.parity.io/srml_support/traits/trait.Currency.html#tymethod.deposit_into_existing), and [much more](https://crates.parity.io/srml_support/traits/trait.Currency.html).
 
-```rust
-T::Currency::total_issuance();
-```
+## Reservable Currency
 
-Indeed, the [`Currency`](https://crates.parity.io/srml_support/traits/trait.Currency.html) trait comes with many useful methods. For example, [`deposit_into_existing`](https://crates.parity.io/srml_support/traits/trait.Currency.html#tymethod.deposit_into_existing) mints `reward: BalanceOf<T>` to the free balance of `winner: &AccountId`.
-
-```rust
-T::Currency::deposit_into_existing(winner, reward)?;
-```
-
-The [`LockableCurrency`](https://crates.parity.io/srml_support/traits/trait.LockableCurrency.html) trait similarly provides nuanced handling of capital locking. This will prove useful in the context of economic systems that often align incentives and enforce accountability by collateralizing fungible resources. Import this trait and a few helper items from `srml/support`
-
-```rust
-use support::traits::{LockIdentifier, LockableCurrency}
-```
-
-Following the convention in [`srml/staking`](https://github.com/paritytech/substrate/blob/master/srml/staking/src/lib.rs), instantiate a lock identifier and assign the `Currency` 
-
-```rust
-const EXAMPLE_ID: LockIdentifier = *b"example ";
-
-pub trait Trait: system::Trait {
-    /// The lockable currency type
-    type Currency: LockableCurrency<Self::AccountId, Moment=Self::BlockNumber>;
-
-    // The length of a generic lock period
-    type LockPeriod: Get<Self::BlockNumber>;
-    ...
-}
-```
-
-The [`LockableCurrency`](https://crates.parity.io/srml_support/traits/trait.LockableCurrency.html) trait comes with runtime methods for locking, unlocking, and extending existing locks.
-
-```rust
-fn lock_capital(origin, amount: BalanceOf<T>) -> Result {
-    let user = ensure_signed(origin)?;
-
-    T::Currency::set_lock(
-        EXAMPLE_ID,
-        user.clone(),
-        amount,
-        T::LockPeriod::get(),
-        WithdrawReasons::except(WithdrawReason::TransactionPayment),
-    );
-
-    Self::deposit_event(RawEvent::Locked(user, amount));
-    Ok(())
-}
-```
-
-The [`ReservableCurrency`](https://crates.parity.io/srml_support/traits/trait.ReservableCurrency.html) trait offers another API for managing an account's liquidity. In [`srml/treasury`](https://github.com/paritytech/substrate/blob/master/srml/treasury/src/lib.rs), this trait is used instead of `LockableCurrency`; it does not require a lock identifier.
+[`srml/treasury`](https://github.com/paritytech/substrate/blob/master/srml/treasury/src/lib.rs) uses the `Currency` type for bonding spending proposals. To reserve and unreserve balances for bonding, `treasury` uses the [`ReservableCurrency`](https://crates.parity.io/srml_support/traits/trait.ReservableCurrency.html) trait. The import and module type declaration follow convention
 
 ```rust
 use support::traits::{Currency, ReservableCurrency};
@@ -102,7 +61,6 @@ pub fn unlock_funds(origin, amount: BalanceOf<T>) -> Result {
     let unlocker = ensure_signed(origin)?;
 
     T::Currency::unreserve(&unlocker, amount);
-    // https://crates.parity.io/srml_support/traits/trait.ReservableCurrency.html
 
     let now = <system::Module<T>>::block_number();
 
@@ -111,6 +69,78 @@ pub fn unlock_funds(origin, amount: BalanceOf<T>) -> Result {
 }
 ```
 
+*The full code can be found in [`collateral/reservable`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/collateral/reservable) in the [kitchen](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/README.md)*
+
+## Lockable Currency
+
+[`srml/staking`](https://github.com/paritytech/substrate/blob/master/srml/staking/src/lib.rs) similarly uses [`LockableCurrency`](https://crates.parity.io/srml_support/traits/trait.LockableCurrency.html) trait for more nuanced handling of capital locking based on time increments. This type can be very useful in the context of economic systems that enforce accountability by collateralizing fungible resources. Import this trait in the usual way
+
+```rust
+use support::traits::{LockIdentifier, LockableCurrency}
+
+pub trait Trait: system::Trait {
+    /// The lockable currency type
+    type Currency: LockableCurrency<Self::AccountId, Moment=Self::BlockNumber>;
+
+    // Example length of a generic lock period
+    type LockPeriod: Get<Self::BlockNumber>;
+    ...
+}
+```
+
+To use [`LockableCurrency`](https://crates.parity.io/srml_support/traits/trait.LockableCurrency.html), it is necessary to define a [`LockIdentifier`](https://crates.parity.io/srml_support/traits/type.LockIdentifier.html).
+
+```rust
+const EXAMPLE_ID: LockIdentifier = *b"example ";
+```
+
+By using this `EXAMPLE_ID`, it is straightforward to define logic within the runtime to schedule locking, unlocking, and extending existing locks.
+
+```rust
+fn lock_capital(origin, amount: BalanceOf<T>) -> Result {
+    let user = ensure_signed(origin)?;
+
+    T::Currency::set_lock(
+        EXAMPLE_ID,
+        user.clone(),
+        amount,
+        T::LockPeriod::get(),
+        WithdrawReasons::except(WithdrawReason::TransactionPayment),
+    );
+
+    Self::deposit_event(RawEvent::Locked(user, amount));
+    Ok(())
+}
+```
+
+*The full code can be found in [`collateral/lockable`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/collateral/lockable) in the [kitchen](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/README.md).*
+
+## Imbalances
+
+Functions that alter balances return an object of the [`Imbalance`](https://crates.parity.io/srml_support/traits/trait.Imbalance.html) type to express how much account balances have been altered in aggregate. This is useful in the context of state transitions that adjust the total supply of the `Currency` type in question.
+
+To manage this supply adjustment, the [`OnUnbalanced`](https://crates.parity.io/srml_support/traits/trait.OnUnbalanced.html) handler is often used. An example might look something like 
+
+```rust
+// runtime method (ie decl_module block)
+pub fn reward_funds(origin, to_reward: T::AccountId, reward: BalanceOf<T>) {
+    let _ = ensure_signed(origin)?;
+
+    let mut total_imbalance = <PositiveImbalanceOf<T>>::zero();
+
+    let r = T::Currency::deposit_into_existing(&to_reward, reward).ok();
+    total_imbalance.maybe_subsume(r);
+    T::Reward::on_unbalanced(total_imbalance);
+
+    let now = <system::Module<T>>::block_number();
+    Self::deposit_event(RawEvent::RewardFunds(to_reward, reward, now));
+}
+```
+
+*The full code can be found in [`collateral/imbalances`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/collateral/imbalances) in the [kitchen](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/README.md).*
+
+## takeaways
+
 The way by which we represent value in the runtime dictates both the security and flexibility of the underlying transactional system. Likewise, it is nice to be able to take advantage of Rust's [flexible trait system](https://blog.rust-lang.org/2015/05/11/traits.html) when building systems intended to rethink how we exchange information and value 🚀 
 
-*worth checking out the [`Imbalance`](https://crates.parity.io/srml_support/traits/trait.Imbalance.html) and [`OnDilution`](https://crates.parity.io/srml_support/traits/trait.OnDilution.html#tymethod.on_dilution) traits*
+BONUS: *see [`OnDilution`](https://crates.parity.io/srml_support/traits/trait.OnDilution.html#tymethod.on_dilution)*
