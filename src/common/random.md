@@ -8,16 +8,17 @@ let random_seed = <system::Module<T>>::random_seed();
 
 **To increase entropy**, we can introduce a nonce and a user-specified property. This provides us with a basic RNG on Substrate: 
 ```rust
-let sender = ensure_signed(origin)?;
-let nonce = <Nonce<T>>::get();
-let random_seed = <system::Module<T>>::random_seed();
-
-let random_hash = (random_seed, sender, nonce).using_encoded(<T as system::Trait>::Hashing::hash);
+let nonce = <Nonce>::get();
+let new_random = (<system::Module<T>>::random_seed(), nonce)
+    .using_encoded(|b| Blake2Hasher::hash(b))
+    .using_encoded(|mut b| u64::decode(&mut b))
+    .expect("Hash must be bigger than 8 bytes; Qed");
 
 <Nonce<T>>::mutate(|n| *n += 1);
 ```
 
-## more resources
+ 
+**also see...**
 
 * https://github.com/paritytech/ink/issues/57
 
