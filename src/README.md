@@ -18,6 +18,7 @@
     - [Token Transfer](./recipes/token.md)
     - [Social Network](./recipes/social.md)
 - [SRML Tour](./tour/README.md)
+    - [Treasury](./tour/treasury.md)
 - [Advanced](./safety/README.md)
     - [Declarative Programming](./safety/cop.md)
     - [Optimizations](./safety/optimizations.md)

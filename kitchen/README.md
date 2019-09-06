@@ -6,13 +6,13 @@ The kitchen is for *cooking* recipes. It is structured like the main recipes bui
 * [Adding Machine](./adder/)
 
 **Storage**: managing interactions with the on-chain storage via the `decl_storage` block in the runtime.
-* [Single Value Storage](./storage/value/)
-* [Configurable Module Constants](./storage/constants/)
-* [Lists as Maps](./storage/list/)
+* [Single Value Storage](./value/)
+* [Configurable Module Constants](./constants/)
+* [Lists as Maps](./list/)
 
 **MISC**
 - [Nested Structs](./nstructs)
-- [Currency Types and Locking Techniques](./collateral/)
+- Currency Types and Locking Techniques::{[lockable](./lockable), [reservable](./reservable), [imbalances](./imbalances)}
 - [Token Transfer](./token)
 - [Permissioned Methods](./permissioned)
 - [Blockchain Event Loop](./loop)
@@ -26,7 +26,7 @@ ADD BACK WHEN THERE ARE MORE RECIPES THAN JUST THIS BALANCES STRUCT
 
 ## Directions
 
-Within a recipe's folder, run the following command to build
+Within each folder, run the following command to build
 
 ```rust
 cargo build
