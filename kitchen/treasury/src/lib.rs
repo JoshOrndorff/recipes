@@ -7,7 +7,6 @@ use support::traits::{
 };
 use runtime_primitives::traits::{Zero, AccountIdConversion};
 use runtime_primitives::ModuleId;
-use parity_scale_codec::{Encode, Decode};
 use system::{self, ensure_signed};
 
 type BalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::Balance;
