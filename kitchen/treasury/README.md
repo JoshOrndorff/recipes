@@ -1,11 +1,9 @@
 # treasury module
 
-A simple version of the treasury module that only implements a few basic functions.
+minimal version of the treasury module for showing how to 
 
-## instantiating a pot
+## instantiate a pot
 
-## dispatch spending via blockchain event loop
-* reference other recipe
+## proxy transfer method for spending through the pot
 
-## OnDilution hook
-* add a generic runtime hooks recipe (in types and traits section) and refer to it
+## scheduling spending with configurable module constants
