@@ -1,12 +1,10 @@
 // simple version of treasury
 #![cfg_attr(not(feature = "std"), no_std)]
 
-use support::{StorageValue, decl_module, decl_storage, decl_event, dispatch::Result};
-use support::traits::{
-	Currency, Get, ReservableCurrency
-};
-use runtime_primitives::traits::{Zero, AccountIdConversion};
+use runtime_primitives::traits::{AccountIdConversion, Zero};
 use runtime_primitives::ModuleId;
+use support::traits::{Currency, Get, ReservableCurrency};
+use support::{decl_event, decl_module, decl_storage, dispatch::Result, StorageValue};
 use system::{self, ensure_signed};
 
 type BalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::Balance;
@@ -15,15 +13,15 @@ const MODULE_ID: ModuleId = ModuleId(*b"example ");
 
 pub trait Trait: system::Trait {
     /// The overarching event type.
-	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
+    type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
     /// The staking balance.
-	type Currency: Currency<Self::AccountId> + ReservableCurrency<Self::AccountId>;
+    type Currency: Currency<Self::AccountId> + ReservableCurrency<Self::AccountId>;
     /// Period between successive spends.
-	type SpendPeriod: Get<Self::BlockNumber>;
+    type SpendPeriod: Get<Self::BlockNumber>;
 }
 
 decl_module! {
-	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
+    pub struct Module<T: Trait> for enum Call where origin: T::Origin {
         fn deposit_event() = default;
 
         // uses the example treasury as a proxy for transferring funds
@@ -44,12 +42,11 @@ decl_module! {
     }
 }
 
-
 decl_storage! {
-	trait Store for Module<T: Trait> as STreasury {
-		/// the amount, the address to which it is sent
-		SpendQ get(spend_q): Vec<(T::AccountId, BalanceOf<T>)>;
-	}
+    trait Store for Module<T: Trait> as STreasury {
+        /// the amount, the address to which it is sent
+        SpendQ get(spend_q): Vec<(T::AccountId, BalanceOf<T>)>;
+    }
 }
 
 decl_event!(
@@ -65,21 +62,20 @@ decl_event!(
 	}
 );
 
-
 impl<T: Trait> Module<T> {
-	// Add public immutables and private mutables.
+    // Add public immutables and private mutables.
 
-	/// The account ID of the treasury pot.
-	///
-	/// This actually does computation. If you need to keep using it, then make sure you cache the
-	/// value and only call this once.
-	pub fn account_id() -> T::AccountId {
-		MODULE_ID.into_account()
-	}
+    /// The account ID of the treasury pot.
+    ///
+    /// This actually does computation. If you need to keep using it, then make sure you cache the
+    /// value and only call this once.
+    pub fn account_id() -> T::AccountId {
+        MODULE_ID.into_account()
+    }
 
     fn pot() -> BalanceOf<T> {
-		T::Currency::free_balance(&Self::account_id())
-	}
+        T::Currency::free_balance(&Self::account_id())
+    }
 
     fn spend_funds() {
         let mut budget_remaining = Self::pot();

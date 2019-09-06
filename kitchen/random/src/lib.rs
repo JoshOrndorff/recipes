@@ -1,9 +1,9 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
+use primitives::{ed25519, Blake2Hasher, Hasher, H256};
 /// Generating Randomness example(s)
 use support::{decl_event, decl_module, decl_storage, dispatch::Result, ensure, StorageValue};
 use system::ensure_signed;
-use primitives::{ed25519, Hasher, Blake2Hasher, H256};
 
 pub trait Trait: system::Trait {
     type Event: From<Event> + Into<<Self as system::Trait>::Event>;
