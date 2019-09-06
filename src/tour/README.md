@@ -4,9 +4,7 @@
 
 ## smpl-treasury
 
-**[recipe](./treasury.md)**
+**[recipe](./treasury.md)**, [kitchen/treasury](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/treasury)
 1. instantiate a pot 
 2. proxy spending through the pot 
 3. schedule spending with configurable module constants
-
-[kitchen/treasury](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/treasury)

@@ -69,7 +69,7 @@ pub fn unlock_funds(origin, amount: BalanceOf<T>) -> Result {
 }
 ```
 
-*The full code can be found in [`collateral/reservable`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/collateral/reservable) in the [kitchen](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/README.md)*
+*The full code can be found in [`collateral/reservable`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/reservable) in the [kitchen](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/README.md)*
 
 ## Lockable Currency
 
@@ -113,7 +113,7 @@ fn lock_capital(origin, amount: BalanceOf<T>) -> Result {
 }
 ```
 
-*The full code can be found in [`collateral/lockable`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/collateral/lockable) in the [kitchen](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/README.md).*
+*The full code can be found in [`collateral/lockable`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/lockable) in the [kitchen](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/README.md).*
 
 ## Imbalances
 
@@ -137,7 +137,7 @@ pub fn reward_funds(origin, to_reward: T::AccountId, reward: BalanceOf<T>) {
 }
 ```
 
-*The full code can be found in [`collateral/imbalances`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/collateral/imbalances) in the [kitchen](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/README.md).*
+*The full code can be found in [`collateral/imbalances`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/imbalances) in the [kitchen](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/README.md).*
 
 ## takeaways
 
