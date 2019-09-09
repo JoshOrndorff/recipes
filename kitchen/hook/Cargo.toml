@@ -1,5 +1,5 @@
 [package]
-name = "generating-randomness"
+name = "runtime-hooks"
 version = "0.1.0"
 authors = ["4meta5"]
 edition = "2018"
@@ -11,7 +11,6 @@ std = [
     'support/std',
     'system/std',
     'balances/std',
-    'primitives/std',
     'runtime-primitives/std',
 ]
 
@@ -44,7 +43,7 @@ git = 'https://github.com/paritytech/substrate.git'
 package = 'sr-primitives'
 branch = 'master'
 
-[dependencies.primitives]
+[dev-dependencies.primitives]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'substrate-primitives'
