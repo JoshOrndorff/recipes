@@ -1,4 +1,4 @@
-# Safety and Optimization
+# Safety First
 
 Unlike conventional software development kits that abstract away low-level decisions, Substrate grants developers fine-grain control over the underlying implementation. This approach fosters high-performance, modular applications. At the same time, it also demands increased attention from developers. To quote the [late Uncle Ben](https://knowyourmeme.com/memes/with-great-power-comes-great-responsibility), **with great power comes great responsibility**.
 

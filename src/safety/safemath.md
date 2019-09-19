@@ -1,7 +1,8 @@
-# Safe Arithmetic
+# Fixed Point Arithmetic
 
-* computers are notoriously bad with precision with small numbers
-* link to the inflation section wherein I will discuss some of this stuff
+*computers are notoriously bad with precision with small numbers*
+
+see https://github.com/substrate-developer-hub/recipes/issues/12 for links
 
 ## Perbill and Permill Usage
 
