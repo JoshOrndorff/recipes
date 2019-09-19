@@ -31,7 +31,6 @@ decl_module! {
 
             let random_seed = <system::Module<T>>::random_seed();
             let nonce = <Nonce>::get();
-            let new_random = (<system::Module<T>>::random_seed(), nonce)
             let new_random = (random_seed, nonce)
                 .using_encoded(|b| Blake2Hasher::hash(b))
                 .using_encoded(|mut b| u64::decode(&mut b))
