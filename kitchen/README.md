@@ -2,6 +2,9 @@
 
 The kitchen is for *cooking* recipes. It is structured like the main recipes build as specified in [src/SUMMARY.md](../src/SUMMARY.md), except every code sample is stored as a library via the [substrate-module-template](https://github.com/shawntabrizi/substrate-module-template).
 
+**NEW STRUCTURE**
+* divided up into `modules` and `runtimes`...
+
 **Event**: effectively logging, scheduling, and reacting to events defined in the `decl_event` block of the runtime.
 * [Adding Machine](./adder/)
 
