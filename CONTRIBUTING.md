@@ -1,23 +1,38 @@
 # Contributing Guidelines
 
-**Recipes are not entire tutorials -- they are small patterns that may be extracted from tutorials**. The purpose of Substrate Cookbook is to identify best practices in Substrate runtime code and extract patterns that are useful outside of the context of the specific use case.
-    
-1. isolate specific pattern
-2. walk through logic in piecewise steps
-3. show/link to the full file in the used codebase
+The **purpose** of [Substrate Recipes](https://substrate.dev/recipes/) is to identify best practices in Substrate runtime code and extract useful patterns.
 
-If you want to get involved, feel free to open an [issue](https://github.com/substrate-developer-hub/recipes/issues/new) with any ideas/comments/questions.**The markdown for each recipe can be found by following the paths set in [SUMMARY.md](./src/SUMMARY.md)**.
+* [Scope and Structure](#scope)
+* [Getting Involved](#involve)
+* [Mdbook Local Build Instructions](#instructions)
+* [Etiquette](#etiquette)
 
-I'm going to spend more time working on samples over the next few weeks, but I'm in the process of improving this project as well.
+## Scope and Structure <a name = "scope"></a>
 
-## Common Etiquette
+At the moment, the recipes onboards developers by focusing primarily on **module development** patterns before reusing these patterns in the context of **runtime configuration** (runtime section is *in-progress*).
 
-* try to not use "we" or "our" because it often is conducive to unnecessary language
-* frequently link to outside content ie original code, blog/tutorial references, documentation for a specific method/trait/etc
+The **[kitchen](./kitchen)** contains code from the recipes in the context of modules/runtimes, while **[src](./src)** houses the commentary for related explanations and references. The structure of the `src` can be found in [src/SUMMARY.md](./src/SUMMARY.md).
 
-## Local Build Instructions
+In practice, the recipes supplements existing resources by providing usage examples, demonstrating best practices in context, and extending simple samples/tutorials. Likewise, it is necessary to **frequently link to/from [reference docs](https://crates.parity.io/substrate_service/index.html?search=srml), [tutorials](https://github.com/substrate-developer-hub/), and [high-level docs](https://substrate.dev/)**.
 
-Stage locally before making a PR. Don't forget to switch to a new branch before you make edits.
+The recipes do NOT cover:
+* module testing
+* rpc, cli, and other [`node/`](https://github.com/paritytech/substrate/tree/master/node) stuff outside the runtime
+* frontend UI
+* protocol engineering (consensus, networking, etc.)
+
+If you're interested in adding new chapters for any of these sections, [create an issue](https://github.com/substrate-developer-hub/recipes/issues/new) and convince us :)
+
+## Getting Involved <a name = "involve"></a>
+
+1. isolate useful pattern (in [`issues`](https://github.com/substrate-developer-hub/recipes/issues))
+2. build a module/runtime example with context (in [`kitchen`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen))
+3. walk through logic of useful pattern in piecewise steps (in [`src/`](https://github.com/substrate-developer-hub/recipes/tree/master/src))
+4. link `src` and `kitchen` (in [`src/`](https://github.com/substrate-developer-hub/recipes/tree/master/src)) 
+
+## Local Build Instructions <a name = "instructions"></a>
+
+**Stage locally before making a PR.** Don't forget to switch to a new branch before you make edits.
 
 1. install [`mdbook`](https://github.com/rust-lang-nursery/mdBook)
 
@@ -32,3 +47,10 @@ $ mdbook build --open
 ```
 
 3. If everything looks good, open a [Pull Request](https://github.com/substrate-developer-hub/recipes/compare)
+
+## Etiquette <a name = "etiquette"></a>
+
+* don't use "we" or "our" because it often is conducive to unnecessary language
+* use active voice (instead of passive voice ie "you may want to use active voice")
+* frequently link to outside content ie original code, blog/tutorial references, documentation for a specific method/trait/etc
+* **be nice, abide by the [Rust CoC](https://www.rust-lang.org/policies/code-of-conduct)**
