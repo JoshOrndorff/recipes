@@ -1,5 +1,7 @@
 # SRML Tour
 
+(**deprecated**)
+
 [srml-tour](https://github.com/JoshOrndorff/srml-tour) intends to explain the features of SRML modules, demonstrate use cases, and explore the code. It is *in progress*, tracked in [issues](https://github.com/substrate-developer-hub/recipes/issues).
 
 ## smpl-treasury
