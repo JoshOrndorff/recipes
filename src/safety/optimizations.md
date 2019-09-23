@@ -42,7 +42,7 @@ We call an algorithm *efficient* if its running time is polynomial in the size o
 Substrate developers should take advantage of Rust's zero cost abstractions.
 
 *Articles*
-* [Abstraction without overhead: traits in Rust](https://rust-embedded.github.io/book/static-guarantees/zero-cost-abstractions.html)
+* [Abstraction without overhead: traits in Rust](https://blog.rust-lang.org/2015/05/11/traits.html)
 * [Effectively Using Iterators in Rust](https://hermanradtke.com/2015/06/22/effectively-using-iterators-in-rust.html)
 * [Type States](https://rust-embedded.github.io/book/static-guarantees/zero-cost-abstractions.html)
 

@@ -1,6 +1,6 @@
-# Template Node
+# Super Node
 
-A new SRML-based Substrate node, ready for hacking.
+A node with all the module configurations from [modules](./modules)
 
 # Building
 

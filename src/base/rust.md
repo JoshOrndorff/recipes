@@ -1,3 +1,49 @@
-# Intro to Rust
+# Learn Rust
 
-* TODO
+To be productive with [substrate](https://github.com/substrate), it is necessary to become proficient in Rust. Fortunately, the Rust community is known for comprehensive documentation and tutorials. The canonical resource for learning Rust is [The Rust Book](https://doc.rust-lang.org/book/index.html). [Rust by Example](https://doc.rust-lang.org/rust-by-example/index.html) is also a good reference for learning how to use popular crates within the Rust ecosystem.
+
+To become more familiar with commmon design patterns in Rust, see the following:
+* [Official Rust API Guidelines](https://rust-lang-nursery.github.io/api-guidelines/about.html)
+* [Rust Unofficial Design Patterns](https://github.com/rust-unofficial/patterns)
+* [Elegant Library API Guidelines](https://deterministic.space/elegant-apis-in-rust.html) by Pascal Hertleif
+
+To optimize runtime performance, Substrate developers should make use of iterators, traits, and Rust's other "*zero cost* abstractions":
+* [Abstraction without overhead: traits in Rust](https://blog.rust-lang.org/2015/05/11/traits.html), [related conferencce talk](https://www.youtube.com/watch?v=Sn3JklPAVLk)
+* [Effectively Using Iterators in Rust](https://hermanradtke.com/2015/06/22/effectively-using-iterators-in-rust.html), *[iterate over a slice rather than a `vec!`](https://twitter.com/heinz_gies/status/1121490424739303425)*
+* [Achieving Warp Speed with Rust](http://troubles.md/posts/rust-optimization/) 
+
+It is not (immediately) necessary to become familiar with multithreading because the runtime operates in a [single-threaded context](https://www.tutorialspoint.com/single-threaded-and-multi-threaded-processes). Even so, an optimized [substrate node](https://github.com/paritytech/substrate/tree/master/node) architecture will use a custom RPC interface. Moreover, the runtime might take advantage of the [offchain workers API](https://substrate.dev/docs/en/next/overview/off-chain-workers) to minimize the computation executed on-chain. Effectively using these features requires increased familiarity with advanced Rust. 
+
+For a high-level overview of concurrency in Rust, Stjepan Glavina provides the following descriptions in [Lock-free Rust: Crossbeam in 2019](https://stjepang.github.io/2019/01/29/lock-free-rust-crossbeam-in-2019.html):
+* **[Rayon](https://github.com/rayon-rs/rayon)** splits your data into distinct pieces, gives each piece to a thread to do some kind of computation on it, and finally aggregates results. Its goal is to distribute CPU-intensive tasks onto a thread pool.
+* **[Tokio](https://github.com/tokio-rs/tokio)** runs tasks which sometimes need to be paused in order to wait for asynchronous events. Handling tons of such tasks is no problem. Its goal is to distribute IO-intensive tasks onto a thread pool.
+* **[Crossbeam](https://github.com/crossbeam-rs/crossbeam)** is all about low-level concurrency: atomics, concurrent data structures, synchronization primitives. Same idea as the `std::sync` module, but bigger. Its goal is to provide tools on top of which libraries like Rayon and Tokio can be built.
+
+To dive deeper down these rabbit holes:
+* [Asynchrony](#async)
+* [Concurrency](#concurrency)
+
+### Asynchrony <a name = "async"></a>
+[Are we `async` yet?](https://areweasyncyet.rs/)
+
+**Conceptual**
+* [Introduction to Async/Await Programming (withoutboats/wakers-i)](https://boats.gitlab.io/blog/post/wakers-i/)
+* [Futures (by Aaron Turon)](http://aturon.github.io/2016/08/11/futures/)
+* [RustLatam 2019 - Without Boats: Zero-Cost Async IO](https://www.youtube.com/watch?v=skos4B5x7qE)
+
+**Projects**
+* [Rust Asynchronous Ecosystem Working Group](https://github.com/rustasync)
+* [romio](https://github.com/withoutboats/romio)
+* [Tokio Docs](https://tokio.rs/docs/overview/)
+
+### Concurrency <a name = "concurrency"></a>
+
+**Conceptual**
+* [Rust Concurrency Explained](https://www.youtube.com/watch?v=Dbytx0ivH7Q)
+* [Lock-free Rust: Crossbeam in 2019](https://stjepang.github.io/2019/01/29/lock-free-rust-crossbeam-in-2019.html)
+* [Crossbeam Research Meta-link](https://github.com/crossbeam-rs/rfcs/wiki)
+
+**Projects**
+* [sled](https://github.com/spacejam/sled)
+* [servo](https://github.com/servo/servo)
+* [TiKV](https://github.com/tikv/tikv)
