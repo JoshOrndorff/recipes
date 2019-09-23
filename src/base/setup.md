@@ -27,6 +27,8 @@ test with
 $ cargo test
 ```
 
+See **[Creating a Runtime Module](https://substrate.dev/docs/en/tutorials/creating-a-runtime-module)** in [the official docs](https://substrate.dev/en/tutorials).
+
 ## Runtime
 
 To develop in the context of the runtime, clone the [substrate-node-template](https://github.com/shawntabrizi/substrate-package/tree/master/substrate-node-template) and add module logic to [`runtime/src/template.rs`](https://github.com/shawntabrizi/substrate-package/blob/master/substrate-node-template/runtime/src/template.rs).
