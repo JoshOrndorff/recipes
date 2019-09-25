@@ -1,7 +1,7 @@
 [package]
-name = "hello-world"
+name = "simple-map"
 version = "0.1.0"
-authors = ["shawntabrizi"]
+authors = ["4meta5"]
 edition = "2018"
 
 [features]
