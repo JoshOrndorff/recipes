@@ -7,7 +7,7 @@
 /// fees ([Big O notation refresher](https://rob-bell.net/2009/06/a-beginners-guide-to-big-o-notation/)). 
 /// This opens an economic attack vector on your chain.
 
-use support::{ensure, decl_module, decl_storage, decl_event, StorageValue, StorageMap, EnumerableStorageMap, dispatch::Result};
+use support::{ensure, decl_module, decl_storage, decl_event, StorageValue, StorageMap, StorageLinkedMap, dispatch::Result};
 use system::ensure_signed;
 
 pub trait Trait: system::Trait {
@@ -15,7 +15,7 @@ pub trait Trait: system::Trait {
 }
 
 decl_storage! {
-	trait Store for Module<T: Trait> as Example {
+	trait Store for Module<T: Trait> as List {
 		TheList get(the_list): map u32 => T::AccountId;
 		TheCounter get(the_counter): u32;
 
@@ -36,7 +36,7 @@ decl_event!(
 decl_module! {
 	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
 		// initialize the default event for this module
-		fn deposit_event<T>() = default;
+		fn deposit_event() = default;
 
 		fn add_member(origin) -> Result {
 			let who = ensure_signed(origin)?;
@@ -45,29 +45,44 @@ decl_module! {
 			<TheCounter>::mutate(|count| *count + 1);
 
 			// add member at the largest_index
-			let largest_index = <TheCounter>::get();
-			<TheList<T>>::insert(largest_index, who.clone());
+			let new_largest_index = <TheCounter>::get() + 1;
+			<TheList<T>>::insert(new_largest_index, who.clone());
+			// incremement counter
+			<TheCounter>::put(new_largest_index);
+
+			// (same for linked counter)
+			let new_linked_largest_index = <LinkedCounter>::get() + 1;
+			<LinkedList<T>>::insert(new_linked_largest_index, who.clone());
+			// increment the counter
+			<LinkedCounter>::put(new_linked_largest_index);
 
 			Self::deposit_event(RawEvent::MemberAdded(who));
 
 			Ok(())
 		} 
 
+		// worst option
+		// -- only works if the list is *unbounded*
 		fn remove_member_unbounded(origin, index: u32) -> Result {
-			let who = ensure_signed(origin)?;
+			let _ = ensure_signed(origin)?;
 
 			// verify existence
 			ensure!(<TheList<T>>::exists(index), "an element doesn't exist at this index");
 			let removed_member = <TheList<T>>::get(index);
 			<TheList<T>>::remove(index);
+			// assumes that we do not need to adjust the list because every add just increments counter
 
 			Self::deposit_event(RawEvent::MemberRemoved(removed_member));
 
 			Ok(())
 		}
 
-		fn remove_member_ordered(origin, index: u32) -> Result {
-			let who = ensure_signed(origin)?;
+		// ok option
+		// swap and pop
+		// -- better than `remove_member_unbounded`
+		// -- this pattern becomes unwieldy fast!
+		fn remove_member_bounded(origin, index: u32) -> Result {
+			let _ = ensure_signed(origin)?;
 
 			ensure!(<TheList<T>>::exists(index), "an element doesn't exist at this index");
 
@@ -88,21 +103,11 @@ decl_module! {
 			Ok(())
 		}
 
-		fn add_member_linked(origin) -> Result {
-			let who = ensure_signed(origin)?;
-
-			// increment the counter
-			<LinkedCounter>::mutate(|count| *count + 1);
-
-			// add member at the largest_index
-			let largest_index = <LinkedCounter>::get();
-			<TheList<T>>::insert(largest_index, who.clone());
-
-			Ok(())
-		}
-
+		// best option (atm)
+		// this uses the enumerable storage map to simplify `swap and pop`
+		// should be generally preferred
 		fn remove_member_linked(origin, index: u32) -> Result {
-			let who = ensure_signed(origin)?;
+			let _ = ensure_signed(origin)?;
 
 			ensure!(<LinkedList<T>>::exists(index), "A member does not exist at this index");
 
@@ -110,6 +115,7 @@ decl_module! {
 			let member_to_remove = <LinkedList<T>>::take(index);
 			let head_member = <LinkedList<T>>::get(head_index);
 			<LinkedList<T>>::insert(index, head_member);
+			<LinkedList<T>>::insert(head_index, member_to_remove);
 			<LinkedList<T>>::remove(head_index);
 
 			Ok(())

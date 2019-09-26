@@ -80,7 +80,5 @@ decl_module! {
             <SimpleMap<T>>::insert(user, new_entry);
             Ok(())
         }
-
-        // TODO: `append` and `append_or_insert`
 	}
 }
