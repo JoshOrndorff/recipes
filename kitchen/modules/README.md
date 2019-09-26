@@ -1,5 +1,7 @@
 # Modules
 
+- [ ] **UPDATE WITH DESCRIPTIONS AND BUILDS SHOWN**
+
 **Event**: effectively logging, scheduling, and reacting to events defined in `decl_event`
 * [Adding Machine](./modules/adder/)
 * [Simple Event (not generic)](./modules/simple-event)
