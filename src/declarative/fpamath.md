@@ -2,13 +2,14 @@
 
 *computers are notoriously bad with precision with small numbers*
 
-see https://github.com/substrate-developer-hub/recipes/issues/12 for links
+* see https://github.com/substrate-developer-hub/recipes/issues/12 for links
 
 ## Perbill and Permill Usage
 
 ## Saturating Operations
 
 ## Checking for Overflows/Underflows <a name = "overunder"></a>
+> **explain here how context matters for these checks
 
 We can use the `checked` traits in [substrate-primitives](https://crates.parity.io/sr_primitives/traits/index.html) to protect against [overflow/underflow](https://medium.com/@taabishm2/integer-overflow-underflow-and-floating-point-imprecision-6ba869a99033) when incrementing/decrementing objects in our runtime. To follow the [Substrat collectable tutorial example](https://shawntabrizi.com/substrate-collectables-workshop/#/2/tracking-all-kitties?id=checking-for-overflowunderflow), we use [`checked_add()`](https://crates.parity.io/sr_primitives/traits/trait.CheckedAdd.html) to safely handle the possibility of overflow when incremementing a global counter. *Note that this check is similar to [`SafeMath`](https://ethereumdev.io/safemath-protect-overflows/) in Solidity*. 
 

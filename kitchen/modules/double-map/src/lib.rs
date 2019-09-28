@@ -2,14 +2,15 @@
 
 // Double Map Example w/ remove_prefix
 // https://crates.parity.io/srml_support/storage/trait.StorageDoubleMap.html
-// > provides ability to efficiently remove all entries that have a common first key
-
-// by providing two keys, `double_map` allows us to categorize keys by a unique identifier
-// AND a unique group identifier `=>` this allows for more clean removal of values with the same group identifier
+// `double_map` maps two keys to a single value. 
+// the first key might be a group identifier
+// the second key might be a unique identifier
+// `remove_prefix` enables clean removal of all values with the group identifier 
 
 use support::{
-    ensure, decl_module, decl_storage, decl_event, dispatch::Result,
+    ensure, decl_module, decl_storage, decl_event,
     storage::{StorageDoubleMap, StorageMap, StorageValue},
+    dispatch::Result,
 };
 use system::ensure_signed;
 
@@ -17,12 +18,13 @@ pub trait Trait: system::Trait {
 	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
 }
 
-pub type GroupIndex = u32;
+pub type GroupIndex = u32; // this is Encode (which is necessary for double_map)
 
 decl_storage! {
-	trait Store for Module<T: Trait> as DMap {
+	trait Store for Module<T: Trait> as Dmap {
         // member score (double map)
         MemberScore: double_map GroupIndex, twox_128(T::AccountId) => u32;
+
         // get group ID for member
         GroupMembership get(group_membership): map T::AccountId => GroupIndex;
         // for fast membership checks, see check-membership recipe for more details

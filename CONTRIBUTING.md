@@ -52,5 +52,5 @@ $ mdbook build --open
 
 * don't use "we" or "our" because it often is conducive to unnecessary language
 * use active voice (instead of passive voice ie "you may want to use active voice")
-* frequently link to outside content ie original code, blog/tutorial references, documentation for a specific method/trait/etc
+* link as often as possible to outside content and useful resources including other recipes, [documentation](https://substrate.dev/docs/en/getting-started/), [tutorials](https://substrate.dev/en/tutorials), and [code](https://github.com/substrate)
 * **be nice, abide by the [Rust CoC](https://www.rust-lang.org/policies/code-of-conduct)**

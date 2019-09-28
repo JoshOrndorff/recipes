@@ -1,6 +1,8 @@
 # Module Testing
 
-This section has been deprecated because it would repeat information from [Crypto Collectables Testing](https://www.shawntabrizi.com/substrate-collectables-workshop/#/5/introduction). 
+* this section will be used to hold the information from `best-practices/errtesting` when that section inevitably outgrows a single recipe format (which is a priority)
+
+* [Crypto Collectables Testing](https://www.shawntabrizi.com/substrate-collectables-workshop/#/5/introduction). 
 
 Things to cover not covered in that example include
 
