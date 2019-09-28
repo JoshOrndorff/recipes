@@ -24,7 +24,6 @@ decl_storage! {
 	trait Store for Module<T: Trait> as Dmap {
         // member score (double map)
         MemberScore: double_map GroupIndex, twox_128(T::AccountId) => u32;
-
         // get group ID for member
         GroupMembership get(group_membership): map T::AccountId => GroupIndex;
         // for fast membership checks, see check-membership recipe for more details
