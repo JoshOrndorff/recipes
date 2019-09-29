@@ -13,7 +13,7 @@ To become more familiar with commmon design patterns in Rust, the following link
 
 To optimize runtime performance, Substrate developers should make use of iterators, traits, and Rust's other "*zero cost* abstractions":
 * [Abstraction without overhead: traits in Rust](https://blog.rust-lang.org/2015/05/11/traits.html), [related conference talk](https://www.youtube.com/watch?v=Sn3JklPAVLk)
-* [Effectively Using Iterators in Rust](https://hermanradtke.com/2015/06/22/effectively-using-iterators-in-rust.html), *[iterate over a slice rather than a `vec!`](https://twitter.com/heinz_gies/status/1121490424739303425)*
+* [Effectively Using Iterators in Rust](https://hermanradtke.com/2015/06/22/effectively-using-iterators-in-rust.html)
 * [Achieving Warp Speed with Rust](http://troubles.md/posts/rust-optimization/) 
 
 It is not (immediately) necessary to become familiar with multithreading because the runtime operates in a [single-threaded context](https://www.tutorialspoint.com/single-threaded-and-multi-threaded-processes). Even so, an optimized [substrate node](https://github.com/paritytech/substrate/tree/master/node) architecture will use a custom RPC interface. Moreover, the runtime might take advantage of the [offchain workers API](https://substrate.dev/docs/en/next/overview/off-chain-workers) to minimize the computation executed on-chain. Effectively using these features requires increased familiarity with advanced Rust. 
