@@ -2,6 +2,7 @@
 
 The **purpose** of [Substrate Recipes](https://substrate.dev/recipes/) is to identify best practices in Substrate runtime code and extract useful patterns.
 
+* [Template](./src/TEMPLATE.md)
 * [Scope and Structure](#scope)
 * [Getting Involved](#involve)
 * [Mdbook Local Build Instructions](#instructions)

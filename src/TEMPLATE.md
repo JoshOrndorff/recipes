@@ -1,21 +1,19 @@
 # <Provided Feature>: <API Used>
-> [code]`(`**`<link to the code in kitchen>`**`)`, status`[`**`<recipe status>`**`[`, [status]`[`**`<recipe status>`**`[`
+*[code]`(`**`<link to the code in kitchen>`**`)`, [status]`(`**`<recipe status>`**`)`*
 
-*Status isn't ready yet...still thinking about how much structure should be defined and where it should be documented*
-
+*brainstorming*
 ```rust
-pub enum Status {
-    OutdatedAndWrong,
-    ExistsImprovements(u32),
-
-
+pub enum Status<T : Recipe>  {
+    OutdatedAndWrong(T),
+    ExistsImprovements(T),
+    MotivatesNewSection(T),
 }
-```
-
-```rust
+...
 match status {
-    OutdatedAndWrong => replace() && (create_issue || create_pr);
-    ExistsImprovements => link to 
+    OutdatedAndWrong => replace() && link(create_issue || create_pr);
+    ExistsImprovements => link(issues || prs || tutorials || code);
+    MotivatesNewSection => link(issues || prs || tutorials || code);
+    _ => empty_label_at_top;
 }
 ```
 

@@ -1,56 +1,42 @@
 # Single Value
+*[`kitchen/modules/single-value`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/single-value)*
 
-Substrate supports all primitive [Rust types](https://cheats.rs/) (`bool`, `u8`, `u32`, etc) as well as some [custom types specific to Substrate](https://github.com/paritytech/oo7/blob/master/packages/oo7-substrate/src/types.js) (`Hash`, `Balance`, `BlockNumber`, etc).
-
-* [Basic Storage](#basic)
-* [Storage Interaction](#interact)
-* [Getter Syntax](#get)
-* [Setter Syntax](#set)
-* [Substrate Specific Types](#sub)
-
-## Basic Storage <a name = "basic"></a>
-
-Within a specific module, a single value (`u32` type) is stored in the runtime with this syntax:
+Within a specific module, a single value (`u32` type) is stored in the runtime using the [`decl_storage`](https://wiki.parity.io/decl_storage) macro
 
 ```rust
 decl_storage! {
-    trait Store for Module<T: Trait> as Example {
+    trait Store for Module<T: Trait> as SingleValue {
         MyValue: u32;
     }
 }
 ```
 
-## Storage Interaction <a name = "interact"></a>
-
-To interact with single storage values, it is necessary to import the `support::StorageValue` type. Functions used to access a `StorageValue` are defined in [`srml/support`](https://github.com/paritytech/substrate/blob/master/srml/support/src/storage/generator.rs):
+To interact with single storage values, it is necessary to import the `support::StorageValue` type. Functions used to access a `StorageValue` are defined in [`srml/support`](https://crates.parity.io/srml_support/storage/trait.StorageValue.html#required-methods):
 
 ```rust
 /// Get the storage key.
-fn key() -> &'static [u8];
+fn hashed_key() -> [u8; 16];
 
-/// true if the value is defined in storage.
-fn exists<S: Storage>(storage: &S) -> bool {
-    storage.exists(Self::key())
-}
+/// true if the value exists in storage.
+fn exists() -> bool;
 
 /// Load the value from the provided storage instance.
-fn get<S: Storage>(storage: &S) -> Self::Query;
+fn get() -> Self::Query;
 
-/// Take a value from storage, removing it afterwards.
-fn take<S: Storage>(storage: &S) -> Self::Query;
+///Put the borrowed value at the key
+fn put<Arg: Borrow<T>>(val: Arg);
 
-/// Store a value under this key into the provided storage instance.
-fn put<S: Storage>(val: &T, storage: &S) {
-    storage.put(Self::key(), val)
-}
+/// Put an unsized and `Encode` value at the key
+fn put_ref<Arg: ?Sized + Encode>(val: &Arg) where T: AsRef<Arg>;
 
-/// Mutate this value
-fn mutate<R, F: FnOnce(&mut Self::Query) -> R, S: Storage>(f: F, storage: &S) -> R;
+/// Mutate the value at the key
+n mutate<R, F: FnOnce(&mut G::Query) -> R>(f: F) -> R;
 
-/// Clear the storage value.
-fn kill<S: Storage>(storage: &S) {
-    storage.kill(Self::key())
-}
+/// Takes the value at the key
+fn take() -> G::Query;
+
+/// Clear the storage value
+fn kill();
 ```
 
 Therefore, the syntax to "put" `Value`:
@@ -65,55 +51,22 @@ and to "get" `Value`:
 let my_val = <MyValue>::get();
 ```
 
-Note that we do not need the type `T` because the value is only of one type `u32`. If the `T` was polymorphic over more than one type, the syntax would include `T` in call like
+Note that we do not need the type `T` because the value is only of one type `u32`. If the `T` was polymorphic over more than one type, the syntax would include `T` in call
 
 ```rust
-<MyValue<T>>::put(178);
-```
-
-## Getter Syntax <a name = "get"></a>
-
-Storage values can also be declared with a `get` function to provide cleaner syntax for getting values.
-
-```rust
-decl_storage! {
-    trait Store for Module<T: Trait> as Example {
-        MyValue get(value_getter): u32;
-    }
-}
-```
-
-The `get` parameter is optional, but, by including it, the module exposes a getter function (`fn value_getter() -> u32`). 
-
-To "get" the `Value` with the getter function
-
-```rust
-let my_val = Self::value_getter();
-```
-
-## Setter Syntax <a name = "set"></a>
-
-Here is an example of a module that stores a `u32` value in runtime storage and provides a function `set_value` to set the given `u32`. This code follows [convention](https://deterministic.space/elegant-apis-in-rust.html#consistent-names) for naming setters in Rust.
-
-```rust
-use srml_support::{StorageValue, dispatch::Result};
-
-pub trait Trait: system::Trait {}
-
-decl_module! {
-    pub struct Module<T: Trait> for enum Call where origin: T::Origin {
-        fn set_value(origin, value: u32) -> Result {
-            // check sender signature to verify permissions
-            let sender = ensure_signed(origin)?; 
-            <MyValue>::put(value);
-            Ok(())
-        }
-    }
-}
-
 decl_storage! {
     trait Store for Module<T: Trait> as Example {
         MyValue: u32;
+        MyAccount: T::AccountId;
     }
 }
+
 ```
+
+The requirements for setting the `AccountId` stored in `MyAccount` can be specified in the runtime and exposed via
+
+```rust
+<MyAccount<T>>::put(some_account_id);
+```
+
+*The full example in [`kitchen/modules/single-value`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/single-value) emits events to also notify off-chain processes of when values were set and got.*

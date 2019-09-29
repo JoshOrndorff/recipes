@@ -1,8 +1,6 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
-/// TODO:
-/// this is a really poor implementation
-/// brainstorm and rewrite `=>` create a profile struct for managing friend information
+/// TODO:rewrite `=>` create a profile struct for managing friend information
 /// use constant getters and softmax?
 use support::{
     decl_event, decl_module, decl_storage, dispatch::Result, ensure, EnumerableStorageMap,
@@ -37,7 +35,7 @@ decl_event!(
 
 decl_module! {
     pub struct Module<T: Trait> for enum Call where origin: T::Origin {
-        fn deposit_event<T>() = default;
+        fn deposit_event() = default;
 
         pub fn add_friend(origin, new_friend: T::AccountId) {
             let user = ensure_signed(origin)?;

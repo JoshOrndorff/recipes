@@ -1,11 +1,15 @@
 # Learn Rust
 
-To be productive with [substrate](https://github.com/substrate), it is necessary to become proficient in Rust. Fortunately, the Rust community is known for comprehensive documentation and tutorials. The canonical resource for learning Rust is [The Rust Book](https://doc.rust-lang.org/book/index.html). [Rust by Example](https://doc.rust-lang.org/rust-by-example/index.html) is also a good reference for learning how to use popular crates within the Rust ecosystem.
+To be productive with [substrate](https://github.com/substrate) requires some familiarity with Rust. Fortunately, the Rust community is known for comprehensive documentation and tutorials. The most common resource for initially learning Rust is [The Rust Book](https://doc.rust-lang.org/book/index.html). To see examples of popular crate usage patterns, [Rust by Example](https://doc.rust-lang.org/rust-by-example/index.html) is also convenient.
 
-To become more familiar with commmon design patterns in Rust, see the following:
+## API Design
+
+To become more familiar with commmon design patterns in Rust, the following links might be helpful:
 * [Official Rust API Guidelines](https://rust-lang-nursery.github.io/api-guidelines/about.html)
 * [Rust Unofficial Design Patterns](https://github.com/rust-unofficial/patterns)
 * [Elegant Library API Guidelines](https://deterministic.space/elegant-apis-in-rust.html)
+
+## Optimizations
 
 To optimize runtime performance, Substrate developers should make use of iterators, traits, and Rust's other "*zero cost* abstractions":
 * [Abstraction without overhead: traits in Rust](https://blog.rust-lang.org/2015/05/11/traits.html), [related conference talk](https://www.youtube.com/watch?v=Sn3JklPAVLk)

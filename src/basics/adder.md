@@ -1,4 +1,5 @@
 # Adding Machine
+*[`kitchen/modules/adding-machine`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/adding-machine)*
 
 A simple adding machine checks for overflow and emits an event with the result, without using storage. In the module file,
 
@@ -32,18 +33,7 @@ decl_event!(
 
 If the addition overflows, the method will return the `"Addition overflowed"` without emitting the event. Likewise, events are generally emitted at the bottom of method bodies as an indication of correct execution of all logic therein.
 
-*NOTE*: The event described above only wraps `u32` values. If we want/need the `Event` type to contain multiple types, then we declare the following in `decl_module`
-
-```rust
-decl_module! {
-    pub struct Module<T: Trait> for enum Call where origin: T::Origin {
-        fn deposit_event<T>() = default;
-        ...
-    }
-}
-```
-
-and also the `decl_event` would use this generic syntax
+*NOTE*: The event described above only wraps `u32` values. If we want/need the `Event` type to contain multiple types from our runtime, then the `decl_event` would use the following syntax
 
 ```rust
 decl_event!(

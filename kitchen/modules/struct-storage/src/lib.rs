@@ -3,9 +3,8 @@
 use support::codec::{Decode, Encode};
 /// Nested Structs
 use support::{
-    decl_event, decl_module, decl_storage, dispatch::Result, ensure, StorageMap, StorageValue,
+    decl_module, decl_storage, dispatch::Result, StorageMap, StorageValue,
 };
-use system::ensure_signed;
 
 pub trait Trait: balances::Trait {}
 

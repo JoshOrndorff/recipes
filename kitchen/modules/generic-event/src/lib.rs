@@ -1,6 +1,6 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
-/// Event generic over multiple types (u32, AccountId)
+/// Event uses types from the module trait
 use support::{decl_event, decl_module, dispatch::Result};
 use system::ensure_signed;
 
@@ -24,7 +24,7 @@ decl_module! {
     }
 }
 
-// AccountId, u32 both are inputs `=>` generic event declaration
+// AccountId, u32 both are inputs `=>` declaration with `<T>`
 decl_event!(
     pub enum Event<T> where AccountId = <T as system::Trait>::AccountId {
         EmitInput(AccountId, u32),

@@ -1,15 +1,12 @@
 # Module Fundamentals
+*[`kitchen/modules/hello-substrate`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/hello-substrate)*
 
 Clone the [substrate module template](https://github.com/shawntabrizi/substrate-module-template):
 ```bash
 git clone https://github.com/shawntabrizi/substrate-module-template
 ```
 
-For an in-depth explanation of using this template, see *[Creating a Substrate Runtime Module](https://substrate.dev/docs/en/tutorials/creating-a-runtime-module)*.
-
-## Hello Substrate
-
-Import the following from [`srml-support`](https://crates.parity.io/srml_support/index.html):
+At the top of the `src/lib.rs` file, import the following from [`srml-support`](https://crates.parity.io/srml_support/index.html):
 
 ```rust
 use support::{decl_module, decl_event, decl_storage, StorageValue, StorageMap};
@@ -27,7 +24,7 @@ decl_storage! {
 }
 ```
 
-The runtime methods defined in [`decl_module`](https://crates.parity.io/srml_support/macro.decl_module.html) are used to define permissions for interacting with runtime storage.
+Defined in [`decl_module`](https://crates.parity.io/srml_support/macro.decl_module.html), the runtime methods are specify acceptable interaction with runtime storage.
 
 ```rust
 decl_module! {

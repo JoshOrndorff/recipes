@@ -25,7 +25,7 @@ decl_module! {
     }
 }
 
-// only uses u32 so does not need to be generic
+// uses u32 and not types from Trait so does not require `<T>`
 decl_event!(
     pub enum Event {
         EmitInput(u32),
