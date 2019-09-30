@@ -1,5 +1,7 @@
 # Higher Order Arrays with Tuples and Maps
 
+> *[related issue (wip)](https://github.com/substrate-developer-hub/recipes/issues/47)*
+
 To represent ownership of multiple items across multiple users, tuples can be used alongside maps in order to emulate arrays.
 
 For example, consider a scenario in which persistent storage keeps track of a *social network graph* in which each user (represented by an `AccountId`) has a list of other friends. In this case, it would be convenient to use a 2 dimensional array like
@@ -83,9 +85,9 @@ Similarly, when we block a user, we should check that the user isn't already blo
 ensure!(!Self::is_blocked(user.clone(), blocked_user.clone()), "user is already blocked");
 ```
 
-The full logic for this sample can be found in the [kitchen](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen) in `storage/arrays`.
+The full logic for this sample can be found in the [kitchen](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen) in `modules/social-network`.
 <!-- **TODO: update link once pushed** -->
 
 *To see another example of how to use tuples to emulate higher order arrays, see the [Substrate Collectables Tutorial](https://shawntabrizi.github.io/substrate-collectables-workshop/#/2/owning-multiple-kitties?id=using-tuples-to-emulate-higher-order-arrays).*
 
-**NOTE**: [DoubleMap](https://crates.parity.io/srml_support/storage/trait.StorageDoubleMap.html) is a map with two keys; this storage item may also be useful for implementing higher order arrays
+**NOTE**: [DoubleMap](https://crates.parity.io/srml_support/storage/trait.StorageDoubleMap.html) is a map with two keys; this storage item may also be useful for implementing higher order arrays (see [the related recipe](../storage/double.md))

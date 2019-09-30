@@ -1,3 +1,3 @@
 # NFT Ticket Machine
 
-* kitties `=>` collectables `=>` ticketing
+*[related issue (wip)](https://github.com/substrate-developer-hub/recipes/issues/47)*

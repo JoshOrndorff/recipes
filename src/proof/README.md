@@ -1,3 +1,3 @@
 # Proof of Existence
 
-poe tutorial `=>` {ofc_workers, proof-based APIs}
+*[related issue (wip)](https://github.com/substrate-developer-hub/recipes/issues/47)*

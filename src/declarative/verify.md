@@ -1,4 +1,4 @@
-## Verifying Signed Messages <a name = "verify"></a>
+## Verifying Signed Messages
 
 It is often useful to designate some functions as permissioned and, therefore, accessible only to a defined group. In this case, we check that the transaction that invokes the runtime function is signed before verifying that the signature corresponds to a member of the permissioned set.
 

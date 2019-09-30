@@ -21,14 +21,13 @@
  - [Condition Oriented Programming](./declarative/README.md)
     - [Ensure Checks](./declarative/ensure.md)
     - [Fixed Point Arithmetic](./declarative/fpamath.md)
-    - [Verify Signed Messages](./declarative/verify.md)
-    - [Check for Collisions](./declarative/collide.md)
+    - [Verify Signed Messages; Custom Origin](./declarative/verify.md)
 - [Runtime Configuration](./base/runtime.md)
-- [Simple Treasury](./dao/README.md)
-- [Token Curated Registry](./token/README.md)
+- [Simple Treasury](./dao/treasury.md)
+- [Token Curated Registry](./token/token.md)
 - [NFT Ticket Machine](./nft/README.md)
 - [Proof of Existence](./proof/README.md)
-- [Social Network](./identity/README.md)
+- [Social Network](./identity/social.md)
 - [Featured Tutorials](./base/dessert.md)
 
 -----------

@@ -1,11 +1,10 @@
-# Runtimes
+# runtimes
 
-* super-node
-* loosely coupled modules
-* larger examples of inter-module usage `=>` look at Basti's PR and push the limits of how many modules can be used in a runtime
+- [ ] super-node with all module configurations
+- [ ] loosely coupled modules
+- [ ] larger examples of inter-module usage `=>` look at bkch's PR to know how many modules can be placed in the runtime
 
-> watch Joshy work on loosely coupled modules
+## references
 
 * https://github.com/JoshOrndorff/Marketplace
-
 * https://github.com/JoshOrndorff/TicTacToe
