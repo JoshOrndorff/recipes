@@ -27,7 +27,6 @@ impl module::Trait for Runtime {
 
 Within the context of testing, there are a few ways of building a mock runtime that offer varying levels of customizations. The easiest way is to mock runtime storage with
 
-
 ```rust
 
 ```
