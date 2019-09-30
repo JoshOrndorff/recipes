@@ -42,19 +42,17 @@ decl_module! {
 			let who = ensure_signed(origin)?;
 
 			// increment the counter
-			<TheCounter>::mutate(|count| *count + 1);
+			let new_count = <TheCounter>::get() + 1;
 
 			// add member at the largest_index
-			let new_largest_index = <TheCounter>::get() + 1;
-			<TheList<T>>::insert(new_largest_index, who.clone());
+			<TheList<T>>::insert(new_count, who.clone());
 			// incremement counter
-			<TheCounter>::put(new_largest_index);
+			<TheCounter>::put(new_count);
 
-			// (same for linked counter)
-			let new_linked_largest_index = <LinkedCounter>::get() + 1;
-			<LinkedList<T>>::insert(new_linked_largest_index, who.clone());
+			// (keep linked list synced)
+			<LinkedList<T>>::insert(new_count, who.clone());
 			// increment the counter
-			<LinkedCounter>::put(new_linked_largest_index);
+			<LinkedCounter>::put(new_count);
 
 			Self::deposit_event(RawEvent::MemberAdded(who));
 
@@ -68,6 +66,7 @@ decl_module! {
 
 			// verify existence
 			ensure!(<TheList<T>>::exists(index), "an element doesn't exist at this index");
+			// for event emission (could be removed to minimize calls)
 			let removed_member = <TheList<T>>::get(index);
 			<TheList<T>>::remove(index);
 			// assumes that we do not need to adjust the list because every add just increments counter
@@ -96,7 +95,7 @@ decl_module! {
 			}
 			// pop
 			<TheList<T>>::remove(largest_index);
-			<TheCounter>::mutate(|count| *count - 1);
+			<TheCounter>::put(largest_index - 1);
 
 			Self::deposit_event(RawEvent::MemberRemoved(member_to_remove.clone()));
 
@@ -113,7 +112,7 @@ decl_module! {
 
 			let head_index = <LinkedList<T>>::head().unwrap();
 			let member_to_remove = <LinkedList<T>>::take(index);
-			let head_member = <LinkedList<T>>::get(head_index);
+			let head_member = <LinkedList<T>>::take(head_index);
 			<LinkedList<T>>::insert(index, head_member);
 			<LinkedList<T>>::insert(head_index, member_to_remove);
 			<LinkedList<T>>::remove(head_index);
