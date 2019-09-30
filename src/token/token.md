@@ -76,3 +76,5 @@ decl_module! {
 ```
 
 S/O [`gautamdhameja/substrate-demo`](https://github.com/gautamdhameja/substrate-demo/blob/master/runtime/src/template.rs) for providing this recipe!
+
+*see the [TCR tutorial](https://github.com/substrate-developer-hub/substrate-tcr) for an extension in the form of a token curated registry*

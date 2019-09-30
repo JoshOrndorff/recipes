@@ -25,13 +25,11 @@ impl module::Trait for Runtime {
 }
 ```
 
-Within the context of testing, there are a few ways of building a mock runtime that offer varying levels of customizations. The easiest way is to mock runtime storage with
+Within the context of testing, there are a few ways of building a mock runtime that offer varying levels of customizations...
 
-```rust
+**This recipe is still in progress -- see [srml-balances](https://github.com/paritytech/substrate/tree/master/srml/balances/src) as well as the other [srml modules](https://github.com/paritytech/substrate/tree/master/srml) test scaffolding for more**
 
-```
-
-*To learn more about [test](), see the official docs*
+<!-- ## in-progress scaffolding
 
 What are runtime errors?
 
@@ -41,8 +39,4 @@ Reminder: never panic
 
 Reminder: verify first, write last
 
-Custom Error Messages
-
-[`decl_error`](https://crates.parity.io/srml_support/macro.decl_error.html)
-
-* testing from `balances`
+Custom Error Messages: [`decl_error`](https://crates.parity.io/srml_support/macro.decl_error.html) -->

@@ -8,7 +8,7 @@ Each of the recipes in this section are oriented around increasing
 * [ensure checks](./ensure.md)
 * [fixed point arithmetic](./fpamath.md)
 * [verify signed messages](./verify.md)
-* [checking for collisions](./collide.md)
+<!-- * [checking for collisions](./collide.md) -->
 
 ## Module Development Criteria <a name = "criteria"></a>
 

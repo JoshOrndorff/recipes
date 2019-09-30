@@ -24,7 +24,7 @@ decl_storage! {
 }
 ```
 
-Defined in [`decl_module`](https://crates.parity.io/srml_support/macro.decl_module.html), the runtime methods are specify acceptable interaction with runtime storage.
+Defined in [`decl_module`](https://crates.parity.io/srml_support/macro.decl_module.html), the runtime methods specify acceptable interaction with runtime storage.
 
 ```rust
 decl_module! {
