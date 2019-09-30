@@ -1,4 +1,5 @@
 # Runtime Errors and Testing
+*[`kitchen/modules/srml-test`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/srml-test)*
 
 Runtime tests allow you to verify the logic in your runtime module by mocking a Substrate runtime environment. This requires an explicit implementation of all the traits declared in the module(s) for the mock runtime. So, if our module trait looked like,
 
