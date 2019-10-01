@@ -1,9 +1,9 @@
 # Module Fundamentals
 *[`kitchen/modules/hello-substrate`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/hello-substrate)*
 
-Clone the [substrate module template](https://github.com/shawntabrizi/substrate-module-template):
+Clone the [substrate module template](https://github.com/substrate-developer-hub/substrate-module-template):
 ```bash
-git clone https://github.com/shawntabrizi/substrate-module-template
+git clone https://github.com/substrate-developer-hub/substrate-module-template
 ```
 
 At the top of the `src/lib.rs` file, import the following from [`srml-support`](https://crates.parity.io/srml_support/index.html):

@@ -1,6 +1,6 @@
 # Kitchen
 
-The kitchen is for *cooking* recipes. It is structured similarly to the main recipes build as specified in [src/SUMMARY.md](../src/SUMMARY.md), except every code sample is stored as a library via the [substrate-module-template](https://github.com/shawntabrizi/substrate-module-template).
+The kitchen is for *cooking* recipes. It is structured similarly to the main recipes build as specified in [src/SUMMARY.md](../src/SUMMARY.md), except every code sample is stored as a library via the [substrate-module-template](https://github.com/substrate-developer-hub/substrate-module-template).
 
 There are two main sections:
 * [Modules](./modules/README.md): individual modules, formatted as libraries
@@ -18,6 +18,6 @@ I haven't written unit tests *yet*, but you can write tests in the [usual way](h
 
 ## Using Recipes in External Projects
 
-Follow the [substrate-module-template](https://github.com/shawntabrizi/substrate-module-template) directions to use recipes in your personal projects. 
+Follow the [substrate-module-template](https://github.com/substrate-developer-hub/substrate-module-template) directions to use recipes in your personal projects. 
 
 **I recommend extracting patterns and applying them in the context of your application rather than directly importing the recipes** :)
