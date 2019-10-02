@@ -4,3 +4,6 @@ multilingual = false
 src = "src"
 title = "Substrate Recipes"
 description = "Substrate runtime design patterns"
+
+[output.html]
+additional-js = ["static/js/load.js", "static/js/config.js", "static/js/klaro.min.js"]
