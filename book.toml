@@ -6,4 +6,4 @@ title = "Substrate Recipes"
 description = "Substrate runtime design patterns"
 
 [output.html]
-additional-js = ["static/js/load.js", "static/js/config.js", "static/js/klaro.min.js"]
+additional-js = ["load.js", "config.js", "klaro.min.js"]
