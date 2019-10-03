@@ -1,5 +1,5 @@
 [package]
-name = "node-template-runtime"
+name = "super-node-runtime"
 version = "2.0.0"
 authors = ["Anonymous"]
 edition = "2018"

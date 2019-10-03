@@ -1,11 +1,11 @@
 [package]
-name = 'example-configs'
+name = 'super-node-genesis'
 version = "2.0.0"
 authors = ["Anonymous"]
 edition = "2018"
 
 [dependencies.super-node-runtime]
-package = 'node-template-runtime'
+package = 'super-node-runtime'
 path = '../super-node-runtime'
 
 [dependencies]
