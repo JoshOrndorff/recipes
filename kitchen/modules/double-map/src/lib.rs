@@ -13,6 +13,7 @@ use support::{
     dispatch::Result,
 };
 use system::ensure_signed;
+use rstd::prelude::*;
 
 pub trait Trait: system::Trait {
 	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;

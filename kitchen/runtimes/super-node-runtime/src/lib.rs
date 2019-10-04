@@ -32,6 +32,7 @@ use version::NativeVersion;
 use adding_machine;
 use basic_token;
 use check_membership;
+use double_map;
 
 // A few exports that help ease life for downstream crates.
 #[cfg(any(feature = "std", test))]
@@ -269,6 +270,11 @@ impl check_membership::Trait for Runtime {
 	type Event = Event;
 }
 
+// The Double Map's Configuration Trait
+impl double_map::Trait for Runtime {
+	type Event = Event;
+}
+
 construct_runtime!(
 	pub enum Runtime where
 		Block = Block,
@@ -286,6 +292,7 @@ construct_runtime!(
 		AddingMachine: adding_machine::{Module, Call, Event},
 		BasicToken: basic_token::{Module, Call, Storage, Event<T>},
 		CheckMembership: check_membership::{Module, Call, Storage, Event<T>},
+		DoubleMap: double_map::{Module, Call, Storage, Event<T>},
 	}
 );
 
