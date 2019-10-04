@@ -34,6 +34,7 @@ use basic_token;
 use check_membership;
 use double_map;
 use module_constant_config;
+use schedule_on_finalize;
 
 // A few exports that help ease life for downstream crates.
 #[cfg(any(feature = "std", test))]
@@ -292,6 +293,11 @@ impl module_constant_config::Trait for Runtime {
 	type ClearFrequency = ClearFrequency;
 }
 
+impl schedule_on_finalize::Trait for Runtime {
+	type Event = Event;
+	type ExecutionFrequency = ClearFrequency; // for convenience (can use a different constant)
+}
+
 construct_runtime!(
 	pub enum Runtime where
 		Block = Block,
@@ -312,6 +318,7 @@ construct_runtime!(
 		DoubleMap: double_map::{Module, Call, Storage, Event<T>},
 		LinkedMap: linked_map::{Module, Call, Storage, Event<T>},
 		ModuleConstantConfig: module_constant_config::{Module, Call, Storage, Event},
+		ScheduleOnFinalize: schedule_on_finalize::{Module, Call, Storage, Event<T>},
 	}
 );
 

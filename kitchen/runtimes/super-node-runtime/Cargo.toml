@@ -13,6 +13,7 @@ check-membership = { package = "check-membership", path = "../../modules/check-m
 double-map = { package = "double-map", path = "../../modules/double-map", default-features = false }
 linked-map = { package = "linked-map", path = "../../modules/linked-map", default-features = false }
 module-constant-config = { package = "module-constant-config", path = "../../modules/module-constant-config", default-features = false }
+schedule-on-finalize = { package = "schedule-on-finalize", path = "../../modules/schedule-on-finalize", default-features = false }
 
 [dependencies.parity-scale-codec]
 default-features = false
@@ -161,4 +162,5 @@ std = [
 	"double-map/std",
 	"linked-map/std",
 	"module-constant-config/std",
+	"schedule-on-finalize/std",
 ]
