@@ -9,6 +9,7 @@ serde = { version = "1.0", optional = true, features = ["derive"] }
 safe-mix = { version = "1.0", default-features = false }
 adding-machine = { package = "adding-machine", path = "../../modules/adding-machine", default-features = false }
 basic-token = { package = "basic-token", path = "../../modules/basic-token", default-features = false }
+check-membership = { package = "check-membership", path = "../../modules/check-membership", default-features = false }
 
 [dependencies.parity-scale-codec]
 default-features = false
@@ -153,4 +154,5 @@ std = [
 	"substrate-session/std",
 	"adding-machine/std",
 	"basic-token/std",
+	"check-membership/std",
 ]
