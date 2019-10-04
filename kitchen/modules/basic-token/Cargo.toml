@@ -1,5 +1,5 @@
 [package]
-name = "token-transfer"
+name = "basic-token"
 version = "0.1.0"
 authors = ["4meta5"]
 edition = "2018"
@@ -17,7 +17,7 @@ std = [
 [dependencies.parity-scale-codec]
 default-features = false
 features = ['derive']
-version = '1.0.5'
+version = '1.0.6'
 
 [dependencies.support]
 default_features = false

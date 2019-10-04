@@ -30,6 +30,7 @@ use version::NativeVersion;
 
 // The Recipe Modules
 use adding_machine;
+use basic_token;
 
 // A few exports that help ease life for downstream crates.
 #[cfg(any(feature = "std", test))]
@@ -257,6 +258,11 @@ impl adding_machine::Trait for Runtime {
 	type Event = Event;
 }
 
+// The Basic Token's Configuration Trait
+impl basic_token::Trait for Runtime {
+	type Event = Event;
+}
+
 construct_runtime!(
 	pub enum Runtime where
 		Block = Block,
@@ -272,6 +278,7 @@ construct_runtime!(
 		Sudo: sudo,
 		// The Recipe Modules
 		AddingMachine: adding_machine::{Module, Call, Event},
+		BasicToken: basic_token::{Module, Call, Storage, Event<T>},
 	}
 );
 
