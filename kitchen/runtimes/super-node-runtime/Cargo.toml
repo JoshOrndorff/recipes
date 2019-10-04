@@ -11,6 +11,7 @@ adding-machine = { package = "adding-machine", path = "../../modules/adding-mach
 basic-token = { package = "basic-token", path = "../../modules/basic-token", default-features = false }
 check-membership = { package = "check-membership", path = "../../modules/check-membership", default-features = false }
 double-map = { package = "double-map", path = "../../modules/double-map", default-features = false }
+linked-map = { package = "linked-map", path = "../../modules/linked-map", default-features = false }
 
 [dependencies.parity-scale-codec]
 default-features = false
@@ -157,4 +158,5 @@ std = [
 	"basic-token/std",
 	"check-membership/std",
 	"double-map/std",
+	"linked-map/std",
 ]

@@ -275,6 +275,11 @@ impl double_map::Trait for Runtime {
 	type Event = Event;
 }
 
+// The Linked Map's Configuration Trait
+impl linked_map::Trait for Runtime {
+	type Event = Event;
+}
+
 construct_runtime!(
 	pub enum Runtime where
 		Block = Block,
@@ -293,6 +298,7 @@ construct_runtime!(
 		BasicToken: basic_token::{Module, Call, Storage, Event<T>},
 		CheckMembership: check_membership::{Module, Call, Storage, Event<T>},
 		DoubleMap: double_map::{Module, Call, Storage, Event<T>},
+		LinkedMap: linked_map::{Module, Call, Storage, Event<T>},
 	}
 );
 
