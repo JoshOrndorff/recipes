@@ -48,9 +48,3 @@ default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'substrate-primitives'
 branch = 'master'
-
-[dev-dependencies.runtime-io]
-default_features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'sr-io'
-branch = 'master'

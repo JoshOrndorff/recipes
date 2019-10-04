@@ -29,13 +29,16 @@ use version::RuntimeVersion;
 use version::NativeVersion;
 
 // The Recipe Modules
+use simple_event;
+use generic_event;
 use adding_machine;
-use basic_token;
-use check_membership;
+use single_value;
+use simple_map;
 use double_map;
 use module_constant_config;
+use basic_token;
+use check_membership;
 use schedule_on_finalize;
-use simple_map;
 
 // A few exports that help ease life for downstream crates.
 #[cfg(any(feature = "std", test))]
@@ -258,22 +261,25 @@ impl sudo::Trait for Runtime {
 	type Proposal = Call;
 }
 
+// ---------------------- Runtime Recipe Configurations ----------------------
+impl simple_event::Trait for Runtime {
+	type Event = Event;
+}
+
+impl generic_event::Trait for Runtime {
+	type Event = Event;
+}
+
 // The Adding Machine's Configuration Trait
 impl adding_machine::Trait for Runtime {
 	type Event = Event;
 }
 
+impl single_value::Trait for Runtime {
+	type Event = Event;
+}
+
 impl simple_map::Trait for Runtime {
-	type Event = Event;
-}
-
-// The Basic Token's Configuration Trait
-impl basic_token::Trait for Runtime {
-	type Event = Event;
-}
-
-// The Check Membership's Configuration Trait
-impl check_membership::Trait for Runtime {
 	type Event = Event;
 }
 
@@ -298,6 +304,16 @@ impl module_constant_config::Trait for Runtime {
 	type ClearFrequency = ClearFrequency;
 }
 
+// The Basic Token's Configuration Trait
+impl basic_token::Trait for Runtime {
+	type Event = Event;
+}
+
+// The Check Membership's Configuration Trait
+impl check_membership::Trait for Runtime {
+	type Event = Event;
+}
+
 impl schedule_on_finalize::Trait for Runtime {
 	type Event = Event;
 	type ExecutionFrequency = ClearFrequency; // for convenience (can use a different constant)
@@ -317,13 +333,16 @@ construct_runtime!(
 		Balances: balances::{default, Error},
 		Sudo: sudo,
 		// The Recipe Modules
+		SimpleEvent: simple_event::{Module, Call, Event},
+		GenericEvent: generic_event::{Module, Call, Event<T>},
 		AddingMachine: adding_machine::{Module, Call, Event},
-		BasicToken: basic_token::{Module, Call, Storage, Event<T>},
-		CheckMembership: check_membership::{Module, Call, Storage, Event<T>},
+		SingleValue: single_value::{Module, Call, Event<T>},
 		SimpleMap: simple_map::{Module, Call, Storage, Event<T>},
 		DoubleMap: double_map::{Module, Call, Storage, Event<T>},
 		LinkedMap: linked_map::{Module, Call, Storage, Event<T>},
 		ModuleConstantConfig: module_constant_config::{Module, Call, Storage, Event},
+		BasicToken: basic_token::{Module, Call, Storage, Event<T>},
+		CheckMembership: check_membership::{Module, Call, Storage, Event<T>},
 		ScheduleOnFinalize: schedule_on_finalize::{Module, Call, Storage, Event<T>},
 	}
 );
