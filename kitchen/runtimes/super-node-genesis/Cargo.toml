@@ -1,0 +1,13 @@
+[package]
+name = 'super-node-genesis'
+version = "2.0.0"
+authors = ["Anonymous"]
+edition = "2018"
+
+[dependencies.super-node-runtime]
+package = 'super-node-runtime'
+path = '../super-node-runtime'
+
+[dependencies]
+babe-primitives = { package = "substrate-consensus-babe-primitives", git = "https://github.com/paritytech/substrate", branch = "master" }
+grandpa-primitives = { package = "substrate-finality-grandpa-primitives", git = "https://github.com/paritytech/substrate", branch = "master" }

@@ -54,7 +54,7 @@ decl_event!(
 );
 
 decl_storage! {
-    trait Store for Module<T: Trait> as Ranodom {
+    trait Store for Module<T: Trait> as RNG {
         Nonce get(nonce): u64;
     }
 } 

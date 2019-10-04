@@ -5,6 +5,7 @@
 /// when the function is successfully executed.
 use support::{decl_event, decl_module, decl_storage, dispatch::Result, ensure, StorageValue};
 use system::ensure_signed;
+use rstd::prelude::*;
 
 pub trait Trait: system::Trait {
     type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
@@ -31,7 +32,7 @@ decl_event!(
 
 decl_module! {
     pub struct Module<T: Trait> for enum Call where origin: T::Origin {
-        fn deposit_event<T>() = default;
+        fn deposit_event() = default;
 
         fn init_ownership(origin) -> Result {
             ensure!(!<Owner<T>>::exists(), "Owner already exists");

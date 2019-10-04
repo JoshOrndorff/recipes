@@ -17,7 +17,7 @@ std = [
 [dependencies.parity-scale-codec]
 default-features = false
 features = ['derive']
-version = '1.0.5'
+version = '1.0.6'
 
 [dependencies.support]
 default_features = false
@@ -47,10 +47,4 @@ branch = 'master'
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'substrate-primitives'
-branch = 'master'
-
-[dev-dependencies.runtime-io]
-default_features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'sr-io'
 branch = 'master'

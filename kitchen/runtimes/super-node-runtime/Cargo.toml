@@ -1,0 +1,181 @@
+[package]
+name = "super-node-runtime"
+version = "2.0.0"
+authors = ["Anonymous"]
+edition = "2018"
+
+[dependencies]
+serde = { version = "1.0", optional = true, features = ["derive"] }
+safe-mix = { version = "1.0", default-features = false }
+simple-event = { package = "simple-event", path = "../../modules/simple-event", default_features = false }
+generic-event = { package = "generic-event", path = "../../modules/generic-event", default_features = false }
+adding-machine = { package = "adding-machine", path = "../../modules/adding-machine", default-features = false }
+single-value = { package = "single-value", path = "../../modules/single-value", default-features = false }
+vec-set = { package = "vec-set", path = "../../modules/vec-set", default-features = false }
+storage-cache = { package = "storage-cache", path = "../../modules/storage-cache", default-features = false }
+simple-map = { package = "simple-map", path = "../../modules/simple-map", default-features = false }
+double-map = { package = "double-map", path = "../../modules/double-map", default-features = false }
+linked-map = { package = "linked-map", path = "../../modules/linked-map", default-features = false }
+struct-storage = { package = "struct-storage", path = "../../modules/struct-storage", default-features = false }
+module-constant-config = { package = "module-constant-config", path = "../../modules/module-constant-config", default-features = false }
+basic-token = { package = "basic-token", path = "../../modules/basic-token", default-features = false }
+check-membership = { package = "check-membership", path = "../../modules/check-membership", default-features = false }
+schedule-on-finalize = { package = "schedule-on-finalize", path = "../../modules/schedule-on-finalize", default-features = false }
+# smpl-treasury = { package = "smpl-treasury", path = "../../modules/smpl-treasury", default-features = false }
+
+[dependencies.parity-scale-codec]
+default-features = false
+features = ['derive']
+version = '1.0.6' # v1.0.0 indevhub/node-template
+
+[dependencies.rstd]
+default-features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = "sr-std"
+branch = 'master'
+
+[dependencies.runtime-io]
+default_features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'sr-io'
+branch = 'master'
+
+[dependencies.version]
+default_features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'sr-version'
+branch = 'master'
+
+[dependencies.support]
+default_features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'srml-support'
+branch = 'master'
+
+[dependencies.primitives]
+default_features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'substrate-primitives'
+branch = 'master'
+
+[dependencies.substrate-session]
+default_features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'substrate-session'
+branch = 'master'
+
+[dependencies.balances]
+default_features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'srml-balances'
+branch = 'master'
+
+[dependencies.babe]
+default_features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'srml-babe'
+branch = 'master'
+
+[dependencies.babe-primitives]
+default_features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'substrate-consensus-babe-primitives'
+branch = 'master'
+
+[dependencies.executive]
+default_features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'srml-executive'
+branch = 'master'
+
+[dependencies.indices]
+default_features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'srml-indices'
+branch = 'master'
+
+[dependencies.grandpa]
+default_features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'srml-grandpa'
+branch = 'master'
+
+[dependencies.system]
+default_features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'srml-system'
+branch = 'master'
+
+[dependencies.timestamp]
+default_features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'srml-timestamp'
+branch = 'master'
+
+[dependencies.sudo]
+default_features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'srml-sudo'
+branch = 'master'
+
+[dependencies.sr-primitives]
+default_features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'sr-primitives'
+branch = 'master'
+
+[dependencies.client]
+default_features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'substrate-client'
+branch = 'master'
+
+[dependencies.offchain-primitives]
+default_features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'substrate-offchain-primitives'
+branch = 'master'
+
+
+[build-dependencies]
+wasm-builder-runner = { package = "substrate-wasm-builder-runner", version = "1.0.3" }
+
+[features]
+default = ["std"]
+std = [
+	"parity-scale-codec/std",
+	"client/std",
+	"rstd/std",
+	"runtime-io/std",
+	"support/std",
+	"balances/std",
+	"babe/std",
+	"babe-primitives/std",
+	"executive/std",
+	"indices/std",
+	"grandpa/std",
+	"primitives/std",
+	"sr-primitives/std",
+	"system/std",
+	"timestamp/std",
+	"sudo/std",
+	"version/std",
+	"serde",
+	"safe-mix/std",
+	"offchain-primitives/std",
+	"substrate-session/std",
+	"simple-event/std",
+	"generic-event/std",
+	"adding-machine/std",
+	"single-value/std",
+	"vec-set/std",
+	"storage-cache/std",
+	"simple-map/std",
+	"double-map/std",
+	"linked-map/std",
+	"struct-storage/std",
+	"module-constant-config/std",
+	"basic-token/std",
+	"check-membership/std",
+	"schedule-on-finalize/std",
+]

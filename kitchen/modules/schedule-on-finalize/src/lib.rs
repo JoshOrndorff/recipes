@@ -1,15 +1,14 @@
-//! scheduling execution (the blockchain event loop)
 #![cfg_attr(not(feature = "std"), no_std)]
-#![recursion_limit = "128"]
-// runtime imports
+
+// schedule with `OnFinalize`
 use parity_scale_codec::{Decode, Encode};
-#[cfg(feature = "std")]
 use runtime_primitives::traits::{Hash, Zero};
 use support::traits::Get;
 use support::{
-    decl_event, decl_module, decl_storage, dispatch::Result, ensure, StorageMap, StorageValue,
+    decl_event, decl_module, decl_storage, dispatch::Result, StorageMap, StorageValue,
 };
 use system::ensure_signed;
+use rstd::prelude::*;
 
 // type alias ordering task execution in `on_finalize`
 pub type PriorityScore = u32;
@@ -45,7 +44,7 @@ decl_event!(
 );
 
 decl_storage! {
-    trait Store for Module<T: Trait> as eloop {
+    trait Store for Module<T: Trait> as EventLoop {
         /// Outstanding tasks getter
         Tasks get(tasks): map T::Hash => Option<Task<T::BlockNumber>>;
         /// Dispatch Queue for tasks
@@ -107,7 +106,7 @@ impl<T: Trait> Module<T> {
             execute_q.push(<Tasks<T>>::get(h));
             // sort based on priority score and block number
             execute_q.sort();
-            execute_q.iter().for_each(|t| {
+            execute_q.iter().for_each(|_t| {
                 // this is where each task is executed
                 // -- execution occurs in order based on sort()
             });

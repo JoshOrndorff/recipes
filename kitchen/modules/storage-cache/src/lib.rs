@@ -1,11 +1,10 @@
-// storage cache example
-// -- generally...minimize calls to runtime storage
-
 #![cfg_attr(not(feature = "std"), no_std)]
 
-/// Single Value Storage
+// storage cache example
+// -- in general, the lesson is to minimize calls to runtime storage
 use support::{decl_module, decl_event, ensure, decl_storage, dispatch::Result, StorageValue};
 use system::ensure_signed;
+use rstd::prelude::*;
 
 pub trait Trait: system::Trait {
     type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;

@@ -37,7 +37,7 @@ decl_event!(
 decl_module! {
     pub struct Module<T: Trait> for enum Call where origin: T::Origin {
         // initialize the default event for this module
-        fn deposit_event<T>() = default;
+        fn deposit_event() = default;
 
         // initialize the token
         // transfers the total_supply amout to the caller
