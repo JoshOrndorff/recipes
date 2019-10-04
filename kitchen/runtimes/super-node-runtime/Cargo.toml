@@ -11,14 +11,17 @@ simple-event = { package = "simple-event", path = "../../modules/simple-event", 
 generic-event = { package = "generic-event", path = "../../modules/generic-event", default_features = false }
 adding-machine = { package = "adding-machine", path = "../../modules/adding-machine", default-features = false }
 single-value = { package = "single-value", path = "../../modules/single-value", default-features = false }
+vec-set = { package = "vec-set", path = "../../modules/vec-set", default-features = false }
 storage-cache = { package = "storage-cache", path = "../../modules/storage-cache", default-features = false }
 simple-map = { package = "simple-map", path = "../../modules/simple-map", default-features = false }
 double-map = { package = "double-map", path = "../../modules/double-map", default-features = false }
 linked-map = { package = "linked-map", path = "../../modules/linked-map", default-features = false }
+struct-storage = { package = "struct-storage", path = "../../modules/struct-storage", default-features = false }
 module-constant-config = { package = "module-constant-config", path = "../../modules/module-constant-config", default-features = false }
 basic-token = { package = "basic-token", path = "../../modules/basic-token", default-features = false }
 check-membership = { package = "check-membership", path = "../../modules/check-membership", default-features = false }
 schedule-on-finalize = { package = "schedule-on-finalize", path = "../../modules/schedule-on-finalize", default-features = false }
+# smpl-treasury = { package = "smpl-treasury", path = "../../modules/smpl-treasury", default-features = false }
 
 [dependencies.parity-scale-codec]
 default-features = false
@@ -165,10 +168,12 @@ std = [
 	"generic-event/std",
 	"adding-machine/std",
 	"single-value/std",
+	"vec-set/std",
 	"storage-cache/std",
 	"simple-map/std",
 	"double-map/std",
 	"linked-map/std",
+	"struct-storage/std",
 	"module-constant-config/std",
 	"basic-token/std",
 	"check-membership/std",

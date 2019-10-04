@@ -6,6 +6,7 @@ use runtime_primitives::ModuleId;
 use support::traits::{Currency, Get, ReservableCurrency};
 use support::{decl_event, decl_module, decl_storage, dispatch::Result, StorageValue};
 use system::{self, ensure_signed};
+use rstd::prelude::*;
 
 type BalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::Balance;
 

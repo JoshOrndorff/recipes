@@ -33,13 +33,16 @@ use simple_event;
 use generic_event;
 use adding_machine;
 use single_value;
+use vec_set;
 use storage_cache;
 use simple_map;
 use double_map;
+use struct_storage;
 use module_constant_config;
 use basic_token;
 use check_membership;
 use schedule_on_finalize;
+// use smpl_treasury;
 
 // A few exports that help ease life for downstream crates.
 #[cfg(any(feature = "std", test))]
@@ -262,7 +265,7 @@ impl sudo::Trait for Runtime {
 	type Proposal = Call;
 }
 
-// ---------------------- Runtime Recipe Configurations ----------------------
+// ---------------------- Recipe Runtime Configurations ----------------------
 impl simple_event::Trait for Runtime {
 	type Event = Event;
 }
@@ -271,12 +274,15 @@ impl generic_event::Trait for Runtime {
 	type Event = Event;
 }
 
-// The Adding Machine's Configuration Trait
 impl adding_machine::Trait for Runtime {
 	type Event = Event;
 }
 
 impl single_value::Trait for Runtime {
+	type Event = Event;
+}
+
+impl vec_set::Trait for Runtime {
 	type Event = Event;
 }
 
@@ -288,33 +294,31 @@ impl simple_map::Trait for Runtime {
 	type Event = Event;
 }
 
-// The Double Map's Configuration Trait
 impl double_map::Trait for Runtime {
 	type Event = Event;
 }
 
-// The Linked Map's Configuration Trait
 impl linked_map::Trait for Runtime {
 	type Event = Event;
 }
+
+impl struct_storage::Trait for Runtime { }
 
 parameter_types! {
 	pub const MaxAddend: u32 = 1738;
 	pub const ClearFrequency: u32 = 10;
 }
-// The Module Constant Config's Configuration Trait
+
 impl module_constant_config::Trait for Runtime {
 	type Event = Event;
 	type MaxAddend = MaxAddend;
 	type ClearFrequency = ClearFrequency;
 }
 
-// The Basic Token's Configuration Trait
 impl basic_token::Trait for Runtime {
 	type Event = Event;
 }
 
-// The Check Membership's Configuration Trait
 impl check_membership::Trait for Runtime {
 	type Event = Event;
 }
@@ -342,10 +346,12 @@ construct_runtime!(
 		GenericEvent: generic_event::{Module, Call, Event<T>},
 		AddingMachine: adding_machine::{Module, Call, Event},
 		SingleValue: single_value::{Module, Call, Storage, Event<T>},
+		VecSet: vec_set::{Module, Call, Storage, Event<T>},
 		StorageCache: storage_cache::{Module, Call, Storage, Event<T>},
 		SimpleMap: simple_map::{Module, Call, Storage, Event<T>},
 		DoubleMap: double_map::{Module, Call, Storage, Event<T>},
 		LinkedMap: linked_map::{Module, Call, Storage, Event<T>},
+		StructStorage: struct_storage::{Module, Call, Storage},
 		ModuleConstantConfig: module_constant_config::{Module, Call, Storage, Event},
 		BasicToken: basic_token::{Module, Call, Storage, Event<T>},
 		CheckMembership: check_membership::{Module, Call, Storage, Event<T>},

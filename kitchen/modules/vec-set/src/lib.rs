@@ -4,6 +4,7 @@
 // https://crates.parity.io/srml_support/storage/trait.StorageValue.html#tymethod.append
 use support::{ensure, decl_module, decl_storage, decl_event, StorageValue, dispatch::Result};
 use system::ensure_signed;
+use rstd::prelude::*;
 
 pub trait Trait: system::Trait {
 	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
