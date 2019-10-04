@@ -1,5 +1,5 @@
-//! A Super Node runtime. This runtime intends to demonstrate all the recipes i nthe kitchen
-//! in a sinlge super runtime. At the moment it only contains the adding machine.
+//! A Super Node runtime. This runtime intends to demonstrate all the recipes in the kitchen
+//! in a single super runtime. At the moment it only contains the adding machine.
 
 #![cfg_attr(not(feature = "std"), no_std)]
 // `construct_runtime!` does a lot of recursion and requires us to increase the limit to 256.

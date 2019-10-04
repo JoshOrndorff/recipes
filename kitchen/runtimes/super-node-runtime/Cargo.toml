@@ -12,7 +12,7 @@ adding-machine = { package = "adding-machine", path = "../../modules/adding-mach
 [dependencies.parity-scale-codec]
 default-features = false
 features = ['derive']
-version = '1.0.5' # v1.0.0 indevhub/node-template
+version = '1.0.6' # v1.0.0 indevhub/node-template
 
 [dependencies.rstd]
 default-features = false
@@ -124,7 +124,7 @@ branch = 'master'
 
 
 [build-dependencies]
-wasm-builder-runner = { package = "substrate-wasm-builder-runner", version = "1.0.2" }
+wasm-builder-runner = { package = "substrate-wasm-builder-runner", version = "1.0.3" }
 
 [features]
 default = ["std"]
