@@ -35,6 +35,7 @@ use check_membership;
 use double_map;
 use module_constant_config;
 use schedule_on_finalize;
+use simple_map;
 
 // A few exports that help ease life for downstream crates.
 #[cfg(any(feature = "std", test))]
@@ -262,6 +263,10 @@ impl adding_machine::Trait for Runtime {
 	type Event = Event;
 }
 
+impl simple_map::Trait for Runtime {
+	type Event = Event;
+}
+
 // The Basic Token's Configuration Trait
 impl basic_token::Trait for Runtime {
 	type Event = Event;
@@ -315,6 +320,7 @@ construct_runtime!(
 		AddingMachine: adding_machine::{Module, Call, Event},
 		BasicToken: basic_token::{Module, Call, Storage, Event<T>},
 		CheckMembership: check_membership::{Module, Call, Storage, Event<T>},
+		SimpleMap: simple_map::{Module, Call, Storage, Event<T>},
 		DoubleMap: double_map::{Module, Call, Storage, Event<T>},
 		LinkedMap: linked_map::{Module, Call, Storage, Event<T>},
 		ModuleConstantConfig: module_constant_config::{Module, Call, Storage, Event},

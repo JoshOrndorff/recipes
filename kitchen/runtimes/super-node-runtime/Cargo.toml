@@ -10,6 +10,7 @@ safe-mix = { version = "1.0", default-features = false }
 adding-machine = { package = "adding-machine", path = "../../modules/adding-machine", default-features = false }
 basic-token = { package = "basic-token", path = "../../modules/basic-token", default-features = false }
 check-membership = { package = "check-membership", path = "../../modules/check-membership", default-features = false }
+simple-map = { package = "simple-map", path = "../../modules/simple-map", default-features = false }
 double-map = { package = "double-map", path = "../../modules/double-map", default-features = false }
 linked-map = { package = "linked-map", path = "../../modules/linked-map", default-features = false }
 module-constant-config = { package = "module-constant-config", path = "../../modules/module-constant-config", default-features = false }
@@ -159,6 +160,7 @@ std = [
 	"adding-machine/std",
 	"basic-token/std",
 	"check-membership/std",
+	"simple-map/std",
 	"double-map/std",
 	"linked-map/std",
 	"module-constant-config/std",
