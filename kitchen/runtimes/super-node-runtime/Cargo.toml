@@ -12,6 +12,7 @@ basic-token = { package = "basic-token", path = "../../modules/basic-token", def
 check-membership = { package = "check-membership", path = "../../modules/check-membership", default-features = false }
 double-map = { package = "double-map", path = "../../modules/double-map", default-features = false }
 linked-map = { package = "linked-map", path = "../../modules/linked-map", default-features = false }
+module-constant-config = { package = "module-constant-config", path = "../../modules/module-constant-config", default-features = false }
 
 [dependencies.parity-scale-codec]
 default-features = false
@@ -159,4 +160,5 @@ std = [
 	"check-membership/std",
 	"double-map/std",
 	"linked-map/std",
+	"module-constant-config/std",
 ]

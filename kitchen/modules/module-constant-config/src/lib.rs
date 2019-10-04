@@ -3,13 +3,11 @@
 /// configurable module constants in substrate
 use runtime_primitives::traits::Zero;
 use support::{ensure, decl_module, decl_storage, decl_event, StorageValue, dispatch::Result};
-use support::traits::{Currency, Get, ReservableCurrency};
+use support::traits::Get;
 use system::ensure_signed;
 
 pub trait Trait: system::Trait {
 	type Event: From<Event> + Into<<Self as system::Trait>::Event>;
-
-    type Currency: Currency<Self::AccountId> + ReservableCurrency<Self::AccountId>;
 
     // maximum amount added per invocation
     type MaxAddend: Get<u32>;

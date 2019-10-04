@@ -33,6 +33,7 @@ use adding_machine;
 use basic_token;
 use check_membership;
 use double_map;
+use module_constant_config;
 
 // A few exports that help ease life for downstream crates.
 #[cfg(any(feature = "std", test))]
@@ -280,6 +281,17 @@ impl linked_map::Trait for Runtime {
 	type Event = Event;
 }
 
+parameter_types! {
+	pub const MaxAddend: u32 = 1738;
+	pub const ClearFrequency: u32 = 10;
+}
+// The Module Constant Config's Configuration Trait
+impl module_constant_config::Trait for Runtime {
+	type Event = Event;
+	type MaxAddend = MaxAddend;
+	type ClearFrequency = ClearFrequency;
+}
+
 construct_runtime!(
 	pub enum Runtime where
 		Block = Block,
@@ -299,6 +311,7 @@ construct_runtime!(
 		CheckMembership: check_membership::{Module, Call, Storage, Event<T>},
 		DoubleMap: double_map::{Module, Call, Storage, Event<T>},
 		LinkedMap: linked_map::{Module, Call, Storage, Event<T>},
+		ModuleConstantConfig: module_constant_config::{Module, Call, Storage, Event},
 	}
 );
 
