@@ -33,6 +33,7 @@ use simple_event;
 use generic_event;
 use adding_machine;
 use single_value;
+use storage_cache;
 use simple_map;
 use double_map;
 use module_constant_config;
@@ -279,6 +280,10 @@ impl single_value::Trait for Runtime {
 	type Event = Event;
 }
 
+impl storage_cache::Trait for Runtime {
+	type Event = Event;
+}
+
 impl simple_map::Trait for Runtime {
 	type Event = Event;
 }
@@ -336,7 +341,8 @@ construct_runtime!(
 		SimpleEvent: simple_event::{Module, Call, Event},
 		GenericEvent: generic_event::{Module, Call, Event<T>},
 		AddingMachine: adding_machine::{Module, Call, Event},
-		SingleValue: single_value::{Module, Call, Event<T>},
+		SingleValue: single_value::{Module, Call, Storage, Event<T>},
+		StorageCache: storage_cache::{Module, Call, Storage, Event<T>},
 		SimpleMap: simple_map::{Module, Call, Storage, Event<T>},
 		DoubleMap: double_map::{Module, Call, Storage, Event<T>},
 		LinkedMap: linked_map::{Module, Call, Storage, Event<T>},
