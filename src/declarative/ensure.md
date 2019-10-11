@@ -4,7 +4,7 @@ Within each runtime module function, it is important to perform requisite checks
 
 **Place [`ensure!`](https://crates.parity.io/srml_support/macro.ensure.html) checks at the top of each runtime function's logic to verify that all requisite conditions are met before performing any storage changes.** *Note that this is similar to [`require()`](https://ethereum.stackexchange.com/questions/15166/difference-between-require-and-assert-and-the-difference-between-revert-and-thro) checks at the top of function bodies in Solidity contracts.*
 
-In the [set storage and iteration](../storage/iterate.md), a vector was stored in the runtime to allow for simple membership checks for methods only available to members. 
+In the [set storage and iteration](../storage/iterate.md), a vector was stored in the runtime to allow for simple membership checks for methods only available to members.
 
 ```rust
 decl_storage! {
@@ -21,7 +21,7 @@ impl<T: Trait> Module<T> {
 ```
 
 
-"*By returning `bool`, we can easily use these methods in `ensure!` statements to verify relevant state conditions before making requests in the main runtime methods.*" 
+"*By returning `bool`, we can easily use these methods in `ensure!` statements to verify relevant state conditions before making requests in the main runtime methods.*"
 
 ```rust
 fn member_action(origin) -> Result {
@@ -35,6 +35,7 @@ fn member_action(origin) -> Result {
 Indeed, this pattern of extracting runtime checks into separate functions and invoking the `ensure` macro in their place is useful. It produces readable code and encourages targeted testing to more easily identify the source of logic errors.
 
 *This [github comment](https://github.com/shawntabrizi/substrate-collectables-workshop/pull/55#discussion_r258147961) might help when visualizing declarative patterns in practice.*
+TODO: Ellaborate github comment as it is no longer accessible.
 
 **Bonus Reading**
 * [Design for Testability](https://blog.nelhage.com/2016/03/design-for-testability/)
