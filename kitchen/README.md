@@ -5,6 +5,7 @@ The kitchen is for *cooking* recipes. It is structured similarly to the main rec
 There are two main sections:
 * [Modules](./modules/README.md): individual modules, formatted as libraries
 * [Runtimes](./runtimes/README.md): module configurations for executable runtimes
+* [Node](./node/README.md): node configuration using the runtimes
 
 ## Directions
 

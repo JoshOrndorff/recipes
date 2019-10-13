@@ -1,6 +1,5 @@
 # todos are scattered in these files
 k.md
-# to be made into a larger PR for Substrate soon
 v002.md
 **/*/drafts/
 **/*/*/drafts/
@@ -8,7 +7,7 @@ v002.md
 # local staging; need not be pushed
 book
 
-# need not push the executables
+# need not push...
 **/*/target
 **/*/Cargo.lock
 **/*/.DS_Store
