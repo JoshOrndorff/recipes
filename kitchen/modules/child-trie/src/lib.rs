@@ -81,6 +81,7 @@ decl_module! {
                 initiator: initiator.clone(),
                 max_sum,
                 end,
+                ..Default::default(),
             });
 
             Self::deposit_event(RawEvent::NewObject(index, initiator));
