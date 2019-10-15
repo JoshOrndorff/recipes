@@ -79,7 +79,6 @@ decl_module! {
 
             <ExampleObjects<T>>::insert(index, ExampleObject {
                 initiator: initiator.clone(),
-                sum: 0, // also of ValueType (u32)
                 max_sum,
                 end,
             });
