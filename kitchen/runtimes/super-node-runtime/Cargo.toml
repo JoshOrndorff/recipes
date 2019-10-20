@@ -100,6 +100,12 @@ git = 'https://github.com/paritytech/substrate.git'
 package = 'srml-grandpa'
 branch = 'master'
 
+[dependencies.randomness-collective-flip]
+default_features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'srml-randomness-collective-flip'
+branch = 'master'
+
 [dependencies.system]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
@@ -155,6 +161,7 @@ std = [
 	"indices/std",
 	"grandpa/std",
 	"primitives/std",
+	"randomness-collective-flip/std",
 	"sr-primitives/std",
 	"system/std",
 	"timestamp/std",
