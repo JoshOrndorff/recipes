@@ -17,7 +17,7 @@ use sr_primitives::{
 };
 use sr_primitives::traits::{NumberFor, BlakeTwo256, Block as BlockT, StaticLookup, Verify, ConvertInto};
 use sr_primitives::weights::Weight;
-use babe::{AuthorityId as BabeId, SameAuthoritiesForever};
+use babe::{AuthorityId as BabeId/*, SameAuthoritiesForever*/};
 use grandpa::{AuthorityId as GrandpaId, AuthorityWeight as GrandpaWeight};
 use grandpa::fg_primitives;
 use client::{
@@ -203,7 +203,7 @@ parameter_types! {
 impl babe::Trait for Runtime {
 	type EpochDuration = EpochDuration;
 	type ExpectedBlockTime = ExpectedBlockTime;
-	type EpochChangeTrigger = SameAuthoritiesForever;
+	//type EpochChangeTrigger = SameAuthoritiesForever;
 }
 
 impl grandpa::Trait for Runtime {
