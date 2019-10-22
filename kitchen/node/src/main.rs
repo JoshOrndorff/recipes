@@ -12,12 +12,12 @@ pub use substrate_cli::{VersionInfo, IntoExit, error};
 
 fn main() {
 	let version = VersionInfo {
-		name: "Substrate Node",
+		name: "Kitchen Node",
 		commit: env!("VERGEN_SHA_SHORT"),
 		version: env!("CARGO_PKG_VERSION"),
-		executable_name: "node-template",
+		executable_name: "kitchen-node",
 		author: "Anonymous",
-		description: "Template Node",
+		description: "Kitchen Node",
 		support_url: "support.anonymous.an",
 	};
 
