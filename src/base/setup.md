@@ -1,8 +1,8 @@
-# Installation and Running Recipe Kitchen Node
+# Installation and Running the Kitchen Node
 
 ## Setup
 
-If you do not have Subtrate development environment setup on your machine, please install it as followed.
+If you do not have a Subtrate development environment setup on your machine, please install it.
 
 ### For Linux / macOS
 
@@ -15,23 +15,24 @@ curl https://getsubstrate.io -sSf | bash
 
 Refer to our [Substrate Installation on Windows](https://substrate.dev/docs/en/next/getting-started#getting-started-on-windows).
 
-## Running the Recipe Kitchen Node
+## Running the Kitchen Node
 
-To interact with the code in this recipe, `git clone` the source repository. We also want to kick-start the node compilation as it may take about 30 minutes to complete depending on your hardware.
+To interact with the code in these recipes, `git clone` the source repository. We also want to kick-start the node compilation as it may take about 30 minutes to complete depending on your hardware.
 
 ```bash
 git clone https://github.com/substrate-developer-hub/recipes.git
 cd recipes/kitchen/node
+./scripts/init.sh
 
 # This step takes a while to complete
 cargo build --release
 ```
 
-Here, `recipes/kitchen` folder contains all the code necessary to run a Substrate node. Let us call it the Recipe Kitchen Node. There are three folders inside:
+Here, `recipes/kitchen` folder contains all the code necessary to run a Substrate node. Let us call it the Kitchen Node. There are three folders inside:
 
-  * `node` - contains the code to start the Recipe Kitchen Node.
-  * `runtimes` - contains the runtime of the Recipe Kitchen Node.
-  * `modules` - the runtime includes multiple modules. Each module gives the runtime a new set of functionality. Most of the recipe module code we discuss afterwards is stored in this folder
+  * `node` - contains the code to start the Kitchen Node.
+  * `runtimes` - contains the runtime of the Kitchen Node.
+  * `modules` - the runtime includes multiple modules. Each module gives the runtime a new set of functionality. Most of the recipe module code we discuss afterwards is stored under this folder
 
 > **Notes**
 >
@@ -48,7 +49,7 @@ Once the compilation is completed, you can first purge any existing blockchain d
 # Purge any existing blockchain data. Enter `y` upon prompt.
 ./target/release/kitchen-node purge-chain --dev
 
-# Start the Recipe Kitchen Node
+# Start the Kitchen Node
 ./target/release/kitchen-node --dev
 ```
 
@@ -56,11 +57,11 @@ Once the compilation is completed, you can first purge any existing blockchain d
 
 You should see blocks are being created on the console. You can now use our [Polkadot-JS Apps to interact with your locally running node](https://polkadot.js.org/apps/#/explorer?rpc=ws://127.0.0.1:9944). You will be mainly using the **Chain state** tab to query the blockchain status and **Extrinsics** to send transactions to the blockchain.
 
-Congratulation on running your Recipe Kitchen Node and able to interact with it!
+Congratulation on running the Kitchen Node and able to interact with it!
 
-## Understanding the Recipe Kitchen Node
+## Understanding the Kitchen Node
 
-Let us take a deeper look at the Recipe Kitchen Node. Inside
+Let us take a deeper look at the Kitchen Node. Inside
 
 **`kitchen/node/Cargo.toml`**
 
@@ -130,11 +131,11 @@ construct_runtime!(
 
 Finally, you can see how the `simple-event` module is specified in `kitchen/modules/simple-event/src/lib.rs`.
 
-This is the general pattern used throughout this recipe. We first talk about a new piece of module code stored in `kitchen/modules/<module-name>/src/lib.rs`. The module is then included into the runtime by adding the module name and relative path in `kitchen/runtimes/super-node-runtime/Cargo.toml` (if not yet added) and updating `kitchen/runtimes/super-node-runtime/src/lib.rs`.
+This is the general pattern used throughout these recipes. We first talk about a new piece of module code stored in `kitchen/modules/<module-name>/src/lib.rs`. The module is then included into the runtime by adding the module name and relative path in `kitchen/runtimes/super-node-runtime/Cargo.toml` (if not yet added) and updating `kitchen/runtimes/super-node-runtime/src/lib.rs`.
 
 ## Learn More
 
-In fact, the Recipe Kitchen Node and runtime structure has been refactored to cater for the recipe purpose. If you are interested to learn more about how to include your own module in a node runtime, we recommend you to go through the following two tutorials.
+In fact, the Kitchen Node and runtime structure has been refactored to cater for the recipe purpose. If you are interested to learn more about how to include your own module in a node runtime, we recommend you to go through the following two tutorials.
 
 * [Writing a Runtime Module in its Own Crate Tutorial](https://substrate.dev/docs/en/tutorials/ creating-a-runtime-module)
 * [Adding `Contract` Module to Your Runtime Tutorial](https://substrate.dev/docs/en/tutorials/adding-a-module-to-your-runtime)
