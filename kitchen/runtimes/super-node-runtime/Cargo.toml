@@ -70,6 +70,12 @@ git = 'https://github.com/paritytech/substrate.git'
 package = 'srml-balances'
 branch = 'master'
 
+[dependencies.transaction-payment]
+default_features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'srml-transaction-payment'
+branch = 'master'
+
 [dependencies.babe]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
@@ -185,4 +191,5 @@ std = [
 	"basic-token/std",
 	"check-membership/std",
 	"schedule-on-finalize/std",
+	"transaction-payment/std"
 ]

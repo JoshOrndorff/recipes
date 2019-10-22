@@ -17,7 +17,7 @@ use sr_primitives::{
 };
 use sr_primitives::traits::{NumberFor, BlakeTwo256, Block as BlockT, StaticLookup, Verify, ConvertInto};
 use sr_primitives::weights::Weight;
-use babe::{AuthorityId as BabeId/*, SameAuthoritiesForever*/};
+use babe::{AuthorityId as BabeId, SameAuthoritiesForever};
 use grandpa::{AuthorityId as GrandpaId, AuthorityWeight as GrandpaWeight};
 use grandpa::fg_primitives;
 use client::{
@@ -180,8 +180,6 @@ impl system::Trait for Runtime {
 	type Header = generic::Header<BlockNumber, BlakeTwo256>;
 	/// The ubiquitous event type.
 	type Event = Event;
-	/// Update weight (to fee) multiplier per-block.
-	type WeightMultiplierUpdate = ();
 	/// The ubiquitous origin type.
 	type Origin = Origin;
 	/// Maximum number of block number to block hash mappings to keep (oldest pruned first).
@@ -203,7 +201,7 @@ parameter_types! {
 impl babe::Trait for Runtime {
 	type EpochDuration = EpochDuration;
 	type ExpectedBlockTime = ExpectedBlockTime;
-	//type EpochChangeTrigger = SameAuthoritiesForever;
+	type EpochChangeTrigger = SameAuthoritiesForever;
 }
 
 impl grandpa::Trait for Runtime {
@@ -237,8 +235,6 @@ parameter_types! {
 	pub const ExistentialDeposit: u128 = 500;
 	pub const TransferFee: u128 = 0;
 	pub const CreationFee: u128 = 0;
-	pub const TransactionBaseFee: u128 = 0;
-	pub const TransactionByteFee: u128 = 1;
 }
 
 impl balances::Trait for Runtime {
@@ -250,15 +246,11 @@ impl balances::Trait for Runtime {
 	type OnNewAccount = Indices;
 	/// The ubiquitous event type.
 	type Event = Event;
-	type TransactionPayment = ();
 	type DustRemoval = ();
 	type TransferPayment = ();
 	type ExistentialDeposit = ExistentialDeposit;
 	type TransferFee = TransferFee;
 	type CreationFee = CreationFee;
-	type TransactionBaseFee = TransactionBaseFee;
-	type TransactionByteFee = TransactionByteFee;
-	type WeightToFee = ConvertInto;
 }
 
 impl sudo::Trait for Runtime {
@@ -329,6 +321,20 @@ impl schedule_on_finalize::Trait for Runtime {
 	type ExecutionFrequency = ClearFrequency; // for convenience (can use a different constant)
 }
 
+parameter_types! {
+	pub const TransactionBaseFee: u128 = 0;
+	pub const TransactionByteFee: u128 = 1;
+}
+
+impl transaction_payment::Trait for Runtime {
+	type Currency = balances::Module<Runtime>;
+	type OnTransactionPayment = ();
+	type TransactionBaseFee = TransactionBaseFee;
+	type TransactionByteFee = TransactionByteFee;
+	type WeightToFee = ConvertInto;
+	type FeeMultiplierUpdate = ();
+}
+
 construct_runtime!(
 	pub enum Runtime where
 		Block = Block,
@@ -343,6 +349,7 @@ construct_runtime!(
 		Balances: balances::{default, Error},
 		RandomnessCollectiveFlip: randomness_collective_flip::{Module, Call, Storage},
 		Sudo: sudo,
+		TransactionPayment: transaction_payment::{Module, Storage},
 		// The Recipe Modules
 		SimpleEvent: simple_event::{Module, Call, Event},
 		GenericEvent: generic_event::{Module, Call, Event<T>},
@@ -378,7 +385,7 @@ pub type SignedExtra = (
 	system::CheckEra<Runtime>,
 	system::CheckNonce<Runtime>,
 	system::CheckWeight<Runtime>,
-	balances::TakeFees<Runtime>
+	transaction_payment::ChargeTransactionPayment<Runtime>
 );
 /// Unchecked extrinsic type as expected by this runtime.
 pub type UncheckedExtrinsic = generic::UncheckedExtrinsic<Address, Call, Signature, SignedExtra>;
