@@ -1,4 +1,4 @@
-use super_node_runtime::{
+use super_runtime::{
 	AccountId, BabeConfig, BalancesConfig, GenesisConfig, GrandpaConfig,
 	SudoConfig, IndicesConfig, SystemConfig, WASM_BINARY,
 };
