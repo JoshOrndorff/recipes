@@ -1,5 +1,5 @@
 [package]
-name = "super-node-runtime"
+name = "super-runtime"
 version = "2.0.0"
 authors = ["Anonymous"]
 edition = "2018"

@@ -1,6 +1,6 @@
 # Runtime Configurations
 
-* [Super Runtime Configuration](./super-node-runtime/)
+* [Super Runtime Configuration](./super-runtime/)
 
 ### TODO
 - [ ] loosely coupled modules
