@@ -1,5 +1,5 @@
-//! A Super Node runtime. This runtime intends to demonstrate all the recipes in the kitchen
-//! in a single super runtime. At the moment it only contains the adding machine.
+//! A Super Runtime. This runtime demonstrates all the recipes in the kitchen
+//! in a single super runtime.
 
 #![cfg_attr(not(feature = "std"), no_std)]
 // `construct_runtime!` does a lot of recursion and requires us to increase the limit to 256.
@@ -108,8 +108,8 @@ pub mod opaque {
 
 /// This runtime version.
 pub const VERSION: RuntimeVersion = RuntimeVersion {
-	spec_name: create_runtime_str!("super-node"),
-	impl_name: create_runtime_str!("super-node"),
+	spec_name: create_runtime_str!("super-runtime"),
+	impl_name: create_runtime_str!("super-runtime"),
 	authoring_version: 3,
 	spec_version: 4,
 	impl_version: 4,

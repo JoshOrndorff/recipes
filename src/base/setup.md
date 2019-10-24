@@ -67,7 +67,7 @@ Let us take a deeper look at the Kitchen Node. Inside
 
 ```TOML
 # -- snip --
-runtime = { package = "super-node-runtime", path = "../runtimes/super-node-runtime" }
+runtime = { package = "super-runtime", path = "../runtimes/super-runtime" }
 # -- snip --
 ```
 
@@ -89,9 +89,9 @@ macro_rules! new_full_start {
 }
 ```
 
-The `runtime` folder contains two folders, `super-node-genesis` for specifying how the first block on the blockchain (genesis block) is being produced, and `super-node-runtime` for specifying how the node runtime behaves. Let us focus on one module `simple-event` in the runtime. In
+The `runtime` folder contains two folders, `super-genesis` for specifying how the first block on the blockchain (genesis block) is being produced, and `super-runtime` for specifying how the node runtime behaves. Let us focus on one module `simple-event` in the runtime. In
 
-**`kitchen/runtimes/super-node-runtime/Cargo.toml`**
+**`kitchen/runtimes/super-runtime/Cargo.toml`**
 
 ```TOML
 # -- snip --
@@ -105,7 +105,7 @@ simple-event = { package = "simple-event", path = "../../modules/simple-event", 
 
 This is where the node runtime includes additional module `simple-event` written in this recipe. The module is then included into the runtime by:
 
-**`kitchen/runtimes/super-node-runtime/src/lib.rs`**
+**`kitchen/runtimes/super-runtime/src/lib.rs`**
 
 ```Rust
 // -- snip --
@@ -131,7 +131,7 @@ construct_runtime!(
 
 Finally, you can see how the `simple-event` module is specified in `kitchen/modules/simple-event/src/lib.rs`.
 
-This is the general pattern used throughout these recipes. We first talk about a new piece of module code stored in `kitchen/modules/<module-name>/src/lib.rs`. The module is then included into the runtime by adding the module name and relative path in `kitchen/runtimes/super-node-runtime/Cargo.toml` (if not yet added) and updating `kitchen/runtimes/super-node-runtime/src/lib.rs`.
+This is the general pattern used throughout these recipes. We first talk about a new piece of module code stored in `kitchen/modules/<module-name>/src/lib.rs`. The module is then included into the runtime by adding the module name and relative path in `kitchen/runtimes/super-runtime/Cargo.toml` (if not yet added) and updating `kitchen/runtimes/super-runtime/src/lib.rs`.
 
 ## Learn More
 
