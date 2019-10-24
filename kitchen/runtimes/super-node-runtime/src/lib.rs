@@ -50,7 +50,7 @@ pub use sr_primitives::BuildStorage;
 pub use timestamp::Call as TimestampCall;
 pub use balances::Call as BalancesCall;
 pub use sr_primitives::{Permill, Perbill};
-pub use support::{StorageValue, construct_runtime, parameter_types};
+pub use support::{StorageValue, construct_runtime, parameter_types, traits::Randomness};
 
 /// An index to a block.
 pub type BlockNumber = u32;
@@ -180,8 +180,6 @@ impl system::Trait for Runtime {
 	type Header = generic::Header<BlockNumber, BlakeTwo256>;
 	/// The ubiquitous event type.
 	type Event = Event;
-	/// Update weight (to fee) multiplier per-block.
-	type WeightMultiplierUpdate = ();
 	/// The ubiquitous origin type.
 	type Origin = Origin;
 	/// Maximum number of block number to block hash mappings to keep (oldest pruned first).
@@ -237,8 +235,6 @@ parameter_types! {
 	pub const ExistentialDeposit: u128 = 500;
 	pub const TransferFee: u128 = 0;
 	pub const CreationFee: u128 = 0;
-	pub const TransactionBaseFee: u128 = 0;
-	pub const TransactionByteFee: u128 = 1;
 }
 
 impl balances::Trait for Runtime {
@@ -250,15 +246,11 @@ impl balances::Trait for Runtime {
 	type OnNewAccount = Indices;
 	/// The ubiquitous event type.
 	type Event = Event;
-	type TransactionPayment = ();
 	type DustRemoval = ();
 	type TransferPayment = ();
 	type ExistentialDeposit = ExistentialDeposit;
 	type TransferFee = TransferFee;
 	type CreationFee = CreationFee;
-	type TransactionBaseFee = TransactionBaseFee;
-	type TransactionByteFee = TransactionByteFee;
-	type WeightToFee = ConvertInto;
 }
 
 impl sudo::Trait for Runtime {
@@ -329,6 +321,20 @@ impl schedule_on_finalize::Trait for Runtime {
 	type ExecutionFrequency = ClearFrequency; // for convenience (can use a different constant)
 }
 
+parameter_types! {
+	pub const TransactionBaseFee: u128 = 0;
+	pub const TransactionByteFee: u128 = 1;
+}
+
+impl transaction_payment::Trait for Runtime {
+	type Currency = balances::Module<Runtime>;
+	type OnTransactionPayment = ();
+	type TransactionBaseFee = TransactionBaseFee;
+	type TransactionByteFee = TransactionByteFee;
+	type WeightToFee = ConvertInto;
+	type FeeMultiplierUpdate = ();
+}
+
 construct_runtime!(
 	pub enum Runtime where
 		Block = Block,
@@ -341,7 +347,9 @@ construct_runtime!(
 		Grandpa: grandpa::{Module, Call, Storage, Config, Event},
 		Indices: indices::{default, Config<T>},
 		Balances: balances::{default, Error},
+		RandomnessCollectiveFlip: randomness_collective_flip::{Module, Call, Storage},
 		Sudo: sudo,
+		TransactionPayment: transaction_payment::{Module, Storage},
 		// The Recipe Modules
 		SimpleEvent: simple_event::{Module, Call, Event},
 		GenericEvent: generic_event::{Module, Call, Event<T>},
@@ -377,7 +385,7 @@ pub type SignedExtra = (
 	system::CheckEra<Runtime>,
 	system::CheckNonce<Runtime>,
 	system::CheckWeight<Runtime>,
-	balances::TakeFees<Runtime>
+	transaction_payment::ChargeTransactionPayment<Runtime>
 );
 /// Unchecked extrinsic type as expected by this runtime.
 pub type UncheckedExtrinsic = generic::UncheckedExtrinsic<Address, Call, Signature, SignedExtra>;
@@ -425,7 +433,7 @@ impl_runtime_apis! {
 		}
 
 		fn random_seed() -> <Block as BlockT>::Hash {
-			System::random_seed()
+			RandomnessCollectiveFlip::random_seed()
 		}
 	}
 

@@ -18,7 +18,7 @@
     - [Types and Traits](./design/ttraits.md)
     - [Economic Security](./design/econsecurity.md)
     - [Runtime Errors and Testing](./design/errtesting.md)
- - [Condition Oriented Programming](./declarative/README.md)
+- [Condition Oriented Programming](./declarative/README.md)
     - [Ensure Checks](./declarative/ensure.md)
     - [Fixed Point Arithmetic](./declarative/fpamath.md)
     - [Verify Signed Messages; Custom Origin](./declarative/verify.md)
