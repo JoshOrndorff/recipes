@@ -23,11 +23,11 @@ jobs:
             cargo check
             cd ..
       - run:
-        name: Build Basic Token
-        command: |
-          cd basic-token
-          cargo check
-          cd ..
+          name: Build Basic Token
+          command: |
+            cd basic-token
+            cargo check
+            cd ..
       # - persist_to_workspace:
       #     # relative to working_directory
       #     root: "./"
