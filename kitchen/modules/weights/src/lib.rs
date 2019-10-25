@@ -65,6 +65,31 @@ impl<T> ClassifyDispatch<T> for Quadratic {
 	}
 }
 
+/// A final scale to weight transactions. This one weighs
+/// transactions where the first parameter is bool. If
+/// the bool is true, then the weight is linear in the
+/// second parameter. Otherwise the weight is constant.
+pub struct Conditional(u32);
+
+impl WeighData<(&bool, &u32)> for Conditional {
+	fn weigh_data(&self, (switch, val): (&bool, &u32)) -> Weight {
+
+		if *switch {
+			val.saturating_mul(self.0)
+		}
+		else {
+			self.0
+		}
+	}
+}
+
+impl<T> ClassifyDispatch<T> for Conditional {
+	fn classify_dispatch(&self, _: T) -> DispatchClass {
+		// Classify all calls as Normal (which is the default)
+		Default::default()
+	}
+}
+
 decl_module! {
 	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
 
@@ -120,7 +145,7 @@ decl_module! {
 		// the same order as the compute required by the transaction.
 		#[weight = Quadratic(200, 30, 100)]
 		fn complex_calculations(_origin, x: u32, y: u32) -> Result {
-			// This first part performs y relatively cheap (hence 30)
+			// This first part performs a relatively cheap (hence 30)
 			// in-memory calculations.
 			let mut part1 = 0;
 			for _i in 1..=y {
@@ -136,6 +161,22 @@ decl_module! {
 
 			// One final storage write (hence 100)
 			StoredValue::put(part1);
+
+			Ok(())
+		}
+
+		// Here the first parameter, a boolean has a significant effect
+		// on the computational intensity of the call.
+		#[weight = Conditional(200)]
+		fn add_or_set(_origin, add_flag: bool, val: u32) -> Result {
+			if add_flag {
+				StoredValue::put(&val);
+			}
+			else {
+				for _i in 1..=val {
+					StoredValue::put(StoredValue::get());
+				}
+			}
 
 			Ok(())
 		}
