@@ -66,6 +66,31 @@ jobs:
           command: |
             cd kitchen/modules/lockable-currency
             cargo check
+      - run:
+          name: Check Module Constant Config
+          command: |
+            cd kitchen/modules/module-constant-config
+            cargo check
+      - run:
+          name: Check Reservable Currency
+          command: |
+            cd kitchen/modules/reservable-currency
+            cargo check
+      - run:
+          name: Check Schedule on Finalize
+          command: |
+            cd kitchen/modules/schedule-on-finalize
+            cargo check
+      - run:
+          name: Check Simple Event
+          command: |
+            cd kitchen/modules/simple-event
+            cargo check
+      - run:
+          name: Check Simple Map
+          command: |
+            cd kitchen/modules/simple-map
+            cargo check
       # - persist_to_workspace:
       #     # relative to working_directory
       #     root: "./"
