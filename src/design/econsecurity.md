@@ -8,7 +8,7 @@ Any resources used by a transaction must explicitly be paid for, and it is a mod
 
 
 
-Substrate provides several ways to affect the fees charges for executing a transaction. Substrate developer hub contains full details about [fees]() and [weights]()
+Substrate provides several ways to affect the fees charges for executing a transaction. Substrate developer hub contains full details about [fees](https://substrate.dev/docs/en/next/development/module/fees) and [weights](https://substrate.dev/docs/en/next/conceptual/runtime/weight).
 
 * Base fee - Applies a fixed fee to each and every transaction. A parameter in the `transaction_payment` module.
 
