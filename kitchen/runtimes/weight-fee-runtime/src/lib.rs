@@ -235,8 +235,8 @@ impl weights::Trait for Runtime {}
 
 // --------------------- Multiple Options for WeightToFee -----------------------
 
-/// Convert from weight to balance via a simple coefficient multiplication
-/// The associated type C encapsulates a constant in units of balance per weight
+/// Convert from weight to balance via a simple coefficient multiplication. The associated type C
+/// encapsulates a constant in units of balance per weight.
 pub struct LinearWeightToFee<C>(rstd::marker::PhantomData<C>);
 
 impl<C> Convert<Weight, Balance> for LinearWeightToFee<C>
@@ -250,8 +250,8 @@ impl<C> Convert<Weight, Balance> for LinearWeightToFee<C>
 	}
 }
 
-/// Convert from weight to balance via a quadratic curve
-/// The type parameters encapsulate the coefficients
+/// Convert from weight to balance via a quadratic curve. The type parameters encapsulate the
+/// coefficients.
 pub struct QuadraticWeightToFee<C0, C1, C2>(C0, C1, C2);
 
 impl<C0, C1, C2> Convert<Weight, Balance> for QuadraticWeightToFee<C0, C1, C2>
@@ -305,7 +305,7 @@ impl transaction_payment::Trait for Runtime {
 	type TransactionByteFee = TransactionByteFee;
 
 	// Function to convert module's weight to a chargeable fee.
-	// Enable exactly one of the following examplesone of the following
+	// Enable exactly one of the following examples
 	//type WeightToFee = ConvertInto;
 	//type WeightToFee = LinearWeightToFee<FeeWeightRatio>;
 	type WeightToFee = QuadraticWeightToFee<WeightFeeConstant, WeightFeeLinear, WeightFeeQuadratic>;

@@ -1,4 +1,4 @@
-#![cfg_attr(not(feature = "std"), no_std)]
+// #![cfg_attr(not(feature = "std"), no_std)]
 
 // Transaction Weight Examples
 // https://crates.parity.io/sr_primitives/weights/index.html
@@ -13,11 +13,9 @@ decl_storage! {
 	}
 }
 
-/// A "scale" to weigh transactions. This scale can be used
-/// with any transactions that take a single argument of
-/// type u32. The ultimate weight of the transaction is the
-/// product of the transaction parameter and the field of
-/// this struct.
+// A "scale" to weigh transactions. This scale can be used with any transactions that take a
+// single argument of type u32. The ultimate weight of the transaction is the / product of the
+// transaction parameter and the field of this struct.
 pub struct Linear(u32);
 
 // The actual weight calculation happens in the
@@ -31,9 +29,8 @@ impl WeighData<(&u32,)> for Linear {
 	}
 }
 
-// Any struct that is used to weigh data must also implement
-// ClassifyDispatchInfo. Here we calssify the transaction as
-// Normal (as opposed to operational.)
+// Any struct that is used to weigh data must also implement ClassifyDispatchInfo. Here we calssify
+// the transaction as Normal (as opposed to operational.)
 impl<T> ClassifyDispatch<T> for Linear {
 	fn classify_dispatch(&self, _: T) -> DispatchClass {
 		// Classify all calls as Normal (which is the default)
@@ -41,10 +38,9 @@ impl<T> ClassifyDispatch<T> for Linear {
 	}
 }
 
-/// Another scale to weight transactions. This one is more complex.
-/// It computes weight according to the formula a*x^2 + b*y + c where
-/// a, b, and c are fields in the struct, and x and y are transaction
-/// parameters.
+// Another scale to weight transactions. This one is more complex. / It computes weight according
+// to the formula a*x^2 + b*y + c where / a, b, and c are fields in the struct, and x and y are
+// transaction / parameters.
 pub struct Quadratic(u32, u32, u32);
 
 impl WeighData<(&u32, &u32)> for Quadratic {
@@ -65,10 +61,9 @@ impl<T> ClassifyDispatch<T> for Quadratic {
 	}
 }
 
-/// A final scale to weight transactions. This one weighs
-/// transactions where the first parameter is bool. If
-/// the bool is true, then the weight is linear in the
-/// second parameter. Otherwise the weight is constant.
+// A final scale to weight transactions. This one weighs / transactions where the first parameter
+// is bool. If / the bool is true, then the weight is linear in the / second parameter. Otherwise
+// the weight is constant.
 pub struct Conditional(u32);
 
 impl WeighData<(&bool, &u32)> for Conditional {
@@ -93,9 +88,9 @@ impl<T> ClassifyDispatch<T> for Conditional {
 decl_module! {
 	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
 
-		/// Store value does not loop at all so a fixed weight is appropriate
-		/// Fixed weights can be assigned using types available in the Substrate
-		// framework. No custom coding is necessary.
+		// Store value does not loop at all so a fixed weight is appropriate. Fixed weights can
+		// be assigned using types available in the Substrate framework. No custom coding is
+		// necessary.
 		#[weight = SimpleDispatchInfo::FixedNormal(100)]
 		fn store_value(_origin, entry: u32) -> Result {
 
@@ -104,9 +99,9 @@ decl_module! {
 			Ok(())
 		}
 
-		/// add_n sets the storage value n times, so it should cost n times as much as
-		/// store_value. Because it performs both a read and a write, the multiplier
-		/// is set to 200 instead of 100 as before
+		// add_n sets the storage value n times, so it should cost n times as much as
+		// store_value. Because it performs both a read and a write, the multiplier is set to 200
+		// instead of 100 as before.
 		#[weight = Linear(200)]
 		fn add_n(_origin, n: u32) -> Result {
 
@@ -118,17 +113,15 @@ decl_module! {
 			Ok(())
 		}
 
-		/// The actual expense of `double` is proportional to a storage value.
-		/// Dispatch weightings can't use storage values directly, because the
-		/// weight should be computable ahead of time.
-		/// Instead we have the caller pass in the expected storage value
-		/// and we ensure it is correct.
+		// The actual expense of `double` is proportional to a storage value. Dispatch
+		// weightings can't use storage values directly, because the weight should be computable
+		// ahead of time. Instead we have the caller pass in the expected storage value and we
+		// ensure it is correct.
 		#[weight = Linear(200)]
 		fn double(_origin, initial_value: u32) -> Result {
 
-			// Ensure the value passed by the caller actually matches storage
-			// If this condition were not true, the caller would be able to
-			// avoid paying appropriate fees.
+			// Ensure the value passed by the caller actually matches storage If this condition
+			// were not true, the caller would be able to avoid paying appropriate fees.
 			let initial = StoredValue::get();
 			ensure!(initial == initial_value, "Storage value did not match parameter");
 
@@ -139,10 +132,10 @@ decl_module! {
 			Ok(())
 		}
 
-		// This one is quadratic in the first argument plus linear in the second
-		// plus a constant. This calculation is not meant to do something really
-		// useful or common other than demonstrate that weights should grow by
-		// the same order as the compute required by the transaction.
+		// This one is quadratic in the first argument plus linear in the second plus a constant.
+		// This calculation is not meant to do something really useful or common other than
+		// demonstrate that weights should grow by the same order as the compute required by the
+		// transaction.
 		#[weight = Quadratic(200, 30, 100)]
 		fn complex_calculations(_origin, x: u32, y: u32) -> Result {
 			// This first part performs a relatively cheap (hence 30)
@@ -165,8 +158,8 @@ decl_module! {
 			Ok(())
 		}
 
-		// Here the first parameter, a boolean has a significant effect
-		// on the computational intensity of the call.
+		// Here the first parameter, a boolean has a significant effect on the computational
+		// intensity of the call.
 		#[weight = Conditional(200)]
 		fn add_or_set(_origin, add_flag: bool, val: u32) -> Result {
 			if add_flag {
