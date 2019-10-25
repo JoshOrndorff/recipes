@@ -1,5 +1,5 @@
 [package]
-name = "weight"
+name = "weights"
 version = "0.1.0"
 authors = ["Anonymous"]
 edition = "2018"
