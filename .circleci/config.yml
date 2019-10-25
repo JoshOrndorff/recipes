@@ -24,7 +24,8 @@ jobs:
       - run:
           name: Build Adding Machine
           command: |
-            cargo check -p adding-machine
+            cd kitchen/modules/adding-machine
+            cargo check
       # - run:
       #     name: Test
       #     command: yarn test
