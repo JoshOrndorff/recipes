@@ -255,7 +255,7 @@ impl<C> Convert<Weight, Balance> for LinearWeightToFee<C>
 pub struct QuadraticWeightToFee<C0, C1, C2>(C0, C1, C2);
 
 impl<C0, C1, C2> Convert<Weight, Balance> for QuadraticWeightToFee<C0, C1, C2>
- 	where C0: Get<Balance>, C1: Get<Balance>, C2: Get<Balance> {
+	where C0: Get<Balance>, C1: Get<Balance>, C2: Get<Balance> {
 
 	fn convert(w: Weight) -> Balance {
 		let c0 = C0::get();
