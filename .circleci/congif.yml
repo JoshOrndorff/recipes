@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  test:
+  check-modules:
     docker:
       - image: parity/rust:nightly
     working_directory: ~/repo
@@ -22,16 +22,17 @@ jobs:
       #       - node_modules
       #     key: v1-dependencies-{{ checksum "package.json" }}
       - run:
-          name: 
-          command: yarn lint:ci
-      - run:
-          name: Test
-          command: yarn test
-      - persist_to_workspace:
-          # relative to working_directory
-          root: "./"
-          paths:
-            - "./"
+          name: Build Adding Machine
+          command: |
+            cargo check -p adding-machine
+      # - run:
+      #     name: Test
+      #     command: yarn test
+      # - persist_to_workspace:
+      #     # relative to working_directory
+      #     root: "./"
+      #     paths:
+      #       - "./"
 
   deploy:
     docker:
@@ -50,11 +51,11 @@ jobs:
             yarn deploy
 workflows:
   version: 2
-  test_deploy:
+  build-modules:
     jobs:
-      - test:
-          filters: *filter-non-gh-pages
-      - deploy:
-          filters: *filter-only-master
-          requires:
-            - test
+      - build-modules:
+      #     filters: *filter-non-gh-pages
+      # - deploy:
+      #     filters: *filter-only-master
+      #     requires:
+      #       - test
