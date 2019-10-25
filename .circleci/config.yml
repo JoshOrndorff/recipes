@@ -12,11 +12,6 @@ jobs:
       #       - v1-dependencies-{{ checksum "package.json" }}
       #       # fallback to using the latest cache if no exact match is found
       #       - v1-dependencies-
-      # - run:
-      #     name: Install
-      #     command: |
-      #       sudo apt-get install libusb-1.0-0-dev
-      #       yarn install
       # - save_cache:
       #     paths:
       #       - node_modules
@@ -26,30 +21,24 @@ jobs:
           command: |
             cd kitchen/modules/adding-machine
             cargo check
-      # - run:
-      #     name: Test
-      #     command: yarn test
+            cd ..
+      - run:
+        name: Build Basic Token
+        command: |
+          cd basic-token
+          cargo check
+          cd ..
       # - persist_to_workspace:
       #     # relative to working_directory
       #     root: "./"
       #     paths:
       #       - "./"
 
-  deploy:
-    docker:
-      - image: circleci/node:10.16
-    working_directory: ~/repo
-    steps:
-      - attach_workspace:
-          at: ~/repo
-      - run:
-          name: Build & Deploy
-          # added skip host key checking to avoid the manual prompt
-          command: |
-            mkdir ~/.ssh/ && echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
-            git config --global user.email "devhub-deploy@users.noreply.github.com"
-            git config --global user.name "Devhub Deployer"
-            yarn deploy
+  #TODO Port the build from travis CI to here
+  #build-book:
+
+
+
 workflows:
   version: 2
   check-modules:

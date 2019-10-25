@@ -5,7 +5,7 @@
 /// the result, without using storage.
 use support::{decl_event, decl_module, dispatch::Result};
 use system::ensure_signed;
-syntax error
+
 pub trait Trait: system::Trait {
     type Event: From<Event> + Into<<Self as system::Trait>::Event>;
 }
