@@ -17,14 +17,54 @@ jobs:
       #       - node_modules
       #     key: v1-dependencies-{{ checksum "package.json" }}
       - run:
-          name: Build Adding Machine
+          name: Check Adding Machine
           command: |
             cd kitchen/modules/adding-machine
             cargo check
       - run:
-          name: Build Basic Token
+          name: Check Basic Token
           command: |
             cd kitchen/modules/basic-token
+            cargo check
+      - run:
+          name: Check Check Membership
+          command: |
+            cd kitchen/modules/check-membership
+            cargo check
+      - run:
+          name: Check Currency Imbalances
+          command: |
+            cd kitchen/modules/currency-imbalances
+            cargo check
+      - run:
+          name: Check Double Map
+          command: |
+            cd kitchen/modules/double-map
+            cargo check
+      - run:
+          name: Check Gen Random
+          command: |
+            cd kitchen/modules/gen-random
+            cargo check
+      - run:
+          name: Check Generic Event
+          command: |
+            cd kitchen/modules/generic-event
+            cargo check
+      - run:
+          name: Check Hello Substrate
+          command: |
+            cd kitchen/modules/hello-substrate
+            cargo check
+      - run:
+          name: Check Linked Map
+          command: |
+            cd kitchen/modules/linked-map
+            cargo check
+      - run:
+          name: Check Lockable Currency
+          command: |
+            cd kitchen/modules/lockable-currency
             cargo check
       # - persist_to_workspace:
       #     # relative to working_directory
