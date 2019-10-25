@@ -21,13 +21,11 @@ jobs:
           command: |
             cd kitchen/modules/adding-machine
             cargo check
-            cd ..
       - run:
           name: Build Basic Token
           command: |
-            cd basic-token
+            cd kitchen/modules/basic-token
             cargo check
-            cd ..
       # - persist_to_workspace:
       #     # relative to working_directory
       #     root: "./"
