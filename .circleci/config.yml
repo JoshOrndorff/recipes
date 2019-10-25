@@ -51,9 +51,9 @@ jobs:
             yarn deploy
 workflows:
   version: 2
-  build-modules:
+  check-modules:
     jobs:
-      - build-modules
+      - check-modules
       #     filters: *filter-non-gh-pages
       # - deploy:
       #     filters: *filter-only-master
