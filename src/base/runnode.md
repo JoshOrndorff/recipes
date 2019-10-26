@@ -29,5 +29,3 @@ Once the compilation is completed, you can first purge any existing blockchain d
 # Start the Kitchen Node
 ./target/release/kitchen-node --dev
 ```
-
-[Next](./interactnode.md), learn how to interact with your node.

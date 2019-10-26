@@ -1,6 +1,6 @@
 # Using the Kitchen
 
-Let us take a deeper look at the Kitchen Node. Inside
+Let us take a deeper look at the [Kitchen Node](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/node). Inside
 
 **`kitchen/node/Cargo.toml`**
 
