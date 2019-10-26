@@ -25,7 +25,6 @@ decl_module! {
     pub struct Module<T: Trait> for enum Call where origin: T::Origin {
         fn deposit_event() = default;
 
-        fn weak_entropy(origin) -> u32{
         fn use_weak_entropy(origin) -> Result {
             let _ = ensure_signed(origin)?;
 
