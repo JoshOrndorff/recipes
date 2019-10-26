@@ -19,7 +19,7 @@ The [`recipes/kitchen`](https://github.com/substrate-developer-hub/recipes/tree/
 
   * [`node`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/node) - contains the code to start the Kitchen Node.
   * [`runtimes`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/runtimes) - contains the runtime of the Kitchen Node.
-  * [`modules`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules) - the runtime includes multiple modules. Each module gives the runtime a new set of functionality. Most of the recipe module code we discuss afterwards is stored under this folder.
+  * [`modules`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules) - each runtime includes multiple modules. Each module gives the runtime a new set of functionality. Most of the recipe module code we discuss afterwards is stored under this folder.
 
 This section teaches users to interact with [`recipes/kitchen`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen) by
 * [Running a Node](./runnode.md)
