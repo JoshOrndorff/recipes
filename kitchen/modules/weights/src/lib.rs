@@ -29,7 +29,7 @@ impl WeighData<(&u32,)> for Linear {
 	}
 }
 
-// Any struct that is used to weigh data must also implement ClassifyDispatchInfo. Here we calssify
+// Any struct that is used to weigh data must also implement ClassifyDispatchInfo. Here we classify
 // the transaction as Normal (as opposed to operational.)
 impl<T> ClassifyDispatch<T> for Linear {
 	fn classify_dispatch(&self, _: T) -> DispatchClass {
