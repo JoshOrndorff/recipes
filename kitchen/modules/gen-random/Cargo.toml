@@ -44,7 +44,7 @@ git = 'https://github.com/paritytech/substrate.git'
 package = 'sr-primitives'
 branch = 'master'
 
-[dev-dependencies.primitives]
+[dependencies.primitives]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'substrate-primitives'
