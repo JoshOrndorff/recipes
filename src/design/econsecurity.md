@@ -18,7 +18,6 @@ Substrate provides several ways to affect the fees charges for executing a trans
 
 * Weight to Fee - A function to convert weight to fee. It doesn't need to be linear, although it often is. The same conversion function is applied across all transactions from all modules in the runtime. This is exemplified briefly below and more thoroughly in the kitchen.
 
-
 ## Assigning Transaction Weights
 
 For simple transactions a fixed weight will do.
