@@ -1,12 +1,12 @@
+//! Child Trie Storage Template
+//! - for efficient storage of (key, value) pairs when **proofs of key inclusion** need to be cheap
+//! - the root of the child trie is used to prove participation of the `key`
+//! - the trie is retained for efficient usage of the associated `value` later
 use primitives::{Blake2Hasher, Hasher};
 use substrate_primitives::storage::well_known_keys::CHILD_STORAGE_KEY_PREFIX;
-/// Child Trie Storage Example (designed to be minimal and generic)
-/// - for efficient storage of (key, value) pairs when **proofs of key inclusion** need to be cheap
-///
-/// - the root of the child trie is used to prove participation of the `key`
-/// - the trie is retained for efficient usage of the associated `value` later
 use support::{
-    decl_event, decl_module, decl_storage, dispatch::Result, ensure, storage::child, traits::Get,
+    decl_event, decl_module, decl_storage, dispatch::Result, ensure, storage::child,
+    traits::Get,
 };
 use system::ensure_signed;
 
@@ -15,13 +15,14 @@ use rstd::prelude::*;
 
 pub trait Trait: system::Trait {
     type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
-
+    
     type UpdateFrequency: Get<Self::BlockNumber>;
 }
 
 // this is the value type associated with the AccountId
-// is `BalanceOf<T>` in the parachain/runtime/crowdfund
+// (is `BalanceOf<T>` in modules/smpl-crowdfund)
 pub type ValAppended = u32;
+// is `FundIndex` in modules/smpl-crowdfund
 pub type ExampleIndex = u32;
 
 #[derive(Encode, Decode, Default)]
@@ -30,8 +31,8 @@ pub struct ExampleObject<AccountId, BlockNumber> {
     /// initiated the example object which will accept new (key, value) submissions
     initiator: AccountId,
     /// sum_of_values (for example purposes)
-    sum: ValAppended,
-    /// maximum sum allowed
+    votes: Vec<(AccountId, Votes)>, // something more minimal, but add to ideation
+    /// defined upper bound on sum
     max_sum: ValAppended,
     /// new submissions accepted until this block number
     end: BlockNumber,
