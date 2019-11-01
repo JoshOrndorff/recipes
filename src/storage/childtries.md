@@ -106,6 +106,6 @@ It may be a good idea to consider using child tries if
 
 Each individual call to read/write to the child trie is more expensive than it would be for `map` or `double_map`. This cost is poorly amortized over a large number of calls, but can be significantly reduced by following a proper batch execution strategy.
 
-Storage proofs associated with child tries are also small in size, thereby allowing for storage on-chain if necessary. Short proofs of inclusion may also prove useful in the cross-chain context (i.e. when exporting data to other chains).
+Storage proofs associated with child tries are small in size, thereby allowing for storage on-chain if necessary. Short proofs of inclusion may also prove useful in the cross-chain context (i.e. when exporting data to other chains).
 
 Constructing and using such proofs can be done via an outside call to the light client. The call would create an extrinsic that returns a proof of inclusion from the runtime. Note that there is no *proper* way of doing this in the runtime at this time.
