@@ -10,7 +10,7 @@ This construction lends itself to efficient removal of subgroups of a dataset (s
 
 In addition, proofs of inclusion are relatively small in size and can be reused to verify membership of the trie in the future.
 
-Every change in the leaves percolates up to the root, thereby providing a complete, succinct history of all changes to the underlying data structure in form of the root hash.
+Every change in the leaves percolates up to the root, thereby providing a complete, succinct history of all changes to the underlying data structure in the form of the trie root hash.
 
 ## Runtime Child Storage <a name = "storj"></a>
 
