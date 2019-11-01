@@ -28,7 +28,7 @@ pub fn kill(storage_key: &[u8], key: &[u8]) {
 }
 ```
 
-`kill_storage` deletes all  `(key, value)` pairs associated with the `storage_key`. [Documentation](https://crates.parity.io/srml_support/storage/child/index.html) shows that the basic API for interacting with a given child trie follows this format:
+[`kill_storage`](https://crates.parity.io/srml_support/storage/child/fn.kill_storage.html) deletes all  `(key, value)` pairs associated with the `storage_key`. [Documentation](https://crates.parity.io/srml_support/storage/child/index.html) shows that the basic API for interacting with a given child trie follows this format:
 
 ```rust
 // pseudocode
