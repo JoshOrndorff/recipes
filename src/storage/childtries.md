@@ -99,8 +99,6 @@ pub fn crowdfund_kill(index: FundIndex) {
 ```
 
 The child trie api is useful when data associated with an identifier needs to be isolated to facilitate efficient batch removal. In this case, all the information associated with a given crowdfund should be removed when the crowdfund is dissolved.
-* data associated with an identifier needs to be isolated to facilitate efficient batch removal (i.e. all the information associated with a given crowdfund is removed when the crowdfund is dissolved)
-* a small proof needs to be stored on-chain or sent between chains (i.e. to verify inclusion of some data)
 
 ## caveat coder
 
