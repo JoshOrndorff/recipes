@@ -98,7 +98,9 @@ pub fn crowdfund_kill(index: FundIndex) {
 }
 ```
 
-It is still to be seen how child tries will be utilized in substrate runtimes, but it is a good candidate for storing data with strong correctness guarantees (all changes reflected in trie root), and a batching-oriented removal schedule based on some associated identity. Other operations like `get` and `put` can be made less expensive by also batching execution.
+It may be a good idea to consider using child tries if
+* data associated with an identifier needs to be isolated to facilitate efficient batch removal (i.e. all the information associated with a given crowdfund is removed when the crowdfund is dissolved)
+* a small proof needs to be stored on-chain or sent between chains (i.e. to verify inclusion of some data)
 
 ## caveat coder
 
