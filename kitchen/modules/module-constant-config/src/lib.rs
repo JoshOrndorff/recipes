@@ -18,7 +18,7 @@ pub trait Trait: system::Trait {
 
 decl_storage! {
 	trait Store for Module<T: Trait> as Example {
-        SingleValue get(single_value): u32;
+        SingleValue get(fn single_value): u32;
 	}
 }
 

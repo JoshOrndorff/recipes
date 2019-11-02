@@ -14,10 +14,10 @@ pub trait Trait: system::Trait {
 
 decl_storage! {
     trait Store for Module<T: Trait> as SocialNetwork {
-        MyFriend get(my_friend): map (T::AccountId, u32) => T::AccountId;
-        FriendsCount get(friends_count): map T::AccountId => u32;
-        AllFriends get(all_friends): map T::AccountId => Vec<T::AccountId>;
-        Blocked get(blocked): map T::AccountId => Vec<T::AccountId>;
+        MyFriend get(fn my_friend): map (T::AccountId, u32) => T::AccountId;
+        FriendsCount get(fn friends_count): map T::AccountId => u32;
+        AllFriends get(fn all_friends): map T::AccountId => Vec<T::AccountId>;
+        Blocked get(fn blocked): map T::AccountId => Vec<T::AccountId>;
     }
 }
 

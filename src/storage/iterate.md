@@ -14,7 +14,7 @@ To maintain a set of `AccountId` to establish group ownership of decisions, it i
 ```rust
 decl_storage! {
 	trait Store for Module<T: Trait> as VecMap {
-        Members get(members): Vec<T::AccountId>;
+        Members get(fn members): Vec<T::AccountId>;
 	}
 }
 ```
@@ -50,8 +50,8 @@ In this example, the helper method facilitates isolation of runtime storage acce
 ```rust
 decl_storage! {
 	trait Store for Module<T: Trait> as VecMap {
-	    CurrentValues get(current_values): Vec<u32>;
-        NewValues get(new_values): Vec<u32>;
+	    CurrentValues get(fn current_values): Vec<u32>;
+        NewValues get(fn new_values): Vec<u32>;
 	}
 }
 ```

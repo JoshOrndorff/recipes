@@ -2,10 +2,10 @@
 
 // Double Map Example w/ remove_prefix
 // https://crates.parity.io/srml_support/storage/trait.StorageDoubleMap.html
-// `double_map` maps two keys to a single value. 
+// `double_map` maps two keys to a single value.
 // the first key might be a group identifier
 // the second key might be a unique identifier
-// `remove_prefix` enables clean removal of all values with the group identifier 
+// `remove_prefix` enables clean removal of all values with the group identifier
 
 use support::{
     ensure, decl_module, decl_storage, decl_event,
@@ -26,9 +26,9 @@ decl_storage! {
         // member score (double map)
         MemberScore: double_map GroupIndex, twox_128(T::AccountId) => u32;
         // get group ID for member
-        GroupMembership get(group_membership): map T::AccountId => GroupIndex;
+        GroupMembership get(fn group_membership): map T::AccountId => GroupIndex;
         // for fast membership checks, see check-membership recipe for more details
-        AllMembers get(all_members): Vec<T::AccountId>;
+        AllMembers get(fn all_members): Vec<T::AccountId>;
 	}
 }
 

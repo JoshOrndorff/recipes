@@ -12,9 +12,9 @@ pub trait Trait: system::Trait {
 
 decl_storage! {
 	trait Store for Module<T: Trait> as VecMap {
-        Members get(members): Vec<T::AccountId>;
-	    CurrentValues get(current_values): Vec<u32>;
-        NewValues get(new_values): Vec<u32>;
+        Members get(fn members): Vec<T::AccountId>;
+	    CurrentValues get(fn current_values): Vec<u32>;
+        NewValues get(fn new_values): Vec<u32>;
 	}
 }
 
@@ -53,7 +53,7 @@ decl_module! {
             current_values.append(&mut Self::new_values());
             Self::deposit_event(RawEvent::AppendVec(user));
             Ok(())
-        } // more examples in srml/elections-phragmen   
+        } // more examples in srml/elections-phragmen
 
         fn add_member(origin) -> Result {
             let new_member = ensure_signed(origin)?;

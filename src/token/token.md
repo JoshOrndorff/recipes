@@ -10,11 +10,11 @@ To implement a simple token transfer with Substrate,
 ```rust
 decl_storage! {
   trait Store for Module<T: Trait> as TokenTransfer {
-    pub TotalSupply get(total_supply): u64 = 21000000; // (1)
+    pub TotalSupply get(fn total_supply): u64 = 21000000; // (1)
 
-    pub GetBalance get(get_balance): map T::AccountId => u64; // (3)
+    pub GetBalance get(fn get_balance): map T::AccountId => u64; // (3)
 
-    Init get(is_init): bool; // (2)
+    Init get(fn is_init): bool; // (2)
   }
 }
 ```
@@ -60,7 +60,7 @@ decl_module! {
       let updated_from_balance = sender_balance.checked_sub(value).ok_or("overflow in calculating balance")?;
       let receiver_balance = Self::get_balance(to.clone());
       let updated_to_balance = receiver_balance.checked_add(value).ok_or("overflow in calculating balance")?;
-      
+
       // reduce sender's balance
       <GetBalance<T>>::insert(sender.clone(), updated_from_balance);
 
@@ -68,7 +68,7 @@ decl_module! {
       <GetBalance<T>>::insert(to.clone(), updated_to_balance);
 
       Self::deposit_event(RawEvent::Transfer(sender, to, value));
-      
+
       Ok(())
     }
   }

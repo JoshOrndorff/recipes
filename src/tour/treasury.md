@@ -36,7 +36,7 @@ In [srml/treasury](https://github.com/paritytech/substrate/blob/master/srml/trea
 decl_storage! {
 	trait Store for Module<T: Trait> as STreasury {
 		/// the amount, the address to which it is sent
-		SpendQ get(spend_q): Vec<(T::AccountId, BalanceOf<T>)>;
+		SpendQ get(fn spend_q): Vec<(T::AccountId, BalanceOf<T>)>;
 	}
 }
 ```
