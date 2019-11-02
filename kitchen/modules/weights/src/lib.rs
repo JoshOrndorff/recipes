@@ -61,8 +61,8 @@ impl<T> ClassifyDispatch<T> for Quadratic {
 	}
 }
 
-// A final scale to weight transactions. This one weighs / transactions where the first parameter
-// is bool. If / the bool is true, then the weight is linear in the / second parameter. Otherwise
+// A final scale to weight transactions. This one weighs transactions where the first parameter
+// is bool. If the bool is true, then the weight is linear in the second parameter. Otherwise
 // the weight is constant.
 pub struct Conditional(u32);
 
