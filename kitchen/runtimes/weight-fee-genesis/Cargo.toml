@@ -1,12 +1,12 @@
 [package]
-name = 'super-genesis'
+name = 'weight-fee-genesis'
 version = "2.0.0"
 authors = ["Anonymous"]
 edition = "2018"
 
 [dependencies.runtime]
-package = 'super-runtime'
-path = '../super-runtime'
+package = 'weight-fee-runtime'
+path = '../weight-fee-runtime'
 
 [dependencies]
 babe-primitives = { package = "substrate-consensus-babe-primitives", git = "https://github.com/paritytech/substrate", branch = "master" }

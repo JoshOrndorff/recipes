@@ -15,7 +15,8 @@ use sr_primitives::{
 	ApplyResult, transaction_validity::TransactionValidity, generic, create_runtime_str,
 	impl_opaque_keys, AnySignature
 };
-use sr_primitives::traits::{NumberFor, BlakeTwo256, Block as BlockT, StaticLookup, Verify, ConvertInto};
+use sr_primitives::traits::{NumberFor, BlakeTwo256, Block as BlockT, StaticLookup, Verify, ConvertInto, Convert};
+use support::traits::Get;
 use sr_primitives::weights::Weight;
 use babe::{AuthorityId as BabeId, SameAuthoritiesForever};
 use grandpa::{AuthorityId as GrandpaId, AuthorityWeight as GrandpaWeight};
@@ -27,22 +28,6 @@ use client::{
 use version::RuntimeVersion;
 #[cfg(feature = "std")]
 use version::NativeVersion;
-
-// The Recipe Modules
-use simple_event;
-use generic_event;
-use adding_machine;
-use single_value;
-use vec_set;
-use storage_cache;
-use simple_map;
-use double_map;
-use struct_storage;
-use module_constant_config;
-use basic_token;
-use check_membership;
-use schedule_on_finalize;
-// use smpl_treasury;
 
 // A few exports that help ease life for downstream crates.
 #[cfg(any(feature = "std", test))]
@@ -117,19 +102,6 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
 };
 
 /// Constants for Babe.
-
-/// Since BABE is probabilistic this is the average expected block time that
-/// we are targetting. Blocks will be produced at a minimum duration defined
-/// by `SLOT_DURATION`, but some slots will not be allocated to any
-/// authority and hence no block will be produced. We expect to have this
-/// block time on average following the defined slot duration and the value
-/// of `c` configured for BABE (where `1 - c` represents the probability of
-/// a slot being empty).
-/// This value is only used indirectly to define the unit constants below
-/// that are expressed in blocks. The rest of the code should use
-/// `SLOT_DURATION` instead (like the timestamp module for calculating the
-/// minimum period).
-/// <https://research.web3.foundation/en/latest/polkadot/BABE/Babe/#6-practical-results>
 pub const MILLISECS_PER_BLOCK: u64 = 6000;
 
 pub const SLOT_DURATION: u64 = MILLISECS_PER_BLOCK;
@@ -258,6 +230,64 @@ impl sudo::Trait for Runtime {
 	type Proposal = Call;
 }
 
+impl weights::Trait for Runtime {}
+
+
+// --------------------- Multiple Options for WeightToFee -----------------------
+
+/// Convert from weight to balance via a simple coefficient multiplication. The associated type C
+/// encapsulates a constant in units of balance per weight.
+pub struct LinearWeightToFee<C>(rstd::marker::PhantomData<C>);
+
+impl<C> Convert<Weight, Balance> for LinearWeightToFee<C>
+	where C: Get<Balance> {
+
+	fn convert(w: Weight) -> Balance {
+		// substrate-node a weight of 10_000 (smallest non-zero weight) to be mapped to 10^7 units of
+		// fees, hence:
+		let coefficient = C::get();
+		Balance::from(w).saturating_mul(coefficient)
+	}
+}
+
+/// Convert from weight to balance via a quadratic curve. The type parameters encapsulate the
+/// coefficients.
+pub struct QuadraticWeightToFee<C0, C1, C2>(C0, C1, C2);
+
+impl<C0, C1, C2> Convert<Weight, Balance> for QuadraticWeightToFee<C0, C1, C2>
+	where C0: Get<Balance>, C1: Get<Balance>, C2: Get<Balance> {
+
+	fn convert(w: Weight) -> Balance {
+		let c0 = C0::get();
+		let c1 = C1::get();
+		let c2 = C2::get();
+		let w = Balance::from(w);
+
+		// All the safe math reduces to
+		// c0 + c1 * w + c2 * w * w
+
+		let c1w = c1.saturating_mul(w);
+		let c2w2 = c2.saturating_mul(w).saturating_mul(w);
+
+		c0.saturating_add(c1w).saturating_add(c2w2)
+	}
+}
+
+
+
+// Enable only when WeightToFee = LinearWeightToFee
+// parameter_types!{
+// 	pub const FeeWeightRatio: u128 = 1_000;
+// }
+
+// Enable only when WeightToFee = QuadraticWeightToFee
+parameter_types! {
+	pub const WeightFeeConstant: u128 = 1_000;
+	pub const WeightFeeLinear: u128 = 100;
+	pub const WeightFeeQuadratic : u128 = 10;
+}
+
+// Always necessary
 parameter_types! {
 	pub const TransactionBaseFee: u128 = 0;
 	pub const TransactionByteFee: u128 = 1;
@@ -266,74 +296,26 @@ parameter_types! {
 impl transaction_payment::Trait for Runtime {
 	type Currency = balances::Module<Runtime>;
 	type OnTransactionPayment = ();
+
+	// Base fee is applied to every single transaction
 	type TransactionBaseFee = TransactionBaseFee;
+
+	// Byte fee is multiplied by the length of the
+	// serialized transaction in bytes
 	type TransactionByteFee = TransactionByteFee;
-	type WeightToFee = ConvertInto;
+
+	// Function to convert module's weight to a chargeable fee.
+	// Enable exactly one of the following examples
+	//type WeightToFee = ConvertInto;
+	//type WeightToFee = LinearWeightToFee<FeeWeightRatio>;
+	type WeightToFee = QuadraticWeightToFee<WeightFeeConstant, WeightFeeLinear, WeightFeeQuadratic>;
+
+	//TODO Explore how to change FeeMultiplierUpdate
 	type FeeMultiplierUpdate = ();
 }
 
-// ---------------------- Recipe Runtime Configurations ----------------------
-impl simple_event::Trait for Runtime {
-	type Event = Event;
-}
+// --------------------------------------------
 
-impl generic_event::Trait for Runtime {
-	type Event = Event;
-}
-
-impl adding_machine::Trait for Runtime {
-	type Event = Event;
-}
-
-impl single_value::Trait for Runtime {
-	type Event = Event;
-}
-
-impl vec_set::Trait for Runtime {
-	type Event = Event;
-}
-
-impl storage_cache::Trait for Runtime {
-	type Event = Event;
-}
-
-impl simple_map::Trait for Runtime {
-	type Event = Event;
-}
-
-impl double_map::Trait for Runtime {
-	type Event = Event;
-}
-
-impl linked_map::Trait for Runtime {
-	type Event = Event;
-}
-
-impl struct_storage::Trait for Runtime { }
-
-parameter_types! {
-	pub const MaxAddend: u32 = 1738;
-	pub const ClearFrequency: u32 = 10;
-}
-
-impl module_constant_config::Trait for Runtime {
-	type Event = Event;
-	type MaxAddend = MaxAddend;
-	type ClearFrequency = ClearFrequency;
-}
-
-impl basic_token::Trait for Runtime {
-	type Event = Event;
-}
-
-impl check_membership::Trait for Runtime {
-	type Event = Event;
-}
-
-impl schedule_on_finalize::Trait for Runtime {
-	type Event = Event;
-	type ExecutionFrequency = ClearFrequency; // for convenience (can use a different constant)
-}
 
 construct_runtime!(
 	pub enum Runtime where
@@ -351,20 +333,7 @@ construct_runtime!(
 		Sudo: sudo,
 		TransactionPayment: transaction_payment::{Module, Storage},
 		// The Recipe Modules
-		SimpleEvent: simple_event::{Module, Call, Event},
-		GenericEvent: generic_event::{Module, Call, Event<T>},
-		AddingMachine: adding_machine::{Module, Call, Event},
-		SingleValue: single_value::{Module, Call, Storage, Event<T>},
-		VecSet: vec_set::{Module, Call, Storage, Event<T>},
-		StorageCache: storage_cache::{Module, Call, Storage, Event<T>},
-		SimpleMap: simple_map::{Module, Call, Storage, Event<T>},
-		DoubleMap: double_map::{Module, Call, Storage, Event<T>},
-		LinkedMap: linked_map::{Module, Call, Storage, Event<T>},
-		StructStorage: struct_storage::{Module, Call, Storage},
-		ModuleConstantConfig: module_constant_config::{Module, Call, Storage, Event},
-		BasicToken: basic_token::{Module, Call, Storage, Event<T>},
-		CheckMembership: check_membership::{Module, Call, Storage, Event<T>},
-		ScheduleOnFinalize: schedule_on_finalize::{Module, Call, Storage, Event<T>},
+		Weights: weights::{Module, Call, Storage},
 	}
 );
 

@@ -38,6 +38,8 @@ basic-authorship = { package = "substrate-basic-authorship", git = 'https://gith
 # Your runtime must have the necessary runtime modules to support consensus (Babe, Grandpa, etc)
 runtime = { package = "super-runtime", path = "../runtimes/super-runtime" }
 runtime-genesis = { package = "super-genesis", path = "../runtimes/super-genesis" }
+# runtime = { package = "weight-fee-runtime", path = "../runtimes/weight-fee-runtime"}
+# runtime-genesis = { package = "weight-fee-genesis", path = "../runtimes/weight-fee-genesis"}
 
 [build-dependencies]
 vergen = "3.0.4"
