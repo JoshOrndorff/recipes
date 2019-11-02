@@ -99,6 +99,10 @@ decl_module! {
 			Ok(())
 		}
 
+		// WARNING: The functions that follow, allow the caller to control the
+		// amount of computation being performed. This is ONLY SAFE when using
+		// custom weighting structs as shown here.
+
 		// add_n sets the storage value n times, so it should cost n times as much as
 		// store_value. Because it performs both a read and a write, the multiplier is set to 200
 		// instead of 100 as before.
