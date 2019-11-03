@@ -27,7 +27,9 @@ decl_storage! {
     }
 }
 
-decl_module! {pub struct Module<T: Trait> for enum Call where origin: T::Origin {}}
+decl_module! {
+    pub struct Module<T: Trait> for enum Call where origin: T::Origin {}
+}
 
 impl<T: Trait> Module<T> {
     pub fn id_from_index(index: ObjectCount) -> Vec<u8> {
