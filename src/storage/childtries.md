@@ -1,4 +1,4 @@
-# Cheap Membership Proofs: Child Tries
+# Child Tries
 *[`kitchen/modules/child-trie`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/child-trie)*, *[`kitchen/modules/smpl-crowdfund`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/smpl-crowdfund)*
 
 * [Runtime Child Storage](#storj)

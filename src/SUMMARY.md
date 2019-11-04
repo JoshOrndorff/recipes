@@ -12,7 +12,7 @@
     - [Set Storage and Iteration](./storage/iterate.md)
     - [Lists: Maps vs Linked Maps](./storage/enumerated.md)
     - [Efficent Subgroup Removal by Subkey: Double Maps](./storage/double.md)
-    - [Cheap Membership Proofs: Child Tries](./storage/childtries.md)
+    - [Child Tries](./storage/childtries.md)
     - [Configurable Constants](./storage/constants.md)
 - [Best Practices](./design/README.md)
     - [Types and Traits](./design/ttraits.md)
