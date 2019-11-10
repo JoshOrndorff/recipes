@@ -13,11 +13,11 @@ pub trait Trait: system::Trait {
 decl_storage! {
     trait Store for Module<T: Trait> as StorageCache {
         // copy type
-        SomeCopyValue get(some_copy_value): u32;
+        SomeCopyValue get(fn some_copy_value): u32;
 
         // clone type
-        KingMember get(king_member): T::AccountId;
-        GroupMembers get(group_members): Vec<T::AccountId>;
+        KingMember get(fn king_member): T::AccountId;
+        GroupMembers get(fn group_members): Vec<T::AccountId>;
     }
 }
 
@@ -56,7 +56,7 @@ decl_module! {
             Self::deposit_event(RawEvent::InefficientValueChange(another_calculation, now));
             Ok(())
         }
-        
+
         // (Copy) more efficient value change
         fn swap_value_w_copy(origin, some_val: u32) -> Result {
             let _ = ensure_signed(origin)?;
@@ -71,14 +71,14 @@ decl_module! {
         }
 
         //  (Clone) inefficient implementation
-        // swaps the king account if 
-        // (1) other account is member && 
+        // swaps the king account if
+        // (1) other account is member &&
         // (2) existing king isn't
         fn swap_king_no_cache(origin) -> Result {
             let new_king = ensure_signed(origin)?;
             let existing_king = <KingMember<T>>::get();
 
-            // only places a new account if 
+            // only places a new account if
             // (1) the existing account is not a member &&
             // (2) the new account is a member
             ensure!(!Self::is_member(existing_king), "is a member so maintains priority");
@@ -94,8 +94,8 @@ decl_module! {
         }
 
         //  (Clone) better implementation
-        // swaps the king account if 
-        // (1) other account is member && 
+        // swaps the king account if
+        // (1) other account is member &&
         // (2) existing king isn't
         fn swap_king_with_cache(origin) -> Result {
             let new_king = ensure_signed(origin)?;
@@ -103,7 +103,7 @@ decl_module! {
             // prefer to clone previous call rather than repeat call unnecessarily
             let old_king = existing_king.clone();
 
-            // only places a new account if 
+            // only places a new account if
             // (1) the existing account is not a member &&
             // (2) the new account is a member
             ensure!(!Self::is_member(existing_king), "is a member so maintains priority");

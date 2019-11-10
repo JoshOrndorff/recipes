@@ -11,7 +11,7 @@ pub trait Trait: system::Trait {
 
 decl_storage! {
 	trait Store for Module<T: Trait> as SimpleMap {
-		SimpleMap get(simple_map): map T::AccountId => u32;
+		SimpleMap get(fn simple_map): map T::AccountId => u32;
 	}
 }
 

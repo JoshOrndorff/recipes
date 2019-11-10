@@ -13,9 +13,9 @@ pub trait Trait: system::Trait {
 
 decl_storage! {
     trait Store for Module<T: Trait> as PGeneric {
-        Owner get(owner): T::AccountId;
+        Owner get(fn owner): T::AccountId;
 
-        Members get(members): Vec<T::AccountId>;
+        Members get(fn members): Vec<T::AccountId>;
     }
 }
 

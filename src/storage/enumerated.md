@@ -10,8 +10,8 @@ use support::{StorageValue, StorageMap};
 
 decl_storage! {
     trait Store for Module<T: Trait> as Example {
-        TheList get(the_list): map u32 => T::AccountId;
-        TheCounter get(the_counter): u32;
+        TheList get(fn the_list): map u32 => T::AccountId;
+        TheCounter get(fn the_counter): u32;
     }
 }
 ```
@@ -45,7 +45,7 @@ fn add_member(origin) -> Result {
     Self::deposit_event(RawEvent::MemberAdded(who));
 
     Ok(())
-} 
+}
 ```
 
 To remove an `AccountId`, call the `remove` method for the `StorageMap` type at the relevant index. In this case, it isn't necessary to update the indices of other `proposal`s; order is not relevant.
@@ -74,7 +74,7 @@ Because the code doesn't update the indices of other `AccountId`s in the map, it
 To preserve storage so that the list doesn't continue growing even after removing elements, invoke the **swap and pop** algorithm:
 1. swap the element to be removed with the element at the head of the *list* (the element with the highest index in the map)
 2. remove the element recently placed at the highest index
-3. decrement the `TheCount` value. 
+3. decrement the `TheCount` value.
 
 Use the *swap and pop* algorithm to remove elements from the list.
 
@@ -113,8 +113,8 @@ use support::{StorageMap, EnumerableStorageMap}; // no StorageValue necessary
 
 decl_storage! {
     trait Store for Module<T: Trait> as Example {
-        LinkedList get(linked_list): linked_map u32 => T::AccountId;
-        LinkedCounter get(linked_counter): u32;
+        LinkedList get(fn linked_list): linked_map u32 => T::AccountId;
+        LinkedCounter get(fn linked_counter): u32;
     }
 }
 ```

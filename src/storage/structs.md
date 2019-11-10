@@ -21,7 +21,7 @@ To use the `Encode` and `Decode` traits, it is necessary to import them from `su
 use support::codec::{Encode, Decode};
 ```
 
-By storing types in `MyStruct` as generics, it is possible to access custom Substrate types like `AccountId`, `Balance`, and `Hash`. 
+By storing types in `MyStruct` as generics, it is possible to access custom Substrate types like `AccountId`, `Balance`, and `Hash`.
 
 For example, to store a mapping from `AccountId` to `MyStruct` with `some_generic` as the `Balance` type and `some_other_generic` as the `Hash` type:
 
@@ -79,9 +79,9 @@ pub struct SuperThing <Hash, Balance> {
 decl_module! {
     pub struct Module<T: Trait> for enum Call where origin: T::Origin {
         fn set_mapping(_origin, key: u32, num: u32, hash: T::Hash, balance: T::Balance) -> Result {
-            let thing = Thing { 
-                            my_num: num, 
-                            my_hash: hash, 
+            let thing = Thing {
+                            my_num: num,
+                            my_hash: hash,
                             my_balance: balance
                         };
             <Value<T>>::insert(key, thing);
@@ -90,8 +90,8 @@ decl_module! {
 
         fn set_super_mapping(_origin, key: u32, super_num: u32, thing_key: u32) -> Result {
             let thing = Self::value(thing_key);
-            let super_thing = SuperThing { 
-                            my_super_num: super_num, 
+            let super_thing = SuperThing {
+                            my_super_num: super_num,
                             my_thing: thing
                         };
             <SuperValue<T>>::insert(key, super_thing);
@@ -102,8 +102,8 @@ decl_module! {
 
 decl_storage! {
     trait Store for Module<T: Trait> as RuntimeExampleStorage {
-        Value get(value): map u32 => Thing<T::Hash, T::Balance>;
-        SuperValue get(super_value): map u32 => SuperThing<T::Hash, T::Balance>;
+        Value get(fn value): map u32 => Thing<T::Hash, T::Balance>;
+        SuperValue get(fn super_value): map u32 => SuperThing<T::Hash, T::Balance>;
     }
 }
 ```

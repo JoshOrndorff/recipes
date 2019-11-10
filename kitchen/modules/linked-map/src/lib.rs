@@ -1,10 +1,10 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 /// List via Maps
-/// Substrate does not natively support a list type since it may encourage 
-/// dangerous habits. Unless explicitly guarded against, a list will add 
-/// unbounded `O(n)` complexity to an operation that will only charge `O(1)` 
-/// fees ([Big O notation refresher](https://rob-bell.net/2009/06/a-beginners-guide-to-big-o-notation/)). 
+/// Substrate does not natively support a list type since it may encourage
+/// dangerous habits. Unless explicitly guarded against, a list will add
+/// unbounded `O(n)` complexity to an operation that will only charge `O(1)`
+/// fees ([Big O notation refresher](https://rob-bell.net/2009/06/a-beginners-guide-to-big-o-notation/)).
 /// This opens an economic attack vector on your chain.
 
 use support::{ensure, decl_module, decl_storage, decl_event, StorageValue, StorageMap, StorageLinkedMap, dispatch::Result};
@@ -16,11 +16,11 @@ pub trait Trait: system::Trait {
 
 decl_storage! {
 	trait Store for Module<T: Trait> as List {
-		TheList get(the_list): map u32 => T::AccountId;
-		TheCounter get(the_counter): u32;
+		TheList get(fn the_list): map u32 => T::AccountId;
+		TheCounter get(fn the_counter): u32;
 
-		LinkedList get(linked_list): linked_map u32 => T::AccountId;
-		LinkedCounter get(linked_counter): u32;
+		LinkedList get(fn linked_list): linked_map u32 => T::AccountId;
+		LinkedCounter get(fn linked_counter): u32;
 	}
 }
 
@@ -57,7 +57,7 @@ decl_module! {
 			Self::deposit_event(RawEvent::MemberAdded(who));
 
 			Ok(())
-		} 
+		}
 
 		// worst option
 		// -- only works if the list is *unbounded*

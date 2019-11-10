@@ -17,7 +17,7 @@ pub trait Trait: system::Trait {
 
 decl_storage! {
     trait Store for Module<T: Trait> as PGeneric {
-        Nonce get(nonce): u32;
+        Nonce get(fn nonce): u32;
     }
 }
 
@@ -54,6 +54,6 @@ decl_event!(
 
 decl_storage! {
     trait Store for Module<T: Trait> as RNG {
-        Nonce get(nonce): u64;
+        Nonce get(fn nonce): u64;
     }
-} 
+}

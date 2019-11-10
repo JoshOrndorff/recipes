@@ -46,9 +46,9 @@ decl_event!(
 decl_storage! {
     trait Store for Module<T: Trait> as EventLoop {
         /// Outstanding tasks getter
-        Tasks get(tasks): map T::Hash => Option<Task<T::BlockNumber>>;
+        Tasks get(fn tasks): map T::Hash => Option<Task<T::BlockNumber>>;
         /// Dispatch Queue for tasks
-        TaskQ get(task_q): Vec<T::Hash>;
+        TaskQ get(fn task_q): Vec<T::Hash>;
     }
 }
 

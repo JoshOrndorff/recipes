@@ -9,7 +9,7 @@ pub trait Trait: system::Trait {}
 
 decl_storage! {
 	trait Store for Module<T: Trait> as SimpleMap {
-		StoredValue get(stored_value): u32;
+		StoredValue get(fn stored_value): u32;
 	}
 }
 

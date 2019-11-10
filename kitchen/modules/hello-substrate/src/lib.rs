@@ -16,8 +16,8 @@ decl_event!{
 
 decl_storage! {
 	trait Store for Module<T: Trait> as HelloWorld {
-		pub LastValue get(last_value): u64; 
-		pub UserValue get(user_value): map T::AccountId => u64;
+		pub LastValue get(fn last_value): u64;
+		pub UserValue get(fn user_value): map T::AccountId => u64;
 	}
 }
 

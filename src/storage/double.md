@@ -11,14 +11,14 @@ decl_storage! {
         // member score (double map)
         MemberScore: double_map GroupIndex, twox_128(T::AccountId) => u32;
         // get group ID for member
-        GroupMembership get(group_membership): map T::AccountId => GroupIndex;
+        GroupMembership get(fn group_membership): map T::AccountId => GroupIndex;
         // for fast membership checks, see check-membership recipe for more details
-        AllMembers get(all_members): Vec<T::AccountId>;
+        AllMembers get(fn all_members): Vec<T::AccountId>;
 	}
 }
 ```
 
-For the purposes of this example,  store the scores of each members in a map that associates this `u32` value with two keys: (1) the hash of the member's `AccountId` and (2) a `GroupIndex` identifier. This allows for efficient removal of all values associated with a specific `GroupIndex` identifier. 
+For the purposes of this example,  store the scores of each members in a map that associates this `u32` value with two keys: (1) the hash of the member's `AccountId` and (2) a `GroupIndex` identifier. This allows for efficient removal of all values associated with a specific `GroupIndex` identifier.
 
 ```rust
 fn remove_group_score(origin, group: GroupIndex) -> Result {

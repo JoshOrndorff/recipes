@@ -36,12 +36,12 @@ decl_module! {
 }
 ```
 
-This example manipulates a single value in storage declared as `SingleValue`. 
+This example manipulates a single value in storage declared as `SingleValue`.
 
 ```rust
 decl_storage! {
 	trait Store for Module<T: Trait> as Example {
-        SingleValue get(single_value): u32;
+        SingleValue get(fn single_value): u32;
 	}
 }
 ```

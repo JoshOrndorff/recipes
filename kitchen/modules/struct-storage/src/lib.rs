@@ -23,8 +23,8 @@ pub struct SuperThing<Hash, Balance> {
 
 decl_storage! {
     trait Store for Module<T: Trait> as NestedStructs {
-        Value get(value): map u32 => Thing<T::Hash, T::Balance>;
-        SuperValue get(super_value): map u32 => SuperThing<T::Hash, T::Balance>;
+        Value get(fn value): map u32 => Thing<T::Hash, T::Balance>;
+        SuperValue get(fn super_value): map u32 => SuperThing<T::Hash, T::Balance>;
     }
 }
 
