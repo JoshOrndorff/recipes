@@ -25,9 +25,6 @@
 - [Runtime Configuration](./base/runtime.md)
 - [Simple Treasury](./dao/treasury.md)
 - [Token Curated Registry](./token/token.md)
-- [NFT Ticket Machine](./nft/README.md)
-- [Proof of Existence](./proof/README.md)
-- [Social Network](./identity/social.md)
 - [Featured Tutorials](./base/dessert.md)
 
 -----------
