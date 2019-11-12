@@ -8,8 +8,6 @@ A [trie](https://en.wikipedia.org/wiki/Trie) is an ordered tree structure for ma
 
 This construction lends itself to efficient removal of subgroups of a dataset (similar to [`double_map`](./double.md)). By associating a common prefix with related data, the dataset can be partitioned to effectively batch deletions.
 
-In addition, proofs of inclusion are relatively small in size and can be reused to verify membership of the trie in the future.
-
 Every change in the leaves percolates up to the root, thereby providing a complete, succinct history of all changes to the underlying data structure in the form of the trie root hash.
 
 ## Runtime Child Storage <a name = "storj"></a>
@@ -100,10 +98,6 @@ pub fn crowdfund_kill(index: FundIndex) {
 
 The child trie api is useful when data associated with an identifier needs to be isolated to facilitate efficient batch removal. In this case, all the information associated with a given crowdfund should be removed when the crowdfund is dissolved.
 
-## caveat coder
+### caveat coder
 
 Each individual call to read/write to the child trie is more expensive than it would be for `map` or `double_map`. This cost is poorly amortized over a large number of calls, but can be significantly reduced by following a proper batch execution strategy.
-
-Storage proofs associated with child tries are small in size, thereby allowing for storage on-chain if necessary. Short proofs of inclusion may also prove useful in the cross-chain context (i.e. when exporting data to other chains).
-
-Constructing and using such proofs can be done via an outside call to the light client. The call would create an extrinsic that returns a proof of inclusion from the runtime. Note that there is no *proper* way of doing this in the runtime at this time.

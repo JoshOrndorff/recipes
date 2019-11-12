@@ -32,6 +32,9 @@ decl_module! {
 }
 
 impl<T: Trait> Module<T> {
+    /// Find the ID associated with the Child Trie
+    /// to access the respective trie
+    /// (see invocations in the other methods below for context)
     pub fn id_from_index(index: ObjectCount) -> Vec<u8> {
         let mut buf = Vec::new();
         buf.extend_from_slice(b"exchildtr");
