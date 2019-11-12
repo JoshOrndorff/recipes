@@ -24,9 +24,9 @@ members = [
   "modules/struct-storage",
   "modules/vec-set",
   # "modules/weights",
-  "runtimes/super-runtime",
-  "runtimes/super-genesis",
+  # "runtimes/super-runtime",
+  # "runtimes/super-genesis",
   # "runtimes/weight-fee-runtime",
   # "runtimes/weight-fee-genesis",
-  "node",
+  # "node",
 ]
