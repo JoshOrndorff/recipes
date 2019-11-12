@@ -37,7 +37,7 @@ To start a dev node (after building) run
 There are many other ways to use this node which can be explored by running `kitchen-node --help` or reading general [Substrate Documentation](https://substrate.dev/).
 
 ## Swapping Runtimes
-All runtimes in the kitchen are compatible with this node. To sawp just edit the `Cargo.toml` file. You may also use this node template to wrap your own custom runtimes. Just make sure you have Babe, Grandpa, and possibly other necessary modules installed properly.
+All runtimes in the kitchen are compatible with this node. To swap just edit the `Cargo.toml` file. You may also use this node template to wrap your own custom runtimes. Just make sure you have Babe, Grandpa, and possibly other necessary modules installed properly.
 
 ```toml
 # Edit these lines to point to a different runtime.

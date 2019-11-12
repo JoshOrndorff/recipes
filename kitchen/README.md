@@ -2,9 +2,10 @@
 
 The kitchen is for *cooking* recipes. It is structured similarly to the main recipes build as specified in [src/SUMMARY.md](../src/SUMMARY.md), except every code sample is stored as a library via the [substrate-module-template](https://github.com/substrate-developer-hub/substrate-module-template).
 
-There are two main sections:
+There are three sections:
 * [Modules](./modules/README.md): individual modules, formatted as libraries
 * [Runtimes](./runtimes/README.md): module configurations for executable runtimes
+* [Node](./node/README.md): node configuration using the runtimes
 
 ## Directions
 
