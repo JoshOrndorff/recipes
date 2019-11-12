@@ -14,8 +14,8 @@
     - [Cache Multiple Storage Calls](./storage/cache.md)
     - [Set Storage and Iteration](./storage/iterate.md)
     - [Lists: Maps vs Linked Maps](./storage/enumerated.md)
-    - [Efficent Subgroup Removal by Subkey: Double Maps](./storage/double.md)
-    - [Cheap Inclusion Proofs: Child Tries](./storage/childtries.md)
+    - [Removal by Subkey: Double Maps](./storage/double.md)
+    - [Efficient Removal by Subkey: Child Tries](./storage/childtries.md)
     - [Configurable Constants](./storage/constants.md)
 - [Best Practices](./design/README.md)
     - [Types and Traits](./design/ttraits.md)
@@ -28,9 +28,6 @@
 - [Runtime Configuration](./base/runtime.md)
 - [Simple Treasury](./dao/treasury.md)
 - [Token Curated Registry](./token/token.md)
-- [NFT Ticket Machine](./nft/README.md)
-- [Proof of Existence](./proof/README.md)
-- [Social Network](./identity/social.md)
 - [Featured Tutorials](./base/dessert.md)
 
 -----------
