@@ -122,10 +122,27 @@ git = 'https://github.com/paritytech/substrate.git'
 package = 'sr-primitives'
 branch = 'master'
 
-[dependencies.client]
+[dependencies.sr-api]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
-package = 'substrate-client'
+branch = 'master'
+
+[dependencies.block-builder-api]
+default_features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'substrate-block-builder-runtime-api'
+branch = 'master'
+
+[dependencies.tx-pool-api]
+default_features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'substrate-transaction-pool-runtime-api'
+branch = 'master'
+
+[dependencies.inherents]
+default_features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'substrate-inherents'
 branch = 'master'
 
 [dependencies.offchain-primitives]
@@ -142,7 +159,7 @@ wasm-builder-runner = { package = "substrate-wasm-builder-runner", version = "1.
 default = ["std"]
 std = [
 	"parity-scale-codec/std",
-	"client/std",
+	"sr-api/std",
 	"rstd/std",
 	"runtime-io/std",
 	"support/std",
@@ -164,5 +181,8 @@ std = [
 	"offchain-primitives/std",
 	"substrate-session/std",
 	"transaction-payment/std",
+	"block-builder-api/std",
+	"tx-pool-api/std",
+	"inherents/std",
 	"weights/std",
 ]
