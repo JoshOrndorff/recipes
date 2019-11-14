@@ -330,20 +330,6 @@ impl schedule_on_finalize::Trait for Runtime {
 	type ExecutionFrequency = ClearFrequency; // for convenience (can use a different constant)
 }
 
-parameter_types! {
-	pub const TransactionBaseFee: u128 = 0;
-	pub const TransactionByteFee: u128 = 1;
-}
-
-impl transaction_payment::Trait for Runtime {
-	type Currency = balances::Module<Runtime>;
-	type OnTransactionPayment = ();
-	type TransactionBaseFee = TransactionBaseFee;
-	type TransactionByteFee = TransactionByteFee;
-	type WeightToFee = ConvertInto;
-	type FeeMultiplierUpdate = ();
-}
-
 // The following two configuration traits are for two different instances of the last-caller module
 impl last_caller::Trait<last_caller::Instance1> for Runtime {
     type Event = Event;
@@ -355,11 +341,11 @@ impl last_caller::Trait<last_caller::Instance2> for Runtime {
 
 // The following two configuration traits are for two different instances of the deafult-instance
 // module. Notice that only the second instance has to explicitly specify an instance
-impl default_instance::Trait for Runtime {
-    type Event = Event;
-}
+// impl default_instance::Trait for Runtime {
+//     type Event = Event;
+// }
 
-impl default_instance:Trait<last_caller::Instance2> for Runtime {
+impl default_instance::Trait<default_instance::Instance2> for Runtime {
     type Event = Event;
 }
 
@@ -395,8 +381,8 @@ construct_runtime!(
 		ScheduleOnFinalize: schedule_on_finalize::{Module, Call, Storage, Event<T>},
 		LastCaller1: last_caller::<Instance1>::{Module, Call, Storage, Event<T>},
 		LastCaller2: last_caller::<Instance2>::{Module, Call, Storage, Event<T>},
-		DefaultInstance1: last_caller::{Module, Call, Storage, Event<T>},
-		DefaultInstance2: last_caller::<Instance2>::{Module, Call, Storage, Event<T>},
+		// DefaultInstance1: default_instance::{Module, Call, Storage, Event<T>},
+		DefaultInstance2: default_instance::<Instance2>::{Module, Call, Storage, Event<T>},
 	}
 );
 
