@@ -20,7 +20,7 @@
 - [Types and Traits](./traits/README.md)
     - [Currency Types](./traits/currency.md)
     - [Transaction Fees for Economic Security](./traits/fees.md)
-    - [Mock Runtime for Unit Testing](./traits/mock.md)
+    - [Mock Runtime for Unit Testing](./testing/mock.md)
  - [Declarative Syntax](./declarative/README.md)
     - [Verify First, Write Last](./declarative/ensure.md)
     - [Safe Math](./declarative/safemath.md)
