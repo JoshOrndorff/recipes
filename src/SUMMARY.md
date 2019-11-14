@@ -2,7 +2,10 @@
 
 - [Introduction](./base/README.md)
 - [Learn Rust](./base/rust.md)
-- [Installation](./base/setup.md)
+- [Getting Started](./base/setup.md)
+    - [Running A Node](./base/runnode.md)
+    - [Interacting with a Node](./base/interactnode.md)
+    - [Using the Kitchen](./base/kitchenoverview.md)
 - [Hello Substrate](./basics/README.md)
     - [Events Verify Execution](./basics/events.md)
     - [Adding Machine](./basics/adder.md)
