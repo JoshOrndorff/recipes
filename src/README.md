@@ -17,6 +17,7 @@
     - [Subgroup Removal by Subkey: Double Maps](./storage/double.md)
     - [Efficient Subgroup Removal by Subkey: Child Tries](./storage/childtries.md)
     - [Configurable Constants](./storage/constants.md)
+    - [Instantiable Modules](./storage/instantiable.md)
 - [Best Practices](./design/README.md)
     - [Types and Traits](./design/ttraits.md)
     - [Economic Security](./design/econsecurity.md)
