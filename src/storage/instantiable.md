@@ -110,7 +110,12 @@ decl_storage! {
   }
 }
 ```
-
+```rust
+decl_module! {
+    pub struct Module<T: Trait<I>, I: Instance = DefaultInstance> for enum Call where origin: T::Origin {
+        ...
+    }
+}
 ```rust
 decl_event!(
 	pub enum Event<T, I=DefaultInstance> where ... {
