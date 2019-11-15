@@ -381,7 +381,7 @@ construct_runtime!(
 		ScheduleOnFinalize: schedule_on_finalize::{Module, Call, Storage, Event<T>},
 		LastCaller1: last_caller::<Instance1>::{Module, Call, Storage, Event<T>},
 		LastCaller2: last_caller::<Instance2>::{Module, Call, Storage, Event<T>},
-		DefaultInstance: default_instance::{Module, Call, Storage, Event<T>},
+		DefaultInstance1: default_instance::{Module, Call, Storage, Event<T>},
 		DefaultInstance2: default_instance::<Instance2>::{Module, Call, Storage, Event<T>},
 	}
 );
