@@ -124,7 +124,7 @@ decl_event!(
 }
 ```
 
-Having made these three changes, a developer who uses your module doesn't need to know or care that your module is instantable. They can deploy it just as they would any other module.
+Having made these changes, a developer who uses your module doesn't need to know or care that your module is instantable. They can deploy it just as they would any other module.
 
 ## Genesis Configuration
 Some modules require a genesis configuration to be specified. Let's look to the default Substrate node's use of the Collective module as an example.
