@@ -35,7 +35,7 @@ decl_event!(
 
 decl_module! {
     // The module struct also takes the instance parameter.
-    pub struct Module<T: Trait<I>, I: Instance> for enum Call where origin: T::Origin {
+    pub struct Module<T: Trait<I>, I: Instance = DefaultInstance> for enum Call where origin: T::Origin {
         fn deposit_event() = default;
 
         // The only dispatchable call, updates the single storage item,
