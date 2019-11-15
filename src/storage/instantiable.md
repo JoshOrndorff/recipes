@@ -77,7 +77,7 @@ decl_event!(
 
 ## Installing a Module Instance in a Runtime
 
-The syntax for including an instance of an instantiable module in a runtime is slightly different than for a regular module. The only exception is for modules that use the [Default Instance](#defualt-instance) feature described below.
+The syntax for including an instance of an instantiable module in a runtime is slightly different than for a regular module. The only exception is for modules that use the [Default Instance](#default-instance) feature described below.
 
 ### Implementing Configuration Traits
 Each instance needs to be configured separately. Configuration consists of implementing the specific instance's trait. The following snippet shows a configuration for `Instance1`.
