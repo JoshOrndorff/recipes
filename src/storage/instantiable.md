@@ -94,7 +94,7 @@ FirstTemplate: template::<Instance1>::{Module, Call, Storage, Event<T>, Config},
 ```
 
 
-## Default Instance
+## Default Instance <a name="default-instance"></a>
 One drawback of instantiable modules, as we've presented them so far is that they require the runtime designer to use the more elaborate syntax even if they only desire a single instance of the module. To alleviate this inconvenience, Substrate provides a feature known as DefaultInstance. This allows runtime developers to deploy an instantiable module exactly as they would if it were not instantiable provided they **only use a single instance**.
 
 To make your instantiable module support DefaultInstance, you must specify it in three places.
