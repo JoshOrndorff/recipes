@@ -1,7 +1,7 @@
 [package]
-name = "vec-set"
+name = "default-instance"
 version = "0.1.0"
-authors = ["4meta5"]
+authors = ["Joshy"]
 edition = "2018"
 
 [features]
@@ -43,14 +43,20 @@ git = 'https://github.com/paritytech/substrate.git'
 package = 'sr-primitives'
 rev = '6ae3b6c4ddc03d4cdb10bd1d417b95d20f4c1b6e'
 
-[dependencies.rstd]
-default_features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'sr-std'
-rev = '6ae3b6c4ddc03d4cdb10bd1d417b95d20f4c1b6e'
+# [dependencies.rstd]
+# default-features = false
+# git = 'https://github.com/paritytech/substrate.git'
+# package = "sr-std"
+# rev = '6ae3b6c4ddc03d4cdb10bd1d417b95d20f4c1b6e'
 
 [dev-dependencies.primitives]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'substrate-primitives'
+rev = '6ae3b6c4ddc03d4cdb10bd1d417b95d20f4c1b6e'
+
+[dev-dependencies.runtime-io]
+default_features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'sr-io'
 rev = '6ae3b6c4ddc03d4cdb10bd1d417b95d20f4c1b6e'
