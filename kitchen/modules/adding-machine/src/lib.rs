@@ -103,21 +103,44 @@ mod tests {
     fn add_emits_correct_event() {
         ExtBuilder::build().execute_with(|| {
             AddingMachine::add(Origin::signed(1), 6, 9);
+            AddingMachine::add(Origin::signed(1), 235, 431);
+            AddingMachine::add(Origin::signed(1), 1700, 38);
+            AddingMachine::add(Origin::signed(1), 6, 79);
+            AddingMachine::add(Origin::signed(1), 13, 37);
 
             assert_eq!(
                 System::events(),
-                vec![EventRecord {
-                    phase: Phase::ApplyExtrinsic(0),
-                    event: TestEvent::added(crate::Event::Added(6, 9, 15)),
-                    topics: vec![],
-                }]
+                vec![
+                    EventRecord {
+                        phase: Phase::ApplyExtrinsic(0),
+                        event: TestEvent::added(crate::Event::Added(6, 9, 15)),
+                        topics: vec![],
+                    },
+                    EventRecord {
+                        phase: Phase::ApplyExtrinsic(0),
+                        event: TestEvent::added(crate::Event::Added(235, 431, 666)),
+                        topics: vec![],
+                    },
+                    EventRecord {
+                        phase: Phase::ApplyExtrinsic(0),
+                        event: TestEvent::added(crate::Event::Added(1700, 38, 1738)),
+                        topics: vec![],
+                    },
+                    EventRecord {
+                        phase: Phase::ApplyExtrinsic(0),
+                        event: TestEvent::added(crate::Event::Added(6, 79, 85)),
+                        topics: vec![],
+                    },
+                    EventRecord {
+                        phase: Phase::ApplyExtrinsic(0),
+                        event: TestEvent::added(crate::Event::Added(13, 37, 50)),
+                        topics: vec![],
+                    },
+                ]
             );
         })
     }
 
-// AddingMachine::add(Origin::signed(1), 235, 431);
-//         AddingMachine::add(Origin::signed(1), 1700, 38);
-//         AddingMachine::add(Origin::signed(1), 6, 79);
-//         AddingMachine::add(Origin::signed(1), 13, 37);
+
 
 }
