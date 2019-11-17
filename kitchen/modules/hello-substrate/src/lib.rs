@@ -14,8 +14,6 @@ decl_event!{
 		AccountId = <T as system::Trait>::AccountId,
 	{
 		ValueSet(AccountId, u64),
-		ValueGot(AccountId, u64),
-		UserValueGot(AccountId, u64),
 	}
 }
 
@@ -35,22 +33,6 @@ decl_module! {
 			LastValue::put(value);
 			UserValue::<T>::insert(&setter, value);
 			Self::deposit_event(RawEvent::ValueSet(setter, value));
-			Ok(())
-		}
-
-		pub fn get_last_value(origin) -> Result {
-			let getter = ensure_signed(origin)?;
-			ensure!(LastValue::exists(), "no value stored in LastValue storage item");
-			let value = LastValue::get();
-			Self::deposit_event(RawEvent::ValueGot(getter, value));
-			Ok(())
-		}
-
-		pub fn get_user_value(origin) -> Result {
-			let getter = ensure_signed(origin)?;
-			ensure!(UserValue::<T>::exists(&getter), "value for user's AccountId does not exist");
-			let value = UserValue::<T>::get(&getter);
-			Self::deposit_event(RawEvent::ValueGot(getter, value));
 			Ok(())
 		}
 	}
@@ -134,4 +116,6 @@ mod tests {
 			assert_eq!(HelloSubstrate::last_value(), 11u64);
 		});
 	}
+
+	// TODO: find out how to construct signed extrinsics in runtime testing
 }
