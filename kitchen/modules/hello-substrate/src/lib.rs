@@ -43,7 +43,6 @@ mod tests {
 	use support::{impl_outer_origin, parameter_types, traits::Get};
 	use runtime_primitives::{Perbill, traits::{IdentityLookup, BlakeTwo256}, testing::Header};
 	use runtime_io;
-	use core::cell::RefCell;
 	use primitives::H256;
 	use crate::{Module, Trait};
 
