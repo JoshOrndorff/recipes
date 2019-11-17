@@ -12,7 +12,7 @@
     - [Single Value Storage](./basics/value.md)
 - [Runtime Storage API](./storage/README.md)
     - [Cache Locally > Storage Calls](./storage/cache.md)
-    - [Lists](./storage/set.md)
+    - [Lists](./storage/iterate.md)
     - [Ordered Lists: Maps, Linked Maps](./storage/enumerated.md)
     - [Subgroup Removal by Subkey: Double Maps](./storage/double.md)
     - [Efficient Subgroup Removal by Subkey: Child Tries](./storage/childtries.md)
@@ -26,7 +26,7 @@
     - [Safe Math](./declarative/safemath.md)
     - [Permissioned Methods](./declarative/permissioned.md)
 - [Runtime Configuration](./base/runtime.md)
-- [Simple Treasury](./dao/treasury.md)
+- [Simple Treasury](./tour/treasury.md)
 - [Token Curated Registry](./token/token.md)
 - [Featured Tutorials](./base/dessert.md)
 
