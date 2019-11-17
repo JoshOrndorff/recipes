@@ -116,6 +116,4 @@ mod tests {
 			assert_eq!(HelloSubstrate::last_value(), 11u64);
 		});
 	}
-
-	// TODO: find out how to construct signed extrinsics in runtime testing
 }
