@@ -1,5 +1,34 @@
+# Mock Runtime for Testing
 
-## Test Scaffolding
+Runtime tests allow you to verify the logic in your runtime module by mocking a Substrate runtime environment. This requires an explicit implementation of all the traits declared in the module(s) for the mock runtime. So, if our module trait looked like,
+
+```rust
+pub trait Trait: system::Trait {
+  type Reward = SomeRewardType<AssociatedType>;
+
+  type ConstThing = Get<u32>;
+}
+```
+
+Then, the implementation would require an explicit implementation of this trait in our mock runtime (similar in structure to the [substrate](https://github.com/paritytech/substrate/tree/master/node/runtime) and [polkadot](https://github.com/paritytech/polkadot/blob/master/runtime/src/lib.rs) runtime configurations). For example,
+
+```rust
+pub type SpecificType = u32; // could be some other type
+
+parameter_types!{
+  pub const ConstThing = 255;
+}
+
+impl module::Trait for Runtime {
+  type Reward = SpecificType;
+  type ConstThing = ConstThing;
+}
+```
+
+Within the context of testing, there are a few ways of building a mock runtime that offer varying levels of customizations.
+
+
+## OLD DOCS
 
 Testing a module in the context of Substrate can require a bit more work relative to [conventional Rust unit testing](https://doc.rust-lang.org/rust-by-example/testing/unit_testing.html). This follows from the fact that testing Substrate modules requires a mock runtime; modules are only useful in the context of their execution environment.
 
@@ -16,13 +45,7 @@ mod test {/*tests here*/}
 
 The attribute above the module declaration ensures that the `test` module is only compiled for `cargo test`(not `cargo build`).
 
-## Comprehensive Testing
-
-* `new_test_ext()`
-
-I personally enjoy...
-
-### ExtBuilder
+## ExtBuilder
 
 To test a module in the context of Substrate, there is bit more work required to set up our testing environment. Here, we'll introduce one scaffolding design pattern to test a module. If you just want the code, you can just use the `mod test{}` at the bottom of the [Substrate Node Template](https://github.com/shawntabrizi/substrate-package/blob/master/substrate-node-template/runtime/src/template.rs). However, because most modules require some custom configuration, it is useful to understand the components that comprise the scaffolding.
 

@@ -1,10 +1,11 @@
 # smpl-treasury
+*[`kitchen/modules/treasury`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/treasury)*
 
-This recipe demonstrates how [srml/treasury](https://github.com/paritytech/substrate/blob/master/srml/treasury/src/lib.rs) instantiates a pot of funds and schedules funding. *See [kitchen/treasury](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/treasury) for the full code*
+This recipe demonstrates how [`srml-treasury`](https://github.com/paritytech/substrate/blob/master/srml/treasury/src/lib.rs) instantiates a pot of funds and schedules funding.
 
 ## Instantiate a Pot
 
-To instantiate a pool of funds, import [`ModuleId`](https://crates.parity.io/sr_primitives/struct.ModuleId.html) and [`AccountIdConversion`](https://crates.parity.io/sr_primitives/traits/trait.AccountIdConversion.html) from [sr-primitives](https://crates.parity.io/sr_primitives/index.html).
+To instantiate a pool of funds, import [`ModuleId`](https://crates.parity.io/sr_primitives/struct.ModuleId.html) and [`AccountIdConversion`](https://crates.parity.io/sr_primitives/traits/trait.AccountIdConversion.html) from [`sr-primitives`](https://crates.parity.io/sr_primitives/index.html).
 
 ```rust
 use runtime_primitives::{ModuleId, traits::AccountIdConversion};

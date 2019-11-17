@@ -10,7 +10,6 @@ std = [
     'parity-scale-codec/std',
     'support/std',
     'system/std',
-    'balances/std',
     'runtime-primitives/std',
 ]
 
@@ -25,16 +24,16 @@ git = 'https://github.com/paritytech/substrate.git'
 package = 'srml-support'
 rev = '6ae3b6c4ddc03d4cdb10bd1d417b95d20f4c1b6e'
 
+[dependencies.rstd]
+default_features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'sr-std'
+rev = '6ae3b6c4ddc03d4cdb10bd1d417b95d20f4c1b6e'
+
 [dependencies.system]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'srml-system'
-rev = '6ae3b6c4ddc03d4cdb10bd1d417b95d20f4c1b6e'
-
-[dependencies.balances]
-default_features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'srml-balances'
 rev = '6ae3b6c4ddc03d4cdb10bd1d417b95d20f4c1b6e'
 
 [dependencies.runtime-primitives]

@@ -1,4 +1,4 @@
-# ensure!
+# Verify First, Write Last
 
 Within each runtime module function, it is important to perform requisite checks prior to any storage changes. Unlike existing smart contract platforms, Substrate requires greater attention to detail because mid-function panics will persist any prior changes made to storage.
 

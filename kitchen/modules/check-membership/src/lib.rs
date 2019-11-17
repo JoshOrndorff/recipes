@@ -1,11 +1,11 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
+use rstd::prelude::*;
 /// Permissioned Function with Generic Event
 /// a permissioned funtion which can only be called by the "owner". An event is emitted
 /// when the function is successfully executed.
 use support::{decl_event, decl_module, decl_storage, dispatch::Result, ensure, StorageValue};
 use system::ensure_signed;
-use rstd::prelude::*;
 
 pub trait Trait: system::Trait {
     type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
@@ -24,6 +24,7 @@ decl_event!(
     where
         AccountId = <T as system::Trait>::AccountId,
     {
+        OwnershipInitiated(AccountId),
         OwnershipTransferred(AccountId, AccountId),
         AddMember(AccountId),
         RemoveMember(AccountId),
@@ -37,15 +38,15 @@ decl_module! {
         fn init_ownership(origin) -> Result {
             ensure!(!<Owner<T>>::exists(), "Owner already exists");
             let sender = ensure_signed(origin)?;
-            <Owner<T>>::put(&sender);
-            Self::deposit_event(RawEvent::OwnershipTransferred(sender.clone(), sender));
+            <Owner<T>>::put(sender.clone());
+            Self::deposit_event(RawEvent::OwnershipInitiated(sender));
             Ok(())
         }
 
         fn transfer_ownership(origin, new_owner: T::AccountId) -> Result {
             let sender = ensure_signed(origin)?;
             ensure!(sender == Self::owner(), "This function can only be called by the owner");
-            <Owner<T>>::put(&new_owner);
+            <Owner<T>>::put(new_owner.clone());
             Self::deposit_event(RawEvent::OwnershipTransferred(sender, new_owner));
             Ok(())
         }
@@ -54,15 +55,14 @@ decl_module! {
             let new_member = ensure_signed(origin)?;
             ensure!(!Self::is_member(&new_member), "already a member");
 
-            <Members<T>>::mutate(|mem| mem.push(new_member.clone())); // change to append after 3071 merged
+            <Members<T>>::append(&[new_member.clone()])?;
             Self::deposit_event(RawEvent::AddMember(new_member));
             Ok(())
         }
 
         fn remove_member(origin) -> Result {
             let old_member = ensure_signed(origin)?;
-
-            ensure!(Self::is_member(&old_member), "not a member");
+            ensure!(Self::is_member(&old_member), "not a member so can't be taken out of the set");
             // keep all members except for the member in question
             <Members<T>>::mutate(|mem| mem.retain(|m| m != &old_member));
             Self::deposit_event(RawEvent::RemoveMember(old_member));

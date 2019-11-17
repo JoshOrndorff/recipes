@@ -1,13 +1,13 @@
-# Condition Oriented Programming
+# Declarative Syntax
 
 Unlike conventional software development kits that abstract away low-level decisions, Substrate grants developers fine-grain control over the underlying implementation. This approach fosters high-performance, modular applications. At the same time, it also demands increased attention from developers. **With great power comes great responsibility**.
 
 Indeed, Substrate developers have to exercise incredible caution. The bare-metal control that they maintain over the runtime logic introduces new attack vectors. In the context of blockchains, the cost of bugs scale with the amount of capital secured by the application. Likewise, developers should generally abide by a few *[rules](#criteria)* when building with Substrate. These rules may not hold in every situation; Substrate offers optimization in context.
 
-Each of the recipes in this section are oriented around increasing 
-* [ensure checks](./ensure.md)
-* [fixed point arithmetic](./fpamath.md)
-* [verify signed messages](./verify.md)
+Each of the recipes in this section are oriented around increasing
+- [Verify First, Write Last](./declarative/ensure.md)
+- [Safe Math](./declarative/safemath.md)
+- [Permissioned Methods](./declarative/permissioned.md)
 <!-- * [checking for collisions](./collide.md) -->
 
 ## Module Development Criteria <a name = "criteria"></a>
