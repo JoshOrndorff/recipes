@@ -74,9 +74,10 @@ decl_module! {
 
 #[cfg(test)]
 mod tests {
-	use support::{impl_outer_origin, impl_outer_event, parameter_types, traits::Get};
+	use support::{assert_err, impl_outer_origin, impl_outer_event, parameter_types, traits::Get};
 	use runtime_primitives::{Perbill, traits::{IdentityLookup, BlakeTwo256}, testing::Header};
     use system::{EventRecord, Phase};
+    use super::RawEvent;
     use runtime_io;
 	use primitives::H256;
 	use crate::{Module, Trait};
@@ -112,13 +113,13 @@ mod tests {
 		type Version = ();
     }
 
-    mod singlevalue {
-        pub use crate::Event;
+    mod single_value {
+        pub use super::super::*;
     }
     
     impl_outer_event! {
         pub enum TestEvent for Runtime {
-            singlevalue<T>,
+            single_value<T>,
         }
     }
 
@@ -141,12 +142,107 @@ mod tests {
     #[test]
     fn set_value_works() {
         ExtBuilder::build().execute_with(|| {
-            assert!(true);
+            System::set_block_number(2);
+            SingleValue::set_value(Origin::signed(1), 10);
+
+            let expected_event = TestEvent::single_value(
+                RawEvent::ValueSet(10, 2),
+            );
+
+            assert!(System::events().iter().any(|a| a.event == expected_event));
+            
+            System::set_block_number(15);
+            SingleValue::set_value(Origin::signed(1), 11);
+
+            let expected_event = TestEvent::single_value(
+                RawEvent::ValueSet(11, 15),
+            );
+
+			assert!(System::events().iter().any(|a| a.event == expected_event));
         })
     }
 
     #[test]
-    fn get_value_works() {
-        assert!(true);
+    fn set_account_works() {
+        // NOTE: could probably be combined into `set_works()`
+        ExtBuilder::build().execute_with(|| {
+            System::set_block_number(2);
+            SingleValue::set_account(Origin::signed(1), 10);
+
+            let expected_event = TestEvent::single_value(
+                RawEvent::AccountSet(10, 2),
+            );
+
+            assert!(System::events().iter().any(|a| a.event == expected_event));
+            
+            System::set_block_number(15);
+            SingleValue::set_account(Origin::signed(1), 11);
+
+            let expected_event = TestEvent::single_value(
+                RawEvent::AccountSet(11, 15),
+            );
+
+			assert!(System::events().iter().any(|a| a.event == expected_event));
+        })
+    }
+
+    #[test]
+    fn get_works() {
+        ExtBuilder::build().execute_with(|| {
+
+                assert_err!(
+                    SingleValue::get_value(Origin::signed(1)),
+                    "value does not exist"
+                );
+                assert_err!(
+                    SingleValue::get_account(Origin::signed(2)),
+                    "account dne"
+                );
+
+                // set value and account
+                System::set_block_number(2);
+                SingleValue::set_value(Origin::signed(2), 5);
+                SingleValue::set_account(Origin::signed(1), 10);
+
+                // get value and account
+                SingleValue::get_value(Origin::signed(1));
+
+                let expected_event = TestEvent::single_value(
+                    RawEvent::ValueGet(5, 2),
+                );
+    
+                assert!(System::events().iter().any(|a| a.event == expected_event));
+
+                SingleValue::get_account(Origin::signed(1));
+
+                let expected_event2 = TestEvent::single_value(
+                    RawEvent::AccountGet(10, 2),
+                );
+
+                assert!(System::events().iter().any(|a| a.event == expected_event2));
+
+                // reset value and account
+                System::set_block_number(12);
+                SingleValue::set_value(Origin::signed(2), 27);
+                SingleValue::set_account(Origin::signed(1), 13);
+
+                // reget value and account
+                SingleValue::get_value(Origin::signed(1));
+
+                let expected_event3 = TestEvent::single_value(
+                    RawEvent::ValueGet(27, 12),
+                );
+    
+                assert!(System::events().iter().any(|a| a.event == expected_event3));
+
+                SingleValue::get_account(Origin::signed(1));
+
+                let expected_event4 = TestEvent::single_value(
+                    RawEvent::AccountGet(13, 12),
+                );
+
+                assert!(System::events().iter().any(|a| a.event == expected_event4));
+            }
+        )
     }
 }
