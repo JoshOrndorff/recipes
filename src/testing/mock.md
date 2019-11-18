@@ -71,7 +71,7 @@ To build the runtime environment, import `runtime_io`
 use runtime_io;
 ```
 
-and define the `ExtBuilder` object
+and define the `ExtBuilder` object which is responsible for building an instance of `[TestExternalities](https://crates.parity.io/sr_io/type.TestExternalities.html)`. [Externalities](https://crates.parity.io/substrate_externalities/index.html) are an abstraction that allows the runtime to access features of the outer node such as storage or offchain workers. In this case we just create a mock storage from our default genesis configuration.
 
 ```rust
 pub struct ExtBuilder;
