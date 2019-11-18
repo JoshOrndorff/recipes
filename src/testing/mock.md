@@ -95,7 +95,7 @@ fn fake_test_example() {
 }
 ```
 
-While testing in this environment, runtimes that require signed extrinsics (aka take `origin` as a parameter) will require transactions coming from an `Origin`. This requires also importing `impl_outer_origin` macro from `support`
+While testing in this environment, runtimes that require signed extrinsics (aka take `origin` as a parameter) will require transactions coming from an `Origin`. This requires also importing [`impl_outer_origin`](https://crates.parity.io/srml_support/macro.impl_outer_origin.html) macro from `support`
 
 ```rust
 use support::{impl_outer_event, impl_outer_origin};
@@ -105,7 +105,7 @@ impl_outer_origin!{
 }
 ```
 
-Now, it is possible to placed signed transactions as parameters in runtime methods that require the `origin` input. See the full code in the kitchen](), but this looks like
+It is possible to placed signed transactions as parameters in runtime methods that require the `origin` input. See the [full code in the kitchen](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/hello-substrate)), but this looks like
 
 ```rust
 #[test]
@@ -117,7 +117,7 @@ fn last_value_updates() {
 }
 ```
 
-As always, run `cargo test` to run the unit tests.
+Run `cargo test` to run the unit tests
 
 ## Storage Changes
 
@@ -136,7 +136,7 @@ fn last_value_updates() {
 }
 ```
 
-For context, the `decl_storage` block looks like
+For context, the tested module's `decl_storage` block looks like
 
 ```rust
 decl_storage! {
@@ -151,7 +151,7 @@ Updates to `UserValue` are *covered* in the `last_value_updates` test in [`kitch
 
 ## `impl system::Trait`
 
-Substrate's design makes it convenient for the `trait Trait` to inherit `system::Trait` to inherit its types (*[remember](https://substrate.dev/recipes/traits/index.html)*). To emulate this with the mock `Runtime`, it is necessary to import some types and add an `impl` block,
+Substrate's design makes it convenient for the `trait Trait` to inherit `system::Trait` to inherit its types (*[remember](https://substrate.dev/recipes/traits/index.html)*). To inherit this behavior in the mock `Runtime`, it is necessary to `impl` the `system::Trait` (and import some types to do so),
 
 ```rust
 use support::{impl_outer_event, impl_outer_origin, parameter_types};
