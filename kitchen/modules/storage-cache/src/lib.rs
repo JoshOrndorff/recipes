@@ -48,7 +48,7 @@ decl_module! {
         fn increase_value_no_cache(origin, some_val: u32) -> Result {
             let _ = ensure_signed(origin)?;
             let original_call = <SomeCopyValue>::get();
-            let some_calculation = original_call.checked_add(some_val).ok_or("addition overflowed1")?; // doesn't check for overflow!
+            let some_calculation = original_call.checked_add(some_val).ok_or("addition overflowed1")?;
             // this next storage call is unnecessary and is wasteful
             let unnecessary_call = <SomeCopyValue>::get();
             // should've just used first_call here because u32 is copy
