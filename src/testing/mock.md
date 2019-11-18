@@ -25,36 +25,12 @@ pub struct Runtime;
 
 The `derive` macro attribute provides implementations of the `Clone + PartialEq + Eq + Debug` traits for the `Runtime` struct. 
 
-The mock runtime also needs to implement the tested module's `Trait`. 
+The mock runtime also needs to implement the tested module's `Trait`. If it is unnecessary to test the module's `Event` type, the type can be set to `()`. See further below to test the module's `Event` enum.
 
 ```rust
 impl Trait for Runtime {
-	type Event = TestEvent;
+	type Event = ();
 }
-```
-
-The `TestEvent` enum is defined to emulate the module's `Event` enum. 
-
-```rust
-mod hello_substrate {
-	pub use crate::Event;
-}
-
-impl_outer_event! {
-	pub enum TestEvent for Runtime {
-		hello_substrate<T>,
-	}
-}
-
-impl Trait for Runtime {
-	type Event = TestEvent;
-}
-```
-
-This requires using `support`'s [`impl_outer_event!`](https://crates.parity.io/srml_support/macro.impl_outer_event.html) macro
-
-```rust
-use support::impl_outer_event;
 ```
 
 Next, we create a new type that wraps the mock `Runtime` in the module's `Module`.
@@ -95,17 +71,17 @@ fn fake_test_example() {
 }
 ```
 
-While testing in this environment, runtimes that require signed extrinsics (aka take `origin` as a parameter) will require transactions coming from an `Origin`. This requires also importing [`impl_outer_origin`](https://crates.parity.io/srml_support/macro.impl_outer_origin.html) macro from `support`
+While testing in this environment, runtimes that require signed extrinsics (aka take `origin` as a parameter) will require transactions coming from an `Origin`. This requires importing the [`impl_outer_origin`](https://crates.parity.io/srml_support/macro.impl_outer_origin.html) macro from `support`
 
 ```rust
-use support::{impl_outer_event, impl_outer_origin};
+use support::{impl_outer_origin};
 
 impl_outer_origin!{
 	pub enum Origin for Runtime {}
 }
 ```
 
-It is possible to placed signed transactions as parameters in runtime methods that require the `origin` input. See the [full code in the kitchen](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/hello-substrate)), but this looks like
+It is possible to placed signed transactions as parameters in runtime methods that require the `origin` input. See the [full code in the kitchen](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/hello-substrate), but this looks like
 
 ```rust
 #[test]
@@ -117,7 +93,17 @@ fn last_value_updates() {
 }
 ```
 
-Run `cargo test` to run the unit tests
+> Run these tests with `cargo test` with an optional parameter for the test's name
+
+The input to `Origin::signed` is the `system::Trait`'s `AccountId` type which was set to `u64` for the `TestRuntime` implementation. In theory, this could be set to some other type as long as it conforms to the [trait bound](https://crates.parity.io/srml_system/trait.Trait.html),
+
+```rust
+pub trait Trait: 'static + Eq + Clone {
+    //...
+    type AccountId: Parameter + Member + MaybeSerializeDeserialize + Debug + MaybeDisplay + Ord + Default;
+	//...
+}
+```
 
 ## Storage Changes
 
@@ -127,11 +113,10 @@ Changes to storage can be checked by direct calls to the storage values. The syn
 #[test]
 fn last_value_updates() {
 	ExtBuilder::build().execute_with(|| {
-	HelloSubstrate::set_value(Origin::signed(1), 10u64);
-	assert_eq!(HelloSubstrate::last_value(), 10u64);
-	HelloSubstrate::set_value(Origin::signed(2), 11u64);
-	assert_eq!(HelloSubstrate::last_value(), 11u64);
-	// .. more assert statements
+		let expected = 10u64;
+		HelloSubstrate::set_value(Origin::signed(1), expected);
+		assert_eq!(HelloSubstrate::last_value(), expected);
+		// .. more assert statements
 	})
 }
 ```
@@ -147,11 +132,19 @@ decl_storage! {
 }
 ```
 
-Updates to `UserValue` are *covered* in the `last_value_updates` test in [`kitchen/module/hello-substrate`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/hello-substrate).
+Updates to `UserValue` are covered in the `last_value_updates` test in [`kitchen/module/hello-substrate`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/hello-substrate).
 
 ## `impl system::Trait`
 
-Substrate's design makes it convenient for the `trait Trait` to inherit `system::Trait` to inherit its types (*[remember](https://substrate.dev/recipes/traits/index.html)*). To inherit this behavior in the mock `Runtime`, it is necessary to `impl` the `system::Trait` (and import some types to do so),
+The module's `Trait` inherits `system::Trait`
+
+```rust
+pub trait Trait: system::Trait {
+	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
+}
+```
+
+The mock runtime must inherit and define the `system::Trait` associated types (*[remember](https://substrate.dev/recipes/traits/index.html)*). To do so, `impl` the `system::Trait` for `TestRuntime` with a few types imported from other crates,
 
 ```rust
 use support::{impl_outer_event, impl_outer_origin, parameter_types};
@@ -199,7 +192,31 @@ fn add_emits_correct_event() {
 
 ## Event Emission
 
-Testing the correct emission of events should call [`System::events`](https://crates.parity.io/srml_system/struct.Module.html#method.events) to compare the events emitted in the test environment with the expected event emission. In [`kitchen/module/adding-machine`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/adding-machine),
+The `TestEvent` enum basically imports and uses the module's `Event` enum,
+
+```rust
+mod hello_substrate {
+	pub use crate::Event;
+}
+
+impl_outer_event! {
+	pub enum TestEvent for Runtime {
+		hello_substrate<T>,
+	}
+}
+
+impl Trait for Runtime {
+	type Event = TestEvent;
+}
+```
+
+This requires using `support`'s [`impl_outer_event!`](https://crates.parity.io/srml_support/macro.impl_outer_event.html) macro
+
+```rust
+use support::impl_outer_event;
+```
+
+Testing the correct emission of events compares constructions of expected events with the entries in the [`System::events`](https://crates.parity.io/srml_system/struct.Module.html#method.events) vector of `EventRecord`s. In [`kitchen/module/adding-machine`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/adding-machine),
 
 ```rust
 #[test]
@@ -226,14 +243,14 @@ This check requires importing from `system`
 use system::{EventRecord, Phase};
 ```
 
-A more ergonomic way of testing whether a specific event was emitted might use the `System::events().iter()`. This pattern would doesn't require the previous imports, but it does require importing `RawEvent` from the module and `ensure_signed` from `system` to convert signed extrinsics to the underlying `AccountId`,
+A more ergonomic way of testing whether a specific event was emitted might use the `System::events().iter()`. This pattern would doesn't require the previous imports, but it does require importing `RawEvent` (or `Event`) from the module and `ensure_signed` from `system` to convert signed extrinsics to the underlying `AccountId`,
 
 ```rust
 #[cfg(test)]
 mod tests {
 	// other imports
 	use system::ensure_signed;
-	use super::RawEvent;
+	use super::RawEvent; // if no RawEvent, then `use super::Event;`
 	// tests
 }
 ```
@@ -260,7 +277,7 @@ This test constructs an `expected_event1` based on the event that the developer 
 
 ## Panics Panic
 
-The [`Verify First, Write Last`](https://substrate.dev/recipes/declarative/ensure.html) recipe encourages verifying certain conditions before changing storage values. In tests, it might be desirable to verify that invalid inputs cannot trigger runtime method logic and return the accurate error message.
+The [`Verify First, Write Last`](https://substrate.dev/recipes/declarative/ensure.html) recipe encourages verifying certain conditions before changing storage values. In tests, it might be desirable to verify that invalid inputs return the expected error message.
 
 In [`kitchen/module/adding-machine`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/adding-machine), the runtime method `add` checks for overflow
 
@@ -283,7 +300,7 @@ decl_module! {
 }
 ```
 
-A naive test to verify that the overflow throws the correct error message,
+The test below verifies that the expected error is thrown for a specific case of overflow.
 
 ```rust
 #[test]

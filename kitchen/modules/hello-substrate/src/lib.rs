@@ -107,8 +107,9 @@ mod tests {
 	#[test]
 	fn last_value_updates() {
 		ExtBuilder::build().execute_with(|| {
-			HelloSubstrate::set_value(Origin::signed(1), 10u64);
-			assert_eq!(HelloSubstrate::last_value(), 10u64);
+			let expected = 10u64;
+			HelloSubstrate::set_value(Origin::signed(1), expected);
+			assert_eq!(HelloSubstrate::last_value(), expected);
 			HelloSubstrate::set_value(Origin::signed(2), 11u64);
 			assert_eq!(HelloSubstrate::last_value(), 11u64);
 
