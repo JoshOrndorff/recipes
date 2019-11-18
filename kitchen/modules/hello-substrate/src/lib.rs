@@ -48,19 +48,19 @@ mod tests {
 	use crate::{Module, Trait};
 
 	impl_outer_origin!{
-		pub enum Origin for Runtime {}
+		pub enum Origin for TestRuntime {}
 	}
 
 	// Workaround for https://github.com/rust-lang/rust/issues/26925 . Remove when sorted.
 	#[derive(Clone, PartialEq, Eq, Debug)]
-	pub struct Runtime;
+	pub struct TestRuntime;
 	parameter_types! {
 		pub const BlockHashCount: u64 = 250;
 		pub const MaximumBlockWeight: u32 = 1024;
 		pub const MaximumBlockLength: u32 = 2 * 1024;
 		pub const AvailableBlockRatio: Perbill = Perbill::one();
 	}
-	impl system::Trait for Runtime {
+	impl system::Trait for TestRuntime {
 		type Origin = Origin;
 		type Index = u64;
 		type Call = ();
@@ -83,23 +83,23 @@ mod tests {
     }
 
     impl_outer_event! {
-        pub enum TestEvent for Runtime {
+        pub enum TestEvent for TestRuntime {
             hello_substrate<T>,
         }
     }
 
-	impl Trait for Runtime {
+	impl Trait for TestRuntime {
 		type Event = TestEvent;
 	}
 
-	pub type System = system::Module<Runtime>;
-	pub type HelloSubstrate = Module<Runtime>;
+	pub type System = system::Module<TestRuntime>;
+	pub type HelloSubstrate = Module<TestRuntime>;
 
 	pub struct ExtBuilder;
 
 	impl ExtBuilder {
 		pub fn build() -> runtime_io::TestExternalities {
-			let mut storage = system::GenesisConfig::default().build_storage::<Runtime>().unwrap();
+			let mut storage = system::GenesisConfig::default().build_storage::<TestRuntime>().unwrap();
 			runtime_io::TestExternalities::from(storage)
 		}
 	}
