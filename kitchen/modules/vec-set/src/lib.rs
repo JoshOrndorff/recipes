@@ -2,24 +2,27 @@
 
 // demonstrates how to use append instead of mutate
 // https://crates.parity.io/srml_support/storage/trait.StorageValue.html#tymethod.append
-use support::{ensure, decl_module, decl_storage, decl_event, StorageValue, dispatch::Result};
-use system::ensure_signed;
 use rstd::prelude::*;
+use support::{decl_event, decl_module, decl_storage, dispatch::Result, ensure, StorageValue};
+use system::ensure_signed;
 
 pub trait Trait: system::Trait {
-	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
+    type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
 }
 
 decl_storage! {
-	trait Store for Module<T: Trait> as VecMap {
+    trait Store for Module<T: Trait> as VecMap {
         Members get(fn members): Vec<T::AccountId>;
-	    CurrentValues get(fn current_values): Vec<u32>;
+        CurrentValues get(fn current_values): Vec<u32>;
         NewValues get(fn new_values): Vec<u32>;
-	}
+    }
 }
 
 decl_event!(
-	pub enum Event<T> where AccountId = <T as system::Trait>::AccountId {
+    pub enum Event<T>
+    where
+        AccountId = <T as system::Trait>::AccountId,
+    {
         // added member
         MemberAdded(AccountId),
         // removed member
@@ -28,12 +31,12 @@ decl_event!(
         MutateToAppend(AccountId),
         // append
         AppendVec(AccountId),
-	}
+    }
 );
 
 decl_module! {
-	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
-		fn deposit_event() = default;
+    pub struct Module<T: Trait> for enum Call where origin: T::Origin {
+        fn deposit_event() = default;
 
         // don't do this
         // (unless appending new entries AND mutating existing entries)
@@ -175,10 +178,7 @@ mod tests {
             let expected_event = TestEvent::vec_set(RawEvent::MemberAdded(new_member));
             assert!(System::events().iter().any(|a| a.event == expected_event));
 
-            assert_eq!(
-                VecSet::members(),
-                vec![new_member]
-            );
+            assert_eq!(VecSet::members(), vec![new_member]);
         })
     }
 
@@ -207,10 +207,7 @@ mod tests {
             assert!(System::events().iter().any(|a| a.event == expected_event));
 
             // check storage changes
-            assert_eq!(
-                VecSet::members(),
-                vec![new_member]
-            );
+            assert_eq!(VecSet::members(), vec![new_member]);
         })
     }
 }
