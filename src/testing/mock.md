@@ -16,7 +16,7 @@ To use the logic from the runtime module to be tested, it is necessary to bring 
 use crate::{Module, Trait};
 ```
 
-Now, declare the mock runtime as a blanket structure
+Now, declare the mock runtime as a unit structure
 
 ```rust
 #[derive(Clone, PartialEq, Eq, Debug)]
