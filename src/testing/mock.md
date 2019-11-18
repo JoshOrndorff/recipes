@@ -10,7 +10,7 @@ mod tests {
 }
 ```
 
-To use the logic from the module to be tested, it is necessary to bring `Module` and `Trait` into scope.
+To use the logic from the runtime module to be tested, it is necessary to bring `Module` and `Trait` into scope.
 
 ```rust
 use crate::{Module, Trait};
