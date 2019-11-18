@@ -47,7 +47,7 @@ To build the runtime environment, import `runtime_io`
 use runtime_io;
 ```
 
-and define the `ExtBuilder` object which is responsible for building an instance of `[TestExternalities](https://crates.parity.io/sr_io/type.TestExternalities.html)`. [Externalities](https://crates.parity.io/substrate_externalities/index.html) are an abstraction that allows the runtime to access features of the outer node such as storage or offchain workers. In this case we just create a mock storage from our default genesis configuration.
+and define the `ExtBuilder` object which is responsible for building an instance of [`TestExternalities`](https://crates.parity.io/sr_io/type.TestExternalities.html). [Externalities](https://crates.parity.io/substrate_externalities/index.html) are an abstraction that allows the runtime to access features of the outer node such as storage or offchain workers. In this case, create a mock storage from the default genesis configuration.
 
 ```rust
 pub struct ExtBuilder;
@@ -243,7 +243,7 @@ This check requires importing from `system`
 use system::{EventRecord, Phase};
 ```
 
-A more ergonomic way of testing whether a specific event was emitted might use the `System::events().iter()`. This pattern would doesn't require the previous imports, but it does require importing `RawEvent` (or `Event`) from the module and `ensure_signed` from `system` to convert signed extrinsics to the underlying `AccountId`,
+A more ergonomic way of testing whether a specific event was emitted might use the `System::events().iter()`. This pattern doesn't require the previous imports, but it does require importing `RawEvent` (or `Event`) from the module and `ensure_signed` from `system` to convert signed extrinsics to the underlying `AccountId`,
 
 ```rust
 #[cfg(test)]
