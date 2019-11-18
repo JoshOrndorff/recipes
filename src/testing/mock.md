@@ -192,7 +192,7 @@ fn add_emits_correct_event() {
 
 ## Event Emission
 
-The `TestEvent` enum basically imports and uses the module's `Event` enum,
+The `TestEvent` enum imports and uses the module's `Event` enum,
 
 ```rust
 mod hello_substrate {
