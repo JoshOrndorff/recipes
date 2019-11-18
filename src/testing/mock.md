@@ -1,7 +1,7 @@
 # Mock Runtime for Unit Testing
 *[`kitchen/module/hello-substrate`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/hello-substrate), [`kitchen/module/adding-machine`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/adding-machine)*
 
-At the bottom of the module, we can place unit tests in a separate module with a special compilation flag
+At the bottom of the runtime module, we can place unit tests in a separate rust module with a special compilation flag
 
 ```rust
 #[cfg(test)]
