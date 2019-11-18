@@ -139,7 +139,7 @@ mod tests {
         Perbill,
     };
     use support::{assert_err, impl_outer_event, impl_outer_origin, parameter_types, traits::Get};
-    use system::{EventRecord, Phase, ensure_signed};
+    use system::{ensure_signed, EventRecord, Phase};
 
     impl_outer_origin! {
         pub enum Origin for Runtime {}
@@ -206,9 +206,10 @@ mod tests {
             LinkedMap::add_member(Origin::signed(1));
             let first_account = ensure_signed(Origin::signed(1)).unwrap();
 
-            let expected_event = TestEvent::linked_map(RawEvent::MemberAdded(first_account.clone()));
+            let expected_event =
+                TestEvent::linked_map(RawEvent::MemberAdded(first_account.clone()));
             assert!(System::events().iter().any(|a| a.event == expected_event));
-            
+
             let counter = LinkedMap::the_counter();
             assert_eq!(counter, 1);
             assert_eq!(LinkedMap::the_list(counter), first_account.clone());
