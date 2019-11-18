@@ -80,7 +80,7 @@ mod tests {
     }
 
     mod generic_event {
-        pub use super::super::*;
+        pub use crate::Event;
     }
 
     impl_outer_event! {

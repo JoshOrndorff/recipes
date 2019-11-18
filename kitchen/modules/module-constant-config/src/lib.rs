@@ -119,7 +119,7 @@ mod tests {
     }
 
     mod constant_config {
-        pub use super::super::*;
+        pub use crate::Event;
     }
 
     impl_outer_event! {

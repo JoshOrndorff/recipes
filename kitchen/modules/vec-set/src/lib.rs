@@ -130,7 +130,7 @@ mod tests {
     }
 
     mod vec_set {
-        pub use super::super::*;
+        pub use crate::Event;
     }
 
     impl_outer_event! {

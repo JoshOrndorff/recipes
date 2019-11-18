@@ -195,7 +195,7 @@ mod tests {
     }
 
     mod storage_cache {
-        pub use super::super::*;
+        pub use crate::Event;
     }
 
     impl_outer_event! {
