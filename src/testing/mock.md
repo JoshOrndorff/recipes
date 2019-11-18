@@ -1,218 +1,310 @@
-# Mock Runtime for Testing
+# Mock Runtime for Unit Testing
+*[`kitchen/module/hello-substrate`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/hello-substrate)*
 
-Runtime tests allow you to verify the logic in your runtime module by mocking a Substrate runtime environment. This requires an explicit implementation of all the traits declared in the module(s) for the mock runtime. So, if our module trait looked like,
-
-```rust
-pub trait Trait: system::Trait {
-  type Reward = SomeRewardType<AssociatedType>;
-
-  type ConstThing = Get<u32>;
-}
-```
-
-Then, the implementation would require an explicit implementation of this trait in our mock runtime (similar in structure to the [substrate](https://github.com/paritytech/substrate/tree/master/node/runtime) and [polkadot](https://github.com/paritytech/polkadot/blob/master/runtime/src/lib.rs) runtime configurations). For example,
-
-```rust
-pub type SpecificType = u32; // could be some other type
-
-parameter_types!{
-  pub const ConstThing = 255;
-}
-
-impl module::Trait for Runtime {
-  type Reward = SpecificType;
-  type ConstThing = ConstThing;
-}
-```
-
-Within the context of testing, there are a few ways of building a mock runtime that offer varying levels of customizations.
-
-
-## OLD DOCS
-
-Testing a module in the context of Substrate can require a bit more work relative to [conventional Rust unit testing](https://doc.rust-lang.org/rust-by-example/testing/unit_testing.html). This follows from the fact that testing Substrate modules requires a mock runtime; modules are only useful in the context of their execution environment.
-
-*The [Substrate Collectables Tutorial](https://www.shawntabrizi.com/substrate-collectables-workshop/#/5/setting-up-tests) also contains a section on unit testing*
-
-## Simple Unit Tests
-
-In the case of when we have only a few unit tests, we can place them in a `test` module below our code in the same file.
+At the bottom of the module, we can place unit tests in a separate module with a special compilation flag attribute
 
 ```rust
 #[cfg(test)]
-mod test {/*tests here*/}
+mod tests {
+	...
+}
 ```
 
-The attribute above the module declaration ensures that the `test` module is only compiled for `cargo test`(not `cargo build`).
-
-## ExtBuilder
-
-To test a module in the context of Substrate, there is bit more work required to set up our testing environment. Here, we'll introduce one scaffolding design pattern to test a module. If you just want the code, you can just use the `mod test{}` at the bottom of the [Substrate Node Template](https://github.com/shawntabrizi/substrate-package/blob/master/substrate-node-template/runtime/src/template.rs). However, because most modules require some custom configuration, it is useful to understand the components that comprise the scaffolding.
-
-Before we dive in, create a `mock.rs` and `test.rs` file in the runtime directory ([here](https://github.com/shawntabrizi/substrate-package/blob/master/substrate-node-template/runtime/src/)). At the top of `mock.rs` and `test.rs`, include the following compilation flag:
+To use the logic from the module to be tested, it is necessary to bring `Module` and `Trait` into scope.
 
 ```rust
-#![cfg(test)]
+use crate::{Module, Trait};
 ```
 
-This basically tells the compiler to only run the tests if the [`cargo test`](https://doc.rust-lang.org/cargo/guide/tests.html) command is invoked. For more information on this syntax, check out the [Rust reference guide](https://doc.rust-lang.org/reference/attributes.html#conditional-compilation) as well as [this unit testing tutorial by Philipp Oppermann](https://os.phil-opp.com/unit-testing/). Within the `mock.rs` file, we include the following imports
-
-```rust
-use primitives::{BuildStorage, traits::IdentityLookup, testing::{Digest, DigestItem, Header, UintAuthorityId}};
-use srml_support::impl_outer_origin;
-use runtime_io;
-use substrate_primitives::{H256, Blake2Hasher};
-```
-
-It is also necessary to import the module configuration traits. For this recipe,  import `Module` and `Trait`. We may also import `GenesisConfig` if some storage items are set to be configured in the genesis block (marked with `config()` in the `decl_storage` block).
-
-```rust
-use crate::{GenesisConfig, Module, Trait};
-```
-
-### Constructing a Mock Runtime
-
-To test the module, construct a mock runtime. To do so, create a configuration type called `Test` which implements the configuration traits.
+Now, declare the mock runtime as a blanket structure
 
 ```rust
 #[derive(Clone, PartialEq, Eq, Debug)]
-pub struct Test;
+pub struct Runtime;
 ```
 
-The [derive attribute](https://doc.rust-lang.org/edition-guide/rust-2018/macros/custom-derive.html) ensures that you don't have to manually implement the `Clone, PartialEq, Eq, Debug` traits; the compiler does this for you thereby ensuring that the `Test` type conforms to the behavior of these traits.
+The `derive` macro attribute provides implementations of the `Clone + PartialEq + Eq + Debug` traits for the `Runtime` struct. 
 
-Even so, this doesn't work for all traits. Indeed, there are a few traits that require manual implementation to set up the testing environment in `test.rs`. In most case, these *implementations* are limited to specifying the type in your module that corresponds to the type in the imported module. For example, the [Staking module](https://github.com/paritytech/substrate/blob/master/srml/staking/src/mock.rs) implements the `balances` trait in its `mock.rs` file like so:
+The mock runtime also needs to implement the tested module's `Trait`. 
 
 ```rust
-impl balances::Trait for Test {
-	type Balance = u64;
-	type OnFreeBalanceZero = Staking;
-	type OnNewAccount = ();
-	type Event = ();
-	type TransactionPayment = ();
-	type TransferPayment = ();
-	type DustRemoval = ();
+impl Trait for Runtime {
+	type Event = TestEvent;
 }
 ```
 
-> If the configuration logic is not overly complicated, the pattern that follows below can be forgone and replaced with something like [the test scaffolding in `srml/aura`](https://github.com/paritytech/substrate/blob/master/srml/aura/src/mock.rs).
-
-Next, define an `ExtBuilder` struct that contains the configuration items from your module. In [`srml/staking`](https://github.com/paritytech/substrate/blob/master/srml/staking/src/mock.rs), this looks like
+The `TestEvent` enum is defined to emulate the module's `Event` enum. 
 
 ```rust
-pub struct ExtBuilder {
-	existential_deposit: u64,
-	session_length: u64,
-	sessions_per_era: u64,
-	current_era: u64,
-	reward: u64,
-	validator_pool: bool,
-	nominate: bool,
-	validator_count: u32,
-	minimum_validator_count: u32,
-	fair: bool,
+mod hello_substrate {
+	pub use super::super::*;
 }
-```
 
-It is useful for testing purposes to define default configuration values for each of the struct's fields. There is a [derive macro](https://doc.rust-lang.org/std/default/trait.Default.html) which could be invoked instead as an annotation on the `ExtBuilder` struct, but it assumes certain default values. From [`srml/staking`](https://github.com/paritytech/substrate/blob/master/srml/staking/src/mock.rs),
-
-```rust
-impl Default for ExtBuilder {
-	fn default() -> Self {
-		Self {
-			existential_deposit: 0,
-			session_length: 1,
-			sessions_per_era: 1,
-			current_era: 0,
-			reward: 10,
-			validator_pool: false,
-			nominate: true,
-			validator_count: 2,
-			minimum_validator_count: 0,
-			fair: true
-		}
+impl_outer_event! {
+	pub enum TestEvent for Runtime {
+		hello_substrate<T>,
 	}
 }
+
+impl Trait for Runtime {
+	type Event = TestEvent;
+}
 ```
 
-To implement the relevant methods for `ExtBuilder`, convention dictates defining a function to set each configuration value like so
+This requires using `support`'s [`impl_outer_event!`](https://crates.parity.io/srml_support/macro.impl_outer_event.html) macro
 
 ```rust
+use support::impl_outer_event;
+```
+
+Next, we create a new type that wraps the mock `Runtime` in the module's `Module`.
+
+```rust
+pub type HelloSubstrate = Module<Runtime>;
+```
+
+It may be helpful to read this as type aliasing our configured mock runtime to work with the module's `Module`, which is what is ultimately being tested.
+
+To build the runtime environment, import `runtime_io`
+
+```rust
+use runtime_io;
+```
+
+and define the `ExtBuilder` object
+
+```rust
+pub struct ExtBuilder;
+
 impl ExtBuilder {
-    	pub fn existential_deposit(mut self, existential_deposit: u64) -> Self {
-		self.existential_deposit = existential_deposit;
-		self
+	pub fn build() -> runtime_io::TestExternalities {
+		let mut storage = system::GenesisConfig::default().build_storage::<Runtime>().unwrap();
+		runtime_io::TestExternalities::from(storage)
 	}
-	pub fn session_length(mut self, session_length: u64) -> Self {
-		self.session_length = session_length;
-		self
-	}
-	pub fn sessions_per_era(mut self, sessions_per_era: u64) -> Self {
-		self.sessions_per_era = sessions_per_era;
-		self
-	}
-	pub fn _current_era(mut self, current_era: u64) -> Self {
-		self.current_era = current_era;
-		self
-	}
-	pub fn validator_pool(mut self, validator_pool: bool) -> Self {
-		self.validator_pool = validator_pool;
-		self
-	}
-	pub fn nominate(mut self, nominate: bool) -> Self {
-		self.nominate = nominate;
-		self
-	}
-	pub fn validator_count(mut self, count: u32) -> Self {
-		self.validator_count = count;
-		self
-	}
-	pub fn minimum_validator_count(mut self, count: u32) -> Self {
-		self.minimum_validator_count = count;
-		self
-	}
-	pub fn fair(mut self, is_fair: bool) -> Self {
-		self.fair = is_fair;
-		self
-	}
-    // more code...
 }
 ```
 
-Next, define a `build` method for `ExtBuilder` to properly set all the configuration values in our runtime storage. If we are just using our default values, it is not more complicated than defining the following method:
+which calls some methods to create a test environment,
 
 ```rust
-fn build() -> runtime_io::TestExternalities<Blake2Hasher> {
-    system::GenesisConfig::<Test>::default().build_storage().unwrap().0.into()
+#[test]
+fn fake_test_example() {
+	ExtBuilder::build().execute_with(|| {
+		// ...test conditions...
+	}) 
 }
 ```
 
-However, the logic for the `build` method in [`srml/staking`](https://github.com/paritytech/substrate/blob/master/srml/staking/src/mock.rs) is slightly more complicated to allow for a diversity of testing scenarios.
-
-At the bottom of the `mock.rs` file, publicly declare all of the modules used in correspondence to the traits that were *implemented* for the `Test` struct. For [`srml/staking`](https://github.com/paritytech/substrate/blob/master/srml/staking/src/mock.rs),
+While testing in this environment, runtimes that require signed extrinsics (aka take `origin` as a parameter) will require transactions coming from an `Origin`. This requires also importing `impl_outer_origin` macro from `support`
 
 ```rust
-pub type System = system::Module<Test>;
-pub type Balances = balances::Module<Test>;
-pub type Session = session::Module<Test>;
-pub type Timestamp = timestamp::Module<Test>;
-pub type Staking = Module<Test>;
+use support::{impl_outer_event, impl_outer_origin};
+
+impl_outer_origin!{
+	pub enum Origin for Runtime {}
+}
 ```
 
-### Setting up the Testing Environment
-
-All of the types publicly declared at the bottom of `mock.rs` are imported in `test.rs` along with any other traits that will be used in the unit testing and any necessary comparison operators. *We're still using [`srml/staking/src/mock.rs`](https://github.com/paritytech/substrate/blob/master/srml/staking/src/mock.rs) for the example*
+Now, it is possible to placed signed transactions as parameters in runtime methods that require the `origin` input. See the full code in the kitchen](), but this looks like
 
 ```rust
-// don't forget this at the top of the file to indicate 
-// compilation only with the `cargo test` command
-#![cfg(test)]
-
-use super::*;
-use runtime_io::with_externalities;
-use phragmen;
-use primitives::PerU128;
-use srml_support::{assert_ok, assert_noop, assert_eq_uvec, EnumerableStorageMap}; // comparison operators
-use mock::{Balances, Session, Staking, System, Timestamp, Test, ExtBuilder, Origin}; // publicly declared types
-use srml_support::traits::{Currency, ReservableCurrency};
+#[test]
+fn last_value_updates() {
+	ExtBuilder::build().execute_with(|| {
+		HelloSubstrate::set_value(Origin::signed(1), 10u64);
+		// some assert statements
+	})
+}
 ```
+
+As always, run `cargo test` to run the unit tests.
+
+## Storage Changes
+
+Changes to storage can be checked by direct calls to the storage values. The syntax is the same as it would be in the module's runtime methods
+
+```rust
+#[test]
+fn last_value_updates() {
+	ExtBuilder::build().execute_with(|| {
+	HelloSubstrate::set_value(Origin::signed(1), 10u64);
+	assert_eq!(HelloSubstrate::last_value(), 10u64);
+	HelloSubstrate::set_value(Origin::signed(2), 11u64);
+	assert_eq!(HelloSubstrate::last_value(), 11u64);
+	// .. more assert statements
+	})
+}
+```
+
+For context, the `decl_storage` block looks like
+
+```rust
+decl_storage! {
+	trait Store for Module<T: Trait> as HelloSubstrate{
+		pub LastValue get(fn last_value): u64;
+		pub UserValue get(fn user_value): map T::AccountId => u64;
+	}
+}
+```
+
+Updates to `UserValue` are *covered* in the `last_value_updates` test in [`kitchen/module/hello-substrate`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/hello-substrate).
+
+## `impl system::Trait`
+
+Substrate's design makes it convenient for the `trait Trait` to inherit `system::Trait` to inherit its types (*[remember](https://substrate.dev/recipes/traits/index.html)*). To emulate this with the mock `Runtime`, it is necessary to import some types and add an `impl` block,
+
+```rust
+use support::{impl_outer_event, impl_outer_origin, parameter_types};
+use runtime_primitives::{Perbill, traits::{IdentityLookup, BlakeTwo256}, testing::Header};
+
+#[derive(Clone, PartialEq, Eq, Debug)]
+pub struct Runtime;
+parameter_types! {
+	pub const BlockHashCount: u64 = 250;
+	pub const MaximumBlockWeight: u32 = 1024;
+	pub const MaximumBlockLength: u32 = 2 * 1024;
+	pub const AvailableBlockRatio: Perbill = Perbill::one();
+}
+impl system::Trait for Runtime {
+	type Origin = Origin;
+	type Index = u64;
+	type Call = ();
+	type BlockNumber = u64;
+	type Hash = BlakeTwo256;
+	type AccountId = u64;
+	type Lookup = IdentityLookup<Self::AccountId>;
+	type Header = Header;
+	type Event = TestEvent;
+	type BlockHashCount = BlockHashCount;
+	type MaximumBlockWeight = MaximumBlockWeight;
+	type MaximumBlockLength = MaximumBlockLength;
+	type AvailableBlockRatio = AvailableBlockRatio;
+	type Version = ();
+}
+
+pub type System = system::Module<Runtime>;
+```
+
+With this, it is possible to use this type in the unit tests. For example, the block number can be set with [`set_block_number`](https://crates.parity.io/srml_system/struct.Module.html#method.set_block_number)
+
+```rust
+#[test]
+fn add_emits_correct_event() {
+	ExtBuilder::build().execute_with(|| {
+		System::set_block_number(2);
+		// some assert statements and HelloSubstrate calls
+	}
+}
+```
+
+## Event Emission
+
+Testing the correct emission of events should call [`System::events`](https://crates.parity.io/srml_system/struct.Module.html#method.events) to compare the events emitted in the test environment with the expected event emission. In [`kitchen/module/adding-machine`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/adding-machine),
+
+```rust
+#[test]
+fn add_emits_correct_event() {
+	ExtBuilder::build().execute_with(|| {
+		AddingMachine::add(Origin::signed(1), 6, 9);
+
+		assert_eq!(
+			System::events(),
+			vec![
+				EventRecord {
+					phase: Phase::ApplyExtrinsic(0),
+					event: TestEvent::added(crate::Event::Added(6, 9, 15)),
+					topics: vec![],
+				},
+			]
+		);
+	})
+```
+
+This check requires importing from `system`
+
+```rust
+use system::{EventRecord, Phase};
+```
+
+A more ergonomic way of testing whether a specific event was emitted might use the `System::events().iter()`. This pattern would doesn't require the previous imports, but it does require importing `RawEvent` from the module and `ensure_signed` from `system` to convert signed extrinsics to the underlying `AccountId`,
+
+```rust
+#[cfg(test)]
+mod tests {
+	// other imports
+	use system::ensure_signed;
+	use super::RawEvent;
+	// tests
+}
+```
+
+In [`kitchen/module/hello-substrate`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/hello-substrate),
+
+```rust
+#[test]
+fn last_value_updates() {
+	ExtBuilder::build().execute_with(|| {
+		HelloSubstrate::set_value(Origin::signed(1), 10u64);
+		// some assert checks
+
+		let id_1 = ensure_signed(Origin::signed(1)).unwrap();
+		let expected_event1 = TestEvent::hello_substrate(
+			RawEvent::ValueSet(id_1, 10),
+		);
+		assert!(System::events().iter().any(|a| a.event == expected_event1));
+	})
+}
+```
+
+This test constructs an `expected_event1` based on the event that the developer expects will be emitted upon the successful execution of logic in `HelloSubstrate::set_value`. The `assert!()` statement checks if the `expected_event1` is contained in the `System::events` vector of `EventRecord`s.
+
+## Panics Panic
+
+The [`Verify First, Write Last`](https://substrate.dev/recipes/declarative/ensure.html) recipe encourages verifying certain conditions before changing storage values. In tests, it might be desirable to verify that invalid inputs cannot trigger runtime method logic and return the accurate error message.
+
+In [`kitchen/module/adding-machine`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/adding-machine), the runtime method `add` checks for overflow
+
+```rust
+decl_module! {
+    pub struct Module<T: Trait> for enum Call where origin: T::Origin {
+        fn deposit_event() = default;
+
+        fn add(origin, val1: u32, val2: u32) -> Result {
+            let _ = ensure_signed(origin)?;
+            // checks for overflow
+            let result = match val1.checked_add(val2) {
+                Some(r) => r,
+                None => return Err("Addition overflowed"),
+            };
+            Self::deposit_event(Event::Added(val1, val2, result));
+            Ok(())
+        }
+    }
+}
+```
+
+A naive test to verify that the overflow throws the correct error message,
+
+```rust
+#[test]
+fn overflow_fails() {
+	ExtBuilder::build().execute_with(|| {
+		assert_err!(
+			AddingMachine::add(Origin::signed(3), u32::max_value(), 1),
+			"Addition overflowed"
+		);
+	})
+}
+```
+
+This requires importing the `assert_err` macro from `support`. With all the previous imported objects, 
+
+```rust
+#[cfg(test)]
+mod tests {
+	use support::{assert_err, impl_outer_event, impl_outer_origin, parameter_types};
+	// more imports and tests
+}
+```
+
+For more examples, see the [paint](https://github.com/paritytech/substrate/tree/master/paint) modules (specifically `mock.rs` for mock runtime scaffolding and `test.rs` for unit tests)

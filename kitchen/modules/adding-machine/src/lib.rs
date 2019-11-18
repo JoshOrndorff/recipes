@@ -43,7 +43,7 @@ mod tests {
         traits::{BlakeTwo256, IdentityLookup},
         Perbill,
     };
-    use support::{impl_outer_event, impl_outer_origin, parameter_types, traits::Get};
+    use support::{assert_err, impl_outer_event, impl_outer_origin, parameter_types, traits::Get};
     use system::{EventRecord, Phase};
 
     impl_outer_origin! {
@@ -143,6 +143,16 @@ mod tests {
                         topics: vec![],
                     },
                 ]
+            );
+        })
+    }
+
+    #[test]
+    fn overflow_fails() {
+        ExtBuilder::build().execute_with(|| {
+            assert_err!(
+                AddingMachine::add(Origin::signed(3), u32::max_value(), 1),
+                "Addition overflowed"
             );
         })
     }

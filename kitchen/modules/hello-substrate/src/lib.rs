@@ -40,8 +40,9 @@ decl_module! {
 
 #[cfg(test)]
 mod tests {
-	use support::{impl_outer_origin, parameter_types, traits::Get};
+	use support::{impl_outer_event, impl_outer_origin, parameter_types};
 	use runtime_primitives::{Perbill, traits::{IdentityLookup, BlakeTwo256}, testing::Header};
+	use super::RawEvent;
 	use runtime_io;
 	use primitives::H256;
 	use crate::{Module, Trait};
@@ -69,7 +70,7 @@ mod tests {
 		type AccountId = u64;
 		type Lookup = IdentityLookup<Self::AccountId>;
 		type Header = Header;
-		type Event = ();
+		type Event = TestEvent;
 		type BlockHashCount = BlockHashCount;
 		type MaximumBlockWeight = MaximumBlockWeight;
 		type MaximumBlockLength = MaximumBlockLength;
@@ -77,8 +78,18 @@ mod tests {
 		type Version = ();
 	}
 
+	mod hello_substrate {
+        pub use super::super::*;
+    }
+
+    impl_outer_event! {
+        pub enum TestEvent for Runtime {
+            hello_substrate<T>,
+        }
+    }
+
 	impl Trait for Runtime {
-		type Event = ();
+		type Event = TestEvent;
 	}
 
 	pub type System = system::Module<Runtime>;
@@ -96,11 +107,24 @@ mod tests {
 	#[test]
 	fn last_value_updates() {
 		ExtBuilder::build().execute_with(|| {
-			HelloSubstrate::set_value(Origin::signed(2), 10u64);
+			HelloSubstrate::set_value(Origin::signed(1), 10u64);
 			assert_eq!(HelloSubstrate::last_value(), 10u64);
 			HelloSubstrate::set_value(Origin::signed(2), 11u64);
 			assert_eq!(HelloSubstrate::last_value(), 11u64);
-		});
+
+			use system::ensure_signed;
+			let id_1 = ensure_signed(Origin::signed(1)).unwrap();
+			let expected_event1 = TestEvent::hello_substrate(
+				RawEvent::ValueSet(id_1, 10),
+            );
+			assert!(System::events().iter().any(|a| a.event == expected_event1));
+
+			let id_2 = ensure_signed(Origin::signed(2)).unwrap();
+			let expected_event2 = TestEvent::hello_substrate(
+				RawEvent::ValueSet(id_2, 11),
+            );
+			assert!(System::events().iter().any(|a| a.event == expected_event2));
+		})
 	}
 
 	#[test]

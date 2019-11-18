@@ -126,3 +126,105 @@ decl_module! {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::RawEvent;
+    use crate::{Module, Trait};
+    use primitives::H256;
+    use runtime_io;
+    use runtime_primitives::{
+        testing::Header,
+        traits::{BlakeTwo256, IdentityLookup},
+        Perbill,
+    };
+    use support::{assert_err, impl_outer_event, impl_outer_origin, parameter_types, traits::Get};
+    use system::{EventRecord, Phase, ensure_signed};
+
+    impl_outer_origin! {
+        pub enum Origin for Runtime {}
+    }
+
+    // Workaround for https://github.com/rust-lang/rust/issues/26925 . Remove when sorted.
+    #[derive(Clone, PartialEq, Eq, Debug)]
+    pub struct Runtime;
+    parameter_types! {
+        pub const BlockHashCount: u64 = 250;
+        pub const MaximumBlockWeight: u32 = 1024;
+        pub const MaximumBlockLength: u32 = 2 * 1024;
+        pub const AvailableBlockRatio: Perbill = Perbill::one();
+    }
+    impl system::Trait for Runtime {
+        type Origin = Origin;
+        type Index = u64;
+        type Call = ();
+        type BlockNumber = u64;
+        type Hash = H256;
+        type Hashing = BlakeTwo256;
+        type AccountId = u64;
+        type Lookup = IdentityLookup<Self::AccountId>;
+        type Header = Header;
+        type Event = TestEvent;
+        type BlockHashCount = BlockHashCount;
+        type MaximumBlockWeight = MaximumBlockWeight;
+        type MaximumBlockLength = MaximumBlockLength;
+        type AvailableBlockRatio = AvailableBlockRatio;
+        type Version = ();
+    }
+
+    mod linked_map {
+        pub use super::super::*;
+    }
+
+    impl_outer_event! {
+        pub enum TestEvent for Runtime {
+            linked_map<T>,
+        }
+    }
+
+    impl Trait for Runtime {
+        type Event = TestEvent;
+    }
+
+    pub type System = system::Module<Runtime>;
+    pub type LinkedMap = Module<Runtime>;
+
+    pub struct ExtBuilder;
+
+    impl ExtBuilder {
+        pub fn build() -> runtime_io::TestExternalities {
+            let mut storage = system::GenesisConfig::default()
+                .build_storage::<Runtime>()
+                .unwrap();
+            runtime_io::TestExternalities::from(storage)
+        }
+    }
+
+    #[test]
+    fn add_member_works() {
+        ExtBuilder::build().execute_with(|| {
+            LinkedMap::add_member(Origin::signed(1));
+            let first_account = ensure_signed(Origin::signed(1)).unwrap();
+
+            let expected_event = TestEvent::linked_map(RawEvent::MemberAdded(first_account.clone()));
+            assert!(System::events().iter().any(|a| a.event == expected_event));
+            
+            let counter = LinkedMap::the_counter();
+            assert_eq!(counter, 1);
+            assert_eq!(LinkedMap::the_list(counter), first_account.clone());
+            let lcounter = LinkedMap::the_counter();
+            assert_eq!(lcounter, 1);
+            assert_eq!(LinkedMap::linked_list(lcounter), first_account.clone());
+
+            LinkedMap::add_member(Origin::signed(2));
+            let second_account = ensure_signed(Origin::signed(2)).unwrap();
+
+            let counter2 = LinkedMap::the_counter();
+            assert_eq!(counter2, 2);
+            assert_eq!(LinkedMap::the_list(counter2), second_account.clone());
+            let lcounter2 = LinkedMap::the_counter();
+            assert_eq!(lcounter2, 2);
+            assert_eq!(LinkedMap::linked_list(lcounter2), second_account.clone());
+        })
+    }
+}

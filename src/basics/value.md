@@ -30,7 +30,7 @@ fn put<Arg: Borrow<T>>(val: Arg);
 fn put_ref<Arg: ?Sized + Encode>(val: &Arg) where T: AsRef<Arg>;
 
 /// Mutate the value at the key
-n mutate<R, F: FnOnce(&mut G::Query) -> R>(f: F) -> R;
+fn mutate<R, F: FnOnce(&mut G::Query) -> R>(f: F) -> R;
 
 /// Takes the value at the key
 fn take() -> G::Query;
@@ -60,7 +60,13 @@ decl_storage! {
         MyAccount: T::AccountId;
     }
 }
+```
 
+Now that we're using `T::AccountId` in the `MyAccount` storage value, it is necessary to specify that the call is generic over the trait `Trait` by writing
+
+```rust
+// in a runtime method in `decl_module` block
+<MyAccount<T>>::get()
 ```
 
 The requirements for setting the `AccountId` stored in `MyAccount` can be specified in the runtime and exposed via
@@ -69,4 +75,4 @@ The requirements for setting the `AccountId` stored in `MyAccount` can be specif
 <MyAccount<T>>::put(some_account_id);
 ```
 
-*The full example in [`kitchen/modules/single-value`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/single-value) emits events to also notify off-chain processes of when values were set and got.*
+*The full example in [`kitchen/modules/single-value`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/single-value) emits events to also notify off-chain processes of when values were `set` and `got`.*
