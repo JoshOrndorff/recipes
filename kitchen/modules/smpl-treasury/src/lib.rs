@@ -3,7 +3,7 @@
 
 use runtime_primitives::traits::{AccountIdConversion, Zero};
 use runtime_primitives::ModuleId;
-use support::traits::{Currency, Get, ReservableCurrency};
+use support::traits::{Currency, Get};
 use support::{decl_event, decl_module, decl_storage, dispatch::Result, StorageValue};
 use system::{self, ensure_signed};
 use rstd::prelude::*;
@@ -16,7 +16,7 @@ pub trait Trait: system::Trait {
     /// The overarching event type.
     type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
     /// The staking balance.
-    type Currency: Currency<Self::AccountId> + ReservableCurrency<Self::AccountId>;
+    type Currency: Currency<Self::AccountId>;
     /// Period between successive spends.
     type SpendPeriod: Get<Self::BlockNumber>;
 }
