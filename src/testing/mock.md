@@ -20,20 +20,20 @@ Now, declare the mock runtime as a unit structure
 
 ```rust
 #[derive(Clone, PartialEq, Eq, Debug)]
-pub struct Runtime;
+pub struct TestRuntime;
 ```
 
-The `derive` macro attribute provides implementations of the `Clone + PartialEq + Eq + Debug` traits for the `Runtime` struct. 
+The `derive` macro attribute provides implementations of the `Clone + PartialEq + Eq + Debug` traits for the `TestRuntime` struct. 
 
 The mock runtime also needs to implement the tested module's `Trait`. If it is unnecessary to test the module's `Event` type, the type can be set to `()`. See further below to test the module's `Event` enum.
 
 ```rust
-impl Trait for Runtime {
+impl Trait for TestRuntime {
 	type Event = ();
 }
 ```
 
-Next, we create a new type that wraps the mock `Runtime` in the module's `Module`.
+Next, we create a new type that wraps the mock `TestRuntime` in the module's `Module`.
 
 ```rust
 pub type HelloSubstrate = Module<Runtime>;
@@ -54,7 +54,7 @@ pub struct ExtBuilder;
 
 impl ExtBuilder {
 	pub fn build() -> runtime_io::TestExternalities {
-		let mut storage = system::GenesisConfig::default().build_storage::<Runtime>().unwrap();
+		let mut storage = system::GenesisConfig::default().build_storage::<TestRuntime>().unwrap();
 		runtime_io::TestExternalities::from(storage)
 	}
 }
@@ -77,7 +77,7 @@ While testing in this environment, runtimes that require signed extrinsics (aka 
 use support::{impl_outer_origin};
 
 impl_outer_origin!{
-	pub enum Origin for Runtime {}
+	pub enum Origin for TestRuntime {}
 }
 ```
 
@@ -151,14 +151,14 @@ use support::{impl_outer_event, impl_outer_origin, parameter_types};
 use runtime_primitives::{Perbill, traits::{IdentityLookup, BlakeTwo256}, testing::Header};
 
 #[derive(Clone, PartialEq, Eq, Debug)]
-pub struct Runtime;
+pub struct TestRuntime;
 parameter_types! {
 	pub const BlockHashCount: u64 = 250;
 	pub const MaximumBlockWeight: u32 = 1024;
 	pub const MaximumBlockLength: u32 = 2 * 1024;
 	pub const AvailableBlockRatio: Perbill = Perbill::one();
 }
-impl system::Trait for Runtime {
+impl system::Trait for TestRuntime {
 	type Origin = Origin;
 	type Index = u64;
 	type Call = ();
@@ -175,7 +175,7 @@ impl system::Trait for Runtime {
 	type Version = ();
 }
 
-pub type System = system::Module<Runtime>;
+pub type System = system::Module<TestRuntime>;
 ```
 
 With this, it is possible to use this type in the unit tests. For example, the block number can be set with [`set_block_number`](https://crates.parity.io/srml_system/struct.Module.html#method.set_block_number)
@@ -200,12 +200,12 @@ mod hello_substrate {
 }
 
 impl_outer_event! {
-	pub enum TestEvent for Runtime {
+	pub enum TestEvent for TestRuntime {
 		hello_substrate<T>,
 	}
 }
 
-impl Trait for Runtime {
+impl Trait for TestRuntime {
 	type Event = TestEvent;
 }
 ```
