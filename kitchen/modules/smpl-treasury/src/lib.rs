@@ -51,16 +51,16 @@ decl_storage! {
 }
 
 decl_event!(
-	pub enum Event<T>
-	where
-		Balance = BalanceOf<T>,
-		<T as system::Trait>::AccountId
-	{
-		/// New spend requets.
-		ProxyTransfer(AccountId, Balance),
+    pub enum Event<T>
+    where
+        Balance = BalanceOf<T>,
+        <T as system::Trait>::AccountId
+    {
+        /// New spend requets.
+        ProxyTransfer(AccountId, Balance),
         /// New spend execution
         SpendExecute(AccountId, Balance),
-	}
+    }
 );
 
 impl<T: Trait> Module<T> {
