@@ -1,5 +1,5 @@
 # Event
-*[`kitchen/modules/simple-event`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/simple-event)*, *[`kitchen/modules/generic-event`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/simple-event)*
+*[`kitchen/modules/simple-event`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/simple-event)*, *[`kitchen/modules/generic-event`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/generic-event)*
 
 In Substrate, [transaction](https://docs.substrate.dev/docs/glossary#section-transaction) finality does not guarantee the execution of functions dependent on the given transaction. To verify that functions have executed successfully, emit an [event](https://docs.substrate.dev/docs/glossary#section-events) at the bottom of the function body.
 
