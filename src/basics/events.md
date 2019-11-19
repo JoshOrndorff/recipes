@@ -44,9 +44,3 @@ Self::deposit_event(RawEvent::EmitInput(user, new_number));
 ```
 
 *See the next example to use the simple event syntax in the context of verifying successful execution of an [adding machine](./adder.md)*
-
-<!-- ## More Resources
-> OUTDATED SO DO NOT INCLUDE AT THE MOMENT
-
-* [`decl_event` wiki docs](https://wiki.parity.io/decl_event)
-* [Substrate Collectables Tutorial: Creating Events](https://shawntabrizi.github.io/substrate-collectables-workshop/#/2/creating-an-event) -->

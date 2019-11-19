@@ -40,27 +40,27 @@ decl_module! {
 
 #[cfg(test)]
 mod tests {
-	use support::{impl_outer_origin, parameter_types, traits::Get};
+	use support::{impl_outer_event, impl_outer_origin, parameter_types};
 	use runtime_primitives::{Perbill, traits::{IdentityLookup, BlakeTwo256}, testing::Header};
+	use super::RawEvent;
 	use runtime_io;
-	use core::cell::RefCell;
 	use primitives::H256;
 	use crate::{Module, Trait};
 
 	impl_outer_origin!{
-		pub enum Origin for Runtime {}
+		pub enum Origin for TestRuntime {}
 	}
 
 	// Workaround for https://github.com/rust-lang/rust/issues/26925 . Remove when sorted.
 	#[derive(Clone, PartialEq, Eq, Debug)]
-	pub struct Runtime;
+	pub struct TestRuntime;
 	parameter_types! {
 		pub const BlockHashCount: u64 = 250;
 		pub const MaximumBlockWeight: u32 = 1024;
 		pub const MaximumBlockLength: u32 = 2 * 1024;
 		pub const AvailableBlockRatio: Perbill = Perbill::one();
 	}
-	impl system::Trait for Runtime {
+	impl system::Trait for TestRuntime {
 		type Origin = Origin;
 		type Index = u64;
 		type Call = ();
@@ -70,7 +70,7 @@ mod tests {
 		type AccountId = u64;
 		type Lookup = IdentityLookup<Self::AccountId>;
 		type Header = Header;
-		type Event = ();
+		type Event = TestEvent;
 		type BlockHashCount = BlockHashCount;
 		type MaximumBlockWeight = MaximumBlockWeight;
 		type MaximumBlockLength = MaximumBlockLength;
@@ -78,18 +78,28 @@ mod tests {
 		type Version = ();
 	}
 
-	impl Trait for Runtime {
-		type Event = ();
+	mod hello_substrate {
+        pub use crate::Event;
+    }
+
+    impl_outer_event! {
+        pub enum TestEvent for TestRuntime {
+            hello_substrate<T>,
+        }
+    }
+
+	impl Trait for TestRuntime {
+		type Event = TestEvent;
 	}
 
-	pub type System = system::Module<Runtime>;
-	pub type HelloSubstrate = Module<Runtime>;
+	pub type System = system::Module<TestRuntime>;
+	pub type HelloSubstrate = Module<TestRuntime>;
 
 	pub struct ExtBuilder;
 
 	impl ExtBuilder {
 		pub fn build() -> runtime_io::TestExternalities {
-			let mut storage = system::GenesisConfig::default().build_storage::<Runtime>().unwrap();
+			let mut storage = system::GenesisConfig::default().build_storage::<TestRuntime>().unwrap();
 			runtime_io::TestExternalities::from(storage)
 		}
 	}
@@ -97,11 +107,25 @@ mod tests {
 	#[test]
 	fn last_value_updates() {
 		ExtBuilder::build().execute_with(|| {
-			HelloSubstrate::set_value(Origin::signed(2), 10u64);
-			assert_eq!(HelloSubstrate::last_value(), 10u64);
+			let expected = 10u64;
+			HelloSubstrate::set_value(Origin::signed(1), expected);
+			assert_eq!(HelloSubstrate::last_value(), expected);
 			HelloSubstrate::set_value(Origin::signed(2), 11u64);
 			assert_eq!(HelloSubstrate::last_value(), 11u64);
-		});
+
+			use system::ensure_signed;
+			let id_1 = ensure_signed(Origin::signed(1)).unwrap();
+			let expected_event1 = TestEvent::hello_substrate(
+				RawEvent::ValueSet(id_1, 10),
+            );
+			assert!(System::events().iter().any(|a| a.event == expected_event1));
+
+			let id_2 = ensure_signed(Origin::signed(2)).unwrap();
+			let expected_event2 = TestEvent::hello_substrate(
+				RawEvent::ValueSet(id_2, 11),
+            );
+			assert!(System::events().iter().any(|a| a.event == expected_event2));
+		})
 	}
 
 	#[test]

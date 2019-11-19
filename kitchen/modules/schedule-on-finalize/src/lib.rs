@@ -2,13 +2,11 @@
 
 // schedule with `OnFinalize`
 use parity_scale_codec::{Decode, Encode};
+use rstd::prelude::*;
 use runtime_primitives::traits::{Hash, Zero};
 use support::traits::Get;
-use support::{
-    decl_event, decl_module, decl_storage, dispatch::Result, StorageMap, StorageValue,
-};
+use support::{decl_event, decl_module, decl_storage, dispatch::Result, StorageMap, StorageValue};
 use system::ensure_signed;
-use rstd::prelude::*;
 
 // type alias ordering task execution in `on_finalize`
 pub type PriorityScore = u32;
