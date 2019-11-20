@@ -3,7 +3,7 @@
 
 use runtime_primitives::traits::{AccountIdConversion, Zero};
 use runtime_primitives::ModuleId;
-use support::traits::{Currency, Get, ReservableCurrency};
+use support::traits::{Currency, Get, ExistenceRequirement::AllowDeath};
 use support::{decl_event, decl_module, decl_storage, dispatch::Result, StorageValue};
 use system::{self, ensure_signed};
 use rstd::prelude::*;
@@ -16,7 +16,7 @@ pub trait Trait: system::Trait {
     /// The overarching event type.
     type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
     /// The staking balance.
-    type Currency: Currency<Self::AccountId> + ReservableCurrency<Self::AccountId>;
+    type Currency: Currency<Self::AccountId>;
     /// Period between successive spends.
     type SpendPeriod: Get<Self::BlockNumber>;
 }
@@ -29,7 +29,7 @@ decl_module! {
         fn proxy_transfer(origin, dest: T::AccountId, amount: BalanceOf<T>) -> Result {
             let sender = ensure_signed(origin)?;
 
-            let _ = T::Currency::transfer(&sender, &Self::account_id(), amount)?;
+            let _ = T::Currency::transfer(&sender, &Self::account_id(), amount, AllowDeath)?;
             <SpendQ<T>>::mutate(|requests| requests.push((dest.clone(), amount)));
             Self::deposit_event(RawEvent::ProxyTransfer(dest, amount));
             Ok(())
@@ -51,16 +51,16 @@ decl_storage! {
 }
 
 decl_event!(
-	pub enum Event<T>
-	where
-		Balance = BalanceOf<T>,
-		<T as system::Trait>::AccountId
-	{
-		/// New spend requets.
-		ProxyTransfer(AccountId, Balance),
+    pub enum Event<T>
+    where
+        Balance = BalanceOf<T>,
+        <T as system::Trait>::AccountId
+    {
+        /// New spend requets.
+        ProxyTransfer(AccountId, Balance),
         /// New spend execution
         SpendExecute(AccountId, Balance),
-	}
+    }
 );
 
 impl<T: Trait> Module<T> {
@@ -83,7 +83,7 @@ impl<T: Trait> Module<T> {
         <SpendQ<T>>::get().into_iter().for_each(|request| {
             if request.1 <= budget_remaining {
                 budget_remaining -= request.1;
-                let _ = T::Currency::transfer(&Self::account_id(), &request.0, request.1);
+                let _ = T::Currency::transfer(&Self::account_id(), &request.0, request.1, AllowDeath);
             }
         });
     }
