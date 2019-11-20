@@ -3,7 +3,7 @@ members = [
   "modules/adding-machine",
   "modules/basic-token",
   "modules/check-membership",
-  # "modules/child-tree",
+  "modules/child-tree",
   "modules/currency-imbalances",
   "modules/double-map",
   # "modules/gen-random",
@@ -30,5 +30,5 @@ members = [
   "runtimes/super-genesis",
   "runtimes/weight-fee-runtime",
   "runtimes/weight-fee-genesis",
-  "node",
+  # "node",
 ]
