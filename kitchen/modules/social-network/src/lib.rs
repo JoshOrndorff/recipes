@@ -3,7 +3,7 @@
 /// TODO:rewrite `=>` create a profile struct for managing friend information
 /// use constant getters and softmax?
 use support::{
-    decl_event, decl_module, decl_storage, dispatch::Result, ensure, EnumerableStorageMap,
+    decl_event, decl_module, decl_storage, dispatch::Result, ensure,
     StorageMap, StorageValue,
 };
 use system::ensure_signed;

@@ -14,8 +14,6 @@ std = [
     'runtime-primitives/std',
 ]
 
-[dependencies]
-substrate-primitives = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "polkadot-master" }
 
 [dependencies.parity-scale-codec]
 default-features = false
