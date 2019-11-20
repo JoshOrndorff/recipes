@@ -1,6 +1,5 @@
 # smpl-treasury
 
-- [ ] add tests for mock runtime
 - [ ] reconfigure `node` and `runtime` with this module `Trait`
 - [ ] address node build issue
 
