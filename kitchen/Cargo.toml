@@ -27,7 +27,7 @@ members = [
   "modules/default-instance",
   # "modules/weights",
   "runtimes/super-runtime",
-  # "runtimes/super-genesis",
+  "runtimes/super-genesis",
   # "runtimes/weight-fee-runtime",
   # "runtimes/weight-fee-genesis",
   # "node",

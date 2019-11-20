@@ -27,9 +27,6 @@
     - [Permissioned Methods](./declarative/permissioned.md)
 - [Testing](./testing/README.md)
     - [Mock Runtime for Unit Testing](./testing/mock.md)
-- [Runtime Configuration](./base/runtime.md)
-- [Simple Treasury](./tour/treasury.md)
-- [Token Curated Registry](./token/token.md)
 - [Featured Tutorials](./base/dessert.md)
 
 -----------

@@ -1,5 +1,5 @@
 [package]
-name = "smpl-treasury"
+name = "smpl-batch"
 version = "0.1.0"
 authors = ["4meta5"]
 edition = "2018"
@@ -14,10 +14,13 @@ std = [
     'runtime-primitives/std',
 ]
 
+[dependencies]
+substrate-primitives = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "polkadot-master" }
+
 [dependencies.parity-scale-codec]
 default-features = false
 features = ['derive']
-version = '1.0.6'
+version = '1.1.0'
 
 [dependencies.support]
 default_features = false
@@ -49,8 +52,14 @@ git = 'https://github.com/paritytech/substrate.git'
 package = 'sr-std'
 rev = '6ae3b6c4ddc03d4cdb10bd1d417b95d20f4c1b6e'
 
-[dev-dependencies.primitives]
+[dependencies.primitives]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'substrate-primitives'
+rev = '6ae3b6c4ddc03d4cdb10bd1d417b95d20f4c1b6e'
+
+[dev-dependencies.runtime-io]
+default_features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'sr-io'
 rev = '6ae3b6c4ddc03d4cdb10bd1d417b95d20f4c1b6e'
