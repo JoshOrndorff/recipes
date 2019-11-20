@@ -27,6 +27,7 @@
     - [Permissioned Methods](./declarative/permissioned.md)
 - [Testing](./testing/README.md)
     - [Mock Runtime for Unit Testing](./testing/mock.md)
+    - [Configuring Externalities](./testing/externalities)
 - [Featured Tutorials](./base/dessert.md)
 
 -----------
