@@ -2,13 +2,11 @@
 
 // schedule with `OnFinalize`
 use parity_scale_codec::{Decode, Encode};
+use rstd::prelude::*;
 use runtime_primitives::traits::{Hash, Zero};
 use support::traits::Get;
-use support::{
-    decl_event, decl_module, decl_storage, dispatch::Result, StorageMap, StorageValue,
-};
+use support::{decl_event, decl_module, decl_storage, dispatch::Result, StorageMap, StorageValue};
 use system::ensure_signed;
-use rstd::prelude::*;
 
 // type alias ordering task execution in `on_finalize`
 pub type PriorityScore = u32;
@@ -46,9 +44,9 @@ decl_event!(
 decl_storage! {
     trait Store for Module<T: Trait> as EventLoop {
         /// Outstanding tasks getter
-        Tasks get(tasks): map T::Hash => Option<Task<T::BlockNumber>>;
+        Tasks get(fn tasks): map T::Hash => Option<Task<T::BlockNumber>>;
         /// Dispatch Queue for tasks
-        TaskQ get(task_q): Vec<T::Hash>;
+        TaskQ get(fn task_q): Vec<T::Hash>;
     }
 }
 

@@ -1,7 +1,7 @@
 //! borrows collateral locking logic from treasury/lib.rs
 // demonstrates https://crates.parity.io/srml_support/traits/trait.ReservableCurrency.html
 use support::traits::{
-	Currency, OnUnbalanced, ReservableCurrency,
+	Currency, ReservableCurrency, ExistenceRequirement::AllowDeath
 };
 use support::{decl_event, decl_module, dispatch::Result};
 use system::ensure_signed;
@@ -23,7 +23,7 @@ decl_event!(
         AccountId = <T as system::Trait>::AccountId,
         Balance = BalanceOf<T>,
         BlockNumber = <T as system::Trait>::BlockNumber,
-    {   
+    {
         LockFunds(AccountId, Balance, BlockNumber),
         UnlockFunds(AccountId, Balance, BlockNumber),
         // sender, dest, amount, block number
@@ -63,7 +63,7 @@ decl_module! {
         pub fn transfer_funds(origin, dest: T::AccountId, amount: BalanceOf<T>) -> Result {
             let sender = ensure_signed(origin)?;
 
-            T::Currency::transfer(&sender, &dest, amount)?;
+            T::Currency::transfer(&sender, &dest, amount, AllowDeath)?;
 
             let now = <system::Module<T>>::block_number();
 
@@ -73,15 +73,15 @@ decl_module! {
 
         // might be useful in closed economic systems
         pub fn unreserve_and_transfer(
-            origin, 
-            to_punish: T::AccountId, 
-            dest: T::AccountId, 
+            origin,
+            to_punish: T::AccountId,
+            dest: T::AccountId,
             collateral: BalanceOf<T>
         ) -> Result {
             let _ = ensure_signed(origin)?; // dangerous because can be called with any signature (so dont do this in practice ever!)
 
             let unreserved = T::Currency::unreserve(&to_punish, collateral);
-            T::Currency::transfer(&to_punish, &dest, unreserved)?;
+            T::Currency::transfer(&to_punish, &dest, unreserved, AllowDeath)?;
 
             let now = <system::Module<T>>::block_number();
             Self::deposit_event(RawEvent::TransferFunds(to_punish, dest, unreserved, now));

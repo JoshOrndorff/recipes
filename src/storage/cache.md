@@ -1,17 +1,17 @@
 # Cache Multiple Calls
 *[`kitchen/modules/storage-cache`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/storage-cache)*
 
-Calls to runtime storage have an associated cost. With this in mind, multiple calls to storage values should be avoided when possible. 
+Calls to runtime storage have an associated cost. With this in mind, multiple calls to storage values should be avoided when possible.
 
 ```rust
 decl_storage! {
     trait Store for Module<T: Trait> as StorageCache {
         // copy type
-        SomeCopyValue get(some_copy_value): u32;
+        SomeCopyValue get(fn some_copy_value): u32;
 
         // clone type
-        KingMember get(king_member): T::AccountId;
-        GroupMembers get(group_members): Vec<T::AccountId>;
+        KingMember get(fn king_member): T::AccountId;
+        GroupMembers get(fn group_members): Vec<T::AccountId>;
     }
 }
 ```
@@ -58,13 +58,13 @@ decl_storage! {
     trait Store for Module<T: Trait> as StorageCache {
         // ...<copy type here>...
         // clone type
-        KingMember get(king_member): T::AccountId;
-        GroupMembers get(group_members): Vec<T::AccountId>;
+        KingMember get(fn king_member): T::AccountId;
+        GroupMembers get(fn group_members): Vec<T::AccountId>;
     }
 }
 ```
 
-The runtime methods enable the calling account to swap the `T::AccountId` value in storage if 
+The runtime methods enable the calling account to swap the `T::AccountId` value in storage if
 1. the existing storage value is not in `GroupMembers` AND
 2. the calling account is in `Group Members
 
@@ -74,7 +74,7 @@ fn swap_king_no_cache(origin) -> Result {
     let new_king = ensure_signed(origin)?;
     let existing_king = <KingMember<T>>::get();
 
-    // only places a new account if 
+    // only places a new account if
     // (1) the existing account is not a member &&
     // (2) the new account is a member
     ensure!(!Self::is_member(existing_king), "is a member so maintains priority");
@@ -129,7 +129,7 @@ fn swap_king_with_cache(origin) -> Result {
     // <no (unnecessary) storage call here>
     // place new king
     <KingMember<T>>::put(new_king.clone());
-    
+
     // use cached old_king value here
     Self::deposit_event(RawEvent::BetterKingSwap(old_king, new_king));
     Ok(())

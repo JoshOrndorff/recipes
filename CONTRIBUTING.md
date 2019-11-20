@@ -52,6 +52,6 @@ $ mdbook build --open
 ## Etiquette <a name = "etiquette"></a>
 
 * don't use "we" or "our" because it often is conducive to unnecessary language
-* use active voice (instead of passive voice ie "you may want to use active voice")
+* use active voice (instead of passive voice like "you may want to use active voice", prefer "use active voice")
 * link as often as possible to outside content and useful resources including other recipes, [documentation](https://substrate.dev/docs/en/getting-started/), [tutorials](https://substrate.dev/en/tutorials), and [code](https://github.com/substrate)
 * **be nice, abide by the [Rust CoC](https://www.rust-lang.org/policies/code-of-conduct)**

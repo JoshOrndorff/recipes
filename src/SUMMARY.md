@@ -1,1 +1,36 @@
-README.md
+# Summary
+
+- [Introduction](./base/README.md)
+- [Learn Rust](./base/rust.md)
+- [Getting Started](./base/setup.md)
+    - [Running A Node](./base/runnode.md)
+    - [Interacting with a Node](./base/interactnode.md)
+    - [Using the Kitchen](./base/kitchenoverview.md)
+- [Hello Substrate](./basics/README.md)
+    - [Events Verify Execution](./basics/events.md)
+    - [Adding Machine](./basics/adder.md)
+    - [Single Value Storage](./basics/value.md)
+- [Runtime Storage API](./storage/README.md)
+    - [Cache Locally > Storage Calls](./storage/cache.md)
+    - [Sets](./storage/iterate.md)
+    - [Ordered Lists: Maps, Linked Maps](./storage/enumerated.md)
+    - [Subgroup Removal by Subkey: Double Maps](./storage/double.md)
+    - [Efficient Subgroup Removal by Subkey: Child Tries](./storage/childtries.md)
+    - [Configurable Constants](./storage/constants.md)
+    - [Instantiable Modules](./storage/instantiable.md)
+- [Types and Traits](./traits/README.md)
+    - [Currency Types](./traits/currency.md)
+    - [Transaction Fees for Economic Security](./traits/fees.md)
+    - [Mock Runtime for Unit Testing](./testing/mock.md)
+ - [Declarative Syntax](./declarative/README.md)
+    - [Verify First, Write Last](./declarative/ensure.md)
+    - [Safe Math](./declarative/safemath.md)
+    - [Permissioned Methods](./declarative/permissioned.md)
+- [Runtime Configuration](./base/runtime.md)
+- [Simple Treasury](./tour/treasury.md)
+- [Token Curated Registry](./token/token.md)
+- [Featured Tutorials](./base/dessert.md)
+
+-----------
+
+[More Resources](./base/resource.md)

@@ -71,3 +71,178 @@ decl_module! {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+	use support::{assert_err, impl_outer_origin, impl_outer_event, parameter_types, traits::Get};
+	use runtime_primitives::{Perbill, traits::{IdentityLookup, BlakeTwo256}, testing::Header};
+    use system::{EventRecord, Phase};
+    use super::RawEvent;
+    use runtime_io;
+	use primitives::H256;
+	use crate::{Module, Trait};
+
+	impl_outer_origin!{
+		pub enum Origin for TestRuntime {}
+	}
+
+	// Workaround for https://github.com/rust-lang/rust/issues/26925 . Remove when sorted.
+	#[derive(Clone, PartialEq, Eq, Debug)]
+	pub struct TestRuntime;
+	parameter_types! {
+		pub const BlockHashCount: u64 = 250;
+		pub const MaximumBlockWeight: u32 = 1024;
+		pub const MaximumBlockLength: u32 = 2 * 1024;
+		pub const AvailableBlockRatio: Perbill = Perbill::one();
+	}
+	impl system::Trait for TestRuntime {
+		type Origin = Origin;
+		type Index = u64;
+		type Call = ();
+		type BlockNumber = u64;
+		type Hash = H256;
+		type Hashing = BlakeTwo256;
+		type AccountId = u64;
+		type Lookup = IdentityLookup<Self::AccountId>;
+		type Header = Header;
+		type Event = TestEvent;
+		type BlockHashCount = BlockHashCount;
+		type MaximumBlockWeight = MaximumBlockWeight;
+		type MaximumBlockLength = MaximumBlockLength;
+		type AvailableBlockRatio = AvailableBlockRatio;
+		type Version = ();
+    }
+
+    mod single_value {
+        pub use crate::Event;
+    }
+    
+    impl_outer_event! {
+        pub enum TestEvent for TestRuntime {
+            single_value<T>,
+        }
+    }
+
+	impl Trait for TestRuntime {
+		type Event = TestEvent;
+    }
+
+	pub type System = system::Module<TestRuntime>;
+	pub type SingleValue = Module<TestRuntime>;
+
+	pub struct ExtBuilder;
+
+	impl ExtBuilder {
+		pub fn build() -> runtime_io::TestExternalities {
+			let mut storage = system::GenesisConfig::default().build_storage::<TestRuntime>().unwrap();
+			runtime_io::TestExternalities::from(storage)
+		}
+    }
+
+    #[test]
+    fn set_value_works() {
+        ExtBuilder::build().execute_with(|| {
+            System::set_block_number(2);
+            SingleValue::set_value(Origin::signed(1), 10);
+
+            let expected_event = TestEvent::single_value(
+                RawEvent::ValueSet(10, 2),
+            );
+
+            assert!(System::events().iter().any(|a| a.event == expected_event));
+            
+            System::set_block_number(15);
+            SingleValue::set_value(Origin::signed(1), 11);
+
+            let expected_event = TestEvent::single_value(
+                RawEvent::ValueSet(11, 15),
+            );
+
+			assert!(System::events().iter().any(|a| a.event == expected_event));
+        })
+    }
+
+    #[test]
+    fn set_account_works() {
+        // NOTE: could probably be combined into `set_works()`
+        ExtBuilder::build().execute_with(|| {
+            System::set_block_number(2);
+            SingleValue::set_account(Origin::signed(1), 10);
+
+            let expected_event = TestEvent::single_value(
+                RawEvent::AccountSet(10, 2),
+            );
+
+            assert!(System::events().iter().any(|a| a.event == expected_event));
+            
+            System::set_block_number(15);
+            SingleValue::set_account(Origin::signed(1), 11);
+
+            let expected_event = TestEvent::single_value(
+                RawEvent::AccountSet(11, 15),
+            );
+
+			assert!(System::events().iter().any(|a| a.event == expected_event));
+        })
+    }
+
+    #[test]
+    fn get_works() {
+        ExtBuilder::build().execute_with(|| {
+
+                assert_err!(
+                    SingleValue::get_value(Origin::signed(1)),
+                    "value does not exist"
+                );
+                assert_err!(
+                    SingleValue::get_account(Origin::signed(2)),
+                    "account dne"
+                );
+
+                // set value and account
+                System::set_block_number(2);
+                SingleValue::set_value(Origin::signed(2), 5);
+                SingleValue::set_account(Origin::signed(1), 10);
+
+                // get value and account
+                SingleValue::get_value(Origin::signed(1));
+
+                let expected_event = TestEvent::single_value(
+                    RawEvent::ValueGet(5, 2),
+                );
+    
+                assert!(System::events().iter().any(|a| a.event == expected_event));
+
+                SingleValue::get_account(Origin::signed(1));
+
+                let expected_event2 = TestEvent::single_value(
+                    RawEvent::AccountGet(10, 2),
+                );
+
+                assert!(System::events().iter().any(|a| a.event == expected_event2));
+
+                // reset value and account
+                System::set_block_number(12);
+                SingleValue::set_value(Origin::signed(2), 27);
+                SingleValue::set_account(Origin::signed(1), 13);
+
+                // reget value and account
+                SingleValue::get_value(Origin::signed(1));
+
+                let expected_event3 = TestEvent::single_value(
+                    RawEvent::ValueGet(27, 12),
+                );
+    
+                assert!(System::events().iter().any(|a| a.event == expected_event3));
+
+                SingleValue::get_account(Origin::signed(1));
+
+                let expected_event4 = TestEvent::single_value(
+                    RawEvent::AccountGet(13, 12),
+                );
+
+                assert!(System::events().iter().any(|a| a.event == expected_event4));
+            }
+        )
+    }
+}
