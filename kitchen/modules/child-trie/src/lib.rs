@@ -2,7 +2,7 @@
 //! - auxiliary runtime methods for using child storage
 //! - see modules::{smpl-crowdfund,} for examples of using this API with objects in the module
 use primitives::{Blake2Hasher, Hasher};
-use substrate_primitives::storage::well_known_keys::CHILD_STORAGE_KEY_PREFIX;
+use primitives::storage::well_known_keys::CHILD_STORAGE_KEY_PREFIX;
 use support::{decl_module, decl_storage, storage::child};
 
 use parity_scale_codec::{Decode, Encode};
