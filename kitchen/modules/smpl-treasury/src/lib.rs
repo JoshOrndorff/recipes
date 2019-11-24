@@ -57,10 +57,21 @@ decl_storage! {
         /// The amount, the address to which it is sent
         TransferRequests get(fn treasury_requests): Vec<SpendRequest<T::AccountId, BalanceOf<T>>>;
         /// The members which vote on how taxes are spent
-        Council get(fn council):  Vec<T::AccountId>;
-        /// The proposals that have yet to be approved for spending
+        Council get(fn council) config():  Vec<T::AccountId>;
+        /// The proposals for treasury spending
         Proposals get(fn proposals): map T::AccountId => Option<Proposal<T::AccountId, BalanceOf<T>, T::BlockNumber>>;
     }
+    add_extra_genesis {
+		build(|config| {
+			// Create the receiving treasury account
+			let _ = T::Currency::make_free_balance_be(
+				&<Module<T>>::account_id(),
+				T::Currency::minimum_balance(),
+            );  
+            
+            <Council<T>>::put(&config.council);
+		});
+	}
 }
 
 decl_event!(
@@ -78,6 +89,8 @@ decl_event!(
         TreasuryProposal(AccountId, Balance),
         /// Treasury spend executed
         TreasurySpent(AccountId, Balance, BlockNumber),
+        /// For testing purposes
+        NullEvent(u32), // u32 could be aliases as an error code for mocking setup
     }
 );
 
@@ -228,6 +241,164 @@ impl<T: Trait> Module<T> {
                 budget_remaining -= proposal.amount;
                 let _ = T::Currency::transfer(&Self::account_id(), &proposal.to, proposal.amount, AllowDeath);
             }
+        })
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::{Module, Trait};
+    use super::{RawEvent, GenesisConfig};
+    use primitives::H256;
+    use runtime_io;
+    use runtime_primitives::{
+        testing::Header,
+        traits::{BlakeTwo256, IdentityLookup, OnFinalize},
+        Perbill,
+    };
+    use balances;
+    use support::{assert_err, impl_outer_event, impl_outer_origin, parameter_types, traits::Get};
+    use system::ensure_signed;
+
+    impl_outer_origin! {
+        pub enum Origin for TestRuntime {}
+    }
+
+    // Workaround for https://github.com/rust-lang/rust/issues/26925 . Remove when sorted.
+    #[derive(Clone, PartialEq, Eq, Debug)]
+    pub struct TestRuntime;
+    parameter_types! {
+        pub const BlockHashCount: u64 = 250;
+        pub const MaximumBlockWeight: u32 = 1024;
+        pub const MaximumBlockLength: u32 = 2 * 1024;
+        pub const AvailableBlockRatio: Perbill = Perbill::one();
+
+        pub const ExistentialDeposit: u64 = 0;
+        pub const TransferFee: u64 = 0;
+        pub const CreationFee: u64 = 0;
+    }
+    impl system::Trait for TestRuntime {
+        type Origin = Origin;
+        type Index = u64;
+        type Call = ();
+        type BlockNumber = u64;
+        type Hash = H256;
+        type Hashing = BlakeTwo256;
+        type AccountId = u64;
+        type Lookup = IdentityLookup<Self::AccountId>;
+        type Header = Header;
+        type Event = TestEvent;
+        type BlockHashCount = BlockHashCount;
+        type MaximumBlockWeight = MaximumBlockWeight;
+        type MaximumBlockLength = MaximumBlockLength;
+        type AvailableBlockRatio = AvailableBlockRatio;
+        type Version = ();
+    }
+
+    impl balances::Trait for TestRuntime {
+        type Balance = u64;
+        type OnFreeBalanceZero = ();
+        type OnNewAccount = ();
+        type Event = ();
+        type TransferPayment = ();
+        type DustRemoval = ();
+        type ExistentialDeposit = ExistentialDeposit;
+        type TransferFee = TransferFee;
+        type CreationFee = CreationFee;
+    }
+    
+    mod treasury {
+        pub use crate::Event;
+    }
+
+    impl_outer_event! {
+        pub enum TestEvent for TestRuntime {
+            treasury<T>,
+        }
+    }
+
+    impl std::convert::From<()> for TestEvent {
+        fn from(unit: ()) -> Self {
+            TestEvent::treasury(RawEvent::NullEvent(6))
+        }
+    }
+
+    parameter_types!{
+        pub const Tax: u64 = 2;
+        pub const UserSpend: u64 = 10;
+        pub const TreasurySpend: u64 = 10;
+        pub const MinimumProposalAge: u64 = 3;
+    }
+    impl Trait for TestRuntime {
+        type Event = TestEvent;
+        type Currency = balances::Module<Self>;
+        type Tax = Tax;
+        type UserSpend = UserSpend;
+        type TreasurySpend = TreasurySpend;
+        type MinimumProposalAge = MinimumProposalAge;
+    }
+
+    pub type System = system::Module<TestRuntime>;
+    pub type Balances = balances::Module<TestRuntime>;
+    pub type Treasury = Module<TestRuntime>;
+
+    // An alternative to `ExtBuilder` which includes custom configuration
+    pub fn new_test_ext() -> runtime_io::TestExternalities {
+        let mut t = system::GenesisConfig::default().build_storage::<TestRuntime>().unwrap();
+        balances::GenesisConfig::<TestRuntime> {
+            balances: vec![
+                (1, 13),
+                (2, 11),
+                (3, 8),
+                (4, 3),
+                (5, 19),
+                (6, 23),
+                (7, 17),
+            ],
+            vesting: vec![],
+        }.assimilate_storage(&mut t).unwrap();
+        GenesisConfig::<TestRuntime>{
+            council: vec![
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+            ]
+        }.assimilate_storage(&mut t).unwrap();
+        t.into()
+    }
+
+    /// Auxiliary method for simulating block time passing
+    fn run_to_block(n: u64) {
+        while System::block_number() < n {
+            Treasury::on_finalize(System::block_number());
+            System::set_block_number(System::block_number() + 1);
+            // could add on_initialize here if this module had it
+        }
+    }
+
+    /// Testing correct behavior of boilerplate
+    #[test]
+    fn config_is_correct() {
+        new_test_ext().execute_with(|| {
+            // check membership initiated correctly
+            let first_account = ensure_signed(Origin::signed(1)).unwrap();
+            let second_account = ensure_signed(Origin::signed(2)).unwrap();
+            let third_account = ensure_signed(Origin::signed(3)).unwrap();
+            let fourth_account = ensure_signed(Origin::signed(4)).unwrap();
+            let fifth_account = ensure_signed(Origin::signed(5)).unwrap();
+            let sixth_account = ensure_signed(Origin::signed(6)).unwrap();
+            let seventh_account = ensure_signed(Origin::signed(7)).unwrap();
+            assert!(Treasury::is_on_council(&first_account));
+            assert!(Treasury::is_on_council(&second_account));
+            assert!(Treasury::is_on_council(&third_account));
+            assert!(Treasury::is_on_council(&fourth_account));
+            assert!(Treasury::is_on_council(&fifth_account));
+            assert!(Treasury::is_on_council(&sixth_account));
+            assert!(Treasury::is_on_council(&seventh_account));
         })
     }
 }
