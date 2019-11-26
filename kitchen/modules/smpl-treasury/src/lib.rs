@@ -1,8 +1,9 @@
-// simple treasury
+// not simple treasury
 #![cfg_attr(not(feature = "std"), no_std)]
 
-use runtime_primitives::traits::{AccountIdConversion, Zero};
-use runtime_primitives::{ModuleId, RuntimeDebug};
+use runtime_primitives::{
+    ModuleId, RuntimeDebug, traits::{CheckedSub, CheckedAdd, AccountIdConversion, Zero},
+};
 use support::traits::{Currency, ReservableCurrency, Get, ExistenceRequirement::AllowDeath};
 use support::{decl_event, decl_module, decl_storage, dispatch::Result, ensure, StorageValue};
 use parity_scale_codec::{Encode, Decode};
@@ -29,7 +30,7 @@ pub trait Trait: system::Trait {
     type MinimumProposalAge: Get<Self::BlockNumber>;
 }
 
-#[derive(Encode, Decode)]
+#[derive(Encode, Decode, PartialEq)]
 pub struct SpendRequest<AccountId, Balance> {
     /// Sending account
     from: AccountId,
@@ -55,7 +56,9 @@ pub struct Proposal<AccountId, Balance, BlockNumber> {
 decl_storage! {
     trait Store for Module<T: Trait> as SmplTreasury {
         /// The amount, the address to which it is sent
-        TransferRequests get(fn treasury_requests): Vec<SpendRequest<T::AccountId, BalanceOf<T>>>;
+        TransferRequests get(fn transfer_requests): Vec<SpendRequest<T::AccountId, BalanceOf<T>>>;
+        /// Track user debt (to prevent excessive requests beyond means)
+        UserDebt get(fn user_debt): map T::AccountId => Option<BalanceOf<T>>;
         /// The members which vote on how taxes are spent
         Council get(fn council) config():  Vec<T::AccountId>;
         /// The proposals for treasury spending
@@ -89,7 +92,7 @@ decl_event!(
         TreasuryProposal(AccountId, Balance),
         /// Treasury spend executed
         TreasurySpent(AccountId, Balance, BlockNumber),
-        /// For testing purposes
+        /// For testing purposes, to impl From<()> for TestEvent to assign `()` to balances::Event
         NullEvent(u32), // u32 could be aliases as an error code for mocking setup
     }
 );
@@ -114,9 +117,13 @@ decl_module! {
         ) -> Result {
             let sender = ensure_signed(origin)?;
 
+            // the bond calculation could depend on the transfer amount
             let bond = T::Tax::get();
             T::Currency::reserve(&sender, bond)
                 .map_err(|_| "Must be able to pay tax to make transfer")?;
+            // error message could print the tax amount
+
+            // could add some ensure statement to prevent excessive requests by checking `UserDebt`
             
             let requested_spend = SpendRequest {
                 from: sender.clone(),
@@ -124,6 +131,11 @@ decl_module! {
                 amount: amount.clone(),
             };
             <TransferRequests<T>>::append(&[requested_spend])?;
+            if let Some(mut new_debt) = <UserDebt<T>>::get(sender.clone()) {
+                new_debt.checked_add(&amount.clone()).ok_or("overflowed upon adding user_debt")?;
+            } else {
+                <UserDebt<T>>::insert(sender.clone(), amount.clone());
+            }
             Self::deposit_event(RawEvent::TransferRequested(sender, dest, amount));
             Ok(())
         }
@@ -209,6 +221,10 @@ impl<T: Trait> Module<T> {
         <TransferRequests<T>>::get().into_iter().for_each(|request| {
             // execute the transfer request
             let _ = T::Currency::transfer(&request.from, &request.to, request.amount, AllowDeath);
+            // update the UserDebt storage value designed to manage spending requests queue
+            let mut new_debt = <UserDebt<T>>::get(&request.from).expect("the debt is only declared in one method and forgiven in this method; weak qed");
+            new_debt.checked_sub(&request.amount).expect("this amount could not underflow because every call matches the symmetric request in `transfer_request` `=>` > 0 always; qed");
+            <UserDebt<T>>::insert(&request.from, new_debt);
             // get the tax
             let tax_to_pay = T::Tax::get();
             // unreserve the tax from the sender
@@ -247,8 +263,7 @@ impl<T: Trait> Module<T> {
 
 #[cfg(test)]
 mod tests {
-    use crate::{Module, Trait};
-    use super::{RawEvent, GenesisConfig};
+    use crate::*; //{Module, Trait, RawEvent, SpendRequest, GenesisConfig};
     use primitives::H256;
     use runtime_io;
     use runtime_primitives::{
@@ -347,13 +362,18 @@ mod tests {
         let mut t = system::GenesisConfig::default().build_storage::<TestRuntime>().unwrap();
         balances::GenesisConfig::<TestRuntime> {
             balances: vec![
+                // members of council (can also be users)
                 (1, 13),
                 (2, 11),
-                (3, 8),
+                (3, 1),
                 (4, 3),
                 (5, 19),
                 (6, 23),
                 (7, 17),
+                // users, not members of council
+                (8, 1),
+                (9, 22),
+                (10, 46),
             ],
             vesting: vec![],
         }.assimilate_storage(&mut t).unwrap();
@@ -376,13 +396,12 @@ mod tests {
         while System::block_number() < n {
             Treasury::on_finalize(System::block_number());
             System::set_block_number(System::block_number() + 1);
-            // could add on_initialize here if this module had it
         }
     }
 
-    /// Testing correct behavior of boilerplate
+    /// Verifying correct behavior of boilerplate
     #[test]
-    fn config_is_correct() {
+    fn new_test_ext_behaves() {
         new_test_ext().execute_with(|| {
             // check membership initiated correctly
             let first_account = ensure_signed(Origin::signed(1)).unwrap();
@@ -401,4 +420,71 @@ mod tests {
             assert!(Treasury::is_on_council(&seventh_account));
         })
     }
+
+    /// Transfer reserves tax == 2 
+    fn transfer_reserves_tax() {
+        new_test_ext().execute_with(|| {
+            let first_account = ensure_signed(Origin::signed(1)).unwrap();
+            let second_account = ensure_signed(Origin::signed(2)).unwrap();
+            assert_err!(
+                Treasury::request_transfer(Origin::signed(3), first_account, 1),
+                "Must be able to pay tax to make transfer" 
+            );
+            Treasury::request_transfer(Origin::signed(1), second_account, 8);
+            assert_eq!(
+                Balances::reserved_balance(&first_account),
+                2
+            );
+            let mock_spend_request = SpendRequest {
+                from: first_account.clone(),
+                to: second_account.clone(),
+                amount: 8, // Balances::from()
+            };
+            // check that the expected spend request is in runtime storage
+            assert!(Treasury::transfer_requests().iter().any(|a| *a == mock_spend_request));
+
+            // check that user debt is correctly tracked
+            assert_eq!(
+                Treasury::user_debt(&first_account).unwrap(),
+                8,
+            );
+            
+            // check that the correct event is emitted
+            let expected_event = TestEvent::treasury(RawEvent::TransferRequested(first_account.clone(), second_account.clone(), 10));
+            assert!(System::events().iter().any(|a| a.event == expected_event));
+        })
+    }
+
+    #[test]
+    fn propose_treasury_spend_works() {
+        new_test_ext().execute_with(|| {
+            let first_account = ensure_signed(Origin::signed(1)).unwrap();
+            let eighth_account = ensure_signed(Origin::signed(8)).unwrap();
+            assert_err!(
+                Treasury::propose_treasury_spend(Origin::signed(8), first_account, 10u64.into()),
+                "must be on council to make proposal"
+            );
+            System::set_block_number(5);
+            Treasury::propose_treasury_spend(Origin::signed(1), eighth_account, 10u64.into());
+
+            let expected_proposal = Proposal {
+                to: eighth_account.clone(),
+                amount: 10u64.into(),
+                when: 5u64.into(),
+                support: 1u32,
+            };
+            assert_eq!(
+                Treasury::proposals(first_account).unwrap(),
+                expected_proposal
+            );
+
+            let expected_event = TestEvent::treasury(RawEvent::TreasuryProposal(eighth_account.clone(), 10u64.into()));
+            assert!(System::events().iter().any(|a| a.event == expected_event));
+        })
+    }
+
+    // TODO: test
+    // - user_spend and expected behavior in different environments with `on_finalize`
+    // - treasury_spend and expected behavior in different environments with `on_finalize`
+    // - both in different order (need to test all possible overlapping configurations, maybe in a model checker like TLA+)
 }
