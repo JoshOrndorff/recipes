@@ -12,7 +12,10 @@ jobs:
   build:
     runs-on: ubuntu-18.04
     steps:
-    - name: Enter Kitchen Modules
+    - uses: actions/checkout@master
+      with:
+        submodules: recursive  
+    - name: Enter Kitchen
       run: cd kitchen/modules
     - name: Install toolchain
       uses: actions-rs/toolchain@v1
@@ -22,10 +25,7 @@ jobs:
         components: rustfmt
         target: wasm32-unknown-unknown
         default: true
-    - uses: actions/checkout@v1
-      with:
-        submodules: recursive
-    - name: Compile Modules
+    - name: Check Modules
       run: cargo check --all
     - name: Run Tests
       run: cargo test --all
