@@ -23,5 +23,7 @@ jobs:
     - uses: actions/checkout@master
       with:
         submodules: recursive
+    - name: Check Kitchen
+      run: cd kitchen/modules && cargo check --all
     - name: Test Kitchen
       run: cd kitchen/modules && cargo test --all
