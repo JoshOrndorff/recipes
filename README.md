@@ -1,8 +1,6 @@
 # <a href="https://substrate.dev/recipes">Substrate Recipes</a> 🍴😋🍴
 [![Build Status](https://travis-ci.org/substrate-developer-hub/recipes.svg?branch=master)](https://travis-ci.org/substrate-developer-hub/recipes)
 
-[![Status badge](https://github.com/4meta5/recipes/workflows/Test/badge.svg)](https://github.com/4meta5/recipes/actions?workflow=Test)
-
 Simple code patterns that demonstrate best practices when building with **[Substrate](https://github.com/paritytech/substrate)**.
 
 This book is built with [mdbook](https://rust-lang-nursery.github.io/mdBook/continuous-integration.html) and deployed via [github pages](https://pages.github.com/). The code used to build this book is open source and [open for contributions](./CONTRIBUTING.md).
