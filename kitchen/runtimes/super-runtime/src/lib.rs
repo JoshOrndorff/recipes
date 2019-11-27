@@ -38,7 +38,7 @@ use struct_storage;
 use module_constant_config;
 use basic_token;
 use check_membership;
-use schedule_on_finalize;
+use execution_schedule;
 // use smpl_treasury;
 
 // A few exports that help ease life for downstream crates.
@@ -325,7 +325,7 @@ impl check_membership::Trait for Runtime {
 	type Event = Event;
 }
 
-impl schedule_on_finalize::Trait for Runtime {
+impl execution_schedule::Trait for Runtime {
 	type Event = Event;
 	type ExecutionFrequency = ClearFrequency; // for convenience (can use a different constant)
 }
@@ -378,7 +378,7 @@ construct_runtime!(
 		ModuleConstantConfig: module_constant_config::{Module, Call, Storage, Event},
 		BasicToken: basic_token::{Module, Call, Storage, Event<T>},
 		CheckMembership: check_membership::{Module, Call, Storage, Event<T>},
-		ScheduleOnFinalize: schedule_on_finalize::{Module, Call, Storage, Event<T>},
+		ExecutionSchedule: execution_schedule::{Module, Call, Storage, Event<T>},
 		LastCaller1: last_caller::<Instance1>::{Module, Call, Storage, Event<T>},
 		LastCaller2: last_caller::<Instance2>::{Module, Call, Storage, Event<T>},
 		DefaultInstance1: default_instance::{Module, Call, Storage, Event<T>},

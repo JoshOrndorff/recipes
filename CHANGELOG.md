@@ -8,9 +8,9 @@
     * instanceable modules
     * execution schedule
     * testing section
-* in theory, this project should experience diminishing returns, but there is still a high frequency of big changes and new features
+* in theory, this project should experience diminishing returns, but there is still a high frequency of significant changes and new features
 
 **devops**
 * the [book](https://substrate.dev/recipes/) is built and deployed with travis
 * the `kitchen` is run and checked with `CircleCI`
-* looking into using github actions to test modules; next I want to display some test coverage button for greater visibility
+* github actions is used to test the modules in the `kitchen/modules`

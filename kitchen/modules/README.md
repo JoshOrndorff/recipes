@@ -21,7 +21,7 @@ examples with context
 * [Lockable Currency](./lockable-currency)
 * [Reservable Currency](./reservable-currency)
 * [Simple Treasury](./treasury)
-* [On Finalize](./schedule-on-finalize)
+* [Execution Schedule](./execution-schedule)
 
 *wip* (see issues for more information)
 * [custom origin](./custom-origin)

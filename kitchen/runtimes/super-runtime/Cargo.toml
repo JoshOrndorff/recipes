@@ -20,7 +20,7 @@ struct-storage = { package = "struct-storage", path = "../../modules/struct-stor
 module-constant-config = { package = "module-constant-config", path = "../../modules/module-constant-config", default-features = false }
 basic-token = { package = "basic-token", path = "../../modules/basic-token", default-features = false }
 check-membership = { package = "check-membership", path = "../../modules/check-membership", default-features = false }
-schedule-on-finalize = { package = "schedule-on-finalize", path = "../../modules/schedule-on-finalize", default-features = false }
+execution-schedule = { package = "execution-schedule", path = "../../modules/execution-schedule", default-features = false }
 # smpl-treasury = { package = "smpl-treasury", path = "../../modules/smpl-treasury", default-features = false }
 last-caller = { path = "../../modules/last-caller", default-features = false }
 default-instance = { path = "../../modules/default-instance", default-features = false }
@@ -209,7 +209,7 @@ std = [
 	"module-constant-config/std",
 	"basic-token/std",
 	"check-membership/std",
-	"schedule-on-finalize/std",
+	"execution-schedule/std",
 	"transaction-payment/std",
 	"block-builder-api/std",
 	"tx-pool-api/std",
