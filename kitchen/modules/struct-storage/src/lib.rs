@@ -1,11 +1,14 @@
 #![cfg_attr(not(feature = "std"), no_std)]
+use balances;
 /// Nested Structs
-use runtime_primitives::RuntimeDebug;
+use runtime_primitives::{traits::SimpleArithmetic, RuntimeDebug};
 use support::{
-    decl_module, decl_event, decl_storage, dispatch::Result, StorageMap, StorageValue, codec::{Decode, Encode},
+    codec::{Decode, Encode},
+    decl_event, decl_module, decl_storage,
+    dispatch::Result,
+    StorageMap, StorageValue,
 };
 use system::{self, ensure_signed};
-use balances;
 
 pub trait Trait: balances::Trait + system::Trait {
     type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
@@ -17,8 +20,6 @@ pub struct InnerThing<Hash, Balance> {
     hash: Hash,
     balance: Balance,
 }
-
-// must implement Eq in order to properly test this
 
 #[derive(Encode, Decode, Default, RuntimeDebug)]
 pub struct SuperThing<Hash, Balance> {
@@ -85,6 +86,7 @@ decl_module! {
                 hash,
                 balance,
             };
+            // overwrites any existing `InnerThing` with `number: inner_number` by default
             <InnerThingsByNumbers<T>>::insert(inner_number, inner_thing.clone());
             Self::deposit_event(RawEvent::NewInnerThing(inner_number, hash, balance));
             // now construct and insert `super_thing`
@@ -111,6 +113,21 @@ mod tests {
     };
     use support::{assert_err, impl_outer_event, impl_outer_origin, parameter_types, traits::Get};
     use system::{ensure_signed, EventRecord, Phase};
+
+    // hacky Eq implementation for testing InnerThing
+    impl<Hash: Clone, Balance: Copy + SimpleArithmetic> PartialEq for InnerThing<Hash, Balance> {
+        fn eq(&self, other: &Self) -> bool {
+            self.number == other.number
+        }
+    }
+    impl<Hash: Clone, Balance: Copy + SimpleArithmetic> Eq for InnerThing<Hash, Balance> {}
+    // "" for SuperThing
+    impl<Hash: Clone, Balance: Copy + SimpleArithmetic> PartialEq for SuperThing<Hash, Balance> {
+        fn eq(&self, other: &Self) -> bool {
+            self.super_number == other.super_number
+        }
+    }
+    impl<Hash: Clone, Balance: Copy + SimpleArithmetic> Eq for SuperThing<Hash, Balance> {}
 
     impl_outer_origin! {
         pub enum Origin for TestRuntime {}
@@ -141,9 +158,9 @@ mod tests {
         type MaximumBlockLength = MaximumBlockLength;
         type AvailableBlockRatio = AvailableBlockRatio;
         type Version = ();
-    }  
+    }
     // note: very unrealistic for most test envs
-    parameter_types!{
+    parameter_types! {
         pub const ExistentialDeposit: u64 = 0;
         pub const TransferFee: u64 = 0;
         pub const CreationFee: u64 = 0;
@@ -201,13 +218,13 @@ mod tests {
             // prepare hash
             let data = H256::from_low_u64_be(16);
             // insert inner thing
-            StructStorage::insert_inner_thing(Origin::signed(1), 3u32, data, 5u64.into());
+            StructStorage::insert_inner_thing(Origin::signed(1), 3u32, data, 7u64.into());
 
             // check storage matches expectations
             let expected_storage_item = InnerThing {
                 number: 3u32,
                 hash: data,
-                balance: 5u64,
+                balance: 7u64,
             };
             assert_eq!(
                 StructStorage::inner_things_by_numbers(3u32),
@@ -215,19 +232,88 @@ mod tests {
             );
 
             // check events emitted match expectations
-            let expected_event = TestEvent::struct_storage(RawEvent::NewInnerThing(3u32, data, 5u64));
+            let expected_event =
+                TestEvent::struct_storage(RawEvent::NewInnerThing(3u32, data, 7u64));
             assert!(System::events().iter().any(|a| a.event == expected_event));
         })
     }
-}
 
-// TODO LIST BEFORE NEXT PUSH
-// - tests for struct-storage
-// - debug `execution-schedule`
-// PUSH
-// - add tests for `execution-schedule`
-// - finish testing section
-// PUSH
-// - finish testing doc for devhub
-// - link from the recipe's testing chapter
-// - could use just a last page in the testing chapter comparing the first two side by side
+    #[test]
+    fn insert_super_thing_with_existing_works() {
+        ExtBuilder::build().execute_with(|| {
+            // prepare hash
+            let data = H256::from_low_u64_be(16);
+            // insert inner first (tested in direct test above)
+            StructStorage::insert_inner_thing(Origin::signed(1), 3u32, data, 7u64.into());
+            // insert super with existing inner
+            StructStorage::insert_super_thing_with_existing_inner(Origin::signed(1), 3u32, 5u32);
+
+            // check storage matches expectations
+            let expected_inner = InnerThing {
+                number: 3u32,
+                hash: data,
+                balance: 7u64,
+            };
+            assert_eq!(StructStorage::inner_things_by_numbers(3u32), expected_inner);
+            let expected_outer = SuperThing {
+                super_number: 5u32,
+                inner_thing: expected_inner.clone(),
+            };
+            assert_eq!(
+                StructStorage::super_things_by_super_numbers(5u32),
+                expected_outer
+            );
+
+            let expected_event = TestEvent::struct_storage(RawEvent::NewSuperThingByExistingInner(
+                5u32,
+                3u32,
+                data,
+                7u64.into(),
+            ));
+            assert!(System::events().iter().any(|a| a.event == expected_event));
+        })
+    }
+
+    #[test]
+    fn insert_super_with_new_inner_works() {
+        ExtBuilder::build().execute_with(|| {
+            // prepare hash
+            let data = H256::from_low_u64_be(16);
+            // insert super with new inner
+            StructStorage::insert_super_thing_with_new_inner(
+                Origin::signed(1),
+                3u32,
+                data,
+                7u64.into(),
+                5u32,
+            );
+
+            // check storage matches expectations
+            let expected_inner = InnerThing {
+                number: 3u32,
+                hash: data,
+                balance: 7u64,
+            };
+            assert_eq!(StructStorage::inner_things_by_numbers(3u32), expected_inner);
+            let expected_outer = SuperThing {
+                super_number: 5u32,
+                inner_thing: expected_inner.clone(),
+            };
+            assert_eq!(
+                StructStorage::super_things_by_super_numbers(5u32),
+                expected_outer
+            );
+
+            let expected_event =
+                TestEvent::struct_storage(RawEvent::NewInnerThing(3u32, data, 7u64));
+            assert!(System::events().iter().any(|a| a.event == expected_event));
+            let expected_event2 = TestEvent::struct_storage(RawEvent::NewSuperThingByNewInner(
+                5u32,
+                3u32,
+                data,
+                7u64.into(),
+            ));
+            assert!(System::events().iter().any(|a| a.event == expected_event2));
+        })
+    }
+}
