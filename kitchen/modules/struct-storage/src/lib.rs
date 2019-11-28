@@ -1,6 +1,7 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 use support::codec::{Decode, Encode};
+use runtime_primitives::RuntimeDebug;
 /// Nested Structs
 use support::{
     decl_module, decl_storage, dispatch::Result, StorageMap, StorageValue,
@@ -21,10 +22,22 @@ pub struct SuperThing<Hash, Balance> {
     my_thing: Thing<Hash, Balance>,
 }
 
+pub type TaskId = Vec<u8>;
+pub type PriorityScore = u32;
+
+#[derive(Encode, Decode, RuntimeDebug)]
+pub struct MaybeExists<BlockNumber> {
+    inner: u32,
+    now: BlockNumber,
+    id: TaskId,
+    score: PriorityScore,
+}
+
 decl_storage! {
     trait Store for Module<T: Trait> as NestedStructs {
         Value get(fn value): map u32 => Thing<T::Hash, T::Balance>;
         SuperValue get(fn super_value): map u32 => SuperThing<T::Hash, T::Balance>;
+        MaybeValue get(fn maybe_value): map u32 => Option<MaybeExists<T::BlockNumber>>;
     }
 }
 
