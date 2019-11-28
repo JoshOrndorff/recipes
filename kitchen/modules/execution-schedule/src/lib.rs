@@ -279,7 +279,7 @@ mod tests {
     }
     
     // Generate Random TaskId for testing purposes
-    pub fn generate_random_task_id() -> TaskId {
+    pub fn generate_random_task_id(output_len: u32) -> TaskId {
         let mut buf = vec![0u8; output_len];
         OsRng.fill_bytes(&mut buf);
         buf

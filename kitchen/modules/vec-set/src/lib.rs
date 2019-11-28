@@ -86,8 +86,7 @@ impl<T: Trait> Module<T> {
 
 #[cfg(test)]
 mod tests {
-    use super::RawEvent;
-    use crate::{Module, Trait};
+    use crate::{Module, RawEvent, Trait};
     use primitives::H256;
     use runtime_io;
     use runtime_primitives::{
