@@ -2,12 +2,16 @@
 //! Execution Schedule
 use rstd::prelude::*;
 use runtime_primitives::{
-    RuntimeDebug, traits::{SimpleArithmetic, Hash, Zero},
+    traits::{Hash, SimpleArithmetic, Zero},
+    RuntimeDebug,
 };
 use support::{
-    traits::Get, decl_event, decl_module, decl_storage, ensure,
-    dispatch::Result, StorageDoubleMap, StorageMap, StorageValue,
-    codec::{Encode, Decode},
+    codec::{Decode, Encode},
+    decl_event, decl_module, decl_storage,
+    dispatch::Result,
+    ensure,
+    traits::Get,
+    StorageDoubleMap, StorageMap, StorageValue,
 };
 use system::ensure_signed;
 
@@ -44,7 +48,7 @@ decl_event!(
     where
         AccountId = <T as system::Trait>::AccountId,
         BlockNumber = <T as system::Trait>::BlockNumber,
-    {   
+    {
         /// Signal is refreshed for all members at this block number
         SignalRefreshed(BlockNumber),
         /// Task is scheduled by the proposer with `TaskId` and expected_execution_time
@@ -55,7 +59,7 @@ decl_event!(
         TaskExecuted(TaskId, BlockNumber),
         /// New expected execution time for tasks not completed within first *opportunity*
         UpdatedTaskSchedule(TaskId, BlockNumber),
-    }   
+    }
 );
 
 decl_storage! {
@@ -75,7 +79,7 @@ decl_storage! {
         config(council_members): Vec<T::AccountId>;
     }
 }
-// add later when I add the testing config (only works if used)
+// add later if figure out this `serde` error associated with add_extra_genesis and/or individual variable build commands
 // build(|config: &GenesisConfig<T>| {
 //     let starting_quota = T::SignalQuota::get();
 //     config.council_members.into_iter()
@@ -96,8 +100,8 @@ decl_module! {
         /// On Initialize
         ///
         /// After the last block's on_finalize, the logic expressed in this method
-        /// is executed before the logic in the next block.  
-        /// - This allows us to start from 0 for all tasks 
+        /// is executed before the logic in the next block.
+        /// - This allows us to start from 0 for all tasks
         fn on_initialize(n: T::BlockNumber) {
             let one_block_after = T::ExecutionFrequency::get() + 1.into();
             if ((n % one_block_after).is_zero()) {
@@ -130,11 +134,11 @@ decl_module! {
             // current block number
             let proposed_at = <system::Module<T>>::block_number();
             // use current time to estimate the expected `BlockNumber` for execution
-            let expected_execution = Self::efficient_execution_estimate(proposed_at);
+            let expected_execution = Self::execution_estimate(proposed_at);
 
             let task_to_schedule = Task {
                 id: data.clone(),
-                score: 0u32, 
+                score: 0u32,
                 proposed_at,
             };
             // add tasks as values to map with `TaskId` as the key
@@ -206,10 +210,10 @@ impl<T: Trait> Module<T> {
     }
 
     /// Efficient Execution Estimate
-    fn efficient_execution_estimate(n: T::BlockNumber) -> T::BlockNumber {
+    fn execution_estimate(n: T::BlockNumber) -> T::BlockNumber {
         let batch_frequency = T::ExecutionFrequency::get();
-        let quotient = n / batch_frequency;
-        n * (quotient + 1.into())
+        let miss = n % batch_frequency;
+        n + (batch_frequency - miss)
     }
 
     /// Execute Tasks
@@ -230,7 +234,7 @@ impl<T: Trait> Module<T> {
                     Self::deposit_event(RawEvent::TaskExecuted(task.id, n));
                 } else {
                     // need to explicitly end the loop when a single priority_score > task_allowance (prevent exhaustive execution)
-                    return
+                    return;
                 }
             }
             <PendingTasks<T>>::remove(&task_id);
@@ -249,8 +253,8 @@ mod tests {
         Perbill,
     };
     // it's ok, just for the testing suit, thread local variables
+    use rand::{rngs::OsRng, thread_rng, Rng, RngCore};
     use std::cell::RefCell;
-    use rand::{thread_rng, Rng, RngCore, rngs::OsRng};
     use support::{assert_err, impl_outer_event, impl_outer_origin, parameter_types, traits::Get};
     use system::ensure_signed;
 
@@ -268,7 +272,7 @@ mod tests {
             }
         }
     }
-    
+
     // Generate Random TaskId for testing purposes
     pub fn id_generate() -> TaskId {
         let mut buf = vec![0u8; 32];
@@ -288,17 +292,23 @@ mod tests {
 
     pub struct SignalQuota;
     impl Get<u32> for SignalQuota {
-        fn get() -> u32 { SIGNAL_QUOTA.with(|v| *v.borrow()) }
+        fn get() -> u32 {
+            SIGNAL_QUOTA.with(|v| *v.borrow())
+        }
     }
 
     pub struct ExecutionFrequency;
     impl Get<u64> for ExecutionFrequency {
-        fn get() -> u64 { EXECUTION_FREQUENCY.with(|v| *v.borrow()) }
+        fn get() -> u64 {
+            EXECUTION_FREQUENCY.with(|v| *v.borrow())
+        }
     }
 
     pub struct TaskLimit;
     impl Get<u32> for TaskLimit {
-        fn get() -> u32 { TASK_LIMIT.with(|v| *v.borrow()) }
+        fn get() -> u32 {
+            TASK_LIMIT.with(|v| *v.borrow())
+        }
     }
 
     // Workaround for https://github.com/rust-lang/rust/issues/26925 . Remove when sorted.
@@ -383,17 +393,44 @@ mod tests {
         }
         pub fn build(self) -> runtime_io::TestExternalities {
             self.set_associated_consts();
-            let mut storage = system::GenesisConfig::default()
+            let mut t = system::GenesisConfig::default()
                 .build_storage::<TestRuntime>()
                 .unwrap();
-            runtime_io::TestExternalities::from(storage)
+            // GenesisConfig::<TestRuntime> {
+            //     council_members: vec![1, 2, 3, 4, 5, 6],
+            // }.assimilate_storage(&mut t).unwrap();
+            t.into()
         }
     }
 
     #[test]
     fn task_schedulers_work() {
-        ExtBuilder::default().build().execute_with(|| {
-            assert!(true);
-        })
+        // should use quickcheck to cover entire range of checks
+        ExtBuilder::default()
+            .execution_frequency(8)
+            .build()
+            .execute_with(|| {
+                let current_block = 5u64;
+                assert_eq!(
+                    ExecutionSchedule::naive_execution_estimate(current_block.into()),
+                    8u64.into()
+                );
+                assert_eq!(
+                    ExecutionSchedule::execution_estimate(current_block.into()),
+                    8u64.into()
+                );
+                let next_block = 67u64;
+                assert_eq!(
+                    ExecutionSchedule::naive_execution_estimate(next_block.into()),
+                    72u64.into()
+                );
+                assert_eq!(
+                    ExecutionSchedule::execution_estimate(next_block.into()),
+                    72u64.into()
+                );
+            })
     }
+
+    // more tests require some genesis config
+    // or a runtime method to add council members (which adds a lot of complexity)
 }
