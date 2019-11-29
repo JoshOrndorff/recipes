@@ -1,5 +1,5 @@
 #![cfg_attr(not(feature = "std"), no_std)]
-//! Execution Schedule
+//! Scheduling Execution
 use rstd::prelude::*;
 use runtime_primitives::{
     traits::{Hash, SimpleArithmetic, Zero},
@@ -75,19 +75,7 @@ decl_storage! {
         /// The nonce that increments every `ExecutionFrequency` for a new `SignalBank` instantiation
         Era get(fn era): RoundIndex;
     }
-    add_extra_genesis {
-        config(council_members): Vec<T::AccountId>;
-    }
 }
-// add later if figure out this `serde` error associated with add_extra_genesis and/or individual variable build commands
-// build(|config: &GenesisConfig<T>| {
-//     let starting_quota = T::SignalQuota::get();
-//     config.council_members.into_iter()
-//         .for_each(|member| {
-//             (0u32, member.clone(), starting_quota)
-//         })
-// } )
-// build(|config: &GenesisConfig<T>| config.council_members.clone())
 
 decl_module! {
     pub struct Module<T: Trait> for enum Call where origin: T::Origin {
@@ -103,8 +91,8 @@ decl_module! {
         /// is executed before the logic in the next block.
         /// - This allows us to start from 0 for all tasks
         fn on_initialize(n: T::BlockNumber) {
-            let one_block_after = T::ExecutionFrequency::get() + 1.into();
-            if ((n % one_block_after).is_zero()) {
+            let batch_frequency = T::ExecutionFrequency::get();
+            if (((n - 1.into()) % batch_frequency).is_zero()) {
                 let last_era = <Era>::get();
                 // clean up the previous double_map with this last_era group index
                 <SignalBank<T>>::remove_prefix(&last_era);
@@ -162,12 +150,13 @@ decl_module! {
             // get the current voting era
             let current_era = <Era>::get();
             // get the voter's remaining signal in this voting era
-            let mut remaining_signal = <SignalBank<T>>::get(current_era, &voter);
-            ensure!(remaining_signal >= signal, "The voter cannot signal more than the remaining signal");
+            let voters_signal = <SignalBank<T>>::get(current_era, &voter);
+            ensure!(voters_signal >= signal, "The voter cannot signal more than the remaining signal");
             if let Some(mut task) = <PendingTasks<T>>::get(id.clone()) {
                 task.score.checked_add(signal).ok_or("task is too popular and signal support overflowed")?;
-                // don't have to checked_sub because just verified that remaining_signal >= signal
-                remaining_signal -= signal;
+                // don't have to checked_sub because just verified that voters_signal >= signal
+                let remaining_signal = voters_signal - signal;
+                <Era>::put(remaining_signal);
             } else {
                 return Err("the task did not exist in the PendingTasks storage map");
             }
@@ -258,6 +247,29 @@ mod tests {
     use support::{assert_err, impl_outer_event, impl_outer_origin, parameter_types, traits::Get};
     use system::ensure_signed;
 
+    // to compare expected storage items with storage items after method calls
+    impl<BlockNumber: SimpleArithmetic + Copy> PartialEq for Task<BlockNumber> {
+        fn eq(&self, other: &Self) -> bool {
+            self.id == other.id
+        }
+    }
+    impl<BlockNumber: Copy + SimpleArithmetic> Eq for Task<BlockNumber> {}
+
+    // bc I couldn't get the `add_extra_genesis` to work
+    impl<T: Trait> Module<T> {
+        fn add_member_to_council(who: T::AccountId) {
+            <Council<T>>::mutate(|members| members.push(who));
+        }
+
+        fn add_member(who: T::AccountId) {
+            Self::add_member_to_council(who.clone());
+            let current_era = <Era>::get();
+            // intialize with 0, filled full at beginning of next_era
+            <SignalBank<T>>::insert(current_era, who, 0u32);
+        }
+    }
+
+    // to generate random tasks for tests
     impl<BlockNumber: std::convert::From<u64>> Task<BlockNumber> {
         // for testing purposes
         // - could add expressive generator that ensures monotonically increasing block numbers
@@ -273,7 +285,7 @@ mod tests {
         }
     }
 
-    // Generate Random TaskId for testing purposes
+    // to generate random task ids for tests
     pub fn id_generate() -> TaskId {
         let mut buf = vec![0u8; 32];
         OsRng.fill_bytes(&mut buf);
@@ -403,8 +415,31 @@ mod tests {
         }
     }
 
+    /// Auxiliary method for simulating block time passing
+    fn run_to_block(n: u64) {
+        while System::block_number() < n {
+            ExecutionSchedule::on_finalize(System::block_number());
+            System::set_block_number(System::block_number() + 1);
+            ExecutionSchedule::on_initialize(System::block_number() + 1);
+        }
+    }
+
     #[test]
-    fn task_schedulers_work() {
+    fn eras_change_correctly() {
+        ExtBuilder::default()
+            .execution_frequency(2)
+            .build()
+            .execute_with(|| {
+                System::set_block_number(1);
+                run_to_block(13);
+                assert_eq!(ExecutionSchedule::era(), 6);
+                run_to_block(32);
+                assert_eq!(ExecutionSchedule::era(), 16);
+            })
+    } // writing this test helped me discover a bug in `on_initialize` (where I was taking (n % (batch_frequency + 1.into())) which is erroneous)
+
+    #[test]
+    fn estimators_work() {
         // should use quickcheck to cover entire range of checks
         ExtBuilder::default()
             .execution_frequency(8)
@@ -431,6 +466,72 @@ mod tests {
             })
     }
 
-    // more tests require some genesis config
-    // or a runtime method to add council members (which adds a lot of complexity)
+    #[test]
+    fn schedule_task_behaves() {
+        ExtBuilder::default()
+            .execution_frequency(10)
+            .build()
+            .execute_with(|| {
+                let first_account = ensure_signed(Origin::signed(1)).unwrap();
+                ExecutionSchedule::add_member(first_account.clone());
+                assert!(ExecutionSchedule::is_on_council(&first_account));
+                System::set_block_number(2);
+                let new_task = id_generate();
+                ExecutionSchedule::schedule_task(Origin::signed(1), new_task.clone());
+
+                // check storage changes
+                let expected_task: Task<u64> = Task {
+                    id: new_task.clone(),
+                    score: 0u32,
+                    proposed_at: 2u64,
+                };
+                assert_eq!(
+                    ExecutionSchedule::pending_tasks(new_task.clone()).unwrap(),
+                    expected_task
+                );
+                assert_eq!(ExecutionSchedule::execution_queue(), vec![new_task.clone()]);
+
+                // check event behavior
+                let expected_event = TestEvent::execution_schedule(RawEvent::TaskScheduled(
+                    first_account,
+                    new_task,
+                    10,
+                ));
+                assert!(System::events().iter().any(|a| a.event == expected_event));
+            })
+    }
+
+    #[test]
+    fn priority_signalling_behaves() {
+        ExtBuilder::default()
+            .execution_frequency(5)
+            .signal_quota(10)
+            .task_limit(1)
+            .build()
+            .execute_with(|| {
+                System::set_block_number(2u64);
+                let first_account = ensure_signed(Origin::signed(1)).unwrap();
+                let second_account = ensure_signed(Origin::signed(2)).unwrap();
+                let new_task = id_generate();
+                ExecutionSchedule::add_member(first_account);
+                ExecutionSchedule::add_member(second_account);
+
+                // refresh signal_quota
+                run_to_block(7u64);
+
+                ExecutionSchedule::schedule_task(Origin::signed(2), new_task.clone());
+
+                ExecutionSchedule::signal_priority(
+                    Origin::signed(1),
+                    new_task.clone(),
+                    0u32.into(),
+                );
+
+                // check storage changes
+                assert_eq!(
+                    ExecutionSchedule::signal_bank(1u32, &first_account),
+                    10u32.into()
+                );
+            })
+    }
 }
