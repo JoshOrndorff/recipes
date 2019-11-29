@@ -18,7 +18,6 @@ members = [
   "modules/simple-map",
   "modules/single-value",
   "modules/smpl-treasury",
-  "modules/social-network",
   # "modules/srml-panic",
   "modules/storage-cache",
   "modules/struct-storage",

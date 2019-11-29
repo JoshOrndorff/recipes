@@ -26,8 +26,9 @@
     - [Safe Math](./declarative/safemath.md)
     - [Permissioned Methods](./declarative/permissioned.md)
 - [Testing](./testing/README.md)
-    - [Mock Runtime for Unit Testing](./testing/mock.md)
-    - [Configuring Externalities](./testing/externalities)
+    - [Basic Test Environments](./testing/mock.md)
+    - [Common Tests](./testing/common.md)
+    - [Custom Test Environment](./testing/externalities.md)
 - [Featured Tutorials](./base/dessert.md)
 
 -----------

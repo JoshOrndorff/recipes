@@ -1,12 +1,11 @@
-# SRML Tour
+# Kitchen Sauce
 
-(*deprecated in favor of structure described in the README; if people voice interest in bringing back srml-tour, I'll spend some time on it*)
+Inspired by the [srml-tour](https://github.com/JoshOrndorff/srml-tour), the `sauce` intends to walk through minimal working examples that demonstrate a subset of substrate's logic. Each example in `sauce` draws heavily on existing code and documentation from `palette_support` as well as one or more `frame` modules. *Sources will be linked throughout the walk throughs.*
 
-[srml-tour](https://github.com/JoshOrndorff/srml-tour) intends to explain the features of SRML modules, demonstrate use cases, and explore the code. It is *in progress*, tracked in [issues](https://github.com/substrate-developer-hub/recipes/issues).
+This section is under construction (and therefore not shown in the `master` build). At the moment, the documentation from [execution schedule](./loop.md) and [treasury](./treasury) do NOT match the logic in the code for `execution-schedule` and `smpl-treasury`. Both require more tests which should lead to changes in the implementations. I would like to benchmark them using `substrate-analytics` to demonstrate this process, but that should come after the documentation.
 
-## smpl-treasury
+## next
 
-**[recipe](./treasury.md)**, [kitchen/treasury](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen//modules/treasury)
-1. instantiate a pot 
-2. proxy spending through the pot 
-3. schedule spending with configurable module constants
+* `srml-panic` (todo)
+* `smpl-crowdfund` (todo)
+* `smpl-derivative` (todo)

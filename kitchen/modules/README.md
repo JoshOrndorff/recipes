@@ -26,5 +26,4 @@ examples with context
 *wip* (see issues for more information)
 * [custom origin](./custom-origin)
 * [child-trie](./child-trie)
-* [social network](./social-network)
 * [srml-panic](./srml-panic)
