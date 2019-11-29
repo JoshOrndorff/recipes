@@ -2,7 +2,7 @@
 //! Execution Schedule
 use rstd::prelude::*;
 use runtime_primitives::{
-    RuntimeDebug, traits::{SimpleArithmetic, BlockNumber, Hash, Zero},
+    RuntimeDebug, traits::{SimpleArithmetic, Hash, Zero},
 };
 use support::{
     traits::Get, decl_event, decl_module, decl_storage, ensure,
@@ -11,18 +11,10 @@ use support::{
 };
 use system::ensure_signed;
 
-/// Type aliases for this modular's configuration
 pub type TaskId = Vec<u8>;
-/// The priority of a task
 pub type PriorityScore = u32;
-/// RoundIndex to manage voting with `double_map`
 pub type RoundIndex = u32;
 
-/// Generic Task Abstraction
-///
-/// - `id` field is a `TaskId = Vec<u8>` which could be an identifier or a hash corresponding to some data in IPFS
-/// - `priority_score` indicates signalling support from members for tasks
-/// - `proposed_at` indicates the time at which the task was initially proposed 
 #[derive(Encode, Decode, RuntimeDebug)]
 pub struct Task<BlockNumber> {
     /// A vec of bytes which could be an identifier or a hash corresponding to associated data in IPFS or something
@@ -31,24 +23,6 @@ pub struct Task<BlockNumber> {
     score: PriorityScore,
     /// The block number at which the task is initially queued
     proposed_at: BlockNumber,
-}
-
-impl<BlockNumber: SimpleArithmetic + Copy> Ord for Task<BlockNumber> {
-    fn cmp(&self, other: Self) -> Ordering {
-        self.score.cmp(&other.priority_score)
-    }
-}
-
-impl<BlockNumber: SimpleArithmetic + Copy> PartialOrd for Task<BlockNumber> {
-    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        Some(Self.cmp(other))
-    }
-}
-
-impl<BlockNumber: SimpleArithmetic + Copy> PartialEq for Task<BlockNumber> {
-    fn eq(&self, other: &Self) -> bool {
-        self.id == other.id
-    }
 }
 
 pub trait Trait: system::Trait {
@@ -87,7 +61,7 @@ decl_event!(
 decl_storage! {
     trait Store for Module<T: Trait> as ExecutionSchedule {
         /// Outstanding tasks getter
-        PendingTask get(fn pending_task): map TaskId => Option<Task<T::BlockNumber>>;
+        PendingTasks get(fn pending_tasks): map TaskId => Option<Task<T::BlockNumber>>;
         /// Dispatch queue for task execution
         ExecutionQueue get(fn execution_queue): Vec<TaskId>;
         /// The signalling quota left in terms of `PriorityScore` for all members of the council (until it is killed `on_initialize` on `ExecutionFrequency` blocks)
@@ -98,18 +72,18 @@ decl_storage! {
         Era get(fn era): RoundIndex;
     }
     add_extra_genesis {
-        build(|config| {
-            // start at era 0
-            <Era<T>>::put(0u32.into());
-            <Council<T>>::put(&config.council);
-            let signal_quota = T::SignalQuota::get();
-            config.council.into_iter().for_each(|member| {
-                // fill signal quota for all initial members for era 0
-                <SignalBank<T>>::insert(0u32.into(), &member, signal_quota);
-            });
-        });
+        config(council_members): Vec<T::AccountId>;
     }
 }
+// add later when I add the testing config (only works if used)
+// build(|config: &GenesisConfig<T>| {
+//     let starting_quota = T::SignalQuota::get();
+//     config.council_members.into_iter()
+//         .for_each(|member| {
+//             (0u32, member.clone(), starting_quota)
+//         })
+// } )
+// build(|config: &GenesisConfig<T>| config.council_members.clone())
 
 decl_module! {
     pub struct Module<T: Trait> for enum Call where origin: T::Origin {
@@ -126,20 +100,20 @@ decl_module! {
         /// - This allows us to start from 0 for all tasks 
         fn on_initialize(n: T::BlockNumber) {
             let one_block_after = T::ExecutionFrequency::get() + 1.into();
-            if (n % (one_block_after).is_zero()) {
-                let last_era = <Era<T>>::get();
+            if ((n % one_block_after).is_zero()) {
+                let last_era = <Era>::get();
                 // clean up the previous double_map with this last_era group index
                 <SignalBank<T>>::remove_prefix(&last_era);
-                // unlikely to overflow
-                let next_era = last_era + 1u32.into();
-                <Era<T>>::put(next_era);
+                // unlikely to overflow so no checked_add
+                let next_era: RoundIndex = last_era + (1u32 as RoundIndex);
+                <Era>::put(next_era);
 
                 // get the SignalQuota for each `ExecutionFrequency` period
                 let signal_quota = T::SignalQuota::get();
                 // instantiate next mapping for SignalQuota with new Era
                 <Council<T>>::get().into_iter().for_each(|member| {
                     // refresh signal quota for all members for the next era
-                    <SignalBank<T>>::put(next_era, &member, signal_quota);
+                    <SignalBank<T>>::insert(next_era, &member, signal_quota);
                 });
                 Self::deposit_event(RawEvent::SignalRefreshed(n));
             }
@@ -156,20 +130,20 @@ decl_module! {
             // current block number
             let proposed_at = <system::Module<T>>::block_number();
             // use current time to estimate the expected `BlockNumber` for execution
-            let expected_execution = Self::execution_estimate(proposed_at);
+            let expected_execution = Self::efficient_execution_estimate(proposed_at);
 
             let task_to_schedule = Task {
-                id: data.clone().into(),
-                score: 0u32.into(), 
+                id: data.clone(),
+                score: 0u32, 
                 proposed_at,
             };
             // add tasks as values to map with `TaskId` as the key
             // note: by default overwrites any value stored at the `data.clone()` key
             <PendingTasks<T>>::insert(data.clone(), task_to_schedule);
             // add to TaskQ for scheduled execution
-            <ExecutionQueue<T>>::append(&[task_to_schedule])?;
+            <ExecutionQueue>::mutate(|q| q.push(data.clone()));
 
-            Self::deposit_event(RawEvent::TaskScheduled(proposer, data.into(), expected_execution));
+            Self::deposit_event(RawEvent::TaskScheduled(proposer, data, expected_execution));
             Ok(())
         }
 
@@ -182,12 +156,12 @@ decl_module! {
             ensure!(Self::is_on_council(&voter), "The voting member must be on the council");
 
             // get the current voting era
-            let current_era = <Era<T>>::get();
+            let current_era = <Era>::get();
             // get the voter's remaining signal in this voting era
             let mut remaining_signal = <SignalBank<T>>::get(current_era, &voter);
             ensure!(remaining_signal >= signal, "The voter cannot signal more than the remaining signal");
-            if let Some(mut task) = <PendingTasks<T>>::get(id) {
-                task.priority_score.checked_add(signal).ok_or("task is too popular and signal support overflowed")?;
+            if let Some(mut task) = <PendingTasks<T>>::get(id.clone()) {
+                task.score.checked_add(signal).ok_or("task is too popular and signal support overflowed")?;
                 // don't have to checked_sub because just verified that remaining_signal >= signal
                 remaining_signal -= signal;
             } else {
@@ -211,11 +185,12 @@ impl<T: Trait> Module<T> {
         Self::council().contains(who)
     }
 
-    /// Execution Estimate
+    /// Naive Execution Estimate
     ///
     /// emits an event parameter in `schedule_task` to tell users when
-    /// (which block number), the task will be executed based on when it was submitted
-    fn execution_estimate(now: T::BlockNumber) -> T::BlockNumber {
+    /// (which block number), the task is expected to be executed based on when it was submitted
+    /// - iteration makes it quite naive
+    fn naive_execution_estimate(now: T::BlockNumber) -> T::BlockNumber {
         // the frequency with which tasks are batch executed
         let batch_frequency = T::ExecutionFrequency::get();
         let mut expected_execution_time = now;
@@ -230,23 +205,35 @@ impl<T: Trait> Module<T> {
         expected_execution_time
     }
 
+    /// Efficient Execution Estimate
+    fn efficient_execution_estimate(n: T::BlockNumber) -> T::BlockNumber {
+        let batch_frequency = T::ExecutionFrequency::get();
+        let quotient = n / batch_frequency;
+        n * (quotient + 1.into())
+    }
+
     /// Execute Tasks
     ///
     /// - exhaustively executes tasks in the order of their priority
     pub fn execute_tasks(n: T::BlockNumber) {
         // task limit in terms of priority allowed to be executed every period
         let mut task_allowance = T::TaskLimit::get();
-        <ExecutionQueue<T>>::get().sort_unstable().into_iter().for_each(|task| {
-            if task.priority_score <= task_allowance {
-                // execute task (could have more express computation here)
-                // or in off-chain worker running after this block
-                <PendingTasks<T>>::remove(&task.id);
-                task_allowance -= task.priority_score;
-                Self::deposit_event(RawEvent::TaskExecuted(task.id, n));
-            } else {
-                // need to explicitly deal with case of priority_score > task_allowance to ensure loop doesn't continue (aka exhaustive execution)
-                break
+        let remove_queue = 6; // vec limited by task_allowance size
+        let mut execution_q = <ExecutionQueue>::get().clone();
+        execution_q.sort_unstable();
+        execution_q.into_iter().for_each(|task_id| {
+            if let Some(task) = <PendingTasks<T>>::get(&task_id) {
+                if task.score <= task_allowance {
+                    // execute task (could have more express computation here)
+                    // or in off-chain worker running after this block
+                    task_allowance -= task.score;
+                    Self::deposit_event(RawEvent::TaskExecuted(task.id, n));
+                } else {
+                    // need to explicitly end the loop when a single priority_score > task_allowance (prevent exhaustive execution)
+                    return
+                }
             }
+            <PendingTasks<T>>::remove(&task_id);
         });
     }
 }
@@ -261,28 +248,32 @@ mod tests {
         traits::{BlakeTwo256, IdentityLookup, OnFinalize, OnInitialize},
         Perbill,
     };
-    use rand::{thread_rng, RngCore, rngs::OsRng};
+    // it's ok, just for the testing suit, thread local variables
+    use std::cell::RefCell;
+    use rand::{thread_rng, Rng, RngCore, rngs::OsRng};
     use support::{assert_err, impl_outer_event, impl_outer_origin, parameter_types, traits::Get};
     use system::ensure_signed;
 
-    impl<BlockNumber> Task<BlockNumber> {
-        // Generate Random Tasks
-        // for testing purposes (see tests further below)
-        // (should move to tests and isolate rand import in tests module)
+    impl<BlockNumber: std::convert::From<u64>> Task<BlockNumber> {
+        // for testing purposes
+        // - could add expressive generator that ensures monotonically increasing block numbers
         fn random() -> Self {
+            let mut rng = thread_rng();
+            let random_score: u32 = rng.gen();
+            let random_block: u64 = rng.gen();
             Self {
-                id: generate_random_id(),
-                priority_score: RngCore::next_u32().into(),
-                proposed_at: RngCore::next_u64().into(),
+                id: id_generate(),
+                score: random_score.into(),
+                proposed_at: random_block.into(),
             }
         }
     }
     
     // Generate Random TaskId for testing purposes
-    pub fn generate_random_task_id(output_len: u32) -> TaskId {
-        let mut buf = vec![0u8; output_len];
+    pub fn id_generate() -> TaskId {
+        let mut buf = vec![0u8; 32];
         OsRng.fill_bytes(&mut buf);
-        buf
+        buf.into()
     }
 
     impl_outer_origin! {
@@ -290,9 +281,24 @@ mod tests {
     }
 
     thread_local! {
-        static EXISTENTIAL_DEPOSIT: RefCell<u64> = RefCell::new(0);
-        static TRANSFER_FEE: RefCell<u64> = RefCell::new(0);
-        static CREATION_FEE: RefCell<u64> = RefCell::new(0);
+        static SIGNAL_QUOTA: RefCell<u32> = RefCell::new(0);
+        static EXECUTION_FREQUENCY: RefCell<u64> = RefCell::new(0);
+        static TASK_LIMIT: RefCell<u32> = RefCell::new(0);
+    }
+
+    pub struct SignalQuota;
+    impl Get<u32> for SignalQuota {
+        fn get() -> u32 { SIGNAL_QUOTA.with(|v| *v.borrow()) }
+    }
+
+    pub struct ExecutionFrequency;
+    impl Get<u64> for ExecutionFrequency {
+        fn get() -> u64 { EXECUTION_FREQUENCY.with(|v| *v.borrow()) }
+    }
+
+    pub struct TaskLimit;
+    impl Get<u32> for TaskLimit {
+        fn get() -> u32 { TASK_LIMIT.with(|v| *v.borrow()) }
     }
 
     // Workaround for https://github.com/rust-lang/rust/issues/26925 . Remove when sorted.
@@ -332,30 +338,50 @@ mod tests {
         }
     }
 
-    parameter_types!{
-        pub const ExecutionFrequency: u64 = 10;
-    }
     impl Trait for TestRuntime {
         type Event = TestEvent;
+        type SignalQuota = SignalQuota;
         type ExecutionFrequency = ExecutionFrequency;
+        type TaskLimit = TaskLimit;
     }
 
     pub type System = system::Module<TestRuntime>;
     pub type ExecutionSchedule = Module<TestRuntime>;
 
-    pub struct ExtBuilder;
+    pub struct ExtBuilder {
+        signal_quota: u32,
+        execution_frequency: u64,
+        task_limit: u32,
+    }
+    impl Default for ExtBuilder {
+        fn default() -> Self {
+            Self {
+                signal_quota: 100u32,
+                execution_frequency: 5u64,
+                task_limit: 10u32,
+            }
+        }
+    }
 
     impl ExtBuilder {
-        // more setters for ExtBuilder environment
-
-        // the values for one default configuration
-        pub fn set_associated_consts(&self) {
-            EXISTENTIAL_DEPOSIT.with(|v| *v.borrow_mut() = self.existential_deposit);
-            TRANSFER_FEE.with(|v| *v.borrow_mut() = self.transfer_fee);
-            CREATION_FEE.with(|v| *v.borrow_mut() = self.creation_fee);
+        pub fn signal_quota(mut self, signal_quota: u32) -> Self {
+            self.signal_quota = signal_quota;
+            self
         }
-
-        pub fn build() -> runtime_io::TestExternalities {
+        pub fn execution_frequency(mut self, execution_frequency: u64) -> Self {
+            self.execution_frequency = execution_frequency;
+            self
+        }
+        pub fn task_limit(mut self, task_limit: u32) -> Self {
+            self.task_limit = task_limit;
+            self
+        }
+        pub fn set_associated_consts(&self) {
+            SIGNAL_QUOTA.with(|v| *v.borrow_mut() = self.signal_quota);
+            EXECUTION_FREQUENCY.with(|v| *v.borrow_mut() = self.execution_frequency);
+            TASK_LIMIT.with(|v| *v.borrow_mut() = self.task_limit);
+        }
+        pub fn build(self) -> runtime_io::TestExternalities {
             self.set_associated_consts();
             let mut storage = system::GenesisConfig::default()
                 .build_storage::<TestRuntime>()
@@ -365,8 +391,9 @@ mod tests {
     }
 
     #[test]
-    fn task_schedule_estimator_works() {
-        //todo
-        assert!(true);
+    fn task_schedulers_work() {
+        ExtBuilder::default().build().execute_with(|| {
+            assert!(true);
+        })
     }
 }
