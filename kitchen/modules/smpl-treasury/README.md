@@ -2,7 +2,7 @@
 
 This `smpl-treasury` started as a simpler version of the `treasury` module, but it has since veered from the treasury's design. While it demonstrates similar patterns, the `smpl-treasury` defines a module in which the users that would like to transfer funds must call the runtime method `request_transfer`:
 
-```rust
+```rust, ignore
 // in decl_module {}
 fn request_transfer(
     origin, 
@@ -28,14 +28,14 @@ fn request_transfer(
 
 This method reserves collateral from the sender before appending the `SpendRequest` to a runtime storage value.
 
-```rust
+```rust, ignore
 // in decl_storage
 TransferRequests get(fn treasury_requests): Vec<SpendRequest<T::AccountId, BalanceOf<T>>>;
 ```
 
 This vector of spend requests contains the fields `from`, `to`, `amount`.
 
-```rust
+```rust, ignore
 #[derive(Encode, Decode)]
 pub struct SpendRequest<AccountId, Balance> {
     /// Sending account
@@ -47,9 +47,9 @@ pub struct SpendRequest<AccountId, Balance> {
 }
 ```
 
-In essence, this runtime queues requests before batching execution every `UserSpend` number of blocks. `UserSpend` is a [configurable module constant](https://substrate.dev/recipes/storage/constants.html). It is used in [`on_finalize`](https://github.com/substrate-developer-hub/recipes/blob/master/src/tour/loop.md)
+In essence, this runtime queues requests before batching execution every `UserSpend` number of blocks. `UserSpend` is a [configurable module constant](https://substrate.dev/recipes/storage/constants.html). It is used in [`on_finalize`](https://github.com/substrate-developer-hub/recipes/blob/master/src/tour/schedule.md)
 
-```rust
+```rust, ignore
 fn on_finalize(n: T::BlockNumber) {
     if (n % T::UserSpend::get()).is_zero() {
         // every `UserSpend` number of blocks,
@@ -66,7 +66,7 @@ fn on_finalize(n: T::BlockNumber) {
 
 If you looked closely in the `request_transfer` runtime method, a uniform fee called `T::Tax::get()` is taken from the sender for every transfer. It is reserved using `reserve` when the request is initially queued.
 
-```rust
+```rust, ignore
 // in decl_module::request_transfer
 let bond = T::Tax::get();
 T::Currency::reserve(&sender, bond)
@@ -75,7 +75,7 @@ T::Currency::reserve(&sender, bond)
 
 It is transferred to the module's pot when the transfer is executed.
 
-```rust
+```rust, ignore
 let _ = T::Currency::transfer(&request.from, &request.to, request.amount, AllowDeath);
 // get the tax
 let tax_to_pay = T::Tax::get();
@@ -87,25 +87,25 @@ let _ = T::Currency::transfer(&request.from, &Self::account_id(), tax_to_pay, Al
 
 This example demonstrates one pattern for expressing a shared account with substrate. The `ModuleId` is a constant.
 
-```rust
+```rust, ignore
 const MODULE_ID: ModuleId = ModuleId(*b"example ");
 ```
 
 This type comes from `sr-primitives`, which our `Cargo.toml` aliases as `runtime_primitives` so the import is
 
-```rust
+```rust, ignore
 use runtime_primitives::ModuleId;
 ```
 
 To convert this identity into an `AccountId`, it is necessary to also import `AccountIdConversion` from `sr-primitives::traits::AccountIdConversion`.
 
-```rust
+```rust, ignore
 use runtime_primitives::traits::AccountIdConversion;
 ```
 
 This is used to access the `ModuleId` associated with the module-driven governance with the `into_account` method
 
-```rust
+```rust, ignore
 // in impl<T: Trait> Module<T>
 pub fn account_id() -> T::AccountId {
     MODULE_ID.into_account()
@@ -120,7 +120,7 @@ In our example, there is a `Council` storage item which is a list of `AccountId`
 
 It allows every member to submit `Proposal`s for the treasury's spending. To vote on `Proposal`s, members need to call the `stupid_vote` runtime method with the `AccountId` of the member that made the `Proposal`. 
 
-```rust
+```rust, ignore
 fn stupid_vote(
     origin,
     vote: T::AccountId,
@@ -138,7 +138,7 @@ fn stupid_vote(
 
 There is no limit on the number of times this method can be called by a member. So this voting algorithm is vulnerable to a sybil attack. It also doesn't check that the voter doesn't vote for themselves. Adding the latter check would only require placing another `ensure` statement at the top of the method body,
 
-```rust
+```rust, ignore
 ensure!(&voter != &vote, "cannot vote on their own proposal");
 ```
 

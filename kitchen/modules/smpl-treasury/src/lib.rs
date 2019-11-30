@@ -1,16 +1,17 @@
 // not simple treasury
 #![cfg_attr(not(feature = "std"), no_std)]
 
-use runtime_primitives::{
-    ModuleId, RuntimeDebug, traits::{CheckedSub, CheckedAdd, AccountIdConversion, Zero},
-};
-use support::traits::{Currency, ReservableCurrency, Get, ExistenceRequirement::AllowDeath};
-use support::{decl_event, decl_module, decl_storage, dispatch::Result, ensure, StorageValue};
-use parity_scale_codec::{Encode, Decode};
-use system::{self, ensure_signed};
-#[cfg(feature = "std")]
-use serde::{Serialize, Deserialize};
+use parity_scale_codec::{Decode, Encode};
 use rstd::prelude::*;
+use runtime_primitives::{
+    traits::{AccountIdConversion, CheckedAdd, CheckedSub, Zero},
+    ModuleId, RuntimeDebug,
+};
+#[cfg(feature = "std")]
+use serde::{Deserialize, Serialize};
+use support::traits::{Currency, ExistenceRequirement::AllowDeath, Get, ReservableCurrency};
+use support::{decl_event, decl_module, decl_storage, dispatch::Result, ensure, StorageValue};
+use system::{self, ensure_signed};
 
 type BalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::Balance;
 const MODULE_ID: ModuleId = ModuleId(*b"example ");
@@ -65,16 +66,16 @@ decl_storage! {
         Proposals get(fn proposals): map T::AccountId => Option<Proposal<T::AccountId, BalanceOf<T>, T::BlockNumber>>;
     }
     add_extra_genesis {
-		build(|config| {
-			// Create the receiving treasury account
-			let _ = T::Currency::make_free_balance_be(
-				&<Module<T>>::account_id(),
-				T::Currency::minimum_balance(),
-            );  
-            
+        build(|config| {
+            // Create the receiving treasury account
+            let _ = T::Currency::make_free_balance_be(
+                &<Module<T>>::account_id(),
+                T::Currency::minimum_balance(),
+            );
+
             <Council<T>>::put(&config.council);
-		});
-	}
+        });
+    }
 }
 
 decl_event!(
@@ -109,10 +110,10 @@ decl_module! {
         /// Transfer Request
         ///
         /// SpendRequest`s are queued in the `SpendQ` which is dispatched every `SpendPeriod`
-        /// The tax amount is reserved from sender and paid when executing the spend (in an atomic operation) 
+        /// The tax amount is reserved from sender and paid when executing the spend (in an atomic operation)
         fn request_transfer(
-            origin, 
-            dest: T::AccountId, 
+            origin,
+            dest: T::AccountId,
             amount: BalanceOf<T>
         ) -> Result {
             let sender = ensure_signed(origin)?;
@@ -124,7 +125,7 @@ decl_module! {
             // error message could print the tax amount
 
             // could add some ensure statement to prevent excessive requests by checking `UserDebt`
-            
+
             let requested_spend = SpendRequest {
                 from: sender.clone(),
                 to: dest.clone(),
@@ -255,7 +256,12 @@ impl<T: Trait> Module<T> {
         old_enough_proposals.into_iter().for_each(|proposal| {
             if proposal.amount <= budget_remaining {
                 budget_remaining -= proposal.amount;
-                let _ = T::Currency::transfer(&Self::account_id(), &proposal.to, proposal.amount, AllowDeath);
+                let _ = T::Currency::transfer(
+                    &Self::account_id(),
+                    &proposal.to,
+                    proposal.amount,
+                    AllowDeath,
+                );
             }
         })
     }
@@ -264,6 +270,7 @@ impl<T: Trait> Module<T> {
 #[cfg(test)]
 mod tests {
     use crate::*; //{Module, Trait, RawEvent, SpendRequest, GenesisConfig};
+    use balances;
     use primitives::H256;
     use runtime_io;
     use runtime_primitives::{
@@ -271,7 +278,6 @@ mod tests {
         traits::{BlakeTwo256, IdentityLookup, OnFinalize},
         Perbill,
     };
-    use balances;
     use support::{assert_err, impl_outer_event, impl_outer_origin, parameter_types, traits::Get};
     use system::ensure_signed;
 
@@ -321,7 +327,7 @@ mod tests {
         type TransferFee = TransferFee;
         type CreationFee = CreationFee;
     }
-    
+
     mod treasury {
         pub use crate::Event;
     }
@@ -338,7 +344,7 @@ mod tests {
         }
     }
 
-    parameter_types!{
+    parameter_types! {
         pub const Tax: u64 = 2;
         pub const UserSpend: u64 = 10;
         pub const TreasurySpend: u64 = 10;
@@ -359,7 +365,9 @@ mod tests {
 
     // An alternative to `ExtBuilder` which includes custom configuration
     pub fn new_test_ext() -> runtime_io::TestExternalities {
-        let mut t = system::GenesisConfig::default().build_storage::<TestRuntime>().unwrap();
+        let mut t = system::GenesisConfig::default()
+            .build_storage::<TestRuntime>()
+            .unwrap();
         balances::GenesisConfig::<TestRuntime> {
             balances: vec![
                 // members of council (can also be users)
@@ -376,18 +384,14 @@ mod tests {
                 (10, 46),
             ],
             vesting: vec![],
-        }.assimilate_storage(&mut t).unwrap();
-        GenesisConfig::<TestRuntime>{
-            council: vec![
-                1,
-                2,
-                3,
-                4,
-                5,
-                6,
-                7,
-            ]
-        }.assimilate_storage(&mut t).unwrap();
+        }
+        .assimilate_storage(&mut t)
+        .unwrap();
+        GenesisConfig::<TestRuntime> {
+            council: vec![1, 2, 3, 4, 5, 6, 7],
+        }
+        .assimilate_storage(&mut t)
+        .unwrap();
         t.into()
     }
 
@@ -421,36 +425,36 @@ mod tests {
         })
     }
 
-    /// Transfer reserves tax == 2 
+    /// Transfer reserves tax == 2
     fn transfer_reserves_tax() {
         new_test_ext().execute_with(|| {
             let first_account = ensure_signed(Origin::signed(1)).unwrap();
             let second_account = ensure_signed(Origin::signed(2)).unwrap();
             assert_err!(
                 Treasury::request_transfer(Origin::signed(3), first_account, 1),
-                "Must be able to pay tax to make transfer" 
+                "Must be able to pay tax to make transfer"
             );
             Treasury::request_transfer(Origin::signed(1), second_account, 8);
-            assert_eq!(
-                Balances::reserved_balance(&first_account),
-                2
-            );
+            assert_eq!(Balances::reserved_balance(&first_account), 2);
             let mock_spend_request = SpendRequest {
                 from: first_account.clone(),
                 to: second_account.clone(),
                 amount: 8, // Balances::from()
             };
             // check that the expected spend request is in runtime storage
-            assert!(Treasury::transfer_requests().iter().any(|a| *a == mock_spend_request));
+            assert!(Treasury::transfer_requests()
+                .iter()
+                .any(|a| *a == mock_spend_request));
 
             // check that user debt is correctly tracked
-            assert_eq!(
-                Treasury::user_debt(&first_account).unwrap(),
-                8,
-            );
-            
+            assert_eq!(Treasury::user_debt(&first_account).unwrap(), 8,);
+
             // check that the correct event is emitted
-            let expected_event = TestEvent::treasury(RawEvent::TransferRequested(first_account.clone(), second_account.clone(), 10));
+            let expected_event = TestEvent::treasury(RawEvent::TransferRequested(
+                first_account.clone(),
+                second_account.clone(),
+                10,
+            ));
             assert!(System::events().iter().any(|a| a.event == expected_event));
         })
     }
@@ -478,7 +482,10 @@ mod tests {
                 expected_proposal
             );
 
-            let expected_event = TestEvent::treasury(RawEvent::TreasuryProposal(eighth_account.clone(), 10u64.into()));
+            let expected_event = TestEvent::treasury(RawEvent::TreasuryProposal(
+                eighth_account.clone(),
+                10u64.into(),
+            ));
             assert!(System::events().iter().any(|a| a.event == expected_event));
         })
     }

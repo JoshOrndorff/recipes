@@ -47,7 +47,7 @@ Writing unit tests is one of the best ways to understand the code. Although unit
 
 ## sauce
 
-Over the past few weeks, testing has driven a significant rewrite of the [`kitchen`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/). Recently, I spent some time rewriting the following modules. There were many lessons that could be gleaned from the workarounds used in each. Work on these modules and others will continue with documentation recorded in [`sauce`](https://github.com/substrate-developer-hub/recipes/tree/master/src/tour).
+Over the past few weeks, testing has driven a significant rewrite of the [kitchen](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/). This increased focus on testing and benchmarking will continue over the next few weeks in the *[sauce](https://github.com/substrate-developer-hub/recipes/tree/master/src/tour)*, starting with
 
 - [`execution-schedule`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/execution-schedule)
 - [`smpl-treasury`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/smpl-treasury)

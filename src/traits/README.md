@@ -2,7 +2,7 @@
 
 To access **substrate specific types**, the module's `Trait` may inherit from the [Substrate Runtime Module Library](https://github.com/paritytech/substrate/tree/master/srml). For example, to access the Substrate types `Hash`, `AccountId`, and `BlockNumber`, it is sufficient to inherit the [`system`](https://github.com/paritytech/substrate/tree/master/srml/system) module:
 
-```rust
+```rust, ignore
 pub trait Trait: system::Trait {}
 ```
 

@@ -1,7 +1,9 @@
 # smpl-treasury
-*[`kitchen/modules/treasury`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/treasury)*
+*[`kitchen/modules/smpl-treasury`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/smpl-treasury)*
 
-This recipe demonstrates how [`srml-treasury`](https://github.com/paritytech/substrate/blob/master/srml/treasury/src/lib.rs) instantiates a pot of funds and schedules funding.
+> the links don't work and the code is outdated but I'd like to keep some of the wording -- it is concise and still accurate
+
+Otherwise, see *[the WIP](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/smpl-treasury/README.md)*
 
 ## Instantiate a Pot
 

@@ -130,6 +130,7 @@ fn add_emits_correct_event() {
 			]
 		);
 	})
+}
 ```
 
 This check requires importing from `system`

@@ -1,0 +1,29 @@
+name: Test
+
+on:
+  pull_request:
+    branches:
+    - master
+  push:
+    branches:
+    - master
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Install toolchain
+      uses: actions-rs/toolchain@v1
+      with:
+        profile: minimal
+        toolchain: nightly-2019-11-15
+        components: rustfmt
+        target: wasm32-unknown-unknown
+        default: true 
+    - uses: actions/checkout@master
+      with:
+        submodules: recursive
+    - name: Check Kitchen
+      run: cd kitchen/modules && cargo check --all
+    - name: Test Kitchen
+      run: cd kitchen/modules && cargo test --all

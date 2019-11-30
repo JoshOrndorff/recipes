@@ -46,7 +46,7 @@ decl_storage! {
 }
 ```
 
-`SingleValue` is set to `0` every `ClearFrequency` number of blocks. *This logic is in the `on_finalize` block and is covered in deeper detail in the [Blockchain Event Loop](../common/loop.md) recipe.*
+`SingleValue` is set to `0` every `ClearFrequency` number of blocks. *This logic is in the `on_finalize` block and is covered in deeper detail in the [Blockchain Event Loop](../tour/schedule.md) recipe.*
 
 ```rust
 fn on_finalize(n: T::BlockNumber) {
@@ -81,6 +81,4 @@ fn add_value(origin, val_to_add: u32) -> Result {
 
 In more complex patterns, the constant value may be used as a static, base value that is scaled by a multiplier to incorporate stateful context for calculating some dynamic fee (ie floating transaction fees).
 
-<!-- ## Runtime Configuration and Testing
-
-*TODO*: using `parameter_types` or `thread_local` for configuring runtimes with constants -->
+To test the range of module configurations introduced by configurable constants, see *[custom configuration of externalities](../testing/externalities.md)*

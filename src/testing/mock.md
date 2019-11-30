@@ -1,5 +1,5 @@
 # Mock Runtime for Unit Testing
-*see [root](./README.md) for list of kitchen modules with unit test coverage*
+*see [root](./index.md) for list of kitchen modules with unit test coverage*
 
 At the bottom of the runtime module, place unit tests in a separate rust module with a special compilation flag
 
@@ -106,12 +106,22 @@ To build the test runtime environment, import `runtime_io`
 use runtime_io;
 ```
 
-There are many patterns for building a mock runtime environment for testing. This page covers two patterns
-* [`new_test_ext`](#newext) -  consolidates all the logic for building the environment to a single public method, but isn't relatively configurable (i.e. uses one set of module constants)
-* [`ExtBuilder`](#extbuilder) - define methods on the unit struct `ExtBuilder` to foster a flexible environment for tests (i.e. can reconfigure module constants in every test if necessary)
+In the `Cargo.toml`, this only needs to be imported under `dev-dependencies` since it is only used in the `tests` module,
 
-## `new_test_ext` <a name = "newext"><a/>
-> *[`kitchen/modules/smpl-treasury`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/smpl-treasury)*
+```
+[dev-dependencies.runtime-io]
+default_features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'sr-io'
+rev = '6ae3b6c4ddc03d4cdb10bd1d417b95d20f4c1b6e'
+```
+
+There is more than one pattern for building a mock runtime environment for testing module logic. Two patterns are presented below. The latter is generally favored for reasons discussed in [custom test environment](./externalities.md)
+* [`new_test_ext`](#newext) -  consolidates all the logic for building the environment to a single public method, but isn't relatively configurable (i.e. uses one set of module constants)
+* [`ExtBuilder`](#extbuilder) - define methods on the unit struct `ExtBuilder` to facilitate a flexible environment for tests (i.e. can reconfigure module constants in every test if necessary)
+
+## new_test_ext <a name = "newext"><a/>
+*[`kitchen/modules/smpl-treasury`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/smpl-treasury)*
 
 In [`smpl-treasury`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/smpl-treasury), use the `balances::GenesisConfig` and the module's `Genesis::<TestRuntime>` to set the balances of the test accounts and establish council membership in the returned test environment.
 
@@ -175,8 +185,8 @@ fn fake_test() {
 [`execute_with()`](https://crates.parity.io/substrate_state_machine/struct.TestExternalities.html#method.execute_with)
 executes all logic expressed in the closure within the configured runtime test environment specified in `new_test_ext`
 
-## `ExtBuilder` <a name = "extbuilder"></a>
-> *[`kitchen/modules/struct-storage`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/struct-storage)*
+## ExtBuilder <a name = "extbuilder"></a>
+*[`kitchen/modules/struct-storage`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/struct-storage)*
 
 Another approach for a more flexible runtime test environment instantiates a unit struct `ExtBuilder`,
 
@@ -232,9 +242,9 @@ fn last_value_updates() {
 }
 ```
 
-> Run these tests with `cargo test` with an optional parameter for the test's name
+Run these tests with `cargo test`, an optional parameter is the test's name to only run that test and not all tests.
 
-The input to `Origin::signed` is the `system::Trait`'s `AccountId` type which was set to `u64` for the `TestRuntime` implementation. In theory, this could be set to some other type as long as it conforms to the [trait bound](https://crates.parity.io/srml_system/trait.Trait.html),
+NOTE: the input to `Origin::signed` is the `system::Trait`'s `AccountId` type which was set to `u64` for the `TestRuntime` implementation. In theory, this could be set to some other type as long as it conforms to the [trait bound](https://crates.parity.io/srml_system/trait.Trait.html),
 
 ```rust
 pub trait Trait: 'static + Eq + Clone {
@@ -243,3 +253,4 @@ pub trait Trait: 'static + Eq + Clone {
 	//...
 }
 ```
+<!-- add link to testing in devhub docs after it is added -->

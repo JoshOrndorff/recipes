@@ -24,4 +24,4 @@ The [`recipes/kitchen`](https://github.com/substrate-developer-hub/recipes/tree/
 This section teaches users to interact with [`recipes/kitchen`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen) by
 * [Running a Node](./runnode.md)
 * [Interacting with the Node](./interactnode.md)
-* [Understanding the Kitchen Architecture](./usingkitchen.md)
+* [Understanding the Kitchen Architecture](./kitchenoverview.md)

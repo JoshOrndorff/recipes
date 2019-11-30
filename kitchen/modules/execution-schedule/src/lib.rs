@@ -436,11 +436,10 @@ mod tests {
                 run_to_block(32);
                 assert_eq!(ExecutionSchedule::era(), 16);
             })
-    } // writing this test helped me discover a bug in `on_initialize` (where I was taking (n % (batch_frequency + 1.into())) which is erroneous)
+    }
 
     #[test]
     fn estimators_work() {
-        // should use quickcheck to cover entire range of checks
         ExtBuilder::default()
             .execution_frequency(8)
             .build()
