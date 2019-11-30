@@ -21,7 +21,7 @@ module-constant-config = { package = "module-constant-config", path = "../../mod
 basic-token = { package = "basic-token", path = "../../modules/basic-token", default-features = false }
 check-membership = { package = "check-membership", path = "../../modules/check-membership", default-features = false }
 execution-schedule = { package = "execution-schedule", path = "../../modules/execution-schedule", default-features = false }
-# smpl-treasury = { package = "smpl-treasury", path = "../../modules/smpl-treasury", default-features = false }
+smpl-treasury = { package = "smpl-treasury", path = "../../modules/smpl-treasury", default-features = false }
 last-caller = { path = "../../modules/last-caller", default-features = false }
 default-instance = { path = "../../modules/default-instance", default-features = false }
 
