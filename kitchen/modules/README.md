@@ -1,4 +1,5 @@
 # Modules
+[![Status badge](https://github.com/4meta5/recipes/workflows/Test/badge.svg)](https://github.com/4meta5/recipes/actions?workflow=Test)
 
 procedural examples
 * [Hello Substrate](./hello-substrate)
