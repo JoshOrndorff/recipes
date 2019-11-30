@@ -2,7 +2,7 @@
 
 [`execution-schedule`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/execution-schedule)'s `Trait` has three [module constants](../storage/constants.md). For this mock runtime, the `ExtBuilder` defines setters to enable the `TestExternalities` instance for each unit test to configure the local test runtime environment with different value assignments. For context, the `Trait` for [`execution-schedule`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/execution-schedule),
 
-```rust
+```rust, ignore
 // other type aliases
 pub type PriorityScore = u32;
 
@@ -23,7 +23,7 @@ pub trait Trait: system::Trait {
 
 The mock runtime environment extends the [previously discussed](./mock.md) `ExtBuilder` pattern with fields for each configurable constant and a default implementation. The default configuration represents the test environment that should be preferred in a plurality of unit tests. 
 
-```rust
+```rust, ignore
 pub struct ExtBuilder {
     signal_quota: u32,
     execution_frequency: u64,
@@ -42,7 +42,7 @@ impl Default for ExtBuilder {
 
 The setter methods for each configurable module constant are defined in the `ExtBuilder` methods. This allows each instance of `ExtBuilder` to set the module constant parameters for the unit test in question.
 
-```rust
+```rust, ignore
 impl ExtBuilder {
     pub fn signal_quota(mut self, signal_quota: u32) -> Self {
         self.signal_quota = signal_quota;
@@ -62,7 +62,7 @@ impl ExtBuilder {
 
 To allow for separate copies of the constant objects to be used in each thread, the variables assigned as constants are declared as [`thread_local!`](https://crates.parity.io/thread_local/index.html),
 
-```rust
+```rust, ignore
 thread_local! {
     static SIGNAL_QUOTA: RefCell<u32> = RefCell::new(0);
     static EXECUTION_FREQUENCY: RefCell<u64> = RefCell::new(0);
@@ -72,7 +72,7 @@ thread_local! {
 
 Each configurable constant type also maintains unit structs with implementation of `Get<T>` from the type `T` assigned to the module constant in the mock runtime implementation.
 
-```rust
+```rust, ignore
 pub struct SignalQuota;
 impl Get<u32> for SignalQuota {
     fn get() -> u32 {
@@ -96,7 +96,7 @@ impl Get<u32> for TaskLimit {
 ```
 The build method on `ExtBuilder` sets the associated constants before building the default storage configuration.
 
-```rust
+```rust, ignore
 impl ExtBuilder {
     // setters
     pub fn set_associated_consts(&self) {
@@ -110,7 +110,7 @@ impl ExtBuilder {
 
 To build the default test environment, the syntax looks like
 
-```rust
+```rust, ignore
 #[test]
 fn fake_test() {
     ExtBuilder::default()
@@ -123,7 +123,7 @@ fn fake_test() {
 
 To configure a test environment in which the `execution_frequency` is set to `2`, the `eras_change_correctly` test invokes the `execution_frequency` setter declared in as a method on `ExtBuilder`,
 
-```rust
+```rust, ignore
 #[test]
 fn fake_test2() {
     ExtBuilder::default()

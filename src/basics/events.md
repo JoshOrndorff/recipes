@@ -11,7 +11,7 @@ To declare an event, use the [`decl_event`](https://crates.parity.io/srml_suppor
 
 The [simplest example of an event](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/simple-event) uses the following syntax
 
-```rust
+```rust, ignore
 decl_event!(
     pub enum Event {
         EmitInput(u32),
@@ -21,7 +21,7 @@ decl_event!(
 
 The event is emitted at the bottom of the `do_something` function body:
 
-```rust
+```rust, ignore
 Self::deposit_event(Event::EmitInput(new_number));
 ```
 
@@ -29,7 +29,7 @@ Self::deposit_event(Event::EmitInput(new_number));
 
 [Sometimes](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/generic-event) events might emit types from the module Trait. When the event uses types from the module, it is necessary to specify additional syntax
 
-```rust
+```rust, ignore
 decl_event!(
     pub enum Event<T> where AccountId = <T as system::Trait>::AccountId {
         EmitInput(AccountId, u32),
@@ -39,7 +39,7 @@ decl_event!(
 
 The syntax for `deposit_event` now takes the `RawEvent` type because it is generic over the module Trait 
 
-```rust
+```rust, ignore
 Self::deposit_event(RawEvent::EmitInput(user, new_number));
 ```
 

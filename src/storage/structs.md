@@ -4,7 +4,7 @@ In Rust, a `struct`, or structure, is a custom a custom data type that lets you 
 
 To define a custom struct for the runtime, the following syntax may be used:
 
-```rust
+```rust, ignore
 #[derive(Encode, Decode, Default, Clone, PartialEq)]
 pub struct MyStruct<A, B> {
     some_number: u32,
@@ -17,7 +17,7 @@ In the code snippet above, the [derive macro](https://doc.rust-lang.org/rust-by-
 
 To use the `Encode` and `Decode` traits, it is necessary to import them from `support::codec`:
 
-```rust
+```rust, ignore
 use support::codec::{Encode, Decode};
 ```
 
@@ -25,7 +25,7 @@ By storing types in `MyStruct` as generics, it is possible to access custom Subs
 
 For example, to store a mapping from `AccountId` to `MyStruct` with `some_generic` as the `Balance` type and `some_other_generic` as the `Hash` type:
 
-```rust
+```rust, ignore
 decl_storage! {
     trait Store for Module<T: Trait> as Example {
         MyMap: map T::AccountId => MyStruct<T::Balance, T::Hash>;
@@ -37,7 +37,7 @@ decl_storage! {
 
 To push values and modify the map
 
-```rust
+```rust, ignore
 decl_module! {
     pub struct Module<T: Trait> for enum Call where origin: T::Origin {
         fn create_struct(origin, number: u32, balance: T::Balance, secret: T::Hash) -> Result {
@@ -60,7 +60,7 @@ decl_module! {
 
 This basic runtime shows how to store custom, nested structs using a combination of Rust primitive types and Substrate specific types via generics.
 
-```rust
+```rust, ignore
 pub trait Trait: balances::Trait {}
 
 #[derive(Encode, Decode, Default)]

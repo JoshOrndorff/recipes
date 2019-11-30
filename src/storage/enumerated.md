@@ -5,7 +5,7 @@ Substrate does not natively support a list type since it may encourage dangerous
 
 Emulate a list with a mapping and a counter like so:
 
-```rust
+```rust, ignore
 use support::{StorageValue, StorageMap};
 
 decl_storage! {
@@ -32,7 +32,7 @@ This recipe answers those questions with snippets from relevant code samples:
 
 If the size of the list is not relevant, the implementation is straightforward. To add an `AccountId`, increment the `the_counter` and insert an `AccountId` at that index:
 
-```rust
+```rust, ignore
 fn add_member(origin) -> Result {
     let who = ensure_signed(origin)?;
 
@@ -50,7 +50,7 @@ fn add_member(origin) -> Result {
 
 To remove an `AccountId`, call the `remove` method for the `StorageMap` type at the relevant index. In this case, it isn't necessary to update the indices of other `proposal`s; order is not relevant.
 
-```rust
+```rust, ignore
 fn remove_member_unbounded(origin, index: u32) -> Result {
     let who = ensure_signed(origin)?;
 
@@ -78,7 +78,7 @@ To preserve storage so that the list doesn't continue growing even after removin
 
 Use the *swap and pop* algorithm to remove elements from the list.
 
-```rust
+```rust, ignore
 fn remove_member_bounded(origin, index: u32) -> Result {
     let _ = ensure_signed(origin)?;
 
@@ -108,7 +108,7 @@ To trade performance for *relatively* simple code, use the `linked_map` data str
 
 To use `linked_map`, import `EnumerableStorageMap`. Here is the new declaration in the `decl_storage` block:
 
-```rust
+```rust, ignore
 use support::{StorageMap, EnumerableStorageMap}; // no StorageValue necessary
 
 decl_storage! {
@@ -121,7 +121,7 @@ decl_storage! {
 
 The method adding members is no different than the previously covered method, but the `remove_member_linked` method expresses swap and pop in a different way
 
-```rust
+```rust, ignore
 fn remove_member_linked(origin, index: u32) -> Result {
     let _ = ensure_signed(origin)?;
 

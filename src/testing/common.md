@@ -11,7 +11,7 @@ The [`Verify First, Write Last`](https://substrate.dev/recipes/declarative/ensur
 
 In [`kitchen/module/adding-machine`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/adding-machine), the runtime method `add` checks for overflow
 
-```rust
+```rust, ignore
 decl_module! {
     pub struct Module<T: Trait> for enum Call where origin: T::Origin {
         fn deposit_event() = default;
@@ -32,7 +32,7 @@ decl_module! {
 
 The test below verifies that the expected error is thrown for a specific case of overflow.
 
-```rust
+```rust, ignore
 #[test]
 fn overflow_fails() {
 	ExtBuilder::build().execute_with(|| {
@@ -46,7 +46,7 @@ fn overflow_fails() {
 
 This requires importing the `assert_err` macro from `support`. With all the previous imported objects, 
 
-```rust
+```rust, ignore
 #[cfg(test)]
 mod tests {
 	use support::{assert_err, impl_outer_event, impl_outer_origin, parameter_types};
@@ -60,7 +60,7 @@ For more examples, see the substrate runtime modules -- `mock.rs` for mock runti
 
 Changes to storage can be checked by direct calls to the storage values. The syntax is the same as it would be in the module's runtime methods
 
-```rust
+```rust, ignore
 #[test]
 fn last_value_updates() {
 	ExtBuilder::build().execute_with(|| {
@@ -74,7 +74,7 @@ fn last_value_updates() {
 
 For context, the tested module's `decl_storage` block looks like
 
-```rust
+```rust, ignore
 decl_storage! {
 	trait Store for Module<T: Trait> as HelloSubstrate{
 		pub LastValue get(fn last_value): u64;
@@ -89,13 +89,13 @@ Updates to `UserValue` are tested in `last_value_updates` in [`kitchen/module/he
 
 The common way of testing expected event emission behavior requires importing `support`'s [`impl_outer_event!`](https://crates.parity.io/srml_support/macro.impl_outer_event.html) macro
 
-```rust
+```rust, ignore
 use support::impl_outer_event;
 ```
 
 The `TestEvent` enum imports and uses the module's `Event` enum. The new local module `hello_substrate` is re-exports the contents of the root to give a name for the current crate to [`impl_outer_event!`](https://crates.parity.io/srml_support/macro.impl_outer_event.html).
 
-```rust
+```rust, ignore
 mod hello_substrate {
 	pub use crate::Event;
 }
@@ -113,7 +113,7 @@ impl Trait for TestRuntime {
 
 Testing the correct emission of events compares constructions of expected events with the entries in the [`System::events`](https://crates.parity.io/srml_system/struct.Module.html#method.events) vector of `EventRecord`s. In [`kitchen/module/adding-machine`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/adding-machine),
 
-```rust
+```rust, ignore
 #[test]
 fn add_emits_correct_event() {
 	ExtBuilder::build().execute_with(|| {
@@ -135,13 +135,13 @@ fn add_emits_correct_event() {
 
 This check requires importing from `system`
 
-```rust
+```rust, ignore
 use system::{EventRecord, Phase};
 ```
 
 A more ergonomic way of testing whether a specific event was emitted might use the `System::events().iter()`. This pattern doesn't require the previous imports, but it does require importing `RawEvent` (or `Event`) from the module and `ensure_signed` from `system` to convert signed extrinsics to the underlying `AccountId`,
 
-```rust
+```rust, ignore
 #[cfg(test)]
 mod tests {
 	// other imports
@@ -153,7 +153,7 @@ mod tests {
 
 In [`kitchen/module/hello-substrate`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/hello-substrate),
 
-```rust
+```rust, ignore
 #[test]
 fn last_value_updates() {
 	ExtBuilder::build().execute_with(|| {

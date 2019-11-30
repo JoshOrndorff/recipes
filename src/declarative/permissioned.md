@@ -15,13 +15,13 @@ branch = 'master'
 
 The alias for `sr-std` used is `rstd` which follows substrate's conventions. To import a vector type that can be stored in the runtime:
 
-```rust
+```rust, ignore
 use rstd::prelude::*;
 ```
 
 In the runtime, the membership set can be stored as 
 
-```rust
+```rust, ignore
 decl_storage! {
     trait Store for Module<T: Trait> as PGeneric {
         Members get(fn members): Vec<&T::AccountId>;
@@ -31,7 +31,7 @@ decl_storage! {
 
 If the set was determined to be permissionless, we could express this in the runtime as 
 
-```rust
+```rust, ignore
 fn add_member(origin) -> Result {
 	// unwrap signed extrinsic into AccountId
 	let new_member = ensure_signed(origin)?;
@@ -46,7 +46,7 @@ fn add_member(origin) -> Result {
 
 To increase the readability of the code, the membership check can be extracted into its own auxiliary runtime method.
 
-```rust
+```rust, ignore
 impl<T: Trait> Module<T> {
     pub fn is_member(who: &T::AccountId) -> bool {
         Self::members().contains(who)
@@ -56,7 +56,7 @@ impl<T: Trait> Module<T> {
 
 The `add_member` method now reads
 
-```rust
+```rust, ignore
 fn add_member(origin) -> Result {
 	let new_member = ensure_signed(origin)?;
 	// the membership check is now shorter

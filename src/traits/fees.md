@@ -21,7 +21,7 @@ Substrate provides several ways to affect the fees charges for executing a trans
 ## Assigning Transaction Weights
 
 For simple transactions a fixed weight will do.
-```rust
+```rust, ignore
 decl_module! {
 	pub struct Module<T: Trait> for enum Call {
 
@@ -32,7 +32,7 @@ decl_module! {
 ```
 
 For more complex transactions, custom weight calculations can be performed.
-```rust
+```rust, ignore
 pub struct Conditional(u32);
 
 impl WeighData<(&bool, &u32)> for Conditional {
@@ -59,7 +59,7 @@ insecure chain.
 ## Converting Weight To Fees
 
 In many cases converting weight to fees 1:1 will suffice and be accomplished with [`ConvertInto`](https://crates.parity.io/sr_primitives/traits/struct.ConvertInto.html). This approach is taken in the [node template](https://github.com/substrate-developer-hub/substrate-node-template/blob/43ee95347b6626580b1d9d554c3c8b77dc85bc01/runtime/src/lib.rs#L230) as well as the kitchen's own super runtime.
-```rust
+```rust, ignore
 impl transaction_payment::Trait for Runtime {
 	// --snip--
 	type WeightToFee = ConvertInto;
@@ -67,7 +67,7 @@ impl transaction_payment::Trait for Runtime {
 ```
 
 This example uses a quadratic conversion and supports custom coefficients
-```rust
+```rust, ignore
 pub struct QuadraticWeightToFee<C0, C1, C2>(C0, C1, C2);
 
 impl<C0, C1, C2> Convert<Weight, Balance> for QuadraticWeightToFee<C0, C1, C2>

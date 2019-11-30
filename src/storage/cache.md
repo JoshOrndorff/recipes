@@ -3,7 +3,7 @@
 
 Calls to runtime storage have an associated cost. With this in mind, multiple calls to storage values should be avoided when possible.
 
-```rust
+```rust, ignore
 decl_storage! {
     trait Store for Module<T: Trait> as StorageCache {
         // copy type
@@ -19,7 +19,7 @@ decl_storage! {
 
 For [`Copy`](https://doc.rust-lang.org/std/marker/trait.Copy.html) types, it is easy to reuse previous storage calls by simply reusing the value (which is automatically cloned upon reuse). With this in mind, the second call in the following code is unnecessary:
 
-```rust
+```rust, ignore
 fn swap_value_no_cache(origin, some_val: u32) -> Result {
     let _ = ensure_signed(origin)?;
     let original_call = <SomeCopyValue>::get();
@@ -37,7 +37,7 @@ fn swap_value_no_cache(origin, some_val: u32) -> Result {
 
 Instead, the initial call value should be reused. In this example, the `SomeCopyValue` value is [`Copy`](https://doc.rust-lang.org/std/marker/trait.Copy.html) so we should prefer the following code without the unnecessary second call to storage:
 
-```rust
+```rust, ignore
 fn swap_value_w_copy(origin, some_val: u32) -> Result {
     let _ = ensure_signed(origin)?;
     let original_call = <SomeCopyValue>::get();
@@ -53,7 +53,7 @@ fn swap_value_w_copy(origin, some_val: u32) -> Result {
 
 If the type was not `Copy`, but was [`Clone`](https://doc.rust-lang.org/std/clone/trait.Clone.html), then it is still preferred to clone the value in the method than to make another call to runtime storage.
 
-```rust
+```rust, ignore
 decl_storage! {
     trait Store for Module<T: Trait> as StorageCache {
         // ...<copy type here>...
@@ -69,7 +69,7 @@ The runtime methods enable the calling account to swap the `T::AccountId` value 
 2. the calling account is in `Group Members
 
 The first implementation makes a second unnecessary call to runtime storage instead of cloning the call for `existing_key`:
-```rust
+```rust, ignore
 fn swap_king_no_cache(origin) -> Result {
     let new_king = ensure_signed(origin)?;
     let existing_king = <KingMember<T>>::get();
@@ -115,7 +115,7 @@ To learn more, run the command again with --verbose.
 
 Fixing this only requires cloning the original call to storage before it is moved:
 
-```rust
+```rust, ignore
 fn swap_king_with_cache(origin) -> Result {
     let new_king = ensure_signed(origin)?;
     let existing_king = <KingMember<T>>::get();
