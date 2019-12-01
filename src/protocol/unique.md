@@ -4,7 +4,7 @@ There are certain advantageous patterns for verifying the uniqueness of an item 
 
 This pattern can easily be extracted and applied to all situations for which membership uniqueness needs to be checked for some vector. In the context of the [`utxo-workshop`](https://github.com/nczhu/utxo-workshop), we have:
 
-```rust
+```rust, ignore
 /// utox-workshop/runtime/src/utxo.rs `check_transaction`
 {
     let input_set: BTreeMap<_, ()> =

@@ -6,7 +6,7 @@ Within each runtime module function, it is important to perform requisite checks
 
 In the [set storage and iteration](../storage/iterate.md), a vector was stored in the runtime to allow for simple membership checks for methods only available to members.
 
-```rust
+```rust, ignore
 decl_storage! {
 	trait Store for Module<T: Trait> as VecMap {
         Members get(fn members): Vec<T::AccountId>;
@@ -23,7 +23,7 @@ impl<T: Trait> Module<T> {
 
 "*By returning `bool`, we can easily use these methods in `ensure!` statements to verify relevant state conditions before making requests in the main runtime methods.*"
 
-```rust
+```rust, ignore
 fn member_action(origin) -> Result {
     let member = ensure_signed(origin)?;
     ensure!(Self::is_member(&member), "not a member => cannot do action");

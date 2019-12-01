@@ -3,13 +3,13 @@
 
 To declare constant values within a runtime, it is necessary to import the [`Get`](https://crates.parity.io/srml_support/traits/trait.Get.html) trait from the `support` module
 
-```rust
+```rust, ignore
 use support::traits::Get;
 ```
 
 Constants can be declared in the `pub trait` block of the module using the `Get<T>` syntax for any type `T`.
 
-```rust
+```rust, ignore
 pub trait Trait: system::Trait {
 	type Event: From<Event> + Into<<Self as system::Trait>::Event>;
 
@@ -24,7 +24,7 @@ pub trait Trait: system::Trait {
 
 In order to make these constants accessible within the module, it is necessary to declare them with the `const` syntax in the `decl_module` block. Usually constants are declared at the top of this block, under `fn deposit_event`.
 
-```rust
+```rust, ignore
 decl_module! {
     pub struct Module<T: Trait> for enum Call where origin: T::Origin {
 		fn deposit_event() = default;
@@ -38,7 +38,7 @@ decl_module! {
 
 This example manipulates a single value in storage declared as `SingleValue`.
 
-```rust
+```rust, ignore
 decl_storage! {
 	trait Store for Module<T: Trait> as Example {
         SingleValue get(fn single_value): u32;
@@ -46,9 +46,9 @@ decl_storage! {
 }
 ```
 
-`SingleValue` is set to `0` every `ClearFrequency` number of blocks. *This logic is in the `on_finalize` block and is covered in deeper detail in the [Blockchain Event Loop](../common/loop.md) recipe.*
+`SingleValue` is set to `0` every `ClearFrequency` number of blocks. *This logic is in the `on_finalize` block and is covered in deeper detail in the [Blockchain Event Loop](../tour/schedule.md) recipe.*
 
-```rust
+```rust, ignore
 fn on_finalize(n: T::BlockNumber) {
     if (n % T::ClearFrequency::get()).is_zero() {
         let c_val = <SingleValue>::get();
@@ -60,7 +60,7 @@ fn on_finalize(n: T::BlockNumber) {
 
 Signed transactions may invoke the `add_value` runtime method to increase `SingleValue` as long as each call adds less than `MaxAddend`. *There is no anti-sybil mechanism so a user could just split a larger request into multiple smaller requests to overcome the `MaxAddend`*, but overflow is still handled appropriately.
 
-```rust
+```rust, ignore
 fn add_value(origin, val_to_add: u32) -> Result {
     let _ = ensure_signed(origin)?;
     ensure!(val_to_add <= T::MaxAddend::get(), "value must be <= maximum add amount constant");
@@ -81,6 +81,4 @@ fn add_value(origin, val_to_add: u32) -> Result {
 
 In more complex patterns, the constant value may be used as a static, base value that is scaled by a multiplier to incorporate stateful context for calculating some dynamic fee (ie floating transaction fees).
 
-<!-- ## Runtime Configuration and Testing
-
-*TODO*: using `parameter_types` or `thread_local` for configuring runtimes with constants -->
+To test the range of module configurations introduced by configurable constants, see *[custom configuration of externalities](../testing/externalities.md)*

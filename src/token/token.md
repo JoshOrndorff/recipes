@@ -7,7 +7,7 @@ To implement a simple token transfer with Substrate,
 2. establish ownership upon configuration of circulating tokens
 3. coordinate token transfers with the runtime functions
 
-```rust
+```rust, ignore
 decl_storage! {
   trait Store for Module<T: Trait> as TokenTransfer {
     pub TotalSupply get(fn total_supply): u64 = 21000000; // (1)
@@ -21,7 +21,7 @@ decl_storage! {
 
 Declare an event for when token transfers occur to notify clients
 
-```rust
+```rust, ignore
 decl_event!(
     pub enum Event<T> where AccountId = <T as system::Trait>::AccountId {
         // notifies upon token transfers
@@ -32,7 +32,7 @@ decl_event!(
 
 Define the business logic in runtime methods
 
-```rust
+```rust, ignore
 decl_module! {
   pub struct Module<T: Trait> for enum Call where origin: T::Origin {
     // initialize the default event for this module

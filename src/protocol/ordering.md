@@ -2,7 +2,7 @@
 
 To customize the transaction ordering logic for a Substrate blockchain, use the [`TaggedTransactionQueue`](https://crates.parity.io/substrate_client/runtime_api/trait.TaggedTransactionQueue.html?search=) trait to specify the transaction queue logic and mitigate race conditions. To do so, implement the following function,
 
-```rust
+```rust, ignore
 fn validate_transaction(
     &self,
     at: &BlockId<Block>,
@@ -12,7 +12,7 @@ fn validate_transaction(
 
 This function signature reveals that, in the event of a successful call, the return type must be [`TransactionValidity`](https://crates.parity.io/sr_primitives/transaction_validity/enum.TransactionValidity.html). This enum has three variants
 
-```rust
+```rust, ignore
 pub enum TransactionValidity {
     Invalid(i8),
     Valid {
@@ -27,7 +27,7 @@ pub enum TransactionValidity {
 
 In the context of the [`utxo-workshop`](https://github.com/nczhu/utxo-workshop), specify the hashes of required transactions (`missing_utxos`) in the `requires` field while also specifying the list of transactions for which this utxo satisfies `requires` in the `provides` field. The `longevity` field is set somewhat arbitrarily for this example, and the `priority` field serves to enforce an ordering on the set of transactions.  
 
-```rust
+```rust, ignore
 impl runtime_api::TaggedTransactionQueue<Block> for Runtime {
     fn validate_transaction(tx: <Block as BlockT>::Extrinsic) -> TransactionValidity {
         use support::IsSubType;

@@ -14,7 +14,7 @@ At the moment, the recipes onboards developers by focusing primarily on **module
 
 The **[kitchen](./kitchen)** contains code from the recipes in the context of modules/runtimes, while **[src](./src)** houses the commentary for related explanations and references. The structure of the `src` can be found in [src/SUMMARY.md](./src/SUMMARY.md).
 
-In practice, the recipes supplements existing resources by providing usage examples, demonstrating best practices in context, and extending simple samples/tutorials. Likewise, it is necessary to **frequently link to/from [reference docs](https://crates.parity.io/substrate_service/index.html?search=srml), [tutorials](https://github.com/substrate-developer-hub/), and [high-level docs](https://substrate.dev/)**.
+In practice, the recipes supplements existing resources by providing usage examples, demonstrating best practices in context, and extending simple samples/tutorials. Likewise, it is necessary to **frequently link to/from [reference docs](https://crates.parity.io/substrate_service/index.html?), [tutorials](https://github.com/substrate-developer-hub/), and [high-level docs](https://substrate.dev/)**.
 
 The recipes do NOT cover:
 * module testing
@@ -55,3 +55,11 @@ $ mdbook build --open
 * use active voice (instead of passive voice like "you may want to use active voice", prefer "use active voice")
 * link as often as possible to outside content and useful resources including other recipes, [documentation](https://substrate.dev/docs/en/getting-started/), [tutorials](https://substrate.dev/en/tutorials), and [code](https://github.com/substrate)
 * **be nice, abide by the [Rust CoC](https://www.rust-lang.org/policies/code-of-conduct)**
+
+For blocks of rust, prefer annotating code blocks with `rust, ignore` because the current compilation environment doesn't maintain the substrate dependencies.
+
+```rust, ignore
+pub fn fake_method() {
+    nothing()
+}
+```

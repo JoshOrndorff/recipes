@@ -1,8 +1,4 @@
-# Token Curated Registry
+# Token Curated Registry [DEPRECATED]
 
 * [token](./token.md)
 * [tcr](./tcr.md)
-
-* reference the feeless token tutorial
-
-* add bonding curve tutorial as an extension

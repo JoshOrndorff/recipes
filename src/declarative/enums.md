@@ -6,19 +6,19 @@ In the [`utxo-workshop`](https://github.com/nczhu/utxo-workshop), the code utili
 
 To see this pattern in action, see the `check_transaction` runtime function:
 
-```rust
+```rust, ignore
 pub fn check_transaction(transaction: &Transaction) -> CheckResult<'_>
 ```
 
 This function  returns `CheckResult<'_>`. The type signature of `CheckResult<T>`:
 
-```rust
+```rust, ignore
 pub type CheckResult<'a> = rstd::result::Result<CheckInfo<'a>, &'static str>;
 ```
 
 The type signature of `CheckInfo<T>`:
 
-```rust
+```rust, ignore
 /// Information collected during transaction verification
 pub enum CheckInfo<'a> {
     /// Combined value of all inputs and outputs
@@ -31,7 +31,7 @@ pub enum CheckInfo<'a> {
 
 This reveals that in the event of a successful call, it returns either the `Total`s struct that can be easily decomposed to calculate leftover value and distribute it evenly among the authorities OR returns a wrapper around the missing UTXOs which were necessary for verification. Here's the code in `check_transaction` that expresses this logic:
 
-```rust
+```rust, ignore
 if missing_utxo.is_empty() {
     ensure!(
         total_input >= total_output,

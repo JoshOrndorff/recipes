@@ -11,7 +11,7 @@ There are three sections:
 
 Within each folder, run the following command to build
 
-```rust
+```rust, ignore
 cargo build
 ```
 

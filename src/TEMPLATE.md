@@ -2,7 +2,7 @@
 *[code]`(`**`<link to the code in kitchen>`**`)`, [status]`(`**`<recipe status>`**`)`*
 
 *brainstorming*
-```rust
+```rust, ignore
 pub enum Status<T : Recipe>  {
     OutdatedAndWrong(T),
     ExistsImprovements(T),
