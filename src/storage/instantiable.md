@@ -116,6 +116,7 @@ decl_module! {
         ...
     }
 }
+```
 ```rust, ignore
 decl_event!(
 	pub enum Event<T, I=DefaultInstance> where ... {
