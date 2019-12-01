@@ -1,4 +1,5 @@
 # Kitchen
+[![](https://tokei.rs/b1/github/substrate-developer-hub/recipes)](https://github.com/substrate-developer-hub/recipes)
 
 The kitchen is for *cooking* recipes. It is structured similarly to the main recipes build as specified in [src/SUMMARY.md](../src/SUMMARY.md), except every code sample is stored as a library via the [substrate-module-template](https://github.com/substrate-developer-hub/substrate-module-template).
 
