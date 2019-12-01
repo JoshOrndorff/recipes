@@ -63,7 +63,7 @@ If the storage item does not use any types specified in the configuration trait,
 
 ### Event initialization
 ```rust, ignore
-fn deposit_event<T, I>() = default;
+fn deposit_event() = default;
 ```
 
 ### Event Declaration
