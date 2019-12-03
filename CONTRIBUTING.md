@@ -34,7 +34,7 @@ There should be high coverage of the `kitchen` code in the written content (in `
 
 ### Cooking Modules
 
-We do not enforce the [Rust in Substrate coding style](https://wiki.parity.io/Substrate-Style-Guide), but we prefer line wrapping at 120 characters a line (or less) for ease of review on github. 
+There is not yet strict enforcement of the [Rust in Substrate coding style](https://wiki.parity.io/Substrate-Style-Guide), but it is highly encouraged to wrap lines at 120 characters a line (or less) for improving reviewer experience on github.
 
 Graciously invoke `cargo fmt` on module and runtime code -- this should soon be enforced by a script!
 
