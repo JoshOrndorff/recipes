@@ -1,6 +1,6 @@
 # Contributing Guidelines
 
-The **purpose** of [Substrate Recipes](https://substrate.dev/recipes/) is to identify best practices in Substrate runtime code and extract useful patterns. If you're eager to PR, skip to the [Chef's Workflow](#workflow) section.
+The **purpose** of [Substrate Recipes](https://substrate.dev/recipes/) is to identify best practices in Substrate runtime code and extract useful patterns. If you're eager to PR, jump to the [Chef's Workflow](#workflow) section for clear instructions to guide contributions.
 
 ## Scope: Substrate Module and Runtime Development <a name = "scope"></a>
 
@@ -20,22 +20,25 @@ If you're interested in adding new chapters for any of these sections, [create a
 
 ## Chef's Workflow <a name = "workflow"></a>
 
-https://substrate.dev/recipes/base/kitchenoverview.html
+1. Isolate useful pattern(s) from [Substrate](https://github.com/paritytech/substrate) and code written with Substrate.
 
-TODO: break the algorithm into 2-sentence paragraphs with more specificity per paragraph
+2. (optional) Write an issue to discuss organizing the pattern into a written recipe in `recipes/src` or a code example in `recipes/kitchen`
 
-*algorithm*
-1. isolate useful pattern and make an [`issues`](https://github.com/substrate-developer-hub/recipes/issues)
-2. clone and a fork a branch; build a module/runtime example with context in the [`kitchen`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen) directory
-3. walk through logic of useful pattern in piecewise steps (in [`src/`](https://github.com/substrate-developer-hub/recipes/tree/master/src))
-4. link `src` and `kitchen` (in [`src/`](https://github.com/substrate-developer-hub/recipes/tree/master/src)) 
+3. Fork the [recipes](https://github.com/substrate-developer-hub/recipes). Before making any changes, checkout another branch. 
 
-### TODO: Cooking Modules
+4. (optional) To contribute a code example, place the code under the appropriate directory in [`recipes/kitchen`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen).  
 
-TODO:
-* preferences on style?
-* enforcement of `cargo fmt`
-* maybe of the format of the `Cargo.toml`?
+5. (optional) To write a recipe, discuss where it should go in `src` in an issue in step (2). [`SUMMARY.md`](./src/SUMMARY.md) describes the structure of the [book](https://substrate.dev/recipes). [`TEMPLATE.md`](./src/TEMPLATE.md) provides a recommended structure.
+
+There should be high coverage of the `kitchen` code in the written content (in `src`), but this is not necessarily enforced.
+
+### Cooking Modules
+
+We do not enforce the [Rust in Substrate coding style](https://wiki.parity.io/Substrate-Style-Guide), but we prefer line wrapping at 120 characters a line (or less) for ease of review on github. 
+
+Graciously invoke `cargo fmt` on module and runtime code -- this should soon be enforced by a script!
+
+For `Cargo.toml` files, prefer listing dependencies under a single `[dependencies]` header in lieu of using a `[dependencies.some_import]` for every `some_import` module imported. This preference is not enforced. See [`adding-machine/Cargo.toml`](https://github.com/substrate-developer-hub/recipes/blob/master/kitchen/modules/adding-machine/Cargo.toml) for an example of the recommended less verbose `Cargo.toml` syntax.
 
 ### Editing and Writing Recipes
 
@@ -49,7 +52,7 @@ pub fn fake_method() {
 }
 ```
 
-**Stage locally before making a PR.** Don't forget to switch to a new branch before you make edits.
+**Don't forget to stage locally before making a PR.**
 
 1. install [`mdbook`](https://github.com/rust-lang-nursery/mdBook)
 

@@ -10,40 +10,15 @@ std = [
     'parity-scale-codec/std',
     'support/std',
     'system/std',
-    'runtime-primitives/std',
+    'sr-primitives/std',
 ]
 
-[dependencies.parity-scale-codec]
-default-features = false
-features = ['derive']
-version = '1.1.0'
+[dependencies]
+parity-scale-codec = { package = "parity-scale-codec", version = "1.1.0", features = ["derive"], default-features = false }
+support = { package = "srml-support", rev = "6ae3b6c4ddc03d4cdb10bd1d417b95d20f4c1b6e", git = "https://github.com/paritytech/substrate.git", default_features = false }
+system = { package = "srml-system", rev = "6ae3b6c4ddc03d4cdb10bd1d417b95d20f4c1b6e", git = "https://github.com/paritytech/substrate.git", default_features = false }
 
-[dependencies.support]
-default_features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'srml-support'
-rev = '6ae3b6c4ddc03d4cdb10bd1d417b95d20f4c1b6e'
-
-[dependencies.system]
-default_features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'srml-system'
-rev = '6ae3b6c4ddc03d4cdb10bd1d417b95d20f4c1b6e'
-
-[dependencies.runtime-primitives]
-default_features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'sr-primitives'
-rev = '6ae3b6c4ddc03d4cdb10bd1d417b95d20f4c1b6e'
-
-[dev-dependencies.primitives]
-default_features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'substrate-primitives'
-rev = '6ae3b6c4ddc03d4cdb10bd1d417b95d20f4c1b6e'
-
-[dev-dependencies.runtime-io]
-default_features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'sr-io'
-rev = '6ae3b6c4ddc03d4cdb10bd1d417b95d20f4c1b6e'
+[dev-dependencies]
+sr-primitives = { package = "sr-primitives", rev = "6ae3b6c4ddc03d4cdb10bd1d417b95d20f4c1b6e", git = "https://github.com/paritytech/substrate.git", default_features = false }
+substrate-primitives = { package = "substrate-primitives", rev = "6ae3b6c4ddc03d4cdb10bd1d417b95d20f4c1b6e", git = "https://github.com/paritytech/substrate.git", default_features = false }
+sr-io = { package = "sr-io", rev = "6ae3b6c4ddc03d4cdb10bd1d417b95d20f4c1b6e", git = "https://github.com/paritytech/substrate.git", default_features = false }
