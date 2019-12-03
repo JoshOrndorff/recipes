@@ -1,7 +1,7 @@
 [workspace]
 members = [
   "modules/adding-machine",
-  "modules/token",
+  "modules/basic-token",
   "modules/check-membership",
   "modules/child-trie",
   "modules/currency-imbalances",

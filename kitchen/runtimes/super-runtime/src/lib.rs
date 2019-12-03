@@ -29,7 +29,7 @@ use version::RuntimeVersion;
 
 // The Recipe Modules
 use adding_machine;
-use token;
+use basic_token;
 use check_membership;
 use double_map;
 use execution_schedule;
@@ -321,7 +321,7 @@ impl module_constant_config::Trait for Runtime {
     type ClearFrequency = ClearFrequency;
 }
 
-impl token::Trait for Runtime {
+impl basic_token::Trait for Runtime {
     type Event = Event;
 }
 
@@ -392,7 +392,7 @@ construct_runtime!(
 		LinkedMap: linked_map::{Module, Call, Storage, Event<T>},
 		StructStorage: struct_storage::{Module, Call, Storage, Event<T>},
 		ModuleConstantConfig: module_constant_config::{Module, Call, Storage, Event},
-		BasicToken: token::{Module, Call, Storage, Event<T>},
+		BasicToken: basic_token::{Module, Call, Storage, Event<T>},
 		CheckMembership: check_membership::{Module, Call, Storage, Event<T>},
 		ExecutionSchedule: execution_schedule::{Module, Call, Storage, Event<T>},
 		SmplTreasury: smpl_treasury::{Module, Call, Storage, Event<T>},
