@@ -1,5 +1,5 @@
 [package]
-name = "adding-machine"
+name = "token"
 version = "0.1.0"
 authors = ["4meta5"]
 edition = "2018"
@@ -10,15 +10,9 @@ std = [
     'parity-scale-codec/std',
     'support/std',
     'system/std',
-    'sr-primitives/std',
 ]
 
 [dependencies]
 parity-scale-codec = { version = "1.1.0", features = ["derive"], default-features = false }
 support = { package = "srml-support", rev = "6ae3b6c4ddc03d4cdb10bd1d417b95d20f4c1b6e", git = "https://github.com/paritytech/substrate.git", default_features = false }
 system = { package = "srml-system", rev = "6ae3b6c4ddc03d4cdb10bd1d417b95d20f4c1b6e", git = "https://github.com/paritytech/substrate.git", default_features = false }
-sr-primitives = { rev = "6ae3b6c4ddc03d4cdb10bd1d417b95d20f4c1b6e", git = "https://github.com/paritytech/substrate.git", default_features = false }
-
-[dev-dependencies]
-substrate-primitives = { rev = "6ae3b6c4ddc03d4cdb10bd1d417b95d20f4c1b6e", git = "https://github.com/paritytech/substrate.git", default_features = false }
-sr-io = { rev = "6ae3b6c4ddc03d4cdb10bd1d417b95d20f4c1b6e", git = "https://github.com/paritytech/substrate.git", default_features = false }

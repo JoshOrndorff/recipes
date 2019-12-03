@@ -18,7 +18,7 @@ double-map = { package = "double-map", path = "../../modules/double-map", defaul
 linked-map = { package = "linked-map", path = "../../modules/linked-map", default-features = false }
 struct-storage = { package = "struct-storage", path = "../../modules/struct-storage", default-features = false }
 module-constant-config = { package = "module-constant-config", path = "../../modules/module-constant-config", default-features = false }
-basic-token = { package = "basic-token", path = "../../modules/basic-token", default-features = false }
+token = { package = "token", path = "../../modules/token", default-features = false }
 check-membership = { package = "check-membership", path = "../../modules/check-membership", default-features = false }
 execution-schedule = { package = "execution-schedule", path = "../../modules/execution-schedule", default-features = false }
 smpl-treasury = { package = "smpl-treasury", path = "../../modules/smpl-treasury", default-features = false }
@@ -28,7 +28,7 @@ default-instance = { path = "../../modules/default-instance", default-features =
 [dependencies.parity-scale-codec]
 default-features = false
 features = ['derive']
-version = '1.0.6'
+version = '1.1.0'
 
 [dependencies.rstd]
 default-features = false
@@ -207,7 +207,7 @@ std = [
 	"linked-map/std",
 	"struct-storage/std",
 	"module-constant-config/std",
-	"basic-token/std",
+	"token/std",
 	"check-membership/std",
 	"execution-schedule/std",
 	"transaction-payment/std",
