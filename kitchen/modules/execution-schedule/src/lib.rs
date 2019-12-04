@@ -476,7 +476,7 @@ mod tests {
                 assert!(ExecutionSchedule::is_on_council(&first_account));
                 System::set_block_number(2);
                 let new_task = id_generate();
-                ExecutionSchedule::schedule_task(Origin::signed(1), new_task.clone());
+                let _ = ExecutionSchedule::schedule_task(Origin::signed(1), new_task.clone());
 
                 // check storage changes
                 let expected_task: Task<u64> = Task {
