@@ -2,7 +2,7 @@
 //! Scheduling Execution
 use rstd::prelude::*;
 use runtime_primitives::{
-    traits::{SimpleArithmetic, Zero},
+    traits::Zero,
     RuntimeDebug,
 };
 use support::{
@@ -239,7 +239,7 @@ mod tests {
     use runtime_io;
     use runtime_primitives::{
         testing::Header,
-        traits::{BlakeTwo256, IdentityLookup, OnFinalize, OnInitialize},
+        traits::{BlakeTwo256, IdentityLookup, OnFinalize, OnInitialize, SimpleArithmetic},
         Perbill,
     };
     // it's ok, just for the testing suit, thread local variables
