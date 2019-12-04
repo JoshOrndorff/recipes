@@ -156,7 +156,7 @@ decl_module! {
                 task.score.checked_add(signal).ok_or("task is too popular and signal support overflowed")?;
                 // don't have to checked_sub because just verified that voters_signal >= signal
                 let remaining_signal = voters_signal - signal;
-                <Era>::put(remaining_signal);
+                <SignalBank<T>>::insert(current_era, &voter, remaining_signal);
             } else {
                 return Err("the task did not exist in the PendingTasks storage map");
             }
