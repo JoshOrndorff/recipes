@@ -28,7 +28,7 @@ default-instance = { path = "../../modules/default-instance", default-features =
 [dependencies.parity-scale-codec]
 default-features = false
 features = ['derive']
-version = '1.0.6'
+version = '1.1.0'
 
 [dependencies.rstd]
 default-features = false

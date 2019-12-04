@@ -21,7 +21,9 @@ pub trait Trait: system::Trait {
 }
 ```
 
-The mock runtime environment extends the [previously discussed](./mock.md) `ExtBuilder` pattern with fields for each configurable constant and a default implementation. The default configuration represents the test environment that should be preferred in a plurality of unit tests. 
+The mock runtime environment extends the [previously discussed](./mock.md) `ExtBuilder` pattern with fields for each configurable constant and a default implementation. 
+
+> This completes the [builder](https://youtu.be/geovSK3wMB8?t=729) pattern by defining a default configuraton to be used in a plurality of test cases while also providing setter methods to overwrite the values for each field.
 
 ```rust, ignore
 pub struct ExtBuilder {

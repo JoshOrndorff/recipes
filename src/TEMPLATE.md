@@ -1,26 +1,10 @@
 # <Provided Feature>: <API Used>
-*[code]`(`**`<link to the code in kitchen>`**`)`, [status]`(`**`<recipe status>`**`)`*
+*[code]`(`**`<link to the code in kitchen>`**`)`*
 
-*brainstorming*
-```rust, ignore
-pub enum Status<T : Recipe>  {
-    OutdatedAndWrong(T),
-    ExistsImprovements(T),
-    MotivatesNewSection(T),
-}
-...
-match status {
-    OutdatedAndWrong => replace() && link(create_issue || create_pr);
-    ExistsImprovements => link(issues || prs || tutorials || code);
-    MotivatesNewSection => link(issues || prs || tutorials || code);
-    _ => empty_label_at_top;
-}
-```
+## (optional) discuss where api might be useful
 
-## (optional) motivate usage with context
+## exemplify correct api usage without context
 
-## show simple api usage
-
-## (optional) work through each part
+## "" with example context
 
 ## (optional) cite other examples/references

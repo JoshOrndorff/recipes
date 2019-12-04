@@ -36,13 +36,13 @@ decl_event!(
 #[cfg(test)]
 mod tests {
     use crate::{Module, Trait};
-    use primitives::H256;
-    use runtime_io;
-    use runtime_primitives::{
+    use sr_io;
+    use sr_primitives::{
         testing::Header,
         traits::{BlakeTwo256, IdentityLookup},
         Perbill,
     };
+    use substrate_primitives::H256;
     use support::{assert_err, impl_outer_event, impl_outer_origin, parameter_types, traits::Get};
     use system::{EventRecord, Phase};
 
@@ -97,11 +97,11 @@ mod tests {
     pub struct ExtBuilder;
 
     impl ExtBuilder {
-        pub fn build() -> runtime_io::TestExternalities {
+        pub fn build() -> sr_io::TestExternalities {
             let mut storage = system::GenesisConfig::default()
                 .build_storage::<TestRuntime>()
                 .unwrap();
-            runtime_io::TestExternalities::from(storage)
+            sr_io::TestExternalities::from(storage)
         }
     }
 

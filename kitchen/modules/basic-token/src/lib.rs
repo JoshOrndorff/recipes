@@ -15,7 +15,7 @@ pub trait Trait: system::Trait {
 }
 
 decl_storage! {
-    trait Store for Module<T: Trait> as TokenTransfer {
+    trait Store for Module<T: Trait> as Token {
         pub TotalSupply get(total_supply): u64 = 21000000; // (1)
 
         pub GetBalance get(get_balance): map T::AccountId => u64; // (3)
