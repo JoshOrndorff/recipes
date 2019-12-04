@@ -19,10 +19,8 @@ jobs:
         toolchain: nightly-2019-11-15
         components: rustfmt
         target: wasm32-unknown-unknown
-        default: true 
-    - uses: actions/checkout@master
-      with:
-        submodules: recursive
+        default: true
+    - uses: actions/checkout@v2
     - name: Check Kitchen
       run: cd kitchen/modules && cargo check --all
     - name: Test Kitchen
