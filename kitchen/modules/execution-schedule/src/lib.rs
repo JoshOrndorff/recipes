@@ -2,7 +2,7 @@
 //! Scheduling Execution
 use rstd::prelude::*;
 use runtime_primitives::{
-    traits::{Hash, SimpleArithmetic, Zero},
+    traits::{SimpleArithmetic, Zero},
     RuntimeDebug,
 };
 use support::{
@@ -92,7 +92,7 @@ decl_module! {
         /// - This allows us to start from 0 for all tasks
         fn on_initialize(n: T::BlockNumber) {
             let batch_frequency = T::ExecutionFrequency::get();
-            if (((n - 1.into()) % batch_frequency).is_zero()) {
+            if ((n - 1.into()) % batch_frequency).is_zero() {
                 let last_era = <Era>::get();
                 // clean up the previous double_map with this last_era group index
                 <SignalBank<T>>::remove_prefix(&last_era);
@@ -245,7 +245,7 @@ mod tests {
     // it's ok, just for the testing suit, thread local variables
     use rand::{rngs::OsRng, thread_rng, Rng, RngCore};
     use std::cell::RefCell;
-    use support::{assert_err, impl_outer_event, impl_outer_origin, parameter_types, traits::Get};
+    use support::{impl_outer_event, impl_outer_origin, parameter_types, traits::Get};
     use system::ensure_signed;
 
     // to compare expected storage items with storage items after method calls
@@ -519,9 +519,9 @@ mod tests {
                 // refresh signal_quota
                 run_to_block(7u64);
 
-                ExecutionSchedule::schedule_task(Origin::signed(2), new_task.clone());
+                let _ = ExecutionSchedule::schedule_task(Origin::signed(2), new_task.clone());
 
-                ExecutionSchedule::signal_priority(
+                let _ = ExecutionSchedule::signal_priority(
                     Origin::signed(1),
                     new_task.clone(),
                     2u32.into(),
