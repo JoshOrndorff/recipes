@@ -153,7 +153,8 @@ decl_module! {
             let voters_signal = <SignalBank<T>>::get(current_era, &voter);
             ensure!(voters_signal >= signal, "The voter cannot signal more than the remaining signal");
             if let Some(mut task) = <PendingTasks<T>>::get(id.clone()) {
-                task.score.checked_add(signal).ok_or("task is too popular and signal support overflowed")?;
+                task.score = task.score.checked_add(signal).ok_or("task is too popular and signal support overflowed")?;
+                <PendingTasks<T>>::insert(id.clone(), task);
                 // don't have to checked_sub because just verified that voters_signal >= signal
                 let remaining_signal = voters_signal - signal;
                 <SignalBank<T>>::insert(current_era, &voter, remaining_signal);
