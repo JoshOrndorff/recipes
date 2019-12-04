@@ -523,13 +523,18 @@ mod tests {
                 ExecutionSchedule::signal_priority(
                     Origin::signed(1),
                     new_task.clone(),
-                    0u32.into(),
+                    2u32.into(),
                 );
 
-                // check storage changes
+                // check that banked signal has decreased
                 assert_eq!(
                     ExecutionSchedule::signal_bank(1u32, &first_account),
-                    10u32.into()
+                    8u32.into()
+                );
+
+                // check that task priority has increased
+                assert_eq!(
+                    ExecutionSchedule::pending_tasks(new_task.clone()).unwrap().score, 2u32.into()
                 );
             })
     }
