@@ -405,7 +405,7 @@ mod tests {
         }
         pub fn build(self) -> runtime_io::TestExternalities {
             self.set_associated_consts();
-            let mut t = system::GenesisConfig::default()
+            let t = system::GenesisConfig::default()
                 .build_storage::<TestRuntime>()
                 .unwrap();
             // GenesisConfig::<TestRuntime> {
