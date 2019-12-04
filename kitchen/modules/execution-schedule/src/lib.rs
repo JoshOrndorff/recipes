@@ -535,7 +535,10 @@ mod tests {
 
                 // check that task priority has increased
                 assert_eq!(
-                    ExecutionSchedule::pending_tasks(new_task.clone()).unwrap().score, 2u32.into()
+                    ExecutionSchedule::pending_tasks(new_task.clone())
+                        .unwrap()
+                        .score,
+                    2u32.into()
                 );
             })
     }
