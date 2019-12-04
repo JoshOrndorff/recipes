@@ -212,7 +212,6 @@ impl<T: Trait> Module<T> {
     pub fn execute_tasks(n: T::BlockNumber) {
         // task limit in terms of priority allowed to be executed every period
         let mut task_allowance = T::TaskLimit::get();
-        let remove_queue = 6; // vec limited by task_allowance size
         let mut execution_q = <ExecutionQueue>::get().clone();
         execution_q.sort_unstable();
         execution_q.into_iter().for_each(|task_id| {
