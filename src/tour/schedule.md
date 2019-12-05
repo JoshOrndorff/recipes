@@ -50,21 +50,30 @@ The runtime method for proposing a task emits an event with the expected executi
 
 > A more complex engine for predicting task execution time may run off-chain instead of in a runtime method.
 
-My first try at a better implementation of `execution_time(n: T::BlockNumber) -> T::BlockNumber` was haphazard,
+Before adding a runtime method to estimate the `execution_time`, implement a naive implementation that iterates the global `BlockNumber` until it is divisible by `ExecutionFrequency` (which implies execution in `on_finalize` in this block). 
 
 ```rust, ignore
-fn execution_estimate(n: T::BlockNumber) -> T::BlockNumber {
-        let batch_frequency = T::ExecutionFrequency::get();
-        let miss = n % batch_frequency;
-        (n + miss) - batch_frequency
+fn naive_execution_estimate(now: T::BlockNumber) -> T::BlockNumber {
+    // the frequency with which tasks are batch executed
+    let batch_frequency = T::ExecutionFrequency::get();
+    let mut expected_execution_time = now;
+    loop {
+        // the expected execution time is the next block number divisible by `ExecutionFrequency`
+        if (expected_execution_time % batch_frequency).is_zero() {
+            break;
+        } else {
+            expected_execution_time += 1.into();
+        }
     }
+    expected_execution_time
+}
 ```
 
-The above code failed a few dart throw-esque checks in an `estimators_work` unit test
+This naive implementation unsurprisingly worked...
 
 ```rust, ignore
 #[test]
-fn estimators_work() {
+fn naive_estimator_works() {
     // should use quickcheck to cover entire range of checks
     ExtBuilder::default()
         .execution_frequency(8)
@@ -75,14 +84,38 @@ fn estimators_work() {
                 ExecutionSchedule::naive_execution_estimate(current_block.into()),
                 8u64.into()
             );
-            assert_eq!(
-                ExecutionSchedule::execution_estimate(current_block.into()),
-                8u64.into()
-            );
             let next_block = 67u64;
             assert_eq!(
                 ExecutionSchedule::naive_execution_estimate(next_block.into()),
                 72u64.into()
+            );
+        })
+}
+```
+
+
+...but it is obvious that there is a better way. If execution is scheduled every constant `ExecutionFrequency` number of blocks, then it should be straightforward to calculate the next execution block without this slow iterate and check modulus method. My first attempt at a better implementation of `execution_estimate(n: T::BlockNumber) -> T::BlockNumber` was
+
+```rust, ignore
+fn execution_estimate(n: T::BlockNumber) -> T::BlockNumber {
+        let batch_frequency = T::ExecutionFrequency::get();
+        let miss = n % batch_frequency;
+        (n + miss) - batch_frequency
+    }
+```
+
+The above code failed the `estimator_works` unit test
+
+```rust, ignore
+#[test]
+fn estimator_works() {
+    ExtBuilder::default()
+        .execution_frequency(8)
+        .build()
+        .execute_with(|| {
+            assert_eq!(
+                ExecutionSchedule::execution_estimate(current_block.into()),
+                8u64.into()
             );
             assert_eq!(
                 ExecutionSchedule::execution_estimate(next_block.into()),
@@ -92,7 +125,7 @@ fn estimators_work() {
 }
 ```
 
-The `naive_execution_estimate` never failed, but the first implementation of `execution_estimate` made a dumb mistake. The test helped me catch it and change the logic to
+The error helped me catch the logic mistake and change it to
 
 ```rust, ignore
 fn execution_estimate(n: T::BlockNumber) -> T::BlockNumber {

@@ -1,10 +1,7 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 //! Scheduling Execution
 use rstd::prelude::*;
-use runtime_primitives::{
-    traits::Zero,
-    RuntimeDebug,
-};
+use runtime_primitives::{traits::Zero, RuntimeDebug};
 use support::{
     codec::{Decode, Encode},
     decl_event, decl_module, decl_storage,
@@ -179,26 +176,6 @@ impl<T: Trait> Module<T> {
         Self::council().contains(who)
     }
 
-    /// Naive Execution Estimate
-    ///
-    /// emits an event parameter in `schedule_task` to tell users when
-    /// (which block number), the task is expected to be executed based on when it was submitted
-    /// - iteration makes it quite naive
-    fn naive_execution_estimate(now: T::BlockNumber) -> T::BlockNumber {
-        // the frequency with which tasks are batch executed
-        let batch_frequency = T::ExecutionFrequency::get();
-        let mut expected_execution_time = now;
-        loop {
-            // the expected execution time is the next block number divisible by `ExecutionFrequency`
-            if (expected_execution_time % batch_frequency).is_zero() {
-                break;
-            } else {
-                expected_execution_time += 1.into();
-            }
-        }
-        expected_execution_time
-    }
-
     /// Efficient Execution Estimate
     fn execution_estimate(n: T::BlockNumber) -> T::BlockNumber {
         let batch_frequency = T::ExecutionFrequency::get();
@@ -255,7 +232,7 @@ mod tests {
     }
     impl<BlockNumber: Copy + SimpleArithmetic> Eq for Task<BlockNumber> {}
 
-    // bc I couldn't get the `add_extra_genesis` to work
+    // Helper Methods For Testing Purposes
     impl<T: Trait> Module<T> {
         fn add_member_to_council(who: T::AccountId) {
             <Council<T>>::mutate(|members| members.push(who));
@@ -267,12 +244,31 @@ mod tests {
             // intialize with 0, filled full at beginning of next_era
             <SignalBank<T>>::insert(current_era, who, 0u32);
         }
+
+        // Naive Execution Estimate
+        //
+        // emits an event parameter in `schedule_task` to tell users when
+        // (which block number), the task is expected to be executed based on when it was submitted
+        // - iteration makes it quite naive
+        fn naive_execution_estimate(now: T::BlockNumber) -> T::BlockNumber {
+            // the frequency with which tasks are batch executed
+            let batch_frequency = T::ExecutionFrequency::get();
+            let mut expected_execution_time = now;
+            loop {
+                // the expected execution time is the next block number divisible by `ExecutionFrequency`
+                if (expected_execution_time % batch_frequency).is_zero() {
+                    break;
+                } else {
+                    expected_execution_time += 1.into();
+                }
+            }
+            expected_execution_time
+        }
     }
 
-    // to generate random tasks for tests
+    // Random Task Generation for (Future) Testing Purposes
     impl<BlockNumber: std::convert::From<u64>> Task<BlockNumber> {
         // for testing purposes
-        // - could add expressive generator that ensures monotonically increasing block numbers
         fn random() -> Self {
             let mut rng = thread_rng();
             let random_score: u32 = rng.gen();
@@ -284,8 +280,7 @@ mod tests {
             }
         }
     }
-
-    // to generate random task ids for tests
+    // helper method fo task id generation (see above `random` method)
     pub fn id_generate() -> TaskId {
         let mut buf = vec![0u8; 32];
         OsRng.fill_bytes(&mut buf);
@@ -439,7 +434,7 @@ mod tests {
     }
 
     #[test]
-    fn estimators_work() {
+    fn naive_estimator_works() {
         ExtBuilder::default()
             .execution_frequency(8)
             .build()
@@ -458,6 +453,25 @@ mod tests {
                     ExecutionSchedule::naive_execution_estimate(next_block.into()),
                     72u64.into()
                 );
+                assert_eq!(
+                    ExecutionSchedule::execution_estimate(next_block.into()),
+                    72u64.into()
+                );
+            })
+    }
+
+    #[test]
+    fn estimator_works() {
+        ExtBuilder::default()
+            .execution_frequency(8)
+            .build()
+            .execute_with(|| {
+                let current_block = 5u64;
+                assert_eq!(
+                    ExecutionSchedule::execution_estimate(current_block.into()),
+                    8u64.into()
+                );
+                let next_block = 67u64;
                 assert_eq!(
                     ExecutionSchedule::execution_estimate(next_block.into()),
                     72u64.into()
