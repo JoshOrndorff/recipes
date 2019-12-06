@@ -1,0 +1,13 @@
+{
+  "SpendRequest": {
+      "from": "AccountId",
+      "to": "AccountId",
+      "amount": "Balance"
+  },
+  "Proposal": {
+      "to": "AccountId",
+      "amount": "Balance",
+      "when": "BlockNumber",
+      "support": "u32"
+  }
+}

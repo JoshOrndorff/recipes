@@ -1,0 +1,10 @@
+{
+  "TaskId": "Vec<u8>",
+  "PriorityScore": "u32",
+  "RoundIndex": "u32",
+  "Task": {
+      "id": "TaskId",
+      "score": "PriorityScore",
+      "proposed_at": "BlockNumber"
+  }
+}
