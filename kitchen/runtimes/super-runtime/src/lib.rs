@@ -476,7 +476,7 @@ impl_runtime_apis! {
         }
     }
 
-    impl tx_pool_api::TaggedTransactionQueue<Block> for Runtime {
+    impl sc_transaction_pool::TaggedTransactionQueue<Block> for Runtime {
         fn validate_transaction(tx: <Block as BlockT>::Extrinsic) -> TransactionValidity {
             Executive::validate_transaction(tx)
         }

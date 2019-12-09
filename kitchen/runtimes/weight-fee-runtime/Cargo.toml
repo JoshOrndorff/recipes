@@ -133,7 +133,7 @@ git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-block-builder'
 branch = 'td-warnings'
 
-[dependencies.tx-pool-api]
+[dependencies.sc-transaction-pool]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sc-transaction-pool'
@@ -184,4 +184,5 @@ std = [
 	"block-builder-api/std",
 	"inherents/std",
 	"weights/std",
+	# "sc-transaction-pool/std", # Removed because sc-transaction-pool doesn't ahve an std feature https://github.com/paritytech/substrate/blob/master/client/transaction-pool/Cargo.toml
 ]
