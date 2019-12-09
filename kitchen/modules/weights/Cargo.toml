@@ -23,28 +23,28 @@ version = '1.0.6'
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'frame-support'
-rev = '5f0b3dde3f0a097f380c62d0257cf3838a7d8281'
+branch = 'td-warnings'
 
 [dependencies.system]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'frame-system'
-rev = '5f0b3dde3f0a097f380c62d0257cf3838a7d8281'
+branch = 'td-warnings'
 
 [dependencies.balances]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'pallet-balances'
-rev = '5f0b3dde3f0a097f380c62d0257cf3838a7d8281'
+branch = 'td-warnings'
 
 [dependencies.runtime-primitives]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-runtime'
-rev = '5f0b3dde3f0a097f380c62d0257cf3838a7d8281'
+branch = 'td-warnings'
 
 [dev-dependencies.primitives]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-core'
-rev = '5f0b3dde3f0a097f380c62d0257cf3838a7d8281'
+branch = 'td-warnings'
