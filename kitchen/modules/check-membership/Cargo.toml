@@ -15,9 +15,9 @@ std = [
 
 [dependencies]
 parity-scale-codec = { version = "1.1.0", features = ["derive"], default-features = false }
-support = { package = "frame-support", branch = 'td-warnings', git = 'https://github.com/paritytech/substrate.git', default_features = false }
-system = { package = 'frame-system', branch = 'td-warnings', git = 'https://github.com/paritytech/substrate.git', default_features = false}
-runtime-primitives = { package = 'sp-runtime', branch = 'td-warnings', git = 'https://github.com/paritytech/substrate.git', default_features = false }
-rstd = { package = 'sp-std', branch = 'td-warnings', git = 'https://github.com/paritytech/substrate.git', default_features = false }
-primitives = { package = 'sp-core', branch = 'td-warnings', git = 'https://github.com/paritytech/substrate.git', default_features = false }
-runtime-io = { package = 'sp-io', branch = 'td-warnings', git = 'https://github.com/paritytech/substrate.git', default_features = false }
+support = { package = "frame-support", branch = 'master', git = 'https://github.com/paritytech/substrate.git', default_features = false }
+system = { package = 'frame-system', branch = 'master', git = 'https://github.com/paritytech/substrate.git', default_features = false}
+runtime-primitives = { package = 'sp-runtime', branch = 'master', git = 'https://github.com/paritytech/substrate.git', default_features = false }
+rstd = { package = 'sp-std', branch = 'master', git = 'https://github.com/paritytech/substrate.git', default_features = false }
+primitives = { package = 'sp-core', branch = 'master', git = 'https://github.com/paritytech/substrate.git', default_features = false }
+runtime-io = { package = 'sp-io', branch = 'master', git = 'https://github.com/paritytech/substrate.git', default_features = false }

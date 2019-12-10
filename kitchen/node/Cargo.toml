@@ -19,20 +19,20 @@ exit-future = "0.1.4"
 parking_lot = "0.9.0"
 codec = { package = "parity-scale-codec", version = "1.0.0" }
 trie-root = "0.15.2"
-sp-io = { git = 'https://github.com/paritytech/substrate.git', branch = 'td-warnings' }
-substrate-cli = { package = "sc-cli", git = 'https://github.com/paritytech/substrate.git', branch = 'td-warnings' }
-primitives = { package = "sp-core", git = 'https://github.com/paritytech/substrate.git', branch = 'td-warnings' }
-substrate-executor = { package = "sc-executor", git = 'https://github.com/paritytech/substrate.git', branch = 'td-warnings' }
-substrate-service = { package = "sc-service", git = 'https://github.com/paritytech/substrate.git', branch = 'td-warnings' }
-inherents = { package = "sp-inherents", git = 'https://github.com/paritytech/substrate.git', branch = 'td-warnings' }
-transaction-pool = { package = "sc-transaction-pool", git = 'https://github.com/paritytech/substrate.git', branch = 'td-warnings' }
-network = { package = "sc-network", git = 'https://github.com/paritytech/substrate.git', branch = 'td-warnings' }
-babe = { package = "sc-consensus-babe", git = 'https://github.com/paritytech/substrate.git', branch = 'td-warnings' }
-babe-primitives = { package = "sp-consensus-babe", git = 'https://github.com/paritytech/substrate.git', branch = 'td-warnings' }
-grandpa = { package = "sc-finality-grandpa", git = 'https://github.com/paritytech/substrate.git', branch = 'td-warnings' }
-grandpa-primitives = { package = "sp-finality-grandpa", git = 'https://github.com/paritytech/substrate.git', branch = 'td-warnings' }
-substrate-client = { package = "sc-client", git = 'https://github.com/paritytech/substrate.git', branch = 'td-warnings' }
-basic-authorship = { package = "sc-basic-authority", git = 'https://github.com/paritytech/substrate.git', branch = 'td-warnings' }
+sp-io = { git = 'https://github.com/paritytech/substrate.git', branch = 'master' }
+substrate-cli = { package = "sc-cli", git = 'https://github.com/paritytech/substrate.git', branch = 'master' }
+primitives = { package = "sp-core", git = 'https://github.com/paritytech/substrate.git', branch = 'master' }
+substrate-executor = { package = "sc-executor", git = 'https://github.com/paritytech/substrate.git', branch = 'master' }
+substrate-service = { package = "sc-service", git = 'https://github.com/paritytech/substrate.git', branch = 'master' }
+inherents = { package = "sp-inherents", git = 'https://github.com/paritytech/substrate.git', branch = 'master' }
+transaction-pool = { package = "sc-transaction-pool", git = 'https://github.com/paritytech/substrate.git', branch = 'master' }
+network = { package = "sc-network", git = 'https://github.com/paritytech/substrate.git', branch = 'master' }
+babe = { package = "sc-consensus-babe", git = 'https://github.com/paritytech/substrate.git', branch = 'master' }
+babe-primitives = { package = "sp-consensus-babe", git = 'https://github.com/paritytech/substrate.git', branch = 'master' }
+grandpa = { package = "sc-finality-grandpa", git = 'https://github.com/paritytech/substrate.git', branch = 'master' }
+grandpa-primitives = { package = "sp-finality-grandpa", git = 'https://github.com/paritytech/substrate.git', branch = 'master' }
+substrate-client = { package = "sc-client", git = 'https://github.com/paritytech/substrate.git', branch = 'master' }
+basic-authorship = { package = "sc-basic-authority", git = 'https://github.com/paritytech/substrate.git', branch = 'master' }
 
 # Edit these lines to point to a different runtime.
 # Your runtime must have the necessary runtime modules to support consensus (Babe, Grandpa, etc)
