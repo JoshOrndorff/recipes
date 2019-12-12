@@ -10,7 +10,7 @@
 include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 
 use rstd::prelude::*;
-use primitives::{OpaqueMetadata, crypto::key_types};
+use primitives::OpaqueMetadata;
 use sp_runtime::{
     ApplyExtrinsicResult,
 	transaction_validity::TransactionValidity, generic, create_runtime_str,
@@ -19,7 +19,7 @@ use sp_runtime::{
 use sp_runtime::traits::{NumberFor, BlakeTwo256, Block as BlockT, StaticLookup, Verify, ConvertInto, Convert};
 use support::traits::Get;
 use support::weights::Weight;
-use babe::{AuthorityId as BabeId, SameAuthoritiesForever};
+use babe::{SameAuthoritiesForever};
 use grandpa::{AuthorityId as GrandpaId, AuthorityWeight as GrandpaWeight};
 use grandpa::fg_primitives;
 use sp_api::impl_runtime_apis;
