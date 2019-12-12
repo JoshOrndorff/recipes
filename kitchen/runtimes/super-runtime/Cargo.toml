@@ -28,7 +28,7 @@ default-instance = { path = "../../modules/default-instance", default-features =
 [dependencies.parity-scale-codec]
 default-features = false
 features = ['derive']
-version = '1.1.0'
+version = '1.0.6'
 
 [dependencies.rstd]
 default-features = false
@@ -37,136 +37,134 @@ package = "sp-std"
 branch = 'master'
 
 [dependencies.runtime-io]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-io'
 branch = 'master'
 
 [dependencies.version]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-version'
 branch = 'master'
 
 [dependencies.support]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'frame-support'
 branch = 'master'
 
 [dependencies.primitives]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-core'
 branch = 'master'
 
 [dependencies.substrate-session]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-session'
 branch = 'master'
 
 [dependencies.balances]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'pallet-balances'
 branch = 'master'
 
 [dependencies.transaction-payment]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'pallet-transaction-payment'
 branch = 'master'
 
 [dependencies.babe]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'pallet-babe'
 branch = 'master'
 
 [dependencies.babe-primitives]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-consensus-babe'
 branch = 'master'
 
 [dependencies.executive]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'frame-executive'
 branch = 'master'
 
 [dependencies.indices]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'pallet-indices'
 branch = 'master'
 
 [dependencies.grandpa]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'pallet-grandpa'
 branch = 'master'
 
 [dependencies.randomness-collective-flip]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'pallet-randomness-collective-flip'
 branch = 'master'
 
 [dependencies.system]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'frame-system'
 branch = 'master'
 
 [dependencies.timestamp]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'pallet-timestamp'
 branch = 'master'
 
 [dependencies.sudo]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'pallet-sudo'
 branch = 'master'
 
 [dependencies.sp-runtime]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-runtime'
 branch = 'master'
 
 [dependencies.sp-api]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 branch = 'master'
 
 [dependencies.block-builder-api]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-block-builder'
 branch = 'master'
 
-[dependencies.sc-transaction-pool]
-default_features = false
+[dependencies.sp-transaction-pool]
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
-package = 'sc-transaction-pool'
 branch = 'master'
 
 [dependencies.inherents]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-inherents'
 branch = 'master'
 
 [dependencies.offchain-primitives]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-offchain'
 branch = 'master'
-
 
 [build-dependencies]
 wasm-builder-runner = { package = "substrate-wasm-builder-runner", version = "1.0.3" }
@@ -174,28 +172,34 @@ wasm-builder-runner = { package = "substrate-wasm-builder-runner", version = "1.
 [features]
 default = ["std"]
 std = [
-	"parity-scale-codec/std",
-	"sp-api/std",
-	"rstd/std",
-	"runtime-io/std",
-	"support/std",
-	"balances/std",
+	# Substrate dependencies alphabetically
 	"babe/std",
 	"babe-primitives/std",
+	"balances/std",
+	"block-builder-api/std",
 	"executive/std",
-	"indices/std",
 	"grandpa/std",
+	"indices/std",
+	"inherents/std",
+	"offchain-primitives/std",
+	"parity-scale-codec/std",
 	"primitives/std",
 	"randomness-collective-flip/std",
+	"rstd/std",
+	"runtime-io/std",
+	"safe-mix/std",
+	"serde",
+	"sp-api/std",
 	"sp-runtime/std",
+	"substrate-session/std",
+	"sudo/std",
+	"support/std",
 	"system/std",
 	"timestamp/std",
-	"sudo/std",
+	"transaction-payment/std",
 	"version/std",
-	"serde",
-	"safe-mix/std",
-	"offchain-primitives/std",
-	"substrate-session/std",
+
+	# Recipes Modules
 	"simple-event/std",
 	"generic-event/std",
 	"adding-machine/std",
@@ -210,7 +214,4 @@ std = [
 	"basic-token/std",
 	"check-membership/std",
 	"execution-schedule/std",
-	"transaction-payment/std",
-	"block-builder-api/std",
-	"inherents/std",
 ]
