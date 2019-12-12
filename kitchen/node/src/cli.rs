@@ -1,5 +1,5 @@
 use crate::service;
-use futures::{future, Future, sync::oneshot};
+use futures::{future::{select, Map}, FutureExt, TryFutureExt, channel::oneshot, compat::Future01CompatExt};
 use std::cell::RefCell;
 use tokio::runtime::Runtime;
 pub use substrate_cli::{VersionInfo, IntoExit, error};
@@ -71,7 +71,10 @@ where
 	let (exit_send, exit) = exit_future::signal();
 
 	let informant = informant::build(&service);
-	runtime.executor().spawn(exit.until(informant).map(|_| ()));
+	let future = select(exit, informant)
+		.map(|_| Ok(()))
+		.compat();
+	runtime.executor().spawn(future);
 
 	// we eagerly drop the service so that the internal exit future is fired,
 	// but we need to keep holding a reference to the global telemetry guard
@@ -95,7 +98,7 @@ where
 // handles ctrl-c
 pub struct Exit;
 impl IntoExit for Exit {
-	type Exit = future::MapErr<oneshot::Receiver<()>, fn(oneshot::Canceled) -> ()>;
+	type Exit = Map<oneshot::Receiver<()>, fn(Result<(), oneshot::Canceled>) -> ()>;
 	fn into_exit(self) -> Self::Exit {
 		// can't use signal directly here because CtrlC takes only `Fn`.
 		let (exit_send, exit) = oneshot::channel();
