@@ -136,7 +136,6 @@ branch = 'master'
 [dependencies.sp-transaction-pool]
 default-features = false
 git = 'https://github.com/paritytech/substrate.git'
-package = 'sp-transaction-pool-api'
 branch = 'master'
 
 [dependencies.inherents]
