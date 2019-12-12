@@ -34,138 +34,138 @@ version = '1.1.0'
 default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = "sp-std"
-branch = 'td-warnings'
+branch = 'master'
 
 [dependencies.runtime-io]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-io'
-branch = 'td-warnings'
+branch = 'master'
 
 [dependencies.version]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-version'
-branch = 'td-warnings'
+branch = 'master'
 
 [dependencies.support]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'frame-support'
-branch = 'td-warnings'
+branch = 'master'
 
 [dependencies.primitives]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-core'
-branch = 'td-warnings'
+branch = 'master'
 
 [dependencies.substrate-session]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-session'
-branch = 'td-warnings'
+branch = 'master'
 
 [dependencies.balances]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'pallet-balances'
-branch = 'td-warnings'
+branch = 'master'
 
 [dependencies.transaction-payment]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'pallet-transaction-payment'
-branch = 'td-warnings'
+branch = 'master'
 
 [dependencies.babe]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'pallet-babe'
-branch = 'td-warnings'
+branch = 'master'
 
 [dependencies.babe-primitives]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-consensus-babe'
-branch = 'td-warnings'
+branch = 'master'
 
 [dependencies.executive]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'frame-executive'
-branch = 'td-warnings'
+branch = 'master'
 
 [dependencies.indices]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'pallet-indices'
-branch = 'td-warnings'
+branch = 'master'
 
 [dependencies.grandpa]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'pallet-grandpa'
-branch = 'td-warnings'
+branch = 'master'
 
 [dependencies.randomness-collective-flip]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'pallet-randomness-collective-flip'
-branch = 'td-warnings'
+branch = 'master'
 
 [dependencies.system]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'frame-system'
-branch = 'td-warnings'
+branch = 'master'
 
 [dependencies.timestamp]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'pallet-timestamp'
-branch = 'td-warnings'
+branch = 'master'
 
 [dependencies.sudo]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'pallet-sudo'
-branch = 'td-warnings'
+branch = 'master'
 
 [dependencies.sp-runtime]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-runtime'
-branch = 'td-warnings'
+branch = 'master'
 
 [dependencies.sp-api]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
-branch = 'td-warnings'
+branch = 'master'
 
 [dependencies.block-builder-api]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-block-builder'
-branch = 'td-warnings'
+branch = 'master'
 
 [dependencies.sc-transaction-pool]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sc-transaction-pool'
-branch = 'td-warnings'
+branch = 'master'
 
 [dependencies.inherents]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-inherents'
-branch = 'td-warnings'
+branch = 'master'
 
 [dependencies.offchain-primitives]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-offchain'
-branch = 'td-warnings'
+branch = 'master'
 
 
 [build-dependencies]

@@ -7,7 +7,7 @@ edition = "2018"
 [dependencies]
 serde = { version = "1.0", optional = true, features = ["derive"] }
 safe-mix = { version = "1.0", default-features = false }
-weights = { path = "../../modules/weights", default_features = false }
+weights = { path = "../../modules/weights", default-features = false }
 
 [dependencies.parity-scale-codec]
 default-features = false
@@ -18,138 +18,138 @@ version = '1.0.6'
 default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = "sp-std"
-branch = 'td-warnings'
+branch = 'master'
 
 [dependencies.runtime-io]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-io'
-branch = 'td-warnings'
+branch = 'master'
 
 [dependencies.version]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-version'
-branch = 'td-warnings'
+branch = 'master'
 
 [dependencies.support]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'frame-support'
-branch = 'td-warnings'
+branch = 'master'
 
 [dependencies.primitives]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-core'
-branch = 'td-warnings'
+branch = 'master'
 
 [dependencies.substrate-session]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-session'
-branch = 'td-warnings'
+branch = 'master'
 
 [dependencies.balances]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'pallet-balances'
-branch = 'td-warnings'
+branch = 'master'
 
 [dependencies.transaction-payment]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'pallet-transaction-payment'
-branch = 'td-warnings'
+branch = 'master'
 
 [dependencies.babe]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'pallet-babe'
-branch = 'td-warnings'
+branch = 'master'
 
 [dependencies.babe-primitives]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-consensus-babe'
-branch = 'td-warnings'
+branch = 'master'
 
 [dependencies.executive]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'frame-executive'
-branch = 'td-warnings'
+branch = 'master'
 
 [dependencies.indices]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'pallet-indices'
-branch = 'td-warnings'
+branch = 'master'
 
 [dependencies.grandpa]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'pallet-grandpa'
-branch = 'td-warnings'
+branch = 'master'
 
 [dependencies.randomness-collective-flip]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'pallet-randomness-collective-flip'
-branch = 'td-warnings'
+branch = 'master'
 
 [dependencies.system]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'frame-system'
-branch = 'td-warnings'
+branch = 'master'
 
 [dependencies.timestamp]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'pallet-timestamp'
-branch = 'td-warnings'
+branch = 'master'
 
 [dependencies.sudo]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'pallet-sudo'
-branch = 'td-warnings'
+branch = 'master'
 
 [dependencies.sp-runtime]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-runtime'
-branch = 'td-warnings'
+branch = 'master'
 
 [dependencies.sp-api]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
-branch = 'td-warnings'
+branch = 'master'
 
 [dependencies.block-builder-api]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-block-builder'
-branch = 'td-warnings'
+branch = 'master'
 
-[dependencies.sc-transaction-pool]
-default_features = false
+[dependencies.sp-transaction-pool]
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
-package = 'sc-transaction-pool'
-branch = 'td-warnings'
+package = 'sp-transaction-pool-api'
+branch = 'master'
 
 [dependencies.inherents]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-inherents'
-branch = 'td-warnings'
+branch = 'master'
 
 [dependencies.offchain-primitives]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-offchain'
-branch = 'td-warnings'
+branch = 'master'
 
 
 [build-dependencies]
@@ -158,31 +158,31 @@ wasm-builder-runner = { package = "substrate-wasm-builder-runner", version = "1.
 [features]
 default = ["std"]
 std = [
-	"parity-scale-codec/std",
-	"sp-api/std",
-	"rstd/std",
-	"runtime-io/std",
-	"support/std",
-	"balances/std",
-	"babe/std",
 	"babe-primitives/std",
+	"babe/std",
+	"balances/std",
+	"block-builder-api/std",
 	"executive/std",
-	"indices/std",
 	"grandpa/std",
+	"indices/std",
+	"inherents/std",
+	"offchain-primitives/std",
+	"parity-scale-codec/std",
 	"primitives/std",
 	"randomness-collective-flip/std",
+	"rstd/std",
+	"runtime-io/std",
+	"safe-mix/std",
+	"serde",
+	"sp-api/std",
 	"sp-runtime/std",
+	"substrate-session/std",
+	"sudo/std",
+	"support/std",
 	"system/std",
 	"timestamp/std",
-	"sudo/std",
-	"version/std",
-	"serde",
-	"safe-mix/std",
-	"offchain-primitives/std",
-	"substrate-session/std",
 	"transaction-payment/std",
-	"block-builder-api/std",
-	"inherents/std",
+	"version/std",
 	"weights/std",
-	# "sc-transaction-pool/std", # Removed because sc-transaction-pool doesn't ahve an std feature https://github.com/paritytech/substrate/blob/master/client/transaction-pool/Cargo.toml
+  "sp-transaction-pool/std",
 ]
