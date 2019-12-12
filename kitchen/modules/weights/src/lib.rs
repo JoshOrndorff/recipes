@@ -2,8 +2,13 @@
 
 // Transaction Weight Examples
 // https://crates.parity.io/sr_primitives/weights/index.html
-use support::{ensure, decl_module, decl_storage, dispatch::{Result, WeighData}};
-use runtime_primitives::weights::{ DispatchClass, Weight, ClassifyDispatch, SimpleDispatchInfo };
+use support::{
+    ensure,
+    decl_module,
+    decl_storage,
+    dispatch::{Result, WeighData, PaysFee},
+    weights::{ DispatchClass, Weight, ClassifyDispatch, SimpleDispatchInfo},
+};
 
 pub trait Trait: system::Trait {}
 
@@ -27,6 +32,11 @@ impl WeighData<(&u32,)> for Linear {
 		// Does not cause overflow.
 		x.saturating_mul(self.0)
 	}
+}
+impl PaysFee for Linear {
+    fn pays_fee(&self) -> bool {
+        true
+    }
 }
 
 // Any struct that is used to weigh data must also implement ClassifyDispatchInfo. Here we classify
@@ -61,6 +71,12 @@ impl<T> ClassifyDispatch<T> for Quadratic {
 	}
 }
 
+impl PaysFee for Quadratic {
+    fn pays_fee(&self) -> bool {
+        true
+    }
+}
+
 // A final scale to weight transactions. This one weighs transactions where the first parameter
 // is bool. If the bool is true, then the weight is linear in the second parameter. Otherwise
 // the weight is constant.
@@ -76,6 +92,12 @@ impl WeighData<(&bool, &u32)> for Conditional {
 			self.0
 		}
 	}
+}
+
+impl PaysFee for Conditional {
+    fn pays_fee(&self) -> bool {
+        true
+    }
 }
 
 impl<T> ClassifyDispatch<T> for Conditional {

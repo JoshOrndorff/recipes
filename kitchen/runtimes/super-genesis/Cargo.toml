@@ -9,5 +9,5 @@ package = 'super-runtime'
 path = '../super-runtime'
 
 [dependencies]
-babe-primitives = { package = "sp-consensus-babe", git = "https://github.com/paritytech/substrate", branch = 'td-warnings' }
-grandpa-primitives = { package = "sp-finality-grandpa", git = "https://github.com/paritytech/substrate", branch = 'td-warnings' }
+babe-primitives = { package = "sp-consensus-babe", git = "https://github.com/paritytech/substrate", branch = 'master' }
+grandpa-primitives = { package = "sp-finality-grandpa", git = "https://github.com/paritytech/substrate", branch = 'master' }
