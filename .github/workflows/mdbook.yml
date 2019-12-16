@@ -1,9 +1,10 @@
 name: mdBook
 
 on:
-  pull_request:
-    branches:
-    - master
+  # Don't build on PRs; only build when they're merged
+  # pull_request:
+  #   branches:
+  #   - master
   push:
     branches:
     - master
