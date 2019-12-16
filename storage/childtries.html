@@ -1,0 +1,300 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Efficient Subgroup Removal by Subkey: Child Tries - Substrate Recipes</title>
+        
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="Substrate runtime design patterns">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "light" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div id="sidebar-scrollbox" class="sidebar-scrollbox">
+                <ol class="chapter"><li class="expanded "><a href="../base/index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="expanded "><a href="../base/rust.html"><strong aria-hidden="true">2.</strong> Learn Rust</a></li><li class="expanded "><a href="../base/setup.html"><strong aria-hidden="true">3.</strong> Getting Started</a></li><li><ol class="section"><li class="expanded "><a href="../base/runnode.html"><strong aria-hidden="true">3.1.</strong> Running A Node</a></li><li class="expanded "><a href="../base/interactnode.html"><strong aria-hidden="true">3.2.</strong> Interacting with a Node</a></li><li class="expanded "><a href="../base/kitchenoverview.html"><strong aria-hidden="true">3.3.</strong> Using the Kitchen</a></li></ol></li><li class="expanded "><a href="../basics/index.html"><strong aria-hidden="true">4.</strong> Hello Substrate</a></li><li><ol class="section"><li class="expanded "><a href="../basics/events.html"><strong aria-hidden="true">4.1.</strong> Events Verify Execution</a></li><li class="expanded "><a href="../basics/adder.html"><strong aria-hidden="true">4.2.</strong> Adding Machine</a></li><li class="expanded "><a href="../basics/value.html"><strong aria-hidden="true">4.3.</strong> Single Value Storage</a></li></ol></li><li class="expanded "><a href="../storage/index.html"><strong aria-hidden="true">5.</strong> Runtime Storage API</a></li><li><ol class="section"><li class="expanded "><a href="../storage/cache.html"><strong aria-hidden="true">5.1.</strong> Cache Locally &gt; Storage Calls</a></li><li class="expanded "><a href="../storage/iterate.html"><strong aria-hidden="true">5.2.</strong> Sets</a></li><li class="expanded "><a href="../storage/enumerated.html"><strong aria-hidden="true">5.3.</strong> Ordered Lists: Maps, Linked Maps</a></li><li class="expanded "><a href="../storage/double.html"><strong aria-hidden="true">5.4.</strong> Subgroup Removal by Subkey: Double Maps</a></li><li class="expanded "><a href="../storage/childtries.html" class="active"><strong aria-hidden="true">5.5.</strong> Efficient Subgroup Removal by Subkey: Child Tries</a></li><li class="expanded "><a href="../storage/constants.html"><strong aria-hidden="true">5.6.</strong> Configurable Constants</a></li></ol></li><li class="expanded "><a href="../traits/index.html"><strong aria-hidden="true">6.</strong> Types and Traits</a></li><li><ol class="section"><li class="expanded "><a href="../traits/currency.html"><strong aria-hidden="true">6.1.</strong> Currency Types</a></li><li class="expanded "><a href="../traits/fees.html"><strong aria-hidden="true">6.2.</strong> Transaction Fees for Economic Security</a></li><li class="expanded "><a href="../storage/instantiable.html"><strong aria-hidden="true">6.3.</strong> Instantiable Modules</a></li></ol></li><li class="expanded "><a href="../declarative/index.html"><strong aria-hidden="true">7.</strong> Declarative Syntax</a></li><li><ol class="section"><li class="expanded "><a href="../declarative/ensure.html"><strong aria-hidden="true">7.1.</strong> Verify First, Write Last</a></li><li class="expanded "><a href="../declarative/safemath.html"><strong aria-hidden="true">7.2.</strong> Safe Math</a></li><li class="expanded "><a href="../declarative/permissioned.html"><strong aria-hidden="true">7.3.</strong> Permissioned Methods</a></li></ol></li><li class="expanded "><a href="../testing/index.html"><strong aria-hidden="true">8.</strong> Testing</a></li><li><ol class="section"><li class="expanded "><a href="../testing/mock.html"><strong aria-hidden="true">8.1.</strong> Basic Test Environments</a></li><li class="expanded "><a href="../testing/common.html"><strong aria-hidden="true">8.2.</strong> Common Tests</a></li><li class="expanded "><a href="../testing/externalities.html"><strong aria-hidden="true">8.3.</strong> Custom Test Environment</a></li></ol></li><li class="expanded "><a href="../base/dessert.html"><strong aria-hidden="true">9.</strong> Featured Tutorials</a></li><li class="spacer"></li><li class="expanded affix "><a href="../base/resource.html">More Resources</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div id="menu-bar-sticky-container">
+                        <div class="left-buttons">
+                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                                <i class="fa fa-paint-brush"></i>
+                            </button>
+                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                                <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            </ul>
+                            
+                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            
+                        </div>
+
+                        <h1 class="menu-title">Substrate Recipes</h1>
+
+                        <div class="right-buttons">
+                            <a href="../print.html" title="Print this book" aria-label="Print this book">
+                                <i id="print-button" class="fa fa-print"></i>
+                            </a>
+                            
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#child-tries" id="child-tries">Child Tries</a></h1>
+<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/child-trie"><code>kitchen/modules/child-trie</code></a></em>, <em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/smpl-crowdfund"><code>kitchen/modules/smpl-crowdfund</code></a></em></p>
+<ul>
+<li><a href="#storj">Runtime Child Storage</a></li>
+<li><a href="#smplcrwd">Crowdfund Example</a></li>
+</ul>
+<p>A <a href="https://en.wikipedia.org/wiki/Trie">trie</a> is an ordered tree structure for managing dynamic sets. For any given parent node, all descendants (children) share a common prefix associated with the parent.</p>
+<p>This construction lends itself to efficient removal of subgroups of a dataset (similar to <a href="./double.html"><code>double_map</code></a>). By associating a common prefix with related data, the dataset can be partitioned to effectively batch deletions.</p>
+<p>Every change in the leaves percolates up to the root, thereby providing a complete, succinct history of all changes to the underlying data structure in the form of the trie root hash.</p>
+<h2><a class="header" href="#runtime-child-storage-a-name--storja" id="runtime-child-storage-a-name--storja">Runtime Child Storage <a name = "storj"></a></a></h2>
+<p>To interact with child tries, there are methods exposed in <a href="https://crates.parity.io/srml_support/storage/child/index.html">runtime child storage</a>. Of the methods listed in the documentation, it is worth emphasizing the method associated with batch deletion.</p>
+<pre><code class="language-rust ignore">/// Remove all `storage_key` key/values
+pub fn kill_storage(storage_key: &amp;[u8]) {
+	runtime_io::kill_child_storage(storage_key)
+}
+
+/// Remove value associated with `key` in trie with `storage_key`
+pub fn kill(storage_key: &amp;[u8], key: &amp;[u8]) {
+	runtime_io::clear_child_storage(storage_key, key);
+}
+</code></pre>
+<p><a href="https://crates.parity.io/srml_support/storage/child/fn.kill_storage.html"><code>kill_storage</code></a> deletes all  <code>(key, value)</code> pairs associated with the <code>storage_key</code>. <a href="https://crates.parity.io/srml_support/storage/child/index.html">Documentation</a> shows that the basic API for interacting with a given child trie follows this format:</p>
+<pre><code class="language-rust ignore">// pseudocode
+child::do(trie_id, key, value);
+</code></pre>
+<p>To put an object in a child trie, the code would look something like </p>
+<pre><code class="language-rust ignore">fn kv_put(index: ObjectCount, who: &amp;T::AccountId, value_type: &amp;ValueType) {
+    let mut buf = Vec::new();
+		buf.extend_from_slice(b&quot;exchildtr&quot;);
+		buf.extend_from_slice(&amp;index.to_le_bytes()[..]);
+
+	let id = CHILD_STORAGE_KEY_PREFIX.into_iter()
+        .chain(b&quot;default:&quot;)
+        .chain(T::Hashing::hash(&amp;buf[..]).as_ref().into_iter())
+        .cloned()
+        .collect();
+    
+	who.using_encoded(|b| child::put(id.as_ref(), b, value_type));
+}
+</code></pre>
+<p>The code in <a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/child-trie"><code>kitchen/modules/child-trie</code></a> demonstrates a minimal way of organizing the basic child-trie api methods (as done in <a href="https://github.com/paritytech/polkadot/blob/master/runtime/src/crowdfund.rs"><code>polkadot/runtime/crowdfund</code></a>). It separates out the generation of the child trie id from the index with a runtime method <code>id_from_index</code>.</p>
+<pre><code class="language-rust ignore">pub fn id_from_index(index: ObjectCount) -&gt; Vec&lt;u8&gt; {
+    let mut buf = Vec::new();
+    buf.extend_from_slice(b&quot;exchildtr&quot;);
+    buf.extend_from_slice(&amp;index.to_le_bytes()[..]);
+
+    CHILD_STORAGE_KEY_PREFIX
+        .into_iter()
+        .chain(b&quot;default:&quot;)
+        .chain(Blake2Hasher::hash(&amp;buf[..]).as_ref().into_iter())
+        .cloned()
+        .collect()
+}
+</code></pre>
+<p>This results in less code for each method:</p>
+<pre><code class="language-rust ignore">pub fn kv_put(index: ObjectCount, who: &amp;T::AccountId, value_type: ValueType) {
+    let id = Self::id_from_index(index);
+    who.using_encoded(|b| child::put(id.as_ref(), b, &amp;value_type));
+}
+</code></pre>
+<h2><a class="header" href="#smpl-crowdfund-a-name--smplcrwda" id="smpl-crowdfund-a-name--smplcrwda">smpl-crowdfund <a name = "smplcrwd"></a></a></h2>
+<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/smpl-crowdfund"><code>kitchen/modules/smpl-crowdfund</code></a></em></p>
+<p>Child tries are useful for batch deletion of <code>(key, value)</code> pairs associated with a specific <code>trie_id</code>. This is relevant to the <a href="https://github.com/paritytech/polkadot/blob/master/runtime/src/crowdfund.rs">polkadot/crowdfund</a> module, which tracks <code>(AccountId, BalanceOf&lt;T&gt;)</code> associated with a specific crowdfund. <code>BalanceOf&lt;T&gt;</code> represents the contributions of an <code>AccountId</code>. The identifier for each crowdfund is defined</p>
+<pre><code class="language-rust ignore">type FundIndex = u32
+</code></pre>
+<p>With these three types, this storage item effectively manages <code>(FundIndex, AccountId, BalanceOf&lt;T&gt;)</code>. By maintaining a separate <code>child</code> for every <code>FundIndex</code>, this api allows for efficient batch deletions when crowdfunds are ended and dissolved.</p>
+<pre><code class="language-rust ignore">// polkadot/runtime/crowdfund
+pub fn crowdfund_kill(index: FundIndex) {
+    let id = Self::id_from_index(index);
+    child::kill_storage(id.as_ref());
+}
+</code></pre>
+<p>The child trie api is useful when data associated with an identifier needs to be isolated to facilitate efficient batch removal. In this case, all the information associated with a given crowdfund should be removed when the crowdfund is dissolved.</p>
+<h3><a class="header" href="#caveat-coder" id="caveat-coder">caveat coder</a></h3>
+<p>Each individual call to read/write to the child trie is more expensive than it would be for <code>map</code> or <code>double_map</code>. This cost is poorly amortized over a large number of calls, but can be significantly reduced by following a proper batch execution strategy.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="../storage/double.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="../storage/constants.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a href="../storage/double.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="../storage/constants.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+        
+        
+        <script type="text/javascript">
+            window.playpen_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+        <script type="text/javascript" src="../analytics/load.js"></script>
+        
+        <script type="text/javascript" src="../analytics/config.js"></script>
+        
+        <script type="text/javascript" src="../analytics/klaro.min.js"></script>
+        
+
+        
+
+    </body>
+</html>
