@@ -48,7 +48,12 @@ impl WeighData<(&bool, &u32)> for Conditional {
 }
 ```
 
-These examples, and several others can be compiled in the kitchen.
+In addition to the [`WeightData`
+Trait](https://substrate.dev/rustdocs/master/frame_support/weights/trait.WeighData.html), shown
+above, types that are used to calculate transaction weights, must also implement
+[`ClassifyDispatch`](https://substrate.dev/rustdocs/master/frame_support/weights/trait.ClassifyDispatch.html),
+and [`PaysFee`](https://substrate.dev/rustdocs/master/frame_support/weights/trait.PaysFee.html).
+These examples and several others can be compiled in the kitchen.
 
 While you can make reasonable estimates of resource consumption at
 design time, it is always best to actually measure the resources
