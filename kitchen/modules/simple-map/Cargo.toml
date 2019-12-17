@@ -22,28 +22,28 @@ version = '1.1.0'
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'frame-support'
-branch = 'master'
+rev = '16817ab6b6b529ae32fc8151820c15dd1ed00291'
 
 [dependencies.system]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'frame-system'
-branch = 'master'
+rev = '16817ab6b6b529ae32fc8151820c15dd1ed00291'
 
 [dependencies.runtime-primitives]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-runtime'
-branch = 'master'
+rev = '16817ab6b6b529ae32fc8151820c15dd1ed00291'
 
 [dev-dependencies.primitives]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-core'
-branch = 'master'
+rev = '16817ab6b6b529ae32fc8151820c15dd1ed00291'
 
 [dev-dependencies.runtime-io]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-io'
-branch = 'master'
+rev = '16817ab6b6b529ae32fc8151820c15dd1ed00291'
