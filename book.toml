@@ -1,10 +1,11 @@
 [book]
-authors = ["4meta5"]
+authors = ["4meta5, Joshy Orndorff"]
 language = "en"
 multilingual = false
 src = "src"
 title = "Substrate Recipes"
 description = "Substrate runtime design patterns"
+
 [output.html]
 additional-js = [
   "analytics/load.js",
