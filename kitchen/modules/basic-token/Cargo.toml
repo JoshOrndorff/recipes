@@ -14,5 +14,5 @@ std = [
 
 [dependencies]
 parity-scale-codec = { version = "1.1.0", features = ["derive"], default-features = false }
-support = { package = "frame-support", rev = "a4404bc1410ff599dd66b78de1244532b2854f97", git = "https://github.com/paritytech/substrate.git", default_features = false }
-system = { package = "frame-system", rev = "a4404bc1410ff599dd66b78de1244532b2854f97", git = "https://github.com/paritytech/substrate.git", default_features = false }
+support = { package = "frame-support", branch = "master", git = "https://github.com/paritytech/substrate.git", default_features = false }
+system = { package = "frame-system", branch = "master", git = "https://github.com/paritytech/substrate.git", default_features = false }
