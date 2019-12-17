@@ -20,5 +20,5 @@ system = { package = "frame-system", branch = "master", git = "https://github.co
 sp-runtime = { branch = "master", git = "https://github.com/paritytech/substrate.git", default_features = false }
 
 [dev-dependencies]
-# sp-core = { branch = "master", git = "https://github.com/paritytech/substrate.git", default_features = false }
+sp-core = { branch = "master", git = "https://github.com/paritytech/substrate.git", default_features = false }
 sp-io = { branch = "master", git = "https://github.com/paritytech/substrate.git", default_features = false }
