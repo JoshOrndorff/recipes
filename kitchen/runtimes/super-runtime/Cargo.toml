@@ -191,6 +191,7 @@ std = [
 	"serde",
 	"sp-api/std",
 	"sp-runtime/std",
+  "sp-transaction-pool/std",
 	"substrate-session/std",
 	"sudo/std",
 	"support/std",

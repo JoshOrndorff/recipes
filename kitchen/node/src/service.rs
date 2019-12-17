@@ -5,7 +5,6 @@ use std::time::Duration;
 use substrate_client::LongestChain;
 use babe;
 use grandpa::{self, FinalityProofProvider as GrandpaFinalityProofProvider};
-use futures::prelude::*;
 use runtime::{self, GenesisConfig, opaque::Block, RuntimeApi};
 use substrate_service::{error::{Error as ServiceError}, AbstractService, Configuration, ServiceBuilder};
 // use transaction_pool::{self, txpool::{Pool as TransactionPool}};
@@ -145,6 +144,7 @@ pub fn new_full<C: Send + Default + 'static>(config: Configuration<C, GenesisCon
 		is_authority,
 	};
 
+    let executor = service.spawn_task_handle();
 	match (is_authority, disable_grandpa) {
 		(false, false) => {
 			// start the lightweight GRANDPA observer
@@ -153,6 +153,7 @@ pub fn new_full<C: Send + Default + 'static>(config: Configuration<C, GenesisCon
 				grandpa_link,
 				service.network(),
 				service.on_exit(),
+                executor,
 			)?));
 		},
 		(true, false) => {
@@ -165,6 +166,7 @@ pub fn new_full<C: Send + Default + 'static>(config: Configuration<C, GenesisCon
 				on_exit: service.on_exit(),
 				telemetry_on_connect: Some(service.telemetry_on_connect_stream()),
 				voting_rule: grandpa::VotingRulesBuilder::default().build(),
+                executor,
 			};
 
 			// the GRANDPA voter task is considered infallible, i.e.

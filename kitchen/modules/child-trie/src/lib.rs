@@ -31,6 +31,12 @@ decl_module! {
     pub struct Module<T: Trait> for enum Call where origin: T::Origin {}
 }
 
+/// Child trie unique id for a crowdfund is built from the hash part of the fund id.
+pub fn trie_unique_id(fund_id: &[u8]) -> child::ChildInfo {
+    let start = CHILD_STORAGE_KEY_PREFIX.len() + b"default:".len();
+    child::ChildInfo::new_default(&fund_id[start..])
+}
+
 impl<T: Trait> Module<T> {
     /// Find the ID associated with the Child Trie
     /// to access the respective trie
@@ -50,21 +56,37 @@ impl<T: Trait> Module<T> {
 
     pub fn kv_put(index: ObjectCount, who: &T::AccountId, value_to_put: ValAppended) {
         let id = Self::id_from_index(index);
-        who.using_encoded(|b| child::put(id.as_ref(), b, &value_to_put));
+        who.using_encoded(|b| child::put(
+                id.as_ref(),
+                trie_unique_id(id.as_ref()),
+                b,
+                &value_to_put
+        ));
     }
 
     pub fn kv_get(index: ObjectCount, who: &T::AccountId) -> ValAppended {
         let id = Self::id_from_index(index);
-        who.using_encoded(|b| child::get_or_default::<ValAppended>(id.as_ref(), b))
+        who.using_encoded(|b| child::get_or_default::<ValAppended>(
+                id.as_ref(),
+                trie_unique_id(id.as_ref()),
+                b
+        ))
     }
 
     pub fn kv_kill(index: ObjectCount, who: &T::AccountId) {
         let id = Self::id_from_index(index);
-        who.using_encoded(|b| child::kill(id.as_ref(), b));
+        who.using_encoded(|b| child::kill(
+                id.as_ref(),
+                trie_unique_id(id.as_ref()),
+                b
+        ));
     }
 
     pub fn kill_trie(index: ObjectCount) {
         let id = Self::id_from_index(index);
-        child::kill_storage(id.as_ref());
+        child::kill_storage(
+            id.as_ref(),
+            trie_unique_id(id.as_ref()),
+        );
     }
 }
