@@ -1,13 +1,14 @@
 [book]
 authors = ["4meta5"]
+language = "en"
 multilingual = false
 src = "src"
 title = "Substrate Recipes"
 description = "Substrate runtime design patterns"
-
 [output.html]
 additional-js = [
   "analytics/load.js",
   "analytics/config.js",
   "analytics/klaro.min.js"
 ]
+theme = "src/theme"
