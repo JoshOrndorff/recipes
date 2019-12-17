@@ -11,3 +11,4 @@ additional-js = [
   "analytics/config.js",
   "analytics/klaro.min.js"
 ]
+theme = "src/theme"
