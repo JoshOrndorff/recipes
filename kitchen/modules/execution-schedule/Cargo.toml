@@ -1,5 +1,5 @@
 [package]
-name = "social-network"
+name = "execution-schedule"
 version = "0.1.0"
 authors = ["4meta5"]
 edition = "2018"
@@ -10,14 +10,16 @@ std = [
     'parity-scale-codec/std',
     'support/std',
     'system/std',
-    'balances/std',
     'runtime-primitives/std',
 ]
+
+[dependencies]
+rand = "0.7.2"
 
 [dependencies.parity-scale-codec]
 default-features = false
 features = ['derive']
-version = '1.0.6'
+version = '1.1.0'
 
 [dependencies.support]
 default_features = false
@@ -31,16 +33,16 @@ git = 'https://github.com/paritytech/substrate.git'
 package = 'srml-system'
 rev = '6ae3b6c4ddc03d4cdb10bd1d417b95d20f4c1b6e'
 
-[dependencies.balances]
-default_features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'srml-balances'
-rev = '6ae3b6c4ddc03d4cdb10bd1d417b95d20f4c1b6e'
-
 [dependencies.runtime-primitives]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sr-primitives'
+rev = '6ae3b6c4ddc03d4cdb10bd1d417b95d20f4c1b6e'
+
+[dependencies.rstd]
+default_features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'sr-std'
 rev = '6ae3b6c4ddc03d4cdb10bd1d417b95d20f4c1b6e'
 
 [dev-dependencies.primitives]

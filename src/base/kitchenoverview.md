@@ -14,7 +14,7 @@ You see `node` is bringing in the `runtime` modules in, and use it to build up t
 
 **`kitchen/node/src/service.rs`**
 
-```Rust
+```rust, ignore
 // -- snip --
 use runtime::{self, GenesisConfig, opaque::Block, RuntimeApi};
 // -- snip --
@@ -46,7 +46,7 @@ This is where the node runtime includes additional module `simple-event` written
 
 **`kitchen/runtimes/super-runtime/src/lib.rs`**
 
-```Rust
+```rust, ignore
 // -- snip --
 use simple_event;
 

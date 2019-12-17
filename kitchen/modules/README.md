@@ -1,4 +1,5 @@
 # Modules
+[![Status badge](https://github.com/4meta5/recipes/workflows/Test/badge.svg)](https://github.com/4meta5/recipes/actions?workflow=Test)
 
 procedural examples
 * [Hello Substrate](./hello-substrate)
@@ -21,10 +22,9 @@ examples with context
 * [Lockable Currency](./lockable-currency)
 * [Reservable Currency](./reservable-currency)
 * [Simple Treasury](./treasury)
-* [On Finalize](./schedule-on-finalize)
+* [Execution Schedule](./execution-schedule)
 
 *wip* (see issues for more information)
 * [custom origin](./custom-origin)
 * [child-trie](./child-trie)
-* [social network](./social-network)
 * [srml-panic](./srml-panic)

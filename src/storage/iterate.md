@@ -11,7 +11,7 @@ Storing a vector in the runtime can often be useful for managing groups and veri
 
 To maintain a set of `AccountId` to establish group ownership of decisions, it is straightforward to store a vector in the runtime of `AccountId`.
 
-```rust
+```rust, ignore
 decl_storage! {
 	trait Store for Module<T: Trait> as VecMap {
         Members get(fn members): Vec<T::AccountId>;
@@ -21,7 +21,7 @@ decl_storage! {
 
 It is easy to add the following helper method to verify membership elsewhere in the runtime.
 
-```rust
+```rust, ignore
 impl<T: Trait> Module<T> {
     fn is_member(who: &T::AccountId) -> bool {
         <Members<T>>::get().contains(who)
@@ -31,7 +31,7 @@ impl<T: Trait> Module<T> {
 
 This helper method can be placed in other runtime methods to restrict certain changes to runtime storage to privileged groups. Depending on the incentive structure of the network/chain, the members in these groups may have earned membership and the subsequent access rights through loyal contributions to the system.
 
-```rust
+```rust, ignore
 // use support::ensure
 fn member_action(origin) -> Result {
     let member = ensure_signed(origin)?;
@@ -47,7 +47,7 @@ In this example, the helper method facilitates isolation of runtime storage acce
 
 ## Append vs. Mutate
 
-```rust
+```rust, ignore
 decl_storage! {
 	trait Store for Module<T: Trait> as VecMap {
 	    CurrentValues get(fn current_values): Vec<u32>;
@@ -58,7 +58,7 @@ decl_storage! {
 
 Before [3071](https://github.com/paritytech/substrate/pull/3071) was merged, it was necessary to call [`mutate`](https://crates.parity.io/srml_support/storage/trait.StorageValue.html#tymethod.mutate) to push new values to a vector stored in runtime storage.
 
-```rust
+```rust, ignore
 fn mutate_to_append(origin) -> Result {
     let user = ensure_signed(origin)?;
 
@@ -72,7 +72,7 @@ fn mutate_to_append(origin) -> Result {
 For vectors stored in the runtime, mutation can be relatively expensive. This follows from the fact that [`mutate`](https://crates.parity.io/srml_support/storage/trait.StorageValue.html#tymethod.mutate) entails decoding the vector, making changes, and re-encoding the whole vector. It seems wasteful to decode the entire vector, push a new item, and then re-encode the whole thing. This provides sufficient motivation for [`append`](https://crates.parity.io/srml_support/storage/trait.StorageValue.html#tymethod.append):
 
 
-```rust
+```rust, ignore
 fn append_new_entries(origin) -> Result {
     let user = ensure_signed(origin)?;
 

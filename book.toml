@@ -6,5 +6,8 @@ src = "src"
 title = "Substrate Recipes"
 description = "Substrate runtime design patterns"
 [output.html]
-additional-js = ["load.js", "config.js", "klaro.min.js"]
-theme = "src/theme"
+additional-js = [
+  "analytics/load.js",
+  "analytics/config.js",
+  "analytics/klaro.min.js"
+]

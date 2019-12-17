@@ -58,7 +58,7 @@ Substrate developers should take advantage of Rust's zero cost abstractions.
 
 To access an element in a specific position, use the `get()` method. This method performs a double bound check.
 
-```rust
+```rust, ignore
 for arr in array_of_arrays {
     if let Some(elem) = arr.iter().get(1738) {
         println!("{}", elem);
@@ -72,7 +72,7 @@ The `.get()` call performs two checks:
 
 If bound checking has already been performed independently of the call, we can invoke `.getunchecked()` to access the element. Although this is `unsafe` to use, it is equivalent to C/C++ indexing, thereby improving performance when we already know the element's location.
 
-```rust
+```rust, ignore
 for arr in array_of_arrays {
     println!("{}", unsafe { arr.get_unchecked(1738) })
 }

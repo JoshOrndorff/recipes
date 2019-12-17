@@ -10,7 +10,7 @@ Some use cases:
 
 The SRML's Balances and Collective modules are good examples of real-world code using this technique. The default Substrate node has two instances of the Collectives module that make up its Council and Technical Committee. Each collective has its own storage, events, and configuration.
 
-```rust
+```rust, ignore
 Council: collective::<Instance1>::{Module, Call, Storage, Origin<T>, Event<T>, Config<T>},
 TechnicalCommittee: collective::<Instance2>::{Module, Call, Storage, Origin<T>, Event<T>, Config<T>}
 ```
@@ -23,7 +23,7 @@ Writing an instantiable module is almost entirely the same process as writing a 
 > Instantiable modules _must_ call the `decl_storage!` macro so that the `Instance` type is created.
 
 ### Configuration Trait
-```rust
+```rust, ignore
 pub trait Trait<I: Instance>: system::Trait {
 	// TODO: Add other types and constants required configure this module.
 
@@ -33,7 +33,7 @@ pub trait Trait<I: Instance>: system::Trait {
 ```
 
 ### Storage Declaration
-```rust
+```rust, ignore
 decl_storage! {
 	trait Store for Module<T: Trait<I>, I: Instance> as TemplateModule {
 		...
@@ -42,7 +42,7 @@ decl_storage! {
 ```
 
 ### Declaring the Module Struct
-```rust
+```rust, ignore
 decl_module! {
 	/// The module declaration.
 	pub struct Module<T: Trait<I>, I: Instance> for enum Call where origin: T::Origin {
@@ -51,23 +51,23 @@ decl_module! {
 }
 ```
 ### Accessing Storage
-```rust
+```rust, ignore
 <Something<T, I>>::put(something);
 ```
 
 If the storage item does not use any types specified in the configuration trait, the T is omitted, as always.
 
-```rust
+```rust, ignore
 <Something<I>>::put(something);
 ```
 
 ### Event initialization
-```rust
-fn deposit_event<T, I>() = default;
+```rust, ignore
+fn deposit_event() = default;
 ```
 
 ### Event Declaration
-```rust
+```rust, ignore
 decl_event!(
 	pub enum Event<T, I> where AccountId = <T as system::Trait>::AccountId {
 		...
@@ -81,7 +81,7 @@ The syntax for including an instance of an instantiable module in a runtime is s
 
 ### Implementing Configuration Traits
 Each instance needs to be configured separately. Configuration consists of implementing the specific instance's trait. The following snippet shows a configuration for `Instance1`.
-```rust
+```rust, ignore
 impl template::Trait<template::Instance1> for Runtime {
 	type Event = Event;
 }
@@ -89,7 +89,7 @@ impl template::Trait<template::Instance1> for Runtime {
 
 ### Using the `construct_runtime!` Macro
 The final step of installing the module instance in your runtime is updating the `construct_runtime!` macro. You may give each instance a meaningful name. Here I've called `Instance1` `FirstTemplate`.
-```rust
+```rust, ignore
 FirstTemplate: template::<Instance1>::{Module, Call, Storage, Event<T>, Config},
 ```
 
@@ -99,24 +99,25 @@ One drawback of instantiable modules, as we've presented them so far is that the
 
 To make your instantiable module support DefaultInstance, you must specify it in three places.
 
-```rust
+```rust, ignore
 pub trait Trait<I=DefaultInstance>: system::Trait {
 ```
 
-```rust
+```rust, ignore
 decl_storage! {
   trait Store for Module<T: Trait<I>, I: Instance=DefaultInstance> as TemplateModule {
     ...
   }
 }
 ```
-```rust
+```rust, ignore
 decl_module! {
     pub struct Module<T: Trait<I>, I: Instance = DefaultInstance> for enum Call where origin: T::Origin {
         ...
     }
 }
-```rust
+```
+```rust, ignore
 decl_event!(
 	pub enum Event<T, I=DefaultInstance> where ... {
     ...
@@ -130,7 +131,7 @@ Having made these changes, a developer who uses your module doesn't need to know
 Some modules require a genesis configuration to be specified. Let's look to the default Substrate node's use of the Collective module as an example.
 
 In its `chain_spec.rs` file we see
-```rust
+```rust, ignore
 GenesisConfig {
 	...
 	collective_Instance1: Some(CouncilConfig {

@@ -12,7 +12,7 @@ In the [`utxo-workshop`](https://github.com/nczhu/utxo-workshop), unspent output
 
 First, define an enum to distinguish between locked and unlocked UTXOs.
 
-```rust
+```rust, ignore
 /// utxo-workshop/runtime/src/utxo.rs
 /// A UTXO can be locked indefinitely or until a certain block height
 #[cfg_attr(feature = "std", derive(Serialize, Deserialize, Debug))]
@@ -25,7 +25,7 @@ pub enum LockStatus<BlockNumber> {
 
 In `decl_storage`, define a map for specifying the locked UTXOs. This maps an unspent outputs public key (`H256`) to its `LockStatus`.
 
-```rust
+```rust, ignore
 /// utxo-workshop/runtime/src/utxo.rs
 decl_storage {
     trait Store for Module<T: Trait> as Utxo {
@@ -37,7 +37,7 @@ decl_storage {
 
 Specify a runtime function for adding UTXOs to the mapping. Before inserting an unspent output into the storage mapping, check that the UTXO exists and is not already locked.
 
-```rust
+```rust, ignore
 /// utxo-workshop/runtime/src/utxo.rs
 impl<T: Trait> Module<T> {
     pub fn lock_utxo(hash: &H256, until: Option<T::BlockNumber>) -> Result {
@@ -61,7 +61,7 @@ impl<T: Trait> Module<T> {
 
 Next, add a runtime function to unlock UTXOs.
 
-```rust
+```rust, ignore
 /// utxo-workshop/runtime/src/utxo.rs
 impl<T: Trait> Module<T> {
     pub fn unlock_utxo(hash: &H256) -> Result {
@@ -74,7 +74,7 @@ impl<T: Trait> Module<T> {
 
 Next, verify that all of the unspent outputs claimed by transaction inputs are not locked in the `check_transaction` runtime function.
 
-```rust
+```rust, ignore
 /// utxo-workshop/runtime/src/utxo.rs
 impl<T: Trait> Module<T> {
     pub fn check_transaction(transaction: &Transaction) -> CheckResult<'_> {
@@ -101,7 +101,7 @@ So how do we design a robust in-module fee structure? In the [`utxo-workshop`](h
 
 To properly incentivize the ecosystem's actors through the fee structure, the leftover value is distributed evenly among the authorities in the `spend_leftover` runtime function:
 
-```rust
+```rust, ignore
 /// uxto-workshop/runtime/src/utxo.rs `decl_module{}`
 /// Redistribute combined leftover value evenly among chain authorities
 fn spend_leftover(authorities: &[H256]) {
