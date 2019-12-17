@@ -1,5 +1,12 @@
 use crate::service;
-use futures::{future, Future, sync::oneshot};
+use futures::{
+    future::{select, Map},
+    FutureExt,
+    TryFutureExt,
+    channel::oneshot,
+    compat::Future01CompatExt,
+};
+use futures01::Future;
 use std::cell::RefCell;
 use tokio::runtime::Runtime;
 pub use substrate_cli::{VersionInfo, IntoExit, error};
@@ -41,7 +48,9 @@ pub fn run<I, T, E>(args: I, exit: E, version: VersionInfo) -> error::Result<()>
 		ParseAndPrepare::BuildSpec(cmd) => cmd.run::<NoCustom, _, _, _>(load_spec),
 		ParseAndPrepare::ExportBlocks(cmd) => cmd.run_with_builder(|config: Config<_>|
 			Ok(new_full_start!(config).0), load_spec, exit),
-		ParseAndPrepare::ImportBlocks(cmd) => cmd.run_with_builder(|config: Config<_>|
+        ParseAndPrepare::CheckBlock(cmd) => cmd.run_with_builder(|config: Config<_>|
+            Ok(new_full_start!(config).0), load_spec, exit),
+        ParseAndPrepare::ImportBlocks(cmd) => cmd.run_with_builder(|config: Config<_>|
 			Ok(new_full_start!(config).0), load_spec, exit),
 		ParseAndPrepare::PurgeChain(cmd) => cmd.run(load_spec),
 		ParseAndPrepare::RevertChain(cmd) => cmd.run_with_builder(|config: Config<_>|
@@ -71,20 +80,53 @@ where
 	let (exit_send, exit) = exit_future::signal();
 
 	let informant = informant::build(&service);
-	runtime.executor().spawn(exit.until(informant).map(|_| ()));
+	let future = select(exit, informant)
+		.map(|_| Ok(()))
+		.compat();
+	runtime.executor().spawn(future);
 
 	// we eagerly drop the service so that the internal exit future is fired,
 	// but we need to keep holding a reference to the global telemetry guard
 	let _telemetry = service.telemetry();
+    //
+    // let fut01 = Futures01<
+    //     Item = (),
+    //     Error = ()
+    // >;
+    //
+    // fut01.map(|x| ()).map_err(|x| x);
+    //
+    // use futures::TryFutureExt;
+    // let fut03 = Future<
+    //     Output = Result<(), ()>
+    // >;
+    // .map()// then()
+    // .map_ok() // map() 
+    // .map_err();
 
 	let service_res = {
-		let exit = e.into_exit().map_err(|_| error::Error::Other("Exit future failed.".into()));
-		let service = service.map_err(|err| error::Error::Service(err));
-		let select = service.select(exit).map(|_| ()).map_err(|(err, _)| err);
+		let exit = e.into_exit();
+		let service = service
+			.map_err(|err| error::Error::Service(err))
+			.compat();
+		let select = select(service, exit)
+			.map(|_| Ok(()))
+			.compat();
 		runtime.block_on(select)
+        //
+		// let exit = e.into_exit().compat();
+        //
+        // //.map_err(|_| error::Error::Other("Exit future failed.".into()));
+		// let service = service.map_err(|err| error::Error::Service(err));
+		// let select = service.select(exit)
+        //     .map(|_| ())
+        //     .map_err(|(err, _)| err);
+		// runtime.block_on(select)
 	};
 
-	exit_send.fire();
+	if let Err(e) = exit_send.fire() {
+        log::error!("Couldn't send the exit signal: {:?}", e);
+    }
 
 	// TODO [andre]: timeout this future #1318
 	let _ = runtime.shutdown_on_idle().wait();
@@ -95,7 +137,10 @@ where
 // handles ctrl-c
 pub struct Exit;
 impl IntoExit for Exit {
-	type Exit = future::MapErr<oneshot::Receiver<()>, fn(oneshot::Canceled) -> ()>;
+	type Exit = Map<
+        oneshot::Receiver<()>,
+        fn(Result<(), oneshot::Canceled>) -> ()
+    >;
 	fn into_exit(self) -> Self::Exit {
 		// can't use signal directly here because CtrlC takes only `Fn`.
 		let (exit_send, exit) = oneshot::channel();
@@ -108,6 +153,6 @@ impl IntoExit for Exit {
 			}
 		}).expect("Error setting Ctrl-C handler");
 
-		exit.map_err(drop)
+		exit.map(drop)
 	}
 }

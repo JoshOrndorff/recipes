@@ -10,7 +10,7 @@ To manage the set of members allowed to access the methods in question, we may s
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sr-std'
-branch = 'master'
+rev = '16817ab6b6b529ae32fc8151820c15dd1ed00291'
 ```
 
 The alias for `sr-std` used is `rstd` which follows substrate's conventions. To import a vector type that can be stored in the runtime:

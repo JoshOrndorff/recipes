@@ -14,14 +14,15 @@ use grandpa::fg_primitives;
 use grandpa::AuthorityList as GrandpaAuthorityList;
 use primitives::{crypto::key_types, OpaqueMetadata};
 use rstd::prelude::*;
-use sr_api::impl_runtime_apis;
-use sr_primitives::traits::{
+use sp_api::impl_runtime_apis;
+use sp_runtime::traits::{
     BlakeTwo256, Block as BlockT, ConvertInto, NumberFor, StaticLookup, Verify,
 };
-use sr_primitives::weights::Weight;
-use sr_primitives::{
-    create_runtime_str, generic, impl_opaque_keys, transaction_validity::TransactionValidity,
-    AnySignature, ApplyResult,
+use support::weights::Weight;
+use sp_runtime::{
+    ApplyExtrinsicResult,
+	transaction_validity::TransactionValidity, generic, create_runtime_str,
+	impl_opaque_keys, AnySignature
 };
 #[cfg(feature = "std")]
 use version::NativeVersion;
@@ -46,8 +47,8 @@ use vec_set;
 // A few exports that help ease life for downstream crates.
 pub use balances::Call as BalancesCall;
 #[cfg(any(feature = "std", test))]
-pub use sr_primitives::BuildStorage;
-pub use sr_primitives::{Perbill, Permill};
+pub use sp_runtime::BuildStorage;
+pub use sp_runtime::{Perbill, Permill};
 pub use support::{construct_runtime, parameter_types, traits::Randomness, StorageValue};
 pub use timestamp::Call as TimestampCall;
 
@@ -84,7 +85,7 @@ pub type DigestItem = generic::DigestItem<Hash>;
 pub mod opaque {
     use super::*;
 
-    pub use sr_primitives::OpaqueExtrinsic as UncheckedExtrinsic;
+    pub use sp_runtime::OpaqueExtrinsic as UncheckedExtrinsic;
 
     /// Opaque block header type.
     pub type Header = generic::Header<BlockNumber, BlakeTwo256>;
@@ -375,7 +376,7 @@ construct_runtime!(
 		Timestamp: timestamp::{Module, Call, Storage, Inherent},
 		Babe: babe::{Module, Call, Storage, Config, Inherent(Timestamp)},
 		Grandpa: grandpa::{Module, Call, Storage, Config, Event},
-		Indices: indices::{default, Config<T>},
+		Indices: indices::{default},
 		Balances: balances::{default, Error},
 		RandomnessCollectiveFlip: randomness_collective_flip::{Module, Call, Storage},
 		Sudo: sudo,
@@ -431,7 +432,7 @@ pub type Executive =
     executive::Executive<Runtime, Block, system::ChainContext<Runtime>, Runtime, AllModules>;
 
 impl_runtime_apis! {
-    impl sr_api::Core<Block> for Runtime {
+    impl sp_api::Core<Block> for Runtime {
         fn version() -> RuntimeVersion {
             VERSION
         }
@@ -445,14 +446,14 @@ impl_runtime_apis! {
         }
     }
 
-    impl sr_api::Metadata<Block> for Runtime {
+    impl sp_api::Metadata<Block> for Runtime {
         fn metadata() -> OpaqueMetadata {
             Runtime::metadata().into()
         }
     }
 
     impl block_builder_api::BlockBuilder<Block> for Runtime {
-        fn apply_extrinsic(extrinsic: <Block as BlockT>::Extrinsic) -> ApplyResult {
+        fn apply_extrinsic(extrinsic: <Block as BlockT>::Extrinsic) -> ApplyExtrinsicResult {
             Executive::apply_extrinsic(extrinsic)
         }
 
@@ -476,7 +477,7 @@ impl_runtime_apis! {
         }
     }
 
-    impl tx_pool_api::TaggedTransactionQueue<Block> for Runtime {
+    impl sp_transaction_pool::runtime_api::TaggedTransactionQueue<Block> for Runtime {
         fn validate_transaction(tx: <Block as BlockT>::Extrinsic) -> TransactionValidity {
             Executive::validate_transaction(tx)
         }

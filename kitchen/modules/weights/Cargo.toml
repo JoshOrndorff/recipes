@@ -20,31 +20,31 @@ features = ['derive']
 version = '1.0.6'
 
 [dependencies.support]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
-package = 'srml-support'
-rev = '6ae3b6c4ddc03d4cdb10bd1d417b95d20f4c1b6e'
+package = 'frame-support'
+rev = '16817ab6b6b529ae32fc8151820c15dd1ed00291'
 
 [dependencies.system]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
-package = 'srml-system'
-rev = '6ae3b6c4ddc03d4cdb10bd1d417b95d20f4c1b6e'
+package = 'frame-system'
+rev = '16817ab6b6b529ae32fc8151820c15dd1ed00291'
 
 [dependencies.balances]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
-package = 'srml-balances'
-rev = '6ae3b6c4ddc03d4cdb10bd1d417b95d20f4c1b6e'
+package = 'pallet-balances'
+rev = '16817ab6b6b529ae32fc8151820c15dd1ed00291'
 
 [dependencies.runtime-primitives]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
-package = 'sr-primitives'
-rev = '6ae3b6c4ddc03d4cdb10bd1d417b95d20f4c1b6e'
+package = 'sp-runtime'
+rev = '16817ab6b6b529ae32fc8151820c15dd1ed00291'
 
 [dev-dependencies.primitives]
-default_features = false
+default-features = false
 git = 'https://github.com/paritytech/substrate.git'
-package = 'substrate-primitives'
-rev = '6ae3b6c4ddc03d4cdb10bd1d417b95d20f4c1b6e'
+package = 'sp-core'
+rev = '16817ab6b6b529ae32fc8151820c15dd1ed00291'
