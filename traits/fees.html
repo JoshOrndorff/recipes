@@ -192,7 +192,12 @@ impl WeighData&lt;(&amp;bool, &amp;u32)&gt; for Conditional {
 	}
 }
 </code></pre>
-<p>These examples, and several others can be compiled in the kitchen.</p>
+<p>In addition to the <a href="https://substrate.dev/rustdocs/master/frame_support/weights/trait.WeighData.html"><code>WeightData</code>
+Trait</a>, shown
+above, types that are used to calculate transaction weights, must also implement
+<a href="https://substrate.dev/rustdocs/master/frame_support/weights/trait.ClassifyDispatch.html"><code>ClassifyDispatch</code></a>,
+and <a href="https://substrate.dev/rustdocs/master/frame_support/weights/trait.PaysFee.html"><code>PaysFee</code></a>.
+These examples and several others can be compiled in the kitchen.</p>
 <p>While you can make reasonable estimates of resource consumption at
 design time, it is always best to actually measure the resources
 required of your functions through an empirical process. Failure to

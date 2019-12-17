@@ -1162,7 +1162,12 @@ impl WeighData&lt;(&amp;bool, &amp;u32)&gt; for Conditional {
 	}
 }
 </code></pre>
-<p>These examples, and several others can be compiled in the kitchen.</p>
+<p>In addition to the <a href="https://substrate.dev/rustdocs/master/frame_support/weights/trait.WeighData.html"><code>WeightData</code>
+Trait</a>, shown
+above, types that are used to calculate transaction weights, must also implement
+<a href="https://substrate.dev/rustdocs/master/frame_support/weights/trait.ClassifyDispatch.html"><code>ClassifyDispatch</code></a>,
+and <a href="https://substrate.dev/rustdocs/master/frame_support/weights/trait.PaysFee.html"><code>PaysFee</code></a>.
+These examples and several others can be compiled in the kitchen.</p>
 <p>While you can make reasonable estimates of resource consumption at
 design time, it is always best to actually measure the resources
 required of your functions through an empirical process. Failure to
@@ -1383,7 +1388,7 @@ let new_all_people_count = all_people_count.checked_add(1).ok_or(&quot;Overflow 
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sr-std'
-branch = 'master'
+rev = '16817ab6b6b529ae32fc8151820c15dd1ed00291'
 </code></pre>
 <p>The alias for <code>sr-std</code> used is <code>rstd</code> which follows substrate's conventions. To import a vector type that can be stored in the runtime:</p>
 <pre><code class="language-rust ignore">use rstd::prelude::*;
