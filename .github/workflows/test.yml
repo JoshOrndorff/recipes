@@ -35,9 +35,6 @@ jobs:
         path: kitchen/target
         key: ${{ runner.os }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
 
-    - name: What is the actual directory structure?
-      run: pwd
-
     - name: Install toolchain
       uses: actions-rs/toolchain@v1
       with:
