@@ -23,16 +23,16 @@ jobs:
         path: ~/.cargo/registry
         key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
 
-    # - name: Cache cargo index
-    #   uses: actions/cache@v1
-    #   with:
-    #     path: ~/.cargo/git
-    #     key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
+    - name: Cache cargo index
+      uses: actions/cache@v1
+      with:
+        path: ~/.cargo/git
+        key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
 
     - name: Cache cargo build
       uses: actions/cache@v1
       with:
-        path: target
+        path: kitchen/target
         key: ${{ runner.os }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
 
     - name: What is the actual directory structure?
@@ -48,7 +48,7 @@ jobs:
         default: true
 
     - name: Check Kitchen
-      run: cd kitchen/modules && cargo check --all
+      run: cd kitchen && cargo check --all
 
     - name: Test Kitchen
       run: cd kitchen/modules && cargo test --all
