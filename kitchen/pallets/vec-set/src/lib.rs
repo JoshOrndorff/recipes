@@ -1,7 +1,7 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 // demonstrates how to use append instead of mutate
-// https://crates.parity.io/srml_support/storage/trait.StorageValue.html#tymethod.append
+// https://substrate.dev/rustdocs/master/frame_support/storage/trait.StorageValue.html#tymethod.append
 use rstd::prelude::*;
 use support::{decl_event, decl_module, decl_storage, dispatch::Result, ensure, StorageValue};
 use system::ensure_signed;

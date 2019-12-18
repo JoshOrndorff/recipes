@@ -1,5 +1,5 @@
 //! borrows collateral locking logic from treasury/lib.rs
-// demonstrates https://crates.parity.io/srml_support/traits/trait.ReservableCurrency.html
+// demonstrates https://substrate.dev/rustdocs/master/frame_support/traits/trait.ReservableCurrency.html
 use support::traits::{
 	Currency, ReservableCurrency, ExistenceRequirement::AllowDeath
 };
@@ -51,8 +51,7 @@ decl_module! {
             let unlocker = ensure_signed(origin)?;
 
             T::Currency::unreserve(&unlocker, amount);
-            // this function does not fail (it will lock up as much as amount)
-            // https://crates.parity.io/srml_support/traits/trait.ReservableCurrency.html
+            // ReservableCurrency::unreserve does not fail (it will lock up as much as amount)
 
             let now = <system::Module<T>>::block_number();
 

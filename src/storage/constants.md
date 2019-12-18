@@ -1,7 +1,7 @@
 # Configurable Module Constants
 *[`kitchen/modules/module-constant-config`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/module-constant-config)*
 
-To declare constant values within a runtime, it is necessary to import the [`Get`](https://crates.parity.io/srml_support/traits/trait.Get.html) trait from the `support` module
+To declare constant values within a runtime, it is necessary to import the [`Get`](https://substrate.dev/rustdocs/master/frame_support/traits/trait.Get.html) trait from the `support` module
 
 ```rust, ignore
 use support::traits::Get;

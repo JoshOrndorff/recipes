@@ -23,7 +23,7 @@ Now, declare the mock runtime as a unit structure
 pub struct TestRuntime;
 ```
 
-The `derive` macro attribute provides implementations of the `Clone + PartialEq + Eq + Debug` traits for the `TestRuntime` struct. 
+The `derive` macro attribute provides implementations of the `Clone + PartialEq + Eq + Debug` traits for the `TestRuntime` struct.
 
 The mock runtime also needs to implement the tested module's `Trait`. If it is unnecessary to test the module's `Event` type, the type can be set to `()`. See further below to test the module's `Event` enum.
 
@@ -85,7 +85,7 @@ impl system::Trait for TestRuntime {
 pub type System = system::Module<TestRuntime>;
 ```
 
-With this, it is possible to use this type in the unit tests. For example, the block number can be set with [`set_block_number`](https://crates.parity.io/srml_system/struct.Module.html#method.set_block_number)
+With this, it is possible to use this type in the unit tests. For example, the block number can be set with [`set_block_number`](https://substrate.dev/rustdocs/master/frame_system/struct.Module.html#method.set_block_number)
 
 ```rust, ignore
 #[test]
@@ -171,7 +171,7 @@ add_extra_genesis {
 }
 ```
 
-To use `new_test_ext` in a runtime test, we call the method and call [`execute_with()`](https://crates.parity.io/substrate_state_machine/struct.TestExternalities.html#method.execute_with) on the returned `runtime_io::TestExternalities` 
+To use `new_test_ext` in a runtime test, we call the method and call [`execute_with()`](https://crates.parity.io/substrate_state_machine/struct.TestExternalities.html#method.execute_with) on the returned `runtime_io::TestExternalities`
 
 ```rust, ignore
 #[test]
@@ -196,7 +196,7 @@ pub struct ExtBuilder;
 
 The behavior for constructing the test environment is contained the methods on the `ExtBuilder` unit structure. This fosters multiple levels of configuration depending on if the test requires a common default instance of the environment or a more specific edge case configuration. The latter is explored in more detail in [Custom Test Environment](./externalities.md).
 
-Like `new_test_ext`, the `build()` method on the `ExtBuilder` object returns an instance of [`TestExternalities`](https://crates.parity.io/sr_io/type.TestExternalities.html). [Externalities](https://crates.parity.io/substrate_externalities/index.html) are an abstraction that allows the runtime to access features of the outer node such as storage or offchain workers. 
+Like `new_test_ext`, the `build()` method on the `ExtBuilder` object returns an instance of [`TestExternalities`](https://crates.parity.io/sr_io/type.TestExternalities.html). [Externalities](https://crates.parity.io/substrate_externalities/index.html) are an abstraction that allows the runtime to access features of the outer node such as storage or offchain workers.
 
 In this case, create a mock storage from the default genesis configuration.
 
@@ -216,11 +216,11 @@ which calls some methods to create a test environment,
 fn fake_test_example() {
 	ExtBuilder::build().execute_with(|| {
 		// ...test conditions...
-	}) 
+	})
 }
 ```
 
-While testing in this environment, runtimes that require signed extrinsics (aka take `origin` as a parameter) will require transactions coming from an `Origin`. This requires importing the [`impl_outer_origin`](https://crates.parity.io/srml_support/macro.impl_outer_origin.html) macro from `support`
+While testing in this environment, runtimes that require signed extrinsics (aka take `origin` as a parameter) will require transactions coming from an `Origin`. This requires importing the [`impl_outer_origin`](https://substrate.dev/rustdocs/master/frame_support/macro.impl_outer_origin.html) macro from `support`
 
 ```rust, ignore
 use support::{impl_outer_origin};
@@ -230,7 +230,7 @@ impl_outer_origin!{
 }
 ```
 
-It is possible to placed signed transactions as parameters in runtime methods that require the `origin` input. See the [full code in the kitchen](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/hello-substrate), but this looks like
+It is possible to placed signed transactions as parameters in runtime methods that require the `origin` input. See the [full code in the kitchen](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/hello-substrate), but this looks like
 
 ```rust, ignore
 #[test]
@@ -244,7 +244,7 @@ fn last_value_updates() {
 
 Run these tests with `cargo test`, an optional parameter is the test's name to only run that test and not all tests.
 
-NOTE: the input to `Origin::signed` is the `system::Trait`'s `AccountId` type which was set to `u64` for the `TestRuntime` implementation. In theory, this could be set to some other type as long as it conforms to the [trait bound](https://crates.parity.io/srml_system/trait.Trait.html),
+NOTE: the input to `Origin::signed` is the `system::Trait`'s `AccountId` type which was set to `u64` for the `TestRuntime` implementation. In theory, this could be set to some other type as long as it conforms to the [trait bound](https://substrate.dev/rustdocs/master/frame_system/trait.Trait.html#associatedtype.AccountId),
 
 ```rust, ignore
 pub trait Trait: 'static + Eq + Clone {

@@ -1,5 +1,5 @@
 //! borrows collateral locking logic from staking/lib.rs
-// demonstrates https://crates.parity.io/srml_support/traits/trait.LockableCurrency.html
+// demonstrates https://substrate.dev/rustdocs/master/frame_support/traits/trait.LockableCurrency.html
 use support::{
     decl_event, decl_module,
     dispatch::Result,
@@ -29,7 +29,7 @@ decl_event!(
     where
         Balance = BalanceOf<T>,
         <T as system::Trait>::AccountId
-    {   
+    {
         Locked(AccountId, Balance),
         ExtendedLock(AccountId, Balance),
         Unlocked(AccountId),
@@ -51,7 +51,7 @@ decl_module! {
                 amount,
                 T::LockPeriod::get(),
                 WithdrawReasons::except(WithdrawReason::TransactionPayment),
-                // TODO: check out https://crates.parity.io/srml_support/traits/struct.WithdrawReasons.html
+                // https://substrate.dev/rustdocs/master/frame_support/traits/struct.WithdrawReasons.html
             );
 
             Self::deposit_event(RawEvent::Locked(user, amount));

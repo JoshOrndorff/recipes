@@ -1,4 +1,4 @@
-// imbalances docs: https://crates.parity.io/srml_support/traits/trait.Imbalance.html
+// imbalance rustdocs: https://substrate.dev/rustdocs/master/frame_support/traits/trait.Imbalance.html
 // WARNING: never use this code in a module
 // (for demonstration/teaching purposes only)
 // it only checks for signed extrinsics to enable arbitrary minting/slashing!!!
@@ -33,7 +33,7 @@ decl_event!(
         AccountId = <T as system::Trait>::AccountId,
         Balance = BalanceOf<T>,
         BlockNumber = <T as system::Trait>::BlockNumber,
-    {   
+    {
         SlashFunds(AccountId, Balance, BlockNumber),
         RewardFunds(AccountId, Balance, BlockNumber),
     }

@@ -11,7 +11,7 @@ decl_storage! {
 }
 ```
 
-To interact with single storage values, it is necessary to import the `support::StorageValue` type. Functions used to access a `StorageValue` are defined in [`srml/support`](https://crates.parity.io/srml_support/storage/trait.StorageValue.html#required-methods):
+To interact with single storage values, it is necessary to import the `frame_support::StorageValue` type. Functions used to access a `StorageValue` are defined in [`frame-support`](https://substrate.dev/rustdocs/master/frame_support/storage/trait.StorageValue.html):
 
 ```rust, ignore
 /// Get the storage key.

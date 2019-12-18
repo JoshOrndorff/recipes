@@ -1,7 +1,7 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 // Double Map Example w/ remove_prefix
-// https://crates.parity.io/srml_support/storage/trait.StorageDoubleMap.html
+// https://substrate.dev/rustdocs/master/frame_support/storage/trait.StorageDoubleMap.html
 // `double_map` maps two keys to a single value.
 // the first key might be a group identifier
 // the second key might be a unique identifier

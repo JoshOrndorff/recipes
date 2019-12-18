@@ -1,7 +1,7 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 // Simple Storage Map
-// https://crates.parity.io/srml_support/storage/trait.StorageMap.html
+// https://substrate.dev/rustdocs/master/frame_support/storage/trait.StorageMap.html
 use support::{decl_event, decl_module, decl_storage, dispatch::Result, ensure, StorageMap};
 use system::ensure_signed;
 

@@ -29,11 +29,11 @@ impl<T: Trait> Module<T> {
 }
 ```
 
-Accessing the pot's balance is as simple as using the [`Currency`](https://crates.parity.io/srml_support/traits/trait.Currency.html) trait to access the balance of the associated `AccountId`.
+Accessing the pot's balance is as simple as using the [`Currency`](https://substrate.dev/rustdocs/master/frame_support/traits/trait.Currency.html) trait to access the balance of the associated `AccountId`.
 
 ## Proxy Transfers
 
-In [srml/treasury](https://github.com/paritytech/substrate/blob/master/srml/treasury/src/lib.rs), approved spending proposals are queued in runtime storage before they are scheduled for execution. For the example dispatch queue, each entry represents a request to transfer `BalanceOf<T>` to `T::AccountId` from the pot.
+In [pallet_treasury](https://github.com/paritytech/substrate/blob/master/frame/treasury/src/lib.rs), approved spending proposals are queued in runtime storage before they are scheduled for execution. For the example dispatch queue, each entry represents a request to transfer `BalanceOf<T>` to `T::AccountId` from the pot.
 
 ```rust, ignore
 decl_storage! {
@@ -64,11 +64,11 @@ decl_module! {
 
 This method transfers some funds to the pot along with the request to transfer the same funds from the pot to a recipient (the input field `dest: T::AccountId`).
 
-NOTE: *Instead of relying on direct requests, [srml/treasury](https://github.com/paritytech/substrate/blob/master/srml/treasury/src/lib.rs) coordinates spending decisions through a proposal process.*
+NOTE: *Instead of relying on direct requests, the Treasury pallet coordinates spending decisions through a proposal process.*
 
 ## Scheduling Spending
 
-To schedule spending like [`srml/treasury`](https://github.com/paritytech/substrate/blob/master/srml/treasury/src/lib.rs), first add a configurable module constant in the `Trait`. This constant determines how often the spending queue is executed.
+To schedule spending like pallet_treasury, first add a configurable module constant in the `Trait`. This constant determines how often the spending queue is executed.
 
 ```rust, ignore
 pub trait Trait: system::Trait {

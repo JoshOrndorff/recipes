@@ -44,7 +44,7 @@ fn overflow_fails() {
 }
 ```
 
-This requires importing the `assert_err` macro from `support`. With all the previous imported objects, 
+This requires importing the `assert_err` macro from `support`. With all the previous imported objects,
 
 ```rust, ignore
 #[cfg(test)]
@@ -87,13 +87,13 @@ Updates to `UserValue` are tested in `last_value_updates` in [`kitchen/module/he
 
 ### Expected Events are Emitted <a name = "events"></a>
 
-The common way of testing expected event emission behavior requires importing `support`'s [`impl_outer_event!`](https://crates.parity.io/srml_support/macro.impl_outer_event.html) macro
+The common way of testing expected event emission behavior requires importing `support`'s [`impl_outer_event!`](https://substrate.dev/rustdocs/master/frame_support/macro.impl_outer_event.html) macro
 
 ```rust, ignore
 use support::impl_outer_event;
 ```
 
-The `TestEvent` enum imports and uses the module's `Event` enum. The new local module `hello_substrate` is re-exports the contents of the root to give a name for the current crate to [`impl_outer_event!`](https://crates.parity.io/srml_support/macro.impl_outer_event.html).
+The `TestEvent` enum imports and uses the module's `Event` enum. The new local module `hello_substrate` re-exports the contents of the root to give a name for the current crate to `impl_outer_event!`.
 
 ```rust, ignore
 mod hello_substrate {
@@ -111,7 +111,7 @@ impl Trait for TestRuntime {
 }
 ```
 
-Testing the correct emission of events compares constructions of expected events with the entries in the [`System::events`](https://crates.parity.io/srml_system/struct.Module.html#method.events) vector of `EventRecord`s. In [`kitchen/module/adding-machine`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/adding-machine),
+Testing the correct emission of events compares constructions of expected events with the entries in the [`System::events`](https://substrate.dev/rustdocs/master/frame_system/struct.Module.html#method.events) vector of `EventRecord`s. In [`kitchen/pallets/adding-machine`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/adding-machine),
 
 ```rust, ignore
 #[test]
@@ -151,7 +151,7 @@ mod tests {
 }
 ```
 
-In [`kitchen/module/hello-substrate`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/hello-substrate),
+In [`kitchen/pallets/hello-substrate`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/hello-substrate),
 
 ```rust, ignore
 #[test]

@@ -1,12 +1,12 @@
 # Incentive Management <a name = "utxo"></a>
 
-In the [`utxo-workshop`](https://github.com/nczhu/utxo-workshop), the difference between transaction inputs and outputs are distributed evenly among the validator set. 
+In the [`utxo-workshop`](https://github.com/nczhu/utxo-workshop), the difference between transaction inputs and outputs are distributed evenly among the validator set.
 
 * it is useful to differentiate between the `consensus` and `incentive` layer (Rob's talk somewhere -- actually I remember Fred mentioning this in the first ZeroKnowledgeFM interview with Gavin...)
 
 ## Locking Funds at the Protocol Layer
 
-In the [incentive design recipe](./incentive.md#sun), we covered a common bonding pattern also found in the [`srml/staking`](https://github.com/paritytech/substrate/tree/master/srml/staking) and [`srml/council`](https://github.com/paritytech/substrate/tree/master/srml/council) modules which bonds capital via the `reserve => unreserve (=>) transfer` pattern. This pattern works, but there is another way to lock up capital for a defined period of time when building with Substrate.
+In the [incentive design recipe](./incentive.md#sun), we covered a common bonding pattern also found in the [`pallet_staking`](https://github.com/paritytech/substrate/tree/master/frame/staking) and [`pallet_collective`](https://github.com/paritytech/substrate/tree/master/frame/collective) modules which bonds capital via the `reserve => unreserve (=>) transfer` pattern. This pattern works, but there is another way to lock up capital for a defined period of time when building with Substrate.
 
 In the [`utxo-workshop`](https://github.com/nczhu/utxo-workshop), unspent outputs can be locked up until a defined future block.
 

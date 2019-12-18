@@ -1,6 +1,6 @@
 # Hash Patterns
 
-When deciding how to store proposals in `decl_storage {}`, we can either 
+When deciding how to store proposals in `decl_storage {}`, we can either
 1. hash each proposal and use the hash as a unique identifier for relevant maps
 2. use a unique proposalIndex for each
 
@@ -15,7 +15,7 @@ The first iteration of Molochameleon actually used a `type ProposalIndex = u32` 
 * moreso, there is head-of-line blocking and really awkard clean up
     * it's a very synchronous, rigid pattern for managing proposals
 
-### Treasury (SRML Example)
+### Treasury (Frame Example)
 
 So why does Treasury use indexes? Well sometimes we want to closely limit proposal throughput instead of optimzing protocol flexibility.
 
@@ -36,9 +36,9 @@ Parity's hash functions operate on a bit digest so we need to first Encode our s
 **List Variants**
 * applicants can only have one application at a time
 
-When deciding on which fields of the Proposal to hash as the unique identifer , we should add just enough information to ensure uniqueness. In our case, we will choose 
+When deciding on which fields of the Proposal to hash as the unique identifer , we should add just enough information to ensure uniqueness. In our case, we will choose
 
-### Council (SRML Example)
+### Council (Frame Example)
 * higher proposal throughput than `Treasury` but this can also be improved
 
 

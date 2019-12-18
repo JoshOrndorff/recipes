@@ -5,7 +5,7 @@ In Substrate, [transaction](https://docs.substrate.dev/docs/glossary#section-tra
 
 > **Events** notify the off-chain world of successful state transitions
 
-To declare an event, use the [`decl_event`](https://crates.parity.io/srml_support/macro.decl_event.html) macro.
+To declare an event, use the [`decl_event`](https://substrate.dev/rustdocs/master/frame_support/macro.decl_event.html) macro.
 
 ## Simple Event
 
@@ -37,7 +37,7 @@ decl_event!(
 );
 ```
 
-The syntax for `deposit_event` now takes the `RawEvent` type because it is generic over the module Trait 
+The syntax for `deposit_event` now takes the `RawEvent` type because it is generic over the module Trait
 
 ```rust, ignore
 Self::deposit_event(RawEvent::EmitInput(user, new_number));

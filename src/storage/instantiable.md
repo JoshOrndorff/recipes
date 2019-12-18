@@ -8,7 +8,7 @@ Some use cases:
 * Marketplace track users' reputations as buyers separately from their reputations as sellers.
 * Governance has two (or more) houses which act similarly internally.
 
-The SRML's Balances and Collective modules are good examples of real-world code using this technique. The default Substrate node has two instances of the Collectives module that make up its Council and Technical Committee. Each collective has its own storage, events, and configuration.
+Substrate's own Balances and Collective modules are good examples of real-world code using this technique. The default Substrate node has two instances of the Collectives module that make up its Council and Technical Committee. Each collective has its own storage, events, and configuration.
 
 ```rust, ignore
 Council: collective::<Instance1>::{Module, Call, Storage, Origin<T>, Event<T>, Config<T>},

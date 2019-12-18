@@ -12,7 +12,7 @@ Every change in the leaves percolates up to the root, thereby providing a comple
 
 ## Runtime Child Storage <a name = "storj"></a>
 
-To interact with child tries, there are methods exposed in [runtime child storage](https://crates.parity.io/srml_support/storage/child/index.html). Of the methods listed in the documentation, it is worth emphasizing the method associated with batch deletion.
+To interact with child tries, there are methods exposed in [runtime child storage](https://substrate.dev/rustdocs/master/frame_support/storage/child/index.html). Of the methods listed in the documentation, it is worth emphasizing the method associated with batch deletion.
 
 ```rust, ignore
 /// Remove all `storage_key` key/values
@@ -26,14 +26,14 @@ pub fn kill(storage_key: &[u8], key: &[u8]) {
 }
 ```
 
-[`kill_storage`](https://crates.parity.io/srml_support/storage/child/fn.kill_storage.html) deletes all  `(key, value)` pairs associated with the `storage_key`. [Documentation](https://crates.parity.io/srml_support/storage/child/index.html) shows that the basic API for interacting with a given child trie follows this format:
+[`kill_storage`](https://substrate.dev/rustdocs/master/frame_support/storage/child/fn.kill_storage.html) deletes all  `(key, value)` pairs associated with the `storage_key`. The basic API for interacting with a given child trie follows this format:
 
 ```rust, ignore
 // pseudocode
 child::do(trie_id, key, value);
 ```
 
-To put an object in a child trie, the code would look something like 
+To put an object in a child trie, the code would look something like
 
 ```rust, ignore
 fn kv_put(index: ObjectCount, who: &T::AccountId, value_type: &ValueType) {
@@ -46,12 +46,12 @@ fn kv_put(index: ObjectCount, who: &T::AccountId, value_type: &ValueType) {
         .chain(T::Hashing::hash(&buf[..]).as_ref().into_iter())
         .cloned()
         .collect();
-    
+
 	who.using_encoded(|b| child::put(id.as_ref(), b, value_type));
 }
 ```
 
-The code in [`kitchen/modules/child-trie`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/child-trie) demonstrates a minimal way of organizing the basic child-trie api methods (as done in [`polkadot/runtime/crowdfund`](https://github.com/paritytech/polkadot/blob/master/runtime/src/crowdfund.rs)). It separates out the generation of the child trie id from the index with a runtime method `id_from_index`.
+The code in [`kitchen/pallets/child-trie`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/child-trie) demonstrates a minimal way of organizing the basic child-trie api methods (as done in [`polkadot/runtime/crowdfund`](https://github.com/paritytech/polkadot/blob/master/runtime/src/crowdfund.rs)). It separates out the generation of the child trie id from the index with a runtime method `id_from_index`.
 
 ```rust, ignore
 pub fn id_from_index(index: ObjectCount) -> Vec<u8> {
