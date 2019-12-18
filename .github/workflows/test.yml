@@ -16,12 +16,12 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v1
 
-      # Caching steps taken from https://internals.rust-lang.org/t/evaluating-github-actions/11292/4
+      # Steps taken from https://github.com/actions/cache/blob/master/examples.md#rust---cargo
     - name: Cache cargo registry
       uses: actions/cache@v1
       with:
         path: ~/.cargo/registry
-        key: ${{ runner.os }}-cargo-registry #-${{ hashFiles('**/Cargo.lock') }}
+        key: ${{ runner.os }}-cargo-registry-${{ hashFiles('kitchen/Cargo.lock') }}
 
     # - name: Cache cargo index
     #   uses: actions/cache@v1
@@ -33,13 +33,10 @@ jobs:
       uses: actions/cache@v1
       with:
         path: target
-        key: ${{ runner.os }}-cargo-build-target #-${{ hashFiles('**/Cargo.lock') }}
+        key: ${{ runner.os }}-cargo-build-target-${{ hashFiles('kitchen/Cargo.lock') }}
 
     - name: Play around
-      run: |
-        echo "**: ${{ hashFiles('**') }}" &&
-        echo "Cargo.lock: ${{ hashFiles('Cargo.lock') }}" &&
-        echo "**/Cargo.lock: ${{ hashFiles('**/Cargo.lock') }}" &&
+      run: echo "${{ hashFiles('kitchen/Cargo.lock') }}"
 
     - name: Install toolchain
       uses: actions-rs/toolchain@v1
