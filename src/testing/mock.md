@@ -171,7 +171,7 @@ add_extra_genesis {
 }
 ```
 
-To use `new_test_ext` in a runtime test, we call the method and call [`execute_with()`](https://crates.parity.io/substrate_state_machine/struct.TestExternalities.html#method.execute_with) on the returned `runtime_io::TestExternalities`
+To use `new_test_ext` in a runtime test, we call the method and call [`execute_with`](https://substrate.dev/rustdocs/master/sp_state_machine/struct.TestExternalities.html#method.execute_with) on the returned `runtime_io::TestExternalities`
 
 ```rust, ignore
 #[test]
@@ -182,8 +182,7 @@ fn fake_test() {
 }
 ```
 
-[`execute_with()`](https://crates.parity.io/substrate_state_machine/struct.TestExternalities.html#method.execute_with)
-executes all logic expressed in the closure within the configured runtime test environment specified in `new_test_ext`
+`execute_with` executes all logic expressed in the closure within the configured runtime test environment specified in `new_test_ext`
 
 ## ExtBuilder <a name = "extbuilder"></a>
 *[`kitchen/modules/struct-storage`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/struct-storage)*
@@ -196,7 +195,7 @@ pub struct ExtBuilder;
 
 The behavior for constructing the test environment is contained the methods on the `ExtBuilder` unit structure. This fosters multiple levels of configuration depending on if the test requires a common default instance of the environment or a more specific edge case configuration. The latter is explored in more detail in [Custom Test Environment](./externalities.md).
 
-Like `new_test_ext`, the `build()` method on the `ExtBuilder` object returns an instance of [`TestExternalities`](https://crates.parity.io/sr_io/type.TestExternalities.html). [Externalities](https://crates.parity.io/substrate_externalities/index.html) are an abstraction that allows the runtime to access features of the outer node such as storage or offchain workers.
+Like `new_test_ext`, the `build()` method on the `ExtBuilder` object returns an instance of [`TestExternalities`](https://substrate.dev/rustdocs/master/sp_state_machine/struct.TestExternalities.html). [Externalities](https://substrate.dev/rustdocs/master/sp_externalities/index.html) are an abstraction that allows the runtime to access features of the outer node such as storage or offchain workers.
 
 In this case, create a mock storage from the default genesis configuration.
 

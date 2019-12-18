@@ -8,10 +8,9 @@ At the moment, the recipes onboards developers by focusing primarily on **module
 
 The **[kitchen](./kitchen)** contains code from the recipes in the context of modules/runtimes, while **[src](./src)** houses the commentary for related explanations and references (displayed at https://substrate.dev/recipes ). The structure of the `src` can be found in [src/SUMMARY.md](./src/SUMMARY.md).
 
-In practice, the recipes supplements existing resources by providing usage examples, demonstrating best practices in context, and extending simple samples/tutorials. Likewise, it is necessary to **frequently link to/from [reference docs](https://crates.parity.io/substrate_service/index.html?), [tutorials](https://github.com/substrate-developer-hub/), and [high-level docs](https://substrate.dev/)**.
+In practice, the recipes supplements existing resources by providing usage examples, demonstrating best practices in context, and extending simple samples/tutorials. Likewise, it is necessary to **frequently link to/from [reference docs](https://substrate.dev/rustdocs/master/), [tutorials](https://substrate.dev/tutorials/), and [high-level docs](https://substrate.dev/)**.
 
 The recipes do NOT cover:
-* module testing
 * rpc, cli, and other [`node/`](https://github.com/paritytech/substrate/tree/master/node) stuff outside the runtime
 * frontend UI
 * protocol engineering (consensus, networking, etc.)
@@ -24,7 +23,7 @@ If you're interested in adding new chapters for any of these sections, [create a
 
 2. (optional) Write an issue to discuss organizing the pattern into a written recipe in `recipes/src` or a code example in `recipes/kitchen`
 
-3. Fork the [recipes](https://github.com/substrate-developer-hub/recipes). Before making any changes, checkout another branch. 
+3. Fork the [recipes](https://github.com/substrate-developer-hub/recipes). Before making any changes, checkout another branch.
 
 4. (optional) To contribute a code example, place the code under the appropriate directory in [`recipes/kitchen`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen).  
 

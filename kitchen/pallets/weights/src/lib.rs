@@ -1,7 +1,7 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 // Transaction Weight Examples
-// https://crates.parity.io/sr_primitives/weights/index.html
+// https://substrate.dev/rustdocs/master/sp_runtime/weights/index.html
 use support::{
     ensure,
     decl_module,

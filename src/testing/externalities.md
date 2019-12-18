@@ -21,7 +21,7 @@ pub trait Trait: system::Trait {
 }
 ```
 
-The mock runtime environment extends the [previously discussed](./mock.md) `ExtBuilder` pattern with fields for each configurable constant and a default implementation. 
+The mock runtime environment extends the [previously discussed](./mock.md) `ExtBuilder` pattern with fields for each configurable constant and a default implementation.
 
 > This completes the [builder](https://youtu.be/geovSK3wMB8?t=729) pattern by defining a default configuraton to be used in a plurality of test cases while also providing setter methods to overwrite the values for each field.
 
@@ -62,7 +62,7 @@ impl ExtBuilder {
 }
 ```
 
-To allow for separate copies of the constant objects to be used in each thread, the variables assigned as constants are declared as [`thread_local!`](https://crates.parity.io/thread_local/index.html),
+To allow for separate copies of the constant objects to be used in each thread, the variables assigned as constants are declared as [`thread_local!`](https://substrate.dev/rustdocs/master/thread_local/index.html),
 
 ```rust, ignore
 thread_local! {

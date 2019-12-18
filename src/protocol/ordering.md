@@ -1,6 +1,6 @@
 # Transaction Ordering
 
-To customize the transaction ordering logic for a Substrate blockchain, use the [`TaggedTransactionQueue`](https://crates.parity.io/substrate_client/runtime_api/trait.TaggedTransactionQueue.html?search=) trait to specify the transaction queue logic and mitigate race conditions. To do so, implement the following function,
+To customize the transaction ordering logic for a Substrate blockchain, use the [`TaggedTransactionQueue`](https://substrate.dev/rustdocs/master/sp_transaction_pool/runtime_api/trait.TaggedTransactionQueue.html) trait to specify the transaction queue logic and mitigate race conditions. To do so, implement the following function,
 
 ```rust, ignore
 fn validate_transaction(
@@ -10,7 +10,7 @@ fn validate_transaction(
 ) -> Result<TransactionValidity, Error>
 ```
 
-This function signature reveals that, in the event of a successful call, the return type must be [`TransactionValidity`](https://crates.parity.io/sr_primitives/transaction_validity/enum.TransactionValidity.html). This enum has three variants
+This function signature reveals that, in the event of a successful call, the return type must be [`TransactionValidity`](https://substrate.dev/rustdocs/master/sp_runtime/transaction_validity/enum.TransactionValidity.html). This enum has three variants
 
 ```rust, ignore
 pub enum TransactionValidity {
@@ -62,7 +62,7 @@ impl runtime_api::TaggedTransactionQueue<Block> for Runtime {
                     let max_priority = utxo::Value::from(TransactionPriority::max_value());
                     priority = max_priority.min(input - output) as TransactionPriority;
                 }
-                
+
                 // Transaction is missing inputs
                 Ok(utxo::CheckInfo::MissingInputs(missing)) => {
                     // Since some referred UTXOs were not found in the storage yet,

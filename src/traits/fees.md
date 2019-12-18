@@ -63,7 +63,7 @@ insecure chain.
 
 ## Converting Weight To Fees
 
-In many cases converting weight to fees 1:1 will suffice and be accomplished with [`ConvertInto`](https://crates.parity.io/sr_primitives/traits/struct.ConvertInto.html). This approach is taken in the [node template](https://github.com/substrate-developer-hub/substrate-node-template/blob/43ee95347b6626580b1d9d554c3c8b77dc85bc01/runtime/src/lib.rs#L230) as well as the kitchen's own super runtime.
+In many cases converting weight to fees 1:1 will suffice and be accomplished with [`ConvertInto`](https://substrate.dev/rustdocs/master/sp_runtime/traits/struct.ConvertInto.html). This approach is taken in the [node template](https://github.com/substrate-developer-hub/substrate-node-template/blob/43ee95347b6626580b1d9d554c3c8b77dc85bc01/runtime/src/lib.rs#L230) as well as the kitchen's own super runtime.
 ```rust, ignore
 impl transaction_payment::Trait for Runtime {
 	// --snip--

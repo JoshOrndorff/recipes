@@ -7,13 +7,13 @@ Otherwise, see *[the WIP](https://github.com/substrate-developer-hub/recipes/tre
 
 ## Instantiate a Pot
 
-To instantiate a pool of funds, import [`ModuleId`](https://crates.parity.io/sr_primitives/struct.ModuleId.html) and [`AccountIdConversion`](https://crates.parity.io/sr_primitives/traits/trait.AccountIdConversion.html) from [`sr-primitives`](https://crates.parity.io/sr_primitives/index.html).
+To instantiate a pool of funds, import [`ModuleId`](https://substrate.dev/rustdocs/master/sp_runtime/struct.ModuleId.html) and [`AccountIdConversion`](https://substrate.dev/rustdocs/master/sp_runtime/traits/trait.AccountIdConversion.html) from [`sr-primitives`](https://substrate.dev/rustdocs/master/sp_runtime/index.html).
 
 ```rust, ignore
 use runtime_primitives::{ModuleId, traits::AccountIdConversion};
 ```
 
-With these imports, a `MODULE_ID` constant can be generated as an identifier for the pool of funds. This identifier can be converted into an `AccountId` with the `into_account()` method provided by the [`AccountIdConversion`](https://crates.parity.io/sr_primitives/traits/trait.AccountIdConversion.html) trait.
+With these imports, a `MODULE_ID` constant can be generated as an identifier for the pool of funds. This identifier can be converted into an `AccountId` with the `into_account()` method provided by the [`AccountIdConversion`](https://substrate.dev/rustdocs/master/sp_runtime/traits/trait.AccountIdConversion.html) trait.
 
 ```rust, ignore
 const MODULE_ID: ModuleId = ModuleId(*b"example ");
@@ -77,7 +77,7 @@ pub trait Trait: system::Trait {
 }
 ```
 
-This constant is invoked in the runtime method [`on_finalize`](https://crates.parity.io/sr_primitives/traits/trait.OnFinalize.html) to schedule spending every `T::SpendPeriod::get()` blocks.
+This constant is invoked in the runtime method [`on_finalize`](https://substrate.dev/rustdocs/master/sp_runtime/traits/trait.OnFinalize.html) to schedule spending every `T::SpendPeriod::get()` blocks.
 
 ```rust, ignore
 decl_module! {
