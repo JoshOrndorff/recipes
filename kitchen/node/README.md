@@ -41,7 +41,7 @@ All runtimes in the kitchen are compatible with this node. To swap just edit the
 
 ```toml
 # Edit these lines to point to a different runtime.
-# Your runtime must have the necessary runtime modules to support consensus (Babe, Grandpa, etc)
+# Your runtime must have the necessary pallets to support consensus (Babe, Grandpa, etc)
 runtime = { package = "super-runtime", path = "../runtimes/super-runtime" }
 runtime-genesis = { package = "super-genesis", path = "../runtimes/super-genesis" }
 ```

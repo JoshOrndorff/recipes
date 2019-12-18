@@ -1,7 +1,7 @@
 # Mock Runtime for Unit Testing
 *see [root](./index.md) for list of kitchen modules with unit test coverage*
 
-At the bottom of the runtime module, place unit tests in a separate rust module with a special compilation flag
+At the bottom of the pallet, place unit tests in a separate rust module with a special compilation flag
 
 ```rust, ignore
 #[cfg(test)]
@@ -10,7 +10,7 @@ mod tests {
 }
 ```
 
-To use the logic from the runtime module to be tested, bring `Module` and `Trait` into scope.
+To use the logic from the pallet under test, bring `Module` and `Trait` into scope.
 
 ```rust, ignore
 use crate::{Module, Trait};

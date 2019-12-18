@@ -53,4 +53,4 @@ decl_event!{
 }
 ```
 
-*It is also possible to declare an error type for runtime modules with [`decl_error`](https://substrate.dev/rustdocs/master/frame_support/macro.decl_error.html)*
+*It is also possible to declare an error type for pallets with [`decl_error`](https://substrate.dev/rustdocs/master/frame_support/macro.decl_error.html)*

@@ -76,5 +76,5 @@ This is the general pattern used throughout these recipes. We first talk about a
 
 In fact, the Kitchen Node and runtime structure has been refactored to cater for the recipe purpose. If you are interested to learn more about how to include your own module in a node runtime, we recommend you to go through the following two tutorials.
 
-* [Writing a Runtime Module in its Own Crate Tutorial](https://substrate.dev/docs/en/tutorials/creating-a-runtime-module)
-* [Adding `Contract` Module to Your Runtime Tutorial](https://substrate.dev/docs/en/tutorials/adding-a-module-to-your-runtime)
+* [Creating an External Pallet](https://substrate.dev/docs/en/next/tutorials/creating-a-runtime-module)
+* [Adding a Pallet to Your Runtime Tutorial](https://substrate.dev/docs/en/next/tutorials/adding-a-module-to-your-runtime)

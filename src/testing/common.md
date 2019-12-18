@@ -54,7 +54,7 @@ mod tests {
 }
 ```
 
-For more examples, see the substrate runtime modules -- `mock.rs` for mock runtime scaffolding and `test.rs` for unit tests.
+For more examples, see [Substrate's own pallets](https://github.com/paritytech/substrate/tree/master/frame) -- `mock.rs` for mock runtime scaffolding and `test.rs` for unit tests.
 
 ### Expected Changes to Storage are Triggered <a name = "storage"></a>
 
