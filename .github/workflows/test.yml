@@ -13,7 +13,8 @@ jobs:
     runs-on: ubuntu-18.04
 
     steps:
-    - uses: actions/checkout@v1
+    - name: Checkout Code
+      uses: actions/checkout@v1
 
       # Caching steps taken from https://internals.rust-lang.org/t/evaluating-github-actions/11292/4
     - name: Cache cargo registry
