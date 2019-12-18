@@ -11,7 +11,29 @@ on:
 jobs:
   build:
     runs-on: ubuntu-18.04
+
     steps:
+      uses: actions/checkout@v1
+
+      # Caching steps taken from https://internals.rust-lang.org/t/evaluating-github-actions/11292/4
+    - name: Cache cargo registry
+      uses: actions/cache@v1
+      with:
+        path: ~/.cargo/registry
+        key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+
+    - name: Cache cargo index
+      uses: actions/cache@v1
+      with:
+        path: ~/.cargo/git
+        key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
+
+    - name: Cache cargo build
+      uses: actions/cache@v1
+      with:
+        path: target
+        key: ${{ runner.os }}-cargo-build-target-${{ hashFiles('**/Cargo.lock')
+
     - name: Install toolchain
       uses: actions-rs/toolchain@v1
       with:
@@ -20,8 +42,9 @@ jobs:
         components: rustfmt
         target: wasm32-unknown-unknown
         default: true
-    - uses: actions/checkout@v1
+
     - name: Check Kitchen
       run: cd kitchen/modules && cargo check --all
+
     - name: Test Kitchen
       run: cd kitchen/modules && cargo test --all
