@@ -74,7 +74,7 @@ decl_module! {
             Self::deposit_event(RawEvent::MemberRemoved(old_member));
             Ok(())
         }
-        // also see `append_or_insert`, `append_or_put` in srml-elections/phragmen, democracy
+        // also see `append_or_insert`, `append_or_put` in pallet-elections/phragmen, democracy
     }
 }
 

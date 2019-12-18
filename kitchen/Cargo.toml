@@ -18,7 +18,7 @@ members = [
   "modules/simple-map",
   "modules/single-value",
   "modules/smpl-treasury",
-  # "modules/srml-panic",
+  # "modules/pallet-panic",
   "modules/storage-cache",
   "modules/struct-storage",
   "modules/vec-set",

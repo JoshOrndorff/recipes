@@ -5,7 +5,6 @@ multilingual = false
 src = "src"
 title = "Substrate Recipes"
 description = "Substrate runtime design patterns"
-
 [output.html]
 additional-js = [
   "analytics/load.js",

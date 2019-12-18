@@ -1,0 +1,31 @@
+name: mdBook
+
+on:
+  # Don't build on PRs; only build when they're merged
+  # pull_request:
+  #   branches:
+  #   - master
+  push:
+    branches:
+    - master
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Setup mdBook
+      uses: peaceiris/actions-mdbook@v1
+      with:
+        mdbook-version: '0.3.5'
+        # mdbook-version: 'latest'
+
+    - run: mdbook build
+
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v2
+      env:
+        PERSONAL_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+        PUBLISH_BRANCH: gh-pages
+        PUBLISH_DIR: ./book

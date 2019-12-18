@@ -91,13 +91,13 @@ This example demonstrates one pattern for expressing a shared account with subst
 const MODULE_ID: ModuleId = ModuleId(*b"example ");
 ```
 
-This type comes from `sr-primitives`, which our `Cargo.toml` aliases as `runtime_primitives` so the import is
+This type comes from `sp-runtime`, which our `Cargo.toml` aliases as `runtime_primitives` so the import is
 
 ```rust, ignore
 use runtime_primitives::ModuleId;
 ```
 
-To convert this identity into an `AccountId`, it is necessary to also import `AccountIdConversion` from `sr-primitives::traits::AccountIdConversion`.
+To convert this identity into an `AccountId`, it is necessary to also import `AccountIdConversion` from `sp-runtime::traits::AccountIdConversion`.
 
 ```rust, ignore
 use runtime_primitives::traits::AccountIdConversion;
