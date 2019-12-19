@@ -22,6 +22,6 @@ jobs:
         default: true
     - uses: actions/checkout@v1
     - name: Check Kitchen
-      run: cd kitchen/modules && cargo check --all
+      run: cd kitchen/pallets && cargo check --all
     - name: Test Kitchen
       run: cd kitchen/modules && cargo test --all
