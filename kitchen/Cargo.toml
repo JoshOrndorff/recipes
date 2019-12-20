@@ -12,7 +12,7 @@ members = [
   "pallets/hello-substrate",
   "pallets/linked-map",
   "pallets/lockable-currency",
-  "pallets/module-constant-config",
+  "pallets/constant-config",
   "pallets/reservable-currency",
   "pallets/simple-event",
   "pallets/simple-map",

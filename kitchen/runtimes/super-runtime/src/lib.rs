@@ -35,7 +35,7 @@ use check_membership;
 use double_map;
 use execution_schedule;
 use generic_event;
-use module_constant_config;
+use constant_config;
 use simple_event;
 use simple_map;
 use single_value;
@@ -316,7 +316,7 @@ parameter_types! {
     pub const ClearFrequency: u32 = 10;
 }
 
-impl module_constant_config::Trait for Runtime {
+impl constant_config::Trait for Runtime {
     type Event = Event;
     type MaxAddend = MaxAddend;
     type ClearFrequency = ClearFrequency;
@@ -392,7 +392,7 @@ construct_runtime!(
 		DoubleMap: double_map::{Module, Call, Storage, Event<T>},
 		LinkedMap: linked_map::{Module, Call, Storage, Event<T>},
 		StructStorage: struct_storage::{Module, Call, Storage, Event<T>},
-		ModuleConstantConfig: module_constant_config::{Module, Call, Storage, Event},
+		ConstantConfig: constant_config::{Module, Call, Storage, Event},
 		BasicToken: basic_token::{Module, Call, Storage, Event<T>},
 		CheckMembership: check_membership::{Module, Call, Storage, Event<T>},
 		ExecutionSchedule: execution_schedule::{Module, Call, Storage, Event<T>},

@@ -1,6 +1,6 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
-/// configurable module constants in substrate
+/// configurable pallet constants in substrate
 use runtime_primitives::traits::Zero;
 use support::traits::Get;
 use support::{decl_event, decl_module, decl_storage, dispatch::Result, ensure, StorageValue};

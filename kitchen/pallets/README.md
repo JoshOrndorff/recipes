@@ -13,7 +13,7 @@ procedural examples
 * [Cache Multiple Storage Calls](./storage-cache)
 * [Using Vectors for Managing Membership/Sets](./vec-set)
 * [Storing Structs in the Runtime](./struct-storage)
-* [Module Constant Configuration](./module-constant-config)
+* [Constant Configuration](./constant-config)
 
 examples with context
 * [Basic Token](./token)

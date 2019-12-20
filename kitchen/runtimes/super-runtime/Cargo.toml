@@ -17,7 +17,7 @@ simple-map = { package = "simple-map", path = "../../pallets/simple-map", defaul
 double-map = { package = "double-map", path = "../../pallets/double-map", default-features = false }
 linked-map = { package = "linked-map", path = "../../pallets/linked-map", default-features = false }
 struct-storage = { package = "struct-storage", path = "../../pallets/struct-storage", default-features = false }
-module-constant-config = { package = "module-constant-config", path = "../../pallets/module-constant-config", default-features = false }
+constant-config = { path = "../../pallets/constant-config", default-features = false }
 basic-token = { package = "basic-token", path = "../../pallets/basic-token", default-features = false }
 check-membership = { package = "check-membership", path = "../../pallets/check-membership", default-features = false }
 execution-schedule = { package = "execution-schedule", path = "../../pallets/execution-schedule", default-features = false }
@@ -201,18 +201,18 @@ std = [
 	"version/std",
 
 	# Recipes pallets
-	"simple-event/std",
-	"generic-event/std",
 	"adding-machine/std",
-	"single-value/std",
-	"vec-set/std",
-	"storage-cache/std",
-	"simple-map/std",
-	"double-map/std",
-	"linked-map/std",
-	"struct-storage/std",
-	"module-constant-config/std",
 	"basic-token/std",
 	"check-membership/std",
+	"constant-config/std",
+	"double-map/std",
 	"execution-schedule/std",
+	"generic-event/std",
+	"linked-map/std",
+	"simple-event/std",
+	"simple-map/std",
+	"single-value/std",
+	"storage-cache/std",
+	"struct-storage/std",
+	"vec-set/std",
 ]
