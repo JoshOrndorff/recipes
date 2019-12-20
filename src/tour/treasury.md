@@ -13,14 +13,14 @@ To instantiate a pool of funds, import [`ModuleId`](https://substrate.dev/rustdo
 use runtime_primitives::{ModuleId, traits::AccountIdConversion};
 ```
 
-With these imports, a `MODULE_ID` constant can be generated as an identifier for the pool of funds. This identifier can be converted into an `AccountId` with the `into_account()` method provided by the [`AccountIdConversion`](https://substrate.dev/rustdocs/master/sp_runtime/traits/trait.AccountIdConversion.html) trait.
+With these imports, a `PALLET_ID` constant can be generated as an identifier for the pool of funds. This identifier can be converted into an `AccountId` with the `into_account()` method provided by the [`AccountIdConversion`](https://substrate.dev/rustdocs/master/sp_runtime/traits/trait.AccountIdConversion.html) trait.
 
 ```rust, ignore
-const MODULE_ID: ModuleId = ModuleId(*b"example ");
+const PALLET_ID: ModuleId = ModuleId(*b"example ");
 
 impl<T: Trait> Module<T> {
     pub fn account_id() -> T::AccountId {
-		MODULE_ID.into_account()
+		PALLET_ID.into_account()
 	}
 
     fn pot() -> BalanceOf<T> {
@@ -68,7 +68,7 @@ NOTE: *Instead of relying on direct requests, the Treasury pallet coordinates sp
 
 ## Scheduling Spending
 
-To schedule spending like pallet_treasury, first add a configurable module constant in the `Trait`. This constant determines how often the spending queue is executed.
+To schedule spending like pallet_treasury, first add a configurable constant in the `Trait`. This constant determines how often the spending queue is executed.
 
 ```rust, ignore
 pub trait Trait: system::Trait {

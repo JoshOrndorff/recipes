@@ -1,6 +1,6 @@
 # Custom Test Environment
 
-[`execution-schedule`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/execution-schedule)'s `Trait` has three [module constants](../storage/constants.md). For this mock runtime, the `ExtBuilder` defines setters to enable the `TestExternalities` instance for each unit test to configure the local test runtime environment with different value assignments. For context, the `Trait` for [`execution-schedule`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/execution-schedule),
+[`execution-schedule`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/execution-schedule)'s configuration trait has three [configurable constants](../storage/constants.md). For this mock runtime, the `ExtBuilder` defines setters to enable the `TestExternalities` instance for each unit test to configure the local test runtime environment with different value assignments. For context, the `Trait` for [`execution-schedule`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/execution-schedule),
 
 ```rust, ignore
 // other type aliases
@@ -42,7 +42,7 @@ impl Default for ExtBuilder {
 }
 ```
 
-The setter methods for each configurable module constant are defined in the `ExtBuilder` methods. This allows each instance of `ExtBuilder` to set the module constant parameters for the unit test in question.
+The setter methods for each configurable constant are defined in the `ExtBuilder` methods. This allows each instance of `ExtBuilder` to set the constant parameters for the unit test in question.
 
 ```rust, ignore
 impl ExtBuilder {
@@ -72,7 +72,7 @@ thread_local! {
 }
 ```
 
-Each configurable constant type also maintains unit structs with implementation of `Get<T>` from the type `T` assigned to the module constant in the mock runtime implementation.
+Each configurable constant type also maintains unit structs with implementation of `Get<T>` from the type `T` assigned to the pallet constant in the mock runtime implementation.
 
 ```rust, ignore
 pub struct SignalQuota;
@@ -137,6 +137,6 @@ fn fake_test2() {
 }
 ```
 
-The test environment mocked above is actually used for the cursory and incomplete test `eras_change_correctly`. This test guided the structure of the if condition in `on_initialize` to periodically reset the `SignalBank` and increment the `Era`. *If interested in learning more about this module's TDD, read [more here](https://github.com/substrate-developer-hub/recipes/blob/master/src/testing/schedule.md).*
+The test environment mocked above is actually used for the cursory and incomplete test `eras_change_correctly`. This test guided the structure of the if condition in `on_initialize` to periodically reset the `SignalBank` and increment the `Era`. *If interested in learning more about this pallet's TDD, read [more here](https://github.com/substrate-developer-hub/recipes/blob/master/src/testing/schedule.md).*
 
 For more examples of the mock runtime scaffolding pattern used in [`execution-schedule`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/execution-schedule), see `balances/mock.rs` and `contract/tests.rs`.

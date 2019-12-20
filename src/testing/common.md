@@ -1,6 +1,6 @@
 # Common Tests
 
-To verify that our module code behaves as expected, it is necessary to check a few conditions with unit tests. Intuitively, the order of the testing may resemble the structure of runtime method development.
+To verify that our pallet code behaves as expected, it is necessary to check a few conditions with unit tests. Intuitively, the order of the testing may resemble the structure of runtime method development.
 1. Within each runtime method, declarative checks are made prior to any state change. These checks ensure that any required conditions are met before all changes occur; need to ensure that [panics panic](#panicspanic).
 2. Next, verify that the [expected storage changes occurred](#storage).
 3. Finally, check that the [expected events were emitted](#events) with correct values.
@@ -9,7 +9,7 @@ To verify that our module code behaves as expected, it is necessary to check a f
 
 The [`Verify First, Write Last`](https://substrate.dev/recipes/declarative/ensure.html) recipe encourages verifying certain conditions before changing storage values. In tests, it might be desirable to verify that invalid inputs return the expected error message.
 
-In [`kitchen/module/adding-machine`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/adding-machine), the runtime method `add` checks for overflow
+In [`kitchen/pallets/adding-machine`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/adding-machine), the runtime method `add` checks for overflow
 
 ```rust, ignore
 decl_module! {
@@ -58,7 +58,7 @@ For more examples, see [Substrate's own pallets](https://github.com/paritytech/s
 
 ### Expected Changes to Storage are Triggered <a name = "storage"></a>
 
-Changes to storage can be checked by direct calls to the storage values. The syntax is the same as it would be in the module's runtime methods
+Changes to storage can be checked by direct calls to the storage values. The syntax is the same as it would be in the pallet's runtime methods
 
 ```rust, ignore
 #[test]
@@ -72,7 +72,7 @@ fn last_value_updates() {
 }
 ```
 
-For context, the tested module's `decl_storage` block looks like
+For context, the tested pallets's `decl_storage` block looks like
 
 ```rust, ignore
 decl_storage! {
@@ -83,7 +83,7 @@ decl_storage! {
 }
 ```
 
-Updates to `UserValue` are tested in `last_value_updates` in [`kitchen/module/hello-substrate`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/hello-substrate).
+Updates to `UserValue` are tested in `last_value_updates` in [`kitchen/pallets/hello-substrate`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/hello-substrate).
 
 ### Expected Events are Emitted <a name = "events"></a>
 
@@ -93,7 +93,7 @@ The common way of testing expected event emission behavior requires importing `s
 use support::impl_outer_event;
 ```
 
-The `TestEvent` enum imports and uses the module's `Event` enum. The new local module `hello_substrate` re-exports the contents of the root to give a name for the current crate to `impl_outer_event!`.
+The `TestEvent` enum imports and uses the pallet's `Event` enum. The new local pallet, `hello_substrate`, re-exports the contents of the root to give a name for the current crate to `impl_outer_event!`.
 
 ```rust, ignore
 mod hello_substrate {
@@ -139,7 +139,7 @@ This check requires importing from `system`
 use system::{EventRecord, Phase};
 ```
 
-A more ergonomic way of testing whether a specific event was emitted might use the `System::events().iter()`. This pattern doesn't require the previous imports, but it does require importing `RawEvent` (or `Event`) from the module and `ensure_signed` from `system` to convert signed extrinsics to the underlying `AccountId`,
+A more ergonomic way of testing whether a specific event was emitted might use the `System::events().iter()`. This pattern doesn't require the previous imports, but it does require importing `RawEvent` (or `Event`) from the pallet and `ensure_signed` from `system` to convert signed extrinsics to the underlying `AccountId`,
 
 ```rust, ignore
 #[cfg(test)]

@@ -1,5 +1,5 @@
 # Mock Runtime for Unit Testing
-*see [root](./index.md) for list of kitchen modules with unit test coverage*
+*see [root](./index.md) for list of kitchen pallets with unit test coverage*
 
 At the bottom of the pallet, place unit tests in a separate rust module with a special compilation flag
 
@@ -25,7 +25,7 @@ pub struct TestRuntime;
 
 The `derive` macro attribute provides implementations of the `Clone + PartialEq + Eq + Debug` traits for the `TestRuntime` struct.
 
-The mock runtime also needs to implement the tested module's `Trait`. If it is unnecessary to test the module's `Event` type, the type can be set to `()`. See further below to test the module's `Event` enum.
+The mock runtime also needs to implement the tested pallet's `Trait`. If it is unnecessary to test the pallet's `Event` type, the type can be set to `()`. See further below to test the pallet's `Event` enum.
 
 ```rust, ignore
 impl Trait for TestRuntime {
@@ -33,17 +33,17 @@ impl Trait for TestRuntime {
 }
 ```
 
-Next, we create a new type that wraps the mock `TestRuntime` in the module's `Module`.
+Next, we create a new type that wraps the mock `TestRuntime` in the pallet's `Module`.
 
 ```rust, ignore
 pub type HelloSubstrate = Module<Runtime>;
 ```
 
-It may be helpful to read this as type aliasing our configured mock runtime to work with the module's `Module`, which is what is ultimately being tested.
+It may be helpful to read this as type aliasing our configured mock runtime to work with the pallet's `Module`, which is what is ultimately being tested.
 
 ## `impl system::Trait`
 
-In many cases, the module's `Trait` inherits `system::Trait` like
+In many cases, the pallet's `Trait` inherits `system::Trait` like
 
 ```rust, ignore
 pub trait Trait: system::Trait {
@@ -116,14 +116,14 @@ package = 'sr-io'
 rev = '6ae3b6c4ddc03d4cdb10bd1d417b95d20f4c1b6e'
 ```
 
-There is more than one pattern for building a mock runtime environment for testing module logic. Two patterns are presented below. The latter is generally favored for reasons discussed in [custom test environment](./externalities.md)
-* [`new_test_ext`](#newext) -  consolidates all the logic for building the environment to a single public method, but isn't relatively configurable (i.e. uses one set of module constants)
-* [`ExtBuilder`](#extbuilder) - define methods on the unit struct `ExtBuilder` to facilitate a flexible environment for tests (i.e. can reconfigure module constants in every test if necessary)
+There is more than one pattern for building a mock runtime environment for testing pallet logic. Two patterns are presented below. The latter is generally favored for reasons discussed in [custom test environment](./externalities.md)
+* [`new_test_ext`](#newext) -  consolidates all the logic for building the environment to a single public method, but isn't relatively configurable (i.e. uses one set of pallet constants)
+* [`ExtBuilder`](#extbuilder) - define methods on the unit struct `ExtBuilder` to facilitate a flexible environment for tests (i.e. can reconfigure pallet constants in every test if necessary)
 
 ## new_test_ext <a name = "newext"><a/>
 *[`kitchen/pallets/smpl-treasury`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/smpl-treasury)*
 
-In [`smpl-treasury`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/smpl-treasury), use the `balances::GenesisConfig` and the module's `Genesis::<TestRuntime>` to set the balances of the test accounts and establish council membership in the returned test environment.
+In [`smpl-treasury`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/smpl-treasury), use the `balances::GenesisConfig` and the pallet's `Genesis::<TestRuntime>` to set the balances of the test accounts and establish council membership in the returned test environment.
 
 ```rust, ignore
 pub fn new_test_ext() -> runtime_io::TestExternalities {

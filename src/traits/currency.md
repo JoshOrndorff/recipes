@@ -15,7 +15,7 @@ pub trait Trait: system::Trait {
 }
 ```
 
-Defining a module type with this trait bound allows the runtime to access the provided methods of [`Currency`](https://substrate.dev/rustdocs/master/frame_support/traits/trait.Currency.html). For example, it is straightforward to check the total issuance of the system:
+Defining an associated type with this trait bound allows this pallet to access the provided methods of [`Currency`](https://substrate.dev/rustdocs/master/frame_support/traits/trait.Currency.html). For example, it is straightforward to check the total issuance of the system:
 
 ```rust, ignore
 // in decl_module block
@@ -32,7 +32,7 @@ This new `BalanceOf<T>` type satisfies the type constraints of `Self::Balance` f
 
 ## Reservable Currency
 
-Substrate's [Treasury pallet](https://substrate.dev/rustdocs/master/pallet_treasury/index.html) uses the `Currency` type for bonding spending proposals. To reserve and unreserve balances for bonding, `treasury` uses the [`ReservableCurrency`](https://substrate.dev/rustdocs/master/frame_support/traits/trait.ReservableCurrency.html) trait. The import and module type declaration follow convention
+Substrate's [Treasury pallet](https://substrate.dev/rustdocs/master/pallet_treasury/index.html) uses the `Currency` type for bonding spending proposals. To reserve and unreserve balances for bonding, `treasury` uses the [`ReservableCurrency`](https://substrate.dev/rustdocs/master/frame_support/traits/trait.ReservableCurrency.html) trait. The import and associated type declaration follow convention
 
 ```rust, ignore
 use frame_support::traits::{Currency, ReservableCurrency};
