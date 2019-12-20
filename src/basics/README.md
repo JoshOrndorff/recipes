@@ -1,9 +1,9 @@
-# Module Fundamentals
-*[`kitchen/modules/hello-substrate`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/hello-substrate)*
+# Pallet Fundamentals
+*[`kitchen/pallets/hello-substrate`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/hello-substrate)*
 
-Clone the [substrate module template](https://github.com/substrate-developer-hub/substrate-module-template):
+Clone the [substrate pallet template](https://github.com/substrate-developer-hub/substrate-pallet-template):
 ```bash
-git clone https://github.com/substrate-developer-hub/substrate-module-template
+git clone https://github.com/substrate-developer-hub/substrate-pallet-template
 ```
 
 At the top of the `src/lib.rs` file, import the following from [`frame-support`](https://substrate.dev/rustdocs/master/frame_support/index.html):

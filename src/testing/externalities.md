@@ -1,6 +1,6 @@
 # Custom Test Environment
 
-[`execution-schedule`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/execution-schedule)'s `Trait` has three [module constants](../storage/constants.md). For this mock runtime, the `ExtBuilder` defines setters to enable the `TestExternalities` instance for each unit test to configure the local test runtime environment with different value assignments. For context, the `Trait` for [`execution-schedule`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/execution-schedule),
+[`execution-schedule`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/execution-schedule)'s `Trait` has three [module constants](../storage/constants.md). For this mock runtime, the `ExtBuilder` defines setters to enable the `TestExternalities` instance for each unit test to configure the local test runtime environment with different value assignments. For context, the `Trait` for [`execution-schedule`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/execution-schedule),
 
 ```rust, ignore
 // other type aliases
@@ -139,4 +139,4 @@ fn fake_test2() {
 
 The test environment mocked above is actually used for the cursory and incomplete test `eras_change_correctly`. This test guided the structure of the if condition in `on_initialize` to periodically reset the `SignalBank` and increment the `Era`. *If interested in learning more about this module's TDD, read [more here](https://github.com/substrate-developer-hub/recipes/blob/master/src/testing/schedule.md).*
 
-For more examples of the mock runtime scaffolding pattern used in [`execution-schedule`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/execution-schedule), see `balances/mock.rs` and `contract/tests.rs`.
+For more examples of the mock runtime scaffolding pattern used in [`execution-schedule`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/execution-schedule), see `balances/mock.rs` and `contract/tests.rs`.

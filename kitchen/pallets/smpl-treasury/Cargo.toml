@@ -11,7 +11,7 @@ std = [
     'support/std',
     'system/std',
     'balances/std',
-    'runtime-primitives/std',
+    'sp-runtime/std',
 ]
 
 [dependencies]
@@ -40,10 +40,9 @@ git = 'https://github.com/paritytech/substrate.git'
 package = 'pallet-balances'
 rev = '16817ab6b6b529ae32fc8151820c15dd1ed00291'
 
-[dependencies.runtime-primitives]
+[dependencies.sp-runtime]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
-package = 'sp-runtime'
 rev = '16817ab6b6b529ae32fc8151820c15dd1ed00291'
 
 [dependencies.rstd]

@@ -8,7 +8,7 @@ Check out **[awesome-substrate](https://github.com/substrate-developer-hub/aweso
 * [Substrate TCR Tutorial](https://github.com/substrate-developer-hub/substrate-tcr)
 * [Substrate Contracts Workshop](https://github.com/substrate-developer-hub/substrate-contracts-workshop)
 
-<!-- 
+<!--
 **Set Up**
 * [`paritytech/substrate-up`](https://github.com/paritytech/substrate-up) - Scripts for working with new Substrate projects
 
@@ -33,7 +33,6 @@ Check out **[awesome-substrate](https://github.com/substrate-developer-hub/aweso
 
 ## User Interface 🍦 <a name = "ui"></a>
 
-* [`paritytech/oo7`](https://github.com/paritytech/oo7) - The Bonds framework along with associated modules
 * [`paritytech/substrate-light-ui`](https://github.com/paritytech/substrate-light-ui) - User interface optimized for the Substrate light client
 * [`paritytech/apps`](https://github.com/paritytech/apps) - Basic Polkadot/Substrate UI for interacting with a node
 * [`paritytech/substrate-ui`](https://github.com/paritytech/substrate-ui) - Bondy Polkadot UI

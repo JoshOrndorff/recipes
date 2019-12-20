@@ -8,7 +8,7 @@ To use the default chain that comes pre-configured with Substrate Node, enter th
 substrate build-spec --chain=staging > ~/chainspec.json
 ```
 
-Now, it is simple to modify `~/chainspec.json` in your editor. There are a lot of individual fields for each module, and one very large one which contains the WASM code blob for this chain. The most intuitive field to edit is the block `period`. Change it to 10 (seconds):
+Now, it is simple to modify `~/chainspec.json` in your editor. There are a lot of individual fields for each pallet, and one very large one which contains the WASM code blob for this chain. The most intuitive field to edit is the block `period`. Change it to 10 (seconds):
 
 ```json
     "timestamp": {

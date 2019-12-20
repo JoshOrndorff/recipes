@@ -121,9 +121,9 @@ There is more than one pattern for building a mock runtime environment for testi
 * [`ExtBuilder`](#extbuilder) - define methods on the unit struct `ExtBuilder` to facilitate a flexible environment for tests (i.e. can reconfigure module constants in every test if necessary)
 
 ## new_test_ext <a name = "newext"><a/>
-*[`kitchen/modules/smpl-treasury`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/smpl-treasury)*
+*[`kitchen/pallets/smpl-treasury`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/smpl-treasury)*
 
-In [`smpl-treasury`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/smpl-treasury), use the `balances::GenesisConfig` and the module's `Genesis::<TestRuntime>` to set the balances of the test accounts and establish council membership in the returned test environment.
+In [`smpl-treasury`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/smpl-treasury), use the `balances::GenesisConfig` and the module's `Genesis::<TestRuntime>` to set the balances of the test accounts and establish council membership in the returned test environment.
 
 ```rust, ignore
 pub fn new_test_ext() -> runtime_io::TestExternalities {
@@ -185,7 +185,7 @@ fn fake_test() {
 `execute_with` executes all logic expressed in the closure within the configured runtime test environment specified in `new_test_ext`
 
 ## ExtBuilder <a name = "extbuilder"></a>
-*[`kitchen/modules/struct-storage`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/struct-storage)*
+*[`kitchen/pallets/struct-storage`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/struct-storage)*
 
 Another approach for a more flexible runtime test environment instantiates a unit struct `ExtBuilder`,
 

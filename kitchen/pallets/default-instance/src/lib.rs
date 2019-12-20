@@ -1,20 +1,20 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
-/// An example instantiable module (with default instance)
+/// An example instantiable pallet (with default instance)
 use support::{decl_event, decl_module, decl_storage, dispatch::Result, StorageValue};
 use system::{self, ensure_signed};
 
-// The module's configuration trait takes an instance as a type parameter. The instance type is
+// The pallet's configuration trait takes an instance as a type parameter. The instance type is
 // created by the `decl_storage!` macro below. Giving it a value of `DefaultInstance` allows us
-// to use the module in a runtime where only a single instance is desired without the extra syntax
-// that is otherwise needed to use instantiable modules.
+// to use the pallet in a runtime where only a single instance is desired without the extra syntax
+// that is otherwise needed to use instantiable pallets.
 pub trait Trait<I: Instance = DefaultInstance>: system::Trait {
     // The ubiquitous event type's From bound needs updated to support the instance.
     type Event: From<Event<Self, I>> + Into<<Self as system::Trait>::Event>;
 }
 
-// It is necessary for instantiable modules to call `decl_storage!` so
-// the instance type is created.
+// It is necessary for instantiable palletss to call `decl_storage!` eve nif no storage items
+// are used so the instance type is created.
 decl_storage! {
     // The storage trait also takes the Instance parameter
     trait Store for Module<T: Trait<I>, I: Instance=DefaultInstance> as LastCaller {
@@ -36,7 +36,7 @@ decl_event!(
 );
 
 decl_module! {
-    // The module struct also takes the instance parameter.
+    // The `Module` struct also takes the instance parameter.
     pub struct Module<T: Trait<I>, I: Instance = DefaultInstance> for enum Call where origin: T::Origin {
         fn deposit_event() = default;
 

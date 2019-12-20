@@ -1,5 +1,5 @@
 # Set Storage and Iteration
-*[`kitchen/modules/vec-set`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/vec-set)*
+*[`kitchen/pallets/vec-set`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/vec-set)*
 
 Storing a vector in the runtime can often be useful for managing groups and verifying membership. This recipe discusses common patterns encounted when storing vectors in runtime storage.
 

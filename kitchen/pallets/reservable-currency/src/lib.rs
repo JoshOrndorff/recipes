@@ -13,7 +13,7 @@ pub trait Trait: system::Trait + Sized {
     // overarching event type
     type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
 
-    /// Currency type for this module.
+    /// Currency type for this pallet.
     type Currency: Currency<Self::AccountId> + ReservableCurrency<Self::AccountId>;
 }
 

@@ -1,5 +1,5 @@
 # Lists: Maps vs Linked Maps
-*[`kitchen/modules/linked-map`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/linked-map)*
+*[`kitchen/pallets/linked-map`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/linked-map)*
 
 Substrate does not natively support a list type since it may encourage dangerous habits. Unless explicitly guarded against, a list will add unbounded `O(n)` complexity to an operation that will only charge `O(1)` fees ([Big O notation refresher](https://rob-bell.net/2009/06/a-beginners-guide-to-big-o-notation/)). This opens an economic attack vector on your chain.
 

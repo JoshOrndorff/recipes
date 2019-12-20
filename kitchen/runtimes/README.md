@@ -1,10 +1,10 @@
 # Runtime Configurations
 
-* [Super Runtime Configuration](./super-runtime/)
+* [Super Runtime](./super-runtime/) contains most of the recipe pallets. It is the default runtime in the kitchen node.
+* [Weight-Fee Runtime](./weight-fee-runtime/) contains examples of converting dispatch weights to actual payable fees.
 
 ### TODO
-- [ ] loosely coupled modules
-- [ ] larger examples of inter-module usage `=>` look at bkch's PR to know how many modules can be placed in the runtime
+- [ ] loosely coupled pallets
 
 **references**
 * https://github.com/JoshOrndorff/Marketplace

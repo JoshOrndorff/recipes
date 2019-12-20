@@ -16,7 +16,6 @@ cargo build --release
 > Refer to the following sections to:
 >
 >  * Learn more about [Substrate runtime](https://substrate.dev/docs/en/runtime/architecture-of-a-runtime)
->  * Learn more about [Substrate modules](https://substrate.dev/docs/en/runtime/substrate-runtime-module-library)
 
 Once the compilation is completed, you can first purge any existing blockchain data (useful to start your node from a clean state in future) and then start the node.
 

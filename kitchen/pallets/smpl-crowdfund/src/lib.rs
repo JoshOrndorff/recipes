@@ -4,7 +4,7 @@
 use parity_scale_codec::{Decode, Encode};
 use primitives::{Blake2Hasher, Hasher};
 use rstd::prelude::*;
-use runtime_primitives::{
+use sp_runtime::{
     traits::{AccountIdConversion, Saturating, Zero},
     ModuleId,
 };
@@ -19,7 +19,7 @@ use support::{
 };
 use system::ensure_signed;
 
-const MODULE_ID: ModuleId = ModuleId(*b"ex/cfund");
+const PALLET_ID: ModuleId = ModuleId(*b"ex/cfund");
 
 type BalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::Balance;
 type NegativeImbalanceOf<T> =
@@ -230,7 +230,7 @@ impl<T: Trait> Module<T> {
     /// This actually does computation. If you need to keep using it, then make sure you cache the
     /// value and only call this once.
     pub fn fund_account_id(index: FundIndex) -> T::AccountId {
-        MODULE_ID.into_sub_account(index)
+        PALLET_ID.into_sub_account(index)
     }
 
     pub fn id_from_index(index: FundIndex) -> Vec<u8> {

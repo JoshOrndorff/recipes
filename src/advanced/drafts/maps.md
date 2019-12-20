@@ -19,7 +19,7 @@ The first iteration of Molochameleon actually used a `type ProposalIndex = u32` 
 
 So why does Treasury use indexes? Well sometimes we want to closely limit proposal throughput instead of optimzing protocol flexibility.
 
-Also, using indexes may yield a more readable implementation. Readability and maintainability should always be regarded as key criteria when designing your module. This isn't some undergraduate CS project that you're hacking together to just run successfully; mistakes are expensive and ergonomic code is a necessity for careful audits.
+Also, using indexes may yield a more readable implementation. Readability and maintainability should always be regarded as key criteria when designing your pallet. This isn't some undergraduate CS project that you're hacking together to just run successfully; mistakes are expensive and ergonomic code is a necessity for careful audits.
 
 ## Migrating to Using Hashes as Unique Identifiers
 

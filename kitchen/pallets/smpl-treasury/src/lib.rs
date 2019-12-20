@@ -3,7 +3,7 @@
 
 use parity_scale_codec::{Decode, Encode};
 use rstd::prelude::*;
-use runtime_primitives::{
+use sp_runtime::{
     traits::{AccountIdConversion, CheckedAdd, CheckedSub, Zero},
     ModuleId, RuntimeDebug,
 };
@@ -14,7 +14,7 @@ use support::{decl_event, decl_module, decl_storage, dispatch::Result, ensure, S
 use system::{self, ensure_signed};
 
 type BalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::Balance;
-const MODULE_ID: ModuleId = ModuleId(*b"example ");
+const PALLET_ID: ModuleId = ModuleId(*b"example ");
 
 pub trait Trait: system::Trait {
     /// The overarching event type.
@@ -209,7 +209,7 @@ impl<T: Trait> Module<T> {
 
     /// The account ID of the Treasury's Council
     pub fn account_id() -> T::AccountId {
-        MODULE_ID.into_account()
+        PALLET_ID.into_account()
     }
 
     /// The balance of the Treasury's Council's pot of taxed funds
@@ -269,11 +269,11 @@ impl<T: Trait> Module<T> {
 
 #[cfg(test)]
 mod tests {
-    use crate::*; //{Module, Trait, RawEvent, SpendRequest, GenesisConfig};
+    use crate::*;
     use balances;
     use primitives::H256;
     use runtime_io;
-    use runtime_primitives::{
+    use sp_runtime::{
         testing::Header,
         traits::{BlakeTwo256, IdentityLookup, OnFinalize},
         Perbill,

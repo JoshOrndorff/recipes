@@ -1,6 +1,6 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
-/// Event uses types from the module trait
+/// Event uses types from the pallet's configuration trait
 use support::{decl_event, decl_module, dispatch::Result};
 use system::ensure_signed;
 

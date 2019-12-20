@@ -1,6 +1,5 @@
 // imbalance rustdocs: https://substrate.dev/rustdocs/master/frame_support/traits/trait.Imbalance.html
-// WARNING: never use this code in a module
-// (for demonstration/teaching purposes only)
+// WARNING: never use this code in production (for demonstration/teaching purposes only)
 // it only checks for signed extrinsics to enable arbitrary minting/slashing!!!
 use support::traits::{
 	Currency, OnUnbalanced, Imbalance, ReservableCurrency,
@@ -17,7 +16,7 @@ pub trait Trait: system::Trait + Sized {
     // overarching event type
     type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
 
-    /// Currency type for this module.
+    /// Currency type for this pallet.
     type Currency: Currency<Self::AccountId> + ReservableCurrency<Self::AccountId>;
 
     /// Handler for the unbalanced increment when rewarding (minting rewards)

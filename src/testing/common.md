@@ -9,7 +9,7 @@ To verify that our module code behaves as expected, it is necessary to check a f
 
 The [`Verify First, Write Last`](https://substrate.dev/recipes/declarative/ensure.html) recipe encourages verifying certain conditions before changing storage values. In tests, it might be desirable to verify that invalid inputs return the expected error message.
 
-In [`kitchen/module/adding-machine`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/adding-machine), the runtime method `add` checks for overflow
+In [`kitchen/module/adding-machine`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/adding-machine), the runtime method `add` checks for overflow
 
 ```rust, ignore
 decl_module! {
@@ -83,7 +83,7 @@ decl_storage! {
 }
 ```
 
-Updates to `UserValue` are tested in `last_value_updates` in [`kitchen/module/hello-substrate`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/hello-substrate).
+Updates to `UserValue` are tested in `last_value_updates` in [`kitchen/module/hello-substrate`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/hello-substrate).
 
 ### Expected Events are Emitted <a name = "events"></a>
 

@@ -1,12 +1,12 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 use balances;
 /// Nested Structs
-use runtime_primitives::{traits::SimpleArithmetic, RuntimeDebug};
+use runtime_primitives::RuntimeDebug;
 use support::{
     codec::{Decode, Encode},
     decl_event, decl_module, decl_storage,
     dispatch::Result,
-    StorageMap, StorageValue,
+    StorageMap,
 };
 use system::{self, ensure_signed};
 
@@ -39,7 +39,7 @@ decl_event! (
     where
         <T as system::Trait>::Hash,
         <T as balances::Trait>::Balance
-    {   
+    {
         // fields of the new inner thing
         NewInnerThing(u32, Hash, Balance),
         // fields of the super_number and the inner_thing fields
@@ -108,7 +108,7 @@ mod tests {
     use runtime_io;
     use runtime_primitives::{
         testing::Header,
-        traits::{BlakeTwo256, IdentityLookup},
+        traits::{BlakeTwo256, IdentityLookup, SimpleArithmetic},
         Perbill,
     };
     use support::{assert_err, impl_outer_event, impl_outer_origin, parameter_types, traits::Get};

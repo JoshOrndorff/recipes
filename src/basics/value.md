@@ -1,7 +1,7 @@
 # Single Value
-*[`kitchen/modules/single-value`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/single-value)*
+*[`kitchen/pallets/single-value`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/single-value)*
 
-Within a specific module, a single value (`u32` type) is stored in the runtime using the [`decl_storage`](https://wiki.parity.io/decl_storage) macro
+Within a specific pallet, a single value (`u32` type) is stored in the runtime using the [`decl_storage`](https://wiki.parity.io/decl_storage) macro
 
 ```rust, ignore
 decl_storage! {
@@ -75,4 +75,4 @@ The requirements for setting the `AccountId` stored in `MyAccount` can be specif
 <MyAccount<T>>::put(some_account_id);
 ```
 
-*The full example in [`kitchen/modules/single-value`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/single-value) emits events to also notify off-chain processes of when values were `set` and `got`.*
+*The full example in [`kitchen/pallets/single-value`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/single-value) emits events to also notify off-chain processes of when values were `set` and `got`.*

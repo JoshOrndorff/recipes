@@ -1,5 +1,5 @@
 ## Permissioned Methods
-*[kitchen/modules/check-membership](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/check-membership)*
+*[kitchen/pallets/check-membership](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/check-membership)*
 
 It is often useful to designate some functions as permissioned and, therefore, accessible only to a defined group. In this case, we check that the transaction that invokes the runtime function is signed before verifying that the signature corresponds to a member of the permissioned set.
 

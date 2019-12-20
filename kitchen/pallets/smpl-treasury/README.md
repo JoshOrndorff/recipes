@@ -1,12 +1,12 @@
-# treasury module
+# Treasury Pallet
 
-This `smpl-treasury` started as a simpler version of the `treasury` module, but it has since veered from the treasury's design. While it demonstrates similar patterns, the `smpl-treasury` defines a module in which the users that would like to transfer funds must call the runtime method `request_transfer`:
+This `smpl-treasury` started as a simpler version of the Substrate's own [`treasury` pallet](https://github.com/paritytech/substrate/tree/master/frame/treasury), but it has since veered from the treasury's design. While it demonstrates similar patterns, in `smpl-treasury`, users that would like to transfer funds must call the runtime method `request_transfer`:
 
 ```rust, ignore
 // in decl_module {}
 fn request_transfer(
-    origin, 
-    dest: T::AccountId, 
+    origin,
+    dest: T::AccountId,
     amount: BalanceOf<T>
 ) -> Result {
     let sender = ensure_signed(origin)?;
@@ -14,7 +14,7 @@ fn request_transfer(
     let bond = T::Tax::get();
     T::Currency::reserve(&sender, bond)
         .map_err(|_| "Must be able to pay tax to make transfer")?;
-    
+
     let requested_spend = SpendRequest {
         from: sender.clone(),
         to: dest.clone(),
@@ -47,7 +47,7 @@ pub struct SpendRequest<AccountId, Balance> {
 }
 ```
 
-In essence, this runtime queues requests before batching execution every `UserSpend` number of blocks. `UserSpend` is a [configurable module constant](https://substrate.dev/recipes/storage/constants.html). It is used in [`on_finalize`](https://github.com/substrate-developer-hub/recipes/blob/master/src/tour/schedule.md)
+In essence, this pallet queues requests before batching execution every `UserSpend` number of blocks. `UserSpend` is a [configurable constant](https://substrate.dev/recipes/storage/constants.html). It is used in [`on_finalize`](https://github.com/substrate-developer-hub/recipes/blob/master/src/tour/schedule.md)
 
 ```rust, ignore
 fn on_finalize(n: T::BlockNumber) {
@@ -73,7 +73,7 @@ T::Currency::reserve(&sender, bond)
     .map_err(|_| "Must be able to pay tax to make transfer")?;
 ```
 
-It is transferred to the module's pot when the transfer is executed.
+It is transferred to the pallet's pot when the transfer is executed.
 
 ```rust, ignore
 let _ = T::Currency::transfer(&request.from, &request.to, request.amount, AllowDeath);
@@ -85,40 +85,34 @@ T::Currency::unreserve(&request.from, tax_to_pay);
 let _ = T::Currency::transfer(&request.from, &Self::account_id(), tax_to_pay, AllowDeath);
 ```
 
-This example demonstrates one pattern for expressing a shared account with substrate. The `ModuleId` is a constant.
+This example demonstrates one pattern for expressing a shared account with substrate. The `PALLET_ID` is a constant.
 
 ```rust, ignore
-const MODULE_ID: ModuleId = ModuleId(*b"example ");
+const PALLET_ID: ModuleId = ModuleId(*b"example ");
 ```
 
-This type comes from `sp-runtime`, which our `Cargo.toml` aliases as `runtime_primitives` so the import is
+This type comes from `sp-runtime` so the import is
 
 ```rust, ignore
 use runtime_primitives::ModuleId;
 ```
 
-To convert this identity into an `AccountId`, it is necessary to also import `AccountIdConversion` from `sp-runtime::traits::AccountIdConversion`.
-
-```rust, ignore
-use runtime_primitives::traits::AccountIdConversion;
-```
-
-This is used to access the `ModuleId` associated with the module-driven governance with the `into_account` method
+To convert this identity into an `AccountId`, it is necessary to also import `AccountIdConversion` from `sp-runtime::traits::AccountIdConversion`. This is used to access the `ModuleId` associated with the module-driven governance with the `into_account` method
 
 ```rust, ignore
 // in impl<T: Trait> Module<T>
 pub fn account_id() -> T::AccountId {
-    MODULE_ID.into_account()
+    PALLET_ID.into_account()
 }
 ```
 
-In our module, a uniform `Tax` is sent to the `ModuleId` for every `SpendRequest` executed. With `ModuleId` identifier, it is straightforward to define runtime logic to govern scheduled spending from this account as well.
+In our pallet, a uniform `Tax` is sent to the `PALLET_ID` for every `SpendRequest` executed. With `PALLET_ID` identifier, it is straightforward to define runtime logic to govern scheduled spending from this account as well.
 
-In our example, there is a `Council` storage item which is a list of `AccountId`s that are permitted to propose `Proposal`s for the treasury's spending. 
+In our example, there is a `Council` storage item which is a list of `AccountId`s that are permitted to propose `Proposal`s for the treasury's spending.
 
-**In its current state, this runtime is terrifyingly insecure, but we can learn a lot by improving it, one step at a time.**
+**In its current state, this pallet is terrifyingly insecure, but we can learn a lot by improving it, one step at a time.**
 
-It allows every member to submit `Proposal`s for the treasury's spending. To vote on `Proposal`s, members need to call the `stupid_vote` runtime method with the `AccountId` of the member that made the `Proposal`. 
+It allows every member to submit `Proposal`s for the treasury's spending. To vote on `Proposal`s, members need to call the `stupid_vote` runtime method with the `AccountId` of the member that made the `Proposal`.
 
 ```rust, ignore
 fn stupid_vote(
@@ -148,7 +142,7 @@ In `ProposalPeriod`, members should be able to make proposals. Each member shoul
 
 During the transition between the `ProposalPeriod` and `VotePeriod`, it would be convenient if duplicate proposals or the pointing construct described above could be merged to minimize required on-chain state bloat and complexity.
 
-In `VotePeriod`, each member should be able to make only one vote. There should be a configurable role regarding whether or not a candidate can vote for their proposal. Each member should be able to change their vote as many times as requested before the end of the `VotePeriod`. 
+In `VotePeriod`, each member should be able to make only one vote. There should be a configurable role regarding whether or not a candidate can vote for their proposal. Each member should be able to change their vote as many times as requested before the end of the `VotePeriod`.
 
 ## Other Possible Extensions
 * design a system for electing a rotating council instead of the static vector of `AccountId`s; this would be a better model of how representative democracy is supposed to work for funding public infrastructure

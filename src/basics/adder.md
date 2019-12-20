@@ -1,7 +1,7 @@
 # Adding Machine
-*[`kitchen/modules/adding-machine`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/adding-machine)*
+*[`kitchen/pallets/adding-machine`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/adding-machine)*
 
-A simple adding machine checks for overflow and emits an event with the result, without using storage. In the module file,
+A simple adding machine checks for overflow and emits an event with the result, without using storage. In the pallet's `lib.rs` file,
 
 ```rust, ignore
 pub trait Trait: system::Trait {
@@ -46,7 +46,7 @@ In some cases, the `where` clause can be used to specify type aliasing for more 
 
 ```rust, ignore
 decl_event!(
-    pub enum Event<T> 
+    pub enum Event<T>
     where
         Balance = BalanceOf<T>,
         <T as system::Trait>::AccountId,

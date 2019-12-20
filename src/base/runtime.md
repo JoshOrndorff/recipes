@@ -3,4 +3,4 @@
 
 when using FRAME, the runtime gives context to the pallets. Indeed, each pallet is configured in the runtime with explicit assignment of the types declared in its [Configuration `Trait`](https://substrate.dev/rustdocs/master/pallet_example/trait.Trait.html).
 
-Each runtime in the kitchen demonstrates configuring and composing modules in this way.
+Each runtime in the kitchen demonstrates configuring and composing pallets in this way.

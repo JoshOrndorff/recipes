@@ -1,9 +1,9 @@
 # smpl-treasury
-*[`kitchen/modules/smpl-treasury`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/smpl-treasury)*
+*[`kitchen/pallets/smpl-treasury`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/smpl-treasury)*
 
 > the links don't work and the code is outdated but I'd like to keep some of the wording -- it is concise and still accurate
 
-Otherwise, see *[the WIP](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/smpl-treasury/README.md)*
+Otherwise, see *[the WIP](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/smpl-treasury/README.md)*
 
 ## Instantiate a Pot
 

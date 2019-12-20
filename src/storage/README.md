@@ -13,7 +13,7 @@ The previous *[single-value storage recipe](../basics/value.md)* showed how a si
 - [storing sets, checking membership, and iteration](./iterate.md)
 - [ordered lists with basic maps and linked maps](./enumerated.md)
 - [efficient subgroup removal by key prefix with double maps](./double.md)
-- [configurable module constants](./constants.md)
+- [configurable pallet constants](./constants.md)
 
 *in-progress*
 - [cheap inclusion proofs with child tries](./childtries.md)

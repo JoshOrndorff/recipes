@@ -1,5 +1,5 @@
 ## Currency Types
-*[`kitchen/pallets/lockable-currency`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/lockable-currency), [`kitchen/pallets/reservable-currency`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/reservable-currency), [`kitchen/pallets/currency-imbalances`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/currency-imbalances)*
+*[`kitchen/pallets/lockable-currency`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/lockable-currency), [`kitchen/pallets/reservable-currency`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/reservable-currency), [`kitchen/pallets/currency-imbalances`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/currency-imbalances)*
 
 To use a balances type in the runtime, import the [`Currency`](https://substrate.dev/rustdocs/master/frame_support/traits/trait.Currency.html) trait from `frame_support`.
 

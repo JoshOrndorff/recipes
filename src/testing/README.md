@@ -11,16 +11,16 @@ There's also more rigorous testing systems ranging from mocking and fuzzing to f
 ## Kitchen Modules with Unit Tests
 
 The following modules in the [`kitchen`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/) have partial unit test coverage
-- [`struct-storage`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/struct-storage)
-- [`adding-machine`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/adding-machine)
-- [`simple-event`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/simple-event)
-- [`generic-event`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/generic-event)
-- [`single-value`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/single-value)
-- [`simple-map`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/simple-map)
-- [`double-map`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/double-map)
-- [`storage-cache`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/storage-cache)
-- [`vec-set`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/vec-set)
-- [`module-constant-config`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/module-constant-config)
+- [`struct-storage`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/struct-storage)
+- [`adding-machine`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/adding-machine)
+- [`simple-event`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/simple-event)
+- [`generic-event`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/generic-event)
+- [`single-value`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/single-value)
+- [`simple-map`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/simple-map)
+- [`double-map`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/double-map)
+- [`storage-cache`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/storage-cache)
+- [`vec-set`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/vec-set)
+- [`module-constant-config`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/module-constant-config)
 
 ### Cooking in the Kitchen (Running Tests)
 
@@ -33,13 +33,13 @@ $ git clone https://github.com/substrate-developer-hub/recipes
 Enter the path to the module to be tested
 
 ```bash
-recipes git:(some-branch) ✗ cd kitchen/modules/<some-module>
+recipes git:(some-branch) ✗ cd kitchen/pallets/<some-module>
 ```
 
 For example, to test `module-constant-config`, used in [Configurable Constants](https://substrate.dev/recipes/storage/constants.html), 
 
 ```bash
-recipes git:(some-branch) ✗ cd kitchen/modules/module-constant-config/
+recipes git:(some-branch) ✗ cd kitchen/pallets/module-constant-config/
 module-constant-config git:(some-branch) ✗ cargo test
 ```
 
@@ -49,5 +49,5 @@ Writing unit tests is one of the best ways to understand the code. Although unit
 
 Over the past few weeks, testing has driven a significant rewrite of the [kitchen](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/). This increased focus on testing and benchmarking will continue over the next few weeks in the *[sauce](https://github.com/substrate-developer-hub/recipes/tree/master/src/tour)*, starting with
 
-- [`execution-schedule`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/execution-schedule)
-- [`smpl-treasury`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/smpl-treasury)
+- [`execution-schedule`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/execution-schedule)
+- [`smpl-treasury`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/smpl-treasury)
