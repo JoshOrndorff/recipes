@@ -35,14 +35,14 @@ The `runtime` folder contains two folders, `super-genesis` for specifying how th
 ```TOML
 # -- snip --
 
-# `simple-event` module is specified as a relative path to the `modules` folder
+# `simple-event` pallet is specified as a relative path to the `pallets` folder
 [dependencies]
-simple-event = { package = "simple-event", path = "../../modules/simple-event", default_features = false }
+simple-event = { package = "simple-event", path = "../../pallets/simple-event", default_features = false }
 
 # -- snip --
 ```
 
-This is where the node runtime includes additional module `simple-event` written in this recipe. The module is then included into the runtime by:
+This is where the node runtime includes additional pallet `simple-event` written in this recipe. The pallet is then included into the runtime by:
 
 **`kitchen/runtimes/super-runtime/src/lib.rs`**
 
@@ -68,9 +68,9 @@ construct_runtime!(
 );
 ```
 
-Finally, you can see how the `simple-event` module is specified in `kitchen/modules/simple-event/src/lib.rs`.
+Finally, you can see how the `simple-event` pallet is specified in `kitchen/pallets/simple-event/src/lib.rs`.
 
-This is the general pattern used throughout these recipes. We first talk about a new piece of module code stored in `kitchen/modules/<module-name>/src/lib.rs`. The module is then included into the runtime by adding the module name and relative path in `kitchen/runtimes/super-runtime/Cargo.toml` (if not yet added) and updating `kitchen/runtimes/super-runtime/src/lib.rs`.
+This is the general pattern used throughout these recipes. We first talk about a new piece of pallet code stored in `kitchen/pallets/<pallet-name>/src/lib.rs`. The pallet is then included into the runtime by adding the pallet name and relative path in `kitchen/runtimes/super-runtime/Cargo.toml` (if not yet added) and updating `kitchen/runtimes/super-runtime/src/lib.rs`.
 
 ## Learn More
 

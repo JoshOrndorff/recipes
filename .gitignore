@@ -6,5 +6,5 @@ book
 
 # Rust directories
 **/*/target
-kitchen/modules/*/Cargo.lock
+kitchen/pallets/*/Cargo.lock
 kitchen/runtimes/*/Cargo.lock

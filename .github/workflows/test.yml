@@ -48,4 +48,4 @@ jobs:
       run: cd kitchen && cargo check --all
 
     - name: Test Kitchen
-      run: cd kitchen/modules && cargo test --all
+      run: cd kitchen/pallets && cargo test --all

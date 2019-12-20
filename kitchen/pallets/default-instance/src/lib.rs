@@ -7,13 +7,13 @@ use system::{self, ensure_signed};
 // The module's configuration trait takes an instance as a type parameter. The instance type is
 // created by the `decl_storage!` macro below. Giving it a value of `DefaultInstance` allows us
 // to use the module in a runtime where only a single instance is desired without the extra syntax
-// that is otherwise needed to use instantiable modules.
+// that is otherwise needed to use instantiable pallets.
 pub trait Trait<I: Instance = DefaultInstance>: system::Trait {
     // The ubiquitous event type's From bound needs updated to support the instance.
     type Event: From<Event<Self, I>> + Into<<Self as system::Trait>::Event>;
 }
 
-// It is necessary for instantiable modules to call `decl_storage!` so
+// It is necessary for instantiable pallets to call `decl_storage!` so
 // the instance type is created.
 decl_storage! {
     // The storage trait also takes the Instance parameter
