@@ -2,13 +2,13 @@
 //! - example of using `child-trie` in practice
 //! - designed to be a more simple version of polkadot/runtime/crowdfund
 use parity_scale_codec::{Decode, Encode};
-use primitives::{Blake2Hasher, Hasher};
+use sp_core::{Blake2Hasher, Hasher};
 use rstd::prelude::*;
 use sp_runtime::{
     traits::{AccountIdConversion, Saturating, Zero},
     ModuleId,
 };
-use substrate_primitives::storage::well_known_keys::CHILD_STORAGE_KEY_PREFIX;
+use sp_storage::well_known_keys::CHILD_STORAGE_KEY_PREFIX;
 use support::{
     decl_event, decl_module, decl_storage, ensure,
     storage::child,
