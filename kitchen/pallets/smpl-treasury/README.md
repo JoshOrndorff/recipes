@@ -94,7 +94,7 @@ const PALLET_ID: ModuleId = ModuleId(*b"example ");
 This type comes from `sp-runtime` so the import is
 
 ```rust, ignore
-use runtime_primitives::ModuleId;
+use sp_runtime::ModuleId;
 ```
 
 To convert this identity into an `AccountId`, it is necessary to also import `AccountIdConversion` from `sp-runtime::traits::AccountIdConversion`. This is used to access the `ModuleId` associated with the module-driven governance with the `into_account` method
