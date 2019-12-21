@@ -18,4 +18,4 @@ Not all code is covered, and not all covered code is covered well, but we have a
 
 ## Using Recipes in External Projects
 
-The pallets and runtimes provided here are reay to be used in other Substrate-based blockchains. The big caveat is that you must use the same upstream Substrate version throughout the project. Check which version the recipes uses in any of the `Cargo.toml` files. This situation should improve when Substrate begins releasing on crates.io
+The pallets and runtimes provided here are ready to be used in other Substrate-based blockchains. The big caveat is that you must use the same upstream Substrate version throughout the project. Check which version the recipes uses in any of the `Cargo.toml` files. This situation should improve when Substrate begins releasing on crates.io
