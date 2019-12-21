@@ -31,7 +31,7 @@ If you're interested in adding new chapters for any of these sections, [create a
 
 There should be high coverage of the `kitchen` code in the written content (in `src`), but this is not necessarily enforced.
 
-### Cooking Palletss
+### Cooking Pallets
 
 There is not yet strict enforcement of the [Rust in Substrate coding style](https://wiki.parity.io/Substrate-Style-Guide), but it is highly encouraged to wrap lines at 120 characters a line (or less) for improving reviewer experience on github.
 
