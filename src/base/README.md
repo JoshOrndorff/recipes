@@ -23,4 +23,4 @@ As you read through the book, practice compiling and testing recipes in [`recipe
 
 It is useful to recognize that [coding is all about abstraction](https://youtu.be/05H4YsyPA-U?t=1789). To accelerate your progress, I recommend skimming the patterns in this book, composing them into interesting projects, and building your own recipes.
 
-Reach out for guidance on [Stack Overflow](https://stackoverflow.com/questions/tagged/substrate) or in  the [Substrate Technical Riot channel](https://riot.im/app/#/room/#substrate-technical:matrix.org).
+Reach out for guidance on [Stack Overflow](https://stackoverflow.com/questions/tagged/substrate) or in the [Substrate Technical Riot channel](https://riot.im/app/#/room/#substrate-technical:matrix.org).
