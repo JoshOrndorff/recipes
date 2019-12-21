@@ -1,7 +1,7 @@
 # Kitchen
 [![](https://tokei.rs/b1/github/substrate-developer-hub/recipes)](https://github.com/substrate-developer-hub/recipes)
 
-The kitchen contains full working code examples from each recipe and further examples on some topics.
+The kitchen contains full working code examples, ready for *cooking*! Each topic discussed in the book has a recipe and there are further examples on some topics.
 
 There are three sections:
 * [Pallets](./pallets/README.md): individual pallets, for use in FRAME runtimes.
