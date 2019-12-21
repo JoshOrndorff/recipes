@@ -36,7 +36,7 @@ Parity's hash functions operate on a bit digest so we need to first Encode our s
 **List Variants**
 * applicants can only have one application at a time
 
-When deciding on which fields of the Proposal to hash as the unique identifer , we should add just enough information to ensure uniqueness. In our case, we will choose
+When deciding on which fields of the Proposal to hash as the unique identifer, we should add just enough information to ensure uniqueness. In our case, we will choose
 
 ### Council (Frame Example)
 * higher proposal throughput than `Treasury` but this can also be improved
