@@ -13,7 +13,7 @@ pub trait Trait<I: Instance = DefaultInstance>: system::Trait {
     type Event: From<Event<Self, I>> + Into<<Self as system::Trait>::Event>;
 }
 
-// It is necessary for instantiable palletss to call `decl_storage!` eve nif no storage items
+// It is necessary for instantiable pallets to call `decl_storage!` even if no storage items
 // are used so the instance type is created.
 decl_storage! {
     // The storage trait also takes the Instance parameter
