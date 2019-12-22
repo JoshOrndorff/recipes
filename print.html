@@ -1500,7 +1500,7 @@ pub struct TestRuntime;
 }
 </code></pre>
 <p>Next, we create a new type that wraps the mock <code>TestRuntime</code> in the module's <code>Module</code>.</p>
-<pre><code class="language-rust ignore">pub type HelloSubstrate = Module&lt;Runtime&gt;;
+<pre><code class="language-rust ignore">pub type HelloSubstrate = Module&lt;TestRuntime&gt;;
 </code></pre>
 <p>It may be helpful to read this as type aliasing our configured mock runtime to work with the module's <code>Module</code>, which is what is ultimately being tested.</p>
 <h2><a class="header" href="#impl-systemtrait" id="impl-systemtrait"><code>impl system::Trait</code></a></h2>
@@ -1667,7 +1667,8 @@ fn last_value_updates() {
 	//...
 }
 </code></pre>
-<!-- add link to testing in devhub docs after it is added --><h1><a class="header" href="#common-tests" id="common-tests">Common Tests</a></h1>
+<!-- add link to testing in devhub docs after it is added -->
+<h1><a class="header" href="#common-tests" id="common-tests">Common Tests</a></h1>
 <p>To verify that our module code behaves as expected, it is necessary to check a few conditions with unit tests. Intuitively, the order of the testing may resemble the structure of runtime method development.</p>
 <ol>
 <li>Within each runtime method, declarative checks are made prior to any state change. These checks ensure that any required conditions are met before all changes occur; need to ensure that <a href="testing/common.html#panicspanic">panics panic</a>.</li>
