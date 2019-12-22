@@ -36,7 +36,7 @@ impl Trait for TestRuntime {
 Next, we create a new type that wraps the mock `TestRuntime` in the module's `Module`.
 
 ```rust, ignore
-pub type HelloSubstrate = Module<Runtime>;
+pub type HelloSubstrate = Module<TestRuntime>;
 ```
 
 It may be helpful to read this as type aliasing our configured mock runtime to work with the module's `Module`, which is what is ultimately being tested.
