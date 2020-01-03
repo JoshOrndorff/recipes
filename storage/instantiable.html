@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Instantiable Modules - Substrate Recipes</title>
+        <title>Instantiable Pallets - Substrate Recipes</title>
         
 
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
@@ -87,7 +87,7 @@
                 </a>
             </div>
             <div id="sidebar-scrollbox" class="sidebar-scrollbox">
-                <ol class="chapter"><li class="expanded "><a href="../base/index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="expanded "><a href="../base/rust.html"><strong aria-hidden="true">2.</strong> Learn Rust</a></li><li class="expanded "><a href="../base/setup.html"><strong aria-hidden="true">3.</strong> Getting Started</a></li><li><ol class="section"><li class="expanded "><a href="../base/runnode.html"><strong aria-hidden="true">3.1.</strong> Running A Node</a></li><li class="expanded "><a href="../base/interactnode.html"><strong aria-hidden="true">3.2.</strong> Interacting with a Node</a></li><li class="expanded "><a href="../base/kitchenoverview.html"><strong aria-hidden="true">3.3.</strong> Using the Kitchen</a></li></ol></li><li class="expanded "><a href="../basics/index.html"><strong aria-hidden="true">4.</strong> Hello Substrate</a></li><li><ol class="section"><li class="expanded "><a href="../basics/events.html"><strong aria-hidden="true">4.1.</strong> Events Verify Execution</a></li><li class="expanded "><a href="../basics/adder.html"><strong aria-hidden="true">4.2.</strong> Adding Machine</a></li><li class="expanded "><a href="../basics/value.html"><strong aria-hidden="true">4.3.</strong> Single Value Storage</a></li></ol></li><li class="expanded "><a href="../storage/index.html"><strong aria-hidden="true">5.</strong> Runtime Storage API</a></li><li><ol class="section"><li class="expanded "><a href="../storage/cache.html"><strong aria-hidden="true">5.1.</strong> Cache Locally &gt; Storage Calls</a></li><li class="expanded "><a href="../storage/iterate.html"><strong aria-hidden="true">5.2.</strong> Sets</a></li><li class="expanded "><a href="../storage/enumerated.html"><strong aria-hidden="true">5.3.</strong> Ordered Lists: Maps, Linked Maps</a></li><li class="expanded "><a href="../storage/double.html"><strong aria-hidden="true">5.4.</strong> Subgroup Removal by Subkey: Double Maps</a></li><li class="expanded "><a href="../storage/childtries.html"><strong aria-hidden="true">5.5.</strong> Efficient Subgroup Removal by Subkey: Child Tries</a></li><li class="expanded "><a href="../storage/constants.html"><strong aria-hidden="true">5.6.</strong> Configurable Constants</a></li></ol></li><li class="expanded "><a href="../traits/index.html"><strong aria-hidden="true">6.</strong> Types and Traits</a></li><li><ol class="section"><li class="expanded "><a href="../traits/currency.html"><strong aria-hidden="true">6.1.</strong> Currency Types</a></li><li class="expanded "><a href="../traits/fees.html"><strong aria-hidden="true">6.2.</strong> Transaction Fees for Economic Security</a></li><li class="expanded "><a href="../storage/instantiable.html" class="active"><strong aria-hidden="true">6.3.</strong> Instantiable Modules</a></li></ol></li><li class="expanded "><a href="../declarative/index.html"><strong aria-hidden="true">7.</strong> Declarative Syntax</a></li><li><ol class="section"><li class="expanded "><a href="../declarative/ensure.html"><strong aria-hidden="true">7.1.</strong> Verify First, Write Last</a></li><li class="expanded "><a href="../declarative/safemath.html"><strong aria-hidden="true">7.2.</strong> Safe Math</a></li><li class="expanded "><a href="../declarative/permissioned.html"><strong aria-hidden="true">7.3.</strong> Permissioned Methods</a></li></ol></li><li class="expanded "><a href="../testing/index.html"><strong aria-hidden="true">8.</strong> Testing</a></li><li><ol class="section"><li class="expanded "><a href="../testing/mock.html"><strong aria-hidden="true">8.1.</strong> Basic Test Environments</a></li><li class="expanded "><a href="../testing/common.html"><strong aria-hidden="true">8.2.</strong> Common Tests</a></li><li class="expanded "><a href="../testing/externalities.html"><strong aria-hidden="true">8.3.</strong> Custom Test Environment</a></li></ol></li><li class="expanded "><a href="../base/dessert.html"><strong aria-hidden="true">9.</strong> Featured Tutorials</a></li><li class="spacer"></li><li class="expanded affix "><a href="../base/resource.html">More Resources</a></li></ol>
+                <ol class="chapter"><li class="expanded "><a href="../base/index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="expanded "><a href="../base/rust.html"><strong aria-hidden="true">2.</strong> Learn Rust</a></li><li class="expanded "><a href="../base/setup.html"><strong aria-hidden="true">3.</strong> Getting Started</a></li><li><ol class="section"><li class="expanded "><a href="../base/runnode.html"><strong aria-hidden="true">3.1.</strong> Running A Node</a></li><li class="expanded "><a href="../base/interactnode.html"><strong aria-hidden="true">3.2.</strong> Interacting with a Node</a></li><li class="expanded "><a href="../base/kitchenoverview.html"><strong aria-hidden="true">3.3.</strong> Using the Kitchen</a></li></ol></li><li class="expanded "><a href="../basics/index.html"><strong aria-hidden="true">4.</strong> Hello Substrate</a></li><li><ol class="section"><li class="expanded "><a href="../basics/events.html"><strong aria-hidden="true">4.1.</strong> Events Verify Execution</a></li><li class="expanded "><a href="../basics/adder.html"><strong aria-hidden="true">4.2.</strong> Adding Machine</a></li><li class="expanded "><a href="../basics/value.html"><strong aria-hidden="true">4.3.</strong> Single Value Storage</a></li></ol></li><li class="expanded "><a href="../storage/index.html"><strong aria-hidden="true">5.</strong> Runtime Storage API</a></li><li><ol class="section"><li class="expanded "><a href="../storage/cache.html"><strong aria-hidden="true">5.1.</strong> Cache Locally &gt; Storage Calls</a></li><li class="expanded "><a href="../storage/iterate.html"><strong aria-hidden="true">5.2.</strong> Sets</a></li><li class="expanded "><a href="../storage/enumerated.html"><strong aria-hidden="true">5.3.</strong> Ordered Lists: Maps, Linked Maps</a></li><li class="expanded "><a href="../storage/double.html"><strong aria-hidden="true">5.4.</strong> Subgroup Removal by Subkey: Double Maps</a></li><li class="expanded "><a href="../storage/childtries.html"><strong aria-hidden="true">5.5.</strong> Efficient Subgroup Removal by Subkey: Child Tries</a></li><li class="expanded "><a href="../storage/constants.html"><strong aria-hidden="true">5.6.</strong> Configurable Constants</a></li></ol></li><li class="expanded "><a href="../traits/index.html"><strong aria-hidden="true">6.</strong> Types and Traits</a></li><li><ol class="section"><li class="expanded "><a href="../traits/currency.html"><strong aria-hidden="true">6.1.</strong> Currency Types</a></li><li class="expanded "><a href="../traits/fees.html"><strong aria-hidden="true">6.2.</strong> Transaction Fees for Economic Security</a></li><li class="expanded "><a href="../storage/instantiable.html" class="active"><strong aria-hidden="true">6.3.</strong> Instantiable Pallets</a></li></ol></li><li class="expanded "><a href="../declarative/index.html"><strong aria-hidden="true">7.</strong> Declarative Syntax</a></li><li><ol class="section"><li class="expanded "><a href="../declarative/ensure.html"><strong aria-hidden="true">7.1.</strong> Verify First, Write Last</a></li><li class="expanded "><a href="../declarative/safemath.html"><strong aria-hidden="true">7.2.</strong> Safe Math</a></li><li class="expanded "><a href="../declarative/permissioned.html"><strong aria-hidden="true">7.3.</strong> Permissioned Methods</a></li></ol></li><li class="expanded "><a href="../testing/index.html"><strong aria-hidden="true">8.</strong> Testing</a></li><li><ol class="section"><li class="expanded "><a href="../testing/mock.html"><strong aria-hidden="true">8.1.</strong> Basic Test Environments</a></li><li class="expanded "><a href="../testing/common.html"><strong aria-hidden="true">8.2.</strong> Common Tests</a></li><li class="expanded "><a href="../testing/externalities.html"><strong aria-hidden="true">8.3.</strong> Custom Test Environment</a></li></ol></li><li class="expanded "><a href="../base/dessert.html"><strong aria-hidden="true">9.</strong> Featured Tutorials</a></li><li class="spacer"></li><li class="expanded affix "><a href="../base/resource.html">More Resources</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -154,40 +154,38 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#instantiable-modules" id="instantiable-modules">Instantiable Modules</a></h1>
-<p>Instantiable modules enable multiple instances of the same module logic within a single runtime. Each instance of the module has its own independent storage, and extrinsics must specify which instance of the module they are intended for. These patterns are illustrated in the kitchen in the last-caller and default-instance modules.</p>
+                        <h1><a class="header" href="#instantiable-pallets" id="instantiable-pallets">Instantiable Pallets</a></h1>
+<p>Instantiable pallets enable multiple instances of the same pallet logic within a single runtime. Each instance of the pallet has its own independent storage, and extrinsics must specify which instance of the pallet they are intended for. These patterns are illustrated in the kitchen in the last-caller and default-instance pallets.</p>
 <p>Some use cases:</p>
 <ul>
 <li>Token chain hosts two independent cryptocurrencies.</li>
 <li>Marketplace track users' reputations as buyers separately from their reputations as sellers.</li>
 <li>Governance has two (or more) houses which act similarly internally.</li>
 </ul>
-<p>The SRML's Balances and Collective modules are good examples of real-world code using this technique. The default Substrate node has two instances of the Collectives module that make up its Council and Technical Committee. Each collective has its own storage, events, and configuration.</p>
+<p>Substrate's own Balances and Collective pallets are good examples of real-world code using this technique. The default Substrate node has two instances of the Collectives pallet that make up its Council and Technical Committee. Each collective has its own storage, events, and configuration.</p>
 <pre><code class="language-rust ignore">Council: collective::&lt;Instance1&gt;::{Module, Call, Storage, Origin&lt;T&gt;, Event&lt;T&gt;, Config&lt;T&gt;},
 TechnicalCommittee: collective::&lt;Instance2&gt;::{Module, Call, Storage, Origin&lt;T&gt;, Event&lt;T&gt;, Config&lt;T&gt;}
 </code></pre>
-<h2><a class="header" href="#writing-an-instantiable-module" id="writing-an-instantiable-module">Writing an Instantiable Module</a></h2>
-<p>Writing an instantiable module is almost entirely the same process as writing a plain non-instantiable module. There are just a few places where the syntax differs.</p>
+<h2><a class="header" href="#writing-an-instantiable-pallet" id="writing-an-instantiable-pallet">Writing an Instantiable Pallet</a></h2>
+<p>Writing an instantiable pallet is almost entirely the same process as writing a plain non-instantiable pallet. There are just a few places where the syntax differs.</p>
 <blockquote>
 <p>You must call <code>decl_storage!</code></p>
-<p>Instantiable modules <em>must</em> call the <code>decl_storage!</code> macro so that the <code>Instance</code> type is created.</p>
+<p>Instantiable pallets <em>must</em> call the <code>decl_storage!</code> macro so that the <code>Instance</code> type is created.</p>
 </blockquote>
 <h3><a class="header" href="#configuration-trait" id="configuration-trait">Configuration Trait</a></h3>
 <pre><code class="language-rust ignore">pub trait Trait&lt;I: Instance&gt;: system::Trait {
-	// TODO: Add other types and constants required configure this module.
-
 	/// The overarching event type.
 	type Event: From&lt;Event&lt;Self, I&gt;&gt; + Into&lt;&lt;Self as system::Trait&gt;::Event&gt;;
 }
 </code></pre>
 <h3><a class="header" href="#storage-declaration" id="storage-declaration">Storage Declaration</a></h3>
 <pre><code class="language-rust ignore">decl_storage! {
-	trait Store for Module&lt;T: Trait&lt;I&gt;, I: Instance&gt; as TemplateModule {
+	trait Store for Module&lt;T: Trait&lt;I&gt;, I: Instance&gt; as TemplatePallet {
 		...
 	}
 }
 </code></pre>
-<h3><a class="header" href="#declaring-the-module-struct" id="declaring-the-module-struct">Declaring the Module Struct</a></h3>
+<h3><a class="header" href="#declaring-the-module-struct" id="declaring-the-module-struct">Declaring the <code>Module</code> Struct</a></h3>
 <pre><code class="language-rust ignore">decl_module! {
 	/// The module declaration.
 	pub struct Module&lt;T: Trait&lt;I&gt;, I: Instance&gt; for enum Call where origin: T::Origin {
@@ -211,8 +209,8 @@ TechnicalCommittee: collective::&lt;Instance2&gt;::{Module, Call, Storage, Origi
 	}
 }
 </code></pre>
-<h2><a class="header" href="#installing-a-module-instance-in-a-runtime" id="installing-a-module-instance-in-a-runtime">Installing a Module Instance in a Runtime</a></h2>
-<p>The syntax for including an instance of an instantiable module in a runtime is slightly different than for a regular module. The only exception is for modules that use the <a href="#default-instance">Default Instance</a> feature described below.</p>
+<h2><a class="header" href="#installing-a-pallet-instance-in-a-runtime" id="installing-a-pallet-instance-in-a-runtime">Installing a Pallet Instance in a Runtime</a></h2>
+<p>The syntax for including an instance of an instantiable pallet in a runtime is slightly different than for a regular pallet. The only exception is for pallets that use the <a href="#default-instance">Default Instance</a> feature described below.</p>
 <h3><a class="header" href="#implementing-configuration-traits" id="implementing-configuration-traits">Implementing Configuration Traits</a></h3>
 <p>Each instance needs to be configured separately. Configuration consists of implementing the specific instance's trait. The following snippet shows a configuration for <code>Instance1</code>.</p>
 <pre><code class="language-rust ignore">impl template::Trait&lt;template::Instance1&gt; for Runtime {
@@ -220,12 +218,12 @@ TechnicalCommittee: collective::&lt;Instance2&gt;::{Module, Call, Storage, Origi
 }
 </code></pre>
 <h3><a class="header" href="#using-the-construct_runtime-macro" id="using-the-construct_runtime-macro">Using the <code>construct_runtime!</code> Macro</a></h3>
-<p>The final step of installing the module instance in your runtime is updating the <code>construct_runtime!</code> macro. You may give each instance a meaningful name. Here I've called <code>Instance1</code> <code>FirstTemplate</code>.</p>
+<p>The final step of installing the pallet instance in your runtime is updating the <code>construct_runtime!</code> macro. You may give each instance a meaningful name. Here I've called <code>Instance1</code> <code>FirstTemplate</code>.</p>
 <pre><code class="language-rust ignore">FirstTemplate: template::&lt;Instance1&gt;::{Module, Call, Storage, Event&lt;T&gt;, Config},
 </code></pre>
 <h2><a class="header" href="#default-instance-a-namedefault-instancea" id="default-instance-a-namedefault-instancea">Default Instance <a name="default-instance"></a></a></h2>
-<p>One drawback of instantiable modules, as we've presented them so far is that they require the runtime designer to use the more elaborate syntax even if they only desire a single instance of the module. To alleviate this inconvenience, Substrate provides a feature known as DefaultInstance. This allows runtime developers to deploy an instantiable module exactly as they would if it were not instantiable provided they <strong>only use a single instance</strong>.</p>
-<p>To make your instantiable module support DefaultInstance, you must specify it in three places.</p>
+<p>One drawback of instantiable pallets, as we've presented them so far, is that they require the runtime designer to use the more elaborate syntax even if they only desire a single instance of the pallet. To alleviate this inconvenience, Substrate provides a feature known as DefaultInstance. This allows runtime developers to deploy an instantiable pallet exactly as they would if it were not instantiable provided they <strong>only use a single instance</strong>.</p>
+<p>To make your instantiable pallet support DefaultInstance, you must specify it in four places.</p>
 <pre><code class="language-rust ignore">pub trait Trait&lt;I=DefaultInstance&gt;: system::Trait {
 </code></pre>
 <pre><code class="language-rust ignore">decl_storage! {
@@ -246,9 +244,9 @@ TechnicalCommittee: collective::&lt;Instance2&gt;::{Module, Call, Storage, Origi
   }
 }
 </code></pre>
-<p>Having made these changes, a developer who uses your module doesn't need to know or care that your module is instantable. They can deploy it just as they would any other module.</p>
+<p>Having made these changes, a developer who uses your pallet doesn't need to know or care that your pallet is instantable. They can deploy it just as they would any other pallet.</p>
 <h2><a class="header" href="#genesis-configuration" id="genesis-configuration">Genesis Configuration</a></h2>
-<p>Some modules require a genesis configuration to be specified. Let's look to the default Substrate node's use of the Collective module as an example.</p>
+<p>Some pallets require a genesis configuration to be specified. Let's look to the default Substrate node's use of the Collective pallet as an example.</p>
 <p>In its <code>chain_spec.rs</code> file we see</p>
 <pre><code class="language-rust ignore">GenesisConfig {
 	...
