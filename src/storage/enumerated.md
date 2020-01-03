@@ -1,5 +1,5 @@
 # Lists: Maps vs Linked Maps
-*[`kitchen/modules/linked-map`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/linked-map)*
+*[`kitchen/pallets/linked-map`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/linked-map)*
 
 Substrate does not natively support a list type since it may encourage dangerous habits. Unless explicitly guarded against, a list will add unbounded `O(n)` complexity to an operation that will only charge `O(1)` fees ([Big O notation refresher](https://rob-bell.net/2009/06/a-beginners-guide-to-big-o-notation/)). This opens an economic attack vector on your chain.
 
@@ -104,7 +104,7 @@ fn remove_member_bounded(origin, index: u32) -> Result {
 
 ### Linked Map <a name = "linkedmap"></a>
 
-To trade performance for *relatively* simple code, use the `linked_map` data structure. By implementing [`EnumarableStorageMap`](https://crates.parity.io/srml_support/storage/trait.EnumerableStorageMap.html) in addition to [`StorageMap`](https://crates.parity.io/srml_support/storage/trait.StorageMap.html), `linked_map` provides a method `head` which yields the head of the *list*, thereby making it unnecessary to also store the `LargestIndex` (the *counters*). The `enumerate` method also returns an `Iterator` ordered according to when `(key, value)` pairs were inserted into the map.
+To trade performance for *relatively* simple code, use the `linked_map` data structure. By implementing [`StorageLinkedMap`](https://substrate.dev/rustdocs/master/frame_support/storage/trait.StorageLinkedMap.html) in addition to [`StorageMap`](https://substrate.dev/rustdocs/master/frame_support/storage/trait.StorageMap.html), `linked_map` provides a method `head` which yields the head of the *list*, thereby making it unnecessary to also store the `LargestIndex` (the *counters*). The `enumerate` method also returns an `Iterator` ordered according to when `(key, value)` pairs were inserted into the map.
 
 To use `linked_map`, import `EnumerableStorageMap`. Here is the new declaration in the `decl_storage` block:
 
@@ -140,4 +140,4 @@ fn remove_member_linked(origin, index: u32) -> Result {
 }
 ```
 
-This implementation incurs some performance costs (vs solely using `StorageMap` and `StorageValue`) because `linked_map` heap allocates the entire map as an iterator in order to implement the [`enumerate` method](https://crates.parity.io/srml_support/storage/trait.EnumerableStorageMap.html#tymethod.enumerate).
+This implementation incurs some performance costs (vs solely using `StorageMap` and `StorageValue`) because `linked_map` heap allocates the entire map as an iterator in order to implement the [`enumerate` method](https://substrate.dev/rustdocs/master/frame_support/storage/trait.StorageLinkedMap.html#tymethod.enumerate).

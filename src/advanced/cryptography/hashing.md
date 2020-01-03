@@ -3,11 +3,11 @@
 
 ## Hashing
 
-Substrate provides in-built support for hashing data with BlakeTwo256 algorithm. We can get this from the `system` trait. 
+Substrate provides in-built support for hashing data with BlakeTwo256 algorithm. We can get this from the `system` trait.
 
 ```
 use runtime_primitives::traits::Hash;
-use srml_support::{dispatch::Result};
+use frame_support::{dispatch::Result};
 use {system::{self}};
 
 pub trait Trait: system::Trait {}

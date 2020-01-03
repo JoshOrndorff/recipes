@@ -1,13 +1,13 @@
 ## Currency Types
-*[`kitchen/modules/lockable-currency`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/lockable-currency), [`kitchen/modules/reservable-currency`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/reservable-currency), [`kitchen/modules/currency-imbalances`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/currency-imbalances)*
+*[`kitchen/pallets/lockable-currency`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/lockable-currency), [`kitchen/pallets/reservable-currency`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/reservable-currency), [`kitchen/pallets/currency-imbalances`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/currency-imbalances)*
 
-To use a balances type in the runtime, import the [`Currency`](https://crates.parity.io/srml_support/traits/trait.Currency.html) trait from `srml/support`
+To use a balances type in the runtime, import the [`Currency`](https://substrate.dev/rustdocs/master/frame_support/traits/trait.Currency.html) trait from `frame_support`.
 
 ```rust, ignore
 use support::traits::Currency;
 ```
 
-The [`Currency`](https://crates.parity.io/srml_support/traits/trait.Currency.html) trait provides an abstraction over a fungible assets system. To use the behavior defined in [`Currency`](https://crates.parity.io/srml_support/traits/trait.Currency.html), include it in the trait bounds of a module type.
+The `Currency` trait provides an abstraction over a fungible assets system. To use such a fuingible asset from your pallet, include an associated type with the `Currency` trait bound in your pallet's configuration trait.
 
 ```rust, ignore
 pub trait Trait: system::Trait {
@@ -15,7 +15,7 @@ pub trait Trait: system::Trait {
 }
 ```
 
-Defining a module type with this trait bound allows the runtime to access the provided methods of [`Currency`](https://crates.parity.io/srml_support/traits/trait.Currency.html). For example, it is straightforward to check the total issuance of the system:
+Defining an associated type with this trait bound allows this pallet to access the provided methods of [`Currency`](https://substrate.dev/rustdocs/master/frame_support/traits/trait.Currency.html). For example, it is straightforward to check the total issuance of the system:
 
 ```rust, ignore
 // in decl_module block
@@ -28,14 +28,14 @@ As promised, it is also possible to type alias a balances type for use in the ru
 type BalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::Balance;
 ```
 
-This new `BalanceOf<T>` type satisfies the type constraints of `Self::Balance` for the provided methods of [`Currency`](https://crates.parity.io/srml_support/traits/trait.Currency.html). This means that this type can be used for [transfer](https://crates.parity.io/srml_support/traits/trait.Currency.html#tymethod.transfer), [minting](https://crates.parity.io/srml_support/traits/trait.Currency.html#tymethod.deposit_into_existing), and [much more](https://crates.parity.io/srml_support/traits/trait.Currency.html).
+This new `BalanceOf<T>` type satisfies the type constraints of `Self::Balance` for the provided methods of `Currency`. This means that this type can be used for [transfer](https://substrate.dev/rustdocs/master/frame_support/traits/trait.Currency.html#tymethod.transfer), [minting](https://substrate.dev/rustdocs/master/frame_support/traits/trait.Currency.html#tymethod.deposit_into_existing), and much more.
 
 ## Reservable Currency
 
-[`srml/treasury`](https://github.com/paritytech/substrate/blob/master/srml/treasury/src/lib.rs) uses the `Currency` type for bonding spending proposals. To reserve and unreserve balances for bonding, `treasury` uses the [`ReservableCurrency`](https://crates.parity.io/srml_support/traits/trait.ReservableCurrency.html) trait. The import and module type declaration follow convention
+Substrate's [Treasury pallet](https://substrate.dev/rustdocs/master/pallet_treasury/index.html) uses the `Currency` type for bonding spending proposals. To reserve and unreserve balances for bonding, `treasury` uses the [`ReservableCurrency`](https://substrate.dev/rustdocs/master/frame_support/traits/trait.ReservableCurrency.html) trait. The import and associated type declaration follow convention
 
 ```rust, ignore
-use support::traits::{Currency, ReservableCurrency};
+use frame_support::traits::{Currency, ReservableCurrency};
 
 pub trait Trait: system::Trait {
     type Currency: Currency<Self::AccountId> + ReservableCurrency<Self::AccountId>;
@@ -52,7 +52,7 @@ pub fn lock_funds(origin, amount: BalanceOf<T>) -> Result {
             .map_err(|_| "locker can't afford to lock the amount requested")?;
 
     let now = <system::Module<T>>::block_number();
-    
+
     Self::deposit_event(RawEvent::LockFunds(locker, amount, now));
     Ok(())
 }
@@ -71,7 +71,7 @@ pub fn unlock_funds(origin, amount: BalanceOf<T>) -> Result {
 
 ## Lockable Currency
 
-[`srml/staking`](https://github.com/paritytech/substrate/blob/master/srml/staking/src/lib.rs) similarly uses [`LockableCurrency`](https://crates.parity.io/srml_support/traits/trait.LockableCurrency.html) trait for more nuanced handling of capital locking based on time increments. This type can be very useful in the context of economic systems that enforce accountability by collateralizing fungible resources. Import this trait in the usual way
+Substrate's [Staking pallet](https://substrate.dev/rustdocs/master/pallet_staking/index.html) similarly uses [`LockableCurrency`](https://substrate.dev/rustdocs/master/frame_support/traits/trait.LockableCurrency.html) trait for more nuanced handling of capital locking based on time increments. This type can be very useful in the context of economic systems that enforce accountability by collateralizing fungible resources. Import this trait in the usual way
 
 ```rust, ignore
 use support::traits::{LockIdentifier, LockableCurrency}
@@ -86,7 +86,7 @@ pub trait Trait: system::Trait {
 }
 ```
 
-To use [`LockableCurrency`](https://crates.parity.io/srml_support/traits/trait.LockableCurrency.html), it is necessary to define a [`LockIdentifier`](https://crates.parity.io/srml_support/traits/type.LockIdentifier.html).
+To use `LockableCurrency`, it is necessary to define a [`LockIdentifier`](https://substrate.dev/rustdocs/master/frame_support/traits/type.LockIdentifier.html).
 
 ```rust, ignore
 const EXAMPLE_ID: LockIdentifier = *b"example ";
@@ -113,9 +113,9 @@ fn lock_capital(origin, amount: BalanceOf<T>) -> Result {
 
 ## Imbalances
 
-Functions that alter balances return an object of the [`Imbalance`](https://crates.parity.io/srml_support/traits/trait.Imbalance.html) type to express how much account balances have been altered in aggregate. This is useful in the context of state transitions that adjust the total supply of the `Currency` type in question.
+Functions that alter balances return an object of the [`Imbalance`](https://substrate.dev/rustdocs/master/frame_support/traits/trait.Imbalance.html) type to express how much account balances have been altered in aggregate. This is useful in the context of state transitions that adjust the total supply of the `Currency` type in question.
 
-To manage this supply adjustment, the [`OnUnbalanced`](https://crates.parity.io/srml_support/traits/trait.OnUnbalanced.html) handler is often used. An example might look something like 
+To manage this supply adjustment, the [`OnUnbalanced`](https://substrate.dev/rustdocs/master/frame_support/traits/trait.OnUnbalanced.html) handler is often used. An example might look something like
 
 ```rust, ignore
 // runtime method (ie decl_module block)
@@ -135,6 +135,4 @@ pub fn reward_funds(origin, to_reward: T::AccountId, reward: BalanceOf<T>) {
 
 ## takeaway
 
-The way we represent value in the runtime dictates both the security and flexibility of the underlying transactional system. Likewise, it is convenient to be able to take advantage of Rust's [flexible trait system](https://blog.rust-lang.org/2015/05/11/traits.html) when building systems intended to rethink how we exchange information and value 🚀 
-
-BONUS: *see [`OnDilution`](https://crates.parity.io/srml_support/traits/trait.OnDilution.html#tymethod.on_dilution) runtime hook*
+The way we represent value in the runtime dictates both the security and flexibility of the underlying transactional system. Likewise, it is convenient to be able to take advantage of Rust's [flexible trait system](https://blog.rust-lang.org/2015/05/11/traits.html) when building systems intended to rethink how we exchange information and value 🚀

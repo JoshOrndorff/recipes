@@ -20,7 +20,7 @@
 - [Types and Traits](./traits/README.md)
     - [Currency Types](./traits/currency.md)
     - [Transaction Fees for Economic Security](./traits/fees.md)
-    - [Instantiable Modules](./storage/instantiable.md)
+    - [Instantiable Pallets](./storage/instantiable.md)
 - [Declarative Syntax](./declarative/README.md)
     - [Verify First, Write Last](./declarative/ensure.md)
     - [Safe Math](./declarative/safemath.md)

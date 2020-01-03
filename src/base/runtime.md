@@ -1,5 +1,6 @@
 # Runtime Configuration
+*[`kitchen/runtimes/super-runtime`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/runtimes/super-runtime)* *[`kitchen/runtimes/weight-fee-runtime`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/runtimes/weight-fee-runtime)*
 
-The runtime gives context to module development. Indeed, modules are libraries that expose runtime methods to adjust runtime storage. These libraries are configured in the runtime with explicit assignment of the types declared in the module [`Trait`](https://crates.parity.io/srml_example/trait.Trait.html).
+when using FRAME, the runtime gives context to the pallets. Indeed, each pallet is configured in the runtime with explicit assignment of the types declared in its [Configuration `Trait`](https://substrate.dev/rustdocs/master/pallet_example/trait.Trait.html).
 
-*To see how the [srml](https://github.com/paritytech/substrate/tree/master/srml) modules are configured, see the [`node/runtime`](https://github.com/paritytech/substrate/tree/master/node/runtime)*
+Each runtime in the kitchen demonstrates configuring and composing pallets in this way.

@@ -1,5 +1,5 @@
 # Set Storage and Iteration
-*[`kitchen/modules/vec-set`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/vec-set)*
+*[`kitchen/pallets/vec-set`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/vec-set)*
 
 Storing a vector in the runtime can often be useful for managing groups and verifying membership. This recipe discusses common patterns encounted when storing vectors in runtime storage.
 
@@ -41,7 +41,7 @@ fn member_action(origin) -> Result {
 }
 ```
 
-In this example, the helper method facilitates isolation of runtime storage access rights according to membership. In general, **place [`ensure!`](https://crates.parity.io/srml_support/macro.ensure.html) checks at the top of each runtime function's logic to verify that all of the requisite checks pass before performing any storage changes.** *Note that this is similar to [`require()`](https://ethereum.stackexchange.com/questions/15166/difference-between-require-and-assert-and-the-difference-between-revert-and-thro) checks at the top of function bodies in Solidity contracts.*
+In this example, the helper method facilitates isolation of runtime storage access rights according to membership. In general, **place `ensure!` checks at the top of each runtime function's logic to verify that all of the requisite checks pass before performing any storage changes.**
 
 > NOTE: *[child trie](https://github.com/substrate-developer-hub/recipes/issues/35) storage provides a more efficient data structure for tracking group membership*
 
@@ -56,7 +56,7 @@ decl_storage! {
 }
 ```
 
-Before [3071](https://github.com/paritytech/substrate/pull/3071) was merged, it was necessary to call [`mutate`](https://crates.parity.io/srml_support/storage/trait.StorageValue.html#tymethod.mutate) to push new values to a vector stored in runtime storage.
+Before [3071](https://github.com/paritytech/substrate/pull/3071) was merged, it was necessary to call [`mutate`](https://substrate.dev/rustdocs/master/frame_support/storage/trait.StorageValue.html#tymethod.mutate) to push new values to a vector stored in runtime storage.
 
 ```rust, ignore
 fn mutate_to_append(origin) -> Result {
@@ -69,7 +69,7 @@ fn mutate_to_append(origin) -> Result {
 }
 ```
 
-For vectors stored in the runtime, mutation can be relatively expensive. This follows from the fact that [`mutate`](https://crates.parity.io/srml_support/storage/trait.StorageValue.html#tymethod.mutate) entails decoding the vector, making changes, and re-encoding the whole vector. It seems wasteful to decode the entire vector, push a new item, and then re-encode the whole thing. This provides sufficient motivation for [`append`](https://crates.parity.io/srml_support/storage/trait.StorageValue.html#tymethod.append):
+For vectors stored in the runtime, mutation can be relatively expensive. This follows from the fact that `mutate` entails decoding the vector, making changes, and re-encoding the whole vector. It seems wasteful to decode the entire vector, push a new item, and then re-encode the whole thing. This provides sufficient motivation for [`append`](https://substrate.dev/rustdocs/master/frame_support/storage/trait.StorageValue.html#tymethod.append):
 
 
 ```rust, ignore
@@ -84,7 +84,7 @@ fn append_new_entries(origin) -> Result {
 }
 ```
 
-[`append`](https://crates.parity.io/srml_support/storage/trait.StorageValue.html#tymethod.append) encodes the new values, and pushes them to the already encoded vector without decoding the existing entries. This method removes the unnecessary steps for decoding and re-encoding the unchanged elements.
+`append` encodes the new values, and pushes them to the already encoded vector without decoding the existing entries. This method removes the unnecessary steps for decoding and re-encoding the unchanged elements.
 
 ## Iteration in the Runtime <a name = "iterate"></a>
 

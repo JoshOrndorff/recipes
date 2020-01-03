@@ -1,15 +1,15 @@
 # Event
-*[`kitchen/modules/simple-event`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/simple-event)*, *[`kitchen/modules/generic-event`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/generic-event)*
+*[`kitchen/pallets/simple-event`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/simple-event)*, *[`kitchen/pallets/generic-event`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/generic-event)*
 
 In Substrate, [transaction](https://docs.substrate.dev/docs/glossary#section-transaction) finality does not guarantee the execution of functions dependent on the given transaction. To verify that functions have executed successfully, emit an [event](https://docs.substrate.dev/docs/glossary#section-events) at the bottom of the function body.
 
 > **Events** notify the off-chain world of successful state transitions
 
-To declare an event, use the [`decl_event`](https://crates.parity.io/srml_support/macro.decl_event.html) macro.
+To declare an event, use the [`decl_event`](https://substrate.dev/rustdocs/master/frame_support/macro.decl_event.html) macro.
 
 ## Simple Event
 
-The [simplest example of an event](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/simple-event) uses the following syntax
+The [simplest example of an event](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/simple-event) uses the following syntax
 
 ```rust, ignore
 decl_event!(
@@ -25,9 +25,9 @@ The event is emitted at the bottom of the `do_something` function body:
 Self::deposit_event(Event::EmitInput(new_number));
 ```
 
-## Events with Module Types
+## Events with Generic Types
 
-[Sometimes](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/generic-event) events might emit types from the module Trait. When the event uses types from the module, it is necessary to specify additional syntax
+[Sometimes](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/generic-event) events might contin types from the pallet's Configuration Trait. In this case, it is necessary to specify additional syntax
 
 ```rust, ignore
 decl_event!(
@@ -37,7 +37,7 @@ decl_event!(
 );
 ```
 
-The syntax for `deposit_event` now takes the `RawEvent` type because it is generic over the module Trait 
+The syntax for `deposit_event` now takes the `RawEvent` type because it is generic over the pallet's configuration trait
 
 ```rust, ignore
 Self::deposit_event(RawEvent::EmitInput(user, new_number));

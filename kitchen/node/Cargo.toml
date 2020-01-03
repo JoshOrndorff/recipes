@@ -38,7 +38,7 @@ basic-authorship = { package = "sc-basic-authority", git = 'https://github.com/p
 consensus-common = { package = "sp-consensus", git = 'https://github.com/paritytech/substrate.git', rev = '16817ab6b6b529ae32fc8151820c15dd1ed00291' }
 
 # Edit these lines to point to a different runtime.
-# Your runtime must have the necessary runtime modules to support consensus (Babe, Grandpa, etc)
+# Your runtime must have the necessary pallets to support consensus (Babe, Grandpa, etc)
 runtime = { package = "super-runtime", path = "../runtimes/super-runtime" }
 runtime-genesis = { package = "super-genesis", path = "../runtimes/super-genesis" }
 # runtime = { package = "weight-fee-runtime", path = "../runtimes/weight-fee-runtime"}

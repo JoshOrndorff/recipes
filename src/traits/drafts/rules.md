@@ -1,10 +1,10 @@
-# Module Development Rules
+# Pallet Development Rules
 
-* add module development criteria here
+* add pallet development criteria here
 
 ## Logic Proofs <a name = "qed"></a>
 
-Because Substrate grants bare-metal control to developers, certain code patterns can expose panics at runtime. As mentioned in (2) of [Module Development Criteria](#criteria), panics can cause irreversible storage changes, possibly even bricking the blockchain and rendering it useless. 
+Because Substrate grants bare-metal control to developers, certain code patterns can expose panics at runtime. As mentioned in (2) of [Pallet Development Criteria](#criteria), panics can cause irreversible storage changes, possibly even bricking the blockchain and rendering it useless. 
 
 It is the responsibility of Substrate developers to ensure that the code doesn't panics after storage changes. In many cases, safety might be independently verified by the developer while writing the code. To facilitate auditability and better testing, Substrate developers should include a proof in an `.expect()` call that shows why the code's logic is safe and will not panic. Convention dictates formatting the call like so
 

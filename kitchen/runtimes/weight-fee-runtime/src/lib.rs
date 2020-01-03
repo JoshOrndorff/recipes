@@ -19,7 +19,7 @@ use sp_runtime::{
 use sp_runtime::traits::{NumberFor, BlakeTwo256, Block as BlockT, StaticLookup, Verify, ConvertInto, Convert};
 use support::traits::Get;
 use support::weights::Weight;
-use babe::{SameAuthoritiesForever};
+use babe::SameAuthoritiesForever;
 use grandpa::{AuthorityId as GrandpaId, AuthorityWeight as GrandpaWeight};
 use grandpa::fg_primitives;
 use sp_api::impl_runtime_apis;
@@ -300,8 +300,8 @@ impl transaction_payment::Trait for Runtime {
 	// serialized transaction in bytes
 	type TransactionByteFee = TransactionByteFee;
 
-	// Function to convert module's weight to a chargeable fee.
-	// Enable exactly one of the following examples
+	// Function to convert dispatch weight to a chargeable fee.
+	// Enable exactly one of the following examples.
 	//type WeightToFee = ConvertInto;
 	//type WeightToFee = LinearWeightToFee<FeeWeightRatio>;
 	type WeightToFee = QuadraticWeightToFee<WeightFeeConstant, WeightFeeLinear, WeightFeeQuadratic>;
@@ -328,7 +328,7 @@ construct_runtime!(
 		RandomnessCollectiveFlip: randomness_collective_flip::{Module, Call, Storage},
 		Sudo: sudo,
 		TransactionPayment: transaction_payment::{Module, Storage},
-		// The Recipe Modules
+		// The Recipe Pallets
 		Weights: weights::{Module, Call, Storage},
 	}
 );
@@ -356,7 +356,7 @@ pub type SignedExtra = (
 pub type UncheckedExtrinsic = generic::UncheckedExtrinsic<Address, Call, Signature, SignedExtra>;
 /// Extrinsic type that has already been checked.
 pub type CheckedExtrinsic = generic::CheckedExtrinsic<AccountId, Call, SignedExtra>;
-/// Executive: handles dispatch to the various modules.
+/// Executive: handles dispatch to the various pallets.
 pub type Executive = executive::Executive<Runtime, Block, system::ChainContext<Runtime>, Runtime, AllModules>;
 
 impl_runtime_apis! {

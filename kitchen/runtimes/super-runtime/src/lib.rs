@@ -9,10 +9,10 @@
 #[cfg(feature = "std")]
 include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 
-use babe::{AuthorityId as BabeId, SameAuthoritiesForever};
+use babe::SameAuthoritiesForever;
 use grandpa::fg_primitives;
 use grandpa::AuthorityList as GrandpaAuthorityList;
-use primitives::{crypto::key_types, OpaqueMetadata};
+use primitives::OpaqueMetadata;
 use rstd::prelude::*;
 use sp_api::impl_runtime_apis;
 use sp_runtime::traits::{
@@ -27,22 +27,6 @@ use sp_runtime::{
 #[cfg(feature = "std")]
 use version::NativeVersion;
 use version::RuntimeVersion;
-
-// The Recipe Modules
-use adding_machine;
-use basic_token;
-use check_membership;
-use double_map;
-use execution_schedule;
-use generic_event;
-use module_constant_config;
-use simple_event;
-use simple_map;
-use single_value;
-use smpl_treasury;
-use storage_cache;
-use struct_storage;
-use vec_set;
 
 // A few exports that help ease life for downstream crates.
 pub use balances::Call as BalancesCall;
@@ -125,7 +109,7 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
 /// a slot being empty).
 /// This value is only used indirectly to define the unit constants below
 /// that are expressed in blocks. The rest of the code should use
-/// `SLOT_DURATION` instead (like the timestamp module for calculating the
+/// `SLOT_DURATION` instead (like the timestamp pallet for calculating the
 /// minimum period).
 /// <https://research.web3.foundation/en/latest/polkadot/BABE/Babe/#6-practical-results>
 pub const MILLISECS_PER_BLOCK: u64 = 6000;
@@ -316,7 +300,7 @@ parameter_types! {
     pub const ClearFrequency: u32 = 10;
 }
 
-impl module_constant_config::Trait for Runtime {
+impl constant_config::Trait for Runtime {
     type Event = Event;
     type MaxAddend = MaxAddend;
     type ClearFrequency = ClearFrequency;
@@ -347,7 +331,7 @@ impl smpl_treasury::Trait for Runtime {
     type MinimumProposalAge = ClearFrequency;
 }
 
-// The following two configuration traits are for two different instances of the last-caller module
+// The following two configuration traits are for two different instances of the last-caller pallet
 impl last_caller::Trait<last_caller::Instance1> for Runtime {
     type Event = Event;
 }
@@ -357,7 +341,7 @@ impl last_caller::Trait<last_caller::Instance2> for Runtime {
 }
 
 // The following two configuration traits are for two different instances of the deafult-instance
-// module. Notice that only the second instance has to explicitly specify an instance
+// pallet. Notice that only the second instance has to explicitly specify an instance.
 impl default_instance::Trait for Runtime {
     type Event = Event;
 }
@@ -381,7 +365,7 @@ construct_runtime!(
 		RandomnessCollectiveFlip: randomness_collective_flip::{Module, Call, Storage},
 		Sudo: sudo,
 		TransactionPayment: transaction_payment::{Module, Storage},
-		// The Recipe Modules
+		// The Recipe Pallets
 		SimpleEvent: simple_event::{Module, Call, Event},
 		GenericEvent: generic_event::{Module, Call, Event<T>},
 		AddingMachine: adding_machine::{Module, Call, Event},
@@ -392,7 +376,7 @@ construct_runtime!(
 		DoubleMap: double_map::{Module, Call, Storage, Event<T>},
 		LinkedMap: linked_map::{Module, Call, Storage, Event<T>},
 		StructStorage: struct_storage::{Module, Call, Storage, Event<T>},
-		ModuleConstantConfig: module_constant_config::{Module, Call, Storage, Event},
+		ConstantConfig: constant_config::{Module, Call, Storage, Event},
 		BasicToken: basic_token::{Module, Call, Storage, Event<T>},
 		CheckMembership: check_membership::{Module, Call, Storage, Event<T>},
 		ExecutionSchedule: execution_schedule::{Module, Call, Storage, Event<T>},
@@ -427,7 +411,7 @@ pub type SignedExtra = (
 pub type UncheckedExtrinsic = generic::UncheckedExtrinsic<Address, Call, Signature, SignedExtra>;
 /// Extrinsic type that has already been checked.
 pub type CheckedExtrinsic = generic::CheckedExtrinsic<AccountId, Call, SignedExtra>;
-/// Executive: handles dispatch to the various modules.
+/// Executive: handles dispatch to the various pallets.
 pub type Executive =
     executive::Executive<Runtime, Block, system::ChainContext<Runtime>, Runtime, AllModules>;
 

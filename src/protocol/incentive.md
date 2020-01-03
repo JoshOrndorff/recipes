@@ -1,12 +1,12 @@
 # Incentive Management <a name = "utxo"></a>
 
-In the [`utxo-workshop`](https://github.com/nczhu/utxo-workshop), the difference between transaction inputs and outputs are distributed evenly among the validator set. 
+In the [`utxo-workshop`](https://github.com/nczhu/utxo-workshop), the difference between transaction inputs and outputs are distributed evenly among the validator set.
 
 * it is useful to differentiate between the `consensus` and `incentive` layer (Rob's talk somewhere -- actually I remember Fred mentioning this in the first ZeroKnowledgeFM interview with Gavin...)
 
 ## Locking Funds at the Protocol Layer
 
-In the [incentive design recipe](./incentive.md#sun), we covered a common bonding pattern also found in the [`srml/staking`](https://github.com/paritytech/substrate/tree/master/srml/staking) and [`srml/council`](https://github.com/paritytech/substrate/tree/master/srml/council) modules which bonds capital via the `reserve => unreserve (=>) transfer` pattern. This pattern works, but there is another way to lock up capital for a defined period of time when building with Substrate.
+In the [incentive design recipe](./incentive.md#sun), we covered a common bonding pattern also found in the [`pallet_staking`](https://github.com/paritytech/substrate/tree/master/frame/staking) and [`pallet_collective`](https://github.com/paritytech/substrate/tree/master/frame/collective) pallets which bonds capital via the `reserve => unreserve (=>) transfer` pattern. This pattern works, but there is another way to lock up capital for a defined period of time when building with Substrate.
 
 In the [`utxo-workshop`](https://github.com/nczhu/utxo-workshop), unspent outputs can be locked up until a defined future block.
 
@@ -95,9 +95,9 @@ impl<T: Trait> Module<T> {
 
 Substrate developers need to **stay cognizant of the price paid for resource usage** within the runtime. This can be unintuitive for smart contract developers who are accustomed to interacting with a sandboxed execution environment like the EVM.
 
-Indeed, Substrate is a bit more hands-on. When storage changes occur within a runtime function, they are not automatically reverted if the function panics thereafter. For this reason, it is imperative that any resource used by a transaction must explicitly be paid for within the module. For a more comprehensive explanation, check out [the tcr tutorial's best practices](https://docs.substrate.dev/docs/tcr-tutorial-best-practices): *If the resources used might be dependent on transaction parameters or pre-existing on-chain state, then your in-module fee structure must adapt accordingly.*
+Indeed, Substrate is a bit more hands-on. When storage changes occur within a runtime function, they are not automatically reverted if the function panics thereafter. For this reason, it is imperative that any resource used by a transaction must explicitly be paid for within the pallet. For a more comprehensive explanation, check out [the tcr tutorial's best practices](https://docs.substrate.dev/docs/tcr-tutorial-best-practices): *If the resources used might be dependent on transaction parameters or pre-existing on-chain state, then your in-module fee structure must adapt accordingly.*
 
-So how do we design a robust in-module fee structure? In the [`utxo-workshop`](https://github.com/nczhu/utxo-workshop), the difference between inputs and outputs for valid transactions is distributed evenly among the authority set. This pattern demonstrates one approach for incentivizing validation via a floating transaction fee which varies in cost according to the value of the native currency and the relative size/activity of the validator set.
+So how do we design a robust in-pallet fee structure? In the [`utxo-workshop`](https://github.com/nczhu/utxo-workshop), the difference between inputs and outputs for valid transactions is distributed evenly among the authority set. This pattern demonstrates one approach for incentivizing validation via a floating transaction fee which varies in cost according to the value of the native currency and the relative size/activity of the validator set.
 
 To properly incentivize the ecosystem's actors through the fee structure, the leftover value is distributed evenly among the authorities in the `spend_leftover` runtime function:
 

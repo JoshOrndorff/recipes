@@ -1,5 +1,5 @@
 # Cache Multiple Calls
-*[`kitchen/modules/storage-cache`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/storage-cache)*
+*[`kitchen/pallets/storage-cache`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/storage-cache)*
 
 Calls to runtime storage have an associated cost. With this in mind, multiple calls to storage values should be avoided when possible.
 
@@ -97,7 +97,7 @@ error[E0382]: use of moved value: `existing_king`
   --> src/lib.rs:93:63
    |
 80 |             let existing_king = <KingMember<T>>::get();
-   |                 ------------- move occurs because `existing_king` has type `<T as srml_system::Trait>::AccountId`, which does not implement the `Copy` trait
+   |                 ------------- move occurs because `existing_king` has type `<T as frame_system::Trait>::AccountId`, which does not implement the `Copy` trait
 ...
 85 |             ensure!(!Self::is_member(existing_king), "is a member so maintains priority");
    |                                      ------------- value moved here

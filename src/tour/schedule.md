@@ -1,14 +1,14 @@
 # Execution Schedule
 
-Blockchain-native mechanisms may use the block number as a proxy for time to schedule task execution. In the [`smpl-treasury`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/smpl-treasury) recipe, spend requests are batch executed every `UserPeriod` number of blocks.
+Blockchain-native mechanisms may use the block number as a proxy for time to schedule task execution. In the [`smpl-treasury`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/smpl-treasury) recipe, spend requests are batch executed every `UserPeriod` number of blocks.
 
 Although scheduled task execution through council governance is minimal in this example, it is not too hard to imagine tasks taking the form of subscription payments, grant payouts, or any other scheduled *task* execution.
 
 ## execution-schedule
 
-[`execution-schedule`]((https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/execution-schedule)) demonstrates a permissioned task scheduler, in which members of a `council: Vec<AccountId>` can schedule tasks, which are stored in a vector in the runtime storage (`decl_storage`). 
+[`execution-schedule`]((https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/execution-schedule)) demonstrates a permissioned task scheduler, in which members of a `council: Vec<AccountId>` can schedule tasks, which are stored in a vector in the runtime storage (`decl_storage`).
 
-Members of the `council` vote on the tasks with `SignalQuota` voting power which is doled out equally to every member every `ExecutionFrequency` number of blocks. 
+Members of the `council` vote on the tasks with `SignalQuota` voting power which is doled out equally to every member every `ExecutionFrequency` number of blocks.
 
 Tasks with support are prioritized during execution every `ExecutionFrequency` number of blocks. More specifically, every `ExecutionFrequency` number of blocks, a maximum of `TaskLimit` number of tasks are executed. The priority of tasks is decided by the signalling of the council members.
 
@@ -46,11 +46,11 @@ pub struct Task<BlockNumber> {
 }
 ```
 
-The runtime method for proposing a task emits an event with the expected execution time. The calculation of the expected execution time was first naively to basically iterate the block number from the current block number until it was divisible by `T::ExecutionFrequency::get()`. While this is correct, it is clearly not the most efficient way to find the next block in which tasks are executed. 
+The runtime method for proposing a task emits an event with the expected execution time. The calculation of the expected execution time was first naively to basically iterate the block number from the current block number until it was divisible by `T::ExecutionFrequency::get()`. While this is correct, it is clearly not the most efficient way to find the next block in which tasks are executed.
 
 > A more complex engine for predicting task execution time may run off-chain instead of in a runtime method.
 
-Before adding a runtime method to estimate the `execution_time`, implement a naive implementation that iterates the global `BlockNumber` until it is divisible by `ExecutionFrequency` (which implies execution in `on_finalize` in this block). 
+Before adding a runtime method to estimate the `execution_time`, implement a naive implementation that iterates the global `BlockNumber` until it is divisible by `ExecutionFrequency` (which implies execution in `on_finalize` in this block).
 
 ```rust, ignore
 fn naive_execution_estimate(now: T::BlockNumber) -> T::BlockNumber {
@@ -139,7 +139,7 @@ This makes more sense. Current block number `% T::ExecutionFrequency::get()` is,
 
 ## on_initialize updates vote data and round information
 
-Each period of task proposals and voting is considered a round, expressed as `RoundIndex: u32` such that the global round is stored in the runtime storage as `Era`. 
+Each period of task proposals and voting is considered a round, expressed as `RoundIndex: u32` such that the global round is stored in the runtime storage as `Era`.
 
 ```rust, ignore
 pub type RoundIndex = u32;
@@ -162,7 +162,7 @@ let next_era: RoundIndex = last_era + (1u32 as RoundIndex);
 // see next code back
 ```
 
-The `SignalBank` tracks the signalling power of each member of the `council`. By using a `double-map` with the prefix as the round number, it is straightforward to perform batch removal of state related to signalling in the previous round. 
+The `SignalBank` tracks the signalling power of each member of the `council`. By using a `double-map` with the prefix as the round number, it is straightforward to perform batch removal of state related to signalling in the previous round.
 
 ```rust, ignore
 <SignalBank<T>>::remove_prefix(&last_era);
@@ -178,7 +178,7 @@ let signal_quota = T::SignalQuota::get();
 });
 ```
 
-The aforementioned ring buffer is maintained in the `on_initialize` block. The maintenance code is kept in an if statement that limits its invocation to blocks `x` that follow blocks `y` for which `y % ExecutionFrequency == 0`. 
+The aforementioned ring buffer is maintained in the `on_initialize` block. The maintenance code is kept in an if statement that limits its invocation to blocks `x` that follow blocks `y` for which `y % ExecutionFrequency == 0`.
 
 This is a common way of only exercising expensive batch execution functions every periodic number of blocks. Still, the second to last statement is confusing. The first time I encountered the problem, I placed the following in the `on_initialize` if statement that controls the maintenance of the `SignalBank` and `Era` storage values,
 
@@ -220,10 +220,10 @@ With this change, the `eras_change_correctly` test passes.
 
 ## on_finalize execution priority <a name = "priority"></a>
 
-* this pattern of sorting the tasks in `on_finalize` is somewhat taken from the `scored-pool` module which should be referenced
+* this pattern of sorting the tasks in `on_finalize` is inspired by the `scored-pool` pallet which should be referenced
 * when we schedule and reprioritize elements in this way, order of execution becomes extremely important
 
-* we execute tasks in `on_finalize` when `n % T::ExecutionFrequency == 0`. I should ensure that n != 0 as well, but I assume this is the case. The limit is maximum `TaskLimit`. 
+* we execute tasks in `on_finalize` when `n % T::ExecutionFrequency == 0`. I should ensure that n != 0 as well, but I assume this is the case. The limit is maximum `TaskLimit`.
 * An improvement would be to also ensure that their is some minimum amount of `score`. It would be nice to write abstractions that have a more native sense of the collective voting power of all members
 
 * this lends itself to a follow up off-chain workers example for how it fits between `on_finalize` of the last block and `on_initialize` of the next block `=>` there is this whole `execution-schedule` :p

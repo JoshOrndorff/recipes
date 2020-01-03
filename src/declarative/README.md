@@ -10,8 +10,8 @@ Each of the recipes in this section are oriented around increasing
 - [Permissioned Methods](./permissioned.md)
 <!-- * [checking for collisions](./collide.md) -->
 
-## Module Development Criteria <a name = "criteria"></a>
+## Pallet Development Criteria <a name = "criteria"></a>
 
-1. Modules should be relatively independent pieces of code; if your module is tied to many other modules, it should be a smart contract. See the [substrate-contracts-workshop](https://github.com/shawntabrizi/substrate-contracts-workshop) for more details with respect to smart contract programming on Substrate. Also, *use traits for abstracting shared behavior*. 
+1. Pallets should be relatively independent pieces of code; if your pallet is tied to many other pallets, it should be a smart contract. See the [substrate-contracts-workshop](https://github.com/shawntabrizi/substrate-contracts-workshop) for more details with respect to smart contract programming on Substrate. Also, *use traits for abstracting shared behavior*. 
 
 2. It should not be possible for your code to panic after storage changes. Poor error handling in Substrate can *brick* the blockchain, rendering it useless thereafter. With this in mind, it is very important to structure code according to declarative, condition-oriented design patterns. *See more in the [declarative programming](./cop.md) section.*

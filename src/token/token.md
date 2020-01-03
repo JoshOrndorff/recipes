@@ -35,7 +35,6 @@ Define the business logic in runtime methods
 ```rust, ignore
 decl_module! {
   pub struct Module<T: Trait> for enum Call where origin: T::Origin {
-    // initialize the default event for this module
     fn deposit_event() = default;
 
     // initialize the token

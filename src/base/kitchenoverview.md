@@ -10,7 +10,7 @@ runtime = { package = "super-runtime", path = "../runtimes/super-runtime" }
 # -- snip --
 ```
 
-You see `node` is bringing in the `runtime` modules in, and use it to build up the node service in
+You see `node` is bringing in the pallets in and using them to build up the node service in
 
 **`kitchen/node/src/service.rs`**
 
@@ -28,21 +28,21 @@ macro_rules! new_full_start {
 }
 ```
 
-The `runtime` folder contains two folders, `super-genesis` for specifying how the first block on the blockchain (genesis block) is being produced, and `super-runtime` for specifying how the node runtime behaves. Let us focus on one module `simple-event` in the runtime. In
+The `runtime` folder contains two folders for each runtime. Let's consider the super runtime as an example. `super-genesis` is for specifying how the first block on the blockchain (genesis block) is being produced, and `super-runtime` for specifying how the node runtime behaves. Now let us focus on one pallet `simple-event` in the runtime. In
 
 **`kitchen/runtimes/super-runtime/Cargo.toml`**
 
 ```TOML
 # -- snip --
 
-# `simple-event` module is specified as a relative path to the `modules` folder
+# `simple-event` pallet is specified as a relative path to the `pallets` folder
 [dependencies]
-simple-event = { package = "simple-event", path = "../../modules/simple-event", default_features = false }
+simple-event = { path = "../../pallets/simple-event", default_features = false }
 
 # -- snip --
 ```
 
-This is where the node runtime includes additional module `simple-event` written in this recipe. The module is then included into the runtime by:
+This is where the node runtime includes the pallet `simple-event` written here in the recipes.
 
 **`kitchen/runtimes/super-runtime/src/lib.rs`**
 
@@ -68,13 +68,13 @@ construct_runtime!(
 );
 ```
 
-Finally, you can see how the `simple-event` module is specified in `kitchen/modules/simple-event/src/lib.rs`.
+Finally, you can see how the `simple-event` pallet is specified in `kitchen/pallets/simple-event/src/lib.rs`.
 
-This is the general pattern used throughout these recipes. We first talk about a new piece of module code stored in `kitchen/modules/<module-name>/src/lib.rs`. The module is then included into the runtime by adding the module name and relative path in `kitchen/runtimes/super-runtime/Cargo.toml` (if not yet added) and updating `kitchen/runtimes/super-runtime/src/lib.rs`.
+This is the general pattern used throughout these recipes. We first talk about a new piece of pallet code stored in `kitchen/pallets/<pallet-name>/src/lib.rs`. The pallet is then included into a runtime by adding its name and relative path in `kitchen/runtimes/<runtime-name>/Cargo.toml` (if not yet added) and updating `kitchen/runtimes/<runtime-name>/src/lib.rs`.
 
 ## Learn More
 
-In fact, the Kitchen Node and runtime structure has been refactored to cater for the recipe purpose. If you are interested to learn more about how to include your own module in a node runtime, we recommend you to go through the following two tutorials.
+If you are interested to learn more about how to include your own pallets in a node runtime, we recommend you to go through the following two tutorials.
 
-* [Writing a Runtime Module in its Own Crate Tutorial](https://substrate.dev/docs/en/tutorials/creating-a-runtime-module)
-* [Adding `Contract` Module to Your Runtime Tutorial](https://substrate.dev/docs/en/tutorials/adding-a-module-to-your-runtime)
+* [Creating an External Pallet](https://substrate.dev/docs/en/next/tutorials/creating-a-runtime-module)
+* [Adding a Pallet to Your Runtime Tutorial](https://substrate.dev/docs/en/next/tutorials/adding-a-module-to-your-runtime)

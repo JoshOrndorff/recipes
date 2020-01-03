@@ -1,19 +1,19 @@
-# Module Fundamentals
-*[`kitchen/modules/hello-substrate`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/hello-substrate)*
+# Pallet Fundamentals
+*[`kitchen/pallets/hello-substrate`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/hello-substrate)*
 
-Clone the [substrate module template](https://github.com/substrate-developer-hub/substrate-module-template):
+Clone the [substrate pallet template](https://github.com/substrate-developer-hub/substrate-pallet-template):
 ```bash
-git clone https://github.com/substrate-developer-hub/substrate-module-template
+git clone https://github.com/substrate-developer-hub/substrate-pallet-template
 ```
 
-At the top of the `src/lib.rs` file, import the following from [`srml-support`](https://crates.parity.io/srml_support/index.html):
+At the top of the `src/lib.rs` file, import the following from [`frame-support`](https://substrate.dev/rustdocs/master/frame_support/index.html):
 
 ```rust, ignore
-use support::{decl_module, decl_event, decl_storage, StorageValue, StorageMap};
+use frame_support::{decl_module, decl_event, decl_storage, StorageValue, StorageMap};
 use system::ensure_signed;
 ```
 
-The blockchain's runtime storage is configured in [`decl_storage`](https://crates.parity.io/srml_support/macro.decl_storage.html).
+The blockchain's runtime storage is configured in [`decl_storage`](https://substrate.dev/rustdocs/master/frame_support/macro.decl_storage.html).
 
 ```rust, ignore
 decl_storage! {
@@ -24,7 +24,7 @@ decl_storage! {
 }
 ```
 
-Defined in [`decl_module`](https://crates.parity.io/srml_support/macro.decl_module.html), the runtime methods specify acceptable interaction with runtime storage.
+Defined in [`decl_module`](https://substrate.dev/rustdocs/master/frame_support/macro.decl_module.html), the runtime methods specify acceptable interaction with runtime storage.
 
 ```rust, ignore
 decl_module! {
@@ -41,7 +41,7 @@ decl_module! {
 }
 ```
 
-Events are declared in [`decl_event`](https://crates.parity.io/srml_support/macro.decl_event.html). The emission of events is used to determine successful execution of the logic in the body of runtime methods.
+Events are declared in [`decl_event`](https://substrate.dev/rustdocs/master/frame_support/macro.decl_event.html). The emission of events is used to determine successful execution of the logic in the body of runtime methods.
 
 ```rust, ignore
 decl_event!{
@@ -53,4 +53,4 @@ decl_event!{
 }
 ```
 
-*It is also possible to declare an error type for runtime modules with [`decl_error`](https://crates.parity.io/srml_support/macro.decl_error.html)*
+*It is also possible to declare an error type for pallets with [`decl_error`](https://substrate.dev/rustdocs/master/frame_support/macro.decl_error.html)*

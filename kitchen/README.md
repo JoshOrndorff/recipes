@@ -1,25 +1,21 @@
 # Kitchen
 [![](https://tokei.rs/b1/github/substrate-developer-hub/recipes)](https://github.com/substrate-developer-hub/recipes)
 
-The kitchen is for *cooking* recipes. It is structured similarly to the main recipes build as specified in [src/SUMMARY.md](../src/SUMMARY.md), except every code sample is stored as a library via the [substrate-module-template](https://github.com/substrate-developer-hub/substrate-module-template).
+The kitchen contains full working code examples, ready for *cooking*! Each topic discussed in the book has a recipe and there are further examples on some topics.
 
 There are three sections:
-* [Modules](./modules/README.md): individual modules, formatted as libraries
-* [Runtimes](./runtimes/README.md): module configurations for executable runtimes
-* [Node](./node/README.md): node configuration using the runtimes
+* [Pallets](./pallets/README.md): individual pallets, for use in FRAME runtimes.
+* [Runtimes](./runtimes/README.md): complete Substrate runtimes composed from FRAME pallets.
+* [Node](./node/README.md): a BABE and GRANDPA node that supports either runtime.
 
 ## Directions
 
-Within each folder, run the following command to build
+Build the kitchen node with `cargo build --release -p kitchen-node`
+Then run it with `./target/release/kitchen-node --dev`
 
-```rust, ignore
-cargo build
-```
-
-I haven't written unit tests *yet*, but you can write tests in the [usual way](https://doc.rust-lang.org/rust-by-example/testing/unit_testing.html), except with a bit more [scaffolding](https://www.shawntabrizi.com/substrate-collectables-workshop/#/5/setting-up-tests).
+## Test Coverage
+Not all code is covered, and not all covered code is covered well, but we have a good start and will continue to improve. Run the tests with `cargo test -- all`.
 
 ## Using Recipes in External Projects
 
-Follow the [substrate-module-template](https://github.com/substrate-developer-hub/substrate-module-template) directions to use recipes in your personal projects. 
-
-**I recommend extracting patterns and applying them in the context of your application rather than directly importing the recipes** :)
+The pallets and runtimes provided here are ready to be used in other Substrate-based blockchains. The big caveat is that you must use the same upstream Substrate version throughout the project. Check which version the recipes uses in any of the `Cargo.toml` files. This situation should improve when Substrate begins releasing on crates.io

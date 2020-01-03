@@ -1,26 +1,26 @@
 # smpl-treasury
-*[`kitchen/modules/smpl-treasury`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/smpl-treasury)*
+*[`kitchen/pallets/smpl-treasury`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/smpl-treasury)*
 
 > the links don't work and the code is outdated but I'd like to keep some of the wording -- it is concise and still accurate
 
-Otherwise, see *[the WIP](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/modules/smpl-treasury/README.md)*
+Otherwise, see *[the WIP](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/smpl-treasury/README.md)*
 
 ## Instantiate a Pot
 
-To instantiate a pool of funds, import [`ModuleId`](https://crates.parity.io/sr_primitives/struct.ModuleId.html) and [`AccountIdConversion`](https://crates.parity.io/sr_primitives/traits/trait.AccountIdConversion.html) from [`sr-primitives`](https://crates.parity.io/sr_primitives/index.html).
+To instantiate a pool of funds, import [`ModuleId`](https://substrate.dev/rustdocs/master/sp_runtime/struct.ModuleId.html) and [`AccountIdConversion`](https://substrate.dev/rustdocs/master/sp_runtime/traits/trait.AccountIdConversion.html) from [`sr-primitives`](https://substrate.dev/rustdocs/master/sp_runtime/index.html).
 
 ```rust, ignore
 use runtime_primitives::{ModuleId, traits::AccountIdConversion};
 ```
 
-With these imports, a `MODULE_ID` constant can be generated as an identifier for the pool of funds. This identifier can be converted into an `AccountId` with the `into_account()` method provided by the [`AccountIdConversion`](https://crates.parity.io/sr_primitives/traits/trait.AccountIdConversion.html) trait.
+With these imports, a `PALLET_ID` constant can be generated as an identifier for the pool of funds. This identifier can be converted into an `AccountId` with the `into_account()` method provided by the [`AccountIdConversion`](https://substrate.dev/rustdocs/master/sp_runtime/traits/trait.AccountIdConversion.html) trait.
 
 ```rust, ignore
-const MODULE_ID: ModuleId = ModuleId(*b"example ");
+const PALLET_ID: ModuleId = ModuleId(*b"example ");
 
 impl<T: Trait> Module<T> {
     pub fn account_id() -> T::AccountId {
-		MODULE_ID.into_account()
+		PALLET_ID.into_account()
 	}
 
     fn pot() -> BalanceOf<T> {
@@ -29,11 +29,11 @@ impl<T: Trait> Module<T> {
 }
 ```
 
-Accessing the pot's balance is as simple as using the [`Currency`](https://crates.parity.io/srml_support/traits/trait.Currency.html) trait to access the balance of the associated `AccountId`.
+Accessing the pot's balance is as simple as using the [`Currency`](https://substrate.dev/rustdocs/master/frame_support/traits/trait.Currency.html) trait to access the balance of the associated `AccountId`.
 
 ## Proxy Transfers
 
-In [srml/treasury](https://github.com/paritytech/substrate/blob/master/srml/treasury/src/lib.rs), approved spending proposals are queued in runtime storage before they are scheduled for execution. For the example dispatch queue, each entry represents a request to transfer `BalanceOf<T>` to `T::AccountId` from the pot.
+In [pallet_treasury](https://github.com/paritytech/substrate/blob/master/frame/treasury/src/lib.rs), approved spending proposals are queued in runtime storage before they are scheduled for execution. For the example dispatch queue, each entry represents a request to transfer `BalanceOf<T>` to `T::AccountId` from the pot.
 
 ```rust, ignore
 decl_storage! {
@@ -64,11 +64,11 @@ decl_module! {
 
 This method transfers some funds to the pot along with the request to transfer the same funds from the pot to a recipient (the input field `dest: T::AccountId`).
 
-NOTE: *Instead of relying on direct requests, [srml/treasury](https://github.com/paritytech/substrate/blob/master/srml/treasury/src/lib.rs) coordinates spending decisions through a proposal process.*
+NOTE: *Instead of relying on direct requests, the Treasury pallet coordinates spending decisions through a proposal process.*
 
 ## Scheduling Spending
 
-To schedule spending like [`srml/treasury`](https://github.com/paritytech/substrate/blob/master/srml/treasury/src/lib.rs), first add a configurable module constant in the `Trait`. This constant determines how often the spending queue is executed.
+To schedule spending like pallet_treasury, first add a configurable constant in the `Trait`. This constant determines how often the spending queue is executed.
 
 ```rust, ignore
 pub trait Trait: system::Trait {
@@ -77,7 +77,7 @@ pub trait Trait: system::Trait {
 }
 ```
 
-This constant is invoked in the runtime method [`on_finalize`](https://crates.parity.io/sr_primitives/traits/trait.OnFinalize.html) to schedule spending every `T::SpendPeriod::get()` blocks.
+This constant is invoked in the runtime method [`on_finalize`](https://substrate.dev/rustdocs/master/sp_runtime/traits/trait.OnFinalize.html) to schedule spending every `T::SpendPeriod::get()` blocks.
 
 ```rust, ignore
 decl_module! {

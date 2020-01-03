@@ -7,23 +7,23 @@ edition = "2018"
 [dependencies]
 serde = { version = "1.0", optional = true, features = ["derive"] }
 safe-mix = { version = "1.0", default-features = false }
-simple-event = { package = "simple-event", path = "../../modules/simple-event", default_features = false }
-generic-event = { package = "generic-event", path = "../../modules/generic-event", default_features = false }
-adding-machine = { package = "adding-machine", path = "../../modules/adding-machine", default-features = false }
-single-value = { package = "single-value", path = "../../modules/single-value", default-features = false }
-vec-set = { package = "vec-set", path = "../../modules/vec-set", default-features = false }
-storage-cache = { package = "storage-cache", path = "../../modules/storage-cache", default-features = false }
-simple-map = { package = "simple-map", path = "../../modules/simple-map", default-features = false }
-double-map = { package = "double-map", path = "../../modules/double-map", default-features = false }
-linked-map = { package = "linked-map", path = "../../modules/linked-map", default-features = false }
-struct-storage = { package = "struct-storage", path = "../../modules/struct-storage", default-features = false }
-module-constant-config = { package = "module-constant-config", path = "../../modules/module-constant-config", default-features = false }
-basic-token = { package = "basic-token", path = "../../modules/basic-token", default-features = false }
-check-membership = { package = "check-membership", path = "../../modules/check-membership", default-features = false }
-execution-schedule = { package = "execution-schedule", path = "../../modules/execution-schedule", default-features = false }
-smpl-treasury = { package = "smpl-treasury", path = "../../modules/smpl-treasury", default-features = false }
-last-caller = { path = "../../modules/last-caller", default-features = false }
-default-instance = { path = "../../modules/default-instance", default-features = false }
+simple-event = { package = "simple-event", path = "../../pallets/simple-event", default_features = false }
+generic-event = { package = "generic-event", path = "../../pallets/generic-event", default_features = false }
+adding-machine = { package = "adding-machine", path = "../../pallets/adding-machine", default-features = false }
+single-value = { package = "single-value", path = "../../pallets/single-value", default-features = false }
+vec-set = { package = "vec-set", path = "../../pallets/vec-set", default-features = false }
+storage-cache = { package = "storage-cache", path = "../../pallets/storage-cache", default-features = false }
+simple-map = { package = "simple-map", path = "../../pallets/simple-map", default-features = false }
+double-map = { package = "double-map", path = "../../pallets/double-map", default-features = false }
+linked-map = { package = "linked-map", path = "../../pallets/linked-map", default-features = false }
+struct-storage = { package = "struct-storage", path = "../../pallets/struct-storage", default-features = false }
+constant-config = { path = "../../pallets/constant-config", default-features = false }
+basic-token = { package = "basic-token", path = "../../pallets/basic-token", default-features = false }
+check-membership = { package = "check-membership", path = "../../pallets/check-membership", default-features = false }
+execution-schedule = { package = "execution-schedule", path = "../../pallets/execution-schedule", default-features = false }
+smpl-treasury = { package = "smpl-treasury", path = "../../pallets/smpl-treasury", default-features = false }
+last-caller = { path = "../../pallets/last-caller", default-features = false }
+default-instance = { path = "../../pallets/default-instance", default-features = false }
 
 [dependencies.parity-scale-codec]
 default-features = false
@@ -200,19 +200,19 @@ std = [
 	"transaction-payment/std",
 	"version/std",
 
-	# Recipes Modules
-	"simple-event/std",
-	"generic-event/std",
+	# Recipes pallets
 	"adding-machine/std",
-	"single-value/std",
-	"vec-set/std",
-	"storage-cache/std",
-	"simple-map/std",
-	"double-map/std",
-	"linked-map/std",
-	"struct-storage/std",
-	"module-constant-config/std",
 	"basic-token/std",
 	"check-membership/std",
+	"constant-config/std",
+	"double-map/std",
 	"execution-schedule/std",
+	"generic-event/std",
+	"linked-map/std",
+	"simple-event/std",
+	"simple-map/std",
+	"single-value/std",
+	"storage-cache/std",
+	"struct-storage/std",
+	"vec-set/std",
 ]
