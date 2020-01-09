@@ -1,6 +1,6 @@
 # Economic Security in Substrate <a name = "sec"></a>
 
-An algorithm is considered to be *efficient* if its running time is polynomial in the size of the input, and *highly efficient* if its running time is linear in the size of the input. **It is important for all on-chain algorithms to be highly efficient, because they must scale linearly as the size of the Polkadot network grows**. In contrast, off-chain algorithms are only required to be efficient. - [Web3 Research](http://research.web3.foundation/en/latest/polkadot/NPoS/1.intro/)
+An algorithm is considered to be *efficient* if its running time is polynomial in the size of the input, and *highly efficient* if its running time is linear in the size of the input. **It is important for all on-chain algorithms to be highly efficient, because they must scale linearly as the size of the Polkadot network grows**. In contrast, off-chain algorithms are only required to be efficient. - [Web3 Research](https://research.web3.foundation/en/latest/polkadot/NPoS/index.html)
 
 Any resources used by a transaction must explicitly be paid for, and it is a pallet author's job to ensure that appropriate fees are required. Maintaining the balance between **resources used** and **price paid** is an important design activity for runtime security.
 

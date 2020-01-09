@@ -46,7 +46,7 @@ decl_storage! {
 }
 ```
 
-`SingleValue` is set to `0` every `ClearFrequency` number of blocks. *This logic is in the `on_finalize` block and is covered in deeper detail in the [Blockchain Event Loop](../tour/schedule.md) recipe.*
+`SingleValue` is set to `0` every `ClearFrequency` number of blocks in the `on_finalize` function that runs at the end of blocks execution.
 
 ```rust, ignore
 fn on_finalize(n: T::BlockNumber) {
