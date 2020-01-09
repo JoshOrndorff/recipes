@@ -11,7 +11,7 @@ curl https://getsubstrate.io -sSf | bash
 
 ### For Windows
 
-Refer to our [Substrate Installation on Windows](https://substrate.dev/docs/en/next/getting-started#getting-started-on-windows).
+Refer to our [Substrate Installation on Windows](https://substrate.dev/docs/en/overview/getting-started#getting-started-on-windows).
 
 ## Kitchen Overview
 
