@@ -2,7 +2,7 @@
 
 Pallets may access their own associated types as well as the associated types of other pallets in the runtime. This is seen in most pallets when they access `frame_system`'s associated `AccountId` type. All pallets are tightly coupled to `frame_system` through this syntax, and thus have access to its types. You may optionally couple to additional pallets in this way.
 
-> Another option to loosely couple to other pallets is discussed further later.
+> Another option, loosely coupling to other pallets, is discussed further later.
 
 ```rust, ignore
 pub trait Trait: system::Trait {}
@@ -14,7 +14,6 @@ This provides access to `Hash`, `AccountId`, and `BlockNumber` anywhere that spe
 
 - [Currency Types](./currency.md)
 - [Transaction Fees](./fees.md)
-- [Mock Runtime for Unit Testing](./mock.md)
 
 ## support::traits
 

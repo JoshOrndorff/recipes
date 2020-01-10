@@ -51,7 +51,7 @@ fn kv_put(index: ObjectCount, who: &T::AccountId, value_type: &ValueType) {
 }
 ```
 
-The code in [`kitchen/pallets/child-trie`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/child-trie) demonstrates a minimal way of organizing the basic child-trie api methods (as done in [`polkadot/runtime/crowdfund`](https://github.com/paritytech/polkadot/blob/master/runtime/src/crowdfund.rs)). It separates out the generation of the child trie id from the index with a runtime method `id_from_index`.
+The code in [`kitchen/pallets/child-trie`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/child-trie) demonstrates a minimal way of organizing the basic child-trie api methods (as done in [`polkadot/runtime/crowdfund`](https://github.com/paritytech/polkadot/blob/c003d73c65cdcc0367340db09522c91d1d3851fc/runtime/common/src/crowdfund.rs)). It separates out the generation of the child trie id from the index with a runtime method `id_from_index`.
 
 ```rust, ignore
 pub fn id_from_index(index: ObjectCount) -> Vec<u8> {

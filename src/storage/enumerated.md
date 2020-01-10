@@ -26,7 +26,7 @@ This recipe answers those questions with snippets from relevant code samples:
 * [Swap and Pop for Ordered Lists](#swappop)
 * [Linked Map for Simplified Enumeration](#linkedmap)
 
-**Note**: it is important to properly handle [overflow/underflow](../declarative/overunder.md) and verify [other relevant conditions](../declarative/README.md) for safety
+**Note**: it is important to properly handle [overflow/underflow](../declarative/safemath.md) and verify [other relevant conditions](../declarative) for safety
 
 ## Adding/Removing Elements in an Unbounded List <a name = "unbounded"></a>
 
