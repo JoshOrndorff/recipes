@@ -189,7 +189,7 @@
 	}
 }
 </code></pre>
-<p><code>SingleValue</code> is set to <code>0</code> every <code>ClearFrequency</code> number of blocks. <em>This logic is in the <code>on_finalize</code> block and is covered in deeper detail in the <a href="../tour/schedule.html">Blockchain Event Loop</a> recipe.</em></p>
+<p><code>SingleValue</code> is set to <code>0</code> every <code>ClearFrequency</code> number of blocks in the <code>on_finalize</code> function that runs at the end of blocks execution.</p>
 <pre><code class="language-rust ignore">fn on_finalize(n: T::BlockNumber) {
     if (n % T::ClearFrequency::get()).is_zero() {
         let c_val = &lt;SingleValue&gt;::get();

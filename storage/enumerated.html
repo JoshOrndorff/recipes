@@ -179,7 +179,7 @@ decl_storage! {
 <li><a href="#swappop">Swap and Pop for Ordered Lists</a></li>
 <li><a href="#linkedmap">Linked Map for Simplified Enumeration</a></li>
 </ul>
-<p><strong>Note</strong>: it is important to properly handle <a href="../declarative/overunder.html">overflow/underflow</a> and verify <a href="../declarative/README.html">other relevant conditions</a> for safety</p>
+<p><strong>Note</strong>: it is important to properly handle <a href="../declarative/safemath.html">overflow/underflow</a> and verify <a href="../declarative">other relevant conditions</a> for safety</p>
 <h2><a class="header" href="#addingremoving-elements-in-an-unbounded-list-a-name--unboundeda" id="addingremoving-elements-in-an-unbounded-list-a-name--unboundeda">Adding/Removing Elements in an Unbounded List <a name = "unbounded"></a></a></h2>
 <p>If the size of the list is not relevant, the implementation is straightforward. To add an <code>AccountId</code>, increment the <code>the_counter</code> and insert an <code>AccountId</code> at that index:</p>
 <pre><code class="language-rust ignore">fn add_member(origin) -&gt; Result {

@@ -178,7 +178,7 @@
 <h2><a class="header" href="#api-design" id="api-design">API Design</a></h2>
 <p>To become more familiar with commmon design patterns in Rust, the following links might be helpful:</p>
 <ul>
-<li><a href="https://rust-lang-nursery.github.io/api-guidelines/about.html">Official Rust API Guidelines</a></li>
+<li><a href="https://rust-lang.github.io/api-guidelines/about.html">Official Rust API Guidelines</a></li>
 <li><a href="https://github.com/rust-unofficial/patterns">Rust Unofficial Design Patterns</a></li>
 <li><a href="https://deterministic.space/elegant-apis-in-rust.html">Elegant Library API Guidelines</a></li>
 </ul>
@@ -187,9 +187,9 @@
 <ul>
 <li><a href="https://blog.rust-lang.org/2015/05/11/traits.html">Abstraction without overhead: traits in Rust</a>, <a href="https://www.youtube.com/watch?v=Sn3JklPAVLk">related conference talk</a></li>
 <li><a href="https://hermanradtke.com/2015/06/22/effectively-using-iterators-in-rust.html">Effectively Using Iterators in Rust</a></li>
-<li><a href="http://troubles.md/posts/rust-optimization/">Achieving Warp Speed with Rust</a> </li>
+<li><a href="http://troubles.md/posts/rust-optimization/">Achieving Warp Speed with Rust</a></li>
 </ul>
-<p>It is not (immediately) necessary to become familiar with multithreading because the runtime operates in a <a href="https://www.tutorialspoint.com/single-threaded-and-multi-threaded-processes">single-threaded context</a>. Even so, an optimized <a href="https://github.com/paritytech/substrate/tree/master/node">substrate node</a> architecture will use a custom RPC interface. Moreover, the runtime might take advantage of the <a href="https://substrate.dev/docs/en/next/overview/off-chain-workers">offchain workers API</a> to minimize the computation executed on-chain. Effectively using these features requires increased familiarity with advanced Rust. </p>
+<p>It is not (immediately) necessary to become familiar with multithreading because the runtime operates in a <a href="https://www.tutorialspoint.com/single-threaded-and-multi-threaded-processes">single-threaded context</a>. Even so, the runtime might take advantage of the <a href="https://substrate.dev/docs/en/next/overview/off-chain-workers">offchain workers API</a> to minimize the computation executed on-chain. Effectively using these features requires increased familiarity with advanced Rust.</p>
 <p>For a high-level overview of concurrency in Rust, Stjepan Glavina provides the following descriptions in <a href="https://stjepang.github.io/2019/01/29/lock-free-rust-crossbeam-in-2019.html">Lock-free Rust: Crossbeam in 2019</a>:</p>
 <ul>
 <li><strong><a href="https://github.com/rayon-rs/rayon">Rayon</a></strong> splits your data into distinct pieces, gives each piece to a thread to do some kind of computation on it, and finally aggregates results. Its goal is to distribute CPU-intensive tasks onto a thread pool.</li>
@@ -201,7 +201,7 @@
 <p><strong>Conceptual</strong></p>
 <ul>
 <li><a href="https://boats.gitlab.io/blog/post/wakers-i/">Introduction to Async/Await Programming (withoutboats/wakers-i)</a></li>
-<li><a href="http://aturon.github.io/2016/08/11/futures/">Futures (by Aaron Turon)</a></li>
+<li><a href="https://aturon.github.io/tech/2016/08/11/futures/">Futures (by Aaron Turon)</a></li>
 <li><a href="https://www.youtube.com/watch?v=skos4B5x7qE">RustLatam 2019 - Without Boats: Zero-Cost Async IO</a></li>
 </ul>
 <p><strong>Projects</strong></p>
@@ -230,7 +230,7 @@
 curl https://getsubstrate.io -sSf | bash
 </code></pre>
 <h3><a class="header" href="#for-windows" id="for-windows">For Windows</a></h3>
-<p>Refer to our <a href="https://substrate.dev/docs/en/next/getting-started#getting-started-on-windows">Substrate Installation on Windows</a>.</p>
+<p>Refer to our <a href="https://substrate.dev/docs/en/overview/getting-started#getting-started-on-windows">Substrate Installation on Windows</a>.</p>
 <h2><a class="header" href="#kitchen-overview" id="kitchen-overview">Kitchen Overview</a></h2>
 <p>The <a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen"><code>recipes/kitchen</code></a> folder contains all the code necessary to run a Substrate node. Let us call it the Kitchen Node. There are three folders inside:</p>
 <ul>
@@ -740,7 +740,7 @@ decl_storage! {
 <li><a href="storage/enumerated.html#swappop">Swap and Pop for Ordered Lists</a></li>
 <li><a href="storage/enumerated.html#linkedmap">Linked Map for Simplified Enumeration</a></li>
 </ul>
-<p><strong>Note</strong>: it is important to properly handle <a href="storage/../declarative/overunder.html">overflow/underflow</a> and verify <a href="storage/../declarative/README.html">other relevant conditions</a> for safety</p>
+<p><strong>Note</strong>: it is important to properly handle <a href="storage/../declarative/safemath.html">overflow/underflow</a> and verify <a href="storage/../declarative">other relevant conditions</a> for safety</p>
 <h2><a class="header" href="#addingremoving-elements-in-an-unbounded-list-a-name--unboundeda" id="addingremoving-elements-in-an-unbounded-list-a-name--unboundeda">Adding/Removing Elements in an Unbounded List <a name = "unbounded"></a></a></h2>
 <p>If the size of the list is not relevant, the implementation is straightforward. To add an <code>AccountId</code>, increment the <code>the_counter</code> and insert an <code>AccountId</code> at that index:</p>
 <pre><code class="language-rust ignore">fn add_member(origin) -&gt; Result {
@@ -907,7 +907,7 @@ child::do(trie_id, key, value);
 	who.using_encoded(|b| child::put(id.as_ref(), b, value_type));
 }
 </code></pre>
-<p>The code in <a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/child-trie"><code>kitchen/pallets/child-trie</code></a> demonstrates a minimal way of organizing the basic child-trie api methods (as done in <a href="https://github.com/paritytech/polkadot/blob/master/runtime/src/crowdfund.rs"><code>polkadot/runtime/crowdfund</code></a>). It separates out the generation of the child trie id from the index with a runtime method <code>id_from_index</code>.</p>
+<p>The code in <a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/child-trie"><code>kitchen/pallets/child-trie</code></a> demonstrates a minimal way of organizing the basic child-trie api methods (as done in <a href="https://github.com/paritytech/polkadot/blob/c003d73c65cdcc0367340db09522c91d1d3851fc/runtime/common/src/crowdfund.rs"><code>polkadot/runtime/crowdfund</code></a>). It separates out the generation of the child trie id from the index with a runtime method <code>id_from_index</code>.</p>
 <pre><code class="language-rust ignore">pub fn id_from_index(index: ObjectCount) -&gt; Vec&lt;u8&gt; {
     let mut buf = Vec::new();
     buf.extend_from_slice(b&quot;exchildtr&quot;);
@@ -977,7 +977,7 @@ pub fn crowdfund_kill(index: FundIndex) {
 	}
 }
 </code></pre>
-<p><code>SingleValue</code> is set to <code>0</code> every <code>ClearFrequency</code> number of blocks. <em>This logic is in the <code>on_finalize</code> block and is covered in deeper detail in the <a href="storage/../tour/schedule.html">Blockchain Event Loop</a> recipe.</em></p>
+<p><code>SingleValue</code> is set to <code>0</code> every <code>ClearFrequency</code> number of blocks in the <code>on_finalize</code> function that runs at the end of blocks execution.</p>
 <pre><code class="language-rust ignore">fn on_finalize(n: T::BlockNumber) {
     if (n % T::ClearFrequency::get()).is_zero() {
         let c_val = &lt;SingleValue&gt;::get();
@@ -1009,7 +1009,7 @@ pub fn crowdfund_kill(index: FundIndex) {
 <h1><a class="header" href="#substrate-types-and-traits" id="substrate-types-and-traits">Substrate Types and Traits</a></h1>
 <p>Pallets may access their own associated types as well as the associated types of other pallets in the runtime. This is seen in most pallets when they access <code>frame_system</code>'s associated <code>AccountId</code> type. All pallets are tightly coupled to <code>frame_system</code> through this syntax, and thus have access to its types. You may optionally couple to additional pallets in this way.</p>
 <blockquote>
-<p>Another option to loosely couple to other pallets is discussed further later.</p>
+<p>Another option, loosely coupling to other pallets, is discussed further later.</p>
 </blockquote>
 <pre><code class="language-rust ignore">pub trait Trait: system::Trait {}
 </code></pre>
@@ -1020,7 +1020,6 @@ pub fn crowdfund_kill(index: FundIndex) {
 <ul>
 <li><a href="traits/./currency.html">Currency Types</a></li>
 <li><a href="traits/./fees.html">Transaction Fees</a></li>
-<li><a href="traits/./mock.html">Mock Runtime for Unit Testing</a></li>
 </ul>
 <h2><a class="header" href="#supporttraits" id="supporttraits">support::traits</a></h2>
 <p>Unlike in smart contract development, the way to inherit shared behavior is not to directly import other pallets. Instead, it is common to either implement the same logic in the new context or utilize a trait from <a href="https://substrate.dev/rustdocs/master/frame_support/index.html"><code>frame_support</code></a> to guide the new implementation. By abstracting common behavior from pallets into <code>frame_support</code>, Substrate makes it easy to extract and enforce best practices in the runtime.</p>
@@ -1126,7 +1125,7 @@ pub fn reward_funds(origin, to_reward: T::AccountId, reward: BalanceOf&lt;T&gt;)
 <h2><a class="header" href="#takeaway" id="takeaway">takeaway</a></h2>
 <p>The way we represent value in the runtime dictates both the security and flexibility of the underlying transactional system. Likewise, it is convenient to be able to take advantage of Rust's <a href="https://blog.rust-lang.org/2015/05/11/traits.html">flexible trait system</a> when building systems intended to rethink how we exchange information and value 🚀</p>
 <h1><a class="header" href="#economic-security-in-substrate-a-name--seca" id="economic-security-in-substrate-a-name--seca">Economic Security in Substrate <a name = "sec"></a></a></h1>
-<p>An algorithm is considered to be <em>efficient</em> if its running time is polynomial in the size of the input, and <em>highly efficient</em> if its running time is linear in the size of the input. <strong>It is important for all on-chain algorithms to be highly efficient, because they must scale linearly as the size of the Polkadot network grows</strong>. In contrast, off-chain algorithms are only required to be efficient. - <a href="http://research.web3.foundation/en/latest/polkadot/NPoS/1.intro/">Web3 Research</a></p>
+<p>An algorithm is considered to be <em>efficient</em> if its running time is polynomial in the size of the input, and <em>highly efficient</em> if its running time is linear in the size of the input. <strong>It is important for all on-chain algorithms to be highly efficient, because they must scale linearly as the size of the Polkadot network grows</strong>. In contrast, off-chain algorithms are only required to be efficient. - <a href="https://research.web3.foundation/en/latest/polkadot/NPoS/index.html">Web3 Research</a></p>
 <p>Any resources used by a transaction must explicitly be paid for, and it is a pallet author's job to ensure that appropriate fees are required. Maintaining the balance between <strong>resources used</strong> and <strong>price paid</strong> is an important design activity for runtime security.</p>
 <p><em>Indeed, mispriced EVM operations have shown how operations that underestimate cost can open economic DOS attack vectors: <a href="https://www.parity.io/onwards/">Onwards; Underpriced EVM Operations</a>, <a href="https://www4.comp.polyu.edu.hk/%7Ecsxluo/DoSEVM.pdf">Under-Priced DOS Attacks on Ethereum</a></em></p>
 <p>Substrate provides several ways to affect the fees charges for executing a transaction. Substrate developer hub contains full details about <a href="https://substrate.dev/docs/en/next/development/module/fees">fees</a> and <a href="https://substrate.dev/docs/en/next/conceptual/runtime/weight">weights</a>.</p>
@@ -1325,10 +1324,10 @@ TechnicalCommittee: collective::&lt;Instance2&gt;::{Module, Call, Storage, Origi
 <h2><a class="header" href="#pallet-development-criteria-a-name--criteriaa" id="pallet-development-criteria-a-name--criteriaa">Pallet Development Criteria <a name = "criteria"></a></a></h2>
 <ol>
 <li>
-<p>Pallets should be relatively independent pieces of code; if your pallet is tied to many other pallets, it should be a smart contract. See the <a href="https://github.com/shawntabrizi/substrate-contracts-workshop">substrate-contracts-workshop</a> for more details with respect to smart contract programming on Substrate. Also, <em>use traits for abstracting shared behavior</em>. </p>
+<p>Pallets should be relatively independent pieces of code; if your pallet is tied to many other pallets, it should be a smart contract. See the <a href="https://github.com/shawntabrizi/substrate-contracts-workshop">substrate-contracts-workshop</a> for more details with respect to smart contract programming on Substrate. Also, <em>use traits for abstracting shared behavior</em>.</p>
 </li>
 <li>
-<p>It should not be possible for your code to panic after storage changes. Poor error handling in Substrate can <em>brick</em> the blockchain, rendering it useless thereafter. With this in mind, it is very important to structure code according to declarative, condition-oriented design patterns. <em>See more in the <a href="declarative/./cop.html">declarative programming</a> section.</em></p>
+<p>It should not be possible for your code to panic after storage changes. Poor error handling in Substrate can <em>brick</em> the blockchain, rendering it useless thereafter. With this in mind, it is very important to structure code according to declarative, condition-oriented design patterns.</p>
 </li>
 </ol>
 <h1><a class="header" href="#verify-first-write-last" id="verify-first-write-last">Verify First, Write Last</a></h1>
@@ -1356,13 +1355,11 @@ impl&lt;T: Trait&gt; Module&lt;T&gt; {
 }
 </code></pre>
 <p>Indeed, this pattern of extracting runtime checks into separate functions and invoking the <code>ensure</code> macro in their place is useful. It produces readable code and encourages targeted testing to more easily identify the source of logic errors.</p>
-<p><em>This <a href="https://github.com/shawntabrizi/substrate-collectables-workshop/pull/55#discussion_r258147961">github comment</a> might help when visualizing declarative patterns in practice.</em>
-TODO: Ellaborate github comment as it is no longer accessible.</p>
+<p><em>This <a href="https://github.com/substrate-developer-hub/substrate-collectables-workshop/pull/55#discussion_r258147961">github comment</a> might help when visualizing declarative patterns in practice.</em></p>
 <p><strong>Bonus Reading</strong></p>
 <ul>
 <li><a href="https://blog.nelhage.com/2016/03/design-for-testability/">Design for Testability</a></li>
 <li><a href="https://www.parity.io/condition-oriented-programming/">Condition-Oriented Programming</a></li>
-<li><a href="https://www.tokendaily.co/blog/declarative-smart-contracts">Declarative Smart Contracts</a></li>
 </ul>
 <h1><a class="header" href="#safe-math" id="safe-math">Safe Math</a></h1>
 <p>We can use the <code>checked</code> traits in <a href="https://substrate.dev/rustdocs/master/sp_runtime/traits/index.html">substrate-primitives</a> to protect against <a href="https://medium.com/@taabishm2/integer-overflow-underflow-and-floating-point-imprecision-6ba869a99033">overflow/underflow</a> when incrementing/decrementing objects in our runtime. To follow the <a href="https://shawntabrizi.com/substrate-collectables-workshop/#/2/tracking-all-kitties?id=checking-for-overflowunderflow">Substrat collectable tutorial example</a>, use <a href="https://substrate.dev/rustdocs/master/sp_runtime/traits/trait.CheckedAdd.html"><code>checked_add()</code></a> to safely handle the possibility of overflow when incremementing a global counter. <em>Note that this check is similar to <a href="https://ethereumdev.io/safemath-protect-overflows/"><code>SafeMath</code></a> in Solidity</em>. </p>
@@ -1915,7 +1912,7 @@ fn fake_test2() {
         })
 }
 </code></pre>
-<p>The test environment mocked above is actually used for the cursory and incomplete test <code>eras_change_correctly</code>. This test guided the structure of the if condition in <code>on_initialize</code> to periodically reset the <code>SignalBank</code> and increment the <code>Era</code>. <em>If interested in learning more about this pallet's TDD, read <a href="https://github.com/substrate-developer-hub/recipes/blob/master/src/testing/schedule.md">more here</a>.</em></p>
+<p>The test environment mocked above is actually used for the cursory and incomplete test <code>eras_change_correctly</code>. This test guided the structure of the if condition in <code>on_initialize</code> to periodically reset the <code>SignalBank</code> and increment the <code>Era</code>.</p>
 <p>For more examples of the mock runtime scaffolding pattern used in <a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/execution-schedule"><code>execution-schedule</code></a>, see <code>balances/mock.rs</code> and <code>contract/tests.rs</code>.</p>
 <h1><a class="header" href="#dessert-" id="dessert-">Dessert 🍫</a></h1>
 <p>Check out <strong><a href="https://github.com/substrate-developer-hub/awesome-substrate">awesome-substrate</a></strong> for projects, events, and all the latest Substrate news!</p>

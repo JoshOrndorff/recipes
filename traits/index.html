@@ -157,7 +157,7 @@
                         <h1><a class="header" href="#substrate-types-and-traits" id="substrate-types-and-traits">Substrate Types and Traits</a></h1>
 <p>Pallets may access their own associated types as well as the associated types of other pallets in the runtime. This is seen in most pallets when they access <code>frame_system</code>'s associated <code>AccountId</code> type. All pallets are tightly coupled to <code>frame_system</code> through this syntax, and thus have access to its types. You may optionally couple to additional pallets in this way.</p>
 <blockquote>
-<p>Another option to loosely couple to other pallets is discussed further later.</p>
+<p>Another option, loosely coupling to other pallets, is discussed further later.</p>
 </blockquote>
 <pre><code class="language-rust ignore">pub trait Trait: system::Trait {}
 </code></pre>
@@ -168,7 +168,6 @@
 <ul>
 <li><a href="./currency.html">Currency Types</a></li>
 <li><a href="./fees.html">Transaction Fees</a></li>
-<li><a href="./mock.html">Mock Runtime for Unit Testing</a></li>
 </ul>
 <h2><a class="header" href="#supporttraits" id="supporttraits">support::traits</a></h2>
 <p>Unlike in smart contract development, the way to inherit shared behavior is not to directly import other pallets. Instead, it is common to either implement the same logic in the new context or utilize a trait from <a href="https://substrate.dev/rustdocs/master/frame_support/index.html"><code>frame_support</code></a> to guide the new implementation. By abstracting common behavior from pallets into <code>frame_support</code>, Substrate makes it easy to extract and enforce best practices in the runtime.</p>

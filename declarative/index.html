@@ -167,10 +167,10 @@
 <h2><a class="header" href="#pallet-development-criteria-a-name--criteriaa" id="pallet-development-criteria-a-name--criteriaa">Pallet Development Criteria <a name = "criteria"></a></a></h2>
 <ol>
 <li>
-<p>Pallets should be relatively independent pieces of code; if your pallet is tied to many other pallets, it should be a smart contract. See the <a href="https://github.com/shawntabrizi/substrate-contracts-workshop">substrate-contracts-workshop</a> for more details with respect to smart contract programming on Substrate. Also, <em>use traits for abstracting shared behavior</em>. </p>
+<p>Pallets should be relatively independent pieces of code; if your pallet is tied to many other pallets, it should be a smart contract. See the <a href="https://github.com/shawntabrizi/substrate-contracts-workshop">substrate-contracts-workshop</a> for more details with respect to smart contract programming on Substrate. Also, <em>use traits for abstracting shared behavior</em>.</p>
 </li>
 <li>
-<p>It should not be possible for your code to panic after storage changes. Poor error handling in Substrate can <em>brick</em> the blockchain, rendering it useless thereafter. With this in mind, it is very important to structure code according to declarative, condition-oriented design patterns. <em>See more in the <a href="./cop.html">declarative programming</a> section.</em></p>
+<p>It should not be possible for your code to panic after storage changes. Poor error handling in Substrate can <em>brick</em> the blockchain, rendering it useless thereafter. With this in mind, it is very important to structure code according to declarative, condition-oriented design patterns.</p>
 </li>
 </ol>
 

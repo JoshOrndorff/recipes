@@ -194,7 +194,7 @@ child::do(trie_id, key, value);
 	who.using_encoded(|b| child::put(id.as_ref(), b, value_type));
 }
 </code></pre>
-<p>The code in <a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/child-trie"><code>kitchen/pallets/child-trie</code></a> demonstrates a minimal way of organizing the basic child-trie api methods (as done in <a href="https://github.com/paritytech/polkadot/blob/master/runtime/src/crowdfund.rs"><code>polkadot/runtime/crowdfund</code></a>). It separates out the generation of the child trie id from the index with a runtime method <code>id_from_index</code>.</p>
+<p>The code in <a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/child-trie"><code>kitchen/pallets/child-trie</code></a> demonstrates a minimal way of organizing the basic child-trie api methods (as done in <a href="https://github.com/paritytech/polkadot/blob/c003d73c65cdcc0367340db09522c91d1d3851fc/runtime/common/src/crowdfund.rs"><code>polkadot/runtime/crowdfund</code></a>). It separates out the generation of the child trie id from the index with a runtime method <code>id_from_index</code>.</p>
 <pre><code class="language-rust ignore">pub fn id_from_index(index: ObjectCount) -&gt; Vec&lt;u8&gt; {
     let mut buf = Vec::new();
     buf.extend_from_slice(b&quot;exchildtr&quot;);

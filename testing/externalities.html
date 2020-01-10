@@ -270,7 +270,7 @@ fn fake_test2() {
         })
 }
 </code></pre>
-<p>The test environment mocked above is actually used for the cursory and incomplete test <code>eras_change_correctly</code>. This test guided the structure of the if condition in <code>on_initialize</code> to periodically reset the <code>SignalBank</code> and increment the <code>Era</code>. <em>If interested in learning more about this pallet's TDD, read <a href="https://github.com/substrate-developer-hub/recipes/blob/master/src/testing/schedule.md">more here</a>.</em></p>
+<p>The test environment mocked above is actually used for the cursory and incomplete test <code>eras_change_correctly</code>. This test guided the structure of the if condition in <code>on_initialize</code> to periodically reset the <code>SignalBank</code> and increment the <code>Era</code>.</p>
 <p>For more examples of the mock runtime scaffolding pattern used in <a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/execution-schedule"><code>execution-schedule</code></a>, see <code>balances/mock.rs</code> and <code>contract/tests.rs</code>.</p>
 
                     </main>
