@@ -35,7 +35,6 @@ fn member_action(origin) -> Result {
 Indeed, this pattern of extracting runtime checks into separate functions and invoking the `ensure` macro in their place is useful. It produces readable code and encourages targeted testing to more easily identify the source of logic errors.
 
 *This [github comment](https://github.com/substrate-developer-hub/substrate-collectables-workshop/pull/55#discussion_r258147961) might help when visualizing declarative patterns in practice.*
-TODO: Ellaborate github comment
 
 **Bonus Reading**
 * [Design for Testability](https://blog.nelhage.com/2016/03/design-for-testability/)
