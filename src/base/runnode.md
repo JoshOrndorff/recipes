@@ -20,7 +20,7 @@ cargo build --release
 Once the compilation is completed, you can first purge any existing blockchain data (useful to start your node from a clean state in future) and then start the node.
 
 ```bash
-# Inside `recipes/kitchen/node` folder
+# Inside `recipes/kitchen` folder
 
 # Purge any existing blockchain data. Enter `y` upon prompt.
 ./target/release/kitchen-node purge-chain --dev
