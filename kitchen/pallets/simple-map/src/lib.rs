@@ -102,8 +102,7 @@ mod tests {
         traits::{BlakeTwo256, IdentityLookup},
         Perbill,
     };
-    use support::{assert_err, impl_outer_event, impl_outer_origin, parameter_types, traits::Get};
-    use system::{EventRecord, Phase};
+    use support::{assert_err, impl_outer_event, impl_outer_origin, parameter_types};
 
     impl_outer_origin! {
         pub enum Origin for TestRuntime {}
@@ -134,6 +133,7 @@ mod tests {
         type MaximumBlockLength = MaximumBlockLength;
         type AvailableBlockRatio = AvailableBlockRatio;
         type Version = ();
+        type ModuleToIndex = ();
     }
 
     mod simple_map {
@@ -157,7 +157,7 @@ mod tests {
 
     impl ExtBuilder {
         pub fn build() -> runtime_io::TestExternalities {
-            let mut storage = system::GenesisConfig::default()
+            let storage = system::GenesisConfig::default()
                 .build_storage::<TestRuntime>()
                 .unwrap();
             runtime_io::TestExternalities::from(storage)
@@ -167,12 +167,9 @@ mod tests {
     #[test]
     fn set_works() {
         ExtBuilder::build().execute_with(|| {
-            SimpleMap::set_single_entry(Origin::signed(1), 19);
+            let _ = SimpleMap::set_single_entry(Origin::signed(1), 19);
 
-            use system::ensure_signed;
-            let first_id = ensure_signed(Origin::signed(1)).unwrap();
-
-            let expected_event = TestEvent::simple_map(RawEvent::EntrySet(first_id, 19));
+            let expected_event = TestEvent::simple_map(RawEvent::EntrySet(1, 19));
 
             assert!(System::events().iter().any(|a| a.event == expected_event));
         })
@@ -186,13 +183,10 @@ mod tests {
                 "an entry does not exist for this user"
             );
 
-            SimpleMap::set_single_entry(Origin::signed(2), 19);
-            SimpleMap::get_single_entry(Origin::signed(1), 2);
+            let _ = SimpleMap::set_single_entry(Origin::signed(2), 19);
+            let _ = SimpleMap::get_single_entry(Origin::signed(1), 2);
 
-            use system::ensure_signed;
-            let first_id = ensure_signed(Origin::signed(1)).unwrap();
-
-            let expected_event = TestEvent::simple_map(RawEvent::EntryGot(first_id, 19));
+            let expected_event = TestEvent::simple_map(RawEvent::EntryGot(1, 19));
 
             assert!(System::events().iter().any(|a| a.event == expected_event));
         })
@@ -206,13 +200,10 @@ mod tests {
                 "an entry does not exist for this user"
             );
 
-            SimpleMap::set_single_entry(Origin::signed(2), 19);
-            SimpleMap::take_single_entry(Origin::signed(2));
+            let _ = SimpleMap::set_single_entry(Origin::signed(2), 19);
+            let _ = SimpleMap::take_single_entry(Origin::signed(2));
 
-            use system::ensure_signed;
-            let first_id = ensure_signed(Origin::signed(2)).unwrap();
-
-            let expected_event = TestEvent::simple_map(RawEvent::EntryTook(first_id, 19));
+            let expected_event = TestEvent::simple_map(RawEvent::EntryTook(2, 19));
 
             assert!(System::events().iter().any(|a| a.event == expected_event));
         })
@@ -221,8 +212,8 @@ mod tests {
     #[test]
     fn increase_works() {
         ExtBuilder::build().execute_with(|| {
-            SimpleMap::set_single_entry(Origin::signed(2), 19);
-            SimpleMap::increase_single_entry(Origin::signed(2), 2);
+            let _ = SimpleMap::set_single_entry(Origin::signed(2), 19);
+            let _ = SimpleMap::increase_single_entry(Origin::signed(2), 2);
 
             let expected_event = TestEvent::simple_map(RawEvent::IncreaseEntry(19, 21));
 
@@ -233,14 +224,14 @@ mod tests {
     #[test]
     fn cas_works() {
         ExtBuilder::build().execute_with(|| {
-            SimpleMap::set_single_entry(Origin::signed(2), 19);
+            let _ = SimpleMap::set_single_entry(Origin::signed(2), 19);
 
             assert_err!(
                 SimpleMap::compare_and_swap_single_entry(Origin::signed(2), 18, 32),
                 "cas failed bc old_entry inputted by user != existing_entry"
             );
 
-            SimpleMap::compare_and_swap_single_entry(Origin::signed(2), 19, 32);
+            let _ = SimpleMap::compare_and_swap_single_entry(Origin::signed(2), 19, 32);
 
             let expected_event = TestEvent::simple_map(RawEvent::CAS(19, 32));
 

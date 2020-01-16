@@ -111,12 +111,13 @@ mod tests {
 		type MaximumBlockLength = MaximumBlockLength;
 		type AvailableBlockRatio = AvailableBlockRatio;
 		type Version = ();
-    }
+		type ModuleToIndex = ();
+	}
 
     mod single_value {
         pub use crate::Event;
     }
-    
+
     impl_outer_event! {
         pub enum TestEvent for TestRuntime {
             single_value<T>,
@@ -150,7 +151,7 @@ mod tests {
             );
 
             assert!(System::events().iter().any(|a| a.event == expected_event));
-            
+
             System::set_block_number(15);
             SingleValue::set_value(Origin::signed(1), 11);
 
@@ -174,7 +175,7 @@ mod tests {
             );
 
             assert!(System::events().iter().any(|a| a.event == expected_event));
-            
+
             System::set_block_number(15);
             SingleValue::set_account(Origin::signed(1), 11);
 
@@ -210,7 +211,7 @@ mod tests {
                 let expected_event = TestEvent::single_value(
                     RawEvent::ValueGet(5, 2),
                 );
-    
+
                 assert!(System::events().iter().any(|a| a.event == expected_event));
 
                 SingleValue::get_account(Origin::signed(1));
@@ -232,7 +233,7 @@ mod tests {
                 let expected_event3 = TestEvent::single_value(
                     RawEvent::ValueGet(27, 12),
                 );
-    
+
                 assert!(System::events().iter().any(|a| a.event == expected_event3));
 
                 SingleValue::get_account(Origin::signed(1));

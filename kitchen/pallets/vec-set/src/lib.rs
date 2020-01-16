@@ -94,8 +94,8 @@ mod tests {
         traits::{BlakeTwo256, IdentityLookup},
         Perbill,
     };
-    use support::{assert_err, impl_outer_event, impl_outer_origin, parameter_types, traits::Get};
-    use system::{ensure_signed, EventRecord, Phase};
+    use support::{assert_err, impl_outer_event, impl_outer_origin, parameter_types};
+    use system;
 
     impl_outer_origin! {
         pub enum Origin for TestRuntime {}
@@ -126,6 +126,7 @@ mod tests {
         type MaximumBlockLength = MaximumBlockLength;
         type AvailableBlockRatio = AvailableBlockRatio;
         type Version = ();
+        type ModuleToIndex = ();
     }
 
     mod vec_set {
@@ -149,7 +150,7 @@ mod tests {
 
     impl ExtBuilder {
         pub fn build() -> runtime_io::TestExternalities {
-            let mut storage = system::GenesisConfig::default()
+            let storage = system::GenesisConfig::default()
                 .build_storage::<TestRuntime>()
                 .unwrap();
             runtime_io::TestExternalities::from(storage)
@@ -159,7 +160,7 @@ mod tests {
     #[test]
     fn add_member_err_works() {
         ExtBuilder::build().execute_with(|| {
-            VecSet::add_member(Origin::signed(1));
+            let _ = VecSet::add_member(Origin::signed(1));
 
             assert_err!(
                 VecSet::add_member(Origin::signed(1)),
@@ -171,13 +172,12 @@ mod tests {
     #[test]
     fn add_member_works() {
         ExtBuilder::build().execute_with(|| {
-            VecSet::add_member(Origin::signed(1));
+            let _ = VecSet::add_member(Origin::signed(1));
 
-            let new_member = ensure_signed(Origin::signed(1)).unwrap();
-            let expected_event = TestEvent::vec_set(RawEvent::MemberAdded(new_member));
+            let expected_event = TestEvent::vec_set(RawEvent::MemberAdded(1));
             assert!(System::events().iter().any(|a| a.event == expected_event));
 
-            assert_eq!(VecSet::members(), vec![new_member]);
+            assert_eq!(VecSet::members(), vec![1]);
         })
     }
 
@@ -195,18 +195,16 @@ mod tests {
     #[test]
     fn remove_member_works() {
         ExtBuilder::build().execute_with(|| {
-            VecSet::add_member(Origin::signed(1));
-            VecSet::remove_member(Origin::signed(1));
-            VecSet::add_member(Origin::signed(2));
+            let _ = VecSet::add_member(Origin::signed(1));
+            let _ = VecSet::remove_member(Origin::signed(1));
+            let _ = VecSet::add_member(Origin::signed(2));
 
             // check correct event emission
-            let old_member = ensure_signed(Origin::signed(1)).unwrap();
-            let new_member = ensure_signed(Origin::signed(2)).unwrap();
-            let expected_event = TestEvent::vec_set(RawEvent::MemberRemoved(old_member));
+            let expected_event = TestEvent::vec_set(RawEvent::MemberRemoved(1));
             assert!(System::events().iter().any(|a| a.event == expected_event));
 
             // check storage changes
-            assert_eq!(VecSet::members(), vec![new_member]);
+            assert_eq!(VecSet::members(), vec![2]);
         })
     }
 }

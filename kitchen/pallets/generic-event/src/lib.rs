@@ -46,7 +46,6 @@ mod tests {
         Perbill,
     };
     use support::{impl_outer_event, impl_outer_origin, parameter_types};
-    use system::{EventRecord, Phase};
 
     impl_outer_origin! {
         pub enum Origin for TestRuntime {}
@@ -77,6 +76,7 @@ mod tests {
         type MaximumBlockLength = MaximumBlockLength;
         type AvailableBlockRatio = AvailableBlockRatio;
         type Version = ();
+        type ModuleToIndex = ();
     }
 
     mod generic_event {
@@ -100,7 +100,7 @@ mod tests {
 
     impl ExtBuilder {
         pub fn build() -> runtime_io::TestExternalities {
-            let mut storage = system::GenesisConfig::default()
+            let storage = system::GenesisConfig::default()
                 .build_storage::<TestRuntime>()
                 .unwrap();
             runtime_io::TestExternalities::from(storage)
@@ -110,12 +110,10 @@ mod tests {
     #[test]
     fn test() {
         ExtBuilder::build().execute_with(|| {
-            GenericEvent::do_something(Origin::signed(1), 32);
+            let _ = GenericEvent::do_something(Origin::signed(1), 32);
 
             // construct event that should be emitted in the method call directly above
-            use system::ensure_signed;
-            let caller_id = ensure_signed(Origin::signed(1)).unwrap();
-            let expected_event = TestEvent::generic_event(RawEvent::EmitInput(caller_id, 32));
+            let expected_event = TestEvent::generic_event(RawEvent::EmitInput(1, 32));
 
             // iterate through array of `EventRecord`s
             assert!(System::events().iter().any(|a| a.event == expected_event));

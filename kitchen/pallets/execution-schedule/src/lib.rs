@@ -210,9 +210,9 @@ impl<T: Trait> Module<T> {
 #[cfg(test)]
 mod tests {
     use crate::*; //{Module, Trait, RawEvent, Task, GenesisConfig};
-    use primitives::H256;
-    use runtime_io;
-    use runtime_primitives::{
+    use sp_core::H256;
+    use sp_io::TestExternalities;
+    use sp_runtime::{
         testing::Header,
         traits::{BlakeTwo256, IdentityLookup, OnFinalize, OnInitialize, SimpleArithmetic},
         Perbill,
@@ -220,8 +220,8 @@ mod tests {
     // it's ok, just for the testing suit, thread local variables
     use rand::{rngs::OsRng, thread_rng, Rng, RngCore};
     use std::cell::RefCell;
-    use support::{impl_outer_event, impl_outer_origin, parameter_types, traits::Get};
-    use system::ensure_signed;
+    use frame_support::{impl_outer_event, impl_outer_origin, parameter_types, traits::Get};
+    use frame_system as system;
 
     // to compare expected storage items with storage items after method calls
     impl<BlockNumber: SimpleArithmetic + Copy> PartialEq for Task<BlockNumber> {
@@ -342,6 +342,7 @@ mod tests {
         type MaximumBlockLength = MaximumBlockLength;
         type AvailableBlockRatio = AvailableBlockRatio;
         type Version = ();
+        type ModuleToIndex = ();
     }
 
     mod execution_schedule {
@@ -397,7 +398,7 @@ mod tests {
             EXECUTION_FREQUENCY.with(|v| *v.borrow_mut() = self.execution_frequency);
             TASK_LIMIT.with(|v| *v.borrow_mut() = self.task_limit);
         }
-        pub fn build(self) -> runtime_io::TestExternalities {
+        pub fn build(self) -> TestExternalities {
             self.set_associated_consts();
             let t = system::GenesisConfig::default()
                 .build_storage::<TestRuntime>()
@@ -484,9 +485,8 @@ mod tests {
             .execution_frequency(10)
             .build()
             .execute_with(|| {
-                let first_account = ensure_signed(Origin::signed(1)).unwrap();
-                ExecutionSchedule::add_member(first_account.clone());
-                assert!(ExecutionSchedule::is_on_council(&first_account));
+                ExecutionSchedule::add_member(1);
+                assert!(ExecutionSchedule::is_on_council(&1));
                 System::set_block_number(2);
                 let new_task = id_generate();
                 let _ = ExecutionSchedule::schedule_task(Origin::signed(1), new_task.clone());
@@ -505,7 +505,7 @@ mod tests {
 
                 // check event behavior
                 let expected_event = TestEvent::execution_schedule(RawEvent::TaskScheduled(
-                    first_account,
+                    1,
                     new_task,
                     10,
                 ));
@@ -522,11 +522,9 @@ mod tests {
             .build()
             .execute_with(|| {
                 System::set_block_number(2u64);
-                let first_account = ensure_signed(Origin::signed(1)).unwrap();
-                let second_account = ensure_signed(Origin::signed(2)).unwrap();
                 let new_task = id_generate();
-                ExecutionSchedule::add_member(first_account);
-                ExecutionSchedule::add_member(second_account);
+                ExecutionSchedule::add_member(1);
+                ExecutionSchedule::add_member(2);
 
                 // refresh signal_quota
                 run_to_block(7u64);
@@ -541,7 +539,7 @@ mod tests {
 
                 // check that banked signal has decreased
                 assert_eq!(
-                    ExecutionSchedule::signal_bank(1u32, &first_account),
+                    ExecutionSchedule::signal_bank(1u32, 1),
                     8u32.into()
                 );
 

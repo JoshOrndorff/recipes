@@ -14,8 +14,6 @@ std = [
     'sp-std/std',
 ]
 
-[dependencies]
-
 [dependencies.parity-scale-codec]
 default-features = false
 features = ['derive']
@@ -40,3 +38,8 @@ rev = '3e651110aa06aa835790df63410a29676243fc54'
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 rev = '3e651110aa06aa835790df63410a29676243fc54'
+
+[dev-dependencies]
+rand = "0.7.2"
+sp-core = { default_features = false, git = 'https://github.com/paritytech/substrate.git', rev = '3e651110aa06aa835790df63410a29676243fc54' }
+sp-io = { default_features = false, git = 'https://github.com/paritytech/substrate.git', rev = '3e651110aa06aa835790df63410a29676243fc54' }
