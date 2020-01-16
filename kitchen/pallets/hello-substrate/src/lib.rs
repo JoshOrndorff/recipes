@@ -1,7 +1,7 @@
 /// A very simple substrate runtime
 use support::{
 	decl_module, decl_event, decl_storage, StorageValue,
-	dispatch::DispatchResult, ensure
+	dispatch::DispatchResult,
 };
 use system::ensure_signed;
 
