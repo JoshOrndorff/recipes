@@ -6,7 +6,7 @@
 /// 2. establish ownership upon configuration of circulating tokens
 /// 3. coordinate token transfers with the runtime functions
 use support::{
-    decl_event, decl_module, decl_storage, dispatch::Result, ensure, StorageMap, StorageValue,
+    decl_event, decl_module, decl_storage, dispatch::DispatchResult, ensure, StorageMap, StorageValue,
 };
 use system::ensure_signed;
 
@@ -40,7 +40,7 @@ decl_module! {
 
         // initialize the token
         // transfers the total_supply amout to the caller
-        fn init(origin) -> Result {
+        fn init(origin) -> DispatchResult {
             let sender = ensure_signed(origin)?;
             ensure!(Self::is_init() == false, "Already initialized.");
 
@@ -52,7 +52,7 @@ decl_module! {
         }
 
         // transfer tokens from one account to another
-        fn transfer(_origin, to: T::AccountId, value: u64) -> Result {
+        fn transfer(_origin, to: T::AccountId, value: u64) -> DispatchResult {
             let sender = ensure_signed(_origin)?;
             let sender_balance = Self::get_balance(sender.clone());
             ensure!(sender_balance >= value, "Not enough balance.");

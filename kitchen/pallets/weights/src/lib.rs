@@ -6,7 +6,7 @@ use support::{
     ensure,
     decl_module,
     decl_storage,
-    dispatch::{Result, WeighData, PaysFee},
+    dispatch::{DispatchResult, WeighData, PaysFee},
     weights::{ DispatchClass, Weight, ClassifyDispatch, SimpleDispatchInfo},
 };
 
@@ -116,7 +116,7 @@ decl_module! {
         // be assigned using types available in the Substrate framework. No custom coding is
         // necessary.
         #[weight = SimpleDispatchInfo::FixedNormal(100)]
-        fn store_value(_origin, entry: u32) -> Result {
+        fn store_value(_origin, entry: u32) -> DispatchResult {
 
             StoredValue::put(entry);
 
@@ -131,7 +131,7 @@ decl_module! {
         // store_value. Because it performs both a read and a write, the multiplier is set to 200
         // instead of 100 as before.
         #[weight = Linear(200)]
-        fn add_n(_origin, n: u32) -> Result {
+        fn add_n(_origin, n: u32) -> DispatchResult {
 
             let mut old : u32;
             for _i in 1..=n {
@@ -146,7 +146,7 @@ decl_module! {
         // ahead of time. Instead we have the caller pass in the expected storage value and we
         // ensure it is correct.
         #[weight = Linear(200)]
-        fn double(_origin, initial_value: u32) -> Result {
+        fn double(_origin, initial_value: u32) -> DispatchResult {
 
             // Ensure the value passed by the caller actually matches storage If this condition
             // were not true, the caller would be able to avoid paying appropriate fees.
@@ -165,7 +165,7 @@ decl_module! {
         // demonstrate that weights should grow by the same order as the compute required by the
         // transaction.
         #[weight = Quadratic(200, 30, 100)]
-        fn complex_calculations(_origin, x: u32, y: u32) -> Result {
+        fn complex_calculations(_origin, x: u32, y: u32) -> DispatchResult {
             // This first part performs a relatively cheap (hence 30)
             // in-memory calculations.
             let mut part1 = 0;
@@ -189,7 +189,7 @@ decl_module! {
         // Here the first parameter, a boolean has a significant effect on the computational
         // intensity of the call.
         #[weight = Conditional(200)]
-        fn add_or_set(_origin, add_flag: bool, val: u32) -> Result {
+        fn add_or_set(_origin, add_flag: bool, val: u32) -> DispatchResult {
             if add_flag {
                 StoredValue::put(&val);
             }

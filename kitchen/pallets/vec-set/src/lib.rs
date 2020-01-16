@@ -3,7 +3,7 @@
 // demonstrates how to use append instead of mutate
 // https://substrate.dev/rustdocs/master/frame_support/storage/trait.StorageValue.html#tymethod.append
 use rstd::prelude::*;
-use support::{decl_event, decl_module, decl_storage, dispatch::Result, ensure, StorageValue};
+use support::{decl_event, decl_module, decl_storage, dispatch::DispatchResult, ensure, StorageValue};
 use system::ensure_signed;
 
 pub trait Trait: system::Trait {
@@ -40,7 +40,7 @@ decl_module! {
 
         // don't do this
         // (unless appending new entries AND mutating existing entries)
-        fn mutate_to_append(origin) -> Result {
+        fn mutate_to_append(origin) -> DispatchResult {
             let user = ensure_signed(origin)?;
 
             // this decodes the existing vec, appends the new values, and re-encodes the whole thing
@@ -50,7 +50,7 @@ decl_module! {
         }
 
         // do this instead
-        fn append_new_entries(origin) -> Result {
+        fn append_new_entries(origin) -> DispatchResult {
             let user = ensure_signed(origin)?;
 
             // this encodes the new values and appends them to the already encoded existing evc
@@ -59,7 +59,7 @@ decl_module! {
             Ok(())
         }
 
-        fn add_member(origin) -> Result {
+        fn add_member(origin) -> DispatchResult {
             let new_member = ensure_signed(origin)?;
             ensure!(!Self::is_member(&new_member), "must not be a member to be added");
             <Members<T>>::append(&mut vec![new_member.clone()])?;
@@ -67,7 +67,7 @@ decl_module! {
             Ok(())
         }
 
-        fn remove_member(origin) -> Result {
+        fn remove_member(origin) -> DispatchResult {
             let old_member = ensure_signed(origin)?;
             ensure!(Self::is_member(&old_member), "must be a member in order to leave");
             <Members<T>>::mutate(|v| v.retain(|i| i != &old_member));

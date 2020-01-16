@@ -3,7 +3,14 @@
 /// configurable pallet constants in substrate
 use runtime_primitives::traits::Zero;
 use support::traits::Get;
-use support::{decl_event, decl_module, decl_storage, dispatch::Result, ensure, StorageValue};
+use support::{
+    decl_event,
+    decl_module,
+    decl_storage,
+    dispatch::{DispatchResult, DispatchError},
+    ensure,
+    StorageValue
+};
 use system::ensure_signed;
 
 pub trait Trait: system::Trait {
@@ -39,7 +46,7 @@ decl_module! {
 
         const ClearFrequency: T::BlockNumber = T::ClearFrequency::get();
 
-        fn add_value(origin, val_to_add: u32) -> Result {
+        fn add_value(origin, val_to_add: u32) -> DispatchResult {
             let _ = ensure_signed(origin)?;
             ensure!(val_to_add <= T::MaxAddend::get(), "value must be <= maximum add amount constant");
 
@@ -49,7 +56,7 @@ decl_module! {
             // checks for overflow when new value added
             let result = match c_val.checked_add(val_to_add) {
                 Some(r) => r,
-                None => return Err("Addition overflowed"),
+                None => return Err(DispatchError::Other("Addition overflowed")),
             };
             <SingleValue>::put(result);
             Self::deposit_event(Event::Added(c_val, val_to_add, result));
@@ -65,7 +72,7 @@ decl_module! {
         }
 
         // for testing purposes
-        fn set_value(origin, value: u32) -> Result {
+        fn set_value(origin, value: u32) -> DispatchResult {
             let _ = ensure_signed(origin)?;
             <SingleValue>::put(value);
             Ok(())

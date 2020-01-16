@@ -10,7 +10,7 @@
 use rstd::prelude::*;
 use support::{
     decl_event, decl_module, decl_storage,
-    dispatch::Result,
+    dispatch::DispatchResult,
     ensure,
     storage::{StorageDoubleMap, StorageMap, StorageValue},
 };
@@ -54,7 +54,7 @@ decl_module! {
         fn deposit_event() = default;
 
         /// Join the `AllMembers` vec before joining a group
-        fn join_all_members(origin) -> Result {
+        fn join_all_members(origin) -> DispatchResult {
             let new_member = ensure_signed(origin)?;
             ensure!(!Self::is_member(&new_member), "already a member, can't join");
             <AllMembers<T>>::mutate(|v| v.push(new_member.clone()));
@@ -63,7 +63,7 @@ decl_module! {
         }
 
         /// Put MemberScore (for testing purposes)
-        fn join_a_group(origin, index: GroupIndex, score: u32) -> Result {
+        fn join_a_group(origin, index: GroupIndex, score: u32) -> DispatchResult {
             let member = ensure_signed(origin)?;
             ensure!(Self::is_member(&member), "not a member, can't remove");
             <MemberScore<T>>::insert(&index, &member, score);
@@ -72,7 +72,7 @@ decl_module! {
             Ok(())
         }
 
-        fn remove_member(origin) -> Result {
+        fn remove_member(origin) -> DispatchResult {
             let member_to_remove = ensure_signed(origin)?;
             ensure!(Self::is_member(&member_to_remove), "not a member, can't remove");
             let group_id = <GroupMembership<T>>::take(member_to_remove.clone());
@@ -81,7 +81,7 @@ decl_module! {
             Ok(())
         }
 
-        fn remove_group(origin, group: GroupIndex) -> Result {
+        fn remove_group(origin, group: GroupIndex) -> DispatchResult {
             let member = ensure_signed(origin)?;
 
             let group_id = <GroupMembership<T>>::get(member);

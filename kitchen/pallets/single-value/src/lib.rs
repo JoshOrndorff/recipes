@@ -1,7 +1,7 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 /// Single Value Storage
-use support::{decl_module, decl_event, decl_storage, ensure, dispatch::Result, StorageValue};
+use support::{decl_module, decl_event, decl_storage, ensure, dispatch::DispatchResult, StorageValue};
 use system::{self, ensure_signed};
 
 pub trait Trait: system::Trait {
@@ -36,7 +36,7 @@ decl_module! {
     pub struct Module<T: Trait> for enum Call where origin: T::Origin {
         fn deposit_event() = default;
 
-        fn set_value(origin, value: u32) -> Result {
+        fn set_value(origin, value: u32) -> DispatchResult {
             let _ = ensure_signed(origin)?;
             let now = <system::Module<T>>::block_number();
             <MyValue>::put(value.clone());
@@ -44,7 +44,7 @@ decl_module! {
             Ok(())
         }
 
-        fn get_value(origin) -> Result {
+        fn get_value(origin) -> DispatchResult {
             let _ = ensure_signed(origin)?;
             let now = <system::Module<T>>::block_number();
             ensure!(<MyValue>::exists(), "value does not exist");
@@ -53,7 +53,7 @@ decl_module! {
             Ok(())
         }
 
-        fn set_account(origin, account_to_set: T::AccountId) -> Result {
+        fn set_account(origin, account_to_set: T::AccountId) -> DispatchResult {
             let _ = ensure_signed(origin)?;
             let now = <system::Module<T>>::block_number();
             <MyAccount<T>>::put(account_to_set.clone());
@@ -61,7 +61,7 @@ decl_module! {
             Ok(())
         }
 
-        fn get_account(origin) -> Result {
+        fn get_account(origin) -> DispatchResult {
             let _ = ensure_signed(origin)?;
             let now = <system::Module<T>>::block_number();
             ensure!(<MyAccount<T>>::exists(), "account dne");

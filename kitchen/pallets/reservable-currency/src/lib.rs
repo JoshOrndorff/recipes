@@ -3,7 +3,7 @@
 use support::traits::{
 	Currency, ReservableCurrency, ExistenceRequirement::AllowDeath
 };
-use support::{decl_event, decl_module, dispatch::Result};
+use support::{decl_event, decl_module, dispatch::DispatchResult};
 use system::ensure_signed;
 
 // balance type using reservable currency type
@@ -35,7 +35,7 @@ decl_module! {
     pub struct Module<T: Trait> for enum Call where origin: T::Origin {
         fn deposit_event() = default;
 
-        pub fn lock_funds(origin, amount: BalanceOf<T>) -> Result {
+        pub fn lock_funds(origin, amount: BalanceOf<T>) -> DispatchResult {
             let locker = ensure_signed(origin)?;
 
             T::Currency::reserve(&locker, amount)
@@ -47,7 +47,7 @@ decl_module! {
             Ok(())
         }
 
-        pub fn unlock_funds(origin, amount: BalanceOf<T>) -> Result {
+        pub fn unlock_funds(origin, amount: BalanceOf<T>) -> DispatchResult {
             let unlocker = ensure_signed(origin)?;
 
             T::Currency::unreserve(&unlocker, amount);
@@ -59,7 +59,7 @@ decl_module! {
             Ok(())
         }
 
-        pub fn transfer_funds(origin, dest: T::AccountId, amount: BalanceOf<T>) -> Result {
+        pub fn transfer_funds(origin, dest: T::AccountId, amount: BalanceOf<T>) -> DispatchResult {
             let sender = ensure_signed(origin)?;
 
             T::Currency::transfer(&sender, &dest, amount, AllowDeath)?;
@@ -76,7 +76,7 @@ decl_module! {
             to_punish: T::AccountId,
             dest: T::AccountId,
             collateral: BalanceOf<T>
-        ) -> Result {
+        ) -> DispatchResult {
             let _ = ensure_signed(origin)?; // dangerous because can be called with any signature (so dont do this in practice ever!)
 
             let unreserved = T::Currency::unreserve(&to_punish, collateral);

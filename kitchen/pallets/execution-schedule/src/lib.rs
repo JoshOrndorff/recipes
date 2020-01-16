@@ -1,16 +1,15 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 //! Scheduling Execution
-use rstd::prelude::*;
-use runtime_primitives::{traits::Zero, RuntimeDebug};
-use support::{
+use sp_std::prelude::*;
+use sp_runtime::{traits::Zero, RuntimeDebug};
+use frame_support::{
     codec::{Decode, Encode},
     decl_event, decl_module, decl_storage,
-    dispatch::Result,
+    dispatch::{DispatchResult, DispatchError},
     ensure,
     traits::Get,
-    StorageDoubleMap, StorageMap, StorageValue,
 };
-use system::ensure_signed;
+use frame_system::{self as system, ensure_signed};
 
 pub type TaskId = Vec<u8>;
 pub type PriorityScore = u32;
@@ -112,7 +111,7 @@ decl_module! {
         ///
         /// - the task initially has no priority
         /// - only council members can schedule tasks
-        fn schedule_task(origin, data: Vec<u8>) -> Result {
+        fn schedule_task(origin, data: Vec<u8>) -> DispatchResult {
             let proposer = ensure_signed(origin)?;
             ensure!(Self::is_on_council(&proposer), "only members of the council can schedule tasks");
 
@@ -140,12 +139,12 @@ decl_module! {
         ///
         /// - members of the council have limited voting power to increase the priority
         /// of tasks
-        fn signal_priority(origin, id: TaskId, signal: PriorityScore) -> Result {
+        fn signal_priority(origin, id: TaskId, signal: PriorityScore) -> DispatchResult {
             let voter = ensure_signed(origin)?;
             ensure!(Self::is_on_council(&voter), "The voting member must be on the council");
 
             // get the current voting era
-            let current_era = <Era>::get();
+            let current_era = Era::get();
             // get the voter's remaining signal in this voting era
             let voters_signal = <SignalBank<T>>::get(current_era, &voter);
             ensure!(voters_signal >= signal, "The voter cannot signal more than the remaining signal");
@@ -156,7 +155,7 @@ decl_module! {
                 let remaining_signal = voters_signal - signal;
                 <SignalBank<T>>::insert(current_era, &voter, remaining_signal);
             } else {
-                return Err("the task did not exist in the PendingTasks storage map");
+                return Err(DispatchError::Other("the task did not exist in the PendingTasks storage map"));
             }
             Self::deposit_event(RawEvent::SignalSupport(id, signal));
             Ok(())

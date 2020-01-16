@@ -5,7 +5,7 @@ use runtime_primitives::RuntimeDebug;
 use support::{
     codec::{Decode, Encode},
     decl_event, decl_module, decl_storage,
-    dispatch::Result,
+    dispatch::DispatchResult,
     StorageMap,
 };
 use system::{self, ensure_signed};
@@ -55,7 +55,7 @@ decl_module! {
     pub struct Module<T: Trait> for enum Call where origin: T::Origin {
         fn deposit_event() = default;
 
-        fn insert_inner_thing(origin, number: u32, hash: T::Hash, balance: T::Balance) -> Result {
+        fn insert_inner_thing(origin, number: u32, hash: T::Hash, balance: T::Balance) -> DispatchResult {
             let _ = ensure_signed(origin)?;
             let thing = InnerThing {
                             number,
@@ -67,7 +67,8 @@ decl_module! {
             Ok(())
         }
 
-        fn insert_super_thing_with_existing_inner(origin, inner_number: u32, super_number: u32) -> Result {
+        fn insert_super_thing_with_existing_inner(origin, inner_number: u32, super_number: u32) -> DispatchResult {
+            let _ = ensure_signed(origin)?;
             let inner_thing = Self::inner_things_by_numbers(inner_number);
             let super_thing = SuperThing {
                 super_number,
@@ -78,7 +79,7 @@ decl_module! {
             Ok(())
         }
 
-        fn insert_super_thing_with_new_inner(origin, inner_number: u32, hash: T::Hash, balance: T::Balance, super_number: u32) -> Result {
+        fn insert_super_thing_with_new_inner(origin, inner_number: u32, hash: T::Hash, balance: T::Balance, super_number: u32) -> DispatchResult {
             let _ = ensure_signed(origin)?;
             // construct and insert `inner_thing` first
             let inner_thing = InnerThing {

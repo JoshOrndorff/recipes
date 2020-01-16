@@ -7,7 +7,7 @@
 /// fees ([Big O notation refresher](https://rob-bell.net/2009/06/a-beginners-guide-to-big-o-notation/)).
 /// This opens an economic attack vector on your chain.
 use support::{
-    decl_event, decl_module, decl_storage, dispatch::Result, ensure, StorageLinkedMap, StorageMap,
+    decl_event, decl_module, decl_storage, dispatch::DispatchResult, ensure, StorageLinkedMap, StorageMap,
     StorageValue,
 };
 use system::ensure_signed;
@@ -42,7 +42,7 @@ decl_module! {
     pub struct Module<T: Trait> for enum Call where origin: T::Origin {
         fn deposit_event() = default;
 
-        fn add_member(origin) -> Result {
+        fn add_member(origin) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
             // increment the counter
@@ -65,7 +65,7 @@ decl_module! {
 
         // worst option
         // -- only works if the list is *unbounded*
-        fn remove_member_unbounded(origin, index: u32) -> Result {
+        fn remove_member_unbounded(origin, index: u32) -> DispatchResult {
             let _ = ensure_signed(origin)?;
 
             // verify existence
@@ -84,7 +84,7 @@ decl_module! {
         // swap and pop
         // -- better than `remove_member_unbounded`
         // -- this pattern becomes unwieldy fast!
-        fn remove_member_bounded(origin, index: u32) -> Result {
+        fn remove_member_bounded(origin, index: u32) -> DispatchResult {
             let _ = ensure_signed(origin)?;
 
             ensure!(<TheList<T>>::exists(index), "an element doesn't exist at this index");
@@ -109,7 +109,7 @@ decl_module! {
         // best option (atm)
         // this uses the enumerable storage map to simplify `swap and pop`
         // should be generally preferred
-        fn remove_member_linked(origin, index: u32) -> Result {
+        fn remove_member_linked(origin, index: u32) -> DispatchResult {
             let _ = ensure_signed(origin)?;
 
             ensure!(<LinkedList<T>>::exists(index), "A member does not exist at this index");

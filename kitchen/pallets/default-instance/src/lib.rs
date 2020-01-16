@@ -1,7 +1,7 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 /// An example instantiable pallet (with default instance)
-use support::{decl_event, decl_module, decl_storage, dispatch::Result, StorageValue};
+use support::{decl_event, decl_module, decl_storage, dispatch::DispatchResult, StorageValue};
 use system::{self, ensure_signed};
 
 // The pallet's configuration trait takes an instance as a type parameter. The instance type is
@@ -42,7 +42,7 @@ decl_module! {
 
         // The only dispatchable call, updates the single storage item,
         // and emits an event.
-        fn call(origin) -> Result {
+        fn call(origin) -> DispatchResult {
             let caller = ensure_signed(origin)?;
 
             // When writing to storage, we supply, not only a configuration T, but also an

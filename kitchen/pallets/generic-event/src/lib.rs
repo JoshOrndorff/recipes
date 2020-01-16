@@ -1,7 +1,7 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 /// Event uses types from the pallet's configuration trait
-use support::{decl_event, decl_module, dispatch::Result};
+use support::{decl_event, decl_module, dispatch::DispatchResult};
 use system::ensure_signed;
 
 pub trait Trait: system::Trait {
@@ -12,7 +12,7 @@ decl_module! {
     pub struct Module<T: Trait> for enum Call where origin: T::Origin {
         fn deposit_event() = default;
 
-        fn do_something(origin, input: u32) -> Result {
+        fn do_something(origin, input: u32) -> DispatchResult {
             let user = ensure_signed(origin)?;
 
             // could do something with the input here instead

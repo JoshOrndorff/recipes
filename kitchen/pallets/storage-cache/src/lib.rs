@@ -3,7 +3,7 @@
 // storage cache example
 // takeaway: minimize calls to runtime storage
 use rstd::prelude::*;
-use support::{decl_event, decl_module, decl_storage, dispatch::Result, ensure, StorageValue};
+use support::{decl_event, decl_module, decl_storage, dispatch::DispatchResult, ensure, StorageValue};
 use system::ensure_signed;
 
 pub trait Trait: system::Trait {
@@ -45,7 +45,7 @@ decl_module! {
         ///  (Copy) inefficient way of updating value in storage
         ///
         /// storage value -> storage_value * 2 + input_val
-        fn increase_value_no_cache(origin, some_val: u32) -> Result {
+        fn increase_value_no_cache(origin, some_val: u32) -> DispatchResult {
             let _ = ensure_signed(origin)?;
             let original_call = <SomeCopyValue>::get();
             let some_calculation = original_call.checked_add(some_val).ok_or("addition overflowed1")?;
@@ -62,7 +62,7 @@ decl_module! {
         /// (Copy) more efficient value change
         ///
         /// storage value -> storage_value * 2 + input_val
-        fn increase_value_w_copy(origin, some_val: u32) -> Result {
+        fn increase_value_w_copy(origin, some_val: u32) -> DispatchResult {
             let _ = ensure_signed(origin)?;
             let original_call = <SomeCopyValue>::get();
             let some_calculation = original_call.checked_add(some_val).ok_or("addition overflowed1")?; // doesn't check for overflow either!
@@ -78,7 +78,7 @@ decl_module! {
         /// swaps the king account with Origin::signed() if
         /// (1) other account is member &&
         /// (2) existing king isn't
-        fn swap_king_no_cache(origin) -> Result {
+        fn swap_king_no_cache(origin) -> DispatchResult {
             let new_king = ensure_signed(origin)?;
             let existing_king = <KingMember<T>>::get();
 
@@ -101,7 +101,7 @@ decl_module! {
         /// swaps the king account with Origin::signed() if
         /// (1) other account is member &&
         /// (2) existing king isn't
-        fn swap_king_with_cache(origin) -> Result {
+        fn swap_king_with_cache(origin) -> DispatchResult {
             let new_king = ensure_signed(origin)?;
             let existing_king = <KingMember<T>>::get();
             // prefer to clone previous call rather than repeat call unnecessarily
@@ -122,19 +122,19 @@ decl_module! {
         }
 
         // ---- for testing purposes ----
-        fn set_copy(origin, val: u32) -> Result {
+        fn set_copy(origin, val: u32) -> DispatchResult {
             let _ = ensure_signed(origin)?;
             <SomeCopyValue>::put(val);
             Ok(())
         }
 
-        fn set_king(origin) -> Result {
+        fn set_king(origin) -> DispatchResult {
             let user = ensure_signed(origin)?;
             <KingMember<T>>::put(user);
             Ok(())
         }
 
-        fn mock_add_member(origin) -> Result {
+        fn mock_add_member(origin) -> DispatchResult {
             let added = ensure_signed(origin)?;
             ensure!(!Self::is_member(&added), "member already in group");
             <GroupMembers<T>>::append(&mut vec![added])?;

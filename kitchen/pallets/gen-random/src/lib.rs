@@ -5,10 +5,10 @@
 use primitives::{ed25519, Blake2Hasher, Hasher, H256};
 use primitives::{Blake2Hasher, Hasher};
 /// Generating Randomness example(s)
-use support::{decl_event, decl_module, decl_storage, dispatch::Result, ensure, StorageValue};
+use support::{decl_event, decl_module, decl_storage, dispatch::DispatchResult, ensure, StorageValue};
 use system::ensure_signed;
 use parity_scale_codec::{Encode, Decode};
-use support::{decl_event, decl_module, decl_storage, StorageValue, dispatch::Result};
+use support::{decl_event, decl_module, decl_storage, StorageValue, dispatch::DispatchResult};
 use system::{self, ensure_signed};
 
 pub trait Trait: system::Trait {
@@ -25,7 +25,7 @@ decl_module! {
     pub struct Module<T: Trait> for enum Call where origin: T::Origin {
         fn deposit_event() = default;
 
-        fn use_weak_entropy(origin) -> Result {
+        fn use_weak_entropy(origin) -> DispatchResult {
             let _ = ensure_signed(origin)?;
 
             let random_seed = <system::Module<T>>::random_seed();

@@ -3,7 +3,7 @@
 /// Adding Machine
 /// A simple adding machine which checks for overflow and emits an event with
 /// the result, without using storage.
-use support::{decl_event, decl_module, dispatch::Result};
+use support::{decl_event, decl_module, dispatch::{DispatchResult, DispatchError}};
 use system::ensure_signed;
 
 pub trait Trait: system::Trait {
@@ -14,12 +14,12 @@ decl_module! {
     pub struct Module<T: Trait> for enum Call where origin: T::Origin {
         fn deposit_event() = default;
 
-        fn add(origin, val1: u32, val2: u32) -> Result {
+        fn add(origin, val1: u32, val2: u32) -> DispatchResult {
             let _ = ensure_signed(origin)?;
             // checks for overflow
             let result = match val1.checked_add(val2) {
                 Some(r) => r,
-                None => return Err("Addition overflowed"),
+                None => return Err(DispatchError::Other("Addition overflowed")),
             };
             Self::deposit_event(Event::Added(val1, val2, result));
             Ok(())

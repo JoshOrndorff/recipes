@@ -2,7 +2,7 @@
 
 // Simple Storage Map
 // https://substrate.dev/rustdocs/master/frame_support/storage/trait.StorageMap.html
-use support::{decl_event, decl_module, decl_storage, dispatch::Result, ensure, StorageMap};
+use support::{decl_event, decl_module, decl_storage, dispatch::DispatchResult, ensure, StorageMap};
 use system::ensure_signed;
 
 pub trait Trait: system::Trait {
@@ -35,7 +35,7 @@ decl_module! {
     pub struct Module<T: Trait> for enum Call where origin: T::Origin {
         fn deposit_event() = default;
 
-        fn set_single_entry(origin, entry: u32) -> Result {
+        fn set_single_entry(origin, entry: u32) -> DispatchResult {
             // only a user can set their entry
             let user = ensure_signed(origin)?;
 
@@ -45,7 +45,7 @@ decl_module! {
             Ok(())
         }
 
-        fn get_single_entry(origin, account: T::AccountId) -> Result {
+        fn get_single_entry(origin, account: T::AccountId) -> DispatchResult {
             // anyone (signed extrinsic) can get an entry
             let getter = ensure_signed(origin)?;
 
@@ -55,7 +55,7 @@ decl_module! {
             Ok(())
         }
 
-        fn take_single_entry(origin) -> Result {
+        fn take_single_entry(origin) -> DispatchResult {
             // only the user can take their own entry
             let user = ensure_signed(origin)?;
 
@@ -65,7 +65,7 @@ decl_module! {
             Ok(())
         }
 
-        fn increase_single_entry(origin, add_this_val: u32) -> Result {
+        fn increase_single_entry(origin, add_this_val: u32) -> DispatchResult {
             // only the user can mutate their own entry
             let user = ensure_signed(origin)?;
             let original_value = <SimpleMap<T>>::get(&user);
@@ -77,7 +77,7 @@ decl_module! {
             Ok(())
         }
 
-        fn compare_and_swap_single_entry(origin, old_entry: u32, new_entry: u32) -> Result {
+        fn compare_and_swap_single_entry(origin, old_entry: u32, new_entry: u32) -> DispatchResult {
             // only a user that knows their previous entry can set the new entry
             let user = ensure_signed(origin)?;
 

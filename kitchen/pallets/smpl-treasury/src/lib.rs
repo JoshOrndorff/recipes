@@ -10,7 +10,7 @@ use sp_runtime::{
 #[cfg(feature = "std")]
 use serde::{Deserialize, Serialize};
 use support::traits::{Currency, ExistenceRequirement::AllowDeath, Get, ReservableCurrency};
-use support::{decl_event, decl_module, decl_storage, dispatch::Result, ensure, StorageValue};
+use support::{decl_event, decl_module, decl_storage, dispatch::{DispatchResult, DispatchError}, ensure, StorageValue};
 use system::{self, ensure_signed};
 
 type BalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::Balance;
@@ -115,7 +115,7 @@ decl_module! {
             origin,
             dest: T::AccountId,
             amount: BalanceOf<T>
-        ) -> Result {
+        ) -> DispatchResult {
             let sender = ensure_signed(origin)?;
 
             // the bond calculation could depend on the transfer amount
@@ -149,7 +149,7 @@ decl_module! {
             origin,
             dest: T::AccountId,
             amount: BalanceOf<T>,
-        ) -> Result {
+        ) -> DispatchResult {
             let proposer = ensure_signed(origin)?;
             ensure!(Self::is_on_council(&proposer), "must be on council to make proposal");
 
@@ -175,13 +175,13 @@ decl_module! {
         fn stupid_vote(
             origin,
             vote: T::AccountId,
-        ) -> Result {
+        ) -> DispatchResult {
             let voter = ensure_signed(origin)?;
             ensure!(Self::is_on_council(&voter), "the voter is on the council");
             if let Some(mut proposal) = <Proposals<T>>::get(vote) {
                 proposal.support += 1;
             } else {
-                return Err("proposal associated with vote does not exist")
+                return Err(DispatchError::Other("proposal associated with vote does not exist"));
             }
             Ok(())
         }
