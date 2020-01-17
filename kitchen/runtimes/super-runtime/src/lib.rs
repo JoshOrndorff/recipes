@@ -299,13 +299,14 @@ impl double_map::Trait for Runtime {
 
 parameter_types! {
     pub const ExecutionFrequency: u32 = 10;
+    pub const SignalQuota: u32 = 1000;
     pub const TaskLimit: u32 = 10;
 }
 
 impl execution_schedule::Trait for Runtime {
     type Event = Event;
     type ExecutionFrequency = ExecutionFrequency;
-    type SignalQuota = MaxAddend;
+    type SignalQuota = SignalQuota;
     type TaskLimit = TaskLimit;
 }
 
@@ -334,14 +335,21 @@ impl simple_map::Trait for Runtime {
     type Event = Event;
 }
 
-// impl simple_treasury::Trait for Runtime {
-//     type Event = Event;
-//     type Currency = balances::Module<Runtime>;
-//     type Tax = MaxAddend;
-//     type UserSpend = MaxAddend;
-//     type TreasurySpend = MaxAddend;
-//     type MinimumProposalAge = ClearFrequency;
-// }
+parameter_types!{
+    pub const Tax: u32 = 1000;
+    pub const UserSpend: u32 = 1000;
+    pub const TreasurySpend: u32 = 1000;
+    pub const MinProposalAge: u32 = 10;
+}
+
+impl simple_treasury::Trait for Runtime {
+    type Event = Event;
+    type Currency = Balances;
+    type Tax = Tax;
+    type UserSpend = UserSpend;
+    type TreasurySpend = TreasurySpend;
+    type MinimumProposalAge = MinProposalAge;
+}
 
 impl single_value::Trait for Runtime {
     type Event = Event;
@@ -389,7 +397,7 @@ construct_runtime!(
 		LinkedMap: linked_map::{Module, Call, Storage, Event<T>},
 		SimpleEvent: simple_event::{Module, Call, Event},
 		SimpleMap: simple_map::{Module, Call, Storage, Event<T>},
-		// SimpleTreasury: simple_treasury::{Module, Call, Storage, Event<T>},
+		SimpleTreasury: simple_treasury::{Module, Call, Storage, Event<T>},
 		SingleValue: single_value::{Module, Call, Storage, Event<T>},
 		StorageCache: storage_cache::{Module, Call, Storage, Event<T>},
 		StructStorage: struct_storage::{Module, Call, Storage, Event<T>},

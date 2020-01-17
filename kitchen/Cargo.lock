@@ -5062,6 +5062,7 @@ dependencies = [
  "serde 1.0.104 (registry+https://github.com/rust-lang/crates.io-index)",
  "simple-event 0.1.0",
  "simple-map 0.1.0",
+ "simple-treasury 0.1.0",
  "single-value 0.1.0",
  "sp-api 2.0.0 (git+https://github.com/paritytech/substrate.git?rev=3e651110aa06aa835790df63410a29676243fc54)",
  "sp-block-builder 2.0.0 (git+https://github.com/paritytech/substrate.git?rev=3e651110aa06aa835790df63410a29676243fc54)",
