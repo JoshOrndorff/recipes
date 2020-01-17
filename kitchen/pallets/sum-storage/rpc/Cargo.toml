@@ -1,5 +1,5 @@
 [package]
-name = "pallet-sum-storage-rpc"
+name = "sum-storage-rpc"
 version = "2.0.0"
 authors = ["JoshyOrndorff"]
 edition = "2018"
