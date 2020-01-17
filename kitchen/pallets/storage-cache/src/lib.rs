@@ -3,7 +3,7 @@
 // storage cache example
 // takeaway: minimize calls to runtime storage
 use rstd::prelude::*;
-use support::{decl_event, decl_module, decl_storage, dispatch::Result, ensure, StorageValue};
+use support::{decl_event, decl_module, decl_storage, dispatch::DispatchResult, ensure, StorageValue};
 use system::ensure_signed;
 
 pub trait Trait: system::Trait {
@@ -45,7 +45,7 @@ decl_module! {
         ///  (Copy) inefficient way of updating value in storage
         ///
         /// storage value -> storage_value * 2 + input_val
-        fn increase_value_no_cache(origin, some_val: u32) -> Result {
+        fn increase_value_no_cache(origin, some_val: u32) -> DispatchResult {
             let _ = ensure_signed(origin)?;
             let original_call = <SomeCopyValue>::get();
             let some_calculation = original_call.checked_add(some_val).ok_or("addition overflowed1")?;
@@ -62,7 +62,7 @@ decl_module! {
         /// (Copy) more efficient value change
         ///
         /// storage value -> storage_value * 2 + input_val
-        fn increase_value_w_copy(origin, some_val: u32) -> Result {
+        fn increase_value_w_copy(origin, some_val: u32) -> DispatchResult {
             let _ = ensure_signed(origin)?;
             let original_call = <SomeCopyValue>::get();
             let some_calculation = original_call.checked_add(some_val).ok_or("addition overflowed1")?; // doesn't check for overflow either!
@@ -70,7 +70,7 @@ decl_module! {
             let another_calculation = some_calculation.checked_add(original_call).ok_or("addition overflowed2")?;
             <SomeCopyValue>::put(another_calculation);
             let now = <system::Module<T>>::block_number();
-            Self::deposit_event(RawEvent::InefficientValueChange(another_calculation, now));
+            Self::deposit_event(RawEvent::BetterValueChange(another_calculation, now));
             Ok(())
         }
 
@@ -78,7 +78,7 @@ decl_module! {
         /// swaps the king account with Origin::signed() if
         /// (1) other account is member &&
         /// (2) existing king isn't
-        fn swap_king_no_cache(origin) -> Result {
+        fn swap_king_no_cache(origin) -> DispatchResult {
             let new_king = ensure_signed(origin)?;
             let existing_king = <KingMember<T>>::get();
 
@@ -101,7 +101,7 @@ decl_module! {
         /// swaps the king account with Origin::signed() if
         /// (1) other account is member &&
         /// (2) existing king isn't
-        fn swap_king_with_cache(origin) -> Result {
+        fn swap_king_with_cache(origin) -> DispatchResult {
             let new_king = ensure_signed(origin)?;
             let existing_king = <KingMember<T>>::get();
             // prefer to clone previous call rather than repeat call unnecessarily
@@ -122,19 +122,19 @@ decl_module! {
         }
 
         // ---- for testing purposes ----
-        fn set_copy(origin, val: u32) -> Result {
+        fn set_copy(origin, val: u32) -> DispatchResult {
             let _ = ensure_signed(origin)?;
             <SomeCopyValue>::put(val);
             Ok(())
         }
 
-        fn set_king(origin) -> Result {
+        fn set_king(origin) -> DispatchResult {
             let user = ensure_signed(origin)?;
             <KingMember<T>>::put(user);
             Ok(())
         }
 
-        fn mock_add_member(origin) -> Result {
+        fn mock_add_member(origin) -> DispatchResult {
             let added = ensure_signed(origin)?;
             ensure!(!Self::is_member(&added), "member already in group");
             <GroupMembers<T>>::append(&mut vec![added])?;
@@ -160,8 +160,8 @@ mod tests {
         traits::{BlakeTwo256, IdentityLookup},
         Perbill,
     };
-    use support::{assert_err, impl_outer_event, impl_outer_origin, parameter_types, traits::Get};
-    use system::{ensure_signed, EventRecord, Phase};
+    use support::{assert_ok, assert_err, impl_outer_event, impl_outer_origin, parameter_types};
+    use system;
 
     impl_outer_origin! {
         pub enum Origin for TestRuntime {}
@@ -192,6 +192,7 @@ mod tests {
         type MaximumBlockLength = MaximumBlockLength;
         type AvailableBlockRatio = AvailableBlockRatio;
         type Version = ();
+        type ModuleToIndex = ();
     }
 
     mod storage_cache {
@@ -215,7 +216,7 @@ mod tests {
 
     impl ExtBuilder {
         pub fn build() -> runtime_io::TestExternalities {
-            let mut storage = system::GenesisConfig::default()
+            let storage = system::GenesisConfig::default()
                 .build_storage::<TestRuntime>()
                 .unwrap();
             runtime_io::TestExternalities::from(storage)
@@ -225,20 +226,18 @@ mod tests {
     #[test]
     fn init_storage() {
         ExtBuilder::build().execute_with(|| {
-            StorageCache::set_copy(Origin::signed(1), 10);
+            assert_ok!(StorageCache::set_copy(Origin::signed(1), 10));
             assert_eq!(StorageCache::some_copy_value(), 10);
 
-            StorageCache::set_king(Origin::signed(2));
-            let second_account = ensure_signed(Origin::signed(2)).unwrap();
-            assert_eq!(StorageCache::king_member(), second_account);
+            assert_ok!(StorageCache::set_king(Origin::signed(2)));
+            assert_eq!(StorageCache::king_member(), 2);
 
-            StorageCache::mock_add_member(Origin::signed(1));
-            let first_account = ensure_signed(Origin::signed(1)).unwrap();
+            assert_ok!(StorageCache::mock_add_member(Origin::signed(1)));
             assert_err!(
                 StorageCache::mock_add_member(Origin::signed(1)),
                 "member already in group"
             );
-            assert!(StorageCache::group_members().contains(&first_account));
+            assert!(StorageCache::group_members().contains(&1));
         })
     }
 
@@ -246,7 +245,7 @@ mod tests {
     fn increase_value_errs_on_overflow() {
         ExtBuilder::build().execute_with(|| {
             let num1: u32 = u32::max_value() - 9;
-            StorageCache::set_copy(Origin::signed(1), num1);
+            assert_ok!(StorageCache::set_copy(Origin::signed(1), num1));
             // test first overflow panic for both methods
             assert_err!(
                 StorageCache::increase_value_no_cache(Origin::signed(1), 10),
@@ -258,7 +257,7 @@ mod tests {
             );
 
             let num2: u32 = 2147483643;
-            StorageCache::set_copy(Origin::signed(1), num2);
+            assert_ok!(StorageCache::set_copy(Origin::signed(1), num2));
             // test second overflow panic for both methods
             assert_err!(
                 StorageCache::increase_value_no_cache(Origin::signed(1), 10),
@@ -275,16 +274,19 @@ mod tests {
     fn increase_value_works() {
         ExtBuilder::build().execute_with(|| {
             System::set_block_number(5);
-            StorageCache::set_copy(Origin::signed(1), 25);
-            StorageCache::increase_value_no_cache(Origin::signed(1), 10);
+            assert_ok!(StorageCache::set_copy(Origin::signed(1), 25));
+            assert_ok!(StorageCache::increase_value_no_cache(Origin::signed(1), 10));
             // proof: x = 25, 2x + 10 = 60 qed
             let expected_event1 = TestEvent::storage_cache(RawEvent::InefficientValueChange(60, 5));
             assert!(System::events().iter().any(|a| a.event == expected_event1));
 
-            StorageCache::increase_value_w_copy(Origin::signed(1), 10);
+            // Ensure the storage value has actually changed from the first call
+            assert_eq!(StorageCache::some_copy_value(), 60);
+
+            assert_ok!(StorageCache::increase_value_w_copy(Origin::signed(1), 10));
             // proof: x = 60, 2x + 10 = 130
             let expected_event2 = TestEvent::storage_cache(RawEvent::BetterValueChange(130, 5));
-            assert!(System::events().iter().any(|a| a.event == expected_event1));
+            assert!(System::events().iter().any(|a| a.event == expected_event2));
 
             // check storage
             assert_eq!(StorageCache::some_copy_value(), 130);
@@ -294,8 +296,8 @@ mod tests {
     #[test]
     fn swap_king_errs_as_intended() {
         ExtBuilder::build().execute_with(|| {
-            StorageCache::mock_add_member(Origin::signed(1));
-            StorageCache::set_king(Origin::signed(1));
+            assert_ok!(StorageCache::mock_add_member(Origin::signed(1)));
+            assert_ok!(StorageCache::set_king(Origin::signed(1)));
             assert_err!(
                 StorageCache::swap_king_no_cache(Origin::signed(3)),
                 "current king is a member so maintains priority"
@@ -305,7 +307,7 @@ mod tests {
                 "current king is a member so maintains priority"
             );
 
-            StorageCache::set_king(Origin::signed(2));
+            assert_ok!(StorageCache::set_king(Origin::signed(2)));
             assert_err!(
                 StorageCache::swap_king_no_cache(Origin::signed(3)),
                 "new king is not a member so doesn't get priority"
@@ -320,31 +322,25 @@ mod tests {
     #[test]
     fn swap_king_works() {
         ExtBuilder::build().execute_with(|| {
-            StorageCache::mock_add_member(Origin::signed(2));
-            StorageCache::mock_add_member(Origin::signed(3));
-            let first_account = ensure_signed(Origin::signed(1)).unwrap();
-            let second_account = ensure_signed(Origin::signed(2)).unwrap();
-            let third_account = ensure_signed(Origin::signed(3)).unwrap();
+            assert_ok!(StorageCache::mock_add_member(Origin::signed(2)));
+            assert_ok!(StorageCache::mock_add_member(Origin::signed(3)));
 
-            StorageCache::set_king(Origin::signed(1));
-            StorageCache::swap_king_no_cache(Origin::signed(2));
+            assert_ok!(StorageCache::set_king(Origin::signed(1)));
+            assert_ok!(StorageCache::swap_king_no_cache(Origin::signed(2)));
 
-            let expected_event = TestEvent::storage_cache(RawEvent::InefficientKingSwap(
-                first_account,
-                second_account,
-            ));
+            let expected_event = TestEvent::storage_cache(RawEvent::InefficientKingSwap(1, 2));
             assert!(System::events().iter().any(|a| a.event == expected_event));
-            assert_eq!(StorageCache::king_member(), second_account);
+            assert_eq!(StorageCache::king_member(), 2);
 
-            StorageCache::set_king(Origin::signed(1));
-            assert_eq!(StorageCache::king_member(), first_account);
-            StorageCache::swap_king_with_cache(Origin::signed(3));
+            assert_ok!(StorageCache::set_king(Origin::signed(1)));
+            assert_eq!(StorageCache::king_member(), 1);
+            assert_ok!(StorageCache::swap_king_with_cache(Origin::signed(3)));
 
             let expected_event =
-                TestEvent::storage_cache(RawEvent::BetterKingSwap(first_account, third_account));
+                TestEvent::storage_cache(RawEvent::BetterKingSwap(1, 3));
             assert!(System::events().iter().any(|a| a.event == expected_event));
 
-            assert_eq!(StorageCache::king_member(), third_account);
+            assert_eq!(StorageCache::king_member(), 3);
         })
     }
 }

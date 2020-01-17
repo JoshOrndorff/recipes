@@ -10,7 +10,7 @@ use sp_runtime::{
 #[cfg(feature = "std")]
 use serde::{Deserialize, Serialize};
 use support::traits::{Currency, ExistenceRequirement::AllowDeath, Get, ReservableCurrency};
-use support::{decl_event, decl_module, decl_storage, dispatch::Result, ensure, StorageValue};
+use support::{decl_event, decl_module, decl_storage, dispatch::{DispatchResult, DispatchError}, ensure, StorageValue};
 use system::{self, ensure_signed};
 
 type BalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::Balance;
@@ -115,7 +115,7 @@ decl_module! {
             origin,
             dest: T::AccountId,
             amount: BalanceOf<T>
-        ) -> Result {
+        ) -> DispatchResult {
             let sender = ensure_signed(origin)?;
 
             // the bond calculation could depend on the transfer amount
@@ -132,10 +132,12 @@ decl_module! {
                 amount: amount.clone(),
             };
             <TransferRequests<T>>::append(&[requested_spend])?;
-            if let Some(mut new_debt) = <UserDebt<T>>::get(sender.clone()) {
-                new_debt.checked_add(&amount.clone()).ok_or("overflowed upon adding user_debt")?;
-            } else {
-                <UserDebt<T>>::insert(sender.clone(), amount.clone());
+            match <UserDebt<T>>::get(&sender) {
+                Some(old_debt) => {
+                    let new_debt = old_debt.checked_add(&amount.clone()).ok_or("overflowed upon adding user_debt")?;
+                    <UserDebt<T>>::insert(&sender, new_debt)
+                }
+                None => <UserDebt<T>>::insert(sender.clone(), amount.clone())
             }
             Self::deposit_event(RawEvent::TransferRequested(sender, dest, amount));
             Ok(())
@@ -149,7 +151,7 @@ decl_module! {
             origin,
             dest: T::AccountId,
             amount: BalanceOf<T>,
-        ) -> Result {
+        ) -> DispatchResult {
             let proposer = ensure_signed(origin)?;
             ensure!(Self::is_on_council(&proposer), "must be on council to make proposal");
 
@@ -175,13 +177,13 @@ decl_module! {
         fn stupid_vote(
             origin,
             vote: T::AccountId,
-        ) -> Result {
+        ) -> DispatchResult {
             let voter = ensure_signed(origin)?;
             ensure!(Self::is_on_council(&voter), "the voter is on the council");
             if let Some(mut proposal) = <Proposals<T>>::get(vote) {
                 proposal.support += 1;
             } else {
-                return Err("proposal associated with vote does not exist")
+                return Err(DispatchError::Other("proposal associated with vote does not exist"));
             }
             Ok(())
         }
@@ -223,8 +225,8 @@ impl<T: Trait> Module<T> {
             // execute the transfer request
             let _ = T::Currency::transfer(&request.from, &request.to, request.amount, AllowDeath);
             // update the UserDebt storage value designed to manage spending requests queue
-            let mut new_debt = <UserDebt<T>>::get(&request.from).expect("the debt is only declared in one method and forgiven in this method; weak qed");
-            new_debt.checked_sub(&request.amount).expect("this amount could not underflow because every call matches the symmetric request in `transfer_request` `=>` > 0 always; qed");
+            let old_debt = <UserDebt<T>>::get(&request.from).expect("the debt is only declared in one method and forgiven in this method; weak qed");
+            let new_debt = old_debt.checked_sub(&request.amount).expect("this amount could not underflow because every call matches the symmetric request in `transfer_request` `=>` > 0 always; qed");
             <UserDebt<T>>::insert(&request.from, new_debt);
             // get the tax
             let tax_to_pay = T::Tax::get();
@@ -275,11 +277,10 @@ mod tests {
     use runtime_io;
     use sp_runtime::{
         testing::Header,
-        traits::{BlakeTwo256, IdentityLookup, OnFinalize},
+        traits::{BlakeTwo256, IdentityLookup},
         Perbill,
     };
-    use support::{assert_err, impl_outer_event, impl_outer_origin, parameter_types, traits::Get};
-    use system::ensure_signed;
+    use support::{assert_ok, assert_err, impl_outer_event, impl_outer_origin, parameter_types};
 
     impl_outer_origin! {
         pub enum Origin for TestRuntime {}
@@ -314,6 +315,7 @@ mod tests {
         type MaximumBlockLength = MaximumBlockLength;
         type AvailableBlockRatio = AvailableBlockRatio;
         type Version = ();
+        type ModuleToIndex = ();
     }
 
     impl balances::Trait for TestRuntime {
@@ -339,7 +341,7 @@ mod tests {
     }
 
     impl std::convert::From<()> for TestEvent {
-        fn from(unit: ()) -> Self {
+        fn from(_unit: ()) -> Self {
             TestEvent::treasury(RawEvent::NullEvent(6))
         }
     }
@@ -395,50 +397,34 @@ mod tests {
         t.into()
     }
 
-    /// Auxiliary method for simulating block time passing
-    fn run_to_block(n: u64) {
-        while System::block_number() < n {
-            Treasury::on_finalize(System::block_number());
-            System::set_block_number(System::block_number() + 1);
-        }
-    }
-
     /// Verifying correct behavior of boilerplate
     #[test]
     fn new_test_ext_behaves() {
         new_test_ext().execute_with(|| {
             // check membership initiated correctly
-            let first_account = ensure_signed(Origin::signed(1)).unwrap();
-            let second_account = ensure_signed(Origin::signed(2)).unwrap();
-            let third_account = ensure_signed(Origin::signed(3)).unwrap();
-            let fourth_account = ensure_signed(Origin::signed(4)).unwrap();
-            let fifth_account = ensure_signed(Origin::signed(5)).unwrap();
-            let sixth_account = ensure_signed(Origin::signed(6)).unwrap();
-            let seventh_account = ensure_signed(Origin::signed(7)).unwrap();
-            assert!(Treasury::is_on_council(&first_account));
-            assert!(Treasury::is_on_council(&second_account));
-            assert!(Treasury::is_on_council(&third_account));
-            assert!(Treasury::is_on_council(&fourth_account));
-            assert!(Treasury::is_on_council(&fifth_account));
-            assert!(Treasury::is_on_council(&sixth_account));
-            assert!(Treasury::is_on_council(&seventh_account));
+            assert!(Treasury::is_on_council(&1));
+            assert!(Treasury::is_on_council(&2));
+            assert!(Treasury::is_on_council(&3));
+            assert!(Treasury::is_on_council(&4));
+            assert!(Treasury::is_on_council(&5));
+            assert!(Treasury::is_on_council(&6));
+            assert!(Treasury::is_on_council(&7));
         })
     }
 
     /// Transfer reserves tax == 2
+    #[test]
     fn transfer_reserves_tax() {
         new_test_ext().execute_with(|| {
-            let first_account = ensure_signed(Origin::signed(1)).unwrap();
-            let second_account = ensure_signed(Origin::signed(2)).unwrap();
             assert_err!(
-                Treasury::request_transfer(Origin::signed(3), first_account, 1),
+                Treasury::request_transfer(Origin::signed(3), 1, 1),
                 "Must be able to pay tax to make transfer"
             );
-            Treasury::request_transfer(Origin::signed(1), second_account, 8);
-            assert_eq!(Balances::reserved_balance(&first_account), 2);
+            assert_ok!(Treasury::request_transfer(Origin::signed(1), 2, 8));
+            assert_eq!(Balances::reserved_balance(&1), 2);
             let mock_spend_request = SpendRequest {
-                from: first_account.clone(),
-                to: second_account.clone(),
+                from: 1,
+                to: 2,
                 amount: 8, // Balances::from()
             };
             // check that the expected spend request is in runtime storage
@@ -447,13 +433,13 @@ mod tests {
                 .any(|a| *a == mock_spend_request));
 
             // check that user debt is correctly tracked
-            assert_eq!(Treasury::user_debt(&first_account).unwrap(), 8,);
+            assert_eq!(Treasury::user_debt(&1).unwrap(), 8,);
 
             // check that the correct event is emitted
             let expected_event = TestEvent::treasury(RawEvent::TransferRequested(
-                first_account.clone(),
-                second_account.clone(),
-                10,
+                1,
+                2,
+                8,
             ));
             assert!(System::events().iter().any(|a| a.event == expected_event));
         })
@@ -462,28 +448,26 @@ mod tests {
     #[test]
     fn propose_treasury_spend_works() {
         new_test_ext().execute_with(|| {
-            let first_account = ensure_signed(Origin::signed(1)).unwrap();
-            let eighth_account = ensure_signed(Origin::signed(8)).unwrap();
             assert_err!(
-                Treasury::propose_treasury_spend(Origin::signed(8), first_account, 10u64.into()),
+                Treasury::propose_treasury_spend(Origin::signed(8), 1, 10u64.into()),
                 "must be on council to make proposal"
             );
             System::set_block_number(5);
-            Treasury::propose_treasury_spend(Origin::signed(1), eighth_account, 10u64.into());
+            assert_ok!(Treasury::propose_treasury_spend(Origin::signed(1), 8, 10u64.into()));
 
             let expected_proposal = Proposal {
-                to: eighth_account.clone(),
+                to: 8,
                 amount: 10u64.into(),
                 when: 5u64.into(),
                 support: 1u32,
             };
             assert_eq!(
-                Treasury::proposals(first_account).unwrap(),
+                Treasury::proposals(1).unwrap(),
                 expected_proposal
             );
 
             let expected_event = TestEvent::treasury(RawEvent::TreasuryProposal(
-                eighth_account.clone(),
+                8,
                 10u64.into(),
             ));
             assert!(System::events().iter().any(|a| a.event == expected_event));

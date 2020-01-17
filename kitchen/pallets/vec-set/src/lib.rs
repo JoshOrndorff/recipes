@@ -3,7 +3,7 @@
 // demonstrates how to use append instead of mutate
 // https://substrate.dev/rustdocs/master/frame_support/storage/trait.StorageValue.html#tymethod.append
 use rstd::prelude::*;
-use support::{decl_event, decl_module, decl_storage, dispatch::Result, ensure, StorageValue};
+use support::{decl_event, decl_module, decl_storage, dispatch::DispatchResult, ensure, StorageValue};
 use system::ensure_signed;
 
 pub trait Trait: system::Trait {
@@ -40,7 +40,7 @@ decl_module! {
 
         // don't do this
         // (unless appending new entries AND mutating existing entries)
-        fn mutate_to_append(origin) -> Result {
+        fn mutate_to_append(origin) -> DispatchResult {
             let user = ensure_signed(origin)?;
 
             // this decodes the existing vec, appends the new values, and re-encodes the whole thing
@@ -50,7 +50,7 @@ decl_module! {
         }
 
         // do this instead
-        fn append_new_entries(origin) -> Result {
+        fn append_new_entries(origin) -> DispatchResult {
             let user = ensure_signed(origin)?;
 
             // this encodes the new values and appends them to the already encoded existing evc
@@ -59,7 +59,7 @@ decl_module! {
             Ok(())
         }
 
-        fn add_member(origin) -> Result {
+        fn add_member(origin) -> DispatchResult {
             let new_member = ensure_signed(origin)?;
             ensure!(!Self::is_member(&new_member), "must not be a member to be added");
             <Members<T>>::append(&mut vec![new_member.clone()])?;
@@ -67,7 +67,7 @@ decl_module! {
             Ok(())
         }
 
-        fn remove_member(origin) -> Result {
+        fn remove_member(origin) -> DispatchResult {
             let old_member = ensure_signed(origin)?;
             ensure!(Self::is_member(&old_member), "must be a member in order to leave");
             <Members<T>>::mutate(|v| v.retain(|i| i != &old_member));
@@ -94,8 +94,8 @@ mod tests {
         traits::{BlakeTwo256, IdentityLookup},
         Perbill,
     };
-    use support::{assert_err, impl_outer_event, impl_outer_origin, parameter_types, traits::Get};
-    use system::{ensure_signed, EventRecord, Phase};
+    use support::{assert_ok, assert_err, impl_outer_event, impl_outer_origin, parameter_types};
+    use system;
 
     impl_outer_origin! {
         pub enum Origin for TestRuntime {}
@@ -126,6 +126,7 @@ mod tests {
         type MaximumBlockLength = MaximumBlockLength;
         type AvailableBlockRatio = AvailableBlockRatio;
         type Version = ();
+        type ModuleToIndex = ();
     }
 
     mod vec_set {
@@ -149,7 +150,7 @@ mod tests {
 
     impl ExtBuilder {
         pub fn build() -> runtime_io::TestExternalities {
-            let mut storage = system::GenesisConfig::default()
+            let storage = system::GenesisConfig::default()
                 .build_storage::<TestRuntime>()
                 .unwrap();
             runtime_io::TestExternalities::from(storage)
@@ -159,7 +160,7 @@ mod tests {
     #[test]
     fn add_member_err_works() {
         ExtBuilder::build().execute_with(|| {
-            VecSet::add_member(Origin::signed(1));
+            assert_ok!(VecSet::add_member(Origin::signed(1)));
 
             assert_err!(
                 VecSet::add_member(Origin::signed(1)),
@@ -171,13 +172,12 @@ mod tests {
     #[test]
     fn add_member_works() {
         ExtBuilder::build().execute_with(|| {
-            VecSet::add_member(Origin::signed(1));
+            assert_ok!(VecSet::add_member(Origin::signed(1)));
 
-            let new_member = ensure_signed(Origin::signed(1)).unwrap();
-            let expected_event = TestEvent::vec_set(RawEvent::MemberAdded(new_member));
+            let expected_event = TestEvent::vec_set(RawEvent::MemberAdded(1));
             assert!(System::events().iter().any(|a| a.event == expected_event));
 
-            assert_eq!(VecSet::members(), vec![new_member]);
+            assert_eq!(VecSet::members(), vec![1]);
         })
     }
 
@@ -195,18 +195,16 @@ mod tests {
     #[test]
     fn remove_member_works() {
         ExtBuilder::build().execute_with(|| {
-            VecSet::add_member(Origin::signed(1));
-            VecSet::remove_member(Origin::signed(1));
-            VecSet::add_member(Origin::signed(2));
+            assert_ok!(VecSet::add_member(Origin::signed(1)));
+            assert_ok!(VecSet::remove_member(Origin::signed(1)));
+            assert_ok!(VecSet::add_member(Origin::signed(2)));
 
             // check correct event emission
-            let old_member = ensure_signed(Origin::signed(1)).unwrap();
-            let new_member = ensure_signed(Origin::signed(2)).unwrap();
-            let expected_event = TestEvent::vec_set(RawEvent::MemberRemoved(old_member));
+            let expected_event = TestEvent::vec_set(RawEvent::MemberRemoved(1));
             assert!(System::events().iter().any(|a| a.event == expected_event));
 
             // check storage changes
-            assert_eq!(VecSet::members(), vec![new_member]);
+            assert_eq!(VecSet::members(), vec![2]);
         })
     }
 }

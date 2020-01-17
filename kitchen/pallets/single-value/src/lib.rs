@@ -1,7 +1,7 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 /// Single Value Storage
-use support::{decl_module, decl_event, decl_storage, ensure, dispatch::Result, StorageValue};
+use support::{decl_module, decl_event, decl_storage, ensure, dispatch::DispatchResult, StorageValue};
 use system::{self, ensure_signed};
 
 pub trait Trait: system::Trait {
@@ -36,7 +36,7 @@ decl_module! {
     pub struct Module<T: Trait> for enum Call where origin: T::Origin {
         fn deposit_event() = default;
 
-        fn set_value(origin, value: u32) -> Result {
+        fn set_value(origin, value: u32) -> DispatchResult {
             let _ = ensure_signed(origin)?;
             let now = <system::Module<T>>::block_number();
             <MyValue>::put(value.clone());
@@ -44,7 +44,7 @@ decl_module! {
             Ok(())
         }
 
-        fn get_value(origin) -> Result {
+        fn get_value(origin) -> DispatchResult {
             let _ = ensure_signed(origin)?;
             let now = <system::Module<T>>::block_number();
             ensure!(<MyValue>::exists(), "value does not exist");
@@ -53,7 +53,7 @@ decl_module! {
             Ok(())
         }
 
-        fn set_account(origin, account_to_set: T::AccountId) -> Result {
+        fn set_account(origin, account_to_set: T::AccountId) -> DispatchResult {
             let _ = ensure_signed(origin)?;
             let now = <system::Module<T>>::block_number();
             <MyAccount<T>>::put(account_to_set.clone());
@@ -61,7 +61,7 @@ decl_module! {
             Ok(())
         }
 
-        fn get_account(origin) -> Result {
+        fn get_account(origin) -> DispatchResult {
             let _ = ensure_signed(origin)?;
             let now = <system::Module<T>>::block_number();
             ensure!(<MyAccount<T>>::exists(), "account dne");
@@ -74,11 +74,10 @@ decl_module! {
 
 #[cfg(test)]
 mod tests {
-	use support::{assert_err, impl_outer_origin, impl_outer_event, parameter_types, traits::Get};
+	use support::{assert_err, assert_ok, impl_outer_origin, impl_outer_event, parameter_types};
 	use runtime_primitives::{Perbill, traits::{IdentityLookup, BlakeTwo256}, testing::Header};
-    use system::{EventRecord, Phase};
-    use super::RawEvent;
-    use runtime_io;
+	use super::RawEvent;
+	use runtime_io;
 	use primitives::H256;
 	use crate::{Module, Trait};
 
@@ -111,12 +110,13 @@ mod tests {
 		type MaximumBlockLength = MaximumBlockLength;
 		type AvailableBlockRatio = AvailableBlockRatio;
 		type Version = ();
-    }
+		type ModuleToIndex = ();
+	}
 
     mod single_value {
         pub use crate::Event;
     }
-    
+
     impl_outer_event! {
         pub enum TestEvent for TestRuntime {
             single_value<T>,
@@ -125,7 +125,7 @@ mod tests {
 
 	impl Trait for TestRuntime {
 		type Event = TestEvent;
-    }
+	}
 
 	pub type System = system::Module<TestRuntime>;
 	pub type SingleValue = Module<TestRuntime>;
@@ -134,25 +134,25 @@ mod tests {
 
 	impl ExtBuilder {
 		pub fn build() -> runtime_io::TestExternalities {
-			let mut storage = system::GenesisConfig::default().build_storage::<TestRuntime>().unwrap();
+			let storage = system::GenesisConfig::default().build_storage::<TestRuntime>().unwrap();
 			runtime_io::TestExternalities::from(storage)
 		}
-    }
+	}
 
     #[test]
     fn set_value_works() {
         ExtBuilder::build().execute_with(|| {
             System::set_block_number(2);
-            SingleValue::set_value(Origin::signed(1), 10);
+            assert_ok!(SingleValue::set_value(Origin::signed(1), 10));
 
             let expected_event = TestEvent::single_value(
                 RawEvent::ValueSet(10, 2),
             );
 
             assert!(System::events().iter().any(|a| a.event == expected_event));
-            
+
             System::set_block_number(15);
-            SingleValue::set_value(Origin::signed(1), 11);
+            assert_ok!(SingleValue::set_value(Origin::signed(1), 11));
 
             let expected_event = TestEvent::single_value(
                 RawEvent::ValueSet(11, 15),
@@ -167,16 +167,16 @@ mod tests {
         // NOTE: could probably be combined into `set_works()`
         ExtBuilder::build().execute_with(|| {
             System::set_block_number(2);
-            SingleValue::set_account(Origin::signed(1), 10);
+            assert_ok!(SingleValue::set_account(Origin::signed(1), 10));
 
             let expected_event = TestEvent::single_value(
                 RawEvent::AccountSet(10, 2),
             );
 
             assert!(System::events().iter().any(|a| a.event == expected_event));
-            
+
             System::set_block_number(15);
-            SingleValue::set_account(Origin::signed(1), 11);
+            assert_ok!(SingleValue::set_account(Origin::signed(1), 11));
 
             let expected_event = TestEvent::single_value(
                 RawEvent::AccountSet(11, 15),
@@ -201,19 +201,19 @@ mod tests {
 
                 // set value and account
                 System::set_block_number(2);
-                SingleValue::set_value(Origin::signed(2), 5);
-                SingleValue::set_account(Origin::signed(1), 10);
+                assert_ok!(SingleValue::set_value(Origin::signed(2), 5));
+                assert_ok!(SingleValue::set_account(Origin::signed(1), 10));
 
                 // get value and account
-                SingleValue::get_value(Origin::signed(1));
+                assert_ok!(SingleValue::get_value(Origin::signed(1)));
 
                 let expected_event = TestEvent::single_value(
                     RawEvent::ValueGet(5, 2),
                 );
-    
+
                 assert!(System::events().iter().any(|a| a.event == expected_event));
 
-                SingleValue::get_account(Origin::signed(1));
+                assert_ok!(SingleValue::get_account(Origin::signed(1)));
 
                 let expected_event2 = TestEvent::single_value(
                     RawEvent::AccountGet(10, 2),
@@ -223,19 +223,19 @@ mod tests {
 
                 // reset value and account
                 System::set_block_number(12);
-                SingleValue::set_value(Origin::signed(2), 27);
-                SingleValue::set_account(Origin::signed(1), 13);
+                assert_ok!(SingleValue::set_value(Origin::signed(2), 27));
+                assert_ok!(SingleValue::set_account(Origin::signed(1), 13));
 
                 // reget value and account
-                SingleValue::get_value(Origin::signed(1));
+                assert_ok!(SingleValue::get_value(Origin::signed(1)));
 
                 let expected_event3 = TestEvent::single_value(
                     RawEvent::ValueGet(27, 12),
                 );
-    
+
                 assert!(System::events().iter().any(|a| a.event == expected_event3));
 
-                SingleValue::get_account(Origin::signed(1));
+                assert_ok!(SingleValue::get_account(Origin::signed(1)));
 
                 let expected_event4 = TestEvent::single_value(
                     RawEvent::AccountGet(13, 12),

@@ -1,7 +1,7 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 /// Event uses types from the pallet's configuration trait
-use support::{decl_event, decl_module, dispatch::Result};
+use support::{decl_event, decl_module, dispatch::DispatchResult};
 use system::ensure_signed;
 
 pub trait Trait: system::Trait {
@@ -12,7 +12,7 @@ decl_module! {
     pub struct Module<T: Trait> for enum Call where origin: T::Origin {
         fn deposit_event() = default;
 
-        fn do_something(origin, input: u32) -> Result {
+        fn do_something(origin, input: u32) -> DispatchResult {
             let user = ensure_signed(origin)?;
 
             // could do something with the input here instead
@@ -45,8 +45,7 @@ mod tests {
         traits::{BlakeTwo256, IdentityLookup},
         Perbill,
     };
-    use support::{impl_outer_event, impl_outer_origin, parameter_types};
-    use system::{EventRecord, Phase};
+    use support::{assert_ok, impl_outer_event, impl_outer_origin, parameter_types};
 
     impl_outer_origin! {
         pub enum Origin for TestRuntime {}
@@ -77,6 +76,7 @@ mod tests {
         type MaximumBlockLength = MaximumBlockLength;
         type AvailableBlockRatio = AvailableBlockRatio;
         type Version = ();
+        type ModuleToIndex = ();
     }
 
     mod generic_event {
@@ -100,7 +100,7 @@ mod tests {
 
     impl ExtBuilder {
         pub fn build() -> runtime_io::TestExternalities {
-            let mut storage = system::GenesisConfig::default()
+            let storage = system::GenesisConfig::default()
                 .build_storage::<TestRuntime>()
                 .unwrap();
             runtime_io::TestExternalities::from(storage)
@@ -110,12 +110,10 @@ mod tests {
     #[test]
     fn test() {
         ExtBuilder::build().execute_with(|| {
-            GenericEvent::do_something(Origin::signed(1), 32);
+            assert_ok!(GenericEvent::do_something(Origin::signed(1), 32));
 
             // construct event that should be emitted in the method call directly above
-            use system::ensure_signed;
-            let caller_id = ensure_signed(Origin::signed(1)).unwrap();
-            let expected_event = TestEvent::generic_event(RawEvent::EmitInput(caller_id, 32));
+            let expected_event = TestEvent::generic_event(RawEvent::EmitInput(1, 32));
 
             // iterate through array of `EventRecord`s
             assert!(System::events().iter().any(|a| a.event == expected_event));

@@ -3,7 +3,7 @@
 /// Adding Machine
 /// A simple adding machine which checks for overflow and emits an event with
 /// the result, without using storage.
-use support::{decl_event, decl_module, dispatch::Result};
+use support::{decl_event, decl_module, dispatch::{DispatchResult, DispatchError}};
 use system::ensure_signed;
 
 pub trait Trait: system::Trait {
@@ -14,12 +14,12 @@ decl_module! {
     pub struct Module<T: Trait> for enum Call where origin: T::Origin {
         fn deposit_event() = default;
 
-        fn add(origin, val1: u32, val2: u32) -> Result {
+        fn add(origin, val1: u32, val2: u32) -> DispatchResult {
             let _ = ensure_signed(origin)?;
             // checks for overflow
             let result = match val1.checked_add(val2) {
                 Some(r) => r,
-                None => return Err("Addition overflowed"),
+                None => return Err(DispatchError::Other("Addition overflowed")),
             };
             Self::deposit_event(Event::Added(val1, val2, result));
             Ok(())
@@ -42,7 +42,7 @@ mod tests {
         Perbill,
     };
     use sp_core::H256;
-    use support::{assert_err, impl_outer_event, impl_outer_origin, parameter_types, traits::Get};
+    use support::{assert_err, assert_ok, impl_outer_event, impl_outer_origin, parameter_types};
     use system::{EventRecord, Phase};
 
     impl_outer_origin! {
@@ -74,6 +74,7 @@ mod tests {
         type MaximumBlockLength = MaximumBlockLength;
         type AvailableBlockRatio = AvailableBlockRatio;
         type Version = ();
+        type ModuleToIndex = ();
     }
 
     mod added {
@@ -97,7 +98,7 @@ mod tests {
 
     impl ExtBuilder {
         pub fn build() -> sp_io::TestExternalities {
-            let mut storage = system::GenesisConfig::default()
+            let storage = system::GenesisConfig::default()
                 .build_storage::<TestRuntime>()
                 .unwrap();
             sp_io::TestExternalities::from(storage)
@@ -107,11 +108,11 @@ mod tests {
     #[test]
     fn add_emits_correct_event() {
         ExtBuilder::build().execute_with(|| {
-            AddingMachine::add(Origin::signed(1), 6, 9);
-            AddingMachine::add(Origin::signed(1), 235, 431);
-            AddingMachine::add(Origin::signed(1), 1700, 38);
-            AddingMachine::add(Origin::signed(1), 6, 79);
-            AddingMachine::add(Origin::signed(1), 13, 37);
+            assert_ok!(AddingMachine::add(Origin::signed(1), 6, 9));
+            assert_ok!(AddingMachine::add(Origin::signed(1), 235, 431));
+            assert_ok!(AddingMachine::add(Origin::signed(1), 1700, 38));
+            assert_ok!(AddingMachine::add(Origin::signed(1), 6, 79));
+            assert_ok!(AddingMachine::add(Origin::signed(1), 13, 37));
 
             assert_eq!(
                 System::events(),

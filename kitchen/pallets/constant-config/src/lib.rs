@@ -3,7 +3,14 @@
 /// configurable pallet constants in substrate
 use runtime_primitives::traits::Zero;
 use support::traits::Get;
-use support::{decl_event, decl_module, decl_storage, dispatch::Result, ensure, StorageValue};
+use support::{
+    decl_event,
+    decl_module,
+    decl_storage,
+    dispatch::{DispatchResult, DispatchError},
+    ensure,
+    StorageValue
+};
 use system::ensure_signed;
 
 pub trait Trait: system::Trait {
@@ -39,7 +46,7 @@ decl_module! {
 
         const ClearFrequency: T::BlockNumber = T::ClearFrequency::get();
 
-        fn add_value(origin, val_to_add: u32) -> Result {
+        fn add_value(origin, val_to_add: u32) -> DispatchResult {
             let _ = ensure_signed(origin)?;
             ensure!(val_to_add <= T::MaxAddend::get(), "value must be <= maximum add amount constant");
 
@@ -49,7 +56,7 @@ decl_module! {
             // checks for overflow when new value added
             let result = match c_val.checked_add(val_to_add) {
                 Some(r) => r,
-                None => return Err("Addition overflowed"),
+                None => return Err(DispatchError::Other("Addition overflowed")),
             };
             <SingleValue>::put(result);
             Self::deposit_event(Event::Added(c_val, val_to_add, result));
@@ -65,7 +72,7 @@ decl_module! {
         }
 
         // for testing purposes
-        fn set_value(origin, value: u32) -> Result {
+        fn set_value(origin, value: u32) -> DispatchResult {
             let _ = ensure_signed(origin)?;
             <SingleValue>::put(value);
             Ok(())
@@ -84,8 +91,7 @@ mod tests {
         traits::{BlakeTwo256, IdentityLookup, OnFinalize},
         Perbill,
     };
-    use support::{assert_err, impl_outer_event, impl_outer_origin, parameter_types, traits::Get};
-    use system::{ensure_signed, EventRecord, Phase};
+    use support::{assert_ok, assert_err, impl_outer_event, impl_outer_origin, parameter_types};
 
     impl_outer_origin! {
         pub enum Origin for TestRuntime {}
@@ -116,6 +122,7 @@ mod tests {
         type MaximumBlockLength = MaximumBlockLength;
         type AvailableBlockRatio = AvailableBlockRatio;
         type Version = ();
+        type ModuleToIndex = ();
     }
 
     mod constant_config {
@@ -145,7 +152,7 @@ mod tests {
 
     impl ExtBuilder {
         pub fn build() -> runtime_io::TestExternalities {
-            let mut storage = system::GenesisConfig::default()
+            let storage = system::GenesisConfig::default()
                 .build_storage::<TestRuntime>()
                 .unwrap();
             runtime_io::TestExternalities::from(storage)
@@ -166,7 +173,7 @@ mod tests {
     fn overflow_checked() {
         ExtBuilder::build().execute_with(|| {
             let test_num: u32 = u32::max_value() - 99;
-            ConstantConfig::set_value(Origin::signed(1), test_num);
+            assert_ok!(ConstantConfig::set_value(Origin::signed(1), test_num));
 
             assert_err!(
                 ConstantConfig::add_value(Origin::signed(1), 100),
@@ -178,17 +185,17 @@ mod tests {
     #[test]
     fn add_value_works() {
         ExtBuilder::build().execute_with(|| {
-            ConstantConfig::set_value(Origin::signed(1), 10);
+            assert_ok!(ConstantConfig::set_value(Origin::signed(1), 10));
 
-            ConstantConfig::add_value(Origin::signed(2), 100);
+            assert_ok!(ConstantConfig::add_value(Origin::signed(2), 100));
             let expected_event1 = TestEvent::constant_config(Event::Added(10, 100, 110));
             assert!(System::events().iter().any(|a| a.event == expected_event1));
 
-            ConstantConfig::add_value(Origin::signed(3), 100);
+            assert_ok!(ConstantConfig::add_value(Origin::signed(3), 100));
             let expected_event2 = TestEvent::constant_config(Event::Added(110, 100, 210));
             assert!(System::events().iter().any(|a| a.event == expected_event2));
 
-            ConstantConfig::add_value(Origin::signed(4), 100);
+            assert_ok!(ConstantConfig::add_value(Origin::signed(4), 100));
             let expected_event3 = TestEvent::constant_config(Event::Added(210, 100, 310));
             assert!(System::events().iter().any(|a| a.event == expected_event3));
         })
@@ -198,9 +205,9 @@ mod tests {
     fn on_finalize_clears() {
         ExtBuilder::build().execute_with(|| {
             System::set_block_number(5);
-            ConstantConfig::set_value(Origin::signed(1), 10);
+            assert_ok!(ConstantConfig::set_value(Origin::signed(1), 10));
 
-            ConstantConfig::add_value(Origin::signed(2), 100);
+            assert_ok!(ConstantConfig::add_value(Origin::signed(2), 100));
 
             ConstantConfig::on_finalize(10);
             let expected_event = TestEvent::constant_config(Event::Cleared(110));

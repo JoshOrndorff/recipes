@@ -1,7 +1,7 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 /// Simple Event (not generic over types)
-use support::{decl_event, decl_module, dispatch::Result};
+use support::{decl_event, decl_module, dispatch::DispatchResult};
 use system::ensure_signed;
 
 pub trait Trait: system::Trait {
@@ -12,7 +12,7 @@ decl_module! {
     pub struct Module<T: Trait> for enum Call where origin: T::Origin {
         fn deposit_event() = default;
 
-        fn do_something(origin, input: u32) -> Result {
+        fn do_something(origin, input: u32) -> DispatchResult {
             let _ = ensure_signed(origin)?;
 
             // could do something with the input here instead
@@ -42,7 +42,7 @@ mod tests {
         traits::{BlakeTwo256, IdentityLookup},
         Perbill,
     };
-    use support::{impl_outer_event, impl_outer_origin, parameter_types, traits::Get};
+    use support::{assert_ok, impl_outer_event, impl_outer_origin, parameter_types};
     use system::{EventRecord, Phase};
 
     impl_outer_origin! {
@@ -74,6 +74,7 @@ mod tests {
         type MaximumBlockLength = MaximumBlockLength;
         type AvailableBlockRatio = AvailableBlockRatio;
         type Version = ();
+        type ModuleToIndex = ();
     }
 
     mod simple_event {
@@ -97,7 +98,7 @@ mod tests {
 
     impl ExtBuilder {
         pub fn build() -> runtime_io::TestExternalities {
-            let mut storage = system::GenesisConfig::default()
+            let storage = system::GenesisConfig::default()
                 .build_storage::<TestRuntime>()
                 .unwrap();
             runtime_io::TestExternalities::from(storage)
@@ -107,7 +108,7 @@ mod tests {
     #[test]
     fn test() {
         ExtBuilder::build().execute_with(|| {
-            SimpleEvent::do_something(Origin::signed(1), 32);
+            assert_ok!(SimpleEvent::do_something(Origin::signed(1), 32));
 
             assert_eq!(
                 System::events(),

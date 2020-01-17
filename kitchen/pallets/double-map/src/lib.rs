@@ -7,14 +7,14 @@
 // the second key might be a unique identifier
 // `remove_prefix` enables clean removal of all values with the group identifier
 
-use rstd::prelude::*;
-use support::{
+use sp_std::prelude::*;
+use frame_support::{
     decl_event, decl_module, decl_storage,
-    dispatch::Result,
+    dispatch::DispatchResult,
     ensure,
     storage::{StorageDoubleMap, StorageMap, StorageValue},
 };
-use system::ensure_signed;
+use frame_system::{self as system, ensure_signed};
 
 pub trait Trait: system::Trait {
     type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
@@ -54,7 +54,7 @@ decl_module! {
         fn deposit_event() = default;
 
         /// Join the `AllMembers` vec before joining a group
-        fn join_all_members(origin) -> Result {
+        fn join_all_members(origin) -> DispatchResult {
             let new_member = ensure_signed(origin)?;
             ensure!(!Self::is_member(&new_member), "already a member, can't join");
             <AllMembers<T>>::mutate(|v| v.push(new_member.clone()));
@@ -63,7 +63,7 @@ decl_module! {
         }
 
         /// Put MemberScore (for testing purposes)
-        fn join_a_group(origin, index: GroupIndex, score: u32) -> Result {
+        fn join_a_group(origin, index: GroupIndex, score: u32) -> DispatchResult {
             let member = ensure_signed(origin)?;
             ensure!(Self::is_member(&member), "not a member, can't remove");
             <MemberScore<T>>::insert(&index, &member, score);
@@ -72,7 +72,7 @@ decl_module! {
             Ok(())
         }
 
-        fn remove_member(origin) -> Result {
+        fn remove_member(origin) -> DispatchResult {
             let member_to_remove = ensure_signed(origin)?;
             ensure!(Self::is_member(&member_to_remove), "not a member, can't remove");
             let group_id = <GroupMembership<T>>::take(member_to_remove.clone());
@@ -81,7 +81,7 @@ decl_module! {
             Ok(())
         }
 
-        fn remove_group(origin, group: GroupIndex) -> Result {
+        fn remove_group(origin, group: GroupIndex) -> DispatchResult {
             let member = ensure_signed(origin)?;
 
             let group_id = <GroupMembership<T>>::get(member);
@@ -108,15 +108,15 @@ impl<T: Trait> Module<T> {
 mod tests {
     use super::RawEvent;
     use crate::{Module, Trait};
-    use primitives::H256;
-    use runtime_io;
-    use runtime_primitives::{
+    use sp_core::H256;
+    use sp_io::TestExternalities;
+    use sp_runtime::{
         testing::Header,
         traits::{BlakeTwo256, IdentityLookup},
         Perbill,
     };
-    use support::{assert_err, impl_outer_event, impl_outer_origin, parameter_types, traits::Get};
-    use system::{ensure_signed, EventRecord, Phase};
+    use frame_support::{assert_ok, assert_err, impl_outer_event, impl_outer_origin, parameter_types};
+    use frame_system as system;
 
     impl_outer_origin! {
         pub enum Origin for TestRuntime {}
@@ -147,6 +147,7 @@ mod tests {
         type MaximumBlockLength = MaximumBlockLength;
         type AvailableBlockRatio = AvailableBlockRatio;
         type Version = ();
+        type ModuleToIndex = ();
     }
 
     mod double_map {
@@ -169,32 +170,29 @@ mod tests {
     pub struct ExtBuilder;
 
     impl ExtBuilder {
-        pub fn build() -> runtime_io::TestExternalities {
-            let mut storage = system::GenesisConfig::default()
+        pub fn build() -> TestExternalities {
+            let storage = system::GenesisConfig::default()
                 .build_storage::<TestRuntime>()
                 .unwrap();
-            runtime_io::TestExternalities::from(storage)
+            TestExternalities::from(storage)
         }
     }
 
     #[test]
     fn join_all_members_works() {
         ExtBuilder::build().execute_with(|| {
-            DoubleMap::join_all_members(Origin::signed(1));
+            assert_ok!(DoubleMap::join_all_members(Origin::signed(1)));
             // correct panic upon existing member trying to join
             assert_err!(
                 DoubleMap::join_all_members(Origin::signed(1)),
                 "already a member, can't join"
             );
 
-            DoubleMap::join_all_members(Origin::signed(1));
-
             // correct event emission
-            let first_account = ensure_signed(Origin::signed(1)).unwrap();
-            let expected_event = TestEvent::double_map(RawEvent::NewMember(first_account.clone()));
+            let expected_event = TestEvent::double_map(RawEvent::NewMember(1));
             assert!(System::events().iter().any(|a| a.event == expected_event));
             // correct storage changes
-            assert_eq!(DoubleMap::all_members(), vec![first_account]);
+            assert_eq!(DoubleMap::all_members(), vec![1]);
         })
     }
 
@@ -207,32 +205,30 @@ mod tests {
                 "not a member, can't remove"
             );
 
-            DoubleMap::join_all_members(Origin::signed(1));
-            DoubleMap::join_a_group(Origin::signed(1), 3, 5);
+            assert_ok!(DoubleMap::join_all_members(Origin::signed(1)));
+            assert_ok!(DoubleMap::join_a_group(Origin::signed(1), 3, 5));
 
             // correct event emission
-            let first_account = ensure_signed(Origin::signed(1)).unwrap();
             let expected_event =
-                TestEvent::double_map(RawEvent::MemberJoinsGroup(first_account.clone(), 3, 5));
+                TestEvent::double_map(RawEvent::MemberJoinsGroup(1, 3, 5));
             assert!(System::events().iter().any(|a| a.event == expected_event));
 
             // correct storage changes
-            assert_eq!(DoubleMap::group_membership(first_account.clone()), 3);
-            assert_eq!(DoubleMap::member_score(3, first_account.clone()), 5);
+            assert_eq!(DoubleMap::group_membership(1), 3);
+            assert_eq!(DoubleMap::member_score(3, 1), 5);
         })
     }
 
     #[test]
     fn remove_member_works() {
         ExtBuilder::build().execute_with(|| {
-            DoubleMap::join_all_members(Origin::signed(1));
-            DoubleMap::join_a_group(Origin::signed(1), 3, 5);
-            DoubleMap::remove_member(Origin::signed(1));
+            assert_ok!(DoubleMap::join_all_members(Origin::signed(1)));
+            assert_ok!(DoubleMap::join_a_group(Origin::signed(1), 3, 5));
+            assert_ok!(DoubleMap::remove_member(Origin::signed(1)));
 
             // correct event emission
-            let first_account = ensure_signed(Origin::signed(1)).unwrap();
             let expected_event =
-                TestEvent::double_map(RawEvent::RemoveMember(first_account.clone()));
+                TestEvent::double_map(RawEvent::RemoveMember(1));
             assert!(System::events().iter().any(|a| a.event == expected_event));
 
             // TODO: test correct changes to storage
@@ -242,12 +238,12 @@ mod tests {
     #[test]
     fn remove_group_works() {
         ExtBuilder::build().execute_with(|| {
-            DoubleMap::join_all_members(Origin::signed(1));
-            DoubleMap::join_all_members(Origin::signed(2));
-            DoubleMap::join_all_members(Origin::signed(3));
-            DoubleMap::join_a_group(Origin::signed(1), 3, 5);
-            DoubleMap::join_a_group(Origin::signed(2), 3, 5);
-            DoubleMap::join_a_group(Origin::signed(3), 3, 5);
+            assert_ok!(DoubleMap::join_all_members(Origin::signed(1)));
+            assert_ok!(DoubleMap::join_all_members(Origin::signed(2)));
+            assert_ok!(DoubleMap::join_all_members(Origin::signed(3)));
+            assert_ok!(DoubleMap::join_a_group(Origin::signed(1), 3, 5));
+            assert_ok!(DoubleMap::join_a_group(Origin::signed(2), 3, 5));
+            assert_ok!(DoubleMap::join_a_group(Origin::signed(3), 3, 5));
 
             assert_err!(
                 DoubleMap::remove_group(Origin::signed(4), 3),
@@ -259,10 +255,9 @@ mod tests {
                 "member isn't in the group, can't remove it"
             );
 
-            DoubleMap::remove_group(Origin::signed(1), 3);
+            assert_ok!(DoubleMap::remove_group(Origin::signed(1), 3));
 
             // correct event emission
-            let first_account = ensure_signed(Origin::signed(1)).unwrap();
             let expected_event = TestEvent::double_map(RawEvent::RemoveGroup(3));
             assert!(System::events().iter().any(|a| a.event == expected_event));
 

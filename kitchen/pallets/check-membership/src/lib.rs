@@ -1,11 +1,11 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
-use rstd::prelude::*;
 /// Permissioned Function with Generic Event
 /// a permissioned funtion which can only be called by the "owner". An event is emitted
 /// when the function is successfully executed.
-use support::{decl_event, decl_module, decl_storage, dispatch::Result, ensure, StorageValue};
-use system::ensure_signed;
+use frame_support::{decl_event, decl_module, decl_storage, dispatch::DispatchResult, ensure, StorageValue};
+use frame_system::{self as system, ensure_signed};
+use sp_std::vec::Vec;
 
 pub trait Trait: system::Trait {
     type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
@@ -35,7 +35,7 @@ decl_module! {
     pub struct Module<T: Trait> for enum Call where origin: T::Origin {
         fn deposit_event() = default;
 
-        fn init_ownership(origin) -> Result {
+        fn init_ownership(origin) -> DispatchResult {
             ensure!(!<Owner<T>>::exists(), "Owner already exists");
             let sender = ensure_signed(origin)?;
             <Owner<T>>::put(sender.clone());
@@ -43,7 +43,7 @@ decl_module! {
             Ok(())
         }
 
-        fn transfer_ownership(origin, new_owner: T::AccountId) -> Result {
+        fn transfer_ownership(origin, new_owner: T::AccountId) -> DispatchResult {
             let sender = ensure_signed(origin)?;
             ensure!(sender == Self::owner(), "This function can only be called by the owner");
             <Owner<T>>::put(new_owner.clone());
@@ -51,7 +51,7 @@ decl_module! {
             Ok(())
         }
 
-        fn add_member(origin) -> Result {
+        fn add_member(origin) -> DispatchResult {
             let new_member = ensure_signed(origin)?;
             ensure!(!Self::is_member(&new_member), "already a member");
 
@@ -60,7 +60,7 @@ decl_module! {
             Ok(())
         }
 
-        fn remove_member(origin) -> Result {
+        fn remove_member(origin) -> DispatchResult {
             let old_member = ensure_signed(origin)?;
             ensure!(Self::is_member(&old_member), "not a member so can't be taken out of the set");
             // keep all members except for the member in question

@@ -1,16 +1,15 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 //! Scheduling Execution
-use rstd::prelude::*;
-use runtime_primitives::{traits::Zero, RuntimeDebug};
-use support::{
+use sp_std::prelude::*;
+use sp_runtime::{traits::Zero, RuntimeDebug};
+use frame_support::{
     codec::{Decode, Encode},
     decl_event, decl_module, decl_storage,
-    dispatch::Result,
+    dispatch::{DispatchResult, DispatchError},
     ensure,
     traits::Get,
-    StorageDoubleMap, StorageMap, StorageValue,
 };
-use system::ensure_signed;
+use frame_system::{self as system, ensure_signed};
 
 pub type TaskId = Vec<u8>;
 pub type PriorityScore = u32;
@@ -90,12 +89,12 @@ decl_module! {
         fn on_initialize(n: T::BlockNumber) {
             let batch_frequency = T::ExecutionFrequency::get();
             if ((n - 1.into()) % batch_frequency).is_zero() {
-                let last_era = <Era>::get();
+                let last_era = Era::get();
                 // clean up the previous double_map with this last_era group index
                 <SignalBank<T>>::remove_prefix(&last_era);
                 // unlikely to overflow so no checked_add
                 let next_era: RoundIndex = last_era + (1u32 as RoundIndex);
-                <Era>::put(next_era);
+                Era::put(next_era);
 
                 // get the SignalQuota for each `ExecutionFrequency` period
                 let signal_quota = T::SignalQuota::get();
@@ -112,7 +111,7 @@ decl_module! {
         ///
         /// - the task initially has no priority
         /// - only council members can schedule tasks
-        fn schedule_task(origin, data: Vec<u8>) -> Result {
+        fn schedule_task(origin, data: Vec<u8>) -> DispatchResult {
             let proposer = ensure_signed(origin)?;
             ensure!(Self::is_on_council(&proposer), "only members of the council can schedule tasks");
 
@@ -140,12 +139,12 @@ decl_module! {
         ///
         /// - members of the council have limited voting power to increase the priority
         /// of tasks
-        fn signal_priority(origin, id: TaskId, signal: PriorityScore) -> Result {
+        fn signal_priority(origin, id: TaskId, signal: PriorityScore) -> DispatchResult {
             let voter = ensure_signed(origin)?;
             ensure!(Self::is_on_council(&voter), "The voting member must be on the council");
 
             // get the current voting era
-            let current_era = <Era>::get();
+            let current_era = Era::get();
             // get the voter's remaining signal in this voting era
             let voters_signal = <SignalBank<T>>::get(current_era, &voter);
             ensure!(voters_signal >= signal, "The voter cannot signal more than the remaining signal");
@@ -156,7 +155,7 @@ decl_module! {
                 let remaining_signal = voters_signal - signal;
                 <SignalBank<T>>::insert(current_era, &voter, remaining_signal);
             } else {
-                return Err("the task did not exist in the PendingTasks storage map");
+                return Err(DispatchError::Other("the task did not exist in the PendingTasks storage map"));
             }
             Self::deposit_event(RawEvent::SignalSupport(id, signal));
             Ok(())
@@ -211,9 +210,9 @@ impl<T: Trait> Module<T> {
 #[cfg(test)]
 mod tests {
     use crate::*; //{Module, Trait, RawEvent, Task, GenesisConfig};
-    use primitives::H256;
-    use runtime_io;
-    use runtime_primitives::{
+    use sp_core::H256;
+    use sp_io::TestExternalities;
+    use sp_runtime::{
         testing::Header,
         traits::{BlakeTwo256, IdentityLookup, OnFinalize, OnInitialize, SimpleArithmetic},
         Perbill,
@@ -221,8 +220,8 @@ mod tests {
     // it's ok, just for the testing suit, thread local variables
     use rand::{rngs::OsRng, thread_rng, Rng, RngCore};
     use std::cell::RefCell;
-    use support::{impl_outer_event, impl_outer_origin, parameter_types, traits::Get};
-    use system::ensure_signed;
+    use frame_support::{assert_ok, impl_outer_event, impl_outer_origin, parameter_types, traits::Get};
+    use frame_system as system;
 
     // to compare expected storage items with storage items after method calls
     impl<BlockNumber: SimpleArithmetic + Copy> PartialEq for Task<BlockNumber> {
@@ -240,7 +239,7 @@ mod tests {
 
         fn add_member(who: T::AccountId) {
             Self::add_member_to_council(who.clone());
-            let current_era = <Era>::get();
+            let current_era = Era::get();
             // intialize with 0, filled full at beginning of next_era
             <SignalBank<T>>::insert(current_era, who, 0u32);
         }
@@ -269,6 +268,7 @@ mod tests {
     // Random Task Generation for (Future) Testing Purposes
     impl<BlockNumber: std::convert::From<u64>> Task<BlockNumber> {
         // for testing purposes
+        #[allow(dead_code)]
         fn random() -> Self {
             let mut rng = thread_rng();
             let random_score: u32 = rng.gen();
@@ -343,6 +343,7 @@ mod tests {
         type MaximumBlockLength = MaximumBlockLength;
         type AvailableBlockRatio = AvailableBlockRatio;
         type Version = ();
+        type ModuleToIndex = ();
     }
 
     mod execution_schedule {
@@ -398,7 +399,7 @@ mod tests {
             EXECUTION_FREQUENCY.with(|v| *v.borrow_mut() = self.execution_frequency);
             TASK_LIMIT.with(|v| *v.borrow_mut() = self.task_limit);
         }
-        pub fn build(self) -> runtime_io::TestExternalities {
+        pub fn build(self) -> TestExternalities {
             self.set_associated_consts();
             let t = system::GenesisConfig::default()
                 .build_storage::<TestRuntime>()
@@ -485,12 +486,11 @@ mod tests {
             .execution_frequency(10)
             .build()
             .execute_with(|| {
-                let first_account = ensure_signed(Origin::signed(1)).unwrap();
-                ExecutionSchedule::add_member(first_account.clone());
-                assert!(ExecutionSchedule::is_on_council(&first_account));
+                ExecutionSchedule::add_member(1);
+                assert!(ExecutionSchedule::is_on_council(&1));
                 System::set_block_number(2);
                 let new_task = id_generate();
-                let _ = ExecutionSchedule::schedule_task(Origin::signed(1), new_task.clone());
+                assert_ok!(ExecutionSchedule::schedule_task(Origin::signed(1), new_task.clone()));
 
                 // check storage changes
                 let expected_task: Task<u64> = Task {
@@ -506,7 +506,7 @@ mod tests {
 
                 // check event behavior
                 let expected_event = TestEvent::execution_schedule(RawEvent::TaskScheduled(
-                    first_account,
+                    1,
                     new_task,
                     10,
                 ));
@@ -523,26 +523,24 @@ mod tests {
             .build()
             .execute_with(|| {
                 System::set_block_number(2u64);
-                let first_account = ensure_signed(Origin::signed(1)).unwrap();
-                let second_account = ensure_signed(Origin::signed(2)).unwrap();
                 let new_task = id_generate();
-                ExecutionSchedule::add_member(first_account);
-                ExecutionSchedule::add_member(second_account);
+                ExecutionSchedule::add_member(1);
+                ExecutionSchedule::add_member(2);
 
                 // refresh signal_quota
                 run_to_block(7u64);
 
-                let _ = ExecutionSchedule::schedule_task(Origin::signed(2), new_task.clone());
+                assert_ok!(ExecutionSchedule::schedule_task(Origin::signed(2), new_task.clone()));
 
-                let _ = ExecutionSchedule::signal_priority(
+                assert_ok!(ExecutionSchedule::signal_priority(
                     Origin::signed(1),
                     new_task.clone(),
                     2u32.into(),
-                );
+                ));
 
                 // check that banked signal has decreased
                 assert_eq!(
-                    ExecutionSchedule::signal_bank(1u32, &first_account),
+                    ExecutionSchedule::signal_bank(1u32, 1),
                     8u32.into()
                 );
 

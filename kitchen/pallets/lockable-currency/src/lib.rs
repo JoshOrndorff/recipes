@@ -2,7 +2,7 @@
 // demonstrates https://substrate.dev/rustdocs/master/frame_support/traits/trait.LockableCurrency.html
 use support::{
     decl_event, decl_module,
-    dispatch::Result,
+    dispatch::DispatchResult,
     traits::{
         Currency, Get, LockIdentifier, LockableCurrency, WithdrawReason, WithdrawReasons,
     },
@@ -42,7 +42,7 @@ decl_module! {
 
         const LockPeriod: T::BlockNumber = T::LockPeriod::get();
 
-        fn lock_capital(origin, amount: BalanceOf<T>) -> Result {
+        fn lock_capital(origin, amount: BalanceOf<T>) -> DispatchResult {
             let user = ensure_signed(origin)?;
 
             T::Currency::set_lock(
@@ -58,7 +58,7 @@ decl_module! {
             Ok(())
         }
 
-        fn extend_lock(origin, amount: BalanceOf<T>) -> Result {
+        fn extend_lock(origin, amount: BalanceOf<T>) -> DispatchResult {
             let user = ensure_signed(origin)?;
 
             T::Currency::extend_lock(
@@ -73,7 +73,7 @@ decl_module! {
             Ok(())
         }
 
-        fn unlock_all(origin) -> Result {
+        fn unlock_all(origin) -> DispatchResult {
             let user = ensure_signed(origin)?;
 
             T::Currency::remove_lock(EXAMPLE_ID, &user);

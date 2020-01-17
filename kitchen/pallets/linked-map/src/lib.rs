@@ -7,7 +7,7 @@
 /// fees ([Big O notation refresher](https://rob-bell.net/2009/06/a-beginners-guide-to-big-o-notation/)).
 /// This opens an economic attack vector on your chain.
 use support::{
-    decl_event, decl_module, decl_storage, dispatch::Result, ensure, StorageLinkedMap, StorageMap,
+    decl_event, decl_module, decl_storage, dispatch::DispatchResult, ensure, StorageLinkedMap, StorageMap,
     StorageValue,
 };
 use system::ensure_signed;
@@ -42,7 +42,7 @@ decl_module! {
     pub struct Module<T: Trait> for enum Call where origin: T::Origin {
         fn deposit_event() = default;
 
-        fn add_member(origin) -> Result {
+        fn add_member(origin) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
             // increment the counter
@@ -65,7 +65,7 @@ decl_module! {
 
         // worst option
         // -- only works if the list is *unbounded*
-        fn remove_member_unbounded(origin, index: u32) -> Result {
+        fn remove_member_unbounded(origin, index: u32) -> DispatchResult {
             let _ = ensure_signed(origin)?;
 
             // verify existence
@@ -84,7 +84,7 @@ decl_module! {
         // swap and pop
         // -- better than `remove_member_unbounded`
         // -- this pattern becomes unwieldy fast!
-        fn remove_member_bounded(origin, index: u32) -> Result {
+        fn remove_member_bounded(origin, index: u32) -> DispatchResult {
             let _ = ensure_signed(origin)?;
 
             ensure!(<TheList<T>>::exists(index), "an element doesn't exist at this index");
@@ -109,7 +109,7 @@ decl_module! {
         // best option (atm)
         // this uses the enumerable storage map to simplify `swap and pop`
         // should be generally preferred
-        fn remove_member_linked(origin, index: u32) -> Result {
+        fn remove_member_linked(origin, index: u32) -> DispatchResult {
             let _ = ensure_signed(origin)?;
 
             ensure!(<LinkedList<T>>::exists(index), "A member does not exist at this index");
@@ -139,8 +139,8 @@ mod tests {
         traits::{BlakeTwo256, IdentityLookup},
         Perbill,
     };
-    use support::{assert_err, impl_outer_event, impl_outer_origin, parameter_types, traits::Get};
-    use system::{ensure_signed, EventRecord, Phase};
+    use support::{assert_ok, assert_err, impl_outer_event, impl_outer_origin, parameter_types};
+    use system;
 
     impl_outer_origin! {
         pub enum Origin for TestRuntime {}
@@ -171,6 +171,7 @@ mod tests {
         type MaximumBlockLength = MaximumBlockLength;
         type AvailableBlockRatio = AvailableBlockRatio;
         type Version = ();
+        type ModuleToIndex = ();
     }
 
     mod linked_map {
@@ -194,7 +195,7 @@ mod tests {
 
     impl ExtBuilder {
         pub fn build() -> runtime_io::TestExternalities {
-            let mut storage = system::GenesisConfig::default()
+            let storage = system::GenesisConfig::default()
                 .build_storage::<TestRuntime>()
                 .unwrap();
             runtime_io::TestExternalities::from(storage)
@@ -204,29 +205,27 @@ mod tests {
     #[test]
     fn add_member_works() {
         ExtBuilder::build().execute_with(|| {
-            LinkedMap::add_member(Origin::signed(1));
-            let first_account = ensure_signed(Origin::signed(1)).unwrap();
+            assert_ok!(LinkedMap::add_member(Origin::signed(1)));
 
             let expected_event =
-                TestEvent::linked_map(RawEvent::MemberAdded(first_account.clone()));
+                TestEvent::linked_map(RawEvent::MemberAdded(1));
             assert!(System::events().iter().any(|a| a.event == expected_event));
 
             let counter = LinkedMap::the_counter();
             assert_eq!(counter, 1);
-            assert_eq!(LinkedMap::the_list(counter), first_account.clone());
+            assert_eq!(LinkedMap::the_list(counter), 1);
             let lcounter = LinkedMap::the_counter();
             assert_eq!(lcounter, 1);
-            assert_eq!(LinkedMap::linked_list(lcounter), first_account.clone());
+            assert_eq!(LinkedMap::linked_list(lcounter), 1);
 
-            LinkedMap::add_member(Origin::signed(2));
-            let second_account = ensure_signed(Origin::signed(2)).unwrap();
+            assert_ok!(LinkedMap::add_member(Origin::signed(2)));
 
             let counter2 = LinkedMap::the_counter();
             assert_eq!(counter2, 2);
-            assert_eq!(LinkedMap::the_list(counter2), second_account.clone());
+            assert_eq!(LinkedMap::the_list(counter2), 2);
             let lcounter2 = LinkedMap::the_counter();
             assert_eq!(lcounter2, 2);
-            assert_eq!(LinkedMap::linked_list(lcounter2), second_account.clone());
+            assert_eq!(LinkedMap::linked_list(lcounter2), 2);
         })
     }
 
@@ -237,41 +236,39 @@ mod tests {
                 LinkedMap::remove_member_unbounded(Origin::signed(1), 1),
                 "an element doesn't exist at this index"
             );
-            LinkedMap::add_member(Origin::signed(1));
-            let first_account = ensure_signed(Origin::signed(1)).unwrap();
+            assert_ok!(LinkedMap::add_member(Origin::signed(1)));
 
             let expected_event =
-                TestEvent::linked_map(RawEvent::MemberAdded(first_account.clone()));
+                TestEvent::linked_map(RawEvent::MemberAdded(1));
             assert!(System::events().iter().any(|a| a.event == expected_event));
             // check event is emitted
             let counter = LinkedMap::the_counter();
             assert_eq!(counter, 1);
 
             // remove unbounded doesn't decrement counter
-            LinkedMap::remove_member_unbounded(Origin::signed(1), 1);
+            assert_ok!(LinkedMap::remove_member_unbounded(Origin::signed(1), 1));
             let expected_event =
-                TestEvent::linked_map(RawEvent::MemberRemoved(first_account.clone()));
+                TestEvent::linked_map(RawEvent::MemberRemoved(1));
             assert!(System::events().iter().any(|a| a.event == expected_event));
             let counter2 = LinkedMap::the_counter();
             // the counter doesn't decrement because the list was unbounded (counter always increases)
             assert_eq!(counter2, 1);
 
             // add a new member
-            LinkedMap::add_member(Origin::signed(2)); // note: counter increments
-            let second_account = ensure_signed(Origin::signed(2)).unwrap();
+            assert_ok!(LinkedMap::add_member(Origin::signed(2))); // note: counter increments
 
             // remove bounded decrements counter
-            LinkedMap::remove_member_bounded(Origin::signed(1), 2);
+            assert_ok!(LinkedMap::remove_member_bounded(Origin::signed(1), 2));
             let expected_event2 =
-                TestEvent::linked_map(RawEvent::MemberRemoved(second_account.clone()));
+                TestEvent::linked_map(RawEvent::MemberRemoved(2));
             assert!(System::events().iter().any(|a| a.event == expected_event2));
             let counter2 = LinkedMap::the_counter();
             // counter decrements (from 2 to 1)
             assert_eq!(counter2, 1);
 
-            LinkedMap::remove_member_linked(Origin::signed(1), 1);
+            assert_ok!(LinkedMap::remove_member_linked(Origin::signed(1), 1));
             let expected_event3 =
-                TestEvent::linked_map(RawEvent::MemberRemoved(first_account.clone()));
+                TestEvent::linked_map(RawEvent::MemberRemoved(1));
             assert!(System::events().iter().any(|a| a.event == expected_event3));
             // no required counter for linked map
         })

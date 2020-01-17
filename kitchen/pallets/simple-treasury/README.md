@@ -8,7 +8,7 @@ fn request_transfer(
     origin,
     dest: T::AccountId,
     amount: BalanceOf<T>
-) -> Result {
+) -> DispatchResult {
     let sender = ensure_signed(origin)?;
 
     let bond = T::Tax::get();
@@ -118,7 +118,7 @@ It allows every member to submit `Proposal`s for the treasury's spending. To vot
 fn stupid_vote(
     origin,
     vote: T::AccountId,
-) -> Result {
+) -> DispatchResult {
     let voter = ensure_signed(origin)?;
     ensure!(Self::is_on_council(&voter), "the voter is on the council");
     if let Some(mut proposal) = <Proposals<T>>::get(vote) {

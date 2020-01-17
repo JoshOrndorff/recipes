@@ -1,7 +1,7 @@
 /// A very simple substrate runtime
 use support::{
 	decl_module, decl_event, decl_storage, StorageValue,
-	dispatch::Result, ensure
+	dispatch::DispatchResult,
 };
 use system::ensure_signed;
 
@@ -28,7 +28,7 @@ decl_module! {
 	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
 		fn deposit_event() = default;
 
-		pub fn set_value(origin, value: u64) -> Result {
+		pub fn set_value(origin, value: u64) -> DispatchResult {
 			let setter = ensure_signed(origin)?;
 			LastValue::put(value);
 			UserValue::<T>::insert(&setter, value);
@@ -40,7 +40,7 @@ decl_module! {
 
 #[cfg(test)]
 mod tests {
-	use support::{impl_outer_event, impl_outer_origin, parameter_types};
+	use support::{assert_ok, impl_outer_event, impl_outer_origin, parameter_types};
 	use runtime_primitives::{Perbill, traits::{IdentityLookup, BlakeTwo256}, testing::Header};
 	use super::RawEvent;
 	use runtime_io;
@@ -76,6 +76,7 @@ mod tests {
 		type MaximumBlockLength = MaximumBlockLength;
 		type AvailableBlockRatio = AvailableBlockRatio;
 		type Version = ();
+		type ModuleToIndex = ();
 	}
 
 	mod hello_substrate {
@@ -99,7 +100,7 @@ mod tests {
 
 	impl ExtBuilder {
 		pub fn build() -> runtime_io::TestExternalities {
-			let mut storage = system::GenesisConfig::default().build_storage::<TestRuntime>().unwrap();
+			let storage = system::GenesisConfig::default().build_storage::<TestRuntime>().unwrap();
 			runtime_io::TestExternalities::from(storage)
 		}
 	}
@@ -108,22 +109,19 @@ mod tests {
 	fn last_value_updates() {
 		ExtBuilder::build().execute_with(|| {
 			let expected = 10u64;
-			HelloSubstrate::set_value(Origin::signed(1), expected);
+			assert_ok!(HelloSubstrate::set_value(Origin::signed(1), expected));
 			assert_eq!(HelloSubstrate::last_value(), expected);
-			HelloSubstrate::set_value(Origin::signed(2), 11u64);
+			assert_ok!(HelloSubstrate::set_value(Origin::signed(2), 11u64));
 			assert_eq!(HelloSubstrate::last_value(), 11u64);
 
-			use system::ensure_signed;
-			let id_1 = ensure_signed(Origin::signed(1)).unwrap();
 			let expected_event1 = TestEvent::hello_substrate(
-				RawEvent::ValueSet(id_1, 10),
-            );
+				RawEvent::ValueSet(1, 10),
+			);
 			assert!(System::events().iter().any(|a| a.event == expected_event1));
 
-			let id_2 = ensure_signed(Origin::signed(2)).unwrap();
 			let expected_event2 = TestEvent::hello_substrate(
-				RawEvent::ValueSet(id_2, 11),
-            );
+				RawEvent::ValueSet(2, 11),
+			);
 			assert!(System::events().iter().any(|a| a.event == expected_event2));
 		})
 	}
@@ -131,9 +129,9 @@ mod tests {
 	#[test]
 	fn user_value_works() {
 		ExtBuilder::build().execute_with(|| {
-			HelloSubstrate::set_value(Origin::signed(1), 10u64);
+			assert_ok!(HelloSubstrate::set_value(Origin::signed(1), 10u64));
 			assert_eq!(HelloSubstrate::last_value(), 10u64);
-			HelloSubstrate::set_value(Origin::signed(2), 11u64);
+			assert_ok!(HelloSubstrate::set_value(Origin::signed(2), 11u64));
 			assert_eq!(HelloSubstrate::user_value(&2), 11u64);
 			assert_eq!(HelloSubstrate::user_value(&1), 10u64);
 			// verify again that last_value worked as well
