@@ -1,11 +1,10 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
-use rstd::prelude::*;
 /// Permissioned Function with Generic Event
 /// a permissioned funtion which can only be called by the "owner". An event is emitted
 /// when the function is successfully executed.
-use support::{decl_event, decl_module, decl_storage, dispatch::DispatchResult, ensure, StorageValue};
-use system::ensure_signed;
+use frame_support::{decl_event, decl_module, decl_storage, dispatch::DispatchResult, ensure, StorageValue};
+use frame_system::{self as system, ensure_signed};
 
 pub trait Trait: system::Trait {
     type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
