@@ -5,10 +5,10 @@
 /// 1. set total supply
 /// 2. establish ownership upon configuration of circulating tokens
 /// 3. coordinate token transfers with the runtime functions
-use support::{
+use frame_support::{
     decl_event, decl_module, decl_storage, dispatch::DispatchResult, ensure, StorageMap, StorageValue,
 };
-use system::ensure_signed;
+use frame_system::{self as system, ensure_signed};
 
 pub trait Trait: system::Trait {
     type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
