@@ -19,8 +19,8 @@ use sp_runtime::traits::{
 };
 use sp_api::impl_runtime_apis;
 use sp_consensus_aura::sr25519::AuthorityId as AuraId;
-use pallet_grandpa::AuthorityList as GrandpaAuthorityList;
-use pallet_grandpa::fg_primitives;
+use grandpa::AuthorityList as GrandpaAuthorityList;
+use grandpa::fg_primitives;
 use sp_version::RuntimeVersion;
 use frame_system as system;
 #[cfg(feature = "std")]
@@ -29,8 +29,8 @@ use sp_version::NativeVersion;
 // A few exports that help ease life for downstream crates.
 #[cfg(any(feature = "std", test))]
 pub use sp_runtime::BuildStorage;
-pub use pallet_timestamp::Call as TimestampCall;
-pub use pallet_balances::Call as BalancesCall;
+pub use timestamp::Call as TimestampCall;
+pub use balances::Call as BalancesCall;
 pub use sp_runtime::{Permill, Perbill};
 pub use frame_support::{
 	StorageValue, construct_runtime, parameter_types,
@@ -350,14 +350,9 @@ impl_runtime_apis! {
 		}
 	}
 
-	// TOOD: first see the error message.. then uncomment this.
 	impl sum_storage_rpc_runtime_api::SumStorageApi<Block> for Runtime {
 		fn get_sum() -> u32 {
-			// If I return a ficed value here, it is not _so_ silly
-			// because we're already interfacing with the runtime.
-			// But we can still go further, and call into a pallet.
-			//77
-
+			// This Custom Runtime API calls into a specific pallet
 			SumStorage::get_sum()
 		}
 	}

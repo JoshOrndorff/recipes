@@ -5,16 +5,16 @@ authors = ["Joshy Orndorff"]
 edition = "2018"
 
 [dependencies]
-pallet-aura = { rev = '3e651110aa06aa835790df63410a29676243fc54', git = 'https://github.com/paritytech/substrate.git', default_features = false}
-pallet-balances = { rev = '3e651110aa06aa835790df63410a29676243fc54', git = 'https://github.com/paritytech/substrate.git', default_features = false}
+aura = { package = "pallet-aura", rev = '3e651110aa06aa835790df63410a29676243fc54', git = 'https://github.com/paritytech/substrate.git', default_features = false}
+balances = { package = "pallet-balances", rev = '3e651110aa06aa835790df63410a29676243fc54', git = 'https://github.com/paritytech/substrate.git', default_features = false}
 frame-support = { rev = '3e651110aa06aa835790df63410a29676243fc54', git = 'https://github.com/paritytech/substrate.git', default_features = false}
-pallet-grandpa = { rev = '3e651110aa06aa835790df63410a29676243fc54', git = 'https://github.com/paritytech/substrate.git', default_features = false}
-pallet-indices = { rev = '3e651110aa06aa835790df63410a29676243fc54', git = 'https://github.com/paritytech/substrate.git', default_features = false}
-pallet-sudo = { rev = '3e651110aa06aa835790df63410a29676243fc54', git = 'https://github.com/paritytech/substrate.git', default_features = false}
+grandpa = { package = "pallet-grandpa", rev = '3e651110aa06aa835790df63410a29676243fc54', git = 'https://github.com/paritytech/substrate.git', default_features = false}
+indices = { package = "pallet-indices", rev = '3e651110aa06aa835790df63410a29676243fc54', git = 'https://github.com/paritytech/substrate.git', default_features = false}
+sudo = { package = "pallet-sudo", rev = '3e651110aa06aa835790df63410a29676243fc54', git = 'https://github.com/paritytech/substrate.git', default_features = false}
 frame-system = { rev = '3e651110aa06aa835790df63410a29676243fc54', git = 'https://github.com/paritytech/substrate.git', default_features = false}
-pallet-timestamp = { rev = '3e651110aa06aa835790df63410a29676243fc54', git = 'https://github.com/paritytech/substrate.git', default_features = false}
-pallet-transaction-payment = { rev = '3e651110aa06aa835790df63410a29676243fc54', git = 'https://github.com/paritytech/substrate.git', default_features = false}
-pallet-randomness-collective-flip = { rev = '3e651110aa06aa835790df63410a29676243fc54', git = 'https://github.com/paritytech/substrate.git', default_features = false}
+timestamp = { package = "pallet-timestamp", rev = '3e651110aa06aa835790df63410a29676243fc54', git = 'https://github.com/paritytech/substrate.git', default_features = false}
+transaction-payment = { package = "pallet-transaction-payment", rev = '3e651110aa06aa835790df63410a29676243fc54', git = 'https://github.com/paritytech/substrate.git', default_features = false}
+randomness-collective-flip = { package = "pallet-randomness-collective-flip", rev = '3e651110aa06aa835790df63410a29676243fc54', git = 'https://github.com/paritytech/substrate.git', default_features = false}
 
 parity-scale-codec = { version = "1.0.0", default-features = false, features = ["derive"] }
 frame-executive = { rev = '3e651110aa06aa835790df63410a29676243fc54', git = 'https://github.com/paritytech/substrate.git', default_features = false}
@@ -41,13 +41,13 @@ wasm-builder-runner = { version = "1.0.4", package = "substrate-wasm-builder-run
 [features]
 default = ["std"]
 std = [
-	"pallet-aura/std",
-	"pallet-balances/std",
+	"aura/std",
+	"balances/std",
 	"parity-scale-codec/std",
 	"frame-executive/std",
 	"frame-support/std",
-	"pallet-grandpa/std",
-	"pallet-indices/std",
+	"grandpa/std",
+	"indices/std",
 	"safe-mix/std",
 	"serde",
 	"sp-api/std",
@@ -62,10 +62,10 @@ std = [
 	"sp-std/std",
 	"sp-transaction-pool/std",
 	"sp-version/std",
-	"pallet-sudo/std",
+	"sudo/std",
 	"frame-system/std",
-	"pallet-timestamp/std",
-	"pallet-transaction-payment/std",
-	"pallet-randomness-collective-flip/std",
+	"timestamp/std",
+	"transaction-payment/std",
+	"randomness-collective-flip/std",
 	"sum-storage/std",
 ]
