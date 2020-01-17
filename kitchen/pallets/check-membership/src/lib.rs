@@ -5,6 +5,7 @@
 /// when the function is successfully executed.
 use frame_support::{decl_event, decl_module, decl_storage, dispatch::DispatchResult, ensure, StorageValue};
 use frame_system::{self as system, ensure_signed};
+use sp_std::vec::Vec;
 
 pub trait Trait: system::Trait {
     type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;

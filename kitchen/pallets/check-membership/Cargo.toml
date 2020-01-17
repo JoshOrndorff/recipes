@@ -11,6 +11,7 @@ std = [
     'frame-support/std',
     'frame-system/std',
     'sp-runtime/std',
+    'sp-std/std',
 ]
 
 [dependencies]
@@ -19,3 +20,4 @@ frame-support = { rev = '3e651110aa06aa835790df63410a29676243fc54', git = 'https
 frame-system = { rev = '3e651110aa06aa835790df63410a29676243fc54', git = 'https://github.com/paritytech/substrate.git', default_features = false}
 sp-runtime = { rev = '3e651110aa06aa835790df63410a29676243fc54', git = 'https://github.com/paritytech/substrate.git', default_features = false }
 sp-core = { rev = '3e651110aa06aa835790df63410a29676243fc54', git = 'https://github.com/paritytech/substrate.git', default_features = false }
+sp-std = { rev = '3e651110aa06aa835790df63410a29676243fc54', git = 'https://github.com/paritytech/substrate.git', default_features = false }
