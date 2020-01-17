@@ -94,7 +94,7 @@ mod tests {
         traits::{BlakeTwo256, IdentityLookup},
         Perbill,
     };
-    use support::{assert_err, impl_outer_event, impl_outer_origin, parameter_types};
+    use support::{assert_ok, assert_err, impl_outer_event, impl_outer_origin, parameter_types};
     use system;
 
     impl_outer_origin! {
@@ -160,7 +160,7 @@ mod tests {
     #[test]
     fn add_member_err_works() {
         ExtBuilder::build().execute_with(|| {
-            let _ = VecSet::add_member(Origin::signed(1));
+            assert_ok!(VecSet::add_member(Origin::signed(1)));
 
             assert_err!(
                 VecSet::add_member(Origin::signed(1)),
@@ -172,7 +172,7 @@ mod tests {
     #[test]
     fn add_member_works() {
         ExtBuilder::build().execute_with(|| {
-            let _ = VecSet::add_member(Origin::signed(1));
+            assert_ok!(VecSet::add_member(Origin::signed(1)));
 
             let expected_event = TestEvent::vec_set(RawEvent::MemberAdded(1));
             assert!(System::events().iter().any(|a| a.event == expected_event));
@@ -195,9 +195,9 @@ mod tests {
     #[test]
     fn remove_member_works() {
         ExtBuilder::build().execute_with(|| {
-            let _ = VecSet::add_member(Origin::signed(1));
-            let _ = VecSet::remove_member(Origin::signed(1));
-            let _ = VecSet::add_member(Origin::signed(2));
+            assert_ok!(VecSet::add_member(Origin::signed(1)));
+            assert_ok!(VecSet::remove_member(Origin::signed(1)));
+            assert_ok!(VecSet::add_member(Origin::signed(2)));
 
             // check correct event emission
             let expected_event = TestEvent::vec_set(RawEvent::MemberRemoved(1));

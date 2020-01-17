@@ -280,7 +280,7 @@ mod tests {
         traits::{BlakeTwo256, IdentityLookup},
         Perbill,
     };
-    use support::{assert_err, impl_outer_event, impl_outer_origin, parameter_types};
+    use support::{assert_ok, assert_err, impl_outer_event, impl_outer_origin, parameter_types};
 
     impl_outer_origin! {
         pub enum Origin for TestRuntime {}
@@ -420,7 +420,7 @@ mod tests {
                 Treasury::request_transfer(Origin::signed(3), 1, 1),
                 "Must be able to pay tax to make transfer"
             );
-            let _ = Treasury::request_transfer(Origin::signed(1), 2, 8);
+            assert_ok!(Treasury::request_transfer(Origin::signed(1), 2, 8));
             assert_eq!(Balances::reserved_balance(&1), 2);
             let mock_spend_request = SpendRequest {
                 from: 1,
@@ -453,7 +453,7 @@ mod tests {
                 "must be on council to make proposal"
             );
             System::set_block_number(5);
-            let _ = Treasury::propose_treasury_spend(Origin::signed(1), 8, 10u64.into());
+            assert_ok!(Treasury::propose_treasury_spend(Origin::signed(1), 8, 10u64.into()));
 
             let expected_proposal = Proposal {
                 to: 8,

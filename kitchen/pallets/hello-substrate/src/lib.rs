@@ -40,7 +40,7 @@ decl_module! {
 
 #[cfg(test)]
 mod tests {
-	use support::{impl_outer_event, impl_outer_origin, parameter_types};
+	use support::{assert_ok, impl_outer_event, impl_outer_origin, parameter_types};
 	use runtime_primitives::{Perbill, traits::{IdentityLookup, BlakeTwo256}, testing::Header};
 	use super::RawEvent;
 	use runtime_io;
@@ -109,9 +109,9 @@ mod tests {
 	fn last_value_updates() {
 		ExtBuilder::build().execute_with(|| {
 			let expected = 10u64;
-			let _ = HelloSubstrate::set_value(Origin::signed(1), expected);
+			assert_ok!(HelloSubstrate::set_value(Origin::signed(1), expected));
 			assert_eq!(HelloSubstrate::last_value(), expected);
-			let _ = HelloSubstrate::set_value(Origin::signed(2), 11u64);
+			assert_ok!(HelloSubstrate::set_value(Origin::signed(2), 11u64));
 			assert_eq!(HelloSubstrate::last_value(), 11u64);
 
 			let expected_event1 = TestEvent::hello_substrate(
@@ -129,9 +129,9 @@ mod tests {
 	#[test]
 	fn user_value_works() {
 		ExtBuilder::build().execute_with(|| {
-			let _ = HelloSubstrate::set_value(Origin::signed(1), 10u64);
+			assert_ok!(HelloSubstrate::set_value(Origin::signed(1), 10u64));
 			assert_eq!(HelloSubstrate::last_value(), 10u64);
-			let _ = HelloSubstrate::set_value(Origin::signed(2), 11u64);
+			assert_ok!(HelloSubstrate::set_value(Origin::signed(2), 11u64));
 			assert_eq!(HelloSubstrate::user_value(&2), 11u64);
 			assert_eq!(HelloSubstrate::user_value(&1), 10u64);
 			// verify again that last_value worked as well

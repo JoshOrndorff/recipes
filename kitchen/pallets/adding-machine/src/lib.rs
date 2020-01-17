@@ -42,7 +42,7 @@ mod tests {
         Perbill,
     };
     use sp_core::H256;
-    use support::{assert_err, impl_outer_event, impl_outer_origin, parameter_types, traits::Get};
+    use support::{assert_err, assert_ok, impl_outer_event, impl_outer_origin, parameter_types};
     use system::{EventRecord, Phase};
 
     impl_outer_origin! {
@@ -98,7 +98,7 @@ mod tests {
 
     impl ExtBuilder {
         pub fn build() -> sp_io::TestExternalities {
-            let mut storage = system::GenesisConfig::default()
+            let storage = system::GenesisConfig::default()
                 .build_storage::<TestRuntime>()
                 .unwrap();
             sp_io::TestExternalities::from(storage)
@@ -108,11 +108,11 @@ mod tests {
     #[test]
     fn add_emits_correct_event() {
         ExtBuilder::build().execute_with(|| {
-            AddingMachine::add(Origin::signed(1), 6, 9);
-            AddingMachine::add(Origin::signed(1), 235, 431);
-            AddingMachine::add(Origin::signed(1), 1700, 38);
-            AddingMachine::add(Origin::signed(1), 6, 79);
-            AddingMachine::add(Origin::signed(1), 13, 37);
+            assert_ok!(AddingMachine::add(Origin::signed(1), 6, 9));
+            assert_ok!(AddingMachine::add(Origin::signed(1), 235, 431));
+            assert_ok!(AddingMachine::add(Origin::signed(1), 1700, 38));
+            assert_ok!(AddingMachine::add(Origin::signed(1), 6, 79));
+            assert_ok!(AddingMachine::add(Origin::signed(1), 13, 37));
 
             assert_eq!(
                 System::events(),

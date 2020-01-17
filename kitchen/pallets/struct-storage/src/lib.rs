@@ -112,8 +112,7 @@ mod tests {
         traits::{BlakeTwo256, IdentityLookup, SimpleArithmetic},
         Perbill,
     };
-    use support::{assert_err, impl_outer_event, impl_outer_origin, parameter_types, traits::Get};
-    use system::{ensure_signed, EventRecord, Phase};
+    use support::{assert_ok, impl_outer_event, impl_outer_origin, parameter_types};
 
     // hacky Eq implementation for testing InnerThing
     impl<Hash: Clone, Balance: Copy + SimpleArithmetic> PartialEq for InnerThing<Hash, Balance> {
@@ -190,7 +189,7 @@ mod tests {
     }
 
     impl std::convert::From<()> for TestEvent {
-        fn from(unit: ()) -> Self {
+        fn from(_unit: ()) -> Self {
             TestEvent::struct_storage(RawEvent::NullEvent(6))
         }
     }
@@ -200,14 +199,13 @@ mod tests {
     }
 
     pub type System = system::Module<TestRuntime>;
-    pub type Balances = balances::Module<TestRuntime>;
     pub type StructStorage = Module<TestRuntime>;
 
     pub struct ExtBuilder;
 
     impl ExtBuilder {
         pub fn build() -> runtime_io::TestExternalities {
-            let mut storage = system::GenesisConfig::default()
+            let storage = system::GenesisConfig::default()
                 .build_storage::<TestRuntime>()
                 .unwrap();
             runtime_io::TestExternalities::from(storage)
@@ -220,7 +218,7 @@ mod tests {
             // prepare hash
             let data = H256::from_low_u64_be(16);
             // insert inner thing
-            StructStorage::insert_inner_thing(Origin::signed(1), 3u32, data, 7u64.into());
+            assert_ok!(StructStorage::insert_inner_thing(Origin::signed(1), 3u32, data, 7u64.into()));
 
             // check storage matches expectations
             let expected_storage_item = InnerThing {
@@ -246,9 +244,9 @@ mod tests {
             // prepare hash
             let data = H256::from_low_u64_be(16);
             // insert inner first (tested in direct test above)
-            StructStorage::insert_inner_thing(Origin::signed(1), 3u32, data, 7u64.into());
+            assert_ok!(StructStorage::insert_inner_thing(Origin::signed(1), 3u32, data, 7u64.into()));
             // insert super with existing inner
-            StructStorage::insert_super_thing_with_existing_inner(Origin::signed(1), 3u32, 5u32);
+            assert_ok!(StructStorage::insert_super_thing_with_existing_inner(Origin::signed(1), 3u32, 5u32));
 
             // check storage matches expectations
             let expected_inner = InnerThing {
@@ -282,13 +280,13 @@ mod tests {
             // prepare hash
             let data = H256::from_low_u64_be(16);
             // insert super with new inner
-            StructStorage::insert_super_thing_with_new_inner(
+            assert_ok!(StructStorage::insert_super_thing_with_new_inner(
                 Origin::signed(1),
                 3u32,
                 data,
                 7u64.into(),
                 5u32,
-            );
+            ));
 
             // check storage matches expectations
             let expected_inner = InnerThing {

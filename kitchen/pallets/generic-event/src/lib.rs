@@ -45,7 +45,7 @@ mod tests {
         traits::{BlakeTwo256, IdentityLookup},
         Perbill,
     };
-    use support::{impl_outer_event, impl_outer_origin, parameter_types};
+    use support::{assert_ok, impl_outer_event, impl_outer_origin, parameter_types};
 
     impl_outer_origin! {
         pub enum Origin for TestRuntime {}
@@ -110,7 +110,7 @@ mod tests {
     #[test]
     fn test() {
         ExtBuilder::build().execute_with(|| {
-            let _ = GenericEvent::do_something(Origin::signed(1), 32);
+            assert_ok!(GenericEvent::do_something(Origin::signed(1), 32));
 
             // construct event that should be emitted in the method call directly above
             let expected_event = TestEvent::generic_event(RawEvent::EmitInput(1, 32));

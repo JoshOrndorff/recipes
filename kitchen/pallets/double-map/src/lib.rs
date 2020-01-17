@@ -115,7 +115,7 @@ mod tests {
         traits::{BlakeTwo256, IdentityLookup},
         Perbill,
     };
-    use frame_support::{assert_err, impl_outer_event, impl_outer_origin, parameter_types};
+    use frame_support::{assert_ok, assert_err, impl_outer_event, impl_outer_origin, parameter_types};
     use frame_system as system;
 
     impl_outer_origin! {
@@ -181,14 +181,12 @@ mod tests {
     #[test]
     fn join_all_members_works() {
         ExtBuilder::build().execute_with(|| {
-            let _ = DoubleMap::join_all_members(Origin::signed(1));
+            assert_ok!(DoubleMap::join_all_members(Origin::signed(1)));
             // correct panic upon existing member trying to join
             assert_err!(
                 DoubleMap::join_all_members(Origin::signed(1)),
                 "already a member, can't join"
             );
-
-            let _ = DoubleMap::join_all_members(Origin::signed(1));
 
             // correct event emission
             let expected_event = TestEvent::double_map(RawEvent::NewMember(1));
@@ -207,8 +205,8 @@ mod tests {
                 "not a member, can't remove"
             );
 
-            let _ = DoubleMap::join_all_members(Origin::signed(1));
-            let _ = DoubleMap::join_a_group(Origin::signed(1), 3, 5);
+            assert_ok!(DoubleMap::join_all_members(Origin::signed(1)));
+            assert_ok!(DoubleMap::join_a_group(Origin::signed(1), 3, 5));
 
             // correct event emission
             let expected_event =
@@ -224,9 +222,9 @@ mod tests {
     #[test]
     fn remove_member_works() {
         ExtBuilder::build().execute_with(|| {
-            let _ = DoubleMap::join_all_members(Origin::signed(1));
-            let _ = DoubleMap::join_a_group(Origin::signed(1), 3, 5);
-            let _ = DoubleMap::remove_member(Origin::signed(1));
+            assert_ok!(DoubleMap::join_all_members(Origin::signed(1)));
+            assert_ok!(DoubleMap::join_a_group(Origin::signed(1), 3, 5));
+            assert_ok!(DoubleMap::remove_member(Origin::signed(1)));
 
             // correct event emission
             let expected_event =
@@ -240,12 +238,12 @@ mod tests {
     #[test]
     fn remove_group_works() {
         ExtBuilder::build().execute_with(|| {
-            let _ = DoubleMap::join_all_members(Origin::signed(1));
-            let _ = DoubleMap::join_all_members(Origin::signed(2));
-            let _ = DoubleMap::join_all_members(Origin::signed(3));
-            let _ = DoubleMap::join_a_group(Origin::signed(1), 3, 5);
-            let _ = DoubleMap::join_a_group(Origin::signed(2), 3, 5);
-            let _ = DoubleMap::join_a_group(Origin::signed(3), 3, 5);
+            assert_ok!(DoubleMap::join_all_members(Origin::signed(1)));
+            assert_ok!(DoubleMap::join_all_members(Origin::signed(2)));
+            assert_ok!(DoubleMap::join_all_members(Origin::signed(3)));
+            assert_ok!(DoubleMap::join_a_group(Origin::signed(1), 3, 5));
+            assert_ok!(DoubleMap::join_a_group(Origin::signed(2), 3, 5));
+            assert_ok!(DoubleMap::join_a_group(Origin::signed(3), 3, 5));
 
             assert_err!(
                 DoubleMap::remove_group(Origin::signed(4), 3),
@@ -257,7 +255,7 @@ mod tests {
                 "member isn't in the group, can't remove it"
             );
 
-            let _ = DoubleMap::remove_group(Origin::signed(1), 3);
+            assert_ok!(DoubleMap::remove_group(Origin::signed(1), 3));
 
             // correct event emission
             let expected_event = TestEvent::double_map(RawEvent::RemoveGroup(3));

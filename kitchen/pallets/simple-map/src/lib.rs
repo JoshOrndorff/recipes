@@ -102,7 +102,7 @@ mod tests {
         traits::{BlakeTwo256, IdentityLookup},
         Perbill,
     };
-    use support::{assert_err, impl_outer_event, impl_outer_origin, parameter_types};
+    use support::{assert_ok, assert_err, impl_outer_event, impl_outer_origin, parameter_types};
 
     impl_outer_origin! {
         pub enum Origin for TestRuntime {}
@@ -167,7 +167,7 @@ mod tests {
     #[test]
     fn set_works() {
         ExtBuilder::build().execute_with(|| {
-            let _ = SimpleMap::set_single_entry(Origin::signed(1), 19);
+            assert_ok!(SimpleMap::set_single_entry(Origin::signed(1), 19));
 
             let expected_event = TestEvent::simple_map(RawEvent::EntrySet(1, 19));
 
@@ -183,8 +183,8 @@ mod tests {
                 "an entry does not exist for this user"
             );
 
-            let _ = SimpleMap::set_single_entry(Origin::signed(2), 19);
-            let _ = SimpleMap::get_single_entry(Origin::signed(1), 2);
+            assert_ok!(SimpleMap::set_single_entry(Origin::signed(2), 19));
+            assert_ok!(SimpleMap::get_single_entry(Origin::signed(1), 2));
 
             let expected_event = TestEvent::simple_map(RawEvent::EntryGot(1, 19));
 
@@ -200,8 +200,8 @@ mod tests {
                 "an entry does not exist for this user"
             );
 
-            let _ = SimpleMap::set_single_entry(Origin::signed(2), 19);
-            let _ = SimpleMap::take_single_entry(Origin::signed(2));
+            assert_ok!(SimpleMap::set_single_entry(Origin::signed(2), 19));
+            assert_ok!(SimpleMap::take_single_entry(Origin::signed(2)));
 
             let expected_event = TestEvent::simple_map(RawEvent::EntryTook(2, 19));
 
@@ -212,8 +212,8 @@ mod tests {
     #[test]
     fn increase_works() {
         ExtBuilder::build().execute_with(|| {
-            let _ = SimpleMap::set_single_entry(Origin::signed(2), 19);
-            let _ = SimpleMap::increase_single_entry(Origin::signed(2), 2);
+            assert_ok!(SimpleMap::set_single_entry(Origin::signed(2), 19));
+            assert_ok!(SimpleMap::increase_single_entry(Origin::signed(2), 2));
 
             let expected_event = TestEvent::simple_map(RawEvent::IncreaseEntry(19, 21));
 
@@ -224,14 +224,14 @@ mod tests {
     #[test]
     fn cas_works() {
         ExtBuilder::build().execute_with(|| {
-            let _ = SimpleMap::set_single_entry(Origin::signed(2), 19);
+            assert_ok!(SimpleMap::set_single_entry(Origin::signed(2), 19));
 
             assert_err!(
                 SimpleMap::compare_and_swap_single_entry(Origin::signed(2), 18, 32),
                 "cas failed bc old_entry inputted by user != existing_entry"
             );
 
-            let _ = SimpleMap::compare_and_swap_single_entry(Origin::signed(2), 19, 32);
+            assert_ok!(SimpleMap::compare_and_swap_single_entry(Origin::signed(2), 19, 32));
 
             let expected_event = TestEvent::simple_map(RawEvent::CAS(19, 32));
 

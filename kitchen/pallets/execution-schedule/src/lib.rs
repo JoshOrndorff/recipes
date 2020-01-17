@@ -89,12 +89,12 @@ decl_module! {
         fn on_initialize(n: T::BlockNumber) {
             let batch_frequency = T::ExecutionFrequency::get();
             if ((n - 1.into()) % batch_frequency).is_zero() {
-                let last_era = <Era>::get();
+                let last_era = Era::get();
                 // clean up the previous double_map with this last_era group index
                 <SignalBank<T>>::remove_prefix(&last_era);
                 // unlikely to overflow so no checked_add
                 let next_era: RoundIndex = last_era + (1u32 as RoundIndex);
-                <Era>::put(next_era);
+                Era::put(next_era);
 
                 // get the SignalQuota for each `ExecutionFrequency` period
                 let signal_quota = T::SignalQuota::get();
@@ -220,7 +220,7 @@ mod tests {
     // it's ok, just for the testing suit, thread local variables
     use rand::{rngs::OsRng, thread_rng, Rng, RngCore};
     use std::cell::RefCell;
-    use frame_support::{impl_outer_event, impl_outer_origin, parameter_types, traits::Get};
+    use frame_support::{assert_ok, impl_outer_event, impl_outer_origin, parameter_types, traits::Get};
     use frame_system as system;
 
     // to compare expected storage items with storage items after method calls
@@ -239,7 +239,7 @@ mod tests {
 
         fn add_member(who: T::AccountId) {
             Self::add_member_to_council(who.clone());
-            let current_era = <Era>::get();
+            let current_era = Era::get();
             // intialize with 0, filled full at beginning of next_era
             <SignalBank<T>>::insert(current_era, who, 0u32);
         }
@@ -268,6 +268,7 @@ mod tests {
     // Random Task Generation for (Future) Testing Purposes
     impl<BlockNumber: std::convert::From<u64>> Task<BlockNumber> {
         // for testing purposes
+        #[allow(dead_code)]
         fn random() -> Self {
             let mut rng = thread_rng();
             let random_score: u32 = rng.gen();
@@ -489,7 +490,7 @@ mod tests {
                 assert!(ExecutionSchedule::is_on_council(&1));
                 System::set_block_number(2);
                 let new_task = id_generate();
-                let _ = ExecutionSchedule::schedule_task(Origin::signed(1), new_task.clone());
+                assert_ok!(ExecutionSchedule::schedule_task(Origin::signed(1), new_task.clone()));
 
                 // check storage changes
                 let expected_task: Task<u64> = Task {
@@ -529,13 +530,13 @@ mod tests {
                 // refresh signal_quota
                 run_to_block(7u64);
 
-                let _ = ExecutionSchedule::schedule_task(Origin::signed(2), new_task.clone());
+                assert_ok!(ExecutionSchedule::schedule_task(Origin::signed(2), new_task.clone()));
 
-                let _ = ExecutionSchedule::signal_priority(
+                assert_ok!(ExecutionSchedule::signal_priority(
                     Origin::signed(1),
                     new_task.clone(),
                     2u32.into(),
-                );
+                ));
 
                 // check that banked signal has decreased
                 assert_eq!(

@@ -42,7 +42,7 @@ mod tests {
         traits::{BlakeTwo256, IdentityLookup},
         Perbill,
     };
-    use support::{impl_outer_event, impl_outer_origin, parameter_types, traits::Get};
+    use support::{assert_ok, impl_outer_event, impl_outer_origin, parameter_types};
     use system::{EventRecord, Phase};
 
     impl_outer_origin! {
@@ -98,7 +98,7 @@ mod tests {
 
     impl ExtBuilder {
         pub fn build() -> runtime_io::TestExternalities {
-            let mut storage = system::GenesisConfig::default()
+            let storage = system::GenesisConfig::default()
                 .build_storage::<TestRuntime>()
                 .unwrap();
             runtime_io::TestExternalities::from(storage)
@@ -108,7 +108,7 @@ mod tests {
     #[test]
     fn test() {
         ExtBuilder::build().execute_with(|| {
-            SimpleEvent::do_something(Origin::signed(1), 32);
+            assert_ok!(SimpleEvent::do_something(Origin::signed(1), 32));
 
             assert_eq!(
                 System::events(),
