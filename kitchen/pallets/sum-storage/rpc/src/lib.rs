@@ -22,9 +22,8 @@ use jsonrpc_core::{Error as RpcError, ErrorCode, Result};
 use jsonrpc_derive::rpc;
 use sp_runtime::{
 	generic::BlockId,
-	traits::{Block as BlockT, ProvideRuntimeApi, UniqueSaturatedInto},
+	traits::{Block as BlockT, ProvideRuntimeApi},
 };
-use sp_core::Bytes;
 use sum_storage_rpc_runtime_api::SumStorageApi as SumStorageRuntimeApi;
 
 #[rpc]

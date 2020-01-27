@@ -5,12 +5,7 @@ authors = ["Joshy Orndorff"]
 edition = "2018"
 
 [dependencies]
-serde = { version = "1.0.101", optional = true, features = ["derive"] }
 sp-api = { rev = '3e651110aa06aa835790df63410a29676243fc54', git = 'https://github.com/paritytech/substrate.git', default_features = false}
-codec = { package = "parity-scale-codec", version = "1.0.6", default-features = false, features = ["derive"] }
-sp-std = { rev = '3e651110aa06aa835790df63410a29676243fc54', git = 'https://github.com/paritytech/substrate.git', default_features = false}
-sp-runtime = { rev = '3e651110aa06aa835790df63410a29676243fc54', git = 'https://github.com/paritytech/substrate.git', default_features = false}
-frame-support = { rev = '3e651110aa06aa835790df63410a29676243fc54', git = 'https://github.com/paritytech/substrate.git', default_features = false}
 
 [dev-dependencies]
 serde_json = "1.0.41"
@@ -18,10 +13,5 @@ serde_json = "1.0.41"
 [features]
 default = ["std"]
 std = [
-	"serde",
 	"sp-api/std",
-	"codec/std",
-	"sp-std/std",
-	"sp-runtime/std",
-	"frame-support/std",
 ]
