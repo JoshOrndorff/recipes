@@ -120,13 +120,34 @@ mod tests {
 	}
 
 	#[test]
-	fn it_works_for_default_value() {
+	fn default_sum_zero() {
 		new_test_ext().execute_with(|| {
-			// Just a dummy test for the dummy funtion `do_something`
-			// calling the `do_something` function with a value 42
-			assert_ok!(TemplateModule::do_something(Origin::signed(1), 42));
-			// asserting that the stored value is equal to what we stored
-			assert_eq!(TemplateModule::something(), Some(42));
+			assert_eq!(TemplateModule::get_sum(), 0);
+		});
+	}
+
+	#[test]
+	fn sums_thing_one() {
+		new_test_ext().execute_with(|| {
+			assert_ok!(TemplateModule::set_thing_1(Origin::signed(1), 42));
+			assert_eq!(TemplateModule::get_sum(), 42);
+		});
+	}
+
+	#[test]
+	fn sums_thing_two() {
+		new_test_ext().execute_with(|| {
+			assert_ok!(TemplateModule::set_thing_2(Origin::signed(1), 42));
+			assert_eq!(TemplateModule::get_sum(), 42);
+		});
+	}
+
+	#[test]
+	fn sums_both_values() {
+		new_test_ext().execute_with(|| {
+			assert_ok!(TemplateModule::set_thing_1(Origin::signed(1), 42));
+			assert_ok!(TemplateModule::set_thing_2(Origin::signed(1), 43));
+			assert_eq!(TemplateModule::get_sum(), 85);
 		});
 	}
 }
