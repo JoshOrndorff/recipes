@@ -32,6 +32,7 @@ members = [
   "runtimes/weight-fee-runtime",
   "runtimes/weight-fee-genesis",
   "runtimes/api-runtime",
-  # "runtimes/api-genesis",
-  "node",
+  "runtimes/api-genesis",
+  "nodes/kitchen-node",
+  "nodes/rpc-node",
 ]

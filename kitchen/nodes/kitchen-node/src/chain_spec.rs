@@ -2,7 +2,7 @@ use primitives::{Pair, Public};
 use runtime::{AccountId, GenesisConfig};
 use runtime_genesis::testnet_genesis;
 use babe_primitives::{AuthorityId as BabeId};
-use grandpa_primitives::{AuthorityId as GrandpaId};
+use sp_finality_grandpa::{AuthorityId as GrandpaId};
 use substrate_service;
 
 // Note this is the URL for the telemetry server
@@ -29,13 +29,11 @@ pub fn get_from_seed<TPublic: Public>(seed: &str) -> <TPublic::Pair as Pair>::Pu
 		.public()
 }
 
-/// Helper function to generate stash, controller and session key from seed
-pub fn get_authority_keys_from_seed(seed: &str) -> (AccountId, AccountId, GrandpaId, BabeId) {
+/// Helper function to generate session key from seed
+pub fn get_authority_keys_from_seed(seed: &str) -> (BabeId, GrandpaId) {
 	(
-		get_from_seed::<AccountId>(&format!("{}//stash", seed)),
-		get_from_seed::<AccountId>(seed),
-		get_from_seed::<GrandpaId>(seed),
 		get_from_seed::<BabeId>(seed),
+		get_from_seed::<GrandpaId>(seed),
 	)
 }
 

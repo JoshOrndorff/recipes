@@ -1,11 +1,11 @@
 use runtime::{
-	AccountId, BabeConfig, BalancesConfig, GenesisConfig, GrandpaConfig,
+	AccountId, AuraConfig, BalancesConfig, GenesisConfig, GrandpaConfig,
 	SudoConfig, IndicesConfig, SystemConfig, WASM_BINARY,
 };
-use aura_primitives::{AuthorityId as BabeId};
-use grandpa_primitives::{AuthorityId as GrandpaId};
+use sp_consensus_aura::sr25519::{AuthorityId as AuraId};
+use sp_finality_grandpa::{AuthorityId as GrandpaId};
 
-pub fn testnet_genesis(initial_authorities: Vec<(AccountId, AccountId, GrandpaId, BabeId)>,
+pub fn testnet_genesis(initial_authorities: Vec<(AuraId, GrandpaId)>,
 	root_key: AccountId,
 	endowed_accounts: Vec<AccountId>,
 	_enable_println: bool) -> GenesisConfig {
@@ -24,11 +24,11 @@ pub fn testnet_genesis(initial_authorities: Vec<(AccountId, AccountId, GrandpaId
 		sudo: Some(SudoConfig {
 			key: root_key,
 		}),
-		aura: Some(BabeConfig {
-			authorities: initial_authorities.iter().map(|x| (x.3.clone())).collect(),
+		aura: Some(AuraConfig {
+			authorities: initial_authorities.iter().map(|x| (x.0.clone())).collect(),
 		}),
 		grandpa: Some(GrandpaConfig {
-			authorities: initial_authorities.iter().map(|x| (x.2.clone(), 1)).collect(),
+			authorities: initial_authorities.iter().map(|x| (x.1.clone(), 1)).collect(),
 		}),
 	}
 }
