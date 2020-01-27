@@ -1,8 +1,165 @@
 # Custom RPCs
-TODO link to code
+*[`kitchen/nodes/rpc-node`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/nodes/rpc-node)*
+*[`kitchen/runtime/api-runtime`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/runtime/api-runtime)*
 
 Remote Procedure Calls, or RPCs, are a way for an external program (eg. a frontend) to communicate with a Substrate node. They are used for checking storage values, submitting transactions, and querying the current consensus authorities. Substrate comes with several [default RPCs](https://polkadot.js.org/api/substrate/rpc.html). In many cases it is useful to add custom RPCs to your node. In this recipe, we will add two custom RPCs to our node, one of which calls into a [custom runtime API](./runtime-api.md).
 
-## Adding a Silly RPC
+## Defining an RPC
+Every RPC that the node will use must be defined in a trait. We'll begin by defining a simple RPC
+called "silly rpc" which just returns constant integers. A Hello world of sorts. In the `kitchen/nodes/rpc-node/src/silly_rpc.rs` file, we define a basic rpc as
+
+```rust
+#[rpc]
+pub trait SillyRpc {
+    #[rpc(name = "hello_five")]
+    fn silly_5(&self) -> Result<u64>;
+
+    #[rpc(name = "hello_seven")]
+    fn silly_7(&self) -> Result<u64>;
+}
+```
+
+This definition defines two RPC methods called `hello_five` and `hello_seven`. Each RPC method must take a `&self` reference and must return a `Result`. Next, we define a struct that implements this trait.
+
+```rust
+pub struct Silly;
+
+impl SillyRpc for Silly {
+    fn silly_5(&self) -> Result<u64> {
+        Ok(5)
+    }
+
+    fn silly_7(&self) -> Result<u64> {
+        Ok(7)
+    }
+}
+```
+
+Finally, to make the contents of this new files visible, we need to add a line in our `main.rs`.
+```rust
+mod silly_rpc;
+```
+
+## Including the RPC
+With our RPC written, we're ready to install it on our node. We begin with a few dependencies in our `rpc-node`'s `Cargo.toml`.
+
+```toml
+jsonrpc-core = "14.0.3"
+jsonrpc-core-client = "14.0.3"
+jsonrpc-derive = "14.0.3"
+sc-rpc = { git = 'https://github.com/paritytech/substrate.git', rev = '3e651110aa06aa835790df63410a29676243fc54' }
+```
+
+Next, in our `rpc-node`'s `service.rs` file, we extend the service with our RPC. We've chosen to install this RPC for full nodes, so we've included the code in the `new_full_start!` macro. You could also install the RPC on a light client by making the corresponding changes to `new_light`.
+
+The first change to this macro is a simple type definition
+```rust
+type RpcExtension = jsonrpc_core::IoHandler<sc_rpc::Metadata>;
+```
+
+Then, once you've called the service builder, you can extend it with an RPC by using its `with_rpc_extensions` method as follows.
+
+```rust
+.with_rpc_extensions(|client, _pool, _backend, _fetcher, _remote_blockchain| -> Result<RpcExtension, _> {
+  let mut io = jsonrpc_core::IoHandler::default();
+
+  // Use the fully qualified name starting from `crate` because we're in macro_rules!
+  io.extend_with(crate::silly_rpc::SillyRpc::to_delegate(crate::silly_rpc::Silly{}));
+
+  Ok(io)
+})
+```
+
+Once your node is running, you can test the RPC by calling it with any client that speaks json RPC. One widely available option is to just use curl.
+```bash
+$ curl http://localhost:9933 -H "Content-Type:application/json;charset=utf-8" -d   '{
+     "jsonrpc":"2.0",
+      "id":1,
+      "method":"hello_five",
+      "params": []
+    }'
+```
+
+To which the RPC responds TODO
 
 ## RPC to Call a Runtime API
+
+The silly RPC demonstrates the fundamentals of working with RPCs in Substrate. Nonetheless, most RPCs will go beyond what we've learned so far, and actually interact with other parts of the node. In this second example, we will include an RPC that calls into a runtime API. We'll reuse the `sum-storage` runtime API from the [runtime API recipe](./runtime-api.md). While it isn't strictly necessary to understand what the runtime API does, reading that recipe may provide helpful context.
+
+Because this RPC's behavior is closely related to a specific pallet, we've chosen to define the RPC in the pallet's directory. In this case the RPC is defined in `kitchen/pallets/sum-storage/rpc`. So rather than using the `mod` keyword as we did before, we must include this RPC definition in our `Cargo.toml`
+
+```toml
+sum-storage-rpc = { path = "../../pallets/sum-storage/rpc" }
+```
+
+Defining the RPC interface is similar to before, but there are a few differences worth noting. First, the struct that implements the RPC needs a reference to the `client`. This is necessary so we can actually call into the runtime. Second the struct is generic over the `BlockHash` type. This is because it will call a runtime API, and runtime APIs must always be called at a specific block.
+
+```rust
+#[rpc]
+pub trait SumStorageApi<BlockHash> {
+	#[rpc(name = "sumStorage_getSum")]
+	fn get_sum(
+		&self,
+		at: Option<BlockHash>
+	) -> Result<u32>;
+}
+
+/// A struct that implements the `SumStorageApi`.
+pub struct SumStorage<C, M> {
+	client: Arc<C>,
+	_marker: std::marker::PhantomData<M>,
+}
+
+impl<C, M> SumStorage<C, M> {
+	/// Create new `SumStorage` instance with the given reference to the client.
+	pub fn new(client: Arc<C>) -> Self {
+		Self { client, _marker: Default::default() }
+	}
+}
+```
+
+The implementation also looks similar to before, with a few additions. The additional syntax here is related to calling the runtime at a specific block, as well as ensuring that the runtime we're calling actually has the correct runtime API available.
+```rust
+impl<C, Block> SumStorageApi<<Block as BlockT>::Hash>
+	for SumStorage<C, Block>
+where
+	Block: BlockT,
+	C: Send + Sync + 'static,
+	C: ProvideRuntimeApi,
+	C: HeaderBackend<Block>,
+	C::Api: SumStorageRuntimeApi<Block>,
+{
+	fn get_sum(
+		&self,
+		at: Option<<Block as BlockT>::Hash>
+	) -> Result<u32> {
+
+		let api = self.client.runtime_api();
+		let at = BlockId::hash(at.unwrap_or_else(||
+			// If the block hash is not supplied assume the best block.
+			self.client.info().best_hash
+		));
+
+		let runtime_api_result = api.get_sum(&at);
+		runtime_api_result.map_err(|e| RpcError {
+			code: ErrorCode::ServerError(9876), // No real reason for this value
+			message: "Something wrong".into(),
+			data: Some(format!("{:?}", e).into()),
+		})
+	}
+}
+```
+
+Finally, to install this RPC on in our service, we explans the `with_rpc_extensions` call to
+```rust
+.with_rpc_extensions(|client, _pool, _backend, _fetcher, _remote_blockchain| -> Result<RpcExtension, _> {
+  let mut io = jsonrpc_core::IoHandler::default();
+
+  // Use the fully qualified name starting from `crate` because we're in macro_rules!
+  io.extend_with(crate::silly_rpc::SillyRpc::to_delegate(crate::silly_rpc::Silly{}));
+
+  io.extend_with(sum_storage_rpc::SumStorageApi::to_delegate(sum_storage_rpc::SumStorage::new(client)));
+
+  Ok(io)
+})?
+```

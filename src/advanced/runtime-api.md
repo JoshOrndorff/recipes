@@ -1,5 +1,6 @@
 # Runtime APIs
 *[`kitchen/pallets/sum-storage`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/sum-storage)*
+*[`kitchen/runtimes/api-runtime`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/runtime/api-runtime)*
 
 Each Substrate node contains a runtime. The runtime contains the business logic of the chain. It defines what transactions are valid and invalid and determines how the chain's state changes in response to transactions. The runtime is compiled to Wasm to facilitate runtime upgrades. The "outer node", everything other than the runtime, does not compile to Wasm, only to native. The outer node is responsible for handling peer discovery, transaction pooling, block and transaction gossiping, consensus, and answering RPC calls from the outside world. While performing these tasks, the outer node sometimes needs to query the runtime for information, or provide information to the runtime. A Runtime API facilitates this communication between the outer node and the runtime. In this recipe, we will write our own minimal runtime API.
 

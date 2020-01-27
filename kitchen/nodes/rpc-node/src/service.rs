@@ -31,6 +31,7 @@ construct_simple_protocol! {
 /// be able to perform chain operations.
 macro_rules! new_full_start {
 	($config:expr) => {{
+		type RpcExtension = jsonrpc_core::IoHandler<sc_rpc::Metadata>;
 		let mut import_setup = None;
 		let inherent_data_providers = sp_inherents::InherentDataProviders::new();
 
@@ -73,6 +74,22 @@ macro_rules! new_full_start {
 				import_setup = Some((grandpa_block_import, grandpa_link));
 
 				Ok(import_queue)
+			})?
+			.with_rpc_extensions(|client, _pool, _backend, _fetcher, _remote_blockchain| -> Result<RpcExtension, _> {
+				// Make an io handler to be extended with individual RPCs
+				let mut io = jsonrpc_core::IoHandler::default();
+
+				// Add the first rpc extension
+				// Use the fully qualified name starting from `crate` because we're in macro_rules!
+				io.extend_with(crate::silly_rpc::SillyRpc::to_delegate(crate::silly_rpc::Silly{}));
+
+				// Add the second RPC extension
+				// Because this one calls a Runtime API it needs a reference to the client.
+				// In this case we give ownership to the existing client, but in general, you
+				// may need to use client.clone()
+				io.extend_with(sum_storage_rpc::SumStorageApi::to_delegate(sum_storage_rpc::SumStorage::new(client)));
+
+				Ok(io)
 			})?;
 
 		(builder, import_setup, inherent_data_providers)

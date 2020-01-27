@@ -7,6 +7,7 @@ mod chain_spec;
 #[macro_use]
 mod service;
 mod cli;
+mod silly_rpc;
 
 pub use sc_cli::{VersionInfo, IntoExit, error};
 

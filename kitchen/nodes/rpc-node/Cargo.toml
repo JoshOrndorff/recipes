@@ -20,6 +20,11 @@ tokio = '0.1.22'
 trie-root = '0.15.2'
 runtime = { package = "api-runtime", path = "../../runtimes/api-runtime" }
 runtime-genesis = { package = "api-genesis", path = "../../runtimes/api-genesis" }
+jsonrpc-core = "14.0.3"
+jsonrpc-core-client = "14.0.3"
+jsonrpc-derive = "14.0.3"
+sc-rpc = { git = 'https://github.com/paritytech/substrate.git', rev = '3e651110aa06aa835790df63410a29676243fc54' }
+sum-storage-rpc = { path = "../../pallets/sum-storage/rpc" }
 
 [dependencies.codec]
 package = 'parity-scale-codec'
