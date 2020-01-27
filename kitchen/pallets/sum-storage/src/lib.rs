@@ -19,16 +19,10 @@ pub trait Trait: system::Trait {
 	type Event: From<Event> + Into<<Self as system::Trait>::Event>;
 }
 
-// This module's storage items.
-// QUESTION: When I import as `frame_system` instead of `system` I get compile errors on this macro. Possibly related to https://github.com/paritytech/substrate/issues/3295 But why doesn't sudo have that problem? Ohh, sudo does
-// use frame_system::{self as system, ... };
 decl_storage! {
 	trait Store for Module<T: Trait> as TemplateModule {
-		// Just a dummy storage item.
-		// Here we are declaring a StorageValue, `Something` as a Option<u32>
-		// `get(fn something)` is the default getter which returns either the stored `u32` or `None` if nothing stored
-		Thing1 get(fn thing1): Option<u32>;
-		Thing2 get(fn thing2): Option<u32>;
+		Thing1 get(fn thing1): u32;
+		Thing2 get(fn thing2): u32;
 	}
 }
 
@@ -36,8 +30,6 @@ decl_storage! {
 decl_module! {
 	/// The module declaration.
 	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
-		// Initializing events
-		// this is needed only if you are using events in your module
 		fn deposit_event() = default;
 
 		pub fn set_thing_1(origin, val: u32) -> dispatch::DispatchResult {
@@ -62,18 +54,7 @@ decl_module! {
 
 impl<T: Trait> Module<T> {
 	pub fn get_sum() -> u32 {
-		//TODO Actually handle the `None` cases and return something
-		// appropriate when one of the storage values is `None`
-		let v1 = match Thing1::get() {
-			Some(v) => v,
-			None => 0,
-		};
-		let v2 = match Thing2::get() {
-			Some(v) => v,
-			None => 0,
-		};
-
-		v1 + v2
+		Thing1::get() + Thing2::get()
 	}
 }
 

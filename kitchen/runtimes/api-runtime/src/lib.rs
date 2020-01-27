@@ -350,9 +350,13 @@ impl_runtime_apis! {
 		}
 	}
 
+	// Here we implement our custom runtime API.
 	impl sum_storage_rpc_runtime_api::SumStorageApi<Block> for Runtime {
 		fn get_sum() -> u32 {
-			// This Custom Runtime API calls into a specific pallet
+			// This Runtime API calls into a specific pallet. Calling a pallet is a common
+			// design pattern. You can see most other APIs in this file do the same.
+			// It is also possible to write your logic right here in the runtime
+			// amalgamator file
 			SumStorage::get_sum()
 		}
 	}
