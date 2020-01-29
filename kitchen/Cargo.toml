@@ -30,5 +30,6 @@ members = [
   "runtimes/super-genesis",
   "runtimes/weight-fee-runtime",
   "runtimes/weight-fee-genesis",
+  "runtimes/frameless-runtime",
   "node",
 ]
