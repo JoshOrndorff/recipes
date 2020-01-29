@@ -138,7 +138,7 @@ impl<C, M> SumStorage<C, M> {
 }
 ```
 
-The implementation also looks similar to before, with a few additions. The additional syntax here is related to calling the runtime at a specific block, as well as ensuring that the runtime we're calling actually has the correct runtime API available.
+The RPC's implementation is also similar to before. The additional syntax here is related to calling the runtime at a specific block, as well as ensuring that the runtime we're calling actually has the correct runtime API available.
 ```rust
 impl<C, Block> SumStorageApi<<Block as BlockT>::Hash>
 	for SumStorage<C, Block>
@@ -183,3 +183,28 @@ Finally, to install this RPC on in our service, we expand the existing `with_rpc
   Ok(io)
 })?
 ```
+
+## Optional RPC Parameters
+This RPC takes a parameter ,`at`, whose type is `Option<_>`. We may call this RPC by omitting the optional parameter entirely. In this case the implementation provides a default value of the best block.
+
+```bash
+$ curl http://localhost:9933 -H "Content-Type:application/json;charset=utf-8" -d   '{
+     "jsonrpc":"2.0",
+      "id":1,
+      "method":"sumStorage_getSum",
+      "params": []
+    }'
+```
+
+We may also call the RPC by providing a block hash. One easy way to get a block hash to test this call is by copying it from the logs of a running node.
+
+```bash
+$ curl http://localhost:9933 -H "Content-Type:application/json;charset=utf-8" -d   '{
+     "jsonrpc":"2.0",
+      "id":1,
+      "method":"sumStorage_getSum",
+      "params": ["0x87b2e4b93e74d2f06a0bde8de78c9e2a9823ce559eb5e3c4710de40a1c1071ac"]
+    }'
+```
+
+As an exercise, you should change the storage values, and confirm that the RPC provides the correct updated sum. Then call the RPC at an old block and confirm you get the old sum.

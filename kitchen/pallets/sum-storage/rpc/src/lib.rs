@@ -37,6 +37,8 @@ pub trait SumStorageApi<BlockHash> {
 
 /// A struct that implements the `SumStorageApi`.
 pub struct SumStorage<C, M> {
+	// If you have more generics, no need to SumStorage<C, M, N, P, ...>
+	// just use a tuple like SumStorage<C, (M, N, P, ...)>
 	client: Arc<C>,
 	_marker: std::marker::PhantomData<M>,
 }
@@ -67,7 +69,6 @@ impl<C, M> SumStorage<C, M> {
 
 impl<C, Block> SumStorageApi<<Block as BlockT>::Hash>
 	for SumStorage<C, Block>
-	// If you have more generics, no need to add <M, N, P, ..>, just do SumStorage<C, (tuple_of_all_useless_phantom_generics)>
 where
 	Block: BlockT,
 	C: Send + Sync + 'static,
