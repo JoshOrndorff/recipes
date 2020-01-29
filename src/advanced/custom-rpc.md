@@ -208,3 +208,6 @@ $ curl http://localhost:9933 -H "Content-Type:application/json;charset=utf-8" -d
 ```
 
 As an exercise, you should change the storage values, and confirm that the RPC provides the correct updated sum. Then call the RPC at an old block and confirm you get the old sum.
+
+## Polkadot JS API
+Many frontends interact with Substrate nodes through Polkadot JS API. While the recipes does not strive to document that project, we have included a snippet of javascript for interacting with these custom RPCs in the `kitchen/nodes/rpc-node/js` directory.

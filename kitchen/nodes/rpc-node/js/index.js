@@ -1,21 +1,22 @@
-// Import
+// A demonstration of interacting with custom RPCs using Polkadot js API
+
 const { ApiPromise, WsProvider } = require('@polkadot/api');
 
 // Construct parameters for API instance
 const wsProvider = new WsProvider('ws://localhost:9944');
 const types = {};
 const rpc = {
-  hello: [
-    {
-      description: "Always returns 5",
-      name: "five",
-      params: [],
-      type: "u32",
-    },
+  silly: [
     {
       description: "Always returns 7",
       name: "seven",
       params: [],
+      type: "u32",
+    },
+    {
+      description: "Doubles the parameter",
+      name: "double",
+      params: ["u32"],
       type: "u32",
     }
   ],
@@ -38,9 +39,10 @@ async function main() {
   });
 
   // Query the custom SillyRpc
-  let silly5 = await api.rpc.hello.five();
-  let silly7 = await api.rpc.hello.seven();
-  console.log(`The values from the Silly RPC are ${silly5}, and ${silly7}\n`);
+  let silly7 = await api.rpc.silly.seven();
+  let silly14 = await api.rpc.silly.double(7);
+  console.log(`The value from the silly_seven is ${silly7}\n`);
+  console.log(`The double of 7 according to silly_double is ${silly14}\n`);
 
   // Query raw storage values, the oldschool way
   const v1 = ( await api.query.sumStorage.thing1() ).unwrap().toNumber();
