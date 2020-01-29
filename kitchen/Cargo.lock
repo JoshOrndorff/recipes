@@ -1042,7 +1042,6 @@ dependencies = [
  "frame-system 2.0.0 (git+https://github.com/paritytech/substrate.git?rev=3e651110aa06aa835790df63410a29676243fc54)",
  "pallet-babe 2.0.0 (git+https://github.com/paritytech/substrate.git?rev=3e651110aa06aa835790df63410a29676243fc54)",
  "pallet-balances 2.0.0 (git+https://github.com/paritytech/substrate.git?rev=3e651110aa06aa835790df63410a29676243fc54)",
- "pallet-grandpa 2.0.0 (git+https://github.com/paritytech/substrate.git?rev=3e651110aa06aa835790df63410a29676243fc54)",
  "pallet-indices 2.0.0 (git+https://github.com/paritytech/substrate.git?rev=3e651110aa06aa835790df63410a29676243fc54)",
  "pallet-randomness-collective-flip 2.0.0 (git+https://github.com/paritytech/substrate.git?rev=3e651110aa06aa835790df63410a29676243fc54)",
  "pallet-sudo 2.0.0 (git+https://github.com/paritytech/substrate.git?rev=3e651110aa06aa835790df63410a29676243fc54)",

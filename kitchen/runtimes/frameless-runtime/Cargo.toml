@@ -85,12 +85,6 @@ git = 'https://github.com/paritytech/substrate.git'
 package = 'pallet-indices'
 rev = '3e651110aa06aa835790df63410a29676243fc54'
 
-[dependencies.grandpa]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'pallet-grandpa'
-rev = '3e651110aa06aa835790df63410a29676243fc54'
-
 [dependencies.randomness-collective-flip]
 default-features = false
 git = 'https://github.com/paritytech/substrate.git'
@@ -161,7 +155,6 @@ std = [
 	"balances/std",
 	"block-builder-api/std",
 	"executive/std",
-	"grandpa/std",
 	"indices/std",
 	"inherents/std",
 	"offchain-primitives/std",

@@ -10,8 +10,6 @@
 include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 
 use babe::SameAuthoritiesForever;
-use grandpa::fg_primitives;
-use grandpa::AuthorityList as GrandpaAuthorityList;
 use primitives::OpaqueMetadata;
 use rstd::prelude::*;
 use sp_api::impl_runtime_apis;
@@ -78,11 +76,10 @@ pub mod opaque {
     /// Opaque block identifier type.
     pub type BlockId = generic::BlockId<Block>;
 
-    pub type SessionHandlers = (Grandpa, Babe);
+    pub type SessionHandlers = Babe;
 
     impl_opaque_keys! {
         pub struct SessionKeys {
-            pub grandpa: Grandpa,
             pub babe: Babe,
         }
     }
@@ -90,8 +87,8 @@ pub mod opaque {
 
 /// This runtime version.
 pub const VERSION: RuntimeVersion = RuntimeVersion {
-    spec_name: create_runtime_str!("super-runtime"),
-    impl_name: create_runtime_str!("super-runtime"),
+    spec_name: create_runtime_str!("frameless-runtime"),
+    impl_name: create_runtime_str!("frameless-runtime"),
     authoring_version: 1,
     spec_version: 1,
     impl_version: 1,
@@ -191,10 +188,6 @@ impl babe::Trait for Runtime {
     type EpochChangeTrigger = SameAuthoritiesForever;
 }
 
-impl grandpa::Trait for Runtime {
-    type Event = Event;
-}
-
 impl indices::Trait for Runtime {
     /// The type for recording indexing into the account enumeration. If this ever overflows, there
     /// will be problems!
@@ -269,7 +262,6 @@ construct_runtime!(
 		System: system::{Module, Call, Storage, Config, Event},
 		Timestamp: timestamp::{Module, Call, Storage, Inherent},
 		Babe: babe::{Module, Call, Storage, Config, Inherent(Timestamp)},
-		Grandpa: grandpa::{Module, Call, Storage, Config, Event},
 		Indices: indices,
 		Balances: balances,
 		RandomnessCollectiveFlip: randomness_collective_flip::{Module, Call, Storage},
@@ -360,12 +352,6 @@ impl_runtime_apis! {
     impl offchain_primitives::OffchainWorkerApi<Block> for Runtime {
         fn offchain_worker(number: NumberFor<Block>) {
             Executive::offchain_worker(number)
-        }
-    }
-
-    impl fg_primitives::GrandpaApi<Block> for Runtime {
-        fn grandpa_authorities() -> GrandpaAuthorityList {
-            Grandpa::grandpa_authorities()
         }
     }
 
