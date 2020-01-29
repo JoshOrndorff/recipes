@@ -11,11 +11,11 @@ called "silly rpc" which just returns constant integers. A Hello world of sorts.
 ```rust
 #[rpc]
 pub trait SillyRpc {
-    #[rpc(name = "hello_five")]
-    fn silly_5(&self) -> Result<u64>;
-
-    #[rpc(name = "hello_seven")]
+    #[rpc(name = "silly_seven")]
     fn silly_7(&self) -> Result<u64>;
+
+    #[rpc(name = "silly_double")]
+    fn silly_double(&self, val: u64) -> Result<u64>;
 }
 ```
 
@@ -25,12 +25,12 @@ This definition defines two RPC methods called `hello_five` and `hello_seven`. E
 pub struct Silly;
 
 impl SillyRpc for Silly {
-    fn silly_5(&self) -> Result<u64> {
-        Ok(5)
-    }
-
     fn silly_7(&self) -> Result<u64> {
         Ok(7)
+    }
+
+    fn silly_double(&self, val: u64) -> Result<u64> {
+        Ok(2 * val)
     }
 }
 ```
@@ -70,23 +70,43 @@ Then, once you've called the service builder, you can extend it with an RPC by u
 })
 ```
 
-Once your node is running, you can test the RPC by calling it with any client that speaks json RPC. One widely available option is to just use curl.
+## Calling the RPC
+Once your node is running, you can test the RPC by calling it with any client that speaks json RPC. One widely available option `curl`.
 ```bash
 $ curl http://localhost:9933 -H "Content-Type:application/json;charset=utf-8" -d   '{
      "jsonrpc":"2.0",
       "id":1,
-      "method":"hello_five",
+      "method":"silly_seven",
       "params": []
     }'
 ```
 
-To which the RPC responds TODO
+To which the RPC responds
+```
+{"jsonrpc":"2.0","result":7,"id":1}
+```
+
+You may have noticed that our second RPC takes a parameter, the value to double. You can supply this parameter by including its in the  `params` list. For example:
+
+```bash
+$ curl http://localhost:9933 -H "Content-Type:application/json;charset=utf-8" -d   '{
+     "jsonrpc":"2.0",
+      "id":1,
+      "method":"silly_double",
+      "params": [7]
+    }'
+```
+
+To which the RPC responds with the doubled parameter
+```
+{"jsonrpc":"2.0","result":14,"id":1}
+```
 
 ## RPC to Call a Runtime API
 
-The silly RPC demonstrates the fundamentals of working with RPCs in Substrate. Nonetheless, most RPCs will go beyond what we've learned so far, and actually interact with other parts of the node. In this second example, we will include an RPC that calls into a runtime API. We'll reuse the `sum-storage` runtime API from the [runtime API recipe](./runtime-api.md). While it isn't strictly necessary to understand what the runtime API does, reading that recipe may provide helpful context.
+The silly RPC demonstrates the fundamentals of working with RPCs in Substrate. Nonetheless, most RPCs will go beyond what we've learned so far, and actually interact with other parts of the node. In this second example, we will include an RPC that calls into the `sum-storage` runtime API from the [runtime API recipe](./runtime-api.md). While it isn't strictly necessary to understand what the runtime API does, reading that recipe may provide helpful context.
 
-Because this RPC's behavior is closely related to a specific pallet, we've chosen to define the RPC in the pallet's directory. In this case the RPC is defined in `kitchen/pallets/sum-storage/rpc`. So rather than using the `mod` keyword as we did before, we must include this RPC definition in our `Cargo.toml`
+Because this RPC's behavior is closely related to a specific pallet, we've chosen to define the RPC in the pallet's directory. In this case the RPC is defined in `kitchen/pallets/sum-storage/rpc`. So rather than using the `mod` keyword as we did before, we must include this RPC definition in the node's `Cargo.toml` file.
 
 ```toml
 sum-storage-rpc = { path = "../../pallets/sum-storage/rpc" }
@@ -150,7 +170,7 @@ where
 }
 ```
 
-Finally, to install this RPC on in our service, we explans the `with_rpc_extensions` call to
+Finally, to install this RPC on in our service, we expand the existing `with_rpc_extensions` call to
 ```rust
 .with_rpc_extensions(|client, _pool, _backend, _fetcher, _remote_blockchain| -> Result<RpcExtension, _> {
   let mut io = jsonrpc_core::IoHandler::default();
