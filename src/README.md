@@ -29,6 +29,9 @@
     - [Basic Test Environments](./testing/mock.md)
     - [Common Tests](./testing/common.md)
     - [Custom Test Environment](./testing/externalities.md)
+- [Debugging](./debugging/README.md)
+    - [Basic Printing](./debugging/printable.md)
+    - [Std Printing](./debugging/ifstd.md)
 - [Featured Tutorials](./base/dessert.md)
 
 -----------
