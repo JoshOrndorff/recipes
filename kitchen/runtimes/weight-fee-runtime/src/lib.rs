@@ -32,7 +32,7 @@ use version::NativeVersion;
 #[allow(unused_imports)]
 use sp_runtime::traits::ConvertInto;
 #[allow(unused_imports)]
-use generic_asset::SpendingAssetCurrency;
+use generic_asset::{SpendingAssetCurrency, AssetCurrency, AssetIdProvider};
 
 // A few exports that help ease life for downstream crates.
 #[cfg(any(feature = "std", test))]
@@ -289,33 +289,40 @@ impl<C0, C1, C2> Convert<Weight, Balance> for QuadraticWeightToFee<C0, C1, C2>
 }
 
 // --------------------- An Option to Currency to Collect Fees -----------------------
-//TODO
-// struct FixedGenericAsset;
+type FixedGenericAsset<T> = AssetCurrency<T, FixedAssetId>;
+
+pub struct FixedAssetId;
+impl AssetIdProvider for FixedAssetId {
+	type AssetId = u32;
+	fn asset_id() -> Self::AssetId {
+		13
+	}
+}
 
 parameter_types! {
-	// Used with LinearWeightToFee conversion.
+	// Used with LinearWeightToFee conversion. Leaving this constant in tact when using other
+	// conversion techniques is harmless.
 	pub const FeeWeightRatio: u128 = 1_000;
 
-	// Used with QuadraticWeightToFee conversion. Leaving this constant in tact when using other
+	// Used with QuadraticWeightToFee conversion. Leaving these constants in tact when using other
 	// conversion techniques is harmless.
 	pub const WeightFeeConstant: u128 = 1_000;
 	pub const WeightFeeLinear: u128 = 100;
 	pub const WeightFeeQuadratic : u128 = 10;
 
-	// Establish the base- and byte-fees. These are used regardless of which WeightFee conversion
-	// is being used.
+	// Establish the base- and byte-fees. These are used in all configurations.
 	pub const TransactionBaseFee: u128 = 0;
 	pub const TransactionByteFee: u128 = 1;
 }
 
 impl transaction_payment::Trait for Runtime {
 
-    // The asset in which fees will be collected.
-    // Enable exactly one of the following options.
-	//type Currency = Balances; // The balances pallet (The most common choice)
-	// type Currency = FixedGenericAsset... // A generic asset whose ID is hard-coded above.
-	type Currency = SpendingAssetCurrency<Self>; // A generic asset whose ID is stored in the
-	                                             // generic_asset pallet's runtime storage
+	// The asset in which fees will be collected.
+	// Enable exactly one of the following options.
+	type Currency = Balances; // The balances pallet (The most common choice)
+	//type Currency = FixedGenericAsset<Self>; // A generic asset whose ID is hard-coded above.
+	//type Currency = SpendingAssetCurrency<Self>; // A generic asset whose ID is stored in the
+	                                               // generic_asset pallet's runtime storage
 
 	// What to do when fees are paid. () means take no additional actions.
 	type OnTransactionPayment = ();
