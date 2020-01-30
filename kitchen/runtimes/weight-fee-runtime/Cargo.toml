@@ -56,6 +56,12 @@ git = 'https://github.com/paritytech/substrate.git'
 package = 'pallet-balances'
 rev = '3e651110aa06aa835790df63410a29676243fc54'
 
+[dependencies.generic-asset]
+default-features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'pallet-generic-asset'
+rev = '3e651110aa06aa835790df63410a29676243fc54'
+
 [dependencies.transaction-payment]
 default-features = false
 git = 'https://github.com/paritytech/substrate.git'
@@ -162,6 +168,7 @@ std = [
 	"balances/std",
 	"block-builder-api/std",
 	"executive/std",
+	"generic-asset/std",
 	"grandpa/std",
 	"indices/std",
 	"inherents/std",
