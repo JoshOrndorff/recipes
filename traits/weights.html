@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Types and Traits - Substrate Recipes</title>
+        <title>Weights for Resource Accounting - Substrate Recipes</title>
         
 
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
@@ -87,7 +87,7 @@
                 </a>
             </div>
             <div id="sidebar-scrollbox" class="sidebar-scrollbox">
-                <ol class="chapter"><li class="expanded "><a href="../base/index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="expanded "><a href="../base/rust.html"><strong aria-hidden="true">2.</strong> Learn Rust</a></li><li class="expanded "><a href="../base/setup.html"><strong aria-hidden="true">3.</strong> Getting Started</a></li><li><ol class="section"><li class="expanded "><a href="../base/runnode.html"><strong aria-hidden="true">3.1.</strong> Running A Node</a></li><li class="expanded "><a href="../base/interactnode.html"><strong aria-hidden="true">3.2.</strong> Interacting with a Node</a></li><li class="expanded "><a href="../base/kitchenoverview.html"><strong aria-hidden="true">3.3.</strong> Using the Kitchen</a></li></ol></li><li class="expanded "><a href="../basics/index.html"><strong aria-hidden="true">4.</strong> Hello Substrate</a></li><li><ol class="section"><li class="expanded "><a href="../basics/events.html"><strong aria-hidden="true">4.1.</strong> Events Verify Execution</a></li><li class="expanded "><a href="../basics/adder.html"><strong aria-hidden="true">4.2.</strong> Adding Machine</a></li><li class="expanded "><a href="../basics/value.html"><strong aria-hidden="true">4.3.</strong> Single Value Storage</a></li></ol></li><li class="expanded "><a href="../storage/index.html"><strong aria-hidden="true">5.</strong> Runtime Storage API</a></li><li><ol class="section"><li class="expanded "><a href="../storage/cache.html"><strong aria-hidden="true">5.1.</strong> Cache Locally &gt; Storage Calls</a></li><li class="expanded "><a href="../storage/iterate.html"><strong aria-hidden="true">5.2.</strong> Sets</a></li><li class="expanded "><a href="../storage/enumerated.html"><strong aria-hidden="true">5.3.</strong> Ordered Lists: Maps, Linked Maps</a></li><li class="expanded "><a href="../storage/double.html"><strong aria-hidden="true">5.4.</strong> Subgroup Removal by Subkey: Double Maps</a></li><li class="expanded "><a href="../storage/childtries.html"><strong aria-hidden="true">5.5.</strong> Efficient Subgroup Removal by Subkey: Child Tries</a></li><li class="expanded "><a href="../storage/constants.html"><strong aria-hidden="true">5.6.</strong> Configurable Constants</a></li></ol></li><li class="expanded "><a href="../traits/index.html" class="active"><strong aria-hidden="true">6.</strong> Types and Traits</a></li><li><ol class="section"><li class="expanded "><a href="../traits/currency.html"><strong aria-hidden="true">6.1.</strong> Currency Types</a></li><li class="expanded "><a href="../traits/weights.html"><strong aria-hidden="true">6.2.</strong> Weights for Resource Accounting</a></li><li class="expanded "><a href="../traits/fees.html"><strong aria-hidden="true">6.3.</strong> Transaction Fees for Economic Security</a></li><li class="expanded "><a href="../storage/instantiable.html"><strong aria-hidden="true">6.4.</strong> Instantiable Pallets</a></li><li class="expanded "><a href="../advanced/runtime-api.html"><strong aria-hidden="true">6.5.</strong> Runtime APIs</a></li><li class="expanded "><a href="../advanced/custom-rpc.html"><strong aria-hidden="true">6.6.</strong> Custom RPCs</a></li></ol></li><li class="expanded "><a href="../declarative/index.html"><strong aria-hidden="true">7.</strong> Declarative Syntax</a></li><li><ol class="section"><li class="expanded "><a href="../declarative/ensure.html"><strong aria-hidden="true">7.1.</strong> Verify First, Write Last</a></li><li class="expanded "><a href="../declarative/safemath.html"><strong aria-hidden="true">7.2.</strong> Safe Math</a></li><li class="expanded "><a href="../declarative/permissioned.html"><strong aria-hidden="true">7.3.</strong> Permissioned Methods</a></li></ol></li><li class="expanded "><a href="../testing/index.html"><strong aria-hidden="true">8.</strong> Testing</a></li><li><ol class="section"><li class="expanded "><a href="../testing/mock.html"><strong aria-hidden="true">8.1.</strong> Basic Test Environments</a></li><li class="expanded "><a href="../testing/common.html"><strong aria-hidden="true">8.2.</strong> Common Tests</a></li><li class="expanded "><a href="../testing/externalities.html"><strong aria-hidden="true">8.3.</strong> Custom Test Environment</a></li></ol></li><li class="expanded "><a href="../base/dessert.html"><strong aria-hidden="true">9.</strong> Featured Tutorials</a></li><li class="spacer"></li><li class="expanded affix "><a href="../base/resource.html">More Resources</a></li></ol>
+                <ol class="chapter"><li class="expanded "><a href="../base/index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="expanded "><a href="../base/rust.html"><strong aria-hidden="true">2.</strong> Learn Rust</a></li><li class="expanded "><a href="../base/setup.html"><strong aria-hidden="true">3.</strong> Getting Started</a></li><li><ol class="section"><li class="expanded "><a href="../base/runnode.html"><strong aria-hidden="true">3.1.</strong> Running A Node</a></li><li class="expanded "><a href="../base/interactnode.html"><strong aria-hidden="true">3.2.</strong> Interacting with a Node</a></li><li class="expanded "><a href="../base/kitchenoverview.html"><strong aria-hidden="true">3.3.</strong> Using the Kitchen</a></li></ol></li><li class="expanded "><a href="../basics/index.html"><strong aria-hidden="true">4.</strong> Hello Substrate</a></li><li><ol class="section"><li class="expanded "><a href="../basics/events.html"><strong aria-hidden="true">4.1.</strong> Events Verify Execution</a></li><li class="expanded "><a href="../basics/adder.html"><strong aria-hidden="true">4.2.</strong> Adding Machine</a></li><li class="expanded "><a href="../basics/value.html"><strong aria-hidden="true">4.3.</strong> Single Value Storage</a></li></ol></li><li class="expanded "><a href="../storage/index.html"><strong aria-hidden="true">5.</strong> Runtime Storage API</a></li><li><ol class="section"><li class="expanded "><a href="../storage/cache.html"><strong aria-hidden="true">5.1.</strong> Cache Locally &gt; Storage Calls</a></li><li class="expanded "><a href="../storage/iterate.html"><strong aria-hidden="true">5.2.</strong> Sets</a></li><li class="expanded "><a href="../storage/enumerated.html"><strong aria-hidden="true">5.3.</strong> Ordered Lists: Maps, Linked Maps</a></li><li class="expanded "><a href="../storage/double.html"><strong aria-hidden="true">5.4.</strong> Subgroup Removal by Subkey: Double Maps</a></li><li class="expanded "><a href="../storage/childtries.html"><strong aria-hidden="true">5.5.</strong> Efficient Subgroup Removal by Subkey: Child Tries</a></li><li class="expanded "><a href="../storage/constants.html"><strong aria-hidden="true">5.6.</strong> Configurable Constants</a></li></ol></li><li class="expanded "><a href="../traits/index.html"><strong aria-hidden="true">6.</strong> Types and Traits</a></li><li><ol class="section"><li class="expanded "><a href="../traits/currency.html"><strong aria-hidden="true">6.1.</strong> Currency Types</a></li><li class="expanded "><a href="../traits/weights.html" class="active"><strong aria-hidden="true">6.2.</strong> Weights for Resource Accounting</a></li><li class="expanded "><a href="../traits/fees.html"><strong aria-hidden="true">6.3.</strong> Transaction Fees for Economic Security</a></li><li class="expanded "><a href="../storage/instantiable.html"><strong aria-hidden="true">6.4.</strong> Instantiable Pallets</a></li><li class="expanded "><a href="../advanced/runtime-api.html"><strong aria-hidden="true">6.5.</strong> Runtime APIs</a></li><li class="expanded "><a href="../advanced/custom-rpc.html"><strong aria-hidden="true">6.6.</strong> Custom RPCs</a></li></ol></li><li class="expanded "><a href="../declarative/index.html"><strong aria-hidden="true">7.</strong> Declarative Syntax</a></li><li><ol class="section"><li class="expanded "><a href="../declarative/ensure.html"><strong aria-hidden="true">7.1.</strong> Verify First, Write Last</a></li><li class="expanded "><a href="../declarative/safemath.html"><strong aria-hidden="true">7.2.</strong> Safe Math</a></li><li class="expanded "><a href="../declarative/permissioned.html"><strong aria-hidden="true">7.3.</strong> Permissioned Methods</a></li></ol></li><li class="expanded "><a href="../testing/index.html"><strong aria-hidden="true">8.</strong> Testing</a></li><li><ol class="section"><li class="expanded "><a href="../testing/mock.html"><strong aria-hidden="true">8.1.</strong> Basic Test Environments</a></li><li class="expanded "><a href="../testing/common.html"><strong aria-hidden="true">8.2.</strong> Common Tests</a></li><li class="expanded "><a href="../testing/externalities.html"><strong aria-hidden="true">8.3.</strong> Custom Test Environment</a></li></ol></li><li class="expanded "><a href="../base/dessert.html"><strong aria-hidden="true">9.</strong> Featured Tutorials</a></li><li class="spacer"></li><li class="expanded affix "><a href="../base/resource.html">More Resources</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -154,36 +154,83 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#substrate-types-and-traits" id="substrate-types-and-traits">Substrate Types and Traits</a></h1>
-<p>Pallets may access their own associated types as well as the associated types of other pallets in the runtime. This is seen in most pallets when they access <code>frame_system</code>'s associated <code>AccountId</code> type. All pallets are tightly coupled to <code>frame_system</code> through this syntax, and thus have access to its types. You may optionally couple to additional pallets in this way.</p>
-<blockquote>
-<p>Another option, loosely coupling to other pallets, is discussed further later.</p>
-</blockquote>
-<pre><code class="language-rust ignore">pub trait Trait: system::Trait {}
+                        <h1><a class="header" href="#computational-resources-and-weights" id="computational-resources-and-weights">Computational Resources and Weights</a></h1>
+<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/weights"><code>kitchen/pallets/weights</code></a></em></p>
+<p>Any computational resources used by a transaction must be accounted for so that appropriate fees can be applied, and it is a pallet author's job to ensure that this accounting happens. Substrate provides a mechanism known as transaction weighting to quantify the resources consumed while executing a transaction.</p>
+<p><em>Indeed, mispriced EVM operations have shown how operations that underestimate cost can open economic DOS attack vectors: <a href="https://www.parity.io/onwards/">Onwards; Underpriced EVM Operations</a>, <a href="https://www4.comp.polyu.edu.hk/%7Ecsxluo/DoSEVM.pdf">Under-Priced DOS Attacks on Ethereum</a></em></p>
+<h2><a class="header" href="#assigning-transaction-weights" id="assigning-transaction-weights">Assigning Transaction Weights</a></h2>
+<p>Pallet authors can annotate their dispatchable function with a weight using syntax like this,</p>
+<pre><code class="language-rust ignore">#[weight = &lt;Some Weighting Instance&gt;]
+fn some_call(...) -&gt; Result {
+	// --snip--
+}
 </code></pre>
-<p>This provides access to <code>Hash</code>, <code>AccountId</code>, and <code>BlockNumber</code> anywhere that specifies the generic <code>&lt;T: Trait&gt;</code> using <code>T::&lt;Type&gt;</code>. It also provides access to other useful types, declared in <a href="https://substrate.dev/rustdocs/master/frame_system/trait.Trait.html"><code>frame_system</code>'s configuration trait</a>.</p>
-<blockquote>
-<p>basically add a note here on why traits are important for runtime development <code>=&gt;</code> we are in the business of building libraries to support the configuration and modular and extensible digital infrastructure...</p>
-</blockquote>
-<ul>
-<li><a href="./currency.html">Currency Types</a></li>
-<li><a href="./fees.html">Transaction Fees</a></li>
-</ul>
-<h2><a class="header" href="#supporttraits" id="supporttraits">support::traits</a></h2>
-<p>Unlike in smart contract development, the way to inherit shared behavior is not to directly import other pallets. Instead, it is common to either implement the same logic in the new context or utilize a trait from <a href="https://substrate.dev/rustdocs/master/frame_support/index.html"><code>frame_support</code></a> to guide the new implementation. By abstracting common behavior from pallets into <code>frame_support</code>, Substrate makes it easy to extract and enforce best practices in the runtime.</p>
+<p>For simple transactions a fixed weight will do. Substrate provides the <a href="https://substrate.dev/rustdocs/master/frame_support/weights/enum.SimpleDispatchInfo.html"><code>SimpleDispatchInfo</code> enum</a> for situations like this.</p>
+<pre><code class="language-rust ignore">decl_module! {
+	pub struct Module&lt;T: Trait&gt; for enum Call {
+
+		#[weight = SimpleDispatchInfo::FixedNormal(100)]
+		fn store_value(_origin, entry: u32) -&gt; Result {
+			// --snip--
+		}
+</code></pre>
+<p>For more complex transactions, custom weight calculations can be performed that consider the parameters passed to the call. This snippet shows a weighting struct that weighs transactions where the first parameter
+is a <code>boo</code>l. If the first parameter is <code>true</code>, then the weight is linear in the second parameter. Otherwise the weight is constant. A transaction where this weighting scheme makes sense is demonstrated in the kitchen.</p>
+<pre><code class="language-rust ignore">pub struct Conditional(u32);
+
+impl WeighData&lt;(&amp;bool, &amp;u32)&gt; for Conditional {
+	fn weigh_data(&amp;self, (switch, val): (&amp;bool, &amp;u32)) -&gt; Weight {
+
+		if *switch {
+			val.saturating_mul(self.0)
+		}
+		else {
+			self.0
+		}
+	}
+}
+</code></pre>
+<p>In addition to the <a href="https://substrate.dev/rustdocs/master/frame_support/weights/trait.WeighData.html"><code>WeightData</code>
+Trait</a>, shown
+above, types that are used to calculate transaction weights, must also implement
+<a href="https://substrate.dev/rustdocs/master/frame_support/weights/trait.ClassifyDispatch.html"><code>ClassifyDispatch</code></a>,
+and <a href="https://substrate.dev/rustdocs/master/frame_support/weights/trait.PaysFee.html"><code>PaysFee</code></a>.</p>
+<pre><code class="language-rust ignore">impl&lt;T&gt; ClassifyDispatch&lt;T&gt; for Conditional {
+    fn classify_dispatch(&amp;self, _: T) -&gt; DispatchClass {
+        // Classify all calls as Normal (which is the default)
+        Default::default()
+    }
+}
+</code></pre>
+<pre><code class="language-rust ignore">impl PaysFee for Conditional {
+    fn pays_fee(&amp;self) -&gt; bool {
+        true
+    }
+}
+</code></pre>
+<p>The complete code for this example as well as several others can be found in the kitchen.</p>
+<h2><a class="header" href="#cautions" id="cautions">Cautions</a></h2>
+<p>While you can make reasonable estimates of resource consumption at
+design time, it is always best to actually measure the resources
+required of your functions through an empirical process. Failure to
+perform such rigorous measurement may result in an economically
+insecure chain.</p>
+<p>While it isn't enforced, calculating a transaction's weight should itself be a cheap operation. If the weight calculation itself is expensive, your chain will be insecure.</p>
+<h2><a class="header" href="#what-about-fees" id="what-about-fees">What About Fees?</a></h2>
+<p>Weights are used only to describe the computational resources consumed by a transaction, and enable accounting of these resources. To learn how to turn these weights into actual fees charged to transactors, continue to the recipe on <a href="./fees.html">Fees</a>.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
-                            <a rel="prev" href="../storage/constants.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../traits/currency.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
 
                         
-                            <a rel="next" href="../traits/currency.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="../traits/fees.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -195,13 +242,13 @@
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
-                    <a href="../storage/constants.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a href="../traits/currency.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
 
                 
-                    <a href="../traits/currency.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a href="../traits/fees.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 
