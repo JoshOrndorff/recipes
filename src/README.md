@@ -19,6 +19,7 @@
     - [Configurable Constants](./storage/constants.md)
 - [Types and Traits](./traits/README.md)
     - [Currency Types](./traits/currency.md)
+    - [Weights for Resource Accounting](./traits/weights.md)
     - [Transaction Fees for Economic Security](./traits/fees.md)
     - [Instantiable Pallets](./storage/instantiable.md)
     - [Runtime APIs](./advanced/runtime-api.md)

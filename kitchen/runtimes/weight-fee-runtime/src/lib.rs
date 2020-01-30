@@ -27,10 +27,12 @@ use version::RuntimeVersion;
 #[cfg(feature = "std")]
 use version::NativeVersion;
 
-// Don't throw a warning when importing ConvertInto. It is used in one of the commented-by-default
-// weight-fee conversions.
+// These structs are used in one of the commented-by-default implementations of
+// transaction_payment::Trait. Don't warn when they are unused.
 #[allow(unused_imports)]
 use sp_runtime::traits::ConvertInto;
+#[allow(unused_imports)]
+use generic_asset::{SpendingAssetCurrency, AssetCurrency, AssetIdProvider};
 
 // A few exports that help ease life for downstream crates.
 #[cfg(any(feature = "std", test))]
@@ -231,6 +233,13 @@ impl balances::Trait for Runtime {
 	type CreationFee = CreationFee;
 }
 
+impl generic_asset::Trait for Runtime {
+    /// The type for recording an account's balance.
+    type Balance = Balance;
+    type AssetId = u32;
+    type Event = Event;
+}
+
 impl sudo::Trait for Runtime {
 	type Event = Event;
 	type Proposal = Call;
@@ -279,31 +288,46 @@ impl<C0, C1, C2> Convert<Weight, Balance> for QuadraticWeightToFee<C0, C1, C2>
 	}
 }
 
+// --------------------- An Option to Currency to Collect Fees -----------------------
+type FixedGenericAsset<T> = AssetCurrency<T, FixedAssetId>;
 
+pub struct FixedAssetId;
+impl AssetIdProvider for FixedAssetId {
+	type AssetId = u32;
+	fn asset_id() -> Self::AssetId {
+		13
+	}
+}
 
-// Enable only when WeightToFee = LinearWeightToFee
-// parameter_types!{
-// 	pub const FeeWeightRatio: u128 = 1_000;
-// }
-
-// Enable only when WeightToFee = QuadraticWeightToFee
 parameter_types! {
+	// Used with LinearWeightToFee conversion. Leaving this constant in tact when using other
+	// conversion techniques is harmless.
+	pub const FeeWeightRatio: u128 = 1_000;
+
+	// Used with QuadraticWeightToFee conversion. Leaving these constants in tact when using other
+	// conversion techniques is harmless.
 	pub const WeightFeeConstant: u128 = 1_000;
 	pub const WeightFeeLinear: u128 = 100;
 	pub const WeightFeeQuadratic : u128 = 10;
-}
 
-// Always necessary
-parameter_types! {
+	// Establish the base- and byte-fees. These are used in all configurations.
 	pub const TransactionBaseFee: u128 = 0;
 	pub const TransactionByteFee: u128 = 1;
 }
 
 impl transaction_payment::Trait for Runtime {
-	type Currency = balances::Module<Runtime>;
+
+	// The asset in which fees will be collected.
+	// Enable exactly one of the following options.
+	type Currency = Balances; // The balances pallet (The most common choice)
+	//type Currency = FixedGenericAsset<Self>; // A generic asset whose ID is hard-coded above.
+	//type Currency = SpendingAssetCurrency<Self>; // A generic asset whose ID is stored in the
+	                                               // generic_asset pallet's runtime storage
+
+	// What to do when fees are paid. () means take no additional actions.
 	type OnTransactionPayment = ();
 
-	// Base fee is applied to every single transaction
+	// Base fee is a fixed amount applied to every transaction
 	type TransactionBaseFee = TransactionBaseFee;
 
 	// Byte fee is multiplied by the length of the
@@ -311,7 +335,7 @@ impl transaction_payment::Trait for Runtime {
 	type TransactionByteFee = TransactionByteFee;
 
 	// Function to convert dispatch weight to a chargeable fee.
-	// Enable exactly one of the following examples.
+	// Enable exactly one of the following options.
 	//type WeightToFee = ConvertInto;
 	//type WeightToFee = LinearWeightToFee<FeeWeightRatio>;
 	type WeightToFee = QuadraticWeightToFee<WeightFeeConstant, WeightFeeLinear, WeightFeeQuadratic>;
@@ -335,6 +359,7 @@ construct_runtime!(
 		Grandpa: grandpa::{Module, Call, Storage, Config, Event},
 		Indices: indices,
 		Balances: balances,
+		GenericAsset: generic_asset,
 		RandomnessCollectiveFlip: randomness_collective_flip::{Module, Call, Storage},
 		Sudo: sudo,
 		TransactionPayment: transaction_payment::{Module, Storage},
