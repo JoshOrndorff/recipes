@@ -63,7 +63,7 @@ Having calculated the amount of fees due, runtime authors must decide which asse
 impl transaction_payment::Trait for Runtime {
 
 	// A generic asset whose ID is stored in the generic_asset pallet's runtime storage
-	//type Currency = SpendingAssetCurrency<Self>;
+	type Currency = SpendingAssetCurrency<Self>;
 
 	// --snip--
 }
