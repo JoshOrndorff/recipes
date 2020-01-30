@@ -21,6 +21,8 @@
     - [Currency Types](./traits/currency.md)
     - [Transaction Fees for Economic Security](./traits/fees.md)
     - [Instantiable Pallets](./storage/instantiable.md)
+    - [Runtime APIs](./advanced/runtime-api.md)
+    - [Custom RPCs](./advanced/custom-rpc.md)
 - [Declarative Syntax](./declarative/README.md)
     - [Verify First, Write Last](./declarative/ensure.md)
     - [Safe Math](./declarative/safemath.md)

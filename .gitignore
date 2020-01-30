@@ -8,3 +8,6 @@ book
 **/*/target
 kitchen/modules/*/Cargo.lock
 kitchen/runtimes/*/Cargo.lock
+
+# For javascript snippets burried in the code
+**/node_modules

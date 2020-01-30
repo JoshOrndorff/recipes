@@ -1,0 +1,16 @@
+[package]
+name = "sum-storage-rpc"
+version = "2.0.0"
+authors = ["JoshyOrndorff"]
+edition = "2018"
+
+[dependencies]
+codec = { package = "parity-scale-codec", version = "1.0.0" }
+jsonrpc-core = "14.0.3"
+jsonrpc-core-client = "14.0.3"
+jsonrpc-derive = "14.0.3"
+sp-rpc = { rev = '3e651110aa06aa835790df63410a29676243fc54', git = 'https://github.com/paritytech/substrate.git', default_features = false}
+serde = { version = "1.0.101", features = ["derive"] }
+sp-runtime = { rev = '3e651110aa06aa835790df63410a29676243fc54', git = 'https://github.com/paritytech/substrate.git', default_features = false}
+sp-blockchain = { rev = '3e651110aa06aa835790df63410a29676243fc54', git = 'https://github.com/paritytech/substrate.git', default_features = false}
+sum-storage-rpc-runtime-api = { version = "2.0.0", path = "./runtime-api" }
