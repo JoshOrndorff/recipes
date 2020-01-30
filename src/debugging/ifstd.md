@@ -1,13 +1,17 @@
 # Printing In Native Builds
 
-Substrate runtimes are compiled to native binaries as well as WebAssembly blobs. Rust's standard library (`#![std]`) attribute indicates that the crate will link to the std-crate instead of the core-crate making some assumptions about the system the program will run on.
+Substrate runtimes are compiled to native binaries as well as WebAssembly blobs. 
+Rust's standard library (`#![std]`) attribute indicates that the crate will link to 
+the std-crate instead of the core-crate making some assumptions about the system the 
+program will run on.
 
 ## If Std
 
-Substrate's runtime standard library compiled and linked with Rust's standard library (`std`), enables an alternative way of printing values in the terminal.
+Substrate's runtime standard library compiled and linked with Rust's standard library 
+(`std`), enables an alternative way of printing values in the terminal.
 
 ``` rust
-use sp_std::if_std; // Import the if-std macro.
+use sp_std::if_std; // Import into scope the if_std! macro.
 ```
 
 The `println!` statement should be inside of the `if_std` macro.
@@ -36,7 +40,8 @@ decl_module! {
 }
 ```
 
-The values are printed in the terminal or the standard output every time that the runtime function gets called.
+The values are printed in the terminal or the standard output every time that the 
+runtime function gets called.
 
 ```sh
 $		2020-01-01 00:00:00 Substrate Node
