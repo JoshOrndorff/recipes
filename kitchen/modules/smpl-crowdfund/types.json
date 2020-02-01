@@ -1,0 +1,11 @@
+{
+  "FundIndex": "u32",
+  "FundInfo": {
+      "owner": "AccountId",
+      "deposit": "Balance",
+      "raised": "Balance",
+      "start": "BlockNumber",
+      "end": "BlockNumber",
+      "cap": "Balance"
+  }
+}
