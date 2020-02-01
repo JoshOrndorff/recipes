@@ -1,7 +1,7 @@
-use primitives::{Pair, Public, sr25519};
-use babe_primitives::{AuthorityId as BabeId};
+use sp_core::{Pair, Public, sr25519};
+use sp_consensus_babe::{AuthorityId as BabeId};
 use sp_finality_grandpa::{AuthorityId as GrandpaId};
-use substrate_service;
+use sc_service;
 use sp_runtime::traits::{Verify, IdentifyAccount};
 use runtime::{AccountId, GenesisConfig, Signature};
 use runtime_genesis::testnet_genesis;
@@ -10,7 +10,7 @@ use runtime_genesis::testnet_genesis;
 //const STAGING_TELEMETRY_URL: &str = "wss://telemetry.polkadot.io/submit/";
 
 /// Specialized `ChainSpec`. This is a specialization of the general Substrate ChainSpec type.
-pub type ChainSpec = substrate_service::ChainSpec<GenesisConfig>;
+pub type ChainSpec = sc_service::ChainSpec<GenesisConfig>;
 
 /// The chain specification option. This is expected to come in from the CLI and
 /// is little more than one of a number of alternatives which can easily be converted
