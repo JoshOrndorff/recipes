@@ -1,14 +1,5 @@
 {
   "GroupIndex": "u32",
-  "InnerThing": {
-    "number": "u32",
-    "hash": "Hash",
-    "balance": "Balance"
-  },
-  "SuperThing": {
-    "super_number": "u32",
-    "inner_thing": "InnerThing"
-  },
   "TaskId": "Vec<u8>",
   "PriorityScore": "u32",
   "RoundIndex": "u32",
@@ -27,5 +18,14 @@
     "amount": "Balance",
     "when": "BlockNumber",
     "support": "u32"
+  },
+  "InnerThing": {
+    "number": "u32",
+    "hash": "Hash",
+    "balance": "Balance"
+  },
+  "SuperThing": {
+    "super_number": "u32",
+    "inner_thing": "InnerThing"
   }
 }

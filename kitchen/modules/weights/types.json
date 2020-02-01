@@ -1,5 +1,0 @@
-{
-  "Linear": "(u32)",
-  "Quadratic": "(u32, u32, u32)",
-  "Conditional": "(u32)"
-}
