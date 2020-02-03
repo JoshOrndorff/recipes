@@ -41,12 +41,6 @@ git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-core'
 rev = '3e651110aa06aa835790df63410a29676243fc54'
 
-[dependencies.substrate-session]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'sp-session'
-rev = '3e651110aa06aa835790df63410a29676243fc54'
-
 [dependencies.sp-runtime]
 default-features = false
 git = 'https://github.com/paritytech/substrate.git'
@@ -54,6 +48,11 @@ package = 'sp-runtime'
 rev = '3e651110aa06aa835790df63410a29676243fc54'
 
 [dependencies.sp-api]
+default-features = false
+git = 'https://github.com/paritytech/substrate.git'
+rev = '3e651110aa06aa835790df63410a29676243fc54'
+
+[dependencies.sp-session]
 default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 rev = '3e651110aa06aa835790df63410a29676243fc54'
@@ -103,10 +102,10 @@ std = [
 	"serde",
 	"sp-api/std",
 	"sp-consensus-aura/std",
+	"sp-session/std",
 	"sp-io/std",
 	"sp-runtime/std",
 	"sp-finality-grandpa/std",
 	"sp-transaction-pool/std",
-	"substrate-session/std",
 	"version/std",
 ]

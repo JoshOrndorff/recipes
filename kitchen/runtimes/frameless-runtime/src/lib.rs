@@ -21,7 +21,7 @@ use parity_scale_codec::{Decode, Encode};
 use rstd::prelude::*;
 use sp_api::impl_runtime_apis;
 use sp_runtime::traits::{
-    BlakeTwo256, Block as BlockT, Extrinsic, GetNodeBlockType, GetRuntimeBlockType,
+    BlakeTwo256, Block as BlockT, Extrinsic, GetNodeBlockType, GetRuntimeBlockType, NumberFor,
 };
 use sp_runtime::{
     create_runtime_str, generic,
@@ -31,7 +31,7 @@ use sp_runtime::{
 #[cfg(any(feature = "std", test))]
 use sp_runtime::{BuildStorage, Storage};
 
-use primitives::crypto::Public;
+use primitives::{crypto::Public, OpaqueMetadata};
 use sp_consensus_aura::sr25519::AuthorityId as AuraId;
 use sp_finality_grandpa::{AuthorityId as GrandpaId, AuthorityList as GrandpaAuthorityList};
 
@@ -318,4 +318,23 @@ impl_runtime_apis! {
             authorities
         }
     }
+
+    impl sp_api::Metadata<Block> for Runtime {
+        fn metadata() -> OpaqueMetadata {
+            OpaqueMetadata::new(vec![0])
+        }
+    }
+
+    impl offchain_primitives::OffchainWorkerApi<Block> for Runtime {
+        fn offchain_worker(_number: NumberFor<Block>) {
+            // we do not do anything.
+        }
+    }
+
+    impl sp_session::SessionKeys<Block> for Runtime {
+        fn generate_session_keys(seed: Option<Vec<u8>>) -> Vec<u8> {
+            seed.unwrap_or(vec![0])
+        }
+    }
+
 }
