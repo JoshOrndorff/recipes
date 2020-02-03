@@ -34,8 +34,11 @@ use sp_runtime::{
     generic,
     create_runtime_str,
 	// impl_opaque_keys,
-    AnySignature
+    AnySignature,
 };
+#[cfg(any(feature = "std", test))]
+use sp_runtime::{BuildStorage, Storage};
+
 use sp_consensus_aura::sr25519::AuthorityId as AuraId;
 use primitives::crypto::Public;
 use sp_finality_grandpa::{AuthorityId as GrandpaId, AuthorityList as GrandpaAuthorityList};
@@ -49,8 +52,7 @@ use serde::{Serialize, Deserialize};
 
 // A few exports that help ease life for downstream crates.
 pub use balances::Call as BalancesCall;
-#[cfg(any(feature = "std", test))]
-pub use sp_runtime::BuildStorage;
+
 pub use support::{traits::Randomness, StorageValue};
 
 /// An index to a block.
@@ -102,6 +104,15 @@ pub mod opaque {
     //         pub babe: Babe,
     //     }
     // }
+}
+
+pub struct GenesisConfig;
+
+#[cfg(feature = "std")]
+impl BuildStorage for GenesisConfig {
+	fn assimilate_storage(&self, storage: &mut Storage) -> Result<(), String> {
+		Ok(())
+	}
 }
 
 /// This runtime version.

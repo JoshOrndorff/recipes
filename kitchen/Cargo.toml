@@ -32,4 +32,5 @@ members = [
   "runtimes/weight-fee-genesis",
   "runtimes/frameless-runtime",
   "node",
+	"frameless-node",
 ]
