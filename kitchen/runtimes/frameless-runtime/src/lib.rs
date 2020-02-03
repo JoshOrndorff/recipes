@@ -167,7 +167,7 @@ impl BuildStorage for GenesisConfig {
 /// Block header type as expected by this runtime.
 pub type Header = generic::Header<BlockNumber, BlakeTwo256>;
 /// Block type as expected by this runtime.
-pub type Block = generic::Block<Header, ()>;
+pub type Block = generic::Block<Header, FramelessTransaction>;
 /// A Block signed with a Justification
 pub type SignedBlock = generic::SignedBlock<Block>;
 /// BlockId type as expected by this runtime.
