@@ -33,8 +33,7 @@ sp-consensus = { version = "0.8", git = 'https://github.com/paritytech/substrate
 grandpa = { version = "2.0.0", package = "sc-finality-grandpa", git = 'https://github.com/paritytech/substrate.git', rev = '3e651110aa06aa835790df63410a29676243fc54' }
 grandpa-primitives = { version = "2.0.0", package = "sp-finality-grandpa", git = 'https://github.com/paritytech/substrate.git', rev = '3e651110aa06aa835790df63410a29676243fc54' }
 sc-client = { version = "2.0.0", git = 'https://github.com/paritytech/substrate.git', rev = '3e651110aa06aa835790df63410a29676243fc54' }
-runtime = { package = 'frameless-runtime', version = "2.0.0", path = '../runtimes/frameless-runtime' }
-#runtime = { package = 'node-template-runtime', version = "2.0.0", git = 'https://github.com/paritytech/substrate.git', rev = '3e651110aa06aa835790df63410a29676243fc54' }
+runtime = { package = 'frameless-runtime', version = "2.0.0", path = '../../runtimes/frameless-runtime' }
 sp-runtime = { version = "2.0.0", git = 'https://github.com/paritytech/substrate.git', rev = '3e651110aa06aa835790df63410a29676243fc54' }
 sc-basic-authority = { git = 'https://github.com/paritytech/substrate.git', rev = '3e651110aa06aa835790df63410a29676243fc54' }
 

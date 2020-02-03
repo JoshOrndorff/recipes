@@ -1,75 +1,38 @@
-# Economic Security in Substrate <a name = "sec"></a>
+# Transaction Fees
+*[kitchen/runtimes/weight-fee-runtime](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/runtimes/weight-fee-runtime)*
 
-An algorithm is considered to be *efficient* if its running time is polynomial in the size of the input, and *highly efficient* if its running time is linear in the size of the input. **It is important for all on-chain algorithms to be highly efficient, because they must scale linearly as the size of the Polkadot network grows**. In contrast, off-chain algorithms are only required to be efficient. - [Web3 Research](https://research.web3.foundation/en/latest/polkadot/NPoS/index.html)
+Substrate provides the [`transaction_payment` pallet](https://substrate.dev/rustdocs/master/pallet_transaction_payment/index.html) for calculating and collecting fees for executing transactions. Fees are broken down into several components:
 
-Any resources used by a transaction must explicitly be paid for, and it is a pallet author's job to ensure that appropriate fees are required. Maintaining the balance between **resources used** and **price paid** is an important design activity for runtime security.
+* Base fee - A fixed fee applied to each transaction. A parameter in the `transaction_payment` pallet.
+* Length fee - A fee proportional to the transaction's length in bytes. The proportionality constant is a parameter in the `transaction_payment` pallet.
+* Weight fee - A fee calculated from the transaction's weight. Weights are intended to capture the actual resources consumed by the transaction. Learn more in the [recipe on weights](./weights.md). It doesn't need to be linear, although it often is. The same conversion function is applied across all transactions from all pallets in the runtime.
+* Fee Multiplier - A multiplier for the computed fee, that can change as the chain progresses. This topic is not (yet) covered further in the recipes.
 
-*Indeed, mispriced EVM operations have shown how operations that underestimate cost can open economic DOS attack vectors: [Onwards; Underpriced EVM Operations](https://www.parity.io/onwards/), [Under-Priced DOS Attacks on Ethereum](https://www4.comp.polyu.edu.hk/~csxluo/DoSEVM.pdf)*
+`total_fee = base_fee + transaction_length * length_fee + weight_to_fee(total_weight)`
 
+## Setting the Constants
 
+Each of the parameters described above is set in the `transaction_payment` pallet's configuration trait. For example, the `super-runtime` sets these parameters as follows.
 
-Substrate provides several ways to affect the fees charges for executing a transaction. Substrate developer hub contains full details about [fees](https://substrate.dev/docs/en/next/development/module/fees) and [weights](https://substrate.dev/docs/en/next/conceptual/runtime/weight).
+```rust,ignore
+parameter_types! {
+    pub const TransactionBaseFee: u128 = 0;
+    pub const TransactionByteFee: u128 = 1;
+}
 
-* Base fee - Applies a fixed fee to each and every transaction. A parameter in the `transaction_payment` pallet.
-
-* Length fee - Applies a fee proportional to the transaction's length in bytes. The constant is a parameter in the `transaction_payment` pallet.
-
-* Transaction weight - Each transaction can declare a weight, either fixed, or calculated from its parameters. This is exemplified briefly below and more thoroughly in the kitchen.
-
-* Weight to Fee - A function to convert weight to fee. It doesn't need to be linear, although it often is. The same conversion function is applied across all transactions from all pallets in the runtime. This is exemplified briefly below and more thoroughly in the kitchen.
-
-## Assigning Transaction Weights
-
-For simple transactions a fixed weight will do.
-```rust, ignore
-decl_module! {
-	pub struct Module<T: Trait> for enum Call {
-
-		#[weight = SimpleDispatchInfo::FixedNormal(100)]
-		fn store_value(_origin, entry: u32) -> Result {
-			// --snip--
-		}
-```
-
-For more complex transactions, custom weight calculations can be performed.
-```rust, ignore
-pub struct Conditional(u32);
-
-impl WeighData<(&bool, &u32)> for Conditional {
-	fn weigh_data(&self, (switch, val): (&bool, &u32)) -> Weight {
-
-		if *switch {
-			val.saturating_mul(self.0)
-		}
-		else {
-			self.0
-		}
-	}
+impl transaction_payment::Trait for Runtime {
+    type Currency = balances::Module<Runtime>;
+    type OnTransactionPayment = ();
+    type TransactionBaseFee = TransactionBaseFee;
+    type TransactionByteFee = TransactionByteFee;
+    type WeightToFee = ConvertInto;
+    type FeeMultiplierUpdate = ();
 }
 ```
-
-In addition to the [`WeightData`
-Trait](https://substrate.dev/rustdocs/master/frame_support/weights/trait.WeighData.html), shown
-above, types that are used to calculate transaction weights, must also implement
-[`ClassifyDispatch`](https://substrate.dev/rustdocs/master/frame_support/weights/trait.ClassifyDispatch.html),
-and [`PaysFee`](https://substrate.dev/rustdocs/master/frame_support/weights/trait.PaysFee.html).
-These examples and several others can be compiled in the kitchen.
-
-While you can make reasonable estimates of resource consumption at
-design time, it is always best to actually measure the resources
-required of your functions through an empirical process. Failure to
-perform such rigorous measurement may result in an economically
-insecure chain.
 
 ## Converting Weight To Fees
 
-In many cases converting weight to fees 1:1 will suffice and be accomplished with [`ConvertInto`](https://substrate.dev/rustdocs/master/sp_runtime/traits/struct.ConvertInto.html). This approach is taken in the [node template](https://github.com/substrate-developer-hub/substrate-node-template/blob/43ee95347b6626580b1d9d554c3c8b77dc85bc01/runtime/src/lib.rs#L230) as well as the kitchen's own super runtime.
-```rust, ignore
-impl transaction_payment::Trait for Runtime {
-	// --snip--
-	type WeightToFee = ConvertInto;
-}
-```
+In many cases converting weight to fees 1:1, as shown above, will suffice and can be accomplished with [`ConvertInto`](https://substrate.dev/rustdocs/master/sp_runtime/traits/struct.ConvertInto.html). This approach is also taken in the [node template](https://github.com/substrate-developer-hub/substrate-node-template/blob/43ee95347b6626580b1d9d554c3c8b77dc85bc01/runtime/src/lib.rs#L230). It is also possible to provide a type that makes a more complex calculation. Any type that implements `Convert<Weight, Balance>` will suffice.
 
 This example uses a quadratic conversion and supports custom coefficients
 ```rust, ignore
@@ -90,4 +53,20 @@ impl<C0, C1, C2> Convert<Weight, Balance> for QuadraticWeightToFee<C0, C1, C2>
 }
 ```
 
-These examples, and several others can be compiled in the kitchen.
+This examples, and several others can be compiled in the kitchen's [weight-fee-runtime](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/runtimes/weight-fee-runtime)
+
+## Collecting Fees
+
+Having calculated the amount of fees due, runtime authors must decide which asset the fees should be paid in. A common choice is the use the [`Ballances` pallet](https://substrate.dev/rustdocs/master/pallet_balances/index.html), but any type that implements the [`Currency` trait](https://substrate.dev/rustdocs/master/frame_support/traits/trait.Currency.html) can be used. The weight-fee-runtime demonstrates how to use an asset provided by the [`Generic Asset` pallet](https://substrate.dev/rustdocs/master/pallet_generic_asset/index.html).
+
+```rust,ignore
+impl transaction_payment::Trait for Runtime {
+
+	// A generic asset whose ID is stored in the generic_asset pallet's runtime storage
+	type Currency = SpendingAssetCurrency<Self>;
+
+	// --snip--
+}
+```
+
+This examples, and several others can be compiled in the kitchen's [weight-fee-runtime](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/runtimes/weight-fee-runtime)

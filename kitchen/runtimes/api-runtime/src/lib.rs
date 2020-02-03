@@ -1,5 +1,4 @@
-//! A Super Runtime. This runtime demonstrates all the recipes in the kitchen
-//! in a single super runtime.
+//! The Substrate Node Template runtime. This can be compiled with `#[no_std]`, ready for Wasm.
 
 #![cfg_attr(not(feature = "std"), no_std)]
 // `construct_runtime!` does a lot of recursion and requires us to increase the limit to 256.
@@ -9,30 +8,23 @@
 #[cfg(feature = "std")]
 include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 
-use rstd::prelude::*;
-use primitives::OpaqueMetadata;
+use sp_std::prelude::*;
+use sp_core::OpaqueMetadata;
 use sp_runtime::{
-    ApplyExtrinsicResult,
-	transaction_validity::TransactionValidity, generic, create_runtime_str,
-	impl_opaque_keys, AnySignature
+	ApplyExtrinsicResult, transaction_validity::TransactionValidity, generic, create_runtime_str,
+	impl_opaque_keys, MultiSignature
 };
-use sp_runtime::traits::{NumberFor, BlakeTwo256, Block as BlockT, StaticLookup, Verify, Convert};
-use support::traits::Get;
-use support::weights::Weight;
-use babe::SameAuthoritiesForever;
-use grandpa::{AuthorityId as GrandpaId, AuthorityWeight as GrandpaWeight};
-use grandpa::fg_primitives;
+use sp_runtime::traits::{
+	NumberFor, BlakeTwo256, Block as BlockT, StaticLookup, Verify, ConvertInto, IdentifyAccount
+};
 use sp_api::impl_runtime_apis;
-use version::RuntimeVersion;
+use sp_consensus_aura::sr25519::AuthorityId as AuraId;
+use grandpa::AuthorityList as GrandpaAuthorityList;
+use grandpa::fg_primitives;
+use sp_version::RuntimeVersion;
+use frame_system as system;
 #[cfg(feature = "std")]
-use version::NativeVersion;
-
-// These structs are used in one of the commented-by-default implementations of
-// transaction_payment::Trait. Don't warn when they are unused.
-#[allow(unused_imports)]
-use sp_runtime::traits::ConvertInto;
-#[allow(unused_imports)]
-use generic_asset::{SpendingAssetCurrency, AssetCurrency, AssetIdProvider};
+use sp_version::NativeVersion;
 
 // A few exports that help ease life for downstream crates.
 #[cfg(any(feature = "std", test))]
@@ -40,17 +32,21 @@ pub use sp_runtime::BuildStorage;
 pub use timestamp::Call as TimestampCall;
 pub use balances::Call as BalancesCall;
 pub use sp_runtime::{Permill, Perbill};
-pub use support::{StorageValue, construct_runtime, parameter_types, traits::Randomness};
+pub use frame_support::{
+	StorageValue, construct_runtime, parameter_types,
+	traits::Randomness,
+	weights::Weight,
+};
 
 /// An index to a block.
 pub type BlockNumber = u32;
 
 /// Alias to 512-bit hash when used in the context of a transaction signature on the chain.
-pub type Signature = AnySignature;
+pub type Signature = MultiSignature;
 
 /// Some way of identifying an account on the chain. We intentionally make it equivalent
 /// to the public key of our transaction signing scheme.
-pub type AccountId = <Signature as Verify>::Signer;
+pub type AccountId = <<Signature as Verify>::Signer as IdentifyAccount>::AccountId;
 
 /// The type for looking up accounts. We don't expect more than 4 billion of them, but you
 /// never know...
@@ -63,7 +59,7 @@ pub type Balance = u128;
 pub type Index = u32;
 
 /// A hash of some data used by the chain.
-pub type Hash = primitives::H256;
+pub type Hash = sp_core::H256;
 
 /// Digest item type.
 pub type DigestItem = generic::DigestItem<Hash>;
@@ -84,40 +80,32 @@ pub mod opaque {
 	/// Opaque block identifier type.
 	pub type BlockId = generic::BlockId<Block>;
 
-	pub type SessionHandlers = (Grandpa, Babe);
-
 	impl_opaque_keys! {
 		pub struct SessionKeys {
+			pub aura: Aura,
 			pub grandpa: Grandpa,
-			pub babe: Babe,
 		}
 	}
 }
 
 /// This runtime version.
 pub const VERSION: RuntimeVersion = RuntimeVersion {
-	spec_name: create_runtime_str!("super-runtime"),
-	impl_name: create_runtime_str!("super-runtime"),
+	spec_name: create_runtime_str!("node-template"),
+	impl_name: create_runtime_str!("node-template"),
 	authoring_version: 1,
 	spec_version: 1,
 	impl_version: 1,
 	apis: RUNTIME_API_VERSIONS,
 };
 
-/// Constants for Babe.
 pub const MILLISECS_PER_BLOCK: u64 = 6000;
 
 pub const SLOT_DURATION: u64 = MILLISECS_PER_BLOCK;
-
-pub const EPOCH_DURATION_IN_BLOCKS: u32 = 10 * MINUTES;
 
 // These time units are defined in number of blocks.
 pub const MINUTES: BlockNumber = 60_000 / (MILLISECS_PER_BLOCK as BlockNumber);
 pub const HOURS: BlockNumber = MINUTES * 60;
 pub const DAYS: BlockNumber = HOURS * 24;
-
-// 1 in 4 blocks (on average, not counting collisions) will be primary babe blocks.
-pub const PRIMARY_PROBABILITY: (u64, u64) = (1, 4);
 
 /// The version infromation used to identify this runtime when compiled natively.
 #[cfg(feature = "std")]
@@ -159,7 +147,7 @@ impl system::Trait for Runtime {
 	type Origin = Origin;
 	/// Maximum number of block number to block hash mappings to keep (oldest pruned first).
 	type BlockHashCount = BlockHashCount;
-	/// Maximum weight of each block. With a default weight system of 1byte == 1weight, 4mb is ok.
+	/// Maximum weight of each block.
 	type MaximumBlockWeight = MaximumBlockWeight;
 	/// Maximum size of all encoded transactions (in bytes) that are allowed in one block.
 	type MaximumBlockLength = MaximumBlockLength;
@@ -173,15 +161,8 @@ impl system::Trait for Runtime {
 	type ModuleToIndex = ModuleToIndex;
 }
 
-parameter_types! {
-	pub const EpochDuration: u64 = EPOCH_DURATION_IN_BLOCKS as u64;
-	pub const ExpectedBlockTime: u64 = MILLISECS_PER_BLOCK;
-}
-
-impl babe::Trait for Runtime {
-	type EpochDuration = EpochDuration;
-	type ExpectedBlockTime = ExpectedBlockTime;
-	type EpochChangeTrigger = SameAuthoritiesForever;
+impl aura::Trait for Runtime {
+	type AuthorityId = AuraId;
 }
 
 impl grandpa::Trait for Runtime {
@@ -191,7 +172,7 @@ impl grandpa::Trait for Runtime {
 impl indices::Trait for Runtime {
 	/// The type for recording indexing into the account enumeration. If this ever overflows, there
 	/// will be problems!
-	type AccountIndex = u32;
+	type AccountIndex = AccountIndex;
 	/// Use the standard means of resolving an index hint from an id.
 	type ResolveHint = indices::SimpleResolveHint<Self::AccountId, Self::AccountIndex>;
 	/// Determine whether an account is dead.
@@ -207,7 +188,7 @@ parameter_types! {
 impl timestamp::Trait for Runtime {
 	/// A timestamp: milliseconds since the unix epoch.
 	type Moment = u64;
-	type OnTimestampSet = Babe;
+	type OnTimestampSet = Aura;
 	type MinimumPeriod = MinimumPeriod;
 }
 
@@ -233,11 +214,18 @@ impl balances::Trait for Runtime {
 	type CreationFee = CreationFee;
 }
 
-impl generic_asset::Trait for Runtime {
-    /// The type for recording an account's balance.
-    type Balance = Balance;
-    type AssetId = u32;
-    type Event = Event;
+parameter_types! {
+	pub const TransactionBaseFee: Balance = 0;
+	pub const TransactionByteFee: Balance = 1;
+}
+
+impl transaction_payment::Trait for Runtime {
+	type Currency = balances::Module<Runtime>;
+	type OnTransactionPayment = ();
+	type TransactionBaseFee = TransactionBaseFee;
+	type TransactionByteFee = TransactionByteFee;
+	type WeightToFee = ConvertInto;
+	type FeeMultiplierUpdate = ();
 }
 
 impl sudo::Trait for Runtime {
@@ -245,107 +233,9 @@ impl sudo::Trait for Runtime {
 	type Proposal = Call;
 }
 
-impl weights::Trait for Runtime {}
-
-
-// --------------------- Multiple Options for WeightToFee -----------------------
-
-/// Convert from weight to balance via a simple coefficient multiplication. The associated type C
-/// encapsulates a constant in units of balance per weight.
-pub struct LinearWeightToFee<C>(rstd::marker::PhantomData<C>);
-
-impl<C> Convert<Weight, Balance> for LinearWeightToFee<C>
-	where C: Get<Balance> {
-
-	fn convert(w: Weight) -> Balance {
-		// substrate-node a weight of 10_000 (smallest non-zero weight) to be mapped to 10^7 units of
-		// fees, hence:
-		let coefficient = C::get();
-		Balance::from(w).saturating_mul(coefficient)
-	}
+impl sum_storage::Trait for Runtime {
+	type Event = Event;
 }
-
-/// Convert from weight to balance via a quadratic curve. The type parameters encapsulate the
-/// coefficients.
-pub struct QuadraticWeightToFee<C0, C1, C2>(C0, C1, C2);
-
-impl<C0, C1, C2> Convert<Weight, Balance> for QuadraticWeightToFee<C0, C1, C2>
-	where C0: Get<Balance>, C1: Get<Balance>, C2: Get<Balance> {
-
-	fn convert(w: Weight) -> Balance {
-		let c0 = C0::get();
-		let c1 = C1::get();
-		let c2 = C2::get();
-		let w = Balance::from(w);
-
-		// All the safe math reduces to
-		// c0 + c1 * w + c2 * w * w
-
-		let c1w = c1.saturating_mul(w);
-		let c2w2 = c2.saturating_mul(w).saturating_mul(w);
-
-		c0.saturating_add(c1w).saturating_add(c2w2)
-	}
-}
-
-// --------------------- An Option to Currency to Collect Fees -----------------------
-type FixedGenericAsset<T> = AssetCurrency<T, FixedAssetId>;
-
-pub struct FixedAssetId;
-impl AssetIdProvider for FixedAssetId {
-	type AssetId = u32;
-	fn asset_id() -> Self::AssetId {
-		13
-	}
-}
-
-parameter_types! {
-	// Used with LinearWeightToFee conversion. Leaving this constant in tact when using other
-	// conversion techniques is harmless.
-	pub const FeeWeightRatio: u128 = 1_000;
-
-	// Used with QuadraticWeightToFee conversion. Leaving these constants in tact when using other
-	// conversion techniques is harmless.
-	pub const WeightFeeConstant: u128 = 1_000;
-	pub const WeightFeeLinear: u128 = 100;
-	pub const WeightFeeQuadratic : u128 = 10;
-
-	// Establish the base- and byte-fees. These are used in all configurations.
-	pub const TransactionBaseFee: u128 = 0;
-	pub const TransactionByteFee: u128 = 1;
-}
-
-impl transaction_payment::Trait for Runtime {
-
-	// The asset in which fees will be collected.
-	// Enable exactly one of the following options.
-	type Currency = Balances; // The balances pallet (The most common choice)
-	//type Currency = FixedGenericAsset<Self>; // A generic asset whose ID is hard-coded above.
-	//type Currency = SpendingAssetCurrency<Self>; // A generic asset whose ID is stored in the
-	                                               // generic_asset pallet's runtime storage
-
-	// What to do when fees are paid. () means take no additional actions.
-	type OnTransactionPayment = ();
-
-	// Base fee is a fixed amount applied to every transaction
-	type TransactionBaseFee = TransactionBaseFee;
-
-	// Byte fee is multiplied by the length of the
-	// serialized transaction in bytes
-	type TransactionByteFee = TransactionByteFee;
-
-	// Function to convert dispatch weight to a chargeable fee.
-	// Enable exactly one of the following options.
-	//type WeightToFee = ConvertInto;
-	//type WeightToFee = LinearWeightToFee<FeeWeightRatio>;
-	type WeightToFee = QuadraticWeightToFee<WeightFeeConstant, WeightFeeLinear, WeightFeeQuadratic>;
-
-	//TODO Explore how to change FeeMultiplierUpdate
-	type FeeMultiplierUpdate = ();
-}
-
-// --------------------------------------------
-
 
 construct_runtime!(
 	pub enum Runtime where
@@ -355,16 +245,14 @@ construct_runtime!(
 	{
 		System: system::{Module, Call, Storage, Config, Event},
 		Timestamp: timestamp::{Module, Call, Storage, Inherent},
-		Babe: babe::{Module, Call, Storage, Config, Inherent(Timestamp)},
+		Aura: aura::{Module, Config<T>, Inherent(Timestamp)},
 		Grandpa: grandpa::{Module, Call, Storage, Config, Event},
 		Indices: indices,
 		Balances: balances,
-		GenericAsset: generic_asset,
-		RandomnessCollectiveFlip: randomness_collective_flip::{Module, Call, Storage},
-		Sudo: sudo,
 		TransactionPayment: transaction_payment::{Module, Storage},
-		// The Recipe Pallets
-		Weights: weights::{Module, Call, Storage},
+		Sudo: sudo,
+		RandomnessCollectiveFlip: randomness_collective_flip::{Module, Call, Storage},
+		SumStorage: sum_storage::{Module, Call, Storage, Event},
 	}
 );
 
@@ -391,8 +279,8 @@ pub type SignedExtra = (
 pub type UncheckedExtrinsic = generic::UncheckedExtrinsic<Address, Call, Signature, SignedExtra>;
 /// Extrinsic type that has already been checked.
 pub type CheckedExtrinsic = generic::CheckedExtrinsic<AccountId, Call, SignedExtra>;
-/// Executive: handles dispatch to the various pallets.
-pub type Executive = executive::Executive<Runtime, Block, system::ChainContext<Runtime>, Runtime, AllModules>;
+/// Executive: handles dispatch to the various modules.
+pub type Executive = frame_executive::Executive<Runtime, Block, system::ChainContext<Runtime>, Runtime, AllModules>;
 
 impl_runtime_apis! {
 	impl sp_api::Core<Block> for Runtime {
@@ -415,7 +303,7 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl block_builder_api::BlockBuilder<Block> for Runtime {
+	impl sp_block_builder::BlockBuilder<Block> for Runtime {
 		fn apply_extrinsic(extrinsic: <Block as BlockT>::Extrinsic) -> ApplyExtrinsicResult {
 			Executive::apply_extrinsic(extrinsic)
 		}
@@ -424,14 +312,14 @@ impl_runtime_apis! {
 			Executive::finalize_block()
 		}
 
-		fn inherent_extrinsics(data: inherents::InherentData) -> Vec<<Block as BlockT>::Extrinsic> {
+		fn inherent_extrinsics(data: sp_inherents::InherentData) -> Vec<<Block as BlockT>::Extrinsic> {
 			data.create_extrinsics()
 		}
 
 		fn check_inherents(
 			block: Block,
-			data: inherents::InherentData
-		) -> inherents::CheckInherentsResult {
+			data: sp_inherents::InherentData,
+		) -> sp_inherents::CheckInherentsResult {
 			data.check_extrinsics(&block)
 		}
 
@@ -446,39 +334,42 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl offchain_primitives::OffchainWorkerApi<Block> for Runtime {
+	impl sp_offchain::OffchainWorkerApi<Block> for Runtime {
 		fn offchain_worker(number: NumberFor<Block>) {
 			Executive::offchain_worker(number)
 		}
 	}
 
-	impl fg_primitives::GrandpaApi<Block> for Runtime {
-		fn grandpa_authorities() -> Vec<(GrandpaId, GrandpaWeight)> {
-			Grandpa::grandpa_authorities()
+	impl sp_consensus_aura::AuraApi<Block, AuraId> for Runtime {
+		fn slot_duration() -> u64 {
+			Aura::slot_duration()
+		}
+
+		fn authorities() -> Vec<AuraId> {
+			Aura::authorities()
 		}
 	}
 
-	impl babe_primitives::BabeApi<Block> for Runtime {
-		fn configuration() -> babe_primitives::BabeConfiguration {
-			// The choice of `c` parameter (where `1 - c` represents the
-			// probability of a slot being empty), is done in accordance to the
-			// slot duration and expected target block time, for safely
-			// resisting network delays of maximum two seconds.
-			// <https://research.web3.foundation/en/latest/polkadot/BABE/Babe/#6-practical-results>
-			babe_primitives::BabeConfiguration {
-				slot_duration: Babe::slot_duration(),
-				epoch_length: EpochDuration::get(),
-				c: PRIMARY_PROBABILITY,
-				genesis_authorities: Babe::authorities(),
-				randomness: Babe::randomness(),
-				secondary_slots: true,
-			}
+	// Here we implement our custom runtime API.
+	impl sum_storage_rpc_runtime_api::SumStorageApi<Block> for Runtime {
+		fn get_sum() -> u32 {
+			// This Runtime API calls into a specific pallet. Calling a pallet is a common
+			// design pattern. You can see most other APIs in this file do the same.
+			// It is also possible to write your logic right here in the runtime
+			// amalgamator file
+			SumStorage::get_sum()
 		}
 	}
 
-	impl substrate_session::SessionKeys<Block> for Runtime {
+	impl sp_session::SessionKeys<Block> for Runtime {
 		fn generate_session_keys(seed: Option<Vec<u8>>) -> Vec<u8> {
 			opaque::SessionKeys::generate(seed)
+		}
+	}
+
+	impl fg_primitives::GrandpaApi<Block> for Runtime {
+		fn grandpa_authorities() -> GrandpaAuthorityList {
+			Grandpa::grandpa_authorities()
 		}
 	}
 }
