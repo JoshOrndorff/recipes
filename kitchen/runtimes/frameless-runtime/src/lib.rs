@@ -18,20 +18,14 @@ include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 
 use parity_scale_codec::{Decode, Encode};
 
-// use babe::SameAuthoritiesForever;
-use primitives::OpaqueMetadata;
 use rstd::prelude::*;
 use sp_api::impl_runtime_apis;
 use sp_runtime::traits::{
     BlakeTwo256, Block as BlockT, Extrinsic, GetNodeBlockType, GetRuntimeBlockType,
-    /*ConvertInto, NumberFor, StaticLookup,*/ Verify,
 };
 use sp_runtime::{
-    create_runtime_str,
-    generic,
+    create_runtime_str, generic,
     transaction_validity::{TransactionLongevity, TransactionValidity, ValidTransaction},
-    // impl_opaque_keys,
-    AnySignature,
     ApplyExtrinsicResult,
 };
 #[cfg(any(feature = "std", test))]
@@ -157,7 +151,7 @@ pub struct GenesisConfig;
 
 #[cfg(feature = "std")]
 impl BuildStorage for GenesisConfig {
-    fn assimilate_storage(&self, storage: &mut Storage) -> Result<(), String> {
+    fn assimilate_storage(&self, _storage: &mut Storage) -> Result<(), String> {
         Ok(())
     }
 }
@@ -201,14 +195,6 @@ impl Extrinsic for FramelessTransaction {
         Some(Self::Toggle)
     }
 }
-
-// TODO Have to implement Extrinsic, WrapperTypeEncode, WrapperTypeDecode
-// pub type UncheckedExtrinsic = generic::UncheckedExtrinsic<Address, Call, Signature, SignedExtra>;
-
-/// Extrinsic type that has already been checked.
-// pub type CheckedExtrinsic = generic::CheckedExtrinsic<AccountId, Call, SignedExtra>;
-/// Executive: handles dispatch to the various pallets.
-// pub type Executive = executive::Executive<Runtime, Block, system::ChainContext<Runtime>, Runtime, AllModules>;
 
 impl_runtime_apis! {
     // https://substrate.dev/rustdocs/master/sp_api/trait.Core.html
