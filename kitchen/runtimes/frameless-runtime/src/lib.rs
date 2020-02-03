@@ -27,6 +27,7 @@ use sp_runtime::traits::{
     BlakeTwo256, Block as BlockT, /*ConvertInto, NumberFor, StaticLookup,*/ Verify,
 	Extrinsic,
 	GetNodeBlockType,
+	GetRuntimeBlockType,
 };
 use sp_runtime::{
     ApplyExtrinsicResult,
@@ -106,15 +107,6 @@ pub mod opaque {
     // }
 }
 
-pub struct GenesisConfig;
-
-#[cfg(feature = "std")]
-impl BuildStorage for GenesisConfig {
-	fn assimilate_storage(&self, storage: &mut Storage) -> Result<(), String> {
-		Ok(())
-	}
-}
-
 /// This runtime version.
 pub const VERSION: RuntimeVersion = RuntimeVersion {
     spec_name: create_runtime_str!("frameless-runtime"),
@@ -162,6 +154,21 @@ pub struct Runtime;
 
 impl GetNodeBlockType for Runtime {
 	type NodeBlock = Block;
+}
+
+impl GetRuntimeBlockType for Runtime {
+	type RuntimeBlock = Block;
+}
+
+
+#[cfg_attr(feature = "std", derive(Serialize, Deserialize))]
+pub struct GenesisConfig;
+
+#[cfg(feature = "std")]
+impl BuildStorage for GenesisConfig {
+	fn assimilate_storage(&self, storage: &mut Storage) -> Result<(), String> {
+		Ok(())
+	}
 }
 
 /// The address format for describing accounts.
@@ -257,7 +264,7 @@ impl_runtime_apis! {
 
     // https://substrate.dev/rustdocs/master/sc_block_builder/trait.BlockBuilderApi.html
     impl block_builder_api::BlockBuilder<Block> for Runtime {
-        fn apply_extrinsic(extrinsic: <Block as BlockT>::Extrinsic) -> ApplyExtrinsicResult {
+        fn apply_extrinsic(_extrinsic: <Block as BlockT>::Extrinsic) -> ApplyExtrinsicResult {
             // Executive::apply_extrinsic(extrinsic)
             // Maybe this is where the core flipping logic goes?
 			Ok(Ok(()))
@@ -277,14 +284,14 @@ impl_runtime_apis! {
             header
         }
 
-        fn inherent_extrinsics(data: inherents::InherentData) -> Vec<<Block as BlockT>::Extrinsic> {
+        fn inherent_extrinsics(_data: inherents::InherentData) -> Vec<<Block as BlockT>::Extrinsic> {
             // I'm not using any inherents, so I guess I'll just return an empty vec
             Vec::new()
         }
 
         fn check_inherents(
-            block: Block,
-            data: inherents::InherentData
+            _block: Block,
+            _data: inherents::InherentData
         ) -> inherents::CheckInherentsResult {
             // I'm not using any inherents, so it should be safe to just return ok
             inherents::CheckInherentsResult::default()
@@ -297,7 +304,7 @@ impl_runtime_apis! {
     }
 
     impl sp_transaction_pool::runtime_api::TaggedTransactionQueue<Block> for Runtime {
-        fn validate_transaction(tx: <Block as BlockT>::Extrinsic) -> TransactionValidity {
+        fn validate_transaction(_tx: <Block as BlockT>::Extrinsic) -> TransactionValidity {
             // Any transaction of the correct type is valid
             Ok(ValidTransaction{
                 priority: 1u64,
