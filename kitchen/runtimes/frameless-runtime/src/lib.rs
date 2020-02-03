@@ -7,7 +7,6 @@
 // * Which block authoring will be easiest to start with? Seems not babe because of the need to collect randomness in the runtime
 // * Where does this core logic belong?
 
-
 #![cfg_attr(not(feature = "std"), no_std)]
 // `construct_runtime!` does a lot of recursion and requires us to increase the limit to 256.
 // Shouldn't be necessary if we're not using construct_runtime
@@ -17,31 +16,29 @@
 #[cfg(feature = "std")]
 include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 
-use parity_scale_codec::{Encode, Decode};
+use parity_scale_codec::{Decode, Encode};
 
 // use babe::SameAuthoritiesForever;
-use primitives::{OpaqueMetadata};
+use primitives::OpaqueMetadata;
 use rstd::prelude::*;
 use sp_api::impl_runtime_apis;
 use sp_runtime::traits::{
-    BlakeTwo256, Block as BlockT, /*ConvertInto, NumberFor, StaticLookup,*/ Verify,
-	Extrinsic,
-	GetNodeBlockType,
-	GetRuntimeBlockType,
+    BlakeTwo256, Block as BlockT, Extrinsic, GetNodeBlockType, GetRuntimeBlockType,
+    /*ConvertInto, NumberFor, StaticLookup,*/ Verify,
 };
 use sp_runtime::{
-    ApplyExtrinsicResult,
-    transaction_validity::{TransactionValidity, TransactionLongevity, ValidTransaction},
-    generic,
     create_runtime_str,
-	// impl_opaque_keys,
+    generic,
+    transaction_validity::{TransactionLongevity, TransactionValidity, ValidTransaction},
+    // impl_opaque_keys,
     AnySignature,
+    ApplyExtrinsicResult,
 };
 #[cfg(any(feature = "std", test))]
 use sp_runtime::{BuildStorage, Storage};
 
-use sp_consensus_aura::sr25519::AuthorityId as AuraId;
 use primitives::crypto::Public;
+use sp_consensus_aura::sr25519::AuthorityId as AuraId;
 use sp_finality_grandpa::{AuthorityId as GrandpaId, AuthorityList as GrandpaAuthorityList};
 
 #[cfg(feature = "std")]
@@ -49,12 +46,7 @@ use version::NativeVersion;
 use version::RuntimeVersion;
 
 #[cfg(feature = "std")]
-use serde::{Serialize, Deserialize};
-
-// A few exports that help ease life for downstream crates.
-pub use balances::Call as BalancesCall;
-
-pub use support::{traits::Randomness, StorageValue};
+use serde::{Deserialize, Serialize};
 
 /// An index to a block.
 pub type BlockNumber = u32;
@@ -153,22 +145,21 @@ pub fn native_version() -> NativeVersion {
 pub struct Runtime;
 
 impl GetNodeBlockType for Runtime {
-	type NodeBlock = Block;
+    type NodeBlock = Block;
 }
 
 impl GetRuntimeBlockType for Runtime {
-	type RuntimeBlock = Block;
+    type RuntimeBlock = Block;
 }
-
 
 #[cfg_attr(feature = "std", derive(Serialize, Deserialize))]
 pub struct GenesisConfig;
 
 #[cfg(feature = "std")]
 impl BuildStorage for GenesisConfig {
-	fn assimilate_storage(&self, storage: &mut Storage) -> Result<(), String> {
-		Ok(())
-	}
+    fn assimilate_storage(&self, storage: &mut Storage) -> Result<(), String> {
+        Ok(())
+    }
 }
 
 /// The address format for describing accounts.
@@ -176,7 +167,7 @@ impl BuildStorage for GenesisConfig {
 /// Block header type as expected by this runtime.
 pub type Header = generic::Header<BlockNumber, BlakeTwo256>;
 /// Block type as expected by this runtime.
-pub type Block = generic::Block<Header, FramelessTransaction>;
+pub type Block = generic::Block<Header, ()>;
 /// A Block signed with a Justification
 pub type SignedBlock = generic::SignedBlock<Block>;
 /// BlockId type as expected by this runtime.
@@ -199,16 +190,16 @@ pub enum FramelessTransaction {
     Set,
     Clear,
     Toggle,
-	//TODO in future define call
+    //TODO in future define call
 }
 
 impl Extrinsic for FramelessTransaction {
-	type Call = ();
-	type SignaturePayload = ();
+    type Call = ();
+    type SignaturePayload = ();
 
-	fn new(_call: Self::Call, _signed_data: Option<Self::SignaturePayload>) -> Option<Self> {
-		Some(Self::Toggle)
-	}
+    fn new(_call: Self::Call, _signed_data: Option<Self::SignaturePayload>) -> Option<Self> {
+        Some(Self::Toggle)
+    }
 }
 
 // TODO Have to implement Extrinsic, WrapperTypeEncode, WrapperTypeDecode
@@ -230,24 +221,24 @@ impl_runtime_apis! {
             //TODO prolly need to do something with pre-runtime digest? This may be another reason to use
             // consensus that is totally out of the runtime.
             for transaction in block.extrinsics {
-				let previous_state = sp_io::storage::get(&ONLY_KEY)
-					.map(|bytes| <bool as Decode>::decode(&mut &*bytes).unwrap_or(false))
-					.unwrap_or(false);
+                let previous_state = sp_io::storage::get(&ONLY_KEY)
+                    .map(|bytes| <bool as Decode>::decode(&mut &*bytes).unwrap_or(false))
+                    .unwrap_or(false);
 
-				let next_state = match (previous_state, transaction) {
-					(_, FramelessTransaction::Set) => true,
-					(_, FramelessTransaction::Clear) => false,
-					(prev_state, FramelessTransaction::Toggle) => !prev_state,
-				};
+                let next_state = match (previous_state, transaction) {
+                    (_, FramelessTransaction::Set) => true,
+                    (_, FramelessTransaction::Clear) => false,
+                    (prev_state, FramelessTransaction::Toggle) => !prev_state,
+                };
 
-				sp_io::storage::set(&ONLY_KEY, &next_state.encode());
-			}
+                sp_io::storage::set(&ONLY_KEY, &next_state.encode());
+            }
         }
 
         fn initialize_block(header: &<Block as BlockT>::Header) {
-			// Store the header info we're give nfor later use when finalizing block.
-			sp_io::storage::set(&HEADER_KEY, &header.encode());
-		}
+            // Store the header info we're give nfor later use when finalizing block.
+            sp_io::storage::set(&HEADER_KEY, &header.encode());
+        }
     }
 
     // https://substrate.dev/rustdocs/master/sp_api/trait.Metadata.html
@@ -267,20 +258,20 @@ impl_runtime_apis! {
         fn apply_extrinsic(_extrinsic: <Block as BlockT>::Extrinsic) -> ApplyExtrinsicResult {
             // Executive::apply_extrinsic(extrinsic)
             // Maybe this is where the core flipping logic goes?
-			Ok(Ok(()))
+            Ok(Ok(()))
         }
 
         fn finalize_block() -> <Block as BlockT>::Header {
             // https://substrate.dev/rustdocs/master/sp_runtime/generic/struct.Header.html
-			let raw_header = sp_io::storage::get(&HEADER_KEY)
-				.expect("We initialized with header, it never got mutated, qed");
+            let raw_header = sp_io::storage::get(&HEADER_KEY)
+                .expect("We initialized with header, it never got mutated, qed");
 
-			let mut header = <Block as BlockT>::Header::decode(&mut &*raw_header)
-				.expect("we put a valid header in in the first place, qed");
+            let mut header = <Block as BlockT>::Header::decode(&mut &*raw_header)
+                .expect("we put a valid header in in the first place, qed");
 
-			let raw_root = &sp_io::storage::root()[..];
+            let raw_root = &sp_io::storage::root()[..];
 
-			header.state_root = primitives::H256::from(sp_io::hashing::blake2_256(raw_root));
+            header.state_root = primitives::H256::from(sp_io::hashing::blake2_256(raw_root));
             header
         }
 
@@ -316,29 +307,29 @@ impl_runtime_apis! {
         }
     }
 
-	impl sp_consensus_aura::AuraApi<Block, AuraId> for Runtime {
-		fn slot_duration() -> u64 {
-			3000 //milliseconds
-		}
+    impl sp_consensus_aura::AuraApi<Block, AuraId> for Runtime {
+        fn slot_duration() -> u64 {
+            3000 //milliseconds
+        }
 
 
-		fn authorities() -> Vec<AuraId> {
-			// Do we need 32 bytes?
-			let alice = AuraId::from_slice(&[0]);
+        fn authorities() -> Vec<AuraId> {
+            // Do we need 32 bytes?
+            let alice = AuraId::from_slice(&[0]);
 
-			let mut authorities = Vec::new();
-			authorities.push(alice);
-			authorities
-		}
-	}
+            let mut authorities = Vec::new();
+            authorities.push(alice);
+            authorities
+        }
+    }
 
-	impl sp_finality_grandpa::GrandpaApi<Block> for Runtime {
-		fn grandpa_authorities() -> GrandpaAuthorityList {
-			let alice = GrandpaId::from_slice(&[0]);
+    impl sp_finality_grandpa::GrandpaApi<Block> for Runtime {
+        fn grandpa_authorities() -> GrandpaAuthorityList {
+            let alice = GrandpaId::from_slice(&[0]);
 
-			let mut authorities = Vec::new();
-			authorities.push((alice, 1));
-			authorities
-		}
-	}
+            let mut authorities = Vec::new();
+            authorities.push((alice, 1));
+            authorities
+        }
+    }
 }
