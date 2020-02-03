@@ -4,7 +4,7 @@ To run the code in the recipes, `git clone` the source repository. We also want 
 
 ```bash
 git clone https://github.com/substrate-developer-hub/recipes.git
-cd kitchen/nodes/kitchen-node
+cd recipes/kitchen/nodes/kitchen-node
 ./scripts/init.sh
 
 # This step takes a while to complete

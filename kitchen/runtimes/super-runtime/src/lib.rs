@@ -1,5 +1,4 @@
-//! A Super Runtime. This runtime demonstrates all the recipes in the kitchen
-//! in a single super runtime.
+//! A Super Runtime. This runtime demonstrates most the recipe pallets in a single super runtime.
 
 #![cfg_attr(not(feature = "std"), no_std)]
 // `construct_runtime!` does a lot of recursion and requires us to increase the limit to 256.
@@ -9,42 +8,45 @@
 #[cfg(feature = "std")]
 include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 
-use babe::SameAuthoritiesForever;
-use grandpa::fg_primitives;
-use grandpa::AuthorityList as GrandpaAuthorityList;
-use primitives::OpaqueMetadata;
 use rstd::prelude::*;
-use sp_api::impl_runtime_apis;
-use sp_runtime::traits::{
-    BlakeTwo256, Block as BlockT, ConvertInto, NumberFor, StaticLookup, Verify,
-};
-use support::weights::Weight;
+use primitives::OpaqueMetadata;
 use sp_runtime::{
-    ApplyExtrinsicResult,
-	transaction_validity::TransactionValidity, generic, create_runtime_str,
-	impl_opaque_keys, AnySignature
+	ApplyExtrinsicResult, transaction_validity::TransactionValidity, generic, create_runtime_str,
+	impl_opaque_keys, MultiSignature
 };
+use sp_runtime::traits::{
+    BlakeTwo256, Block as BlockT, ConvertInto, NumberFor, StaticLookup, Verify, IdentifyAccount
+};
+use sp_api::impl_runtime_apis;
+use babe::SameAuthoritiesForever;
+use grandpa::AuthorityList as GrandpaAuthorityList;
+use grandpa::fg_primitives;
+
 #[cfg(feature = "std")]
 use version::NativeVersion;
 use version::RuntimeVersion;
 
 // A few exports that help ease life for downstream crates.
-pub use balances::Call as BalancesCall;
 #[cfg(any(feature = "std", test))]
 pub use sp_runtime::BuildStorage;
-pub use sp_runtime::{Perbill, Permill};
-pub use support::{construct_runtime, parameter_types, traits::Randomness, StorageValue};
 pub use timestamp::Call as TimestampCall;
+pub use balances::Call as BalancesCall;
+pub use sp_runtime::{Perbill, Permill};
+pub use support::{
+	StorageValue, construct_runtime, parameter_types,
+	traits::Randomness,
+	weights::Weight,
+};
 
 /// An index to a block.
 pub type BlockNumber = u32;
 
 /// Alias to 512-bit hash when used in the context of a transaction signature on the chain.
-pub type Signature = AnySignature;
+pub type Signature = MultiSignature;
 
 /// Some way of identifying an account on the chain. We intentionally make it equivalent
 /// to the public key of our transaction signing scheme.
-pub type AccountId = <Signature as Verify>::Signer;
+pub type AccountId = <<Signature as Verify>::Signer as IdentifyAccount>::AccountId;
 
 /// The type for looking up accounts. We don't expect more than 4 billion of them, but you
 /// never know...
@@ -77,12 +79,10 @@ pub mod opaque {
     pub type Block = generic::Block<Header, UncheckedExtrinsic>;
     /// Opaque block identifier type.
     pub type BlockId = generic::BlockId<Block>;
-
-    pub type SessionHandlers = (Grandpa, Babe);
-
+//    pub type SessionHandlers = (Grandpa, Babe); // TODO delete this if it isn't needed
     impl_opaque_keys! {
         pub struct SessionKeys {
-            pub grandpa: Grandpa,
+            pub grandpa: Grandpa, //TODO is this order correct? I changed stuff in chainspec.
             pub babe: Babe,
         }
     }
@@ -98,33 +98,19 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
     apis: RUNTIME_API_VERSIONS,
 };
 
-/// Constants for Babe.
-
-/// Since BABE is probabilistic this is the average expected block time that
-/// we are targetting. Blocks will be produced at a minimum duration defined
-/// by `SLOT_DURATION`, but some slots will not be allocated to any
-/// authority and hence no block will be produced. We expect to have this
-/// block time on average following the defined slot duration and the value
-/// of `c` configured for BABE (where `1 - c` represents the probability of
-/// a slot being empty).
-/// This value is only used indirectly to define the unit constants below
-/// that are expressed in blocks. The rest of the code should use
-/// `SLOT_DURATION` instead (like the timestamp pallet for calculating the
-/// minimum period).
-/// <https://research.web3.foundation/en/latest/polkadot/BABE/Babe/#6-practical-results>
 pub const MILLISECS_PER_BLOCK: u64 = 6000;
 
 pub const SLOT_DURATION: u64 = MILLISECS_PER_BLOCK;
-
-pub const EPOCH_DURATION_IN_BLOCKS: u32 = 10 * MINUTES;
 
 // These time units are defined in number of blocks.
 pub const MINUTES: BlockNumber = 60_000 / (MILLISECS_PER_BLOCK as BlockNumber);
 pub const HOURS: BlockNumber = MINUTES * 60;
 pub const DAYS: BlockNumber = HOURS * 24;
 
+// Some BABE-specific stuff
 // 1 in 4 blocks (on average, not counting collisions) will be primary babe blocks.
 pub const PRIMARY_PROBABILITY: (u64, u64) = (1, 4);
+pub const EPOCH_DURATION_IN_BLOCKS: u32 = 10 * MINUTES;
 
 /// The version infromation used to identify this runtime when compiled natively.
 #[cfg(feature = "std")]
@@ -198,7 +184,7 @@ impl grandpa::Trait for Runtime {
 impl indices::Trait for Runtime {
     /// The type for recording indexing into the account enumeration. If this ever overflows, there
     /// will be problems!
-    type AccountIndex = u32;
+    type AccountIndex = AccountIndex;
     /// Use the standard means of resolving an index hint from an id.
     type ResolveHint = indices::SimpleResolveHint<Self::AccountId, Self::AccountIndex>;
     /// Determine whether an account is dead.
@@ -240,11 +226,6 @@ impl balances::Trait for Runtime {
     type CreationFee = CreationFee;
 }
 
-impl sudo::Trait for Runtime {
-    type Event = Event;
-    type Proposal = Call;
-}
-
 parameter_types! {
     pub const TransactionBaseFee: u128 = 0;
     pub const TransactionByteFee: u128 = 1;
@@ -259,7 +240,12 @@ impl transaction_payment::Trait for Runtime {
     type FeeMultiplierUpdate = ();
 }
 
-// ---------------------- Recipe Runtime Configurations ----------------------
+impl sudo::Trait for Runtime {
+    type Event = Event;
+    type Proposal = Call;
+}
+
+// ---------------------- Recipe Pallet Configurations ----------------------
 impl adding_machine::Trait for Runtime {
     type Event = Event;
 }
@@ -429,8 +415,7 @@ pub type UncheckedExtrinsic = generic::UncheckedExtrinsic<Address, Call, Signatu
 /// Extrinsic type that has already been checked.
 pub type CheckedExtrinsic = generic::CheckedExtrinsic<AccountId, Call, SignedExtra>;
 /// Executive: handles dispatch to the various pallets.
-pub type Executive =
-    executive::Executive<Runtime, Block, system::ChainContext<Runtime>, Runtime, AllModules>;
+pub type Executive = executive::Executive<Runtime, Block, system::ChainContext<Runtime>, Runtime, AllModules>;
 
 impl_runtime_apis! {
     impl sp_api::Core<Block> for Runtime {

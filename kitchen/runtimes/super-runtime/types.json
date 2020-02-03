@@ -1,0 +1,31 @@
+{
+  "GroupIndex": "u32",
+  "TaskId": "Vec<u8>",
+  "PriorityScore": "u32",
+  "RoundIndex": "u32",
+  "Task": {
+    "id": "TaskId",
+    "score": "PriorityScore",
+    "proposed_at": "BlockNumber"
+  },
+  "SpendRequest": {
+    "from": "AccountId",
+    "to": "AccountId",
+    "amount": "Balance"
+  },
+  "Proposal": {
+    "to": "AccountId",
+    "amount": "Balance",
+    "when": "BlockNumber",
+    "support": "u32"
+  },
+  "InnerThing": {
+    "number": "u32",
+    "hash": "Hash",
+    "balance": "Balance"
+  },
+  "SuperThing": {
+    "super_number": "u32",
+    "inner_thing": "InnerThing"
+  }
+}

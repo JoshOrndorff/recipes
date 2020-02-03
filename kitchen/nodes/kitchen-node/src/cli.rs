@@ -9,9 +9,9 @@ use futures::{
 use futures01::Future;
 use std::cell::RefCell;
 use tokio::runtime::Runtime;
-pub use substrate_cli::{VersionInfo, IntoExit, error};
-use substrate_cli::{informant, parse_and_prepare, ParseAndPrepare, NoCustom};
-use substrate_service::{AbstractService, Roles as ServiceRoles, Configuration};
+pub use sc_cli::{VersionInfo, IntoExit, error};
+use sc_cli::{informant, parse_and_prepare, ParseAndPrepare, NoCustom};
+use sc_service::{AbstractService, Roles as ServiceRoles, Configuration};
 use crate::chain_spec;
 use log::info;
 
@@ -101,7 +101,7 @@ where
     //     Output = Result<(), ()>
     // >;
     // .map()// then()
-    // .map_ok() // map() 
+    // .map_ok() // map()
     // .map_err();
 
 	let service_res = {

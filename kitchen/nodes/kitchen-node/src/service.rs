@@ -2,16 +2,15 @@
 
 use std::sync::Arc;
 use std::time::Duration;
-use substrate_client::LongestChain;
-use babe;
-use grandpa::{self, FinalityProofProvider as GrandpaFinalityProofProvider};
+use sc_client::LongestChain;
 use runtime::{self, GenesisConfig, opaque::Block, RuntimeApi};
-use substrate_service::{error::{Error as ServiceError}, AbstractService, Configuration, ServiceBuilder};
-// use transaction_pool::{self, txpool::{Pool as TransactionPool}};
-use inherents::InherentDataProviders;
-use network::construct_simple_protocol;
-use substrate_executor::native_executor_instance;
-pub use substrate_executor::NativeExecutor;
+use sc_service::{error::{Error as ServiceError}, AbstractService, Configuration, ServiceBuilder};
+use sp_inherents::InherentDataProviders;
+use sc_network::construct_simple_protocol;
+use sc_executor::native_executor_instance;
+pub use sc_executor::NativeExecutor;
+use sc_consensus_babe;
+use sc_finality_grandpa::{self, FinalityProofProvider as GrandpaFinalityProofProvider};
 
 // Our native executor instance.
 native_executor_instance!(
@@ -32,38 +31,38 @@ construct_simple_protocol! {
 macro_rules! new_full_start {
 	($config:expr) => {{
 		let mut import_setup = None;
-		let inherent_data_providers = inherents::InherentDataProviders::new();
+		let inherent_data_providers = sp_inherents::InherentDataProviders::new();
 
-		let builder = substrate_service::ServiceBuilder::new_full::<
+		let builder = sc_service::ServiceBuilder::new_full::<
 			runtime::opaque::Block, runtime::RuntimeApi, crate::service::Executor
 		>($config)?
 			.with_select_chain(|_config, backend| {
-				Ok(substrate_client::LongestChain::new(backend.clone()))
+				Ok(sc_client::LongestChain::new(backend.clone()))
 			})?
 			.with_transaction_pool(|config, client, _fetcher| {
-				let pool_api = txpool::FullChainApi::new(client.clone());
-				let pool = txpool::BasicPool::new(config, pool_api);
-				let maintainer = txpool::FullBasicPoolMaintainer::new(pool.pool().clone(), client);
-				let maintainable_pool = txpool_api::MaintainableTransactionPool::new(pool, maintainer);
+				let pool_api = sc_transaction_pool::FullChainApi::new(client.clone());
+				let pool = sc_transaction_pool::BasicPool::new(config, pool_api);
+				let maintainer = sc_transaction_pool::FullBasicPoolMaintainer::new(pool.pool().clone(), client);
+				let maintainable_pool = sp_transaction_pool::MaintainableTransactionPool::new(pool, maintainer);
 				Ok(maintainable_pool)
 			})?
 			.with_import_queue(|_config, client, mut select_chain, _transaction_pool| {
 				let select_chain = select_chain.take()
-					.ok_or_else(|| substrate_service::Error::SelectChainRequired)?;
+					.ok_or_else(|| sc_service::Error::SelectChainRequired)?;
 				let (grandpa_block_import, grandpa_link) =
-					grandpa::block_import::<_, _, _, runtime::RuntimeApi, _>(
+					sc_finality_grandpa::block_import::<_, _, _, runtime::RuntimeApi, _>(
 						client.clone(), &*client, select_chain
 					)?;
 				let justification_import = grandpa_block_import.clone();
 
-				let (babe_block_import, babe_link) = babe::block_import(
-					babe::Config::get_or_compute(&*client)?,
+				let (babe_block_import, babe_link) = sc_consensus_babe::block_import(
+					sc_consensus_babe::Config::get_or_compute(&*client)?,
 					grandpa_block_import,
 					client.clone(),
 					client.clone(),
 				)?;
 
-				let import_queue = babe::import_queue(
+				let import_queue = sc_consensus_babe::import_queue(
 					babe_link.clone(),
 					babe_block_import.clone(),
 					Some(Box::new(justification_import)),
@@ -105,7 +104,7 @@ pub fn new_full<C: Send + Default + 'static>(config: Configuration<C, GenesisCon
 			.expect("Link Half and Block Import are present for Full Services or setup failed before. qed");
 
 	if is_authority {
-		let proposer = basic_authorship::ProposerFactory {
+		let proposer = sc_basic_authority::ProposerFactory {
 			client: service.client(),
 			transaction_pool: service.transaction_pool(),
 		};
@@ -115,9 +114,9 @@ pub fn new_full<C: Send + Default + 'static>(config: Configuration<C, GenesisCon
 			.ok_or(ServiceError::SelectChainRequired)?;
 
 		let can_author_with =
-				consensus_common::CanAuthorWithNativeVersion::new(client.executor().clone());
+				sp_consensus::CanAuthorWithNativeVersion::new(client.executor().clone());
 
-		let babe_config = babe::BabeParams {
+		let babe_config = sc_consensus_babe::BabeParams {
 			keystore: service.keystore(),
 			client,
 			select_chain,
@@ -130,12 +129,11 @@ pub fn new_full<C: Send + Default + 'static>(config: Configuration<C, GenesisCon
 			can_author_with,
 		};
 
-		let babe = babe::start_babe(babe_config)?;
+		let babe = sc_consensus_babe::start_babe(babe_config)?;
 		service.spawn_essential_task(babe);
 	}
 
-	let grandpa_config = grandpa::Config {
-		// FIXME #1578 make this available through chainspec
+	let grandpa_config = sc_finality_grandpa::Config {
 		gossip_duration: Duration::from_millis(333),
 		justification_period: 512,
 		name: Some(name),
@@ -148,7 +146,7 @@ pub fn new_full<C: Send + Default + 'static>(config: Configuration<C, GenesisCon
 	match (is_authority, disable_grandpa) {
 		(false, false) => {
 			// start the lightweight GRANDPA observer
-			service.spawn_task(Box::new(grandpa::run_grandpa_observer(
+			service.spawn_task(Box::new(sc_finality_grandpa::run_grandpa_observer(
 				grandpa_config,
 				grandpa_link,
 				service.network(),
@@ -158,23 +156,23 @@ pub fn new_full<C: Send + Default + 'static>(config: Configuration<C, GenesisCon
 		},
 		(true, false) => {
 			// start the full GRANDPA voter
-			let voter_config = grandpa::GrandpaParams {
+			let voter_config = sc_finality_grandpa::GrandpaParams {
 				config: grandpa_config,
 				link: grandpa_link,
 				network: service.network(),
 				inherent_data_providers: inherent_data_providers.clone(),
 				on_exit: service.on_exit(),
 				telemetry_on_connect: Some(service.telemetry_on_connect_stream()),
-				voting_rule: grandpa::VotingRulesBuilder::default().build(),
-                executor,
+				voting_rule: sc_finality_grandpa::VotingRulesBuilder::default().build(),
+				executor,
 			};
 
 			// the GRANDPA voter task is considered infallible, i.e.
 			// if it fails we take down the service with it.
-			service.spawn_essential_task(grandpa::run_grandpa_voter(voter_config)?);
+			service.spawn_essential_task(sc_finality_grandpa::run_grandpa_voter(voter_config)?);
 		},
 		(_, true) => {
-			grandpa::setup_disabled_grandpa(
+			sc_finality_grandpa::setup_disabled_grandpa(
 				service.client(),
 				&inherent_data_providers,
 				service.network(),
@@ -198,17 +196,17 @@ pub fn new_light<C: Send + Default + 'static>(config: Configuration<C, GenesisCo
 		.with_transaction_pool(|config, client, fetcher| {
 			let fetcher = fetcher
 				.ok_or_else(|| "Trying to start light transaction pool without active fetcher")?;
-			let pool_api = txpool::LightChainApi::new(client.clone(), fetcher.clone());
-			let pool = txpool::BasicPool::new(config, pool_api);
-			let maintainer = txpool::LightBasicPoolMaintainer::with_defaults(pool.pool().clone(), client, fetcher);
-			let maintainable_pool = txpool_api::MaintainableTransactionPool::new(pool, maintainer);
+			let pool_api = sc_transaction_pool::LightChainApi::new(client.clone(), fetcher.clone());
+			let pool = sc_transaction_pool::BasicPool::new(config, pool_api);
+			let maintainer = sc_transaction_pool::LightBasicPoolMaintainer::with_defaults(pool.pool().clone(), client, fetcher);
+			let maintainable_pool = sp_transaction_pool::MaintainableTransactionPool::new(pool, maintainer);
 			Ok(maintainable_pool)
 		})?
 		.with_import_queue_and_fprb(|_config, client, backend, fetcher, _select_chain, _tx_pool| {
 			let fetch_checker = fetcher
 				.map(|fetcher| fetcher.checker().clone())
 				.ok_or_else(|| "Trying to start light import queue without active fetch checker")?;
-			let grandpa_block_import = grandpa::light_block_import::<_, _, _, RuntimeApi>(
+			let grandpa_block_import = sc_finality_grandpa::light_block_import::<_, _, _, RuntimeApi>(
 				client.clone(), backend, &*client.clone(), Arc::new(fetch_checker)
 			)?;
 
@@ -216,14 +214,14 @@ pub fn new_light<C: Send + Default + 'static>(config: Configuration<C, GenesisCo
 			let finality_proof_request_builder =
 				finality_proof_import.create_finality_proof_request_builder();
 
-			let (babe_block_import, babe_link) = babe::block_import(
-				babe::Config::get_or_compute(&*client)?,
+			let (babe_block_import, babe_link) = sc_consensus_babe::block_import(
+				sc_consensus_babe::Config::get_or_compute(&*client)?,
 				grandpa_block_import,
 				client.clone(),
 				client.clone(),
 			)?;
 
-			let import_queue = babe::import_queue(
+			let import_queue = sc_consensus_babe::import_queue(
 				babe_link.clone(),
 				babe_block_import,
 				None,

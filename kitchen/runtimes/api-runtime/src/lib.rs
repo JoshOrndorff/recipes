@@ -1,4 +1,4 @@
-//! The Substrate Node Template runtime. This can be compiled with `#[no_std]`, ready for Wasm.
+//! A Runtime that demonstrates ca custom runtime API.
 
 #![cfg_attr(not(feature = "std"), no_std)]
 // `construct_runtime!` does a lot of recursion and requires us to increase the limit to 256.
@@ -21,10 +21,10 @@ use sp_api::impl_runtime_apis;
 use sp_consensus_aura::sr25519::AuthorityId as AuraId;
 use grandpa::AuthorityList as GrandpaAuthorityList;
 use grandpa::fg_primitives;
-use sp_version::RuntimeVersion;
 use frame_system as system;
 #[cfg(feature = "std")]
 use sp_version::NativeVersion;
+use sp_version::RuntimeVersion;
 
 // A few exports that help ease life for downstream crates.
 #[cfg(any(feature = "std", test))]
@@ -90,8 +90,8 @@ pub mod opaque {
 
 /// This runtime version.
 pub const VERSION: RuntimeVersion = RuntimeVersion {
-	spec_name: create_runtime_str!("node-template"),
-	impl_name: create_runtime_str!("node-template"),
+	spec_name: create_runtime_str!("api-runtime"),
+	impl_name: create_runtime_str!("api-runtime"),
 	authoring_version: 1,
 	spec_version: 1,
 	impl_version: 1,
@@ -233,6 +233,7 @@ impl sudo::Trait for Runtime {
 	type Proposal = Call;
 }
 
+// ---------------------- Recipe Pallet Configurations ----------------------
 impl sum_storage::Trait for Runtime {
 	type Event = Event;
 }
