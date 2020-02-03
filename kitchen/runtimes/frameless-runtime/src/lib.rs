@@ -221,11 +221,7 @@ impl_runtime_apis! {
 			}
         }
 
-        fn initialize_block(header: &<Block as BlockT>::Header) {
-            // Do I actually need to do anything here?
-            // I'm struggling to find descriptions of what these APIs are actually supposed to _do_
-            unimplemented!()
-        }
+        fn initialize_block(header: &<Block as BlockT>::Header) {}
     }
 
     // https://substrate.dev/rustdocs/master/sp_api/trait.Metadata.html
