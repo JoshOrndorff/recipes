@@ -145,11 +145,11 @@ pub fn native_version() -> NativeVersion {
 pub struct Runtime;
 
 impl GetNodeBlockType for Runtime {
-    type NodeBlock = Block;
+    type NodeBlock = opaque::Block;
 }
 
 impl GetRuntimeBlockType for Runtime {
-    type RuntimeBlock = Block;
+    type RuntimeBlock = opaque::Block;
 }
 
 #[cfg_attr(feature = "std", derive(Serialize, Deserialize))]
