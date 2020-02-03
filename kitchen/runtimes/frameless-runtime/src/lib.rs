@@ -21,12 +21,16 @@
 #[cfg(feature = "std")]
 include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 
+use parity_scale_codec::{Encode, Decode};
+
 // use babe::SameAuthoritiesForever;
 use primitives::OpaqueMetadata;
 use rstd::prelude::*;
 use sp_api::impl_runtime_apis;
 use sp_runtime::traits::{
     BlakeTwo256, Block as BlockT, /*ConvertInto, NumberFor, StaticLookup,*/ Verify,
+	Extrinsic,
+	GetNodeBlockType,
 };
 use sp_runtime::{
     ApplyExtrinsicResult,
@@ -40,6 +44,9 @@ use sp_runtime::{
 use version::NativeVersion;
 use version::RuntimeVersion;
 
+#[cfg(feature = "std")]
+use serde::{Serialize, Deserialize};
+
 // A few exports that help ease life for downstream crates.
 pub use balances::Call as BalancesCall;
 #[cfg(any(feature = "std", test))]
@@ -50,27 +57,27 @@ pub use support::{traits::Randomness, StorageValue};
 pub type BlockNumber = u32;
 
 /// Alias to 512-bit hash when used in the context of a transaction signature on the chain.
-pub type Signature = AnySignature;
+// pub type Signature = AnySignature;
 
 /// Some way of identifying an account on the chain. We intentionally make it equivalent
 /// to the public key of our transaction signing scheme.
-pub type AccountId = <Signature as Verify>::Signer;
+// pub type AccountId = <Signature as Verify>::Signer;
 
 /// The type for looking up accounts. We don't expect more than 4 billion of them, but you
 /// never know...
-pub type AccountIndex = u32;
+// pub type AccountIndex = u32;
 
 /// Balance of an account.
 //pub type Balance = u128;
 
 /// Index of a transaction in the chain.
-pub type Index = u32;
+// pub type Index = u32;
 
 /// A hash of some data used by the chain.
-pub type Hash = primitives::H256;
+// pub type Hash = primitives::H256;
 
 /// Digest item type.
-pub type DigestItem = generic::DigestItem<Hash>;
+// pub type DigestItem = generic::DigestItem<Hash>;
 
 /// Opaque types. These are used by the CLI to instantiate machinery that don't need to know
 /// the specifics of the runtime. They can then be made to be agnostic over specific formats
@@ -142,6 +149,10 @@ pub fn native_version() -> NativeVersion {
 /// The main struct in this module. In frame this comes from `construct_runtime!`
 pub struct Runtime;
 
+impl GetNodeBlockType for Runtime {
+	type NodeBlock = Block;
+}
+
 /// The address format for describing accounts.
 // pub type Address = <Indices as StaticLookup>::Source;
 /// Block header type as expected by this runtime.
@@ -160,12 +171,25 @@ pub type BlockId = generic::BlockId<Block>;
 //     system::CheckGenesis<Runtime>,
 // );
 /// Unchecked extrinsic type as expected by this runtime.
+
+#[cfg_attr(feature = "std", derive(Serialize, Deserialize))]
 #[derive(Encode, Decode, Debug, PartialEq, Eq, Clone)]
 pub enum FramelessTransaction {
     Set,
     Clear,
     Toggle,
+	//TODO in future define call
 }
+
+impl Extrinsic for FramelessTransaction {
+	type Call = ();
+	type SignaturePayload = ();
+
+	fn new(_call: Self::Call, _signed_data: Option<Self::SignaturePayload>) -> Option<Self> {
+		Some(Self::Toggle)
+	}
+}
+
 // TODO Have to implement Extrinsic, WrapperTypeEncode, WrapperTypeDecode
 // pub type UncheckedExtrinsic = generic::UncheckedExtrinsic<Address, Call, Signature, SignedExtra>;
 
@@ -211,6 +235,7 @@ impl_runtime_apis! {
         fn apply_extrinsic(extrinsic: <Block as BlockT>::Extrinsic) -> ApplyExtrinsicResult {
             // Executive::apply_extrinsic(extrinsic)
             // Maybe this is where the core flipping logic goes?
+			Ok(Ok(()))
         }
 
         fn finalize_block() -> <Block as BlockT>::Header {
@@ -244,7 +269,7 @@ impl_runtime_apis! {
 
         fn random_seed() -> <Block as BlockT>::Hash {
             // Lol how bad is this? What actually depends on it?
-            0.into()
+            <Block as BlockT>::Hash::from([0u8;32])
         }
     }
 
@@ -252,7 +277,7 @@ impl_runtime_apis! {
         fn validate_transaction(tx: <Block as BlockT>::Extrinsic) -> TransactionValidity {
             // Any transaction of the correct type is valid
             Ok(ValidTransaction{
-                priority: 1.into(),
+                priority: 1u64,
                 requires: Vec::new(),
                 provides: Vec::new(),
                 longevity: TransactionLongevity::max_value(),
@@ -271,23 +296,23 @@ impl_runtime_apis! {
     // Probably easier to just go with aura or PoW or manual seal
     // Maybe this can remain largely unchanged..
     // Will have to get the behavior from the babe pallet somehow.
-    impl babe_primitives::BabeApi<Block> for Runtime {
-        fn configuration() -> babe_primitives::BabeConfiguration {
-            // The choice of `c` parameter (where `1 - c` represents the
-            // probability of a slot being empty), is done in accordance to the
-            // slot duration and expected target block time, for safely
-            // resisting network delays of maximum two seconds.
-            // <https://research.web3.foundation/en/latest/polkadot/BABE/Babe/#6-practical-results>
-            babe_primitives::BabeConfiguration {
-                slot_duration: Babe::slot_duration(),//could be hardcoded here
-                epoch_length: EpochDuration::get(),//already hardcoded above, could be moved here for simplicity
-                c: PRIMARY_PROBABILITY, // already hardcoded above
-                genesis_authorities: Babe::authorities(),//could be hardcoded here
-                randomness: Babe::randomness(), // This one might be tricky. Prolly needs to come from actual babe pallet
-                secondary_slots: true,
-            }
-        }
-    }
+    // impl babe_primitives::BabeApi<Block> for Runtime {
+    //     fn configuration() -> babe_primitives::BabeConfiguration {
+    //         // The choice of `c` parameter (where `1 - c` represents the
+    //         // probability of a slot being empty), is done in accordance to the
+    //         // slot duration and expected target block time, for safely
+    //         // resisting network delays of maximum two seconds.
+    //         // <https://research.web3.foundation/en/latest/polkadot/BABE/Babe/#6-practical-results>
+    //         babe_primitives::BabeConfiguration {
+    //             slot_duration: Babe::slot_duration(),//could be hardcoded here
+    //             epoch_length: EpochDuration::get(),//already hardcoded above, could be moved here for simplicity
+    //             c: PRIMARY_PROBABILITY, // already hardcoded above
+    //             genesis_authorities: Babe::authorities(),//could be hardcoded here
+    //             randomness: Babe::randomness(), // This one might be tricky. Prolly needs to come from actual babe pallet
+    //             secondary_slots: true,
+    //         }
+    //     }
+    // }
 
     // Hopefully don't need this one; not using sessions pallet...
     // impl substrate_session::SessionKeys<Block> for Runtime {
