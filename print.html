@@ -227,14 +227,14 @@
 <p>If you do not have a Substrate development environment setup on your machine, please install it by following these directions.</p>
 <h3><a class="header" href="#for-linux--macos" id="for-linux--macos">For Linux / macOS</a></h3>
 <pre><code class="language-bash"># Setup Rust and Substrate
-curl https://getsubstrate.io -sSf | bash
+curl https://getsubstrate.io -sSf | bash -s -- --fast
 </code></pre>
 <h3><a class="header" href="#for-windows" id="for-windows">For Windows</a></h3>
 <p>Refer to our <a href="https://substrate.dev/docs/en/overview/getting-started#getting-started-on-windows">Substrate Installation on Windows</a>.</p>
 <h2><a class="header" href="#kitchen-overview" id="kitchen-overview">Kitchen Overview</a></h2>
-<p>The <a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen"><code>recipes/kitchen</code></a> folder contains all the code necessary to run a Substrate node. Let us call it the Kitchen Node. There are three folders inside:</p>
+<p>The <a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen"><code>recipes/kitchen</code></a> folder contains all the code necessary to run a Substrate node. There are three folders inside:</p>
 <ul>
-<li><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/node"><code>node</code></a> - The Kitchen Node's client; the non-runtime parts of the node.</li>
+<li><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/nodes"><code>nodes</code></a> - Complete blockchain nodes that perform P2P messaging, consensus, and more. Some of these nodes are general-purpose, others demonstrate specific features of Substrate.</li>
 <li><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/runtimes"><code>runtimes</code></a> - Complete runtimes that can be used with the Kitchen Node.</li>
 <li><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets"><code>pallets</code></a> - Pallets that make up the runtimes. A pallet gives the runtime a particular piece of functionality. Currently, most of the recipe code is stored under this folder.</li>
 </ul>
@@ -247,7 +247,7 @@ curl https://getsubstrate.io -sSf | bash
 <h1><a class="header" href="#run-the-kitchen-node" id="run-the-kitchen-node">Run the Kitchen Node</a></h1>
 <p>To run the code in the recipes, <code>git clone</code> the source repository. We also want to kick-start the node compilation as it may take about 30 minutes to complete depending on your hardware.</p>
 <pre><code class="language-bash">git clone https://github.com/substrate-developer-hub/recipes.git
-cd kitchen/nodes/kitchen-node
+cd recipes/kitchen/nodes/kitchen-node
 ./scripts/init.sh
 
 # This step takes a while to complete
@@ -270,8 +270,10 @@ cargo build --release
 ./target/release/kitchen-node --dev
 </code></pre>
 <h1><a class="header" href="#interact-with-the-kitchen-node" id="interact-with-the-kitchen-node">Interact with the Kitchen Node</a></h1>
-<p>If you followed <a href="base/./runnode.html">the instructions</a> to get your node running, you should see blocks created on the console. You can now use our <a href="https://polkadot.js.org/apps/#/explorer?rpc=ws://127.0.0.1:9944">Polkadot-JS Apps to interact with your locally running node</a>. You will use the <strong>Chain state</strong> tab to query the blockchain status and <strong>Extrinsics</strong> to send transactions to the blockchain.</p>
-<p>To configure relevant type definitions, follow the directions in the <a href="https://polkadot.js.org/api/api/#registering-custom-types">polkadot-js docs</a>.</p>
+<p>If you followed <a href="base/./runnode.html">the instructions</a> to get your node running, you should see blocks created on the console. You can navigate to the  <a href="https://polkadot.js.org/apps/#/settings/developer?rpc=ws://127.0.0.1:9944">Polkadot-JS Apps</a> user interface. This is a general purpose interface for interacting with many different Substrate-based blockchains. From now on we'll call it &quot;Apps&quot; for short. Before Apps will work with our blockchain, we need to give it a little chain-specific information known as the &quot;types&quot;. You'll learn what all this means as you work through the recipes; for now just follow the instructions.</p>
+<p>Please copy the contents of <code>kitchen/runtimes/super-runtime/types.json</code> into Apps. You should already be on the Settings -&gt; Developer tab. If not, please navigate there.</p>
+<p><img src="base/../apps-types.png" alt="Screenshot: pasting types into Apps UI" /></p>
+<p>As you work through the recipes, you will use the <strong>Chain state</strong> tab to query the blockchain status and <strong>Extrinsics</strong> to send transactions to the blockchain. Feel free to play around.</p>
 <h1><a class="header" href="#using-the-kitchen" id="using-the-kitchen">Using the Kitchen</a></h1>
 <p>Let us take a deeper look at the <a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/node">Kitchen Node</a>. Inside</p>
 <p><strong><code>kitchen/node/Cargo.toml</code></strong></p>

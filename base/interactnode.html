@@ -155,8 +155,10 @@
                 <div id="content" class="content">
                     <main>
                         <h1><a class="header" href="#interact-with-the-kitchen-node" id="interact-with-the-kitchen-node">Interact with the Kitchen Node</a></h1>
-<p>If you followed <a href="./runnode.html">the instructions</a> to get your node running, you should see blocks created on the console. You can now use our <a href="https://polkadot.js.org/apps/#/explorer?rpc=ws://127.0.0.1:9944">Polkadot-JS Apps to interact with your locally running node</a>. You will use the <strong>Chain state</strong> tab to query the blockchain status and <strong>Extrinsics</strong> to send transactions to the blockchain.</p>
-<p>To configure relevant type definitions, follow the directions in the <a href="https://polkadot.js.org/api/api/#registering-custom-types">polkadot-js docs</a>.</p>
+<p>If you followed <a href="./runnode.html">the instructions</a> to get your node running, you should see blocks created on the console. You can navigate to the  <a href="https://polkadot.js.org/apps/#/settings/developer?rpc=ws://127.0.0.1:9944">Polkadot-JS Apps</a> user interface. This is a general purpose interface for interacting with many different Substrate-based blockchains. From now on we'll call it &quot;Apps&quot; for short. Before Apps will work with our blockchain, we need to give it a little chain-specific information known as the &quot;types&quot;. You'll learn what all this means as you work through the recipes; for now just follow the instructions.</p>
+<p>Please copy the contents of <code>kitchen/runtimes/super-runtime/types.json</code> into Apps. You should already be on the Settings -&gt; Developer tab. If not, please navigate there.</p>
+<p><img src="../apps-types.png" alt="Screenshot: pasting types into Apps UI" /></p>
+<p>As you work through the recipes, you will use the <strong>Chain state</strong> tab to query the blockchain status and <strong>Extrinsics</strong> to send transactions to the blockchain. Feel free to play around.</p>
 
                     </main>
 
