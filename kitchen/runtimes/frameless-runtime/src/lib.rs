@@ -20,7 +20,7 @@ include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 use parity_scale_codec::{Encode, Decode};
 
 // use babe::SameAuthoritiesForever;
-use primitives::OpaqueMetadata;
+use primitives::{OpaqueMetadata};
 use rstd::prelude::*;
 use sp_api::impl_runtime_apis;
 use sp_runtime::traits::{
@@ -161,6 +161,7 @@ pub type SignedBlock = generic::SignedBlock<Block>;
 pub type BlockId = generic::BlockId<Block>;
 
 pub const ONLY_KEY: [u8; 1] = [0];
+pub const HEADER_KEY: [u8; 6] = *b"header";
 
 // I guess we won't need any of this when using our own unchecked extrinsic type
 // The SignedExtension to the basic transaction logic.
@@ -221,20 +222,23 @@ impl_runtime_apis! {
 			}
         }
 
-        fn initialize_block(header: &<Block as BlockT>::Header) {}
+        fn initialize_block(header: &<Block as BlockT>::Header) {
+			// Store the header info we're give nfor later use when finalizing block.
+			sp_io::storage::set(&HEADER_KEY, &header.encode());
+		}
     }
 
     // https://substrate.dev/rustdocs/master/sp_api/trait.Metadata.html
     // "The Metadata api trait that returns metadata for the runtime."
-    impl sp_api::Metadata<Block> for Runtime {
-        fn metadata() -> OpaqueMetadata {
-            // Runtime::metadata().into()
-            // Maybe this one can be omitted or just return () or something?
-            // Would be really cool to return something that makes polkadot-js api happy,
-            // but that seems unlikely.
-            unimplemented!()
-        }
-    }
+    // impl sp_api::Metadata<Block> for Runtime {
+    //     fn metadata() -> OpaqueMetadata {
+    //         // Runtime::metadata().into()
+    //         // Maybe this one can be omitted or just return () or something?
+    //         // Would be really cool to return something that makes polkadot-js api happy,
+    //         // but that seems unlikely.
+    //         unimplemented!()
+    //     }
+    // }
 
     // https://substrate.dev/rustdocs/master/sc_block_builder/trait.BlockBuilderApi.html
     impl block_builder_api::BlockBuilder<Block> for Runtime {
@@ -245,19 +249,17 @@ impl_runtime_apis! {
         }
 
         fn finalize_block() -> <Block as BlockT>::Header {
-            // Docs say "Finish the current block." I guess that means I'm supposed to calculate
-            // the new state root and stuff
-            // Comment in executive says "It is up the caller to ensure that all header fields are valid except state-root."
-            // Docs for return type
             // https://substrate.dev/rustdocs/master/sp_runtime/generic/struct.Header.html
-            // Header {
-            //     parent_hash: Hash::Output,
-            //     number: Number,
-            //     state_root: Hash::Output,
-            //     extrinsics_root: Hash::Output,
-            //     digest: Digest<Hash::Output>,
-            // }
-            unimplemented!()
+			let raw_header = sp_io::storage::get(&HEADER_KEY)
+				.expect("We initialized with header, it never got mutated, qed");
+
+			let mut header = <Block as BlockT>::Header::decode(&mut &*raw_header)
+				.expect("we put a valid header in in the first place, qed");
+
+			let raw_root = &sp_io::storage::root()[..];
+
+			header.state_root = primitives::H256::from(sp_io::hashing::blake2_256(raw_root));
+            header
         }
 
         fn inherent_extrinsics(data: inherents::InherentData) -> Vec<<Block as BlockT>::Extrinsic> {
@@ -270,7 +272,7 @@ impl_runtime_apis! {
             data: inherents::InherentData
         ) -> inherents::CheckInherentsResult {
             // I'm not using any inherents, so it should be safe to just return ok
-            inherents::CheckInherentsResult::new()
+            inherents::CheckInherentsResult::default()
         }
 
         fn random_seed() -> <Block as BlockT>::Hash {
