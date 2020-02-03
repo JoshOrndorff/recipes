@@ -6,11 +6,7 @@
 // * What are core apis (eg. initialize_block, execute_block) actually supposed to do?
 // * Which block authoring will be easiest to start with? Seems not babe because of the need to collect randomness in the runtime
 // * Where does this core logic belong?
-    // let next_state = match (previous_state, transaction) {
-    //     (_, Set) => true,
-    //     (_ Clear) => false,
-    //     (prev_state, Toggle) => !prev_state
-    // };
+
 
 #![cfg_attr(not(feature = "std"), no_std)]
 // `construct_runtime!` does a lot of recursion and requires us to increase the limit to 256.
@@ -164,6 +160,8 @@ pub type SignedBlock = generic::SignedBlock<Block>;
 /// BlockId type as expected by this runtime.
 pub type BlockId = generic::BlockId<Block>;
 
+pub const ONLY_KEY: [u8; 1] = [0];
+
 // I guess we won't need any of this when using our own unchecked extrinsic type
 // The SignedExtension to the basic transaction logic.
 // pub type SignedExtra = (
@@ -208,7 +206,19 @@ impl_runtime_apis! {
         fn execute_block(block: Block) {
             //TODO prolly need to do something with pre-runtime digest? This may be another reason to use
             // consensus that is totally out of the runtime.
-            unimplemented!()
+            for transaction in block.extrinsics {
+				let previous_state = sp_io::storage::get(&ONLY_KEY)
+					.map(|bytes| <bool as Decode>::decode(&mut &*bytes).unwrap_or(false))
+					.unwrap_or(false);
+
+				let next_state = match (previous_state, transaction) {
+					(_, FramelessTransaction::Set) => true,
+					(_, FramelessTransaction::Clear) => false,
+					(prev_state, FramelessTransaction::Toggle) => !prev_state,
+				};
+
+				sp_io::storage::set(&ONLY_KEY, &next_state.encode());
+			}
         }
 
         fn initialize_block(header: &<Block as BlockT>::Header) {
