@@ -146,7 +146,7 @@ impl GetRuntimeBlockType for Runtime {
     type RuntimeBlock = opaque::Block;
 }
 
-#[cfg_attr(feature = "std", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "std", derive(Serialize, Deserialize, Default))]
 pub struct GenesisConfig;
 
 #[cfg(feature = "std")]
