@@ -19,6 +19,11 @@ git = 'https://github.com/paritytech/substrate.git'
 package = "sp-std"
 rev = '3e651110aa06aa835790df63410a29676243fc54'
 
+[dependencies.sp-consensus-aura]
+default-features = false
+git = 'https://github.com/paritytech/substrate.git'
+rev = '3e651110aa06aa835790df63410a29676243fc54'
+
 [dependencies.sp-io]
 default-features = false
 git = 'https://github.com/paritytech/substrate.git'
@@ -125,6 +130,11 @@ git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-block-builder'
 rev = '3e651110aa06aa835790df63410a29676243fc54'
 
+[dependencies.sp-finality-grandpa]
+default-features = false
+git = 'https://github.com/paritytech/substrate.git'
+rev = '3e651110aa06aa835790df63410a29676243fc54'
+
 [dependencies.sp-transaction-pool]
 default-features = false
 git = 'https://github.com/paritytech/substrate.git'
@@ -164,8 +174,10 @@ std = [
 	"safe-mix/std",
 	"serde",
 	"sp-api/std",
+	"sp-consensus-aura/std",
 	"sp-io/std",
 	"sp-runtime/std",
+	"sp-finality-grandpa/std",
   "sp-transaction-pool/std",
 	"substrate-session/std",
 	"sudo/std",

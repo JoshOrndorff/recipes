@@ -36,6 +36,10 @@ use sp_runtime::{
 	// impl_opaque_keys,
     AnySignature
 };
+use sp_consensus_aura::sr25519::AuthorityId as AuraId;
+use primitives::crypto::Public;
+use sp_finality_grandpa::{AuthorityId as GrandpaId, AuthorityList as GrandpaAuthorityList};
+
 #[cfg(feature = "std")]
 use version::NativeVersion;
 use version::RuntimeVersion;
@@ -294,38 +298,29 @@ impl_runtime_apis! {
         }
     }
 
-    // Hopefully don't need this, not planning to support offchain workers
-    // impl offchain_primitives::OffchainWorkerApi<Block> for Runtime {
-    //     fn offchain_worker(number: NumberFor<Block>) {
-    //         Executive::offchain_worker(number)
-    //     }
-    // }
+	impl sp_consensus_aura::AuraApi<Block, AuraId> for Runtime {
+		fn slot_duration() -> u64 {
+			3000 //milliseconds
+		}
 
-    // Probably easier to just go with aura or PoW or manual seal
-    // Maybe this can remain largely unchanged..
-    // Will have to get the behavior from the babe pallet somehow.
-    // impl babe_primitives::BabeApi<Block> for Runtime {
-    //     fn configuration() -> babe_primitives::BabeConfiguration {
-    //         // The choice of `c` parameter (where `1 - c` represents the
-    //         // probability of a slot being empty), is done in accordance to the
-    //         // slot duration and expected target block time, for safely
-    //         // resisting network delays of maximum two seconds.
-    //         // <https://research.web3.foundation/en/latest/polkadot/BABE/Babe/#6-practical-results>
-    //         babe_primitives::BabeConfiguration {
-    //             slot_duration: Babe::slot_duration(),//could be hardcoded here
-    //             epoch_length: EpochDuration::get(),//already hardcoded above, could be moved here for simplicity
-    //             c: PRIMARY_PROBABILITY, // already hardcoded above
-    //             genesis_authorities: Babe::authorities(),//could be hardcoded here
-    //             randomness: Babe::randomness(), // This one might be tricky. Prolly needs to come from actual babe pallet
-    //             secondary_slots: true,
-    //         }
-    //     }
-    // }
 
-    // Hopefully don't need this one; not using sessions pallet...
-    // impl substrate_session::SessionKeys<Block> for Runtime {
-    //     fn generate_session_keys(seed: Option<Vec<u8>>) -> Vec<u8> {
-    //         opaque::SessionKeys::generate(seed)
-    //     }
-    // }
+		fn authorities() -> Vec<AuraId> {
+			// Do we need 32 bytes?
+			let alice = AuraId::from_slice(&[0]);
+
+			let mut authorities = Vec::new();
+			authorities.push(alice);
+			authorities
+		}
+	}
+
+	impl sp_finality_grandpa::GrandpaApi<Block> for Runtime {
+		fn grandpa_authorities() -> GrandpaAuthorityList {
+			let alice = GrandpaId::from_slice(&[0]);
+
+			let mut authorities = Vec::new();
+			authorities.push((alice, 1));
+			authorities
+		}
+	}
 }
