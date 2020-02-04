@@ -107,58 +107,22 @@ decl_module! {
         /// Anyone can propose the charity allocate funds to a particular cause in exchange for
 		/// locking some funds.
 		/// (discovery and discussion of worthwhile projects/people would be off-chain)
-        fn propose_charity_spend(
+        fn spend(
             origin,
             dest: T::AccountId,
             amount: BalanceOf<T>,
         ) -> DispatchResult {
-            let proposer = ensure_signed(origin)?;
+            //ensure_root
 
-			T::Currency::reserve(&proposer, bond)
-                .map_err(|_| "Can't afford bond to make proposal")?;
-
-            let proposed_expenditure = Proposal {
-                to: dest.clone(),
-                amount: amount.clone(),
-                when: <system::Module<T>>::block_number(),
-                support: 1u32,
-            };
-            // if previous proposal exists, it is overwritten
-            <Proposals<T>>::insert(&proposer, proposed_expenditure);
+			let _ = T::Currency::transfer(
+				&Self::account_id(),
+				&proposal.to,
+				proposal.amount,
+				AllowDeath,
+			);
 
             Self::deposit_event(RawEvent::TreasuryProposal(dest, amount));
             Ok(())
-        }
-
-        /// Stupid Vote
-        ///
-        /// No anti-sybil mechanism for voters
-        /// 1 vote per call, but no limit on votes
-        fn stupid_vote(
-            origin,
-            vote: T::AccountId,
-        ) -> DispatchResult {
-            let voter = ensure_signed(origin)?;
-            ensure!(Self::is_on_council(&voter), "the voter is on the council");
-            if let Some(mut proposal) = <Proposals<T>>::get(vote) {
-                proposal.support += 1;
-            } else {
-                return Err(DispatchError::Other("proposal associated with vote does not exist"));
-            }
-            Ok(())
-        }
-
-        fn on_finalize(n: T::BlockNumber) {
-            if (n % T::UserSpend::get()).is_zero() {
-                // every `UserSpend` number of blocks,
-                // spend the funds according to member preferences
-                Self::user_spend();
-            }
-
-            if (n % T::TreasurySpend::get()).is_zero() {
-                Self::treasury_spend();
-            }
-
         }
     }
 }
@@ -177,55 +141,6 @@ impl<T: Trait> Module<T> {
     /// The balance of the Treasury's Council's pot of taxed funds
     fn pot() -> BalanceOf<T> {
         T::Currency::free_balance(&Self::account_id())
-    }
-
-    /// The user spend method for executing transfers requested by users
-    fn user_spend() {
-        <TransferRequests<T>>::get().into_iter().for_each(|request| {
-            // execute the transfer request
-            let _ = T::Currency::transfer(&request.from, &request.to, request.amount, AllowDeath);
-            // update the UserDebt storage value designed to manage spending requests queue
-            let old_debt = <UserDebt<T>>::get(&request.from).expect("the debt is only declared in one method and forgiven in this method; weak qed");
-            let new_debt = old_debt.checked_sub(&request.amount).expect("this amount could not underflow because every call matches the symmetric request in `transfer_request` `=>` > 0 always; qed");
-            <UserDebt<T>>::insert(&request.from, new_debt);
-            // get the tax
-            let tax_to_pay = T::Tax::get();
-            // unreserve the tax from the sender
-            T::Currency::unreserve(&request.from, tax_to_pay);
-            // pay the associated tax from the sender to the treasury account
-            let _ = T::Currency::transfer(&request.from, &Self::account_id(), tax_to_pay, AllowDeath);
-        });
-    }
-
-    /// The treasury pot spends according to proposals and votes
-    ///
-    /// too much iteration in the runtime?
-    fn treasury_spend() {
-        let mut budget_remaining = Self::pot();
-        // take a slice of proposals with a certain age
-        let required_age = T::MinimumProposalAge::get();
-        let now = <system::Module<T>>::block_number();
-        let mut old_enough_proposals = Vec::new();
-        <Council<T>>::get().into_iter().for_each(|member| {
-            if let Some(proposal) = <Proposals<T>>::get(member) {
-                if now - proposal.when > required_age.into() {
-                    old_enough_proposals.push(proposal);
-                }
-            }
-        });
-
-        // sort based on support and pay off as many as possible with the budget
-        old_enough_proposals.into_iter().for_each(|proposal| {
-            if proposal.amount <= budget_remaining {
-                budget_remaining -= proposal.amount;
-                let _ = T::Currency::transfer(
-                    &Self::account_id(),
-                    &proposal.to,
-                    proposal.amount,
-                    AllowDeath,
-                );
-            }
-        })
     }
 }
 
