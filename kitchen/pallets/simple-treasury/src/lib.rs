@@ -1,4 +1,12 @@
-// not simple treasury
+//! A Simple Charity which holds and governs a pot of funds.
+//!
+//! The Charity has a pot of funds. The Pot is unique because unlike other token-holding accounts,
+//! it is not controlled by a cryptographic keypair. Rather it belongs to the pallet itself.
+//! Anyone can donate funds to the pot through the donate extrinsic.
+//! Anyone can propose where funds be allocated through the propose_charity_spend extrinsic. Each
+//! spend proposal requires the proposer to lock some funds.
+//! Each SpendPeriod, members of a council which was established at genesis vote on which proposal
+//! they most prefer and that proposal is executed.
 #![cfg_attr(not(feature = "std"), no_std)]
 
 use parity_scale_codec::{Decode, Encode};
@@ -14,66 +22,44 @@ use support::{decl_event, decl_module, decl_storage, dispatch::{DispatchResult, 
 use system::{self, ensure_signed};
 
 type BalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::Balance;
-const PALLET_ID: ModuleId = ModuleId(*b"example ");
+
+// This pallet ID will be used to create the special Pot Account
+const PALLET_ID: ModuleId = ModuleId(*b"SimpleCharity");
 
 pub trait Trait: system::Trait {
     /// The overarching event type.
     type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
-    /// The currency type for this module
+    /// The currency type that the charity deals in
     type Currency: Currency<Self::AccountId> + ReservableCurrency<Self::AccountId>;
-    /// The collateral associated with a transfer
-    type Tax: Get<BalanceOf<Self>>;
-    /// Period between successive batch spends
-    type UserSpend: Get<Self::BlockNumber>;
+	/// The amount that must be bonded to propose a fund recipient
+	type ProposalBond: Get<BalanceOf<Self>>;
     /// Period between successive treasuery spends
-    type TreasurySpend: Get<Self::BlockNumber>;
-    /// Minimum amount of time until a proposal might get approved
-    type MinimumProposalAge: Get<Self::BlockNumber>;
-}
-
-#[derive(Encode, Decode, PartialEq)]
-pub struct SpendRequest<AccountId, Balance> {
-    /// Sending account
-    from: AccountId,
-    /// Receiving account
-    to: AccountId,
-    /// Send amount
-    amount: Balance,
+    type CharitySpendPeriod: Get<Self::BlockNumber>;
 }
 
 #[cfg_attr(feature = "std", derive(Serialize, Deserialize))]
 #[derive(Encode, Decode, Clone, PartialEq, Eq, RuntimeDebug)]
-pub struct Proposal<AccountId, Balance, BlockNumber> {
+pub struct Proposal<AccountId, Balance> {
     /// Receiving Account
     to: AccountId,
     /// Expenditure amount
     amount: Balance,
-    /// Submission blocknumber (for age requirement)
-    when: BlockNumber,
-    /// Simple support metric
-    support: u32,
 }
 
 decl_storage! {
-    trait Store for Module<T: Trait> as SmplTreasury {
-        /// The amount, the address to which it is sent
-        TransferRequests get(fn transfer_requests): Vec<SpendRequest<T::AccountId, BalanceOf<T>>>;
-        /// Track user debt (to prevent excessive requests beyond means)
-        UserDebt get(fn user_debt): map T::AccountId => Option<BalanceOf<T>>;
-        /// The members which vote on how taxes are spent
+    trait Store for Module<T: Trait> as SimpleTreasury {
+        /// The members who vote on how treasury funds are spent
         Council get(fn council) config():  Vec<T::AccountId>;
         /// The proposals for treasury spending
         Proposals get(fn proposals): map T::AccountId => Option<Proposal<T::AccountId, BalanceOf<T>, T::BlockNumber>>;
     }
     add_extra_genesis {
         build(|config| {
-            // Create the receiving treasury account
+            // Create the charity's pot of funds, and ensure it has the minimum required deposit
             let _ = T::Currency::make_free_balance_be(
                 &<Module<T>>::account_id(),
                 T::Currency::minimum_balance(),
             );
-
-            <Council<T>>::put(&config.council);
         });
     }
 }
@@ -83,17 +69,16 @@ decl_event!(
     where
         Balance = BalanceOf<T>,
         <T as system::Trait>::AccountId,
-        <T as system::Trait>::BlockNumber
+        <T as system::Trait>::BlockNumber,
     {
-        /// New spend request
-        TransferRequested(AccountId, AccountId, Balance),
-        /// Transfer request approved and delayed spend is executed
-        TransferExecuted(AccountId, Balance, BlockNumber),
-        /// Treasury spend proposed (proposed destination)
-        TreasuryProposal(AccountId, Balance),
-        /// Treasury spend executed
-        TreasurySpent(AccountId, Balance, BlockNumber),
+		/// Donor has made a charitable donation to the charity
+		DonationReceived(AccountId, Balance),
+        /// Fund allocation proposed (proposed destination)
+        AllocationProposed(AccountId, Balance),
+        /// Funds allocated by the charity
+        FundsAllocated(AccountId, Balance, BlockNumber),
         /// For testing purposes, to impl From<()> for TestEvent to assign `()` to balances::Event
+		/// TODO Do we even need this?
         NullEvent(u32), // u32 could be aliases as an error code for mocking setup
     }
 );
@@ -102,60 +87,35 @@ decl_module! {
     pub struct Module<T: Trait> for enum Call where origin: T::Origin {
         fn deposit_event() = default;
 
-        const Tax: BalanceOf<T> = T::Tax::get();
-        const UserSpend: T::BlockNumber = T::UserSpend::get();
-        const TreasurySpend: T::BlockNumber = T::TreasurySpend::get();
-        const MinimumProposalAge: T::BlockNumber = T::MinimumProposalAge::get();
+        const CharitySpendPeriodSpend: T::BlockNumber = T::TreasurySpend::get();
 
-        /// Transfer Request
-        ///
-        /// SpendRequest`s are queued in the `SpendQ` which is dispatched every `SpendPeriod`
-        /// The tax amount is reserved from sender and paid when executing the spend (in an atomic operation)
-        fn request_transfer(
+        /// Donate some funds to the charity
+        fn donate(
             origin,
-            dest: T::AccountId,
             amount: BalanceOf<T>
         ) -> DispatchResult {
-            let sender = ensure_signed(origin)?;
+            let donor = ensure_signed(origin)?;
 
-            // the bond calculation could depend on the transfer amount
-            let bond = T::Tax::get();
-            T::Currency::reserve(&sender, bond)
-                .map_err(|_| "Must be able to pay tax to make transfer")?;
-            // error message could print the tax amount
+            let _ = T::Currency::transfer(&donor, &Self::account_id(), &amount, AllowDeath);
 
-            // could add some ensure statement to prevent excessive requests by checking `UserDebt`
-
-            let requested_spend = SpendRequest {
-                from: sender.clone(),
-                to: dest.clone(),
-                amount: amount.clone(),
-            };
-            <TransferRequests<T>>::append(&[requested_spend])?;
-            match <UserDebt<T>>::get(&sender) {
-                Some(old_debt) => {
-                    let new_debt = old_debt.checked_add(&amount.clone()).ok_or("overflowed upon adding user_debt")?;
-                    <UserDebt<T>>::insert(&sender, new_debt)
-                }
-                None => <UserDebt<T>>::insert(sender.clone(), amount.clone())
-            }
-            Self::deposit_event(RawEvent::TransferRequested(sender, dest, amount));
+            Self::deposit_event(RawEvent::DonationMade(donor, amount));
             Ok(())
         }
 
         /// Propose Spend
-        ///
-        /// members can propose capital spending to addresses (from the pot)
-        /// (discovery and discussion of worthwhile projects/people would be off-chain)
-        fn propose_treasury_spend(
+		///
+        /// Anyone can propose the charity allocate funds to a particular cause in exchange for
+		/// locking some funds.
+		/// (discovery and discussion of worthwhile projects/people would be off-chain)
+        fn propose_charity_spend(
             origin,
             dest: T::AccountId,
             amount: BalanceOf<T>,
         ) -> DispatchResult {
             let proposer = ensure_signed(origin)?;
-            ensure!(Self::is_on_council(&proposer), "must be on council to make proposal");
 
-            // <*could add a bond associated with proposals here*>
+			T::Currency::reserve(&proposer, bond)
+                .map_err(|_| "Can't afford bond to make proposal")?;
 
             let proposed_expenditure = Proposal {
                 to: dest.clone(),
