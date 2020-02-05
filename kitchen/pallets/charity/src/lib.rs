@@ -13,7 +13,7 @@ use sp_runtime::{
     traits::{AccountIdConversion},
     ModuleId,
 };
-#[cfg(feature = "std")]
+
 use frame_support::traits::{Currency, ExistenceRequirement::AllowDeath, OnUnbalanced, Imbalance};
 use frame_support::{
 	decl_event,
