@@ -19,7 +19,7 @@ use frame_support::{
 	decl_event,
 	decl_module,
 	decl_storage,
-	dispatch::{DispatchResult}
+	dispatch::{DispatchResult, DispatchError},
 };
 use frame_system::{self as system, ensure_signed, ensure_root};
 
@@ -65,7 +65,6 @@ decl_event!(
 		/// Charity has allocated funds to a cause
 		FundsAllocated(AccountId, Balance, Balance),
         /// For testing purposes, to impl From<()> for TestEvent to assign `()` to balances::Event
-		/// TODO Do we even need this?
         NullEvent(u32), // u32 could be aliases as an error code for mocking setup
     }
 );
@@ -81,7 +80,8 @@ decl_module! {
         ) -> DispatchResult {
             let donor = ensure_signed(origin)?;
 
-            let _ = T::Currency::transfer(&donor, &Self::account_id(), amount, AllowDeath);
+            T::Currency::transfer(&donor, &Self::account_id(), amount, AllowDeath)
+				.map_err(|_| DispatchError::Other("Can't make donation"))?;
 
             Self::deposit_event(RawEvent::DonationReceived(donor, amount, Self::pot()));
             Ok(())
@@ -99,12 +99,12 @@ decl_module! {
             ensure_root(origin)?;
 
 			// Make the transfer requested
-			let _ = T::Currency::transfer(
+			T::Currency::transfer(
 				&Self::account_id(),
 				&dest,
 				amount,
 				AllowDeath,
-			);
+			).map_err(|_| DispatchError::Other("Can't make allocation"))?;
 
 			//TODO what about errors here??
 
@@ -151,7 +151,8 @@ mod tests {
         traits::{BlakeTwo256, IdentityLookup},
         Perbill,
     };
-    use support::{assert_ok, assert_err, impl_outer_event, impl_outer_origin, parameter_types};
+    use frame_support::{assert_ok, assert_err, impl_outer_event, impl_outer_origin, parameter_types};
+	use frame_system::RawOrigin;
 
     impl_outer_origin! {
         pub enum Origin for TestRuntime {}
@@ -255,70 +256,69 @@ mod tests {
         })
     }
 
-    /// Transfer reserves tax == 2
     #[test]
-    fn transfer_reserves_tax() {
+    fn donations_work() {
         new_test_ext().execute_with(|| {
-            assert_err!(
-                Treasury::request_transfer(Origin::signed(3), 1, 1),
-                "Must be able to pay tax to make transfer"
-            );
-            assert_ok!(Treasury::request_transfer(Origin::signed(1), 2, 8));
-            assert_eq!(Balances::reserved_balance(&1), 2);
-            let mock_spend_request = SpendRequest {
-                from: 1,
-                to: 2,
-                amount: 8, // Balances::from()
-            };
-            // check that the expected spend request is in runtime storage
-            assert!(Treasury::transfer_requests()
-                .iter()
-                .any(|a| *a == mock_spend_request));
+			// User 1 donates 10 of her 13 tokens
+            assert_ok!(Charity::donate(Origin::signed(1), 10));
 
-            // check that user debt is correctly tracked
-            assert_eq!(Treasury::user_debt(&1).unwrap(), 8,);
+			// Charity should have 10 tokens
+			assert_eq!(Charity::pot(), 10);
 
-            // check that the correct event is emitted
-            let expected_event = TestEvent::treasury(RawEvent::TransferRequested(
-                1,
-                2,
-                8,
-            ));
+			// Donor should have 3 remaining
+            assert_eq!(Balances::free_balance(&1), 3);
+
+            // Check that the correct event is emitted
+            let expected_event = TestEvent::charity(RawEvent::DonationReceived(1, 10, 10));
             assert!(System::events().iter().any(|a| a.event == expected_event));
         })
     }
 
-    #[test]
-    fn propose_treasury_spend_works() {
+	#[test]
+    fn cant_donate_too_much() {
         new_test_ext().execute_with(|| {
-            assert_err!(
-                Treasury::propose_treasury_spend(Origin::signed(8), 1, 10u64.into()),
-                "must be on council to make proposal"
-            );
-            System::set_block_number(5);
-            assert_ok!(Treasury::propose_treasury_spend(Origin::signed(1), 8, 10u64.into()));
-
-            let expected_proposal = Proposal {
-                to: 8,
-                amount: 10u64.into(),
-                when: 5u64.into(),
-                support: 1u32,
-            };
-            assert_eq!(
-                Treasury::proposals(1).unwrap(),
-                expected_proposal
-            );
-
-            let expected_event = TestEvent::treasury(RawEvent::TreasuryProposal(
-                8,
-                10u64.into(),
-            ));
-            assert!(System::events().iter().any(|a| a.event == expected_event));
+			// User 1 donates 20 toekns but only has 13
+            assert_err!(Charity::donate(Origin::signed(1), 20), "Can't make donation");
         })
     }
 
-    // TODO: test
-    // - user_spend and expected behavior in different environments with `on_finalize`
-    // - treasury_spend and expected behavior in different environments with `on_finalize`
-    // - both in different order (need to test all possible overlapping configurations, maybe in a model checker like TLA+)
+	#[test]
+	fn imbalances_work() {
+		new_test_ext().execute_with(|| {
+			let imb = balances::NegativeImbalance::new(5);
+			Charity::on_nonzero_unbalanced(imb);
+
+			assert_eq!(Charity::pot(), 5);
+
+			// Check that the correct event is emitted
+			let expected_event = TestEvent::charity(RawEvent::ImbalanceAbsorbed(5, 5));
+			assert!(System::events().iter().any(|a| a.event == expected_event));
+		})
+	}
+
+	#[test]
+	fn allocating_works() {
+		new_test_ext().execute_with(|| {
+			// Charity acquires 10 tokens from user 1
+			assert_ok!(Charity::donate(Origin::signed(1), 10));
+
+			// Charity allocates 5 tokens to user 2
+			assert_ok!(Charity::allocate(RawOrigin::Root.into(), 2, 5));
+
+			// Check that the correct event is emitted
+			let expected_event = TestEvent::charity(RawEvent::FundsAllocated(2, 5, 5));
+			assert!(System::events().iter().any(|a| a.event == expected_event));
+		})
+	}
+	//TODO What if we try to allocate more funds than we have
+	#[test]
+	fn cant_allocate_too_much() {
+		new_test_ext().execute_with(|| {
+			// Charity acquires 10 tokens from user 1
+			assert_ok!(Charity::donate(Origin::signed(1), 10));
+
+			// Charity tries to allocates 20 tokens to user 2
+			assert_err!(Charity::allocate(RawOrigin::Root.into(), 2, 20), "Can't make allocation");
+		})
+	}
 }
