@@ -22,6 +22,7 @@
     - [Weights for Resource Accounting](./traits/weights.md)
     - [Transaction Fees for Economic Security](./traits/fees.md)
     - [Instantiable Pallets](./storage/instantiable.md)
+		- [Charity and Imbalances](./traits/charity.md)
     - [Runtime APIs](./advanced/runtime-api.md)
     - [Custom RPCs](./advanced/custom-rpc.md)
 - [Declarative Syntax](./declarative/README.md)
