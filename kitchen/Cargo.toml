@@ -2,6 +2,7 @@
 members = [
   "pallets/adding-machine",
   "pallets/basic-token",
+  "pallets/charity",
   "pallets/check-membership",
   "pallets/child-trie",
   "pallets/constant-config",
@@ -19,7 +20,6 @@ members = [
   "pallets/simple-event",
   "pallets/simple-map",
   "pallets/single-value",
-  "pallets/simple-treasury",
   #"pallets/smpl-crowdfund",
   # "pallets/pallet-panic",
   "pallets/storage-cache",

@@ -1,6 +1,3 @@
-[profile.release]
-panic = 'unwind'
-
 [package]
 authors = ['Anonymous']
 build = 'build.rs'

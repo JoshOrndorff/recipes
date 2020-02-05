@@ -254,6 +254,11 @@ impl basic_token::Trait for Runtime {
     type Event = Event;
 }
 
+impl charity::Trait for Runtime {
+    type Event = Event;
+    type Currency = Balances;
+}
+
 parameter_types! {
     pub const MaxAddend: u32 = 1738;
     pub const ClearFrequency: u32 = 10;
@@ -321,22 +326,6 @@ impl simple_map::Trait for Runtime {
     type Event = Event;
 }
 
-parameter_types!{
-    pub const Tax: u32 = 1000;
-    pub const UserSpend: u32 = 1000;
-    pub const TreasurySpend: u32 = 1000;
-    pub const MinProposalAge: u32 = 10;
-}
-
-impl simple_treasury::Trait for Runtime {
-    type Event = Event;
-    type Currency = Balances;
-    type Tax = Tax;
-    type UserSpend = UserSpend;
-    type TreasurySpend = TreasurySpend;
-    type MinimumProposalAge = MinProposalAge;
-}
-
 impl single_value::Trait for Runtime {
     type Event = Event;
 }
@@ -371,6 +360,7 @@ construct_runtime!(
 		// The Recipe Pallets
 		AddingMachine: adding_machine::{Module, Call, Event},
 		BasicToken: basic_token::{Module, Call, Storage, Event<T>},
+		Charity: charity::{Module, Call, Storage, Event<T>},
 		CheckMembership: check_membership::{Module, Call, Storage, Event<T>},
 		ConstantConfig: constant_config::{Module, Call, Storage, Event},
 		DefaultInstance1: default_instance::{Module, Call, Storage, Event<T>},
@@ -383,7 +373,6 @@ construct_runtime!(
 		LinkedMap: linked_map::{Module, Call, Storage, Event<T>},
 		SimpleEvent: simple_event::{Module, Call, Event},
 		SimpleMap: simple_map::{Module, Call, Storage, Event<T>},
-		SimpleTreasury: simple_treasury::{Module, Call, Storage, Event<T>},
 		SingleValue: single_value::{Module, Call, Storage, Event<T>},
 		StorageCache: storage_cache::{Module, Call, Storage, Event<T>},
 		StructStorage: struct_storage::{Module, Call, Storage, Event<T>},

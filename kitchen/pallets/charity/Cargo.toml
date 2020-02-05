@@ -1,5 +1,5 @@
 [package]
-name = "simple-treasury"
+name = "charity"
 version = "0.1.0"
 authors = ["4meta5"]
 edition = "2018"
@@ -8,8 +8,8 @@ edition = "2018"
 default = ['std']
 std = [
     'parity-scale-codec/std',
-    'support/std',
-    'system/std',
+    'frame-support/std',
+    'frame-system/std',
     'balances/std',
     'sp-runtime/std',
 ]
@@ -22,16 +22,14 @@ default-features = false
 features = ['derive']
 version = '1.1.0'
 
-[dependencies.support]
+[dependencies.frame-support]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
-package = 'frame-support'
 rev = '3e651110aa06aa835790df63410a29676243fc54'
 
-[dependencies.system]
+[dependencies.frame-system]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
-package = 'frame-system'
 rev = '3e651110aa06aa835790df63410a29676243fc54'
 
 [dependencies.balances]
@@ -45,20 +43,17 @@ default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 rev = '3e651110aa06aa835790df63410a29676243fc54'
 
-[dependencies.rstd]
+[dependencies.sp-std]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
-package = 'sp-std'
 rev = '3e651110aa06aa835790df63410a29676243fc54'
 
-[dev-dependencies.primitives]
+[dev-dependencies.sp-core]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
-package = 'sp-core'
 rev = '3e651110aa06aa835790df63410a29676243fc54'
 
-[dev-dependencies.runtime-io]
+[dev-dependencies.sp-io]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
-package = 'sp-io'
 rev = '3e651110aa06aa835790df63410a29676243fc54'

@@ -19,7 +19,7 @@ const pallets = [
   "linked-map",
   "simple-event",
   "simple-map",
-  "simple-treasury",
+  "charity",
   "single-value",
   "storage-cache",
   "struct-storage",

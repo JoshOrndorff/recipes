@@ -20,7 +20,7 @@ last-caller = { path = "../../pallets/last-caller", default-features = false }
 linked-map = { path = "../../pallets/linked-map", default-features = false }
 simple-event = { path = "../../pallets/simple-event", default_features = false }
 simple-map = { path = "../../pallets/simple-map", default-features = false }
-simple-treasury = { path = "../../pallets/simple-treasury", default-features = false }
+charity = { path = "../../pallets/charity", default-features = false }
 single-value = { path = "../../pallets/single-value", default-features = false }
 storage-cache = { path = "../../pallets/storage-cache", default-features = false }
 struct-storage = { path = "../../pallets/struct-storage", default-features = false }
@@ -204,6 +204,7 @@ std = [
 	# Recipes pallets
 	"adding-machine/std",
 	"basic-token/std",
+	"charity/std",
 	"check-membership/std",
 	"constant-config/std",
 	"default-instance/std",
@@ -214,7 +215,6 @@ std = [
 	"linked-map/std",
 	"simple-event/std",
 	"simple-map/std",
-	"simple-treasury/std",
 	"storage-cache/std",
 	"single-value/std",
 	"struct-storage/std",
