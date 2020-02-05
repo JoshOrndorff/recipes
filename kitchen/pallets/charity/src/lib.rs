@@ -8,15 +8,20 @@
 //! Funds can only be allocated by a root call to the `allocate` extrinsic/
 #![cfg_attr(not(feature = "std"), no_std)]
 
-use rstd::prelude::*;
+use sp_std::prelude::*;
 use sp_runtime::{
     traits::{AccountIdConversion},
     ModuleId,
 };
 #[cfg(feature = "std")]
-use support::traits::{Currency, ExistenceRequirement::AllowDeath, OnUnbalanced, Imbalance};
-use support::{decl_event, decl_module, decl_storage, dispatch::{DispatchResult}};
-use system::{self, ensure_signed, ensure_root};
+use frame_support::traits::{Currency, ExistenceRequirement::AllowDeath, OnUnbalanced, Imbalance};
+use frame_support::{
+	decl_event,
+	decl_module,
+	decl_storage,
+	dispatch::{DispatchResult}
+};
+use frame_system::{self as system, ensure_signed, ensure_root};
 
 type BalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::Balance;
 type NegativeImbalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::NegativeImbalance;
@@ -139,8 +144,8 @@ impl<T: Trait> OnUnbalanced<NegativeImbalanceOf<T>> for Module<T> {
 mod tests {
     use crate::*;
     use balances;
-    use primitives::H256;
-    use runtime_io;
+    use sp_core::H256;
+    use sp_io;
     use sp_runtime::{
         testing::Header,
         traits::{BlakeTwo256, IdentityLookup},
@@ -222,7 +227,7 @@ mod tests {
     pub type Charity = Module<TestRuntime>;
 
     // An alternative to `ExtBuilder` which includes custom configuration
-    pub fn new_test_ext() -> runtime_io::TestExternalities {
+    pub fn new_test_ext() -> sp_io::TestExternalities {
         let mut t = system::GenesisConfig::default()
             .build_storage::<TestRuntime>()
             .unwrap();
