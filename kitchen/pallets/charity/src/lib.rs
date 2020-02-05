@@ -2,59 +2,42 @@
 //!
 //! The Charity has a pot of funds. The Pot is unique because unlike other token-holding accounts,
 //! it is not controlled by a cryptographic keypair. Rather it belongs to the pallet itself.
-//! Anyone can donate funds to the pot through the donate extrinsic.
-//! Anyone can propose where funds be allocated through the propose_charity_spend extrinsic. Each
-//! spend proposal requires the proposer to lock some funds.
-//! Each SpendPeriod, members of a council which was established at genesis vote on which proposal
-//! they most prefer and that proposal is executed.
+//! Funds can be added to the pot in two ways:
+//! * Anyone can make a donation through the `donate` extrinsic.
+//! * An imablance can be absorbed from somewhere else in the runtime.
+//! Funds can only be allocated by a root call to the `allocate` extrinsic/
 #![cfg_attr(not(feature = "std"), no_std)]
 
-use parity_scale_codec::{Decode, Encode};
 use rstd::prelude::*;
 use sp_runtime::{
-    traits::{AccountIdConversion, CheckedAdd, CheckedSub, Zero},
-    ModuleId, RuntimeDebug,
+    traits::{AccountIdConversion},
+    ModuleId,
 };
 #[cfg(feature = "std")]
-use serde::{Deserialize, Serialize};
-use support::traits::{Currency, ExistenceRequirement::AllowDeath, Get, ReservableCurrency};
-use support::{decl_event, decl_module, decl_storage, dispatch::{DispatchResult, DispatchError}, ensure, StorageValue};
-use system::{self, ensure_signed};
+use support::traits::{Currency, ExistenceRequirement::AllowDeath, OnUnbalanced, Imbalance};
+use support::{decl_event, decl_module, decl_storage, dispatch::{DispatchResult}};
+use system::{self, ensure_signed, ensure_root};
 
 type BalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::Balance;
+type NegativeImbalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::NegativeImbalance;
 
-// This pallet ID will be used to create the special Pot Account
-const PALLET_ID: ModuleId = ModuleId(*b"SimpleCharity");
+/// Hardcoded pallet ID; used to create the special Pot Account
+/// Must be exactly 8 characters long
+const PALLET_ID: ModuleId = ModuleId(*b"Charity!");
 
 pub trait Trait: system::Trait {
     /// The overarching event type.
     type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
     /// The currency type that the charity deals in
-    type Currency: Currency<Self::AccountId> + ReservableCurrency<Self::AccountId>;
-	/// The amount that must be bonded to propose a fund recipient
-	type ProposalBond: Get<BalanceOf<Self>>;
-    /// Period between successive treasuery spends
-    type CharitySpendPeriod: Get<Self::BlockNumber>;
-}
-
-#[cfg_attr(feature = "std", derive(Serialize, Deserialize))]
-#[derive(Encode, Decode, Clone, PartialEq, Eq, RuntimeDebug)]
-pub struct Proposal<AccountId, Balance> {
-    /// Receiving Account
-    to: AccountId,
-    /// Expenditure amount
-    amount: Balance,
+    type Currency: Currency<Self::AccountId>;
 }
 
 decl_storage! {
     trait Store for Module<T: Trait> as SimpleTreasury {
-        /// The members who vote on how treasury funds are spent
-        Council get(fn council) config():  Vec<T::AccountId>;
-        /// The proposals for treasury spending
-        Proposals get(fn proposals): map T::AccountId => Option<Proposal<T::AccountId, BalanceOf<T>, T::BlockNumber>>;
-    }
+		// No storage items of our own, but we still need decl_storage to initialize the pot
+	}
     add_extra_genesis {
-        build(|config| {
+        build(|_config| {
             // Create the charity's pot of funds, and ensure it has the minimum required deposit
             let _ = T::Currency::make_free_balance_be(
                 &<Module<T>>::account_id(),
@@ -69,14 +52,13 @@ decl_event!(
     where
         Balance = BalanceOf<T>,
         <T as system::Trait>::AccountId,
-        <T as system::Trait>::BlockNumber,
     {
 		/// Donor has made a charitable donation to the charity
-		DonationReceived(AccountId, Balance),
-        /// Fund allocation proposed (proposed destination)
-        AllocationProposed(AccountId, Balance),
-        /// Funds allocated by the charity
-        FundsAllocated(AccountId, Balance, BlockNumber),
+		DonationReceived(AccountId, Balance, Balance),
+        /// An imbalance from elsewhere in the runtime has been absorbed by the Charity
+		ImbalanceAbsorbed(Balance, Balance),
+		/// Charity has allocated funds to a cause
+		FundsAllocated(AccountId, Balance, Balance),
         /// For testing purposes, to impl From<()> for TestEvent to assign `()` to balances::Event
 		/// TODO Do we even need this?
         NullEvent(u32), // u32 could be aliases as an error code for mocking setup
@@ -87,8 +69,6 @@ decl_module! {
     pub struct Module<T: Trait> for enum Call where origin: T::Origin {
         fn deposit_event() = default;
 
-        const CharitySpendPeriodSpend: T::BlockNumber = T::TreasurySpend::get();
-
         /// Donate some funds to the charity
         fn donate(
             origin,
@@ -96,54 +76,54 @@ decl_module! {
         ) -> DispatchResult {
             let donor = ensure_signed(origin)?;
 
-            let _ = T::Currency::transfer(&donor, &Self::account_id(), &amount, AllowDeath);
+            let _ = T::Currency::transfer(&donor, &Self::account_id(), amount, AllowDeath);
 
-            Self::deposit_event(RawEvent::DonationMade(donor, amount));
+            Self::deposit_event(RawEvent::DonationReceived(donor, amount, Self::pot()));
             Ok(())
         }
 
-        /// Propose Spend
+        /// Allocate the Charity's funds
 		///
-        /// Anyone can propose the charity allocate funds to a particular cause in exchange for
-		/// locking some funds.
-		/// (discovery and discussion of worthwhile projects/people would be off-chain)
-        fn spend(
+        /// Take funds from the Charity's pot and send them somewhere. This cal lrequires root origin,
+		/// which means it must come from a governance mechanism such as Substrate's Democracy pallet.
+        fn allocate(
             origin,
             dest: T::AccountId,
             amount: BalanceOf<T>,
         ) -> DispatchResult {
-            //ensure_root
+            ensure_root(origin)?;
 
+			// Make the transfer requested
 			let _ = T::Currency::transfer(
 				&Self::account_id(),
-				&proposal.to,
-				proposal.amount,
+				&dest,
+				amount,
 				AllowDeath,
 			);
 
-            Self::deposit_event(RawEvent::TreasuryProposal(dest, amount));
+			//TODO what about errors here??
+
+            Self::deposit_event(RawEvent::FundsAllocated(dest, amount, Self::pot()));
             Ok(())
         }
     }
 }
 
 impl<T: Trait> Module<T> {
-    /// Check that the signer is on the Treasury's Council
-    pub fn is_on_council(who: &T::AccountId) -> bool {
-        Self::council().contains(who)
-    }
-
-    /// The account ID of the Treasury's Council
+    /// The account ID that holds the Charity's funds
     pub fn account_id() -> T::AccountId {
         PALLET_ID.into_account()
     }
 
-    /// The balance of the Treasury's Council's pot of taxed funds
+    /// The Charity's balance
     fn pot() -> BalanceOf<T> {
         T::Currency::free_balance(&Self::account_id())
     }
 }
 
+// This implementation allows the charity to be the recipient of funds that are burned elsewhere in
+// the runtime. For eample, it could be transaction fees, consensus-related slashing, or burns that
+// align incentives in other pallets.
 impl<T: Trait> OnUnbalanced<NegativeImbalanceOf<T>> for Module<T> {
 	fn on_nonzero_unbalanced(amount: NegativeImbalanceOf<T>) {
 		let numeric_amount = amount.peek();
@@ -151,7 +131,7 @@ impl<T: Trait> OnUnbalanced<NegativeImbalanceOf<T>> for Module<T> {
 		// Must resolve into existing but better to be safe.
 		let _ = T::Currency::resolve_creating(&Self::account_id(), amount);
 
-		Self::deposit_event(RawEvent::Deposit(numeric_amount));
+		Self::deposit_event(RawEvent::ImbalanceAbsorbed(numeric_amount, Self::pot()));
 	}
 }
 
@@ -216,40 +196,30 @@ mod tests {
         type CreationFee = CreationFee;
     }
 
-    mod treasury {
+    mod charity {
         pub use crate::Event;
     }
 
     impl_outer_event! {
         pub enum TestEvent for TestRuntime {
-            treasury<T>,
+            charity<T>,
         }
     }
 
     impl std::convert::From<()> for TestEvent {
         fn from(_unit: ()) -> Self {
-            TestEvent::treasury(RawEvent::NullEvent(6))
+            TestEvent::charity(RawEvent::NullEvent(6))
         }
     }
 
-    parameter_types! {
-        pub const Tax: u64 = 2;
-        pub const UserSpend: u64 = 10;
-        pub const TreasurySpend: u64 = 10;
-        pub const MinimumProposalAge: u64 = 3;
-    }
     impl Trait for TestRuntime {
         type Event = TestEvent;
         type Currency = balances::Module<Self>;
-        type Tax = Tax;
-        type UserSpend = UserSpend;
-        type TreasurySpend = TreasurySpend;
-        type MinimumProposalAge = MinimumProposalAge;
     }
 
     pub type System = system::Module<TestRuntime>;
     pub type Balances = balances::Module<TestRuntime>;
-    pub type Treasury = Module<TestRuntime>;
+    pub type Charity = Module<TestRuntime>;
 
     // An alternative to `ExtBuilder` which includes custom configuration
     pub fn new_test_ext() -> runtime_io::TestExternalities {
@@ -257,26 +227,15 @@ mod tests {
             .build_storage::<TestRuntime>()
             .unwrap();
         balances::GenesisConfig::<TestRuntime> {
+			// Provide some initial balances
             balances: vec![
-                // members of council (can also be users)
                 (1, 13),
                 (2, 11),
                 (3, 1),
                 (4, 3),
                 (5, 19),
-                (6, 23),
-                (7, 17),
-                // users, not members of council
-                (8, 1),
-                (9, 22),
-                (10, 46),
             ],
             vesting: vec![],
-        }
-        .assimilate_storage(&mut t)
-        .unwrap();
-        GenesisConfig::<TestRuntime> {
-            council: vec![1, 2, 3, 4, 5, 6, 7],
         }
         .assimilate_storage(&mut t)
         .unwrap();
@@ -287,14 +246,7 @@ mod tests {
     #[test]
     fn new_test_ext_behaves() {
         new_test_ext().execute_with(|| {
-            // check membership initiated correctly
-            assert!(Treasury::is_on_council(&1));
-            assert!(Treasury::is_on_council(&2));
-            assert!(Treasury::is_on_council(&3));
-            assert!(Treasury::is_on_council(&4));
-            assert!(Treasury::is_on_council(&5));
-            assert!(Treasury::is_on_council(&6));
-            assert!(Treasury::is_on_council(&7));
+            assert_eq!(Balances::free_balance(&1), 13);
         })
     }
 
