@@ -360,7 +360,7 @@ construct_runtime!(
 		// The Recipe Pallets
 		AddingMachine: adding_machine::{Module, Call, Event},
 		BasicToken: basic_token::{Module, Call, Storage, Event<T>},
-		Charity: charity::{Module, Call, Event<T>},
+		Charity: charity::{Module, Call, Storage, Event<T>},
 		CheckMembership: check_membership::{Module, Call, Storage, Event<T>},
 		ConstantConfig: constant_config::{Module, Call, Storage, Event},
 		DefaultInstance1: default_instance::{Module, Call, Storage, Event<T>},
