@@ -36,4 +36,4 @@
 
 -----------
 
-[More Resources](./base/resource.md)
+[More Resources](./more-resources.md)
