@@ -33,7 +33,6 @@
     - [Basic Test Environments](./testing/mock.md)
     - [Common Tests](./testing/common.md)
     - [Custom Test Environment](./testing/externalities.md)
-- [Featured Tutorials](./base/dessert.md)
 
 -----------
 
