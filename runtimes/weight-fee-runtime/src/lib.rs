@@ -289,6 +289,7 @@ impl<C0, C1, C2> Convert<Weight, Balance> for QuadraticWeightToFee<C0, C1, C2>
 }
 
 // --------------------- An Option to Currency to Collect Fees -----------------------
+#[allow(dead_code)]
 type FixedGenericAsset<T> = AssetCurrency<T, FixedAssetId>;
 
 pub struct FixedAssetId;
