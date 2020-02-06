@@ -1,8 +1,8 @@
 # Summary
 
-- [Introduction](./base/README.md)
+- [Introduction](./introduction.md)
 - [Learn Rust](./base/rust.md)
-- [Getting Started](./base/setup.md)
+- [Preparing Your Kitchen](./base/setup.md)
     - [Running A Node](./base/runnode.md)
     - [Interacting with a Node](./base/interactnode.md)
     - [Using the Kitchen](./base/kitchenoverview.md)
