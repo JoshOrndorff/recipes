@@ -4,6 +4,6 @@ If you followed [the instructions](./runnode.md) to get your node running, you s
 
 Please copy the contents of `kitchen/runtimes/super-runtime/types.json` into Apps. You should already be on the Settings -> Developer tab. If not, please navigate there.
 
-![Screenshot: pasting types into Apps UI](../apps-types.png)
+![Screenshot: pasting types into Apps UI](../img/apps-types.png)
 
 As you work through the recipes, you will use the **Chain state** tab to query the blockchain status and **Extrinsics** to send transactions to the blockchain. Feel free to play around.
