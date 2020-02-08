@@ -19,8 +19,14 @@ Start by cloning the repo on github:
 git clone https://github.com/substrate-developer-hub/recipes
 ```
 
-As you read through the book, practice compiling and testing recipes in [`recipes/kitchen`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen). You can't learn to code by reading about it -- play with the code in the kitchen, extract patterns, and apply them to a problem that you want to solve!
+As you read through the book, practice compiling and testing recipes in [`/kitchen`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen). You can't learn to code by reading about it -- play with the code in the kitchen, extract patterns, and apply them to a problem that you want to solve!
 
 It is useful to recognize that [coding is all about abstraction](https://youtu.be/05H4YsyPA-U?t=1789). To accelerate your progress, I recommend skimming the patterns in this book, composing them into interesting projects, and building your own recipes.
 
 Reach out for guidance on [Stack Overflow](https://stackoverflow.com/questions/tagged/substrate) or in the [Substrate Technical Riot channel](https://riot.im/app/#/room/#substrate-technical:matrix.org).
+
+## Learn Rust
+
+Becoming productive with Substrate requires some familiarity with Rust. Fortunately, the Rust community is known for comprehensive documentation and tutorials. The most common resource for initially learning Rust is [The Rust Book](https://doc.rust-lang.org/book/index.html). To see examples of popular crate usage patterns, [Rust by Example](https://doc.rust-lang.org/rust-by-example/index.html) is also convenient.
+
+While knowing some Rust is certainly necessary, it is not wise to delay learning Substrate until you are a Rust guru. Rather than learning rust _before_ you learn Substrate, consider learning Rust _as_ you learn Substrate. If you're beyond the fundamentals of Rust, there are lots [more rust resources](./more-resources.md) at the end of the book.

@@ -1,11 +1,10 @@
 # Summary
 
 - [Introduction](./introduction.md)
-- [Learn Rust](./base/rust.md)
-- [Preparing Your Kitchen](./base/setup.md)
-    - [Running A Node](./base/runnode.md)
-    - [Interacting with a Node](./base/interactnode.md)
-    - [Using the Kitchen](./base/kitchenoverview.md)
+- [Preparing Your Kitchen](./prepare-kitchen/README.md)
+    - [Running A Node](./prepare-kitchen/1-build-node.md)
+    - [Interacting with a Node](./prepare-kitchen/2-interact-node.md)
+    - [Using the Kitchen](./prepare-kitchen/3-kitchen-organization.md)
 - [Hello Substrate](./basics/README.md)
     - [Events Verify Execution](./basics/events.md)
     - [Adding Machine](./basics/adder.md)
