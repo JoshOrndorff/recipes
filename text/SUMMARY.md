@@ -1,6 +1,6 @@
 # Summary
 
-- [Introduction](./introduction.md)
+[Introduction](./introduction.md)
 - [Preparing Your Kitchen](./prepare-kitchen/README.md)
     - [Running A Node](./prepare-kitchen/1-build-node.md)
     - [Interacting with a Node](./prepare-kitchen/2-interact-node.md)

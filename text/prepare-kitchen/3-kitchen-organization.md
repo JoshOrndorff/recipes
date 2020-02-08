@@ -4,9 +4,11 @@ Now that your kitchen is well-equipped with all the right tool (bowl, knives, ru
 
 ## Structure of a Substrate Node
 
+It is useful to recognize that [coding is all about abstraction](https://youtu.be/05H4YsyPA-U?t=1789).
+
 To understand how the code in this repository is organized, let's first take a look at how a Substrate node is constructed. Each node has many components that manage things like queueing transaction, communicating over a P2P network, reaching consensus on the state of the blockchain, and the chain's actual runtime logic. Each aspect of the node is interesting in its own right, and the runtime is particularly interesting because it contains the business logic (aka "state transition function") that codifies the chain's functionality.
 
-Much, but not all of the Recipes focuses on writing runtimes with FRAME, Parity's Framework for composing runtimes from individual building blocks called Pallets. Runtimes built with FRAME typically contain several such pallets. The kitchen node you built previously follows this paradigm.
+Much, but not all, of the Recipes focuses on writing runtimes with FRAME, Parity's Framework for composing runtimes from individual building blocks called Pallets. Runtimes built with FRAME typically contain several such pallets. The kitchen node you built previously follows this paradigm.
 
 * Blockchain Node
 	* P2P Messaging
@@ -27,7 +29,7 @@ There are four primary directories in this repository:
 * **Runtimes**: Complete runtimes for use in Substrate nodes.
 * **Pallets**: Complete pallets for use in FRAME-based runtimes.
 
-Exploring those directories gives a tree that looks like this
+Exploring those directories reveals a tree that looks like this
 ```
 recipes
 |
