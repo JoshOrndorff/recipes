@@ -1,5 +1,5 @@
 # Computational Resources and Weights
-*[`kitchen/pallets/weights`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/weights)*
+*[`pallets/weights`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/weights)*
 
 Any computational resources used by a transaction must be accounted for so that appropriate fees can be applied, and it is a pallet author's job to ensure that this accounting happens. Substrate provides a mechanism known as transaction weighting to quantify the resources consumed while executing a transaction.
 

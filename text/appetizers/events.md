@@ -1,5 +1,5 @@
 # Event
-*[`kitchen/pallets/simple-event`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/simple-event)*, *[`kitchen/pallets/generic-event`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/generic-event)*
+*[`pallets/simple-event`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-event)*, *[`pallets/generic-event`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/generic-event)*
 
 In Substrate, [transaction](https://docs.substrate.dev/docs/glossary#section-transaction) finality does not guarantee the execution of functions dependent on the given transaction. To verify that functions have executed successfully, emit an [event](https://docs.substrate.dev/docs/glossary#section-events) at the bottom of the function body.
 
@@ -9,7 +9,7 @@ To declare an event, use the [`decl_event`](https://substrate.dev/rustdocs/maste
 
 ## Simple Event
 
-The [simplest example of an event](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/simple-event) uses the following syntax
+The simplest example of an event uses the following syntax
 
 ```rust, ignore
 decl_event!(
@@ -27,7 +27,7 @@ Self::deposit_event(Event::EmitInput(new_number));
 
 ## Events with Generic Types
 
-[Sometimes](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/generic-event) events might contin types from the pallet's Configuration Trait. In this case, it is necessary to specify additional syntax
+[Sometimes](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/generic-event) events might contin types from the pallet's Configuration Trait. In this case, it is necessary to specify additional syntax
 
 ```rust, ignore
 decl_event!(

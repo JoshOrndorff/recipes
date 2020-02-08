@@ -1,12 +1,12 @@
 # Custom RPCs
-*[`kitchen/nodes/rpc-node`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/nodes/rpc-node)*
-*[`kitchen/runtime/api-runtime`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/runtime/api-runtime)*
+*[`nodes/rpc-node`](https://github.com/substrate-developer-hub/recipes/tree/master/nodes/rpc-node)*
+*[`runtime/api-runtime`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/api-runtime)*
 
 Remote Procedure Calls, or RPCs, are a way for an external program (eg. a frontend) to communicate with a Substrate node. They are used for checking storage values, submitting transactions, and querying the current consensus authorities. Substrate comes with several [default RPCs](https://polkadot.js.org/api/substrate/rpc.html). In many cases it is useful to add custom RPCs to your node. In this recipe, we will add two custom RPCs to our node, one of which calls into a [custom runtime API](./runtime-api.md).
 
 ## Defining an RPC
 Every RPC that the node will use must be defined in a trait. We'll begin by defining a simple RPC
-called "silly rpc" which just returns constant integers. A Hello world of sorts. In the `kitchen/nodes/rpc-node/src/silly_rpc.rs` file, we define a basic rpc as
+called "silly rpc" which just returns constant integers. A Hello world of sorts. In the `nodes/rpc-node/src/silly_rpc.rs` file, we define a basic rpc as
 
 ```rust
 #[rpc]
@@ -106,7 +106,7 @@ To which the RPC responds with the doubled parameter
 
 The silly RPC demonstrates the fundamentals of working with RPCs in Substrate. Nonetheless, most RPCs will go beyond what we've learned so far, and actually interact with other parts of the node. In this second example, we will include an RPC that calls into the `sum-storage` runtime API from the [runtime API recipe](./runtime-api.md). While it isn't strictly necessary to understand what the runtime API does, reading that recipe may provide helpful context.
 
-Because this RPC's behavior is closely related to a specific pallet, we've chosen to define the RPC in the pallet's directory. In this case the RPC is defined in `kitchen/pallets/sum-storage/rpc`. So rather than using the `mod` keyword as we did before, we must include this RPC definition in the node's `Cargo.toml` file.
+Because this RPC's behavior is closely related to a specific pallet, we've chosen to define the RPC in the pallet's directory. In this case the RPC is defined in `pallets/sum-storage/rpc`. So rather than using the `mod` keyword as we did before, we must include this RPC definition in the node's `Cargo.toml` file.
 
 ```toml
 sum-storage-rpc = { path = "../../pallets/sum-storage/rpc" }
@@ -210,4 +210,4 @@ $ curl http://localhost:9933 -H "Content-Type:application/json;charset=utf-8" -d
 As an exercise, you should change the storage values, and confirm that the RPC provides the correct updated sum. Then call the RPC at an old block and confirm you get the old sum.
 
 ## Polkadot JS API
-Many frontends interact with Substrate nodes through Polkadot JS API. While the recipes does not strive to document that project, we have included a snippet of javascript for interacting with these custom RPCs in the `kitchen/nodes/rpc-node/js` directory.
+Many frontends interact with Substrate nodes through Polkadot JS API. While the recipes does not strive to document that project, we have included a snippet of javascript for interacting with these custom RPCs in the `nodes/rpc-node/js` directory.

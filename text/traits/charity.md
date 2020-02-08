@@ -1,5 +1,5 @@
 # Charity
-*[`kitchen/pallets/charity`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/charity)*
+*[`pallets/charity`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/charity)*
 
 The Charity pallet represents a simple charitable organization that collects funds into a pot that it controls, and allocates those funds to the appropriate causes. It demonstrates two useful concepts in Substrate development:
 * A pallet-controlled shared pot of funds

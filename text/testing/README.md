@@ -10,17 +10,17 @@ There's also more rigorous testing systems ranging from mocking and fuzzing to f
 
 ## Kitchen Pallets with Unit Tests
 
-The following modules in the [`kitchen`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/) have partial unit test coverage
-- [`struct-storage`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/struct-storage)
-- [`adding-machine`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/adding-machine)
-- [`simple-event`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/simple-event)
-- [`generic-event`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/generic-event)
-- [`single-value`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/single-value)
-- [`simple-map`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/simple-map)
-- [`double-map`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/double-map)
-- [`storage-cache`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/storage-cache)
-- [`vec-set`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/vec-set)
-- [`constant-config`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/constant-config)
+The following modules in the kitchen have partial unit test coverage
+- [`struct-storage`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/struct-storage)
+- [`adding-machine`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/adding-machine)
+- [`simple-event`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-event)
+- [`generic-event`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/generic-event)
+- [`single-value`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/single-value)
+- [`simple-map`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-map)
+- [`double-map`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/double-map)
+- [`storage-cache`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/storage-cache)
+- [`vec-set`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/vec-set)
+- [`constant-config`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/constant-config)
 
 ### Cooking in the Kitchen (Running Tests)
 
@@ -33,21 +33,14 @@ $ git clone https://github.com/substrate-developer-hub/recipes
 Enter the path to the pallet to be tested
 
 ```bash
-$ cd kitchen/pallets/<some-module>
+$ cd pallets/<some-module>
 ```
 
 For example, to test `constant-config`, used in [Configurable Constants](https://substrate.dev/recipes/storage/constants.html),
 
 ```bash
-$ cd kitchen/pallets/constant-config/
+$ cd pallets/constant-config/
 $ cargo test
 ```
 
 Writing unit tests is one of the best ways to understand the code. Although unit tests are not comprehensive, they provide a first check to verify that the programmer's basic invariants are not violated in the presence of obvious, expected state changes.
-
-## Sauce
-
-Over the past few weeks, testing has driven a significant rewrite of the [kitchen](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/). This increased focus on testing and benchmarking will continue over the next few weeks in the *[sauce](https://github.com/substrate-developer-hub/recipes/tree/master/src/tour)*, starting with
-
-- [`execution-schedule`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/execution-schedule)
-- [`smpl-treasury`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/smpl-treasury)

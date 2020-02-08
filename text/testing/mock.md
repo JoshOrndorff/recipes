@@ -121,9 +121,9 @@ There is more than one pattern for building a mock runtime environment for testi
 * [`ExtBuilder`](#extbuilder) - define methods on the unit struct `ExtBuilder` to facilitate a flexible environment for tests (i.e. can reconfigure pallet constants in every test if necessary)
 
 ## new_test_ext <a name = "newext"><a/>
-*[`kitchen/pallets/smpl-treasury`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/smpl-treasury)*
+*[`pallets/smpl-treasury`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/smpl-treasury)*
 
-In [`smpl-treasury`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/smpl-treasury), use the `balances::GenesisConfig` and the pallet's `Genesis::<TestRuntime>` to set the balances of the test accounts and establish council membership in the returned test environment.
+In [`smpl-treasury`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/smpl-treasury), use the `balances::GenesisConfig` and the pallet's `Genesis::<TestRuntime>` to set the balances of the test accounts and establish council membership in the returned test environment.
 
 ```rust, ignore
 pub fn new_test_ext() -> runtime_io::TestExternalities {
@@ -185,7 +185,7 @@ fn fake_test() {
 `execute_with` executes all logic expressed in the closure within the configured runtime test environment specified in `new_test_ext`
 
 ## ExtBuilder <a name = "extbuilder"></a>
-*[`kitchen/pallets/struct-storage`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/struct-storage)*
+*[`pallets/struct-storage`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/struct-storage)*
 
 Another approach for a more flexible runtime test environment instantiates a unit struct `ExtBuilder`,
 
@@ -229,7 +229,7 @@ impl_outer_origin!{
 }
 ```
 
-It is possible to placed signed transactions as parameters in runtime methods that require the `origin` input. See the [full code in the kitchen](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/hello-substrate), but this looks like
+It is possible to placed signed transactions as parameters in runtime methods that require the `origin` input. See the [full code in the kitchen](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/hello-substrate), but this looks like
 
 ```rust, ignore
 #[test]

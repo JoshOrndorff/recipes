@@ -9,7 +9,7 @@ To verify that our pallet code behaves as expected, it is necessary to check a f
 
 The [`Verify First, Write Last`](https://substrate.dev/recipes/declarative/ensure.html) recipe encourages verifying certain conditions before changing storage values. In tests, it might be desirable to verify that invalid inputs return the expected error message.
 
-In [`kitchen/pallets/adding-machine`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/adding-machine), the runtime method `add` checks for overflow
+In [`pallets/adding-machine`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/adding-machine), the runtime method `add` checks for overflow
 
 ```rust, ignore
 decl_module! {
@@ -83,7 +83,7 @@ decl_storage! {
 }
 ```
 
-Updates to `UserValue` are tested in `last_value_updates` in [`kitchen/pallets/hello-substrate`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/hello-substrate).
+Updates to `UserValue` are tested in `last_value_updates` in [`pallets/hello-substrate`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/hello-substrate).
 
 ### Expected Events are Emitted <a name = "events"></a>
 
@@ -111,7 +111,7 @@ impl Trait for TestRuntime {
 }
 ```
 
-Testing the correct emission of events compares constructions of expected events with the entries in the [`System::events`](https://substrate.dev/rustdocs/master/frame_system/struct.Module.html#method.events) vector of `EventRecord`s. In [`kitchen/pallets/adding-machine`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/adding-machine),
+Testing the correct emission of events compares constructions of expected events with the entries in the [`System::events`](https://substrate.dev/rustdocs/master/frame_system/struct.Module.html#method.events) vector of `EventRecord`s. In [`pallets/adding-machine`](https://github.com/substrate-developer-hub/recipes/tree/master//pallets/adding-machine),
 
 ```rust, ignore
 #[test]
@@ -151,7 +151,7 @@ mod tests {
 }
 ```
 
-In [`kitchen/pallets/hello-substrate`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/hello-substrate),
+In [`pallets/hello-substrate`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/hello-substrate),
 
 ```rust, ignore
 #[test]

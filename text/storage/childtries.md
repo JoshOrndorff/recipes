@@ -1,5 +1,5 @@
 # Child Tries
-*[`kitchen/pallets/child-trie`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/child-trie)*, *[`kitchen/pallets/smpl-crowdfund`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/smpl-crowdfund)*
+*[`pallets/child-trie`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/child-trie)*, *[`pallets/smpl-crowdfund`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/smpl-crowdfund)*
 
 * [Runtime Child Storage](#storj)
 * [Crowdfund Example](#smplcrwd)
@@ -51,7 +51,7 @@ fn kv_put(index: ObjectCount, who: &T::AccountId, value_type: &ValueType) {
 }
 ```
 
-The code in [`kitchen/pallets/child-trie`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/child-trie) demonstrates a minimal way of organizing the basic child-trie api methods (as done in [`polkadot/runtime/crowdfund`](https://github.com/paritytech/polkadot/blob/c003d73c65cdcc0367340db09522c91d1d3851fc/runtime/common/src/crowdfund.rs)). It separates out the generation of the child trie id from the index with a runtime method `id_from_index`.
+The code in [`pallets/child-trie`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/child-trie) demonstrates a minimal way of organizing the basic child-trie api methods (as done in [`polkadot/runtime/crowdfund`](https://github.com/paritytech/polkadot/blob/c003d73c65cdcc0367340db09522c91d1d3851fc/runtime/common/src/crowdfund.rs)). It separates out the generation of the child trie id from the index with a runtime method `id_from_index`.
 
 ```rust, ignore
 pub fn id_from_index(index: ObjectCount) -> Vec<u8> {
@@ -78,7 +78,7 @@ pub fn kv_put(index: ObjectCount, who: &T::AccountId, value_type: ValueType) {
 ```
 
 ## smpl-crowdfund <a name = "smplcrwd"></a>
-*[`kitchen/pallets/smpl-crowdfund`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/smpl-crowdfund)*
+*[`pallets/smpl-crowdfund`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/smpl-crowdfund)*
 
 Child tries are useful for batch deletion of `(key, value)` pairs associated with a specific `trie_id`. This is relevant to the [polkadot/crowdfund](https://github.com/paritytech/polkadot/blob/master/runtime/src/crowdfund.rs) pallet, which tracks `(AccountId, BalanceOf<T>)` associated with a specific crowdfund. `BalanceOf<T>` represents the contributions of an `AccountId`. The identifier for each crowdfund is defined
 

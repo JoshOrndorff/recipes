@@ -1,5 +1,5 @@
 ## Permissioned Methods
-*[kitchen/pallets/check-membership](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/check-membership)*
+*[pallets/check-membership](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/check-membership)*
 
 It is often useful to designate some functions as permissioned and, therefore, accessible only to a defined group. In this case, we check that the transaction that invokes the runtime function is signed before verifying that the signature corresponds to a member of the permissioned set.
 
@@ -19,7 +19,7 @@ The alias for `sr-std` used is `rstd` which follows substrate's conventions. To 
 use rstd::prelude::*;
 ```
 
-In the runtime, the membership set can be stored as 
+In the runtime, the membership set can be stored as
 
 ```rust, ignore
 decl_storage! {
@@ -29,7 +29,7 @@ decl_storage! {
 }
 ```
 
-If the set was determined to be permissionless, we could express this in the runtime as 
+If the set was determined to be permissionless, we could express this in the runtime as
 
 ```rust, ignore
 fn add_member(origin) -> Result {

@@ -1,12 +1,13 @@
 # Generating Randomness
+*[pallets/gen-random](https://github.com/substrate-developer-hub/recipes/blob/master/pallets/gen-random/)*
 
-Substrate uses a safe mixing algorithm to generate randomness using the entropy of previous blocks. Because it is dependent on previous blocks, it can take many blocks for the seed to change. 
+Substrate uses a safe mixing algorithm to generate randomness using the entropy of previous blocks. Because it is dependent on previous blocks, it can take many blocks for the seed to change.
 
 ```rust, ignore
 let random_seed = <system::Module<T>>::random_seed();
 ```
 
-**To increase entropy**, we can introduce a nonce and a user-specified property. This provides us with a basic RNG on Substrate: 
+**To increase entropy**, we can introduce a nonce and a user-specified property. This provides us with a basic RNG on Substrate:
 ```rust, ignore
 let random_seed = <system::Module<T>>::random_seed();
 let nonce = <Nonce>::get();
@@ -19,7 +20,6 @@ let new_nonce = <Nonce>::get() + 1;
 ```
 
 **also see...**
-* [code in kitchen](https://github.com/substrate-developer-hub/recipes/blob/master/kitchen/random/src/lib.rs)
 * https://github.com/paritytech/ink/issues/57
 
 **[Back to Recipes](https://substrate.dev/recipes/)**

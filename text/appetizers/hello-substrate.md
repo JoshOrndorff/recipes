@@ -1,5 +1,5 @@
 # Pallet Fundamentals
-*[`kitchen/pallets/hello-substrate`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/hello-substrate)*
+*[`pallets/hello-substrate`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/hello-substrate)*
 
 Clone the [substrate pallet template](https://github.com/substrate-developer-hub/substrate-pallet-template):
 ```bash

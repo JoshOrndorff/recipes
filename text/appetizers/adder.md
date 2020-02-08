@@ -1,5 +1,5 @@
 # Adding Machine
-*[`kitchen/pallets/adding-machine`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/adding-machine)*
+*[`pallets/adding-machine`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/adding-machine)*
 
 A simple adding machine checks for overflow and emits an event with the result, without using storage. In the pallet's `lib.rs` file,
 

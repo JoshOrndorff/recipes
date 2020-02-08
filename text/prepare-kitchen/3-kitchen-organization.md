@@ -86,7 +86,7 @@ Every node must have a runtime. You may confirm that by looking at the `Cago.tom
 
 ## Inside the Super Runtime
 
-Having seen that the Kitchen Node depends on a runtime, let us now look deeper at the [Super Runtime](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/super-runtime).
+Having seen that the Kitchen Node depends on a runtime, let us now look deeper at the [Super Runtime](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/super-runtime).
 
 **`runtimes/super-runtime/Cargo.toml`**
 ```TOML

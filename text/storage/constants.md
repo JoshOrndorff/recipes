@@ -1,5 +1,5 @@
 # Configurable Pallet Constants
-*[`kitchen/pallets/constant-config`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/constant-config)*
+*[`pallets/constant-config`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/constant-config)*
 
 To declare constant values within a runtime, it is necessary to import the [`Get`](https://substrate.dev/rustdocs/master/frame_support/traits/trait.Get.html) trait from `frame_support`
 

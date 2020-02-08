@@ -1,5 +1,5 @@
 # Efficent Subgroup Removal by Subkey: Double Maps
-*[`kitchen/pallets/double-map`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/double-map)*
+*[`pallets/double-map`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/double-map)*
 
 For some runtimes, it may be necessary to remove a subset of values in a key-value mapping. If the subset maintain an associated identifier type, this can be done in a clean way with the [`double_map`](https://substrate.dev/rustdocs/master/frame_support/storage/trait.StorageDoubleMap.html) via the `remove_prefix` api.
 

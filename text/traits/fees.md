@@ -1,5 +1,5 @@
 # Transaction Fees
-*[kitchen/runtimes/weight-fee-runtime](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/runtimes/weight-fee-runtime)*
+*[runtimes/weight-fee-runtime](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/weight-fee-runtime)*
 
 Substrate provides the [`transaction_payment` pallet](https://substrate.dev/rustdocs/master/pallet_transaction_payment/index.html) for calculating and collecting fees for executing transactions. Fees are broken down into several components:
 
@@ -53,7 +53,7 @@ impl<C0, C1, C2> Convert<Weight, Balance> for QuadraticWeightToFee<C0, C1, C2>
 }
 ```
 
-This examples, and several others can be compiled in the kitchen's [weight-fee-runtime](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/runtimes/weight-fee-runtime)
+This examples, and several others can be compiled in the kitchen's [weight-fee-runtime](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/weight-fee-runtime)
 
 ## Collecting Fees
 
@@ -69,4 +69,4 @@ impl transaction_payment::Trait for Runtime {
 }
 ```
 
-This examples, and several others can be compiled in the kitchen's [weight-fee-runtime](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/runtimes/weight-fee-runtime)
+This examples, and several others can be compiled in the kitchen's [weight-fee-runtime](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/weight-fee-runtime)

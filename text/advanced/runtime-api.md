@@ -1,6 +1,6 @@
 # Runtime APIs
-*[`kitchen/pallets/sum-storage`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/sum-storage)*
-*[`kitchen/runtimes/api-runtime`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/runtime/api-runtime)*
+*[`pallets/sum-storage`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/sum-storage)*
+*[`runtimes/api-runtime`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/api-runtime)*
 
 Each Substrate node contains a runtime. The runtime contains the business logic of the chain. It defines what transactions are valid and invalid and determines how the chain's state changes in response to transactions. The runtime is compiled to Wasm to facilitate runtime upgrades. The "outer node", everything other than the runtime, does not compile to Wasm, only to native. The outer node is responsible for handling peer discovery, transaction pooling, block and transaction gossiping, consensus, and answering RPC calls from the outside world. While performing these tasks, the outer node sometimes needs to query the runtime for information, or provide information to the runtime. A Runtime API facilitates this communication between the outer node and the runtime. In this recipe, we will write our own minimal runtime API.
 
@@ -44,7 +44,7 @@ sp_api::decl_runtime_apis! {
 ```
 
 ## Implementing the API
-With our pallet written and our runtime API defined, we may now implement the API. This happens in the main runtime aggregation file. In our case we've provided the `api-runtime` in `kitchen/runtimes/api-runtime/src/lib.rs`.
+With our pallet written and our runtime API defined, we may now implement the API. This happens in the main runtime aggregation file. In our case we've provided the `api-runtime` in `runtimes/api-runtime/src/lib.rs`.
 
 As with defining the API, implementing a runtime API looks similar to implementing any old rust trait with the exception that the implementation must go inside of the [`impl_runtime_apis!` macro](https://substrate.dev/rustdocs/master/sp_api/macro.impl_runtime_apis.html). If you've started by copying an existing runtime like the [node template](https://github.com/substrate-developer-hub/substrate-node-template/) you likely already have this block. We will add an implementation for our API to the existing block. Our implementation is straight-forward as it merely calls the pallet's helper function that we wrote previously.
 

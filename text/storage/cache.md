@@ -1,5 +1,5 @@
 # Cache Multiple Calls
-*[`kitchen/pallets/storage-cache`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/storage-cache)*
+*[`pallets/storage-cache`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/storage-cache)*
 
 Calls to runtime storage have an associated cost. With this in mind, multiple calls to storage values should be avoided when possible.
 
