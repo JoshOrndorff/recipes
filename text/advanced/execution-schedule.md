@@ -1,12 +1,11 @@
 # Execution Schedule
+*[`pallets/execution-schedule`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/execution-schedule)*
 
-Blockchain-native mechanisms may use the block number as a proxy for time to schedule task execution. In the [`smpl-treasury`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/smpl-treasury) recipe, spend requests are batch executed every `UserPeriod` number of blocks.
+<!-- TODO This content may need updated to match the actual pallet -->
 
-Although scheduled task execution through council governance is minimal in this example, it is not too hard to imagine tasks taking the form of subscription payments, grant payouts, or any other scheduled *task* execution.
+Blockchain-native mechanisms may use the block number as a proxy for time to schedule task execution. Although scheduled task execution through council governance is minimal in this example, it is not too hard to imagine tasks taking the form of subscription payments, grant payouts, or any other scheduled *task* execution.
 
-## execution-schedule
-
-[`execution-schedule`]((https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/execution-schedule)) demonstrates a permissioned task scheduler, in which members of a `council: Vec<AccountId>` can schedule tasks, which are stored in a vector in the runtime storage (`decl_storage`).
+This pallet demonstrates a permissioned task scheduler, in which members of a `council: Vec<AccountId>` can schedule tasks, which are stored in a vector in the runtime storage (`decl_storage`).
 
 Members of the `council` vote on the tasks with `SignalQuota` voting power which is doled out equally to every member every `ExecutionFrequency` number of blocks.
 
