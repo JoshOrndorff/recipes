@@ -4,7 +4,7 @@
 - [Preparing Your Kitchen](./prepare-kitchen/README.md)
     - [Running A Node](./prepare-kitchen/1-build-node.md)
     - [Interacting with a Node](./prepare-kitchen/2-interact-node.md)
-    - [Using the Kitchen](./prepare-kitchen/3-kitchen-organization.md)
+    - [Kitchen Organization](./prepare-kitchen/3-kitchen-organization.md)
 - [Appetizers](./appetizers/README.md)
     - [Events Verify Execution](./appetizers/events.md)
     - [Adding Machine](./appetizers/adder.md)
