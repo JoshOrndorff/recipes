@@ -1,7 +1,7 @@
 # Mock Runtime for Unit Testing
 *see [root](./index.md) for list of kitchen pallets with unit test coverage*
 
-At the bottom of the pallet, place unit tests in a separate rust module with a special compilation flag
+At the bottom of the pallet, place unit tests in a separate Rust module with a special compilation flag
 
 ```rust, ignore
 #[cfg(test)]

@@ -39,7 +39,7 @@ mdbook build --open
 ### Rust Code
 There is not yet strict enforcement of the [Rust in Substrate coding style](https://wiki.parity.io/Substrate-Style-Guide), but it is highly encouraged to wrap lines at 120 characters a line (or less) for improving reviewer experience on github.
 
-Graciously invoke `cargo fmt` on any rust code -- this should soon be enforced by CI!
+Graciously invoke `cargo fmt` on any Rust code -- this should soon be enforced by CI!
 
 ### Cargo.toml
 Prefer listing dependencies under a single `[dependencies]` header in lieu of using a `[dependencies.some_import]` for every `some_import` module imported. This preference is not enforced. See [`adding-machine/Cargo.toml`](https://github.com/substrate-developer-hub/recipes/blob/master/pallets/adding-machine/Cargo.toml) for an example of the recommended less verbose `Cargo.toml` syntax.

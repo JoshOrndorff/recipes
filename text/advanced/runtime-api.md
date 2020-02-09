@@ -29,11 +29,11 @@ impl<T: Trait> Module<T> {
 So far, nothing we've done is specific to runtime APIs. In the coming sections, we will use this helper function in our runtime API's implementation.
 
 ## Defining the API
-The first step in adding a runtime API to your runtime is defining its interface using a rust trait. This is done in the `sum-storage/rpc/runtime-api/src/lib.rs` file. This file can live anywhere you like, but because it defines an API that is closely related to a particular pallet, it makes sense to include the API definition in the pallet's directory.
+The first step in adding a runtime API to your runtime is defining its interface using a Rust trait. This is done in the `sum-storage/rpc/runtime-api/src/lib.rs` file. This file can live anywhere you like, but because it defines an API that is closely related to a particular pallet, it makes sense to include the API definition in the pallet's directory.
 
 > The `rpc` in the path is not relevant in _this_ recipe, but it is explained in the recipe on [custom RPCs](./custom-rpc.md).
 
-The code to define the API is quite simple, and looks almost like any old rust trait. The one addition is that it must be placed in the [`decl_runtime_apis!` macro](https://substrate.dev/rustdocs/master/sp_api/macro.decl_runtime_apis.html). This macro allows the outer node to query the runtime API at specific blocks. Although this runtime API only provides a single function, you may write as many as you like.
+The code to define the API is quite simple, and looks almost like any old Rust trait. The one addition is that it must be placed in the [`decl_runtime_apis!` macro](https://substrate.dev/rustdocs/master/sp_api/macro.decl_runtime_apis.html). This macro allows the outer node to query the runtime API at specific blocks. Although this runtime API only provides a single function, you may write as many as you like.
 
 ```rust
 sp_api::decl_runtime_apis! {
@@ -46,7 +46,7 @@ sp_api::decl_runtime_apis! {
 ## Implementing the API
 With our pallet written and our runtime API defined, we may now implement the API. This happens in the main runtime aggregation file. In our case we've provided the `api-runtime` in `runtimes/api-runtime/src/lib.rs`.
 
-As with defining the API, implementing a runtime API looks similar to implementing any old rust trait with the exception that the implementation must go inside of the [`impl_runtime_apis!` macro](https://substrate.dev/rustdocs/master/sp_api/macro.impl_runtime_apis.html). If you've started by copying an existing runtime like the [node template](https://github.com/substrate-developer-hub/substrate-node-template/) you likely already have this block. We will add an implementation for our API to the existing block. Our implementation is straight-forward as it merely calls the pallet's helper function that we wrote previously.
+As with defining the API, implementing a runtime API looks similar to implementing any old Rust trait with the exception that the implementation must go inside of the [`impl_runtime_apis!` macro](https://substrate.dev/rustdocs/master/sp_api/macro.impl_runtime_apis.html). If you've started by copying an existing runtime like the [node template](https://github.com/substrate-developer-hub/substrate-node-template/) you likely already have this block. We will add an implementation for our API to the existing block. Our implementation is straight-forward as it merely calls the pallet's helper function that we wrote previously.
 
 ```rust
 impl_runtime_apis! {

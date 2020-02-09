@@ -1,6 +1,6 @@
 # Kitchen Organization
 
-Now that your kitchen is well-equipped with all the right tool (bowl, knives, rust compiler, etc), let's take a look at how it is organized.
+Now that your kitchen is well-equipped with all the right tools (bowls, knives, Rust compiler, etc), let's take a look at how it is organized.
 
 ## Structure of a Substrate Node
 
@@ -79,7 +79,7 @@ runtime-genesis = { package = "super-genesis", path = "../../runtimes/super-gene
 
 Looking inside the Kitchen Node's `Cargo.toml` file we see that it has many dependencies. Most of them come from Substrate itself. Indeed most parts of this Kitchen Node are not unique or specialized, and Substrate offers robust implementations that we can use. The lines quoted above show that the runtime does not come from Substrate. Rather, we use our super-runtime which is in the `runtimes` folder.
 
-The commented lines also quoted above, show that the Super Runtime is not the only runtime we could have chosen. We could also use the Weight-Fee runtime, and I encourage you do try that experiment (remember, instructions to re-compile the node are in the previous section).
+The commented lines, also quoted above, show that the Super Runtime is not the only runtime we could have chosen. We could also use the Weight-Fee runtime, and I encourage you to try that experiment (remember, instructions to re-compile the node are in the previous section).
 
 Every node must have a runtime. You may confirm that by looking at the `Cago.toml` files of the other nodes included in our kitchen.
 

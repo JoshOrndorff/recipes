@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-Before we can even begin compiling our first blockchain node, we need to have a properly configured rust toolchain. There is a convenient script that will set up this toolchain for us, ad we ca nrun it with the following command.
+Before we can even begin compiling our first blockchain node, we need to have a properly configured Rust toolchain. There is a convenient script that will set up this toolchain for us, and we can run it with the following command.
 
 ```bash
 # Setup Rust and Substrate
@@ -36,7 +36,7 @@ As you work through the recipes, refer back to these instructions each time you 
 
 ## Checking Your Work
 
-Once the compilation is completed, you can ensure that the node has built properly by displaying its help page. Notice that the node has built to the `target/release` directory. This is the default location for rust projects.
+Once the compilation is completed, you can ensure that the node has built properly by displaying its help page. Notice that the node has built to the `target/release` directory. This is the default location for Rust projects.
 
 ```bash
 # Inside `recipes` directory
