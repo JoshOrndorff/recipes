@@ -7,7 +7,7 @@
         
 
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <meta name="description" content="Substrate runtime design patterns">
+        <meta name="description" content="A Hands-On Cookbook for Aspiring Blockchain Chefs">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
 
@@ -80,14 +80,8 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <div id="devhub-link">
-                <a href="https://substrate.dev">
-                    <img src="../favicon.png" />
-                    <p>Substrate Developer Hub</p>
-                </a>
-            </div>
             <div id="sidebar-scrollbox" class="sidebar-scrollbox">
-                <ol class="chapter"><li class="expanded "><a href="../base/index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="expanded "><a href="../base/rust.html"><strong aria-hidden="true">2.</strong> Learn Rust</a></li><li class="expanded "><a href="../base/setup.html"><strong aria-hidden="true">3.</strong> Getting Started</a></li><li><ol class="section"><li class="expanded "><a href="../base/runnode.html" class="active"><strong aria-hidden="true">3.1.</strong> Running A Node</a></li><li class="expanded "><a href="../base/interactnode.html"><strong aria-hidden="true">3.2.</strong> Interacting with a Node</a></li><li class="expanded "><a href="../base/kitchenoverview.html"><strong aria-hidden="true">3.3.</strong> Using the Kitchen</a></li></ol></li><li class="expanded "><a href="../basics/index.html"><strong aria-hidden="true">4.</strong> Hello Substrate</a></li><li><ol class="section"><li class="expanded "><a href="../basics/events.html"><strong aria-hidden="true">4.1.</strong> Events Verify Execution</a></li><li class="expanded "><a href="../basics/adder.html"><strong aria-hidden="true">4.2.</strong> Adding Machine</a></li><li class="expanded "><a href="../basics/value.html"><strong aria-hidden="true">4.3.</strong> Single Value Storage</a></li></ol></li><li class="expanded "><a href="../storage/index.html"><strong aria-hidden="true">5.</strong> Runtime Storage API</a></li><li><ol class="section"><li class="expanded "><a href="../storage/cache.html"><strong aria-hidden="true">5.1.</strong> Cache Locally &gt; Storage Calls</a></li><li class="expanded "><a href="../storage/iterate.html"><strong aria-hidden="true">5.2.</strong> Sets</a></li><li class="expanded "><a href="../storage/enumerated.html"><strong aria-hidden="true">5.3.</strong> Ordered Lists: Maps, Linked Maps</a></li><li class="expanded "><a href="../storage/double.html"><strong aria-hidden="true">5.4.</strong> Subgroup Removal by Subkey: Double Maps</a></li><li class="expanded "><a href="../storage/childtries.html"><strong aria-hidden="true">5.5.</strong> Efficient Subgroup Removal by Subkey: Child Tries</a></li><li class="expanded "><a href="../storage/constants.html"><strong aria-hidden="true">5.6.</strong> Configurable Constants</a></li></ol></li><li class="expanded "><a href="../traits/index.html"><strong aria-hidden="true">6.</strong> Types and Traits</a></li><li><ol class="section"><li class="expanded "><a href="../traits/currency.html"><strong aria-hidden="true">6.1.</strong> Currency Types</a></li><li class="expanded "><a href="../traits/weights.html"><strong aria-hidden="true">6.2.</strong> Weights for Resource Accounting</a></li><li class="expanded "><a href="../traits/fees.html"><strong aria-hidden="true">6.3.</strong> Transaction Fees for Economic Security</a></li><li class="expanded "><a href="../storage/instantiable.html"><strong aria-hidden="true">6.4.</strong> Instantiable Pallets</a></li><li class="expanded "><a href="../traits/charity.html"><strong aria-hidden="true">6.5.</strong> Charity and Imbalances</a></li><li class="expanded "><a href="../advanced/runtime-api.html"><strong aria-hidden="true">6.6.</strong> Runtime APIs</a></li><li class="expanded "><a href="../advanced/custom-rpc.html"><strong aria-hidden="true">6.7.</strong> Custom RPCs</a></li></ol></li><li class="expanded "><a href="../declarative/index.html"><strong aria-hidden="true">7.</strong> Declarative Syntax</a></li><li><ol class="section"><li class="expanded "><a href="../declarative/ensure.html"><strong aria-hidden="true">7.1.</strong> Verify First, Write Last</a></li><li class="expanded "><a href="../declarative/safemath.html"><strong aria-hidden="true">7.2.</strong> Safe Math</a></li><li class="expanded "><a href="../declarative/permissioned.html"><strong aria-hidden="true">7.3.</strong> Permissioned Methods</a></li></ol></li><li class="expanded "><a href="../testing/index.html"><strong aria-hidden="true">8.</strong> Testing</a></li><li><ol class="section"><li class="expanded "><a href="../testing/mock.html"><strong aria-hidden="true">8.1.</strong> Basic Test Environments</a></li><li class="expanded "><a href="../testing/common.html"><strong aria-hidden="true">8.2.</strong> Common Tests</a></li><li class="expanded "><a href="../testing/externalities.html"><strong aria-hidden="true">8.3.</strong> Custom Test Environment</a></li></ol></li><li class="expanded "><a href="../base/dessert.html"><strong aria-hidden="true">9.</strong> Featured Tutorials</a></li><li class="spacer"></li><li class="expanded affix "><a href="../base/resource.html">More Resources</a></li></ol>
+                <ol class="chapter"><li class="expanded affix "><a href="../introduction.html">Introduction</a></li><li class="expanded "><a href="../prepare-kitchen/index.html"><strong aria-hidden="true">1.</strong> Preparing Your Kitchen</a></li><li><ol class="section"><li class="expanded "><a href="../prepare-kitchen/1-build-node.html" class="active"><strong aria-hidden="true">1.1.</strong> Running A Node</a></li><li class="expanded "><a href="../prepare-kitchen/2-interact-node.html"><strong aria-hidden="true">1.2.</strong> Interacting with a Node</a></li><li class="expanded "><a href="../prepare-kitchen/3-kitchen-organization.html"><strong aria-hidden="true">1.3.</strong> Kitchen Organization</a></li></ol></li><li class="expanded "><a href="../appetizers/index.html"><strong aria-hidden="true">2.</strong> Appetizers</a></li><li><ol class="section"><li class="expanded "><a href="../appetizers/events.html"><strong aria-hidden="true">2.1.</strong> Events Verify Execution</a></li><li class="expanded "><a href="../appetizers/adder.html"><strong aria-hidden="true">2.2.</strong> Adding Machine</a></li><li class="expanded "><a href="../appetizers/value.html"><strong aria-hidden="true">2.3.</strong> Single Value Storage</a></li><li class="expanded "><a href="../appetizers/hello-substrate.html"><strong aria-hidden="true">2.4.</strong> Hello Substrate</a></li></ol></li><li class="expanded "><a href="../storage/index.html"><strong aria-hidden="true">3.</strong> Runtime Storage API</a></li><li><ol class="section"><li class="expanded "><a href="../storage/cache.html"><strong aria-hidden="true">3.1.</strong> Cache Locally &gt; Storage Calls</a></li><li class="expanded "><a href="../storage/iterate.html"><strong aria-hidden="true">3.2.</strong> Sets</a></li><li class="expanded "><a href="../storage/enumerated.html"><strong aria-hidden="true">3.3.</strong> Ordered Lists: Maps, Linked Maps</a></li><li class="expanded "><a href="../storage/double.html"><strong aria-hidden="true">3.4.</strong> Subgroup Removal by Subkey: Double Maps</a></li><li class="expanded "><a href="../storage/childtries.html"><strong aria-hidden="true">3.5.</strong> Efficient Subgroup Removal by Subkey: Child Tries</a></li><li class="expanded "><a href="../storage/constants.html"><strong aria-hidden="true">3.6.</strong> Configurable Constants</a></li></ol></li><li class="expanded "><a href="../traits/index.html"><strong aria-hidden="true">4.</strong> Types and Traits</a></li><li><ol class="section"><li class="expanded "><a href="../traits/currency.html"><strong aria-hidden="true">4.1.</strong> Currency Types</a></li><li class="expanded "><a href="../traits/weights.html"><strong aria-hidden="true">4.2.</strong> Weights for Resource Accounting</a></li><li class="expanded "><a href="../traits/fees.html"><strong aria-hidden="true">4.3.</strong> Transaction Fees for Economic Security</a></li><li class="expanded "><a href="../storage/instantiable.html"><strong aria-hidden="true">4.4.</strong> Instantiable Pallets</a></li><li class="expanded "><a href="../traits/charity.html"><strong aria-hidden="true">4.5.</strong> Charity and Imbalances</a></li><li class="expanded "><a href="../advanced/runtime-api.html"><strong aria-hidden="true">4.6.</strong> Runtime APIs</a></li><li class="expanded "><a href="../advanced/custom-rpc.html"><strong aria-hidden="true">4.7.</strong> Custom RPCs</a></li><li class="expanded "><a href="../advnced/execution-schedule.html"><strong aria-hidden="true">4.8.</strong> Execution Schedule</a></li></ol></li><li class="expanded "><a href="../declarative/index.html"><strong aria-hidden="true">5.</strong> Declarative Syntax</a></li><li><ol class="section"><li class="expanded "><a href="../declarative/ensure.html"><strong aria-hidden="true">5.1.</strong> Verify First, Write Last</a></li><li class="expanded "><a href="../declarative/safemath.html"><strong aria-hidden="true">5.2.</strong> Safe Math</a></li><li class="expanded "><a href="../declarative/permissioned.html"><strong aria-hidden="true">5.3.</strong> Permissioned Methods</a></li></ol></li><li class="expanded "><a href="../testing/index.html"><strong aria-hidden="true">6.</strong> Testing</a></li><li><ol class="section"><li class="expanded "><a href="../testing/mock.html"><strong aria-hidden="true">6.1.</strong> Basic Test Environments</a></li><li class="expanded "><a href="../testing/common.html"><strong aria-hidden="true">6.2.</strong> Common Tests</a></li><li class="expanded "><a href="../testing/externalities.html"><strong aria-hidden="true">6.3.</strong> Custom Test Environment</a></li><li class="spacer"></li></ol></li><li class="expanded "><a href="../more-resources.html">More Resources</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -154,30 +148,37 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#run-the-kitchen-node" id="run-the-kitchen-node">Run the Kitchen Node</a></h1>
-<p>To run the code in the recipes, <code>git clone</code> the source repository. We also want to kick-start the node compilation as it may take about 30 minutes to complete depending on your hardware.</p>
-<pre><code class="language-bash">git clone https://github.com/substrate-developer-hub/recipes.git
-cd recipes/kitchen/nodes/kitchen-node
-./scripts/init.sh
-
-# This step takes a while to complete
-cargo build --release
+                        <h1><a class="header" href="#building-a-node" id="building-a-node">Building a Node</a></h1>
+<h2><a class="header" href="#prerequisites" id="prerequisites">Prerequisites</a></h2>
+<p>Before we can even begin compiling our first blockchain node, we need to have a properly configured Rust toolchain. There is a convenient script that will set up this toolchain for us, and we can run it with the following command.</p>
+<pre><code class="language-bash"># Setup Rust and Substrate
+curl https://getsubstrate.io -sSf | bash -s -- --fast
 </code></pre>
 <blockquote>
-<p><strong>Notes</strong></p>
-<p>Refer to the following sections to:</p>
-<ul>
-<li>Learn more about <a href="https://substrate.dev/docs/en/runtime/architecture-of-a-runtime">Substrate runtime</a></li>
-</ul>
+<p>This command downloads and executes code from the internet. Give yourself peace-of-mind by inspecting the <a href="https://getsubstrate.io">script's source</a> to confirm it isn't doing anything nasty.</p>
 </blockquote>
-<p>Once the compilation is completed, you can first purge any existing blockchain data (useful to start your node from a clean state in future) and then start the node.</p>
-<pre><code class="language-bash"># Inside `recipes/kitchen` folder
+<h3><a class="header" href="#for-windows" id="for-windows">For Windows</a></h3>
+<p>These instructions and the rest of the instructions in this chapter assume a unix-like environment such as Linux, MacOS, or Windows Subsystem for Linux (WSL). If you are a Windows user, WSL is the best way to proceed. If you want or need to work in a native Windows environment, this is possible, but is not covered in detail here. Please follow along with the <a href="https://substrate.dev/docs/en/overview/getting-started#getting-started-on-windows">Getting Started on Windows</a> guide, then return here when you're ready to proceed.</p>
+<h2><a class="header" href="#compile-the-kitchen-node" id="compile-the-kitchen-node">Compile the Kitchen Node</a></h2>
+<p>If you haven't already, <code>git clone</code> the recipes repository. We also want to kick-start the node compilation as it may take about 30 minutes to complete depending on your hardware.</p>
+<pre><code class="language-bash"># Clone the Recipes Repository
+git clone https://github.com/substrate-developer-hub/recipes.git
+cd recipes
 
-# Purge any existing blockchain data. Enter `y` upon prompt.
-./target/release/kitchen-node purge-chain --dev
+#  Update Rust-Wasm toolchain
+./nodes/scripts/init.sh
 
-# Start the Kitchen Node
-./target/release/kitchen-node --dev
+# Compile the Kitchen Node
+# This step takes a while to complete
+cargo build --release -p kitchen-node
+</code></pre>
+<p>As you work through the recipes, refer back to these instructions each time you wish to re-compile the node. Over time the commands will become familiar, and you will even modify them to compile other nodes.</p>
+<h2><a class="header" href="#checking-your-work" id="checking-your-work">Checking Your Work</a></h2>
+<p>Once the compilation is completed, you can ensure that the node has built properly by displaying its help page. Notice that the node has built to the <code>target/release</code> directory. This is the default location for Rust projects.</p>
+<pre><code class="language-bash"># Inside `recipes` directory
+
+# Display the Kitchen Node's help page
+./target/release/kitchen-node --help
 </code></pre>
 
                     </main>
@@ -185,13 +186,13 @@ cargo build --release
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
-                            <a rel="prev" href="../base/setup.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../prepare-kitchen/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
 
                         
-                            <a rel="next" href="../base/interactnode.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="../prepare-kitchen/2-interact-node.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -203,13 +204,13 @@ cargo build --release
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
-                    <a href="../base/setup.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a href="../prepare-kitchen/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
 
                 
-                    <a href="../base/interactnode.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a href="../prepare-kitchen/2-interact-node.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 
@@ -222,7 +223,7 @@ cargo build --release
         
 
         
-
+        
         
         <script type="text/javascript">
             window.playpen_copyable = true;
@@ -243,11 +244,11 @@ cargo build --release
 
         <!-- Custom JS scripts -->
         
-        <script type="text/javascript" src="../analytics/load.js"></script>
+        <script type="text/javascript" src="../.analytics/load.js"></script>
         
-        <script type="text/javascript" src="../analytics/config.js"></script>
+        <script type="text/javascript" src="../.analytics/config.js"></script>
         
-        <script type="text/javascript" src="../analytics/klaro.min.js"></script>
+        <script type="text/javascript" src="../.analytics/klaro.min.js"></script>
         
 
         

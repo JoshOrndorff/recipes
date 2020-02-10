@@ -3,11 +3,11 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Adding Machine - Substrate Recipes</title>
+        <title>Events Verify Execution - Substrate Recipes</title>
         
 
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <meta name="description" content="Substrate runtime design patterns">
+        <meta name="description" content="A Hands-On Cookbook for Aspiring Blockchain Chefs">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
 
@@ -80,14 +80,8 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <div id="devhub-link">
-                <a href="https://substrate.dev">
-                    <img src="../favicon.png" />
-                    <p>Substrate Developer Hub</p>
-                </a>
-            </div>
             <div id="sidebar-scrollbox" class="sidebar-scrollbox">
-                <ol class="chapter"><li class="expanded "><a href="../base/index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="expanded "><a href="../base/rust.html"><strong aria-hidden="true">2.</strong> Learn Rust</a></li><li class="expanded "><a href="../base/setup.html"><strong aria-hidden="true">3.</strong> Getting Started</a></li><li><ol class="section"><li class="expanded "><a href="../base/runnode.html"><strong aria-hidden="true">3.1.</strong> Running A Node</a></li><li class="expanded "><a href="../base/interactnode.html"><strong aria-hidden="true">3.2.</strong> Interacting with a Node</a></li><li class="expanded "><a href="../base/kitchenoverview.html"><strong aria-hidden="true">3.3.</strong> Using the Kitchen</a></li></ol></li><li class="expanded "><a href="../basics/index.html"><strong aria-hidden="true">4.</strong> Hello Substrate</a></li><li><ol class="section"><li class="expanded "><a href="../basics/events.html"><strong aria-hidden="true">4.1.</strong> Events Verify Execution</a></li><li class="expanded "><a href="../basics/adder.html" class="active"><strong aria-hidden="true">4.2.</strong> Adding Machine</a></li><li class="expanded "><a href="../basics/value.html"><strong aria-hidden="true">4.3.</strong> Single Value Storage</a></li></ol></li><li class="expanded "><a href="../storage/index.html"><strong aria-hidden="true">5.</strong> Runtime Storage API</a></li><li><ol class="section"><li class="expanded "><a href="../storage/cache.html"><strong aria-hidden="true">5.1.</strong> Cache Locally &gt; Storage Calls</a></li><li class="expanded "><a href="../storage/iterate.html"><strong aria-hidden="true">5.2.</strong> Sets</a></li><li class="expanded "><a href="../storage/enumerated.html"><strong aria-hidden="true">5.3.</strong> Ordered Lists: Maps, Linked Maps</a></li><li class="expanded "><a href="../storage/double.html"><strong aria-hidden="true">5.4.</strong> Subgroup Removal by Subkey: Double Maps</a></li><li class="expanded "><a href="../storage/childtries.html"><strong aria-hidden="true">5.5.</strong> Efficient Subgroup Removal by Subkey: Child Tries</a></li><li class="expanded "><a href="../storage/constants.html"><strong aria-hidden="true">5.6.</strong> Configurable Constants</a></li></ol></li><li class="expanded "><a href="../traits/index.html"><strong aria-hidden="true">6.</strong> Types and Traits</a></li><li><ol class="section"><li class="expanded "><a href="../traits/currency.html"><strong aria-hidden="true">6.1.</strong> Currency Types</a></li><li class="expanded "><a href="../traits/weights.html"><strong aria-hidden="true">6.2.</strong> Weights for Resource Accounting</a></li><li class="expanded "><a href="../traits/fees.html"><strong aria-hidden="true">6.3.</strong> Transaction Fees for Economic Security</a></li><li class="expanded "><a href="../storage/instantiable.html"><strong aria-hidden="true">6.4.</strong> Instantiable Pallets</a></li><li class="expanded "><a href="../traits/charity.html"><strong aria-hidden="true">6.5.</strong> Charity and Imbalances</a></li><li class="expanded "><a href="../advanced/runtime-api.html"><strong aria-hidden="true">6.6.</strong> Runtime APIs</a></li><li class="expanded "><a href="../advanced/custom-rpc.html"><strong aria-hidden="true">6.7.</strong> Custom RPCs</a></li></ol></li><li class="expanded "><a href="../declarative/index.html"><strong aria-hidden="true">7.</strong> Declarative Syntax</a></li><li><ol class="section"><li class="expanded "><a href="../declarative/ensure.html"><strong aria-hidden="true">7.1.</strong> Verify First, Write Last</a></li><li class="expanded "><a href="../declarative/safemath.html"><strong aria-hidden="true">7.2.</strong> Safe Math</a></li><li class="expanded "><a href="../declarative/permissioned.html"><strong aria-hidden="true">7.3.</strong> Permissioned Methods</a></li></ol></li><li class="expanded "><a href="../testing/index.html"><strong aria-hidden="true">8.</strong> Testing</a></li><li><ol class="section"><li class="expanded "><a href="../testing/mock.html"><strong aria-hidden="true">8.1.</strong> Basic Test Environments</a></li><li class="expanded "><a href="../testing/common.html"><strong aria-hidden="true">8.2.</strong> Common Tests</a></li><li class="expanded "><a href="../testing/externalities.html"><strong aria-hidden="true">8.3.</strong> Custom Test Environment</a></li></ol></li><li class="expanded "><a href="../base/dessert.html"><strong aria-hidden="true">9.</strong> Featured Tutorials</a></li><li class="spacer"></li><li class="expanded affix "><a href="../base/resource.html">More Resources</a></li></ol>
+                <ol class="chapter"><li class="expanded affix "><a href="../introduction.html">Introduction</a></li><li class="expanded "><a href="../prepare-kitchen/index.html"><strong aria-hidden="true">1.</strong> Preparing Your Kitchen</a></li><li><ol class="section"><li class="expanded "><a href="../prepare-kitchen/1-build-node.html"><strong aria-hidden="true">1.1.</strong> Running A Node</a></li><li class="expanded "><a href="../prepare-kitchen/2-interact-node.html"><strong aria-hidden="true">1.2.</strong> Interacting with a Node</a></li><li class="expanded "><a href="../prepare-kitchen/3-kitchen-organization.html"><strong aria-hidden="true">1.3.</strong> Kitchen Organization</a></li></ol></li><li class="expanded "><a href="../appetizers/index.html"><strong aria-hidden="true">2.</strong> Appetizers</a></li><li><ol class="section"><li class="expanded "><a href="../appetizers/events.html" class="active"><strong aria-hidden="true">2.1.</strong> Events Verify Execution</a></li><li class="expanded "><a href="../appetizers/adder.html"><strong aria-hidden="true">2.2.</strong> Adding Machine</a></li><li class="expanded "><a href="../appetizers/value.html"><strong aria-hidden="true">2.3.</strong> Single Value Storage</a></li><li class="expanded "><a href="../appetizers/hello-substrate.html"><strong aria-hidden="true">2.4.</strong> Hello Substrate</a></li></ol></li><li class="expanded "><a href="../storage/index.html"><strong aria-hidden="true">3.</strong> Runtime Storage API</a></li><li><ol class="section"><li class="expanded "><a href="../storage/cache.html"><strong aria-hidden="true">3.1.</strong> Cache Locally &gt; Storage Calls</a></li><li class="expanded "><a href="../storage/iterate.html"><strong aria-hidden="true">3.2.</strong> Sets</a></li><li class="expanded "><a href="../storage/enumerated.html"><strong aria-hidden="true">3.3.</strong> Ordered Lists: Maps, Linked Maps</a></li><li class="expanded "><a href="../storage/double.html"><strong aria-hidden="true">3.4.</strong> Subgroup Removal by Subkey: Double Maps</a></li><li class="expanded "><a href="../storage/childtries.html"><strong aria-hidden="true">3.5.</strong> Efficient Subgroup Removal by Subkey: Child Tries</a></li><li class="expanded "><a href="../storage/constants.html"><strong aria-hidden="true">3.6.</strong> Configurable Constants</a></li></ol></li><li class="expanded "><a href="../traits/index.html"><strong aria-hidden="true">4.</strong> Types and Traits</a></li><li><ol class="section"><li class="expanded "><a href="../traits/currency.html"><strong aria-hidden="true">4.1.</strong> Currency Types</a></li><li class="expanded "><a href="../traits/weights.html"><strong aria-hidden="true">4.2.</strong> Weights for Resource Accounting</a></li><li class="expanded "><a href="../traits/fees.html"><strong aria-hidden="true">4.3.</strong> Transaction Fees for Economic Security</a></li><li class="expanded "><a href="../storage/instantiable.html"><strong aria-hidden="true">4.4.</strong> Instantiable Pallets</a></li><li class="expanded "><a href="../traits/charity.html"><strong aria-hidden="true">4.5.</strong> Charity and Imbalances</a></li><li class="expanded "><a href="../advanced/runtime-api.html"><strong aria-hidden="true">4.6.</strong> Runtime APIs</a></li><li class="expanded "><a href="../advanced/custom-rpc.html"><strong aria-hidden="true">4.7.</strong> Custom RPCs</a></li><li class="expanded "><a href="../advnced/execution-schedule.html"><strong aria-hidden="true">4.8.</strong> Execution Schedule</a></li></ol></li><li class="expanded "><a href="../declarative/index.html"><strong aria-hidden="true">5.</strong> Declarative Syntax</a></li><li><ol class="section"><li class="expanded "><a href="../declarative/ensure.html"><strong aria-hidden="true">5.1.</strong> Verify First, Write Last</a></li><li class="expanded "><a href="../declarative/safemath.html"><strong aria-hidden="true">5.2.</strong> Safe Math</a></li><li class="expanded "><a href="../declarative/permissioned.html"><strong aria-hidden="true">5.3.</strong> Permissioned Methods</a></li></ol></li><li class="expanded "><a href="../testing/index.html"><strong aria-hidden="true">6.</strong> Testing</a></li><li><ol class="section"><li class="expanded "><a href="../testing/mock.html"><strong aria-hidden="true">6.1.</strong> Basic Test Environments</a></li><li class="expanded "><a href="../testing/common.html"><strong aria-hidden="true">6.2.</strong> Common Tests</a></li><li class="expanded "><a href="../testing/externalities.html"><strong aria-hidden="true">6.3.</strong> Custom Test Environment</a></li><li class="spacer"></li></ol></li><li class="expanded "><a href="../more-resources.html">More Resources</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -154,70 +148,49 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#adding-machine" id="adding-machine">Adding Machine</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/adding-machine"><code>kitchen/pallets/adding-machine</code></a></em></p>
-<p>A simple adding machine checks for overflow and emits an event with the result, without using storage. In the pallet's <code>lib.rs</code> file,</p>
-<pre><code class="language-rust ignore">pub trait Trait: system::Trait {
-    type Event: From&lt;Event&gt; + Into&lt;&lt;Self as system::Trait&gt;::Event&gt;;
-}
-
-decl_module! {
-    pub struct Module&lt;T: Trait&gt; for enum Call where origin: T::Origin {
-        fn deposit_event() = default;
-
-        fn add(origin, val1: u32, val2: u32) -&gt; Result {
-            let _ = ensure_signed(origin)?;
-            // checks for overflow
-            let result = match val1.checked_add(val2) {
-                Some(r) =&gt; r,
-                None =&gt; return Err(&quot;Addition overflowed&quot;),
-            };
-            Self::deposit_event(Event::Added(val1, val2, result));
-            Ok(())
-        }
-    }
-}
-
-decl_event!(
+                        <h1><a class="header" href="#event" id="event">Event</a></h1>
+<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-event"><code>pallets/simple-event</code></a></em>, <em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/generic-event"><code>pallets/generic-event</code></a></em></p>
+<p>In Substrate, <a href="https://docs.substrate.dev/docs/glossary#section-transaction">transaction</a> finality does not guarantee the execution of functions dependent on the given transaction. To verify that functions have executed successfully, emit an <a href="https://docs.substrate.dev/docs/glossary#section-events">event</a> at the bottom of the function body.</p>
+<blockquote>
+<p><strong>Events</strong> notify the off-chain world of successful state transitions</p>
+</blockquote>
+<p>To declare an event, use the <a href="https://substrate.dev/rustdocs/master/frame_support/macro.decl_event.html"><code>decl_event</code></a> macro.</p>
+<h2><a class="header" href="#simple-event" id="simple-event">Simple Event</a></h2>
+<p>The simplest example of an event uses the following syntax</p>
+<pre><code class="language-rust ignore">decl_event!(
     pub enum Event {
-        Added(u32, u32, u32),
+        EmitInput(u32),
     }
 );
 </code></pre>
-<p><em>NOTE</em>: The event described above only wraps <code>u32</code> values. If we want/need the <code>Event</code> type to contain multiple types from our runtime, then the <code>decl_event</code> would use the following syntax</p>
-<pre><code class="language-rust ignore">decl_event!(
-    pub enum Event&lt;T&gt; {
-        ...
-    }
-)
+<p>The event is emitted at the bottom of the <code>do_something</code> function body:</p>
+<pre><code class="language-rust ignore">Self::deposit_event(Event::EmitInput(new_number));
 </code></pre>
-<p>In some cases, the <code>where</code> clause can be used to specify type aliasing for more readable code</p>
+<h2><a class="header" href="#events-with-generic-types" id="events-with-generic-types">Events with Generic Types</a></h2>
+<p><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/generic-event">Sometimes</a> events might contin types from the pallet's Configuration Trait. In this case, it is necessary to specify additional syntax</p>
 <pre><code class="language-rust ignore">decl_event!(
-    pub enum Event&lt;T&gt;
-    where
-        Balance = BalanceOf&lt;T&gt;,
-        &lt;T as system::Trait&gt;::AccountId,
-        &lt;T as system::Trait&gt;::BlockNumber,
-        &lt;T as system::Trait&gt;::Hash,
-    {
-        FakeEvent1(AccountId, Hash, BlockNumber),
-        FakeEvent2(AccountId, Balance, BlockNumber),
+    pub enum Event&lt;T&gt; where AccountId = &lt;T as system::Trait&gt;::AccountId {
+        EmitInput(AccountId, u32),
     }
-)
+);
 </code></pre>
+<p>The syntax for <code>deposit_event</code> now takes the <code>RawEvent</code> type because it is generic over the pallet's configuration trait</p>
+<pre><code class="language-rust ignore">Self::deposit_event(RawEvent::EmitInput(user, new_number));
+</code></pre>
+<p><em>See the next example to use the simple event syntax in the context of verifying successful execution of an <a href="./adder.html">adding machine</a></em></p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
-                            <a rel="prev" href="../basics/events.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../appetizers/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
 
                         
-                            <a rel="next" href="../basics/value.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="../appetizers/adder.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -229,13 +202,13 @@ decl_event!(
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
-                    <a href="../basics/events.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a href="../appetizers/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
 
                 
-                    <a href="../basics/value.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a href="../appetizers/adder.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 
@@ -248,7 +221,7 @@ decl_event!(
         
 
         
-
+        
         
         <script type="text/javascript">
             window.playpen_copyable = true;
@@ -269,11 +242,11 @@ decl_event!(
 
         <!-- Custom JS scripts -->
         
-        <script type="text/javascript" src="../analytics/load.js"></script>
+        <script type="text/javascript" src="../.analytics/load.js"></script>
         
-        <script type="text/javascript" src="../analytics/config.js"></script>
+        <script type="text/javascript" src="../.analytics/config.js"></script>
         
-        <script type="text/javascript" src="../analytics/klaro.min.js"></script>
+        <script type="text/javascript" src="../.analytics/klaro.min.js"></script>
         
 
         

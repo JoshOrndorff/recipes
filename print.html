@@ -9,7 +9,7 @@
         
 
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <meta name="description" content="Substrate runtime design patterns">
+        <meta name="description" content="A Hands-On Cookbook for Aspiring Blockchain Chefs">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
 
@@ -82,14 +82,8 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <div id="devhub-link">
-                <a href="https://substrate.dev">
-                    <img src="favicon.png" />
-                    <p>Substrate Developer Hub</p>
-                </a>
-            </div>
             <div id="sidebar-scrollbox" class="sidebar-scrollbox">
-                <ol class="chapter"><li class="expanded "><a href="base/index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="expanded "><a href="base/rust.html"><strong aria-hidden="true">2.</strong> Learn Rust</a></li><li class="expanded "><a href="base/setup.html"><strong aria-hidden="true">3.</strong> Getting Started</a></li><li><ol class="section"><li class="expanded "><a href="base/runnode.html"><strong aria-hidden="true">3.1.</strong> Running A Node</a></li><li class="expanded "><a href="base/interactnode.html"><strong aria-hidden="true">3.2.</strong> Interacting with a Node</a></li><li class="expanded "><a href="base/kitchenoverview.html"><strong aria-hidden="true">3.3.</strong> Using the Kitchen</a></li></ol></li><li class="expanded "><a href="basics/index.html"><strong aria-hidden="true">4.</strong> Hello Substrate</a></li><li><ol class="section"><li class="expanded "><a href="basics/events.html"><strong aria-hidden="true">4.1.</strong> Events Verify Execution</a></li><li class="expanded "><a href="basics/adder.html"><strong aria-hidden="true">4.2.</strong> Adding Machine</a></li><li class="expanded "><a href="basics/value.html"><strong aria-hidden="true">4.3.</strong> Single Value Storage</a></li></ol></li><li class="expanded "><a href="storage/index.html"><strong aria-hidden="true">5.</strong> Runtime Storage API</a></li><li><ol class="section"><li class="expanded "><a href="storage/cache.html"><strong aria-hidden="true">5.1.</strong> Cache Locally &gt; Storage Calls</a></li><li class="expanded "><a href="storage/iterate.html"><strong aria-hidden="true">5.2.</strong> Sets</a></li><li class="expanded "><a href="storage/enumerated.html"><strong aria-hidden="true">5.3.</strong> Ordered Lists: Maps, Linked Maps</a></li><li class="expanded "><a href="storage/double.html"><strong aria-hidden="true">5.4.</strong> Subgroup Removal by Subkey: Double Maps</a></li><li class="expanded "><a href="storage/childtries.html"><strong aria-hidden="true">5.5.</strong> Efficient Subgroup Removal by Subkey: Child Tries</a></li><li class="expanded "><a href="storage/constants.html"><strong aria-hidden="true">5.6.</strong> Configurable Constants</a></li></ol></li><li class="expanded "><a href="traits/index.html"><strong aria-hidden="true">6.</strong> Types and Traits</a></li><li><ol class="section"><li class="expanded "><a href="traits/currency.html"><strong aria-hidden="true">6.1.</strong> Currency Types</a></li><li class="expanded "><a href="traits/weights.html"><strong aria-hidden="true">6.2.</strong> Weights for Resource Accounting</a></li><li class="expanded "><a href="traits/fees.html"><strong aria-hidden="true">6.3.</strong> Transaction Fees for Economic Security</a></li><li class="expanded "><a href="storage/instantiable.html"><strong aria-hidden="true">6.4.</strong> Instantiable Pallets</a></li><li class="expanded "><a href="traits/charity.html"><strong aria-hidden="true">6.5.</strong> Charity and Imbalances</a></li><li class="expanded "><a href="advanced/runtime-api.html"><strong aria-hidden="true">6.6.</strong> Runtime APIs</a></li><li class="expanded "><a href="advanced/custom-rpc.html"><strong aria-hidden="true">6.7.</strong> Custom RPCs</a></li></ol></li><li class="expanded "><a href="declarative/index.html"><strong aria-hidden="true">7.</strong> Declarative Syntax</a></li><li><ol class="section"><li class="expanded "><a href="declarative/ensure.html"><strong aria-hidden="true">7.1.</strong> Verify First, Write Last</a></li><li class="expanded "><a href="declarative/safemath.html"><strong aria-hidden="true">7.2.</strong> Safe Math</a></li><li class="expanded "><a href="declarative/permissioned.html"><strong aria-hidden="true">7.3.</strong> Permissioned Methods</a></li></ol></li><li class="expanded "><a href="testing/index.html"><strong aria-hidden="true">8.</strong> Testing</a></li><li><ol class="section"><li class="expanded "><a href="testing/mock.html"><strong aria-hidden="true">8.1.</strong> Basic Test Environments</a></li><li class="expanded "><a href="testing/common.html"><strong aria-hidden="true">8.2.</strong> Common Tests</a></li><li class="expanded "><a href="testing/externalities.html"><strong aria-hidden="true">8.3.</strong> Custom Test Environment</a></li></ol></li><li class="expanded "><a href="base/dessert.html"><strong aria-hidden="true">9.</strong> Featured Tutorials</a></li><li class="spacer"></li><li class="expanded affix "><a href="base/resource.html">More Resources</a></li></ol>
+                <ol class="chapter"><li class="expanded affix "><a href="introduction.html">Introduction</a></li><li class="expanded "><a href="prepare-kitchen/index.html"><strong aria-hidden="true">1.</strong> Preparing Your Kitchen</a></li><li><ol class="section"><li class="expanded "><a href="prepare-kitchen/1-build-node.html"><strong aria-hidden="true">1.1.</strong> Running A Node</a></li><li class="expanded "><a href="prepare-kitchen/2-interact-node.html"><strong aria-hidden="true">1.2.</strong> Interacting with a Node</a></li><li class="expanded "><a href="prepare-kitchen/3-kitchen-organization.html"><strong aria-hidden="true">1.3.</strong> Kitchen Organization</a></li></ol></li><li class="expanded "><a href="appetizers/index.html"><strong aria-hidden="true">2.</strong> Appetizers</a></li><li><ol class="section"><li class="expanded "><a href="appetizers/events.html"><strong aria-hidden="true">2.1.</strong> Events Verify Execution</a></li><li class="expanded "><a href="appetizers/adder.html"><strong aria-hidden="true">2.2.</strong> Adding Machine</a></li><li class="expanded "><a href="appetizers/value.html"><strong aria-hidden="true">2.3.</strong> Single Value Storage</a></li><li class="expanded "><a href="appetizers/hello-substrate.html"><strong aria-hidden="true">2.4.</strong> Hello Substrate</a></li></ol></li><li class="expanded "><a href="storage/index.html"><strong aria-hidden="true">3.</strong> Runtime Storage API</a></li><li><ol class="section"><li class="expanded "><a href="storage/cache.html"><strong aria-hidden="true">3.1.</strong> Cache Locally &gt; Storage Calls</a></li><li class="expanded "><a href="storage/iterate.html"><strong aria-hidden="true">3.2.</strong> Sets</a></li><li class="expanded "><a href="storage/enumerated.html"><strong aria-hidden="true">3.3.</strong> Ordered Lists: Maps, Linked Maps</a></li><li class="expanded "><a href="storage/double.html"><strong aria-hidden="true">3.4.</strong> Subgroup Removal by Subkey: Double Maps</a></li><li class="expanded "><a href="storage/childtries.html"><strong aria-hidden="true">3.5.</strong> Efficient Subgroup Removal by Subkey: Child Tries</a></li><li class="expanded "><a href="storage/constants.html"><strong aria-hidden="true">3.6.</strong> Configurable Constants</a></li></ol></li><li class="expanded "><a href="traits/index.html"><strong aria-hidden="true">4.</strong> Types and Traits</a></li><li><ol class="section"><li class="expanded "><a href="traits/currency.html"><strong aria-hidden="true">4.1.</strong> Currency Types</a></li><li class="expanded "><a href="traits/weights.html"><strong aria-hidden="true">4.2.</strong> Weights for Resource Accounting</a></li><li class="expanded "><a href="traits/fees.html"><strong aria-hidden="true">4.3.</strong> Transaction Fees for Economic Security</a></li><li class="expanded "><a href="storage/instantiable.html"><strong aria-hidden="true">4.4.</strong> Instantiable Pallets</a></li><li class="expanded "><a href="traits/charity.html"><strong aria-hidden="true">4.5.</strong> Charity and Imbalances</a></li><li class="expanded "><a href="advanced/runtime-api.html"><strong aria-hidden="true">4.6.</strong> Runtime APIs</a></li><li class="expanded "><a href="advanced/custom-rpc.html"><strong aria-hidden="true">4.7.</strong> Custom RPCs</a></li><li class="expanded "><a href="advnced/execution-schedule.html"><strong aria-hidden="true">4.8.</strong> Execution Schedule</a></li></ol></li><li class="expanded "><a href="declarative/index.html"><strong aria-hidden="true">5.</strong> Declarative Syntax</a></li><li><ol class="section"><li class="expanded "><a href="declarative/ensure.html"><strong aria-hidden="true">5.1.</strong> Verify First, Write Last</a></li><li class="expanded "><a href="declarative/safemath.html"><strong aria-hidden="true">5.2.</strong> Safe Math</a></li><li class="expanded "><a href="declarative/permissioned.html"><strong aria-hidden="true">5.3.</strong> Permissioned Methods</a></li></ol></li><li class="expanded "><a href="testing/index.html"><strong aria-hidden="true">6.</strong> Testing</a></li><li><ol class="section"><li class="expanded "><a href="testing/mock.html"><strong aria-hidden="true">6.1.</strong> Basic Test Environments</a></li><li class="expanded "><a href="testing/common.html"><strong aria-hidden="true">6.2.</strong> Common Tests</a></li><li class="expanded "><a href="testing/externalities.html"><strong aria-hidden="true">6.3.</strong> Custom Test Environment</a></li><li class="spacer"></li></ol></li><li class="expanded "><a href="more-resources.html">More Resources</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -157,8 +151,22 @@
                 <div id="content" class="content">
                     <main>
                         <h1><a class="header" href="#substrate-recipes-" id="substrate-recipes-">Substrate Recipes 🍴😋🍴</a></h1>
-<p>Substrate Recipes is a collection of simple code patterns that demonstrate best practices when building blockchains with <strong><a href="https://github.com/paritytech/substrate">Substrate</a></strong>. The repo used to build this book is <a href="https://github.com/substrate-developer-hub/recipes">open source</a>. Check out the <a href="https://github.com/substrate-developer-hub/recipes/blob/master/CONTRIBUTING.md">contributions guidelines</a> for an overview of the structure and directions for getting involved.</p>
-<p>The current <strong>scope</strong> is limited to pallet development and runtime configuration. To learn more about Substrate, see the <a href="https://substrate.dev">official documentation</a>.</p>
+<p><em>A Hands-On Cookbook for Aspiring Blockchain Chefs</em></p>
+<p>Substrate Recipes is a cookbook of working examples that demonstrate best practices when building blockchains with <strong><a href="https://github.com/paritytech/substrate">Substrate</a></strong>. Each recipe contains a complete working code example as well as a detailed writeup describing the code. This book is <a href="https://github.com/substrate-developer-hub/recipes">open source</a>. Check out the <a href="https://github.com/substrate-developer-hub/recipes/blob/master/CONTRIBUTING.md">contributing guidelines</a> for an overview of the structure and directions for getting involved.</p>
+<h2><a class="header" href="#how-to-use-this-book" id="how-to-use-this-book">How to Use This Book</a></h2>
+<p>The easiest place to read this book is at <a href="https://substrate.dev/recipes">https://substrate.dev/recipes</a>.</p>
+<p>The first two chapters are meant to be read in order.</p>
+<p>In Chapter 1, <a href="./prepare-kitchen/README.html">Preparing your Kitchen</a>, you will set up your toolchain, compile a blockchain node, and learn to interact with the blockchain.</p>
+<p>In Chapter 2, <a href="./appetizers/README.html">Appetizers</a>, you will cook your first few recipes, learning the fundamentals of Substrate development.</p>
+<p>The rest of the book, the &quot;Entrees&quot;, can be read in any order, and you should skip to whichever recipes interest you.</p>
+<p>Remember, you can't learn to cook by reading alone. As you work through the book, put on your apron, get out some pots and pans, and practice compiling, testing, and hacking on the recipes. Play with the code in the kitchen, extract patterns, and apply them to a problem that you want to solve!</p>
+<h2><a class="header" href="#getting-help" id="getting-help">Getting Help</a></h2>
+<p>When learning any new skill, you will inevitably get stuck at some point. When you do get stuck you can seek help in several ways:</p>
+<ul>
+<li>Ask a question on <a href="https://stackoverflow.com/questions/tagged/substrate">Stack Overflow</a></li>
+<li>Ask a question in the <a href="https://riot.im/app/#/room/#substrate-technical:matrix.org">Substrate Technical Riot channel</a></li>
+<li>Open a <a href="https://github.com/substrate-developer-hub/recipes/issues/new">new issue</a> against this repository</li>
+</ul>
 <h2><a class="header" href="#what-is-substrate" id="what-is-substrate">What is Substrate?</a></h2>
 <p><a href="https://github.com/paritytech/substrate">Substrate</a> is a framework for building blockchains. For a high level overview, read the following blog posts:</p>
 <ul>
@@ -166,225 +174,186 @@
 <li><a href="https://www.parity.io/substrate-in-a-nutshell/">Substrate in a nutshell</a></li>
 <li><a href="https://www.parity.io/a-brief-summary-of-everything-substrate-polkadot/">A brief summary of everything Substrate and Polkadot</a></li>
 </ul>
-<h2><a class="header" href="#how-to-use-this-book" id="how-to-use-this-book">How to Use This Book</a></h2>
-<p>Start by cloning the repo on github:</p>
-<pre><code class="language-bash">git clone https://github.com/substrate-developer-hub/recipes
-</code></pre>
-<p>As you read through the book, practice compiling and testing recipes in <a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen"><code>recipes/kitchen</code></a>. You can't learn to code by reading about it -- play with the code in the kitchen, extract patterns, and apply them to a problem that you want to solve!</p>
-<p>It is useful to recognize that <a href="https://youtu.be/05H4YsyPA-U?t=1789">coding is all about abstraction</a>. To accelerate your progress, I recommend skimming the patterns in this book, composing them into interesting projects, and building your own recipes.</p>
-<p>Reach out for guidance on <a href="https://stackoverflow.com/questions/tagged/substrate">Stack Overflow</a> or in the <a href="https://riot.im/app/#/room/#substrate-technical:matrix.org">Substrate Technical Riot channel</a>.</p>
-<h1><a class="header" href="#learn-rust" id="learn-rust">Learn Rust</a></h1>
-<p>To be productive with <a href="https://github.com/substrate">substrate</a> requires some familiarity with Rust. Fortunately, the Rust community is known for comprehensive documentation and tutorials. The most common resource for initially learning Rust is <a href="https://doc.rust-lang.org/book/index.html">The Rust Book</a>. To see examples of popular crate usage patterns, <a href="https://doc.rust-lang.org/rust-by-example/index.html">Rust by Example</a> is also convenient.</p>
-<h2><a class="header" href="#api-design" id="api-design">API Design</a></h2>
-<p>To become more familiar with commmon design patterns in Rust, the following links might be helpful:</p>
+<p>To learn more about Substrate, see the <a href="https://substrate.dev">official documentation</a>.</p>
+<h2><a class="header" href="#learning-rust" id="learning-rust">Learning Rust</a></h2>
+<p>Becoming productive with Substrate requires some familiarity with Rust. Fortunately, the Rust community is known for comprehensive documentation and tutorials. The most common resource for initially learning Rust is <a href="https://doc.rust-lang.org/book/index.html">The Rust Book</a>. To see examples of popular crate usage patterns, <a href="https://doc.rust-lang.org/rust-by-example/index.html">Rust by Example</a> is also convenient.</p>
+<p>While knowing some Rust is certainly necessary, it is not wise to delay learning Substrate until you are a Rust guru. Rather than learning Rust <em>before</em> you learn Substrate, consider learning Rust <em>as</em> you learn Substrate. If you're beyond the fundamentals of Rust, there are lots <a href="./more-resources.html">more Rust resources</a> at the end of the book.</p>
+<h1><a class="header" href="#setting-up-your-kitchen" id="setting-up-your-kitchen">Setting Up Your Kitchen</a></h1>
+<p>Any experienced chef will tell you that cooking delicious blockchains... I mean meals... starts with a properly equipped and organized kitchen. In this chapter we will guide you through setting up your development environment, and introduce you to the structure of the recipes repository.</p>
+<p>This section covers:</p>
 <ul>
-<li><a href="https://rust-lang.github.io/api-guidelines/about.html">Official Rust API Guidelines</a></li>
-<li><a href="https://github.com/rust-unofficial/patterns">Rust Unofficial Design Patterns</a></li>
-<li><a href="https://deterministic.space/elegant-apis-in-rust.html">Elegant Library API Guidelines</a></li>
+<li><a href="prepare-kitchen/./1-build-node.html">Building a Node</a> - Compile and execute your first Substrate-based blockchain node.</li>
+<li><a href="prepare-kitchen/./2-interact-node.html">Interacting with the Node</a> - Submit transactions and inspect state with a user interface.</li>
+<li><a href="prepare-kitchen/./3-kitchen-organization.html">Understanding the Kitchen's Organization</a> - How is the code organized, and why?</li>
 </ul>
-<h2><a class="header" href="#optimizations" id="optimizations">Optimizations</a></h2>
-<p>To optimize runtime performance, Substrate developers should make use of iterators, traits, and Rust's other &quot;<em>zero cost</em> abstractions&quot;:</p>
-<ul>
-<li><a href="https://blog.rust-lang.org/2015/05/11/traits.html">Abstraction without overhead: traits in Rust</a>, <a href="https://www.youtube.com/watch?v=Sn3JklPAVLk">related conference talk</a></li>
-<li><a href="https://hermanradtke.com/2015/06/22/effectively-using-iterators-in-rust.html">Effectively Using Iterators in Rust</a></li>
-<li><a href="http://troubles.md/posts/rust-optimization/">Achieving Warp Speed with Rust</a></li>
-</ul>
-<p>It is not (immediately) necessary to become familiar with multithreading because the runtime operates in a <a href="https://www.tutorialspoint.com/single-threaded-and-multi-threaded-processes">single-threaded context</a>. Even so, the runtime might take advantage of the <a href="https://substrate.dev/docs/en/next/overview/off-chain-workers">offchain workers API</a> to minimize the computation executed on-chain. Effectively using these features requires increased familiarity with advanced Rust.</p>
-<p>For a high-level overview of concurrency in Rust, Stjepan Glavina provides the following descriptions in <a href="https://stjepang.github.io/2019/01/29/lock-free-rust-crossbeam-in-2019.html">Lock-free Rust: Crossbeam in 2019</a>:</p>
-<ul>
-<li><strong><a href="https://github.com/rayon-rs/rayon">Rayon</a></strong> splits your data into distinct pieces, gives each piece to a thread to do some kind of computation on it, and finally aggregates results. Its goal is to distribute CPU-intensive tasks onto a thread pool.</li>
-<li><strong><a href="https://github.com/tokio-rs/tokio">Tokio</a></strong> runs tasks which sometimes need to be paused in order to wait for asynchronous events. Handling tons of such tasks is no problem. Its goal is to distribute IO-intensive tasks onto a thread pool.</li>
-<li><strong><a href="https://github.com/crossbeam-rs/crossbeam">Crossbeam</a></strong> is all about low-level concurrency: atomics, concurrent data structures, synchronization primitives. Same idea as the <code>std::sync</code> module, but bigger. Its goal is to provide tools on top of which libraries like Rayon and Tokio can be built.</li>
-</ul>
-<h3><a class="header" href="#asynchrony" id="asynchrony">Asynchrony</a></h3>
-<p><a href="https://areweasyncyet.rs/">Are we <code>async</code> yet?</a></p>
-<p><strong>Conceptual</strong></p>
-<ul>
-<li><a href="https://boats.gitlab.io/blog/post/wakers-i/">Introduction to Async/Await Programming (withoutboats/wakers-i)</a></li>
-<li><a href="https://aturon.github.io/tech/2016/08/11/futures/">Futures (by Aaron Turon)</a></li>
-<li><a href="https://www.youtube.com/watch?v=skos4B5x7qE">RustLatam 2019 - Without Boats: Zero-Cost Async IO</a></li>
-</ul>
-<p><strong>Projects</strong></p>
-<ul>
-<li><a href="https://github.com/rustasync">Rust Asynchronous Ecosystem Working Group</a></li>
-<li><a href="https://github.com/withoutboats/romio">romio</a></li>
-<li><a href="https://tokio.rs/docs/overview/">Tokio Docs</a></li>
-</ul>
-<h3><a class="header" href="#concurrency" id="concurrency">Concurrency</a></h3>
-<p><strong>Conceptual</strong></p>
-<ul>
-<li><a href="https://stjepang.github.io/2019/01/29/lock-free-rust-crossbeam-in-2019.html">Lock-free Rust: Crossbeam in 2019</a></li>
-<li><a href="https://github.com/crossbeam-rs/rfcs/wiki">Crossbeam Research Meta-link</a></li>
-<li><a href="https://www.youtube.com/watch?v=Dbytx0ivH7Q">Rust Concurrency Explained</a></li>
-</ul>
-<p><strong>Projects</strong></p>
-<ul>
-<li><a href="https://github.com/spacejam/sled">sled</a></li>
-<li><a href="https://github.com/servo/servo">servo</a></li>
-<li><a href="https://github.com/tikv/tikv">TiKV</a></li>
-</ul>
-<h1><a class="header" href="#getting-started" id="getting-started">Getting Started</a></h1>
-<p>If you do not have a Substrate development environment setup on your machine, please install it by following these directions.</p>
-<h3><a class="header" href="#for-linux--macos" id="for-linux--macos">For Linux / macOS</a></h3>
+<h1><a class="header" href="#building-a-node" id="building-a-node">Building a Node</a></h1>
+<h2><a class="header" href="#prerequisites" id="prerequisites">Prerequisites</a></h2>
+<p>Before we can even begin compiling our first blockchain node, we need to have a properly configured Rust toolchain. There is a convenient script that will set up this toolchain for us, and we can run it with the following command.</p>
 <pre><code class="language-bash"># Setup Rust and Substrate
 curl https://getsubstrate.io -sSf | bash -s -- --fast
 </code></pre>
-<h3><a class="header" href="#for-windows" id="for-windows">For Windows</a></h3>
-<p>Refer to our <a href="https://substrate.dev/docs/en/overview/getting-started#getting-started-on-windows">Substrate Installation on Windows</a>.</p>
-<h2><a class="header" href="#kitchen-overview" id="kitchen-overview">Kitchen Overview</a></h2>
-<p>The <a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen"><code>recipes/kitchen</code></a> folder contains all the code necessary to run a Substrate node. There are three folders inside:</p>
-<ul>
-<li><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/nodes"><code>nodes</code></a> - Complete blockchain nodes that perform P2P messaging, consensus, and more. Some of these nodes are general-purpose, others demonstrate specific features of Substrate.</li>
-<li><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/runtimes"><code>runtimes</code></a> - Complete runtimes that can be used with the Kitchen Node.</li>
-<li><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets"><code>pallets</code></a> - Pallets that make up the runtimes. A pallet gives the runtime a particular piece of functionality. Currently, most of the recipe code is stored under this folder.</li>
-</ul>
-<p>This section teaches users to interact with <a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen"><code>recipes/kitchen</code></a> by</p>
-<ul>
-<li><a href="base/./runnode.html">Running a Node</a></li>
-<li><a href="base/./interactnode.html">Interacting with the Node</a></li>
-<li><a href="base/./kitchenoverview.html">Understanding the Kitchen Architecture</a></li>
-</ul>
-<h1><a class="header" href="#run-the-kitchen-node" id="run-the-kitchen-node">Run the Kitchen Node</a></h1>
-<p>To run the code in the recipes, <code>git clone</code> the source repository. We also want to kick-start the node compilation as it may take about 30 minutes to complete depending on your hardware.</p>
-<pre><code class="language-bash">git clone https://github.com/substrate-developer-hub/recipes.git
-cd recipes/kitchen/nodes/kitchen-node
-./scripts/init.sh
-
-# This step takes a while to complete
-cargo build --release
-</code></pre>
 <blockquote>
-<p><strong>Notes</strong></p>
-<p>Refer to the following sections to:</p>
-<ul>
-<li>Learn more about <a href="https://substrate.dev/docs/en/runtime/architecture-of-a-runtime">Substrate runtime</a></li>
-</ul>
+<p>This command downloads and executes code from the internet. Give yourself peace-of-mind by inspecting the <a href="https://getsubstrate.io">script's source</a> to confirm it isn't doing anything nasty.</p>
 </blockquote>
-<p>Once the compilation is completed, you can first purge any existing blockchain data (useful to start your node from a clean state in future) and then start the node.</p>
-<pre><code class="language-bash"># Inside `recipes/kitchen` folder
+<h3><a class="header" href="#for-windows" id="for-windows">For Windows</a></h3>
+<p>These instructions and the rest of the instructions in this chapter assume a unix-like environment such as Linux, MacOS, or Windows Subsystem for Linux (WSL). If you are a Windows user, WSL is the best way to proceed. If you want or need to work in a native Windows environment, this is possible, but is not covered in detail here. Please follow along with the <a href="https://substrate.dev/docs/en/overview/getting-started#getting-started-on-windows">Getting Started on Windows</a> guide, then return here when you're ready to proceed.</p>
+<h2><a class="header" href="#compile-the-kitchen-node" id="compile-the-kitchen-node">Compile the Kitchen Node</a></h2>
+<p>If you haven't already, <code>git clone</code> the recipes repository. We also want to kick-start the node compilation as it may take about 30 minutes to complete depending on your hardware.</p>
+<pre><code class="language-bash"># Clone the Recipes Repository
+git clone https://github.com/substrate-developer-hub/recipes.git
+cd recipes
 
-# Purge any existing blockchain data. Enter `y` upon prompt.
-./target/release/kitchen-node purge-chain --dev
+#  Update Rust-Wasm toolchain
+./nodes/scripts/init.sh
 
-# Start the Kitchen Node
-./target/release/kitchen-node --dev
+# Compile the Kitchen Node
+# This step takes a while to complete
+cargo build --release -p kitchen-node
+</code></pre>
+<p>As you work through the recipes, refer back to these instructions each time you wish to re-compile the node. Over time the commands will become familiar, and you will even modify them to compile other nodes.</p>
+<h2><a class="header" href="#checking-your-work" id="checking-your-work">Checking Your Work</a></h2>
+<p>Once the compilation is completed, you can ensure that the node has built properly by displaying its help page. Notice that the node has built to the <code>target/release</code> directory. This is the default location for Rust projects.</p>
+<pre><code class="language-bash"># Inside `recipes` directory
+
+# Display the Kitchen Node's help page
+./target/release/kitchen-node --help
 </code></pre>
 <h1><a class="header" href="#interact-with-the-kitchen-node" id="interact-with-the-kitchen-node">Interact with the Kitchen Node</a></h1>
-<p>If you followed <a href="base/./runnode.html">the instructions</a> to get your node running, you should see blocks created on the console. You can navigate to the  <a href="https://polkadot.js.org/apps/#/settings/developer?rpc=ws://127.0.0.1:9944">Polkadot-JS Apps</a> user interface. This is a general purpose interface for interacting with many different Substrate-based blockchains. From now on we'll call it &quot;Apps&quot; for short. Before Apps will work with our blockchain, we need to give it a little chain-specific information known as the &quot;types&quot;. You'll learn what all this means as you work through the recipes; for now just follow the instructions.</p>
-<p>Please copy the contents of <code>kitchen/runtimes/super-runtime/types.json</code> into Apps. You should already be on the Settings -&gt; Developer tab. If not, please navigate there.</p>
-<p><img src="base/../apps-types.png" alt="Screenshot: pasting types into Apps UI" /></p>
-<p>As you work through the recipes, you will use the <strong>Chain state</strong> tab to query the blockchain status and <strong>Extrinsics</strong> to send transactions to the blockchain. Feel free to play around.</p>
-<h1><a class="header" href="#using-the-kitchen" id="using-the-kitchen">Using the Kitchen</a></h1>
-<p>Let us take a deeper look at the <a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/node">Kitchen Node</a>. Inside</p>
-<p><strong><code>kitchen/node/Cargo.toml</code></strong></p>
+<p>If you followed the instructions to <a href="prepare-kitchen/./1-build-node.html">build the node</a>, you my proceed to launch your first blockchain.</p>
+<h2><a class="header" href="#launch-a-development-node" id="launch-a-development-node">Launch a Development Node</a></h2>
+<p>Before we launch our node we will purge any chain data. If you've followed the instructions exactly, you will not yet have any chain data to purge, but on each subsequent run, you will, and it is best to get in the habbit of purging your chain now. We will start our node in development mode (<code>--dev</code>).</p>
+<pre><code class="language-bash"># Purge existing blockchain data (if any)
+./target/release/kitchen-node purge-chain --dev
+
+# Start a fresh development blockchain
+./target/release/kitchen-node --dev
+</code></pre>
+<p>You should now see blocks created on the console.</p>
+<h2><a class="header" href="#launch-the-apps-user-interface" id="launch-the-apps-user-interface">Launch the Apps User Interface</a></h2>
+<p>You can navigate to the  <a href="https://polkadot.js.org/apps/#/settings/developer?rpc=ws://127.0.0.1:9944">Polkadot-JS Apps</a> user interface. This is a general purpose interface for interacting with many different Substrate-based blockchains including Polkadot. From now on we'll call it &quot;Apps&quot; for short. Before Apps will work with our blockchain, we need to give it a little chain-specific information known as the &quot;types&quot;. You'll learn what all this means as you work through the recipes; for now just follow the instructions.</p>
+<blockquote>
+<p>If you are not clicking the link above but visiting Apps directly, by default Apps connects to Polkadot Kusama network. You will need to switch the connecting network to your locally running network, with only one node, by clicking on the network icon on Apps top left corner.</p>
+<p><img src="prepare-kitchen/../img/polkadot-apps-select-network.png" alt="Screenshot: Switching Network" /></p>
+</blockquote>
+<blockquote>
+<p>Some browsers, notably Firefox, will not connect to a local node from an https website. An easy work around is to try another browser, like Chromium. Another option is to <a href="https://github.com/polkadot-js/apps#development">host this interface locally</a>.</p>
+</blockquote>
+<p>If you're not already on the <code>Settings -&gt; Developer</code>page, please navigate there. Copy the contents of <code>runtimes/super-runtime/types.json</code> into Apps.</p>
+<p><img src="prepare-kitchen/../img/apps-types.png" alt="Screenshot: pasting types into Apps UI" /></p>
+<p>As you work through the recipes, you will use the <strong>Chain State</strong> tab to query the blockchain status and <strong>Extrinsics</strong> to send transactions to the blockchain. Play around for a bit before moving on.</p>
+<h1><a class="header" href="#kitchen-organization" id="kitchen-organization">Kitchen Organization</a></h1>
+<p>Now that your kitchen is well-equipped with all the right tools (bowls, knives, Rust compiler, etc), let's take a look at how it is organized.</p>
+<h2><a class="header" href="#structure-of-a-substrate-node" id="structure-of-a-substrate-node">Structure of a Substrate Node</a></h2>
+<p>It is useful to recognize that <a href="https://youtu.be/05H4YsyPA-U?t=1789">coding is all about abstraction</a>.</p>
+<p>To understand how the code in this repository is organized, let's first take a look at how a Substrate node is constructed. Each node has many components that manage things like queueing transaction, communicating over a P2P network, reaching consensus on the state of the blockchain, and the chain's actual runtime logic. Each aspect of the node is interesting in its own right, and the runtime is particularly interesting because it contains the business logic (aka &quot;state transition function&quot;) that codifies the chain's functionality.</p>
+<p>Much, but not all, of the Recipes focuses on writing runtimes with FRAME, Parity's Framework for composing runtimes from individual building blocks called Pallets. Runtimes built with FRAME typically contain several such pallets. The kitchen node you built previously follows this paradigm.</p>
+<ul>
+<li>Blockchain Node
+<ul>
+<li>P2P Messaging</li>
+<li>Consensus</li>
+<li>Runtime
+<ul>
+<li>Pallet 1</li>
+<li>Pallet 2</li>
+<li>Pallet 3</li>
+</ul>
+</li>
+<li>Transaction Queue</li>
+<li>RPC</li>
+</ul>
+</li>
+</ul>
+<h2><a class="header" href="#the-directories-in-our-kitchen" id="the-directories-in-our-kitchen">The Directories in our Kitchen</a></h2>
+<p>There are four primary directories in this repository:</p>
+<ul>
+<li><strong>Text</strong>: Source of <a href="https://substrate.dev/recipes">the book</a> written in markdown. This is what you're reading right now.</li>
+<li><strong>Nodes</strong>: Complete Substrate nodes ready to run.</li>
+<li><strong>Runtimes</strong>: Complete runtimes for use in Substrate nodes.</li>
+<li><strong>Pallets</strong>: Complete pallets for use in FRAME-based runtimes.</li>
+</ul>
+<p>Exploring those directories reveals a tree that looks like this</p>
+<pre><code>recipes
+|
++-- text
+|
++-- nodes
+	|
+	+-- kitchen-node    &lt;-- You built this previously
+	|
+	+-- rpc-node
+|
++-- runtimes
+	|
+	+-- super-runtime    &lt;-- You built this too (it is part of the kitchen-node)
+	|
+	+-- super-genesis    &lt;-- You built this too (it is part of the kitchen-node)
+	|
+	+-- weight-fee-runtime
+	|
+	+-- weight-fee-genesis
+	|
+	+ ...
+|
++-- pallets
+	|
+	+-- adding-machine    &lt;-- You built this too (it is part of super-runtime)
+	|
+	+-- basic-token        &lt;-- You built this too (it is part of super-runtime)
+	|
+	+ ...
+	|
+	+-- weights
+</code></pre>
+<h2><a class="header" href="#inside-the-kitchen-node" id="inside-the-kitchen-node">Inside the Kitchen Node</a></h2>
+<p>Let us take a deeper look at the <a href="https://github.com/substrate-developer-hub/recipes/tree/master/nodes/kitchen-node">Kitchen Node</a>.</p>
+<p><strong><code>nodes/kitchen-node/Cargo.toml</code></strong></p>
 <pre><code class="language-TOML"># -- snip --
-runtime = { package = &quot;super-runtime&quot;, path = &quot;../runtimes/super-runtime&quot; }
-# -- snip --
+runtime = { package = &quot;super-runtime&quot;, path = &quot;../../runtimes/super-runtime&quot; }
+runtime-genesis = { package = &quot;super-genesis&quot;, path = &quot;../../runtimes/super-genesis&quot; }
+# runtime = { package = &quot;weight-fee-runtime&quot;, path = &quot;../runtimes/weight-fee-runtime&quot;}
+# runtime-genesis = { package = &quot;weight-fee-genesis&quot;, path = &quot;../runtimes/weight-fee-genesis&quot;}
 </code></pre>
-<p>You see <code>node</code> is bringing in the pallets in and using them to build up the node service in</p>
-<p><strong><code>kitchen/node/src/service.rs</code></strong></p>
-<pre><code class="language-rust ignore">// -- snip --
-use runtime::{self, GenesisConfig, opaque::Block, RuntimeApi};
-// -- snip --
-
-macro_rules! new_full_start {
-  // -- snip --
-  let builder = substrate_service::ServiceBuilder::new_full::&lt;
-    runtime::opaque::Block, runtime::RuntimeApi, crate::service::Executor
-  &gt;($config)?
-  // -- snip --
-}
-</code></pre>
-<p>The <code>runtime</code> folder contains two folders for each runtime. Let's consider the super runtime as an example. <code>super-genesis</code> is for specifying how the first block on the blockchain (genesis block) is being produced, and <code>super-runtime</code> for specifying how the node runtime behaves. Now let us focus on one pallet <code>simple-event</code> in the runtime. In</p>
-<p><strong><code>kitchen/runtimes/super-runtime/Cargo.toml</code></strong></p>
+<p>Looking inside the Kitchen Node's <code>Cargo.toml</code> file we see that it has many dependencies. Most of them come from Substrate itself. Indeed most parts of this Kitchen Node are not unique or specialized, and Substrate offers robust implementations that we can use. The lines quoted above show that the runtime does not come from Substrate. Rather, we use our super-runtime which is in the <code>runtimes</code> folder.</p>
+<p>The commented lines, also quoted above, show that the Super Runtime is not the only runtime we could have chosen. We could also use the Weight-Fee runtime, and I encourage you to try that experiment (remember, instructions to re-compile the node are in the previous section).</p>
+<p>Every node must have a runtime. You may confirm that by looking at the <code>Cago.toml</code> files of the other nodes included in our kitchen.</p>
+<h2><a class="header" href="#inside-the-super-runtime" id="inside-the-super-runtime">Inside the Super Runtime</a></h2>
+<p>Having seen that the Kitchen Node depends on a runtime, let us now look deeper at the <a href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/super-runtime">Super Runtime</a>.</p>
+<p><strong><code>runtimes/super-runtime/Cargo.toml</code></strong></p>
 <pre><code class="language-TOML"># -- snip --
 
-# `simple-event` pallet is specified as a relative path to the `pallets` folder
-[dependencies]
-simple-event = { path = &quot;../../pallets/simple-event&quot;, default_features = false }
-
-# -- snip --
+# Substrate Pallets
+balances = { package = 'pallet-balances', git = 'https://github.com/paritytech/substrate.git', ... }
+transaction-payment = { package = 'pallet-transaction-payment', git = 'https://github.com/paritytech/substrate.git',... }
+# Recipe Pallets
+adding-machine = { path = &quot;../../pallets/adding-machine&quot;, default-features = false }
+basic-token = { path = &quot;../../pallets/basic-token&quot;, default-features = false }
 </code></pre>
-<p>This is where the node runtime includes the pallet <code>simple-event</code> written here in the recipes.</p>
-<p><strong><code>kitchen/runtimes/super-runtime/src/lib.rs</code></strong></p>
-<pre><code class="language-rust ignore">// -- snip --
-use simple_event;
-
-// -- snip --
-impl simple_event::Trait for Runtime {
-  type Event = Event;
-}
-
-// -- snip --
-construct_runtime!(
-  pub enum Runtime where
-    Block = Block,
-    NodeBlock = opaque::Block,
-    UncheckedExtrinsic = UncheckedExtrinsic
-  {
-    // -- snip --
-    SingleValue: single_value::{Module, Call, Storage, Event&lt;T&gt;},
-  }
-);
-</code></pre>
-<p>Finally, you can see how the <code>simple-event</code> pallet is specified in <code>kitchen/pallets/simple-event/src/lib.rs</code>.</p>
-<p>This is the general pattern used throughout these recipes. We first talk about a new piece of pallet code stored in <code>kitchen/pallets/&lt;pallet-name&gt;/src/lib.rs</code>. The pallet is then included into a runtime by adding its name and relative path in <code>kitchen/runtimes/&lt;runtime-name&gt;/Cargo.toml</code> (if not yet added) and updating <code>kitchen/runtimes/&lt;runtime-name&gt;/src/lib.rs</code>.</p>
-<h2><a class="header" href="#learn-more" id="learn-more">Learn More</a></h2>
-<p>If you are interested to learn more about how to include your own pallets in a node runtime, we recommend you to go through the following two tutorials.</p>
+<p>Here we see that the runtime depends on many pallets. Some of these pallets come from Substrate itself. Indeed, Substrate offers a rich collection of commonly used pallets which you may use in your own runtimes. This runtime also contains several custom pallets that are written right here in our Kitchen.</p>
+<h2><a class="header" href="#common-patterns" id="common-patterns">Common Patterns</a></h2>
+<p>We will not yet look closely at individual Pallets. We will begin that endeavor in the next chapter -- Appetizers.</p>
+<p>We've just observed the general pattern used throughout the recipes. From the inside out, we see a piece of pallet code stored in <code>pallets/&lt;pallet-name&gt;/src/lib.rs</code>. The pallet is then included into a runtime by adding its name and relative path in <code>runtimes/&lt;runtime-name&gt;/Cargo.toml</code>. that runtime is then installed in a node by adding its name and relative path in <code>nodes/&lt;node-name&gt;/Cargo.toml</code>. Of course adding pallets and runtimes also requires changing actual <em>code</em> as well. We will cover those details in due course. For now we're just focusing on macroscopic relationships between the parts of a Substrate node.</p>
+<p>Some recipes explore aspects of Blockchain development that are outside of the runtime. Looking back to our node architecture at the beginning of this section, you can imagine that changing a node's RPC or Consensus would be conceptually similar to changing its runtime.</p>
+<h2><a class="header" href="#additional-resources" id="additional-resources">Additional Resources</a></h2>
+<p>Substrate Developer Hub offers tutorials that go into more depth about writing pallets and including them in runtimes. If you desire, you may read them as well.</p>
 <ul>
 <li><a href="https://substrate.dev/docs/en/next/tutorials/creating-a-runtime-module">Creating an External Pallet</a></li>
 <li><a href="https://substrate.dev/docs/en/next/tutorials/adding-a-module-to-your-runtime">Adding a Pallet to Your Runtime Tutorial</a></li>
 </ul>
-<h1><a class="header" href="#pallet-fundamentals" id="pallet-fundamentals">Pallet Fundamentals</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/hello-substrate"><code>kitchen/pallets/hello-substrate</code></a></em></p>
-<p>Clone the <a href="https://github.com/substrate-developer-hub/substrate-pallet-template">substrate pallet template</a>:</p>
-<pre><code class="language-bash">git clone https://github.com/substrate-developer-hub/substrate-pallet-template
-</code></pre>
-<p>At the top of the <code>src/lib.rs</code> file, import the following from <a href="https://substrate.dev/rustdocs/master/frame_support/index.html"><code>frame-support</code></a>:</p>
-<pre><code class="language-rust ignore">use frame_support::{decl_module, decl_event, decl_storage, StorageValue, StorageMap};
-use system::ensure_signed;
-</code></pre>
-<p>The blockchain's runtime storage is configured in <a href="https://substrate.dev/rustdocs/master/frame_support/macro.decl_storage.html"><code>decl_storage</code></a>.</p>
-<pre><code class="language-rust ignore">decl_storage! {
-	trait Store for Module&lt;T: Trait&gt; as HelloWorld {
-		pub LastValue get(fn last_value): u64;
-		pub UserValue get(fn user_value): map T::AccountId =&gt; u64;
-	}
-}
-</code></pre>
-<p>Defined in <a href="https://substrate.dev/rustdocs/master/frame_support/macro.decl_module.html"><code>decl_module</code></a>, the runtime methods specify acceptable interaction with runtime storage.</p>
-<pre><code class="language-rust ignore">decl_module! {
-	pub struct Module&lt;T: Trait&gt; for enum Call where origin: T::Origin {
-		fn deposit_event() = default;
-
-		pub fn set_value(origin, value: u64) {
-			let sender = ensure_signed(origin)?;
-			LastValue::put(value);
-			UserValue::&lt;T&gt;::insert(&amp;sender, value);
-			Self::deposit_event(RawEvent::ValueSet(sender, value));
-		}
-	}
-}
-</code></pre>
-<p>Events are declared in <a href="https://substrate.dev/rustdocs/master/frame_support/macro.decl_event.html"><code>decl_event</code></a>. The emission of events is used to determine successful execution of the logic in the body of runtime methods.</p>
-<pre><code class="language-rust ignore">decl_event!{
-	pub enum Event&lt;T&gt; where
-		AccountId = &lt;T as system::Trait&gt;::AccountId,
-	{
-		ValueSet(AccountId, u64),
-	}
-}
-</code></pre>
-<p><em>It is also possible to declare an error type for pallets with <a href="https://substrate.dev/rustdocs/master/frame_support/macro.decl_error.html"><code>decl_error</code></a></em></p>
+<h1><a class="header" href="#lets-get-cooking" id="lets-get-cooking">Let's Get Cooking!</a></h1>
+<p>When you're ready, we can begin by cooking some appetizer pallets.</p>
+<h1><a class="header" href="#appetizers" id="appetizers">Appetizers</a></h1>
+<p>This section of the cookbook will focus on Appetizers, small runtime pallets that teach you the basics of writing pallets with a little hand-holding. If you are brand new to Substrate, you should follow through these appetizers in order. If you've already got the basics of pallet development down, you may skip ahead to the entrees which may be read in any order.</p>
+<!-- TODO contents of this chapter? -->
 <h1><a class="header" href="#event" id="event">Event</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/simple-event"><code>kitchen/pallets/simple-event</code></a></em>, <em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/generic-event"><code>kitchen/pallets/generic-event</code></a></em></p>
+<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-event"><code>pallets/simple-event</code></a></em>, <em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/generic-event"><code>pallets/generic-event</code></a></em></p>
 <p>In Substrate, <a href="https://docs.substrate.dev/docs/glossary#section-transaction">transaction</a> finality does not guarantee the execution of functions dependent on the given transaction. To verify that functions have executed successfully, emit an <a href="https://docs.substrate.dev/docs/glossary#section-events">event</a> at the bottom of the function body.</p>
 <blockquote>
 <p><strong>Events</strong> notify the off-chain world of successful state transitions</p>
 </blockquote>
 <p>To declare an event, use the <a href="https://substrate.dev/rustdocs/master/frame_support/macro.decl_event.html"><code>decl_event</code></a> macro.</p>
 <h2><a class="header" href="#simple-event" id="simple-event">Simple Event</a></h2>
-<p>The <a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/simple-event">simplest example of an event</a> uses the following syntax</p>
+<p>The simplest example of an event uses the following syntax</p>
 <pre><code class="language-rust ignore">decl_event!(
     pub enum Event {
         EmitInput(u32),
@@ -395,7 +364,7 @@ use system::ensure_signed;
 <pre><code class="language-rust ignore">Self::deposit_event(Event::EmitInput(new_number));
 </code></pre>
 <h2><a class="header" href="#events-with-generic-types" id="events-with-generic-types">Events with Generic Types</a></h2>
-<p><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/generic-event">Sometimes</a> events might contin types from the pallet's Configuration Trait. In this case, it is necessary to specify additional syntax</p>
+<p><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/generic-event">Sometimes</a> events might contin types from the pallet's Configuration Trait. In this case, it is necessary to specify additional syntax</p>
 <pre><code class="language-rust ignore">decl_event!(
     pub enum Event&lt;T&gt; where AccountId = &lt;T as system::Trait&gt;::AccountId {
         EmitInput(AccountId, u32),
@@ -405,9 +374,9 @@ use system::ensure_signed;
 <p>The syntax for <code>deposit_event</code> now takes the <code>RawEvent</code> type because it is generic over the pallet's configuration trait</p>
 <pre><code class="language-rust ignore">Self::deposit_event(RawEvent::EmitInput(user, new_number));
 </code></pre>
-<p><em>See the next example to use the simple event syntax in the context of verifying successful execution of an <a href="basics/./adder.html">adding machine</a></em></p>
+<p><em>See the next example to use the simple event syntax in the context of verifying successful execution of an <a href="appetizers/./adder.html">adding machine</a></em></p>
 <h1><a class="header" href="#adding-machine" id="adding-machine">Adding Machine</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/adding-machine"><code>kitchen/pallets/adding-machine</code></a></em></p>
+<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/adding-machine"><code>pallets/adding-machine</code></a></em></p>
 <p>A simple adding machine checks for overflow and emits an event with the result, without using storage. In the pallet's <code>lib.rs</code> file,</p>
 <pre><code class="language-rust ignore">pub trait Trait: system::Trait {
     type Event: From&lt;Event&gt; + Into&lt;&lt;Self as system::Trait&gt;::Event&gt;;
@@ -458,7 +427,7 @@ decl_event!(
 )
 </code></pre>
 <h1><a class="header" href="#single-value" id="single-value">Single Value</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/single-value"><code>kitchen/pallets/single-value</code></a></em></p>
+<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/single-value"><code>pallets/single-value</code></a></em></p>
 <p>Within a specific pallet, a single value (<code>u32</code> type) is stored in the runtime using the <a href="https://wiki.parity.io/decl_storage"><code>decl_storage</code></a> macro</p>
 <pre><code class="language-rust ignore">decl_storage! {
     trait Store for Module&lt;T: Trait&gt; as SingleValue {
@@ -512,7 +481,48 @@ fn kill();
 <p>The requirements for setting the <code>AccountId</code> stored in <code>MyAccount</code> can be specified in the runtime and exposed via</p>
 <pre><code class="language-rust ignore">&lt;MyAccount&lt;T&gt;&gt;::put(some_account_id);
 </code></pre>
-<p><em>The full example in <a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/single-value"><code>kitchen/pallets/single-value</code></a> emits events to also notify off-chain processes of when values were <code>set</code> and <code>got</code>.</em></p>
+<p><em>The full example  emits events to also notify off-chain processes of when values were <code>set</code> and <code>got</code>.</em></p>
+<h1><a class="header" href="#pallet-fundamentals" id="pallet-fundamentals">Pallet Fundamentals</a></h1>
+<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/hello-substrate"><code>pallets/hello-substrate</code></a></em></p>
+<p>Clone the <a href="https://github.com/substrate-developer-hub/substrate-pallet-template">substrate pallet template</a>:</p>
+<pre><code class="language-bash">git clone https://github.com/substrate-developer-hub/substrate-pallet-template
+</code></pre>
+<p>At the top of the <code>src/lib.rs</code> file, import the following from <a href="https://substrate.dev/rustdocs/master/frame_support/index.html"><code>frame-support</code></a>:</p>
+<pre><code class="language-rust ignore">use frame_support::{decl_module, decl_event, decl_storage, StorageValue, StorageMap};
+use system::ensure_signed;
+</code></pre>
+<p>The blockchain's runtime storage is configured in <a href="https://substrate.dev/rustdocs/master/frame_support/macro.decl_storage.html"><code>decl_storage</code></a>.</p>
+<pre><code class="language-rust ignore">decl_storage! {
+	trait Store for Module&lt;T: Trait&gt; as HelloWorld {
+		pub LastValue get(fn last_value): u64;
+		pub UserValue get(fn user_value): map T::AccountId =&gt; u64;
+	}
+}
+</code></pre>
+<p>Defined in <a href="https://substrate.dev/rustdocs/master/frame_support/macro.decl_module.html"><code>decl_module</code></a>, the runtime methods specify acceptable interaction with runtime storage.</p>
+<pre><code class="language-rust ignore">decl_module! {
+	pub struct Module&lt;T: Trait&gt; for enum Call where origin: T::Origin {
+		fn deposit_event() = default;
+
+		pub fn set_value(origin, value: u64) {
+			let sender = ensure_signed(origin)?;
+			LastValue::put(value);
+			UserValue::&lt;T&gt;::insert(&amp;sender, value);
+			Self::deposit_event(RawEvent::ValueSet(sender, value));
+		}
+	}
+}
+</code></pre>
+<p>Events are declared in <a href="https://substrate.dev/rustdocs/master/frame_support/macro.decl_event.html"><code>decl_event</code></a>. The emission of events is used to determine successful execution of the logic in the body of runtime methods.</p>
+<pre><code class="language-rust ignore">decl_event!{
+	pub enum Event&lt;T&gt; where
+		AccountId = &lt;T as system::Trait&gt;::AccountId,
+	{
+		ValueSet(AccountId, u64),
+	}
+}
+</code></pre>
+<p><em>It is also possible to declare an error type for pallets with <a href="https://substrate.dev/rustdocs/master/frame_support/macro.decl_error.html"><code>decl_error</code></a></em></p>
 <h1><a class="header" href="#storage" id="storage">Storage</a></h1>
 <p>The <a href="https://wiki.parity.io/decl_storage"><code>decl_storage</code></a> documentation specifies how to define type-safe, persistent data that needs to be stored on-chain.</p>
 <p>For crypto<em>currencies</em>, storage might consist of a mapping between account keys and corresponding balances.</p>
@@ -531,7 +541,7 @@ fn kill();
 <li><a href="storage/./childtries.html">cheap inclusion proofs with child tries</a></li>
 </ul>
 <h1><a class="header" href="#cache-multiple-calls" id="cache-multiple-calls">Cache Multiple Calls</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/storage-cache"><code>kitchen/pallets/storage-cache</code></a></em></p>
+<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/storage-cache"><code>pallets/storage-cache</code></a></em></p>
 <p>Calls to runtime storage have an associated cost. With this in mind, multiple calls to storage values should be avoided when possible.</p>
 <pre><code class="language-rust ignore">decl_storage! {
     trait Store for Module&lt;T: Trait&gt; as StorageCache {
@@ -649,7 +659,7 @@ To learn more, run the command again with --verbose.
 </code></pre>
 <p>Not all types implement <a href="https://doc.rust-lang.org/std/marker/trait.Copy.html"><code>Copy</code></a> or <a href="https://doc.rust-lang.org/std/clone/trait.Clone.html"><code>Clone</code></a>, so it is important to discern other patterns that minimize and alleviate the cost of calls to storage.</p>
 <h1><a class="header" href="#set-storage-and-iteration" id="set-storage-and-iteration">Set Storage and Iteration</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/vec-set"><code>kitchen/pallets/vec-set</code></a></em></p>
+<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/vec-set"><code>pallets/vec-set</code></a></em></p>
 <p>Storing a vector in the runtime can often be useful for managing groups and verifying membership. This recipe discusses common patterns encounted when storing vectors in runtime storage.</p>
 <ul>
 <li><a href="storage/iterate.html#group">verifying group membership</a></li>
@@ -718,7 +728,7 @@ fn member_action(origin) -&gt; Result {
 <p>In general, iteration in the runtime should be avoided. <em>In the future</em>, <a href="https://github.com/substrate-developer-hub/recipes/issues/45">offchain-workers</a> may provide a less expensive way to iterate over runtime storage items. Moreover, <em><a href="https://github.com/substrate-developer-hub/recipes/issues/35">child tries</a></em> enable cheap inclusion proofs without the same lookup costs associated with vectors.</p>
 <p>Even so, there are a few tricks to alleviate the costs of iterating over runtime storage items like vectors. For example, it is <a href="https://twitter.com/heinz_gies/status/1121490424739303425">cheaper to iterate over a slice</a> than a vector. With this in mind, store items in the runtime as vectors and transform them into slices after making storage calls. <a href="https://github.com/paritytech/substrate/pull/3041">3041</a> introduced <code>insert_ref</code> and <code>put_ref</code> in order to allow equivalent reference-style types to be placed without copy (e.g. a storage item of <code>Vec&lt;AccountId&gt;</code> can now be written from a <code>&amp;[AccountId]</code>). This enables greater flexibility when working with slices that are associated with vectors stored in the runtime.</p>
 <h1><a class="header" href="#lists-maps-vs-linked-maps" id="lists-maps-vs-linked-maps">Lists: Maps vs Linked Maps</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/linked-map"><code>kitchen/pallets/linked-map</code></a></em></p>
+<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/linked-map"><code>pallets/linked-map</code></a></em></p>
 <p>Substrate does not natively support a list type since it may encourage dangerous habits. Unless explicitly guarded against, a list will add unbounded <code>O(n)</code> complexity to an operation that will only charge <code>O(1)</code> fees (<a href="https://rob-bell.net/2009/06/a-beginners-guide-to-big-o-notation/">Big O notation refresher</a>). This opens an economic attack vector on your chain.</p>
 <p>Emulate a list with a mapping and a counter like so:</p>
 <pre><code class="language-rust ignore">use support::{StorageValue, StorageMap};
@@ -838,7 +848,7 @@ decl_storage! {
 </code></pre>
 <p>This implementation incurs some performance costs (vs solely using <code>StorageMap</code> and <code>StorageValue</code>) because <code>linked_map</code> heap allocates the entire map as an iterator in order to implement the <a href="https://substrate.dev/rustdocs/master/frame_support/storage/trait.StorageLinkedMap.html#tymethod.enumerate"><code>enumerate</code> method</a>.</p>
 <h1><a class="header" href="#efficent-subgroup-removal-by-subkey-double-maps" id="efficent-subgroup-removal-by-subkey-double-maps">Efficent Subgroup Removal by Subkey: Double Maps</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/double-map"><code>kitchen/pallets/double-map</code></a></em></p>
+<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/double-map"><code>pallets/double-map</code></a></em></p>
 <p>For some runtimes, it may be necessary to remove a subset of values in a key-value mapping. If the subset maintain an associated identifier type, this can be done in a clean way with the <a href="https://substrate.dev/rustdocs/master/frame_support/storage/trait.StorageDoubleMap.html"><code>double_map</code></a> via the <code>remove_prefix</code> api.</p>
 <pre><code class="language-rust ignore">pub type GroupIndex = u32; // this is Encode (which is necessary for double_map)
 
@@ -870,7 +880,7 @@ decl_storage! {
 </code></pre>
 <p><strong>Note</strong>: It is necessary for one of the two keys to be hashed; <em><a href="https://github.com/substrate-developer-hub/recipes/issues/46">TODO</a></em></p>
 <h1><a class="header" href="#child-tries" id="child-tries">Child Tries</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/child-trie"><code>kitchen/pallets/child-trie</code></a></em>, <em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/smpl-crowdfund"><code>kitchen/pallets/smpl-crowdfund</code></a></em></p>
+<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/child-trie"><code>pallets/child-trie</code></a></em>, <em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/smpl-crowdfund"><code>pallets/smpl-crowdfund</code></a></em></p>
 <ul>
 <li><a href="storage/childtries.html#storj">Runtime Child Storage</a></li>
 <li><a href="storage/childtries.html#smplcrwd">Crowdfund Example</a></li>
@@ -909,7 +919,7 @@ child::do(trie_id, key, value);
 	who.using_encoded(|b| child::put(id.as_ref(), b, value_type));
 }
 </code></pre>
-<p>The code in <a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/child-trie"><code>kitchen/pallets/child-trie</code></a> demonstrates a minimal way of organizing the basic child-trie api methods (as done in <a href="https://github.com/paritytech/polkadot/blob/c003d73c65cdcc0367340db09522c91d1d3851fc/runtime/common/src/crowdfund.rs"><code>polkadot/runtime/crowdfund</code></a>). It separates out the generation of the child trie id from the index with a runtime method <code>id_from_index</code>.</p>
+<p>The code in <a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/child-trie"><code>pallets/child-trie</code></a> demonstrates a minimal way of organizing the basic child-trie api methods (as done in <a href="https://github.com/paritytech/polkadot/blob/c003d73c65cdcc0367340db09522c91d1d3851fc/runtime/common/src/crowdfund.rs"><code>polkadot/runtime/crowdfund</code></a>). It separates out the generation of the child trie id from the index with a runtime method <code>id_from_index</code>.</p>
 <pre><code class="language-rust ignore">pub fn id_from_index(index: ObjectCount) -&gt; Vec&lt;u8&gt; {
     let mut buf = Vec::new();
     buf.extend_from_slice(b&quot;exchildtr&quot;);
@@ -930,7 +940,7 @@ child::do(trie_id, key, value);
 }
 </code></pre>
 <h2><a class="header" href="#smpl-crowdfund-a-name--smplcrwda" id="smpl-crowdfund-a-name--smplcrwda">smpl-crowdfund <a name = "smplcrwd"></a></a></h2>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/smpl-crowdfund"><code>kitchen/pallets/smpl-crowdfund</code></a></em></p>
+<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/smpl-crowdfund"><code>pallets/smpl-crowdfund</code></a></em></p>
 <p>Child tries are useful for batch deletion of <code>(key, value)</code> pairs associated with a specific <code>trie_id</code>. This is relevant to the <a href="https://github.com/paritytech/polkadot/blob/master/runtime/src/crowdfund.rs">polkadot/crowdfund</a> pallet, which tracks <code>(AccountId, BalanceOf&lt;T&gt;)</code> associated with a specific crowdfund. <code>BalanceOf&lt;T&gt;</code> represents the contributions of an <code>AccountId</code>. The identifier for each crowdfund is defined</p>
 <pre><code class="language-rust ignore">type FundIndex = u32
 </code></pre>
@@ -945,7 +955,7 @@ pub fn crowdfund_kill(index: FundIndex) {
 <h3><a class="header" href="#caveat-coder" id="caveat-coder">caveat coder</a></h3>
 <p>Each individual call to read/write to the child trie is more expensive than it would be for <code>map</code> or <code>double_map</code>. This cost is poorly amortized over a large number of calls, but can be significantly reduced by following a proper batch execution strategy.</p>
 <h1><a class="header" href="#configurable-pallet-constants" id="configurable-pallet-constants">Configurable Pallet Constants</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/constant-config"><code>kitchen/pallets/constant-config</code></a></em></p>
+<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/constant-config"><code>pallets/constant-config</code></a></em></p>
 <p>To declare constant values within a runtime, it is necessary to import the <a href="https://substrate.dev/rustdocs/master/frame_support/traits/trait.Get.html"><code>Get</code></a> trait from <code>frame_support</code></p>
 <pre><code class="language-rust ignore">use support::traits::Get;
 </code></pre>
@@ -1026,7 +1036,7 @@ pub fn crowdfund_kill(index: FundIndex) {
 <h2><a class="header" href="#supporttraits" id="supporttraits">support::traits</a></h2>
 <p>Unlike in smart contract development, the way to inherit shared behavior is not to directly import other pallets. Instead, it is common to either implement the same logic in the new context or utilize a trait from <a href="https://substrate.dev/rustdocs/master/frame_support/index.html"><code>frame_support</code></a> to guide the new implementation. By abstracting common behavior from pallets into <code>frame_support</code>, Substrate makes it easy to extract and enforce best practices in the runtime.</p>
 <h2><a class="header" href="#currency-types" id="currency-types">Currency Types</a></h2>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/lockable-currency"><code>kitchen/pallets/lockable-currency</code></a>, <a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/reservable-currency"><code>kitchen/pallets/reservable-currency</code></a>, <a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/currency-imbalances"><code>kitchen/pallets/currency-imbalances</code></a></em></p>
+<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/lockable-currency"><code>pallets/lockable-currency</code></a>, <a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/reservable-currency"><code>pallets/reservable-currency</code></a>, <a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/currency-imbalances"><code>pallets/currency-imbalances</code></a></em></p>
 <p>To use a balances type in the runtime, import the <a href="https://substrate.dev/rustdocs/master/frame_support/traits/trait.Currency.html"><code>Currency</code></a> trait from <code>frame_support</code>.</p>
 <pre><code class="language-rust ignore">use support::traits::Currency;
 </code></pre>
@@ -1127,7 +1137,7 @@ pub fn reward_funds(origin, to_reward: T::AccountId, reward: BalanceOf&lt;T&gt;)
 <h2><a class="header" href="#takeaway" id="takeaway">takeaway</a></h2>
 <p>The way we represent value in the runtime dictates both the security and flexibility of the underlying transactional system. Likewise, it is convenient to be able to take advantage of Rust's <a href="https://blog.rust-lang.org/2015/05/11/traits.html">flexible trait system</a> when building systems intended to rethink how we exchange information and value 🚀</p>
 <h1><a class="header" href="#computational-resources-and-weights" id="computational-resources-and-weights">Computational Resources and Weights</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/weights"><code>kitchen/pallets/weights</code></a></em></p>
+<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/weights"><code>pallets/weights</code></a></em></p>
 <p>Any computational resources used by a transaction must be accounted for so that appropriate fees can be applied, and it is a pallet author's job to ensure that this accounting happens. Substrate provides a mechanism known as transaction weighting to quantify the resources consumed while executing a transaction.</p>
 <p><em>Indeed, mispriced EVM operations have shown how operations that underestimate cost can open economic DOS attack vectors: <a href="https://www.parity.io/onwards/">Onwards; Underpriced EVM Operations</a>, <a href="https://www4.comp.polyu.edu.hk/%7Ecsxluo/DoSEVM.pdf">Under-Priced DOS Attacks on Ethereum</a></em></p>
 <h2><a class="header" href="#assigning-transaction-weights" id="assigning-transaction-weights">Assigning Transaction Weights</a></h2>
@@ -1191,7 +1201,7 @@ insecure chain.</p>
 <h2><a class="header" href="#what-about-fees" id="what-about-fees">What About Fees?</a></h2>
 <p>Weights are used only to describe the computational resources consumed by a transaction, and enable accounting of these resources. To learn how to turn these weights into actual fees charged to transactors, continue to the recipe on <a href="traits/./fees.html">Fees</a>.</p>
 <h1><a class="header" href="#transaction-fees" id="transaction-fees">Transaction Fees</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/runtimes/weight-fee-runtime">kitchen/runtimes/weight-fee-runtime</a></em></p>
+<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/weight-fee-runtime">runtimes/weight-fee-runtime</a></em></p>
 <p>Substrate provides the <a href="https://substrate.dev/rustdocs/master/pallet_transaction_payment/index.html"><code>transaction_payment</code> pallet</a> for calculating and collecting fees for executing transactions. Fees are broken down into several components:</p>
 <ul>
 <li>Base fee - A fixed fee applied to each transaction. A parameter in the <code>transaction_payment</code> pallet.</li>
@@ -1235,7 +1245,7 @@ impl&lt;C0, C1, C2&gt; Convert&lt;Weight, Balance&gt; for QuadraticWeightToFee&l
 	}
 }
 </code></pre>
-<p>This examples, and several others can be compiled in the kitchen's <a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/runtimes/weight-fee-runtime">weight-fee-runtime</a></p>
+<p>This examples, and several others can be compiled in the kitchen's <a href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/weight-fee-runtime">weight-fee-runtime</a></p>
 <h2><a class="header" href="#collecting-fees" id="collecting-fees">Collecting Fees</a></h2>
 <p>Having calculated the amount of fees due, runtime authors must decide which asset the fees should be paid in. A common choice is the use the <a href="https://substrate.dev/rustdocs/master/pallet_balances/index.html"><code>Ballances</code> pallet</a>, but any type that implements the <a href="https://substrate.dev/rustdocs/master/frame_support/traits/trait.Currency.html"><code>Currency</code> trait</a> can be used. The weight-fee-runtime demonstrates how to use an asset provided by the <a href="https://substrate.dev/rustdocs/master/pallet_generic_asset/index.html"><code>Generic Asset</code> pallet</a>.</p>
 <pre><code class="language-rust ignore">impl transaction_payment::Trait for Runtime {
@@ -1246,7 +1256,7 @@ impl&lt;C0, C1, C2&gt; Convert&lt;Weight, Balance&gt; for QuadraticWeightToFee&l
 	// --snip--
 }
 </code></pre>
-<p>This examples, and several others can be compiled in the kitchen's <a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/runtimes/weight-fee-runtime">weight-fee-runtime</a></p>
+<p>This examples, and several others can be compiled in the kitchen's <a href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/weight-fee-runtime">weight-fee-runtime</a></p>
 <h1><a class="header" href="#instantiable-pallets" id="instantiable-pallets">Instantiable Pallets</a></h1>
 <p>Instantiable pallets enable multiple instances of the same pallet logic within a single runtime. Each instance of the pallet has its own independent storage, and extrinsics must specify which instance of the pallet they are intended for. These patterns are illustrated in the kitchen in the last-caller and default-instance pallets.</p>
 <p>Some use cases:</p>
@@ -1355,7 +1365,7 @@ TechnicalCommittee: collective::&lt;Instance2&gt;::{Module, Call, Storage, Origi
 }
 </code></pre>
 <h1><a class="header" href="#charity" id="charity">Charity</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/charity"><code>kitchen/pallets/charity</code></a></em></p>
+<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/charity"><code>pallets/charity</code></a></em></p>
 <p>The Charity pallet represents a simple charitable organization that collects funds into a pot that it controls, and allocates those funds to the appropriate causes. It demonstrates two useful concepts in Substrate development:</p>
 <ul>
 <li>A pallet-controlled shared pot of funds</li>
@@ -1415,8 +1425,8 @@ impl&lt;T: Trait&gt; OnUnbalanced&lt;NegativeImbalanceOf&lt;T&gt;&gt; for Module
 <h1><a class="header" href="#allocating-funds" id="allocating-funds">Allocating Funds</a></h1>
 <p>In order for the charity to affect change with the funds it has collected it must be able to allocate those funds. Our charity pallet abstracts the governance of where funds will be allocated to the rest of the runtime. Funds can be allocated by a root call to the <code>allocate</code> extrinsic. One good example of a governance mechanism for such decisions is Substrate's own <a href="https://substrate.dev/rustdocs/master/pallet_democracy/index.html">Democracy pallet</a>.</p>
 <h1><a class="header" href="#runtime-apis" id="runtime-apis">Runtime APIs</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/sum-storage"><code>kitchen/pallets/sum-storage</code></a></em>
-<em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/runtime/api-runtime"><code>kitchen/runtimes/api-runtime</code></a></em></p>
+<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/sum-storage"><code>pallets/sum-storage</code></a></em>
+<em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/api-runtime"><code>runtimes/api-runtime</code></a></em></p>
 <p>Each Substrate node contains a runtime. The runtime contains the business logic of the chain. It defines what transactions are valid and invalid and determines how the chain's state changes in response to transactions. The runtime is compiled to Wasm to facilitate runtime upgrades. The &quot;outer node&quot;, everything other than the runtime, does not compile to Wasm, only to native. The outer node is responsible for handling peer discovery, transaction pooling, block and transaction gossiping, consensus, and answering RPC calls from the outside world. While performing these tasks, the outer node sometimes needs to query the runtime for information, or provide information to the runtime. A Runtime API facilitates this communication between the outer node and the runtime. In this recipe, we will write our own minimal runtime API.</p>
 <h2><a class="header" href="#our-example" id="our-example">Our Example</a></h2>
 <p>For this example, we will write a pallet called <code>sum-storage</code> with two storage items, both <code>u32</code>s.</p>
@@ -1444,11 +1454,11 @@ impl&lt;T: Trait&gt; OnUnbalanced&lt;NegativeImbalanceOf&lt;T&gt;&gt; for Module
 </span></code></pre></pre>
 <p>So far, nothing we've done is specific to runtime APIs. In the coming sections, we will use this helper function in our runtime API's implementation.</p>
 <h2><a class="header" href="#defining-the-api" id="defining-the-api">Defining the API</a></h2>
-<p>The first step in adding a runtime API to your runtime is defining its interface using a rust trait. This is done in the <code>sum-storage/rpc/runtime-api/src/lib.rs</code> file. This file can live anywhere you like, but because it defines an API that is closely related to a particular pallet, it makes sense to include the API definition in the pallet's directory.</p>
+<p>The first step in adding a runtime API to your runtime is defining its interface using a Rust trait. This is done in the <code>sum-storage/rpc/runtime-api/src/lib.rs</code> file. This file can live anywhere you like, but because it defines an API that is closely related to a particular pallet, it makes sense to include the API definition in the pallet's directory.</p>
 <blockquote>
 <p>The <code>rpc</code> in the path is not relevant in <em>this</em> recipe, but it is explained in the recipe on <a href="advanced/./custom-rpc.html">custom RPCs</a>.</p>
 </blockquote>
-<p>The code to define the API is quite simple, and looks almost like any old rust trait. The one addition is that it must be placed in the <a href="https://substrate.dev/rustdocs/master/sp_api/macro.decl_runtime_apis.html"><code>decl_runtime_apis!</code> macro</a>. This macro allows the outer node to query the runtime API at specific blocks. Although this runtime API only provides a single function, you may write as many as you like.</p>
+<p>The code to define the API is quite simple, and looks almost like any old Rust trait. The one addition is that it must be placed in the <a href="https://substrate.dev/rustdocs/master/sp_api/macro.decl_runtime_apis.html"><code>decl_runtime_apis!</code> macro</a>. This macro allows the outer node to query the runtime API at specific blocks. Although this runtime API only provides a single function, you may write as many as you like.</p>
 <pre><pre class="playpen"><code class="language-rust">
 <span class="boring">#![allow(unused_variables)]
 </span><span class="boring">fn main() {
@@ -1460,8 +1470,8 @@ impl&lt;T: Trait&gt; OnUnbalanced&lt;NegativeImbalanceOf&lt;T&gt;&gt; for Module
 <span class="boring">}
 </span></code></pre></pre>
 <h2><a class="header" href="#implementing-the-api" id="implementing-the-api">Implementing the API</a></h2>
-<p>With our pallet written and our runtime API defined, we may now implement the API. This happens in the main runtime aggregation file. In our case we've provided the <code>api-runtime</code> in <code>kitchen/runtimes/api-runtime/src/lib.rs</code>.</p>
-<p>As with defining the API, implementing a runtime API looks similar to implementing any old rust trait with the exception that the implementation must go inside of the <a href="https://substrate.dev/rustdocs/master/sp_api/macro.impl_runtime_apis.html"><code>impl_runtime_apis!</code> macro</a>. If you've started by copying an existing runtime like the <a href="https://github.com/substrate-developer-hub/substrate-node-template/">node template</a> you likely already have this block. We will add an implementation for our API to the existing block. Our implementation is straight-forward as it merely calls the pallet's helper function that we wrote previously.</p>
+<p>With our pallet written and our runtime API defined, we may now implement the API. This happens in the main runtime aggregation file. In our case we've provided the <code>api-runtime</code> in <code>runtimes/api-runtime/src/lib.rs</code>.</p>
+<p>As with defining the API, implementing a runtime API looks similar to implementing any old Rust trait with the exception that the implementation must go inside of the <a href="https://substrate.dev/rustdocs/master/sp_api/macro.impl_runtime_apis.html"><code>impl_runtime_apis!</code> macro</a>. If you've started by copying an existing runtime like the <a href="https://github.com/substrate-developer-hub/substrate-node-template/">node template</a> you likely already have this block. We will add an implementation for our API to the existing block. Our implementation is straight-forward as it merely calls the pallet's helper function that we wrote previously.</p>
 <pre><pre class="playpen"><code class="language-rust">
 <span class="boring">#![allow(unused_variables)]
 </span><span class="boring">fn main() {
@@ -1487,12 +1497,12 @@ impl&lt;T: Trait&gt; OnUnbalanced&lt;NegativeImbalanceOf&lt;T&gt;&gt; for Module
 </span></code></pre></pre>
 <p>Calling this runtime API is described with much more detail and context in the recipe on <a href="advanced/./custom-rpc.html">custom RPCs</a>.</p>
 <h1><a class="header" href="#custom-rpcs" id="custom-rpcs">Custom RPCs</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/nodes/rpc-node"><code>kitchen/nodes/rpc-node</code></a></em>
-<em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/runtime/api-runtime"><code>kitchen/runtime/api-runtime</code></a></em></p>
+<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/nodes/rpc-node"><code>nodes/rpc-node</code></a></em>
+<em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/api-runtime"><code>runtime/api-runtime</code></a></em></p>
 <p>Remote Procedure Calls, or RPCs, are a way for an external program (eg. a frontend) to communicate with a Substrate node. They are used for checking storage values, submitting transactions, and querying the current consensus authorities. Substrate comes with several <a href="https://polkadot.js.org/api/substrate/rpc.html">default RPCs</a>. In many cases it is useful to add custom RPCs to your node. In this recipe, we will add two custom RPCs to our node, one of which calls into a <a href="advanced/./runtime-api.html">custom runtime API</a>.</p>
 <h2><a class="header" href="#defining-an-rpc" id="defining-an-rpc">Defining an RPC</a></h2>
 <p>Every RPC that the node will use must be defined in a trait. We'll begin by defining a simple RPC
-called &quot;silly rpc&quot; which just returns constant integers. A Hello world of sorts. In the <code>kitchen/nodes/rpc-node/src/silly_rpc.rs</code> file, we define a basic rpc as</p>
+called &quot;silly rpc&quot; which just returns constant integers. A Hello world of sorts. In the <code>nodes/rpc-node/src/silly_rpc.rs</code> file, we define a basic rpc as</p>
 <pre><pre class="playpen"><code class="language-rust">
 <span class="boring">#![allow(unused_variables)]
 </span><span class="boring">fn main() {
@@ -1584,7 +1594,7 @@ sc-rpc = { git = 'https://github.com/paritytech/substrate.git', rev = '3e651110a
 </code></pre>
 <h2><a class="header" href="#rpc-to-call-a-runtime-api" id="rpc-to-call-a-runtime-api">RPC to Call a Runtime API</a></h2>
 <p>The silly RPC demonstrates the fundamentals of working with RPCs in Substrate. Nonetheless, most RPCs will go beyond what we've learned so far, and actually interact with other parts of the node. In this second example, we will include an RPC that calls into the <code>sum-storage</code> runtime API from the <a href="advanced/./runtime-api.html">runtime API recipe</a>. While it isn't strictly necessary to understand what the runtime API does, reading that recipe may provide helpful context.</p>
-<p>Because this RPC's behavior is closely related to a specific pallet, we've chosen to define the RPC in the pallet's directory. In this case the RPC is defined in <code>kitchen/pallets/sum-storage/rpc</code>. So rather than using the <code>mod</code> keyword as we did before, we must include this RPC definition in the node's <code>Cargo.toml</code> file.</p>
+<p>Because this RPC's behavior is closely related to a specific pallet, we've chosen to define the RPC in the pallet's directory. In this case the RPC is defined in <code>pallets/sum-storage/rpc</code>. So rather than using the <code>mod</code> keyword as we did before, we must include this RPC definition in the node's <code>Cargo.toml</code> file.</p>
 <pre><code class="language-toml">sum-storage-rpc = { path = &quot;../../pallets/sum-storage/rpc&quot; }
 </code></pre>
 <p>Defining the RPC interface is similar to before, but there are a few differences worth noting. First, the struct that implements the RPC needs a reference to the <code>client</code>. This is necessary so we can actually call into the runtime. Second the struct is generic over the <code>BlockHash</code> type. This is because it will call a runtime API, and runtime APIs must always be called at a specific block.</p>
@@ -1683,7 +1693,8 @@ where
 </code></pre>
 <p>As an exercise, you should change the storage values, and confirm that the RPC provides the correct updated sum. Then call the RPC at an old block and confirm you get the old sum.</p>
 <h2><a class="header" href="#polkadot-js-api" id="polkadot-js-api">Polkadot JS API</a></h2>
-<p>Many frontends interact with Substrate nodes through Polkadot JS API. While the recipes does not strive to document that project, we have included a snippet of javascript for interacting with these custom RPCs in the <code>kitchen/nodes/rpc-node/js</code> directory.</p>
+<p>Many frontends interact with Substrate nodes through Polkadot JS API. While the recipes does not strive to document that project, we have included a snippet of javascript for interacting with these custom RPCs in the <code>nodes/rpc-node/js</code> directory.</p>
+<h1><a class="header" href="#execution-schedule" id="execution-schedule">Execution Schedule</a></h1>
 <h1><a class="header" href="#declarative-syntax" id="declarative-syntax">Declarative Syntax</a></h1>
 <p>Unlike conventional software development kits that abstract away low-level decisions, Substrate grants developers fine-grain control over the underlying implementation. This approach fosters high-performance, modular applications. At the same time, it also demands increased attention from developers. <strong>With great power comes great responsibility</strong>.</p>
 <p>Indeed, Substrate developers have to exercise incredible caution. The bare-metal control that they maintain over the runtime logic introduces new attack vectors. In the context of blockchains, the cost of bugs scale with the amount of capital secured by the application. Likewise, developers should generally abide by a few <em><a href="declarative/index.html#criteria">rules</a></em> when building with Substrate. These rules may not hold in every situation; Substrate offers optimization in context.</p>
@@ -1756,7 +1767,7 @@ let new_all_people_count = all_people_count.checked_add(1).ok_or(&quot;Overflow 
 <li>ADD BACK IN NEW RECIPE: <code>collide</code> and the question of whether maps prevent key collisions? could discuss <code>sort</code>, <code>sort_unstable</code>, and the ordering traits here...</li>
 </ul>
 <h2><a class="header" href="#permissioned-methods" id="permissioned-methods">Permissioned Methods</a></h2>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/check-membership">kitchen/pallets/check-membership</a></em></p>
+<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/check-membership">pallets/check-membership</a></em></p>
 <p>It is often useful to designate some functions as permissioned and, therefore, accessible only to a defined group. In this case, we check that the transaction that invokes the runtime function is signed before verifying that the signature corresponds to a member of the permissioned set.</p>
 <p>To manage the set of members allowed to access the methods in question, we may store a vector in runtime storage. Without access to the standard library, it is necessary to add the <code>sr-std</code> dependency to the <code>Cargo.toml</code> file and import its prelude:</p>
 <pre><code>[dependencies.rstd]
@@ -1768,14 +1779,14 @@ rev = '3e651110aa06aa835790df63410a29676243fc54'
 <p>The alias for <code>sr-std</code> used is <code>rstd</code> which follows substrate's conventions. To import a vector type that can be stored in the runtime:</p>
 <pre><code class="language-rust ignore">use rstd::prelude::*;
 </code></pre>
-<p>In the runtime, the membership set can be stored as </p>
+<p>In the runtime, the membership set can be stored as</p>
 <pre><code class="language-rust ignore">decl_storage! {
     trait Store for Module&lt;T: Trait&gt; as PGeneric {
         Members get(fn members): Vec&lt;&amp;T::AccountId&gt;;
     }
 }
 </code></pre>
-<p>If the set was determined to be permissionless, we could express this in the runtime as </p>
+<p>If the set was determined to be permissionless, we could express this in the runtime as</p>
 <pre><code class="language-rust ignore">fn add_member(origin) -&gt; Result {
 	// unwrap signed extrinsic into AccountId
 	let new_member = ensure_signed(origin)?;
@@ -1816,40 +1827,34 @@ rev = '3e651110aa06aa835790df63410a29676243fc54'
 </ul>
 <p>There's also more rigorous testing systems ranging from mocking and fuzzing to formal verification. See <a href="https://docs.rs/quickcheck/0.9.0/quickcheck/">quickcheck</a> for an example of a property-based testing framework ported from Haskell to Rust.</p>
 <h2><a class="header" href="#kitchen-pallets-with-unit-tests" id="kitchen-pallets-with-unit-tests">Kitchen Pallets with Unit Tests</a></h2>
-<p>The following modules in the <a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/"><code>kitchen</code></a> have partial unit test coverage</p>
+<p>The following modules in the kitchen have partial unit test coverage</p>
 <ul>
-<li><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/struct-storage"><code>struct-storage</code></a></li>
-<li><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/adding-machine"><code>adding-machine</code></a></li>
-<li><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/simple-event"><code>simple-event</code></a></li>
-<li><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/generic-event"><code>generic-event</code></a></li>
-<li><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/single-value"><code>single-value</code></a></li>
-<li><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/simple-map"><code>simple-map</code></a></li>
-<li><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/double-map"><code>double-map</code></a></li>
-<li><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/storage-cache"><code>storage-cache</code></a></li>
-<li><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/vec-set"><code>vec-set</code></a></li>
-<li><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/constant-config"><code>constant-config</code></a></li>
+<li><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/struct-storage"><code>struct-storage</code></a></li>
+<li><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/adding-machine"><code>adding-machine</code></a></li>
+<li><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-event"><code>simple-event</code></a></li>
+<li><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/generic-event"><code>generic-event</code></a></li>
+<li><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/single-value"><code>single-value</code></a></li>
+<li><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-map"><code>simple-map</code></a></li>
+<li><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/double-map"><code>double-map</code></a></li>
+<li><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/storage-cache"><code>storage-cache</code></a></li>
+<li><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/vec-set"><code>vec-set</code></a></li>
+<li><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/constant-config"><code>constant-config</code></a></li>
 </ul>
 <h3><a class="header" href="#cooking-in-the-kitchen-running-tests" id="cooking-in-the-kitchen-running-tests">Cooking in the Kitchen (Running Tests)</a></h3>
 <p>To run the tests, clone the repo</p>
 <pre><code class="language-bash">$ git clone https://github.com/substrate-developer-hub/recipes
 </code></pre>
 <p>Enter the path to the pallet to be tested</p>
-<pre><code class="language-bash">$ cd kitchen/pallets/&lt;some-module&gt;
+<pre><code class="language-bash">$ cd pallets/&lt;some-module&gt;
 </code></pre>
 <p>For example, to test <code>constant-config</code>, used in <a href="https://substrate.dev/recipes/storage/constants.html">Configurable Constants</a>,</p>
-<pre><code class="language-bash">$ cd kitchen/pallets/constant-config/
+<pre><code class="language-bash">$ cd pallets/constant-config/
 $ cargo test
 </code></pre>
 <p>Writing unit tests is one of the best ways to understand the code. Although unit tests are not comprehensive, they provide a first check to verify that the programmer's basic invariants are not violated in the presence of obvious, expected state changes.</p>
-<h2><a class="header" href="#sauce" id="sauce">Sauce</a></h2>
-<p>Over the past few weeks, testing has driven a significant rewrite of the <a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/">kitchen</a>. This increased focus on testing and benchmarking will continue over the next few weeks in the <em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/src/tour">sauce</a></em>, starting with</p>
-<ul>
-<li><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/execution-schedule"><code>execution-schedule</code></a></li>
-<li><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/smpl-treasury"><code>smpl-treasury</code></a></li>
-</ul>
 <h1><a class="header" href="#mock-runtime-for-unit-testing" id="mock-runtime-for-unit-testing">Mock Runtime for Unit Testing</a></h1>
 <p><em>see <a href="testing/./index.html">root</a> for list of kitchen pallets with unit test coverage</em></p>
-<p>At the bottom of the pallet, place unit tests in a separate rust module with a special compilation flag</p>
+<p>At the bottom of the pallet, place unit tests in a separate Rust module with a special compilation flag</p>
 <pre><code class="language-rust ignore">#[cfg(test)]
 mod tests {
 	...
@@ -1936,8 +1941,8 @@ rev = '6ae3b6c4ddc03d4cdb10bd1d417b95d20f4c1b6e'
 <li><a href="testing/mock.html#extbuilder"><code>ExtBuilder</code></a> - define methods on the unit struct <code>ExtBuilder</code> to facilitate a flexible environment for tests (i.e. can reconfigure pallet constants in every test if necessary)</li>
 </ul>
 <h2><a class="header" href="#new_test_ext-a-name--newexta" id="new_test_ext-a-name--newexta">new_test_ext <a name = "newext"><a/></a></h2>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/smpl-treasury"><code>kitchen/pallets/smpl-treasury</code></a></em></p>
-<p>In <a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/smpl-treasury"><code>smpl-treasury</code></a>, use the <code>balances::GenesisConfig</code> and the pallet's <code>Genesis::&lt;TestRuntime&gt;</code> to set the balances of the test accounts and establish council membership in the returned test environment.</p>
+<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/smpl-treasury"><code>pallets/smpl-treasury</code></a></em></p>
+<p>In <a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/smpl-treasury"><code>smpl-treasury</code></a>, use the <code>balances::GenesisConfig</code> and the pallet's <code>Genesis::&lt;TestRuntime&gt;</code> to set the balances of the test accounts and establish council membership in the returned test environment.</p>
 <pre><code class="language-rust ignore">pub fn new_test_ext() -&gt; runtime_io::TestExternalities {
 	let mut t = system::GenesisConfig::default().build_storage::&lt;TestRuntime&gt;().unwrap();
 	balances::GenesisConfig::&lt;TestRuntime&gt; {
@@ -1989,7 +1994,7 @@ fn fake_test() {
 </code></pre>
 <p><code>execute_with</code> executes all logic expressed in the closure within the configured runtime test environment specified in <code>new_test_ext</code></p>
 <h2><a class="header" href="#extbuilder-a-name--extbuildera" id="extbuilder-a-name--extbuildera">ExtBuilder <a name = "extbuilder"></a></a></h2>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/struct-storage"><code>kitchen/pallets/struct-storage</code></a></em></p>
+<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/struct-storage"><code>pallets/struct-storage</code></a></em></p>
 <p>Another approach for a more flexible runtime test environment instantiates a unit struct <code>ExtBuilder</code>,</p>
 <pre><code class="language-rust ignore">pub struct ExtBuilder;
 </code></pre>
@@ -2018,7 +2023,7 @@ impl_outer_origin!{
 	pub enum Origin for TestRuntime {}
 }
 </code></pre>
-<p>It is possible to placed signed transactions as parameters in runtime methods that require the <code>origin</code> input. See the <a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/hello-substrate">full code in the kitchen</a>, but this looks like</p>
+<p>It is possible to placed signed transactions as parameters in runtime methods that require the <code>origin</code> input. See the <a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/hello-substrate">full code in the kitchen</a>, but this looks like</p>
 <pre><code class="language-rust ignore">#[test]
 fn last_value_updates() {
 	ExtBuilder::build().execute_with(|| {
@@ -2045,7 +2050,7 @@ fn last_value_updates() {
 </ol>
 <h3><a class="header" href="#checks-before-changes-are-enforced-ie-panics-panic-a-name--panicspanica" id="checks-before-changes-are-enforced-ie-panics-panic-a-name--panicspanica">Checks before Changes are Enforced (i.e. Panics Panic) <a name = "panicspanic"></a></a></h3>
 <p>The <a href="https://substrate.dev/recipes/declarative/ensure.html"><code>Verify First, Write Last</code></a> recipe encourages verifying certain conditions before changing storage values. In tests, it might be desirable to verify that invalid inputs return the expected error message.</p>
-<p>In <a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/adding-machine"><code>kitchen/pallets/adding-machine</code></a>, the runtime method <code>add</code> checks for overflow</p>
+<p>In <a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/adding-machine"><code>pallets/adding-machine</code></a>, the runtime method <code>add</code> checks for overflow</p>
 <pre><code class="language-rust ignore">decl_module! {
     pub struct Module&lt;T: Trait&gt; for enum Call where origin: T::Origin {
         fn deposit_event() = default;
@@ -2102,7 +2107,7 @@ fn last_value_updates() {
 	}
 }
 </code></pre>
-<p>Updates to <code>UserValue</code> are tested in <code>last_value_updates</code> in <a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/hello-substrate"><code>kitchen/pallets/hello-substrate</code></a>.</p>
+<p>Updates to <code>UserValue</code> are tested in <code>last_value_updates</code> in <a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/hello-substrate"><code>pallets/hello-substrate</code></a>.</p>
 <h3><a class="header" href="#expected-events-are-emitted-a-name--eventsa" id="expected-events-are-emitted-a-name--eventsa">Expected Events are Emitted <a name = "events"></a></a></h3>
 <p>The common way of testing expected event emission behavior requires importing <code>support</code>'s <a href="https://substrate.dev/rustdocs/master/frame_support/macro.impl_outer_event.html"><code>impl_outer_event!</code></a> macro</p>
 <pre><code class="language-rust ignore">use support::impl_outer_event;
@@ -2122,7 +2127,7 @@ impl Trait for TestRuntime {
 	type Event = TestEvent;
 }
 </code></pre>
-<p>Testing the correct emission of events compares constructions of expected events with the entries in the <a href="https://substrate.dev/rustdocs/master/frame_system/struct.Module.html#method.events"><code>System::events</code></a> vector of <code>EventRecord</code>s. In <a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/adding-machine"><code>kitchen/pallets/adding-machine</code></a>,</p>
+<p>Testing the correct emission of events compares constructions of expected events with the entries in the <a href="https://substrate.dev/rustdocs/master/frame_system/struct.Module.html#method.events"><code>System::events</code></a> vector of <code>EventRecord</code>s. In <a href="https://github.com/substrate-developer-hub/recipes/tree/master//pallets/adding-machine"><code>pallets/adding-machine</code></a>,</p>
 <pre><code class="language-rust ignore">#[test]
 fn add_emits_correct_event() {
 	ExtBuilder::build().execute_with(|| {
@@ -2153,7 +2158,7 @@ mod tests {
 	// tests
 }
 </code></pre>
-<p>In <a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/hello-substrate"><code>kitchen/pallets/hello-substrate</code></a>,</p>
+<p>In <a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/hello-substrate"><code>pallets/hello-substrate</code></a>,</p>
 <pre><code class="language-rust ignore">#[test]
 fn last_value_updates() {
 	ExtBuilder::build().execute_with(|| {
@@ -2170,7 +2175,7 @@ fn last_value_updates() {
 </code></pre>
 <p>This test constructs an <code>expected_event1</code> based on the event that the developer expects will be emitted upon the successful execution of logic in <code>HelloSubstrate::set_value</code>. The <code>assert!()</code> statement checks if the <code>expected_event1</code> matches the <code>.event</code> field for any <code>EventRecord</code> in the <code>System::events()</code> vector.</p>
 <h1><a class="header" href="#custom-test-environment" id="custom-test-environment">Custom Test Environment</a></h1>
-<p><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/execution-schedule"><code>execution-schedule</code></a>'s configuration trait has three <a href="testing/../storage/constants.html">configurable constants</a>. For this mock runtime, the <code>ExtBuilder</code> defines setters to enable the <code>TestExternalities</code> instance for each unit test to configure the local test runtime environment with different value assignments. For context, the <code>Trait</code> for <a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/execution-schedule"><code>execution-schedule</code></a>,</p>
+<p><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/execution-schedule"><code>execution-schedule</code></a>'s configuration trait has three <a href="testing/../storage/constants.html">configurable constants</a>. For this mock runtime, the <code>ExtBuilder</code> defines setters to enable the <code>TestExternalities</code> instance for each unit test to configure the local test runtime environment with different value assignments. For context, the <code>Trait</code> for <a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/execution-schedule"><code>execution-schedule</code></a>,</p>
 <pre><code class="language-rust ignore">// other type aliases
 pub type PriorityScore = u32;
 
@@ -2286,109 +2291,67 @@ fn fake_test2() {
 }
 </code></pre>
 <p>The test environment mocked above is actually used for the cursory and incomplete test <code>eras_change_correctly</code>. This test guided the structure of the if condition in <code>on_initialize</code> to periodically reset the <code>SignalBank</code> and increment the <code>Era</code>.</p>
-<p>For more examples of the mock runtime scaffolding pattern used in <a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/execution-schedule"><code>execution-schedule</code></a>, see <code>balances/mock.rs</code> and <code>contract/tests.rs</code>.</p>
-<h1><a class="header" href="#dessert-" id="dessert-">Dessert 🍫</a></h1>
-<p>Check out <strong><a href="https://github.com/substrate-developer-hub/awesome-substrate">awesome-substrate</a></strong> for projects, events, and all the latest Substrate news!</p>
-<h2><a class="header" href="#a-hrefhttpsgithubcomsubstrate-developer-hubfeatured-tutorialsa" id="a-hrefhttpsgithubcomsubstrate-developer-hubfeatured-tutorialsa"><a href="https://github.com/substrate-developer-hub/">Featured Tutorials</a></a></h2>
-<ul>
-<li><a href="https://github.com/substrate-developer-hub/substrate-collectables-workshop">Substrate Collectables Workshop</a></li>
-<li><a href="https://github.com/substrate-developer-hub/substrate-verifiable-credentials">Substrate Verifiable Credentials Workshop</a></li>
-<li><a href="https://github.com/substrate-developer-hub/substrate-tcr">Substrate TCR Tutorial</a></li>
-<li><a href="https://github.com/substrate-developer-hub/substrate-contracts-workshop">Substrate Contracts Workshop</a></li>
-</ul>
-<!--
-**Set Up**
-* [`paritytech/substrate-up`](https://github.com/paritytech/substrate-up) - Scripts for working with new Substrate projects
-
-**Consensus**
-* [`paritytech/shasper`](https://github.com/paritytech/shasper) - Parity Shasper beacon chain implementation using the Substrate framework.
-* [`paritytech/finality-grandpa`](https://github.com/paritytech/finality-grandpa) - finality gadget for blockchains using common prefix agreement
-* [`paritytech/rhododendron`](https://github.com/paritytech/rhododendron) - Asynchronously safe BFT consensus, implementation in Rust
-
-## Tutorials 🍮 <a name = "tutorials"></a>
-[parity-samples](https://github.com/parity-samples)
-
-* [`substrate/substrate-contracts-workshop`](https://github.com/substrate-developer-hub/substrate-contracts-workshop)
-* [`shawntabrizi/substrate-collectables-workshop`](https://github.com/shawntabrizi/substrate-collectables-workshop) - A guided tutorial for building a collectable dApp chain on Parity Substrate
-* [`parity-samples/substrate-tcr`](https://github.com/parity-samples/substrate-tcr) - A Parity Substrate runtime implementation of a simple Token Curated Registry (TCR)
-* [`gautamdhameja/substrate-poa`](https://github.com/gautamdhameja/substrate-poa) - A Substrate runtime which allows addition of new validators in a pure PoA fashion
-* [`parity-samples/substrate-tcr-ui`](https://github.com/parity-samples/substrate-tcr-ui) - A react.js frontend for Substrate TCR runtime
-* [`substrate-developer-hub/substrate-package`](https://github.com/substrate-developer-hub/substrate-package) - A stable package of the substrate-node-template and substrate-ui
-* [`lsaether/sr-bonded-token`](https://github.com/lsaether/sr-bonded-token/blob/master/Tutorial.md) - Token Bonding Curve tutorial with Substrate
-* [`nczhu/collateral`](https://github.com/nczhu/collateral) collateralize NFTs
-* [`yjkimjunior/ParkingSpaceSubstrate`](https://github.com/yjkimjunior/ParkingSpaceSubstrate)
-* [`osuketh/apple-store-substrate`](https://github.com/osuketh/apple-store-substrate)
-
-## User Interface 🍦 <a name = "ui"></a>
-
-* [`paritytech/substrate-light-ui`](https://github.com/paritytech/substrate-light-ui) - User interface optimized for the Substrate light client
-* [`paritytech/apps`](https://github.com/paritytech/apps) - Basic Polkadot/Substrate UI for interacting with a node
-* [`paritytech/substrate-ui`](https://github.com/paritytech/substrate-ui) - Bondy Polkadot UI
-
-## Off-Chain Interaction  🍨 <a name = "offchain"></a>
-
-* [`PACTCare/starlog`](https://github.com/PACTCare/Starlog) - Starlog: IPFS Metadata Blockchain based on Substrate
-* [`parity-samples/substrate-events-listener`](https://github.com/parity-samples/substrate-events-listener) - Dockerized websocket listener for substrate events; also writes filtered event data to configured storage
-* [`parity-samples/substrate-proof-of-existence`](https://github.com/parity-samples/substrate-proof-of-existence) - Proof of Existence Blockchain built on Parity's Substrate
-* [`stakedtechnologies/Plasma`](https://github.com/stakedtechnologies/Plasm) - add Plasma functions to the Substrate chain
-
-## Polkadot 🎂 <a name = "polkadot"></a>
-
-* [`paritytech/cumulus`](https://github.com/paritytech/cumulus) - Write Parachains on Substrate
-* [`paritytech/polkadot`](https://github.com/paritytech/polkadot) - Polkadot Node Implementation
-* [`paritytech/substrate-telemetry`](https://github.com/paritytech/substrate-telemetry) - Polkadot telemetry service
-
-## Smart Contracts 🍬 <a name = "contracts"></a>
-* [`hicommonwealth/edgeware-node`](https://github.com/hicommonwealth/edgeware-node) - Substrate node implementing all our edgeware features
-* [`paritytech/fleetwood`](https://github.com/paritytech/fleetwood) - Testbed repo for trying out ideas of what a smart contract API in Rust would look like
-* [`parity-samples/substrate-erc721`](https://github.com/parity-samples/substrate-erc721) - An implementation of ERC721 built on Parity Substrate
-
-## WebAssembly 🍭<a name = "wasm"></a>
-* [`paritytech/wasmi`](https://github.com/paritytech/wasmi) - Wasm interpreter in Rust https://paritytech.github.io/wasmi/
-* [`paritytech/pwasm-token-example`](https://github.com/paritytech/pwasm-token-example) - A simple ERC-20 compatible token contract written in Rust compiled into WebAssembly
-* [`paritytech/pwasm-tutorial`](https://github.com/paritytech/pwasm-tutorial) - A step-by-step tutorial on how to write contracts in Wasm for Kovan
-* [`paritytech/parity-wasm`](https://github.com/paritytech/parity-wasm)- WebAssembly serialization/deserialization in rust
-* [`paritytech/pwasm-std`](https://github.com/paritytech/pwasm-std) - WASM contracts standard library for Rust
-* [`paritytech/pwasm-abi`](https://github.com/paritytech/pwasm-abi) - Parity WASM Abi (Legacy and new)
-* [`paritytech/pwasm-test`](https://github.com/paritytech/pwasm-test) - pwasm-test is a set of tools to make it easy to test internal logic of contracts written using pwasm-std
-* [`paritytech/pwasm-ethereum`](https://github.com/paritytech/pwasm-ethereum)
-* [`paritytech/wasm-utils`](https://github.com/paritytech/wasm-utils)
-
-## Cryptography 🍰 <a name = "crypto"></a>
-* [`mixbytes/substrate-module-multisig`](https://github.com/mixbytes/substrate-module-multisig)
-* [`filiplazovic/substrate-merkle-tree`](https://github.com/filiplazovic/substrate-merkle-tree)
-* [`LayerXcom/bellman-substrate`](https://github.com/LayerXcom/bellman-substrate) - A library for supporting zk-SNARKs to Substrate
-* [`LayerXcom/zero-chain`](https://github.com/LayerXcom/zero-chain)  - A privacy-oriented blockchain on Substrate
-* [`paritytech/substrate-bip39`](https://github.com/paritytech/substrate-bip39)  - deriving secret keys for Ristretto compressed Ed25519 (should be compatible with Ed25519 at this time) from BIP39 phrases
-* [`paritytech/schnorrkel-js`](https://github.com/paritytech/schnorrkel-js) - a Javascript wrapper for schnorrkel signatures on Ristretto using WebAssembly.
-
-## More Open Source Projects 🍪 <a name = "oss"></a>
-
-**Fund Coordination DAO**
-* [`4meta5/SunshineDAO`](https://github.com/4meta5/SunshineDAO)
-
-**Decentralized Asset Management**
-*  [`chainx-org/ChainX`](https://github.com/chainx-org/ChainX) - Fully Decentralized Cross-chain Crypto Asset Management on Polkadot [chainx](https://chainx.org), [development notes](https://hackmd.io/p_v1M8WGRyy9PggYiKA_Xw#)
-
-**Payment Channels**
-* [`AdExNetwork/adex-protocol-substrate`](https://github.com/AdExNetwork/adex-protocol-substrate) - Substrate implementation of the AdEx Protocol v4: OUTPACE & Registry [adex](https://www.adex.network/)
-
-**Identity Registration and Verification**
-* [`hicommonwealth/edge-identity`](https://github.com/hicommonwealth/edge-identity) - Identity registration and verification for substrate chains
-
-**User Governed Video Platform**
-* [`Joystream/substrate-runtime-joystream`](https://github.com/Joystream/substrate-runtime-joystream)
-
-**Token Economics**
-* [`isaether/sr-bonded-curve`](https://github.com/lsaether/sr-bonded-token)
-
-**Robotics**
-* [`airalab/substrate-node-robonomics`](https://github.com/airalab/substrate-node-robonomics) - Substrate Node for Robonomics network [telemetry](https://telemetry.polkadot.io/#/Robonomics) -->
+<p>For more examples of the mock runtime scaffolding pattern used in <a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/execution-schedule"><code>execution-schedule</code></a>, see <code>balances/mock.rs</code> and <code>contract/tests.rs</code>.</p>
 <h1><a class="header" href="#more-resources" id="more-resources">More Resources</a></h1>
-<p>You can learn more knowledge about Substrate by following these resources:</p>
+<h2><a class="header" href="#substrate" id="substrate">Substrate</a></h2>
+<p>Learn more about Substrate from these resources:</p>
 <ul>
-<li><a href="https://substrate.dev"><strong>Substrate Developer Hub</strong></a> - the official Substrate documentation for blockchain developers.</li>
-<li><a href="https://substrate.dev/rustdocs"><strong>Reference Docs</strong></a> - the details about Substrate implementation in Rust.</li>
+<li><a href="https://substrate.dev">Substrate Developer Hub Home</a> - Landing page of the official Substrate documentation.</li>
+<li><a href="https://substrate.dev/docs">Conceptual Docs</a> - Explanation of Substrate's architecture at a high level of abstraction.</li>
+<li><a href="https://substrate.dev/rustdocs">Reference Docs</a> - Documentaiton on specific Substrate APIs with little abstraction.</li>
+<li><a href="https://substrate.dev/tutorials">Substrate Tutorials</a> - Step by step guides to accomplish specific tasks with Substrate.</li>
+</ul>
+<!-- Reminder: There is a _lot_ more potential content for this section in drafts/dessert.md -->
+<h2><a class="header" href="#rust" id="rust">Rust</a></h2>
+<p>Once you've got the fundamentals of Substrate, it can only help to know more rust. Here is a collection of helpful docs
+and blog posts to take you down the rabbit hole.</p>
+<h3><a class="header" href="#api-design" id="api-design">API Design</a></h3>
+<p>To become more familiar with commmon design patterns in Rust, the following links might be helpful:</p>
+<ul>
+<li><a href="https://rust-lang.github.io/api-guidelines/about.html">Official Rust API Guidelines</a></li>
+<li><a href="https://github.com/rust-unofficial/patterns">Rust Unofficial Design Patterns</a></li>
+<li><a href="https://deterministic.space/elegant-apis-in-rust.html">Elegant Library API Guidelines</a></li>
+</ul>
+<h3><a class="header" href="#optimizations" id="optimizations">Optimizations</a></h3>
+<p>To optimize runtime performance, Substrate developers should make use of iterators, traits, and Rust's other &quot;<em>zero cost</em> abstractions&quot;:</p>
+<ul>
+<li><a href="https://blog.rust-lang.org/2015/05/11/traits.html">Abstraction without overhead: traits in Rust</a>, <a href="https://www.youtube.com/watch?v=Sn3JklPAVLk">related conference talk</a></li>
+<li><a href="https://hermanradtke.com/2015/06/22/effectively-using-iterators-in-rust.html">Effectively Using Iterators in Rust</a></li>
+<li><a href="http://troubles.md/posts/rust-optimization/">Achieving Warp Speed with Rust</a></li>
+</ul>
+<h3><a class="header" href="#concurrency" id="concurrency">Concurrency</a></h3>
+<ul>
+<li><strong><a href="https://stjepang.github.io/2019/01/29/lock-free-rust-crossbeam-in-2019.html">Lock-free Rust: Crossbeam in 2019</a></strong> a high-level overview of concurrency in Rust.</li>
+<li><strong><a href="https://github.com/rayon-rs/rayon">Rayon</a></strong> splits your data into distinct pieces, gives each piece to a thread to do some kind of computation on it, and finally aggregates results. Its goal is to distribute CPU-intensive tasks onto a thread pool.</li>
+<li><strong><a href="https://github.com/tokio-rs/tokio">Tokio</a></strong> runs tasks which sometimes need to be paused in order to wait for asynchronous events. Handling tons of such tasks is no problem. Its goal is to distribute IO-intensive tasks onto a thread pool.</li>
+<li><strong><a href="https://github.com/crossbeam-rs/crossbeam">Crossbeam</a></strong> is all about low-level concurrency: atomics, concurrent data structures, synchronization primitives. Same idea as the <code>std::sync</code> module, but bigger. Its goal is to provide tools on top of which libraries like Rayon and Tokio can be built.</li>
+</ul>
+<h3><a class="header" href="#asynchrony" id="asynchrony">Asynchrony</a></h3>
+<p><a href="https://areweasyncyet.rs/">Are we <code>async</code> yet?</a></p>
+<p><strong>Conceptual</strong></p>
+<ul>
+<li><a href="https://boats.gitlab.io/blog/post/wakers-i/">Introduction to Async/Await Programming (withoutboats/wakers-i)</a></li>
+<li><a href="https://aturon.github.io/tech/2016/08/11/futures/">Futures (by Aaron Turon)</a></li>
+<li><a href="https://www.youtube.com/watch?v=skos4B5x7qE">RustLatam 2019 - Without Boats: Zero-Cost Async IO</a></li>
+</ul>
+<p><strong>Projects</strong></p>
+<ul>
+<li><a href="https://github.com/rustasync">Rust Asynchronous Ecosystem Working Group</a></li>
+<li><a href="https://github.com/withoutboats/romio">romio</a></li>
+<li><a href="https://tokio.rs/docs/overview/">Tokio Docs</a></li>
+</ul>
+<h3><a class="header" href="#concurrency-1" id="concurrency-1">Concurrency</a></h3>
+<p><strong>Conceptual</strong></p>
+<ul>
+<li><a href="https://stjepang.github.io/2019/01/29/lock-free-rust-crossbeam-in-2019.html">Lock-free Rust: Crossbeam in 2019</a></li>
+<li><a href="https://github.com/crossbeam-rs/rfcs/wiki">Crossbeam Research Meta-link</a></li>
+<li><a href="https://www.youtube.com/watch?v=Dbytx0ivH7Q">Rust Concurrency Explained</a></li>
+</ul>
+<p><strong>Projects</strong></p>
+<ul>
+<li><a href="https://github.com/spacejam/sled">sled</a></li>
+<li><a href="https://github.com/servo/servo">servo</a></li>
+<li><a href="https://github.com/tikv/tikv">TiKV</a></li>
 </ul>
 
                     </main>
@@ -2417,7 +2380,7 @@ fn fake_test2() {
         
 
         
-
+        
         
         <script type="text/javascript">
             window.playpen_copyable = true;
@@ -2438,11 +2401,11 @@ fn fake_test2() {
 
         <!-- Custom JS scripts -->
         
-        <script type="text/javascript" src="analytics/load.js"></script>
+        <script type="text/javascript" src=".analytics/load.js"></script>
         
-        <script type="text/javascript" src="analytics/config.js"></script>
+        <script type="text/javascript" src=".analytics/config.js"></script>
         
-        <script type="text/javascript" src="analytics/klaro.min.js"></script>
+        <script type="text/javascript" src=".analytics/klaro.min.js"></script>
         
 
         

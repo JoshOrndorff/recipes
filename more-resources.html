@@ -3,29 +3,29 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Learn Rust - Substrate Recipes</title>
+        <title>More Resources - Substrate Recipes</title>
         
 
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <meta name="description" content="Substrate runtime design patterns">
+        <meta name="description" content="A Hands-On Cookbook for Aspiring Blockchain Chefs">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
 
-        <link rel="shortcut icon" href="../favicon.png">
-        <link rel="stylesheet" href="../css/variables.css">
-        <link rel="stylesheet" href="../css/general.css">
-        <link rel="stylesheet" href="../css/chrome.css">
-        <link rel="stylesheet" href="../css/print.css" media="print">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
 
         <!-- Fonts -->
-        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" href="../highlight.css">
-        <link rel="stylesheet" href="../tomorrow-night.css">
-        <link rel="stylesheet" href="../ayu-highlight.css">
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
         
@@ -35,7 +35,7 @@
     <body>
         <!-- Provide site root to javascript -->
         <script type="text/javascript">
-            var path_to_root = "../";
+            var path_to_root = "";
             var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "light" : "light";
         </script>
 
@@ -80,14 +80,8 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <div id="devhub-link">
-                <a href="https://substrate.dev">
-                    <img src="../favicon.png" />
-                    <p>Substrate Developer Hub</p>
-                </a>
-            </div>
             <div id="sidebar-scrollbox" class="sidebar-scrollbox">
-                <ol class="chapter"><li class="expanded "><a href="../base/index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="expanded "><a href="../base/rust.html" class="active"><strong aria-hidden="true">2.</strong> Learn Rust</a></li><li class="expanded "><a href="../base/setup.html"><strong aria-hidden="true">3.</strong> Getting Started</a></li><li><ol class="section"><li class="expanded "><a href="../base/runnode.html"><strong aria-hidden="true">3.1.</strong> Running A Node</a></li><li class="expanded "><a href="../base/interactnode.html"><strong aria-hidden="true">3.2.</strong> Interacting with a Node</a></li><li class="expanded "><a href="../base/kitchenoverview.html"><strong aria-hidden="true">3.3.</strong> Using the Kitchen</a></li></ol></li><li class="expanded "><a href="../basics/index.html"><strong aria-hidden="true">4.</strong> Hello Substrate</a></li><li><ol class="section"><li class="expanded "><a href="../basics/events.html"><strong aria-hidden="true">4.1.</strong> Events Verify Execution</a></li><li class="expanded "><a href="../basics/adder.html"><strong aria-hidden="true">4.2.</strong> Adding Machine</a></li><li class="expanded "><a href="../basics/value.html"><strong aria-hidden="true">4.3.</strong> Single Value Storage</a></li></ol></li><li class="expanded "><a href="../storage/index.html"><strong aria-hidden="true">5.</strong> Runtime Storage API</a></li><li><ol class="section"><li class="expanded "><a href="../storage/cache.html"><strong aria-hidden="true">5.1.</strong> Cache Locally &gt; Storage Calls</a></li><li class="expanded "><a href="../storage/iterate.html"><strong aria-hidden="true">5.2.</strong> Sets</a></li><li class="expanded "><a href="../storage/enumerated.html"><strong aria-hidden="true">5.3.</strong> Ordered Lists: Maps, Linked Maps</a></li><li class="expanded "><a href="../storage/double.html"><strong aria-hidden="true">5.4.</strong> Subgroup Removal by Subkey: Double Maps</a></li><li class="expanded "><a href="../storage/childtries.html"><strong aria-hidden="true">5.5.</strong> Efficient Subgroup Removal by Subkey: Child Tries</a></li><li class="expanded "><a href="../storage/constants.html"><strong aria-hidden="true">5.6.</strong> Configurable Constants</a></li></ol></li><li class="expanded "><a href="../traits/index.html"><strong aria-hidden="true">6.</strong> Types and Traits</a></li><li><ol class="section"><li class="expanded "><a href="../traits/currency.html"><strong aria-hidden="true">6.1.</strong> Currency Types</a></li><li class="expanded "><a href="../traits/weights.html"><strong aria-hidden="true">6.2.</strong> Weights for Resource Accounting</a></li><li class="expanded "><a href="../traits/fees.html"><strong aria-hidden="true">6.3.</strong> Transaction Fees for Economic Security</a></li><li class="expanded "><a href="../storage/instantiable.html"><strong aria-hidden="true">6.4.</strong> Instantiable Pallets</a></li><li class="expanded "><a href="../traits/charity.html"><strong aria-hidden="true">6.5.</strong> Charity and Imbalances</a></li><li class="expanded "><a href="../advanced/runtime-api.html"><strong aria-hidden="true">6.6.</strong> Runtime APIs</a></li><li class="expanded "><a href="../advanced/custom-rpc.html"><strong aria-hidden="true">6.7.</strong> Custom RPCs</a></li></ol></li><li class="expanded "><a href="../declarative/index.html"><strong aria-hidden="true">7.</strong> Declarative Syntax</a></li><li><ol class="section"><li class="expanded "><a href="../declarative/ensure.html"><strong aria-hidden="true">7.1.</strong> Verify First, Write Last</a></li><li class="expanded "><a href="../declarative/safemath.html"><strong aria-hidden="true">7.2.</strong> Safe Math</a></li><li class="expanded "><a href="../declarative/permissioned.html"><strong aria-hidden="true">7.3.</strong> Permissioned Methods</a></li></ol></li><li class="expanded "><a href="../testing/index.html"><strong aria-hidden="true">8.</strong> Testing</a></li><li><ol class="section"><li class="expanded "><a href="../testing/mock.html"><strong aria-hidden="true">8.1.</strong> Basic Test Environments</a></li><li class="expanded "><a href="../testing/common.html"><strong aria-hidden="true">8.2.</strong> Common Tests</a></li><li class="expanded "><a href="../testing/externalities.html"><strong aria-hidden="true">8.3.</strong> Custom Test Environment</a></li></ol></li><li class="expanded "><a href="../base/dessert.html"><strong aria-hidden="true">9.</strong> Featured Tutorials</a></li><li class="spacer"></li><li class="expanded affix "><a href="../base/resource.html">More Resources</a></li></ol>
+                <ol class="chapter"><li class="expanded affix "><a href="introduction.html">Introduction</a></li><li class="expanded "><a href="prepare-kitchen/index.html"><strong aria-hidden="true">1.</strong> Preparing Your Kitchen</a></li><li><ol class="section"><li class="expanded "><a href="prepare-kitchen/1-build-node.html"><strong aria-hidden="true">1.1.</strong> Running A Node</a></li><li class="expanded "><a href="prepare-kitchen/2-interact-node.html"><strong aria-hidden="true">1.2.</strong> Interacting with a Node</a></li><li class="expanded "><a href="prepare-kitchen/3-kitchen-organization.html"><strong aria-hidden="true">1.3.</strong> Kitchen Organization</a></li></ol></li><li class="expanded "><a href="appetizers/index.html"><strong aria-hidden="true">2.</strong> Appetizers</a></li><li><ol class="section"><li class="expanded "><a href="appetizers/events.html"><strong aria-hidden="true">2.1.</strong> Events Verify Execution</a></li><li class="expanded "><a href="appetizers/adder.html"><strong aria-hidden="true">2.2.</strong> Adding Machine</a></li><li class="expanded "><a href="appetizers/value.html"><strong aria-hidden="true">2.3.</strong> Single Value Storage</a></li><li class="expanded "><a href="appetizers/hello-substrate.html"><strong aria-hidden="true">2.4.</strong> Hello Substrate</a></li></ol></li><li class="expanded "><a href="storage/index.html"><strong aria-hidden="true">3.</strong> Runtime Storage API</a></li><li><ol class="section"><li class="expanded "><a href="storage/cache.html"><strong aria-hidden="true">3.1.</strong> Cache Locally &gt; Storage Calls</a></li><li class="expanded "><a href="storage/iterate.html"><strong aria-hidden="true">3.2.</strong> Sets</a></li><li class="expanded "><a href="storage/enumerated.html"><strong aria-hidden="true">3.3.</strong> Ordered Lists: Maps, Linked Maps</a></li><li class="expanded "><a href="storage/double.html"><strong aria-hidden="true">3.4.</strong> Subgroup Removal by Subkey: Double Maps</a></li><li class="expanded "><a href="storage/childtries.html"><strong aria-hidden="true">3.5.</strong> Efficient Subgroup Removal by Subkey: Child Tries</a></li><li class="expanded "><a href="storage/constants.html"><strong aria-hidden="true">3.6.</strong> Configurable Constants</a></li></ol></li><li class="expanded "><a href="traits/index.html"><strong aria-hidden="true">4.</strong> Types and Traits</a></li><li><ol class="section"><li class="expanded "><a href="traits/currency.html"><strong aria-hidden="true">4.1.</strong> Currency Types</a></li><li class="expanded "><a href="traits/weights.html"><strong aria-hidden="true">4.2.</strong> Weights for Resource Accounting</a></li><li class="expanded "><a href="traits/fees.html"><strong aria-hidden="true">4.3.</strong> Transaction Fees for Economic Security</a></li><li class="expanded "><a href="storage/instantiable.html"><strong aria-hidden="true">4.4.</strong> Instantiable Pallets</a></li><li class="expanded "><a href="traits/charity.html"><strong aria-hidden="true">4.5.</strong> Charity and Imbalances</a></li><li class="expanded "><a href="advanced/runtime-api.html"><strong aria-hidden="true">4.6.</strong> Runtime APIs</a></li><li class="expanded "><a href="advanced/custom-rpc.html"><strong aria-hidden="true">4.7.</strong> Custom RPCs</a></li><li class="expanded "><a href="advnced/execution-schedule.html"><strong aria-hidden="true">4.8.</strong> Execution Schedule</a></li></ol></li><li class="expanded "><a href="declarative/index.html"><strong aria-hidden="true">5.</strong> Declarative Syntax</a></li><li><ol class="section"><li class="expanded "><a href="declarative/ensure.html"><strong aria-hidden="true">5.1.</strong> Verify First, Write Last</a></li><li class="expanded "><a href="declarative/safemath.html"><strong aria-hidden="true">5.2.</strong> Safe Math</a></li><li class="expanded "><a href="declarative/permissioned.html"><strong aria-hidden="true">5.3.</strong> Permissioned Methods</a></li></ol></li><li class="expanded "><a href="testing/index.html"><strong aria-hidden="true">6.</strong> Testing</a></li><li><ol class="section"><li class="expanded "><a href="testing/mock.html"><strong aria-hidden="true">6.1.</strong> Basic Test Environments</a></li><li class="expanded "><a href="testing/common.html"><strong aria-hidden="true">6.2.</strong> Common Tests</a></li><li class="expanded "><a href="testing/externalities.html"><strong aria-hidden="true">6.3.</strong> Custom Test Environment</a></li><li class="spacer"></li></ol></li><li class="expanded "><a href="more-resources.html" class="active">More Resources</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -122,7 +116,7 @@
                         <h1 class="menu-title">Substrate Recipes</h1>
 
                         <div class="right-buttons">
-                            <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <a href="print.html" title="Print this book" aria-label="Print this book">
                                 <i id="print-button" class="fa fa-print"></i>
                             </a>
                             
@@ -154,25 +148,36 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#learn-rust" id="learn-rust">Learn Rust</a></h1>
-<p>To be productive with <a href="https://github.com/substrate">substrate</a> requires some familiarity with Rust. Fortunately, the Rust community is known for comprehensive documentation and tutorials. The most common resource for initially learning Rust is <a href="https://doc.rust-lang.org/book/index.html">The Rust Book</a>. To see examples of popular crate usage patterns, <a href="https://doc.rust-lang.org/rust-by-example/index.html">Rust by Example</a> is also convenient.</p>
-<h2><a class="header" href="#api-design" id="api-design">API Design</a></h2>
+                        <h1><a class="header" href="#more-resources" id="more-resources">More Resources</a></h1>
+<h2><a class="header" href="#substrate" id="substrate">Substrate</a></h2>
+<p>Learn more about Substrate from these resources:</p>
+<ul>
+<li><a href="https://substrate.dev">Substrate Developer Hub Home</a> - Landing page of the official Substrate documentation.</li>
+<li><a href="https://substrate.dev/docs">Conceptual Docs</a> - Explanation of Substrate's architecture at a high level of abstraction.</li>
+<li><a href="https://substrate.dev/rustdocs">Reference Docs</a> - Documentaiton on specific Substrate APIs with little abstraction.</li>
+<li><a href="https://substrate.dev/tutorials">Substrate Tutorials</a> - Step by step guides to accomplish specific tasks with Substrate.</li>
+</ul>
+<!-- Reminder: There is a _lot_ more potential content for this section in drafts/dessert.md -->
+<h2><a class="header" href="#rust" id="rust">Rust</a></h2>
+<p>Once you've got the fundamentals of Substrate, it can only help to know more rust. Here is a collection of helpful docs
+and blog posts to take you down the rabbit hole.</p>
+<h3><a class="header" href="#api-design" id="api-design">API Design</a></h3>
 <p>To become more familiar with commmon design patterns in Rust, the following links might be helpful:</p>
 <ul>
 <li><a href="https://rust-lang.github.io/api-guidelines/about.html">Official Rust API Guidelines</a></li>
 <li><a href="https://github.com/rust-unofficial/patterns">Rust Unofficial Design Patterns</a></li>
 <li><a href="https://deterministic.space/elegant-apis-in-rust.html">Elegant Library API Guidelines</a></li>
 </ul>
-<h2><a class="header" href="#optimizations" id="optimizations">Optimizations</a></h2>
+<h3><a class="header" href="#optimizations" id="optimizations">Optimizations</a></h3>
 <p>To optimize runtime performance, Substrate developers should make use of iterators, traits, and Rust's other &quot;<em>zero cost</em> abstractions&quot;:</p>
 <ul>
 <li><a href="https://blog.rust-lang.org/2015/05/11/traits.html">Abstraction without overhead: traits in Rust</a>, <a href="https://www.youtube.com/watch?v=Sn3JklPAVLk">related conference talk</a></li>
 <li><a href="https://hermanradtke.com/2015/06/22/effectively-using-iterators-in-rust.html">Effectively Using Iterators in Rust</a></li>
 <li><a href="http://troubles.md/posts/rust-optimization/">Achieving Warp Speed with Rust</a></li>
 </ul>
-<p>It is not (immediately) necessary to become familiar with multithreading because the runtime operates in a <a href="https://www.tutorialspoint.com/single-threaded-and-multi-threaded-processes">single-threaded context</a>. Even so, the runtime might take advantage of the <a href="https://substrate.dev/docs/en/next/overview/off-chain-workers">offchain workers API</a> to minimize the computation executed on-chain. Effectively using these features requires increased familiarity with advanced Rust.</p>
-<p>For a high-level overview of concurrency in Rust, Stjepan Glavina provides the following descriptions in <a href="https://stjepang.github.io/2019/01/29/lock-free-rust-crossbeam-in-2019.html">Lock-free Rust: Crossbeam in 2019</a>:</p>
+<h3><a class="header" href="#concurrency" id="concurrency">Concurrency</a></h3>
 <ul>
+<li><strong><a href="https://stjepang.github.io/2019/01/29/lock-free-rust-crossbeam-in-2019.html">Lock-free Rust: Crossbeam in 2019</a></strong> a high-level overview of concurrency in Rust.</li>
 <li><strong><a href="https://github.com/rayon-rs/rayon">Rayon</a></strong> splits your data into distinct pieces, gives each piece to a thread to do some kind of computation on it, and finally aggregates results. Its goal is to distribute CPU-intensive tasks onto a thread pool.</li>
 <li><strong><a href="https://github.com/tokio-rs/tokio">Tokio</a></strong> runs tasks which sometimes need to be paused in order to wait for asynchronous events. Handling tons of such tasks is no problem. Its goal is to distribute IO-intensive tasks onto a thread pool.</li>
 <li><strong><a href="https://github.com/crossbeam-rs/crossbeam">Crossbeam</a></strong> is all about low-level concurrency: atomics, concurrent data structures, synchronization primitives. Same idea as the <code>std::sync</code> module, but bigger. Its goal is to provide tools on top of which libraries like Rayon and Tokio can be built.</li>
@@ -191,7 +196,7 @@
 <li><a href="https://github.com/withoutboats/romio">romio</a></li>
 <li><a href="https://tokio.rs/docs/overview/">Tokio Docs</a></li>
 </ul>
-<h3><a class="header" href="#concurrency" id="concurrency">Concurrency</a></h3>
+<h3><a class="header" href="#concurrency-1" id="concurrency-1">Concurrency</a></h3>
 <p><strong>Conceptual</strong></p>
 <ul>
 <li><a href="https://stjepang.github.io/2019/01/29/lock-free-rust-crossbeam-in-2019.html">Lock-free Rust: Crossbeam in 2019</a></li>
@@ -210,15 +215,11 @@
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
-                            <a rel="prev" href="../base/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="testing/externalities.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
 
-                        
-                            <a rel="next" href="../base/setup.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
-                            </a>
                         
 
                         <div style="clear: both"></div>
@@ -228,15 +229,11 @@
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
-                    <a href="../base/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a href="testing/externalities.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
 
-                
-                    <a href="../base/setup.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <i class="fa fa-angle-right"></i>
-                    </a>
                 
             </nav>
 
@@ -247,7 +244,7 @@
         
 
         
-
+        
         
         <script type="text/javascript">
             window.playpen_copyable = true;
@@ -257,22 +254,22 @@
         
 
         
-        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
         
 
-        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
 
         <!-- Custom JS scripts -->
         
-        <script type="text/javascript" src="../analytics/load.js"></script>
+        <script type="text/javascript" src=".analytics/load.js"></script>
         
-        <script type="text/javascript" src="../analytics/config.js"></script>
+        <script type="text/javascript" src=".analytics/config.js"></script>
         
-        <script type="text/javascript" src="../analytics/klaro.min.js"></script>
+        <script type="text/javascript" src=".analytics/klaro.min.js"></script>
         
 
         

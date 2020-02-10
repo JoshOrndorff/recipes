@@ -3,11 +3,11 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Hello Substrate - Substrate Recipes</title>
+        <title>Interacting with a Node - Substrate Recipes</title>
         
 
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <meta name="description" content="Substrate runtime design patterns">
+        <meta name="description" content="A Hands-On Cookbook for Aspiring Blockchain Chefs">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
 
@@ -80,14 +80,8 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <div id="devhub-link">
-                <a href="https://substrate.dev">
-                    <img src="../favicon.png" />
-                    <p>Substrate Developer Hub</p>
-                </a>
-            </div>
             <div id="sidebar-scrollbox" class="sidebar-scrollbox">
-                <ol class="chapter"><li class="expanded "><a href="../base/index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="expanded "><a href="../base/rust.html"><strong aria-hidden="true">2.</strong> Learn Rust</a></li><li class="expanded "><a href="../base/setup.html"><strong aria-hidden="true">3.</strong> Getting Started</a></li><li><ol class="section"><li class="expanded "><a href="../base/runnode.html"><strong aria-hidden="true">3.1.</strong> Running A Node</a></li><li class="expanded "><a href="../base/interactnode.html"><strong aria-hidden="true">3.2.</strong> Interacting with a Node</a></li><li class="expanded "><a href="../base/kitchenoverview.html"><strong aria-hidden="true">3.3.</strong> Using the Kitchen</a></li></ol></li><li class="expanded "><a href="../basics/index.html" class="active"><strong aria-hidden="true">4.</strong> Hello Substrate</a></li><li><ol class="section"><li class="expanded "><a href="../basics/events.html"><strong aria-hidden="true">4.1.</strong> Events Verify Execution</a></li><li class="expanded "><a href="../basics/adder.html"><strong aria-hidden="true">4.2.</strong> Adding Machine</a></li><li class="expanded "><a href="../basics/value.html"><strong aria-hidden="true">4.3.</strong> Single Value Storage</a></li></ol></li><li class="expanded "><a href="../storage/index.html"><strong aria-hidden="true">5.</strong> Runtime Storage API</a></li><li><ol class="section"><li class="expanded "><a href="../storage/cache.html"><strong aria-hidden="true">5.1.</strong> Cache Locally &gt; Storage Calls</a></li><li class="expanded "><a href="../storage/iterate.html"><strong aria-hidden="true">5.2.</strong> Sets</a></li><li class="expanded "><a href="../storage/enumerated.html"><strong aria-hidden="true">5.3.</strong> Ordered Lists: Maps, Linked Maps</a></li><li class="expanded "><a href="../storage/double.html"><strong aria-hidden="true">5.4.</strong> Subgroup Removal by Subkey: Double Maps</a></li><li class="expanded "><a href="../storage/childtries.html"><strong aria-hidden="true">5.5.</strong> Efficient Subgroup Removal by Subkey: Child Tries</a></li><li class="expanded "><a href="../storage/constants.html"><strong aria-hidden="true">5.6.</strong> Configurable Constants</a></li></ol></li><li class="expanded "><a href="../traits/index.html"><strong aria-hidden="true">6.</strong> Types and Traits</a></li><li><ol class="section"><li class="expanded "><a href="../traits/currency.html"><strong aria-hidden="true">6.1.</strong> Currency Types</a></li><li class="expanded "><a href="../traits/weights.html"><strong aria-hidden="true">6.2.</strong> Weights for Resource Accounting</a></li><li class="expanded "><a href="../traits/fees.html"><strong aria-hidden="true">6.3.</strong> Transaction Fees for Economic Security</a></li><li class="expanded "><a href="../storage/instantiable.html"><strong aria-hidden="true">6.4.</strong> Instantiable Pallets</a></li><li class="expanded "><a href="../traits/charity.html"><strong aria-hidden="true">6.5.</strong> Charity and Imbalances</a></li><li class="expanded "><a href="../advanced/runtime-api.html"><strong aria-hidden="true">6.6.</strong> Runtime APIs</a></li><li class="expanded "><a href="../advanced/custom-rpc.html"><strong aria-hidden="true">6.7.</strong> Custom RPCs</a></li></ol></li><li class="expanded "><a href="../declarative/index.html"><strong aria-hidden="true">7.</strong> Declarative Syntax</a></li><li><ol class="section"><li class="expanded "><a href="../declarative/ensure.html"><strong aria-hidden="true">7.1.</strong> Verify First, Write Last</a></li><li class="expanded "><a href="../declarative/safemath.html"><strong aria-hidden="true">7.2.</strong> Safe Math</a></li><li class="expanded "><a href="../declarative/permissioned.html"><strong aria-hidden="true">7.3.</strong> Permissioned Methods</a></li></ol></li><li class="expanded "><a href="../testing/index.html"><strong aria-hidden="true">8.</strong> Testing</a></li><li><ol class="section"><li class="expanded "><a href="../testing/mock.html"><strong aria-hidden="true">8.1.</strong> Basic Test Environments</a></li><li class="expanded "><a href="../testing/common.html"><strong aria-hidden="true">8.2.</strong> Common Tests</a></li><li class="expanded "><a href="../testing/externalities.html"><strong aria-hidden="true">8.3.</strong> Custom Test Environment</a></li></ol></li><li class="expanded "><a href="../base/dessert.html"><strong aria-hidden="true">9.</strong> Featured Tutorials</a></li><li class="spacer"></li><li class="expanded affix "><a href="../base/resource.html">More Resources</a></li></ol>
+                <ol class="chapter"><li class="expanded affix "><a href="../introduction.html">Introduction</a></li><li class="expanded "><a href="../prepare-kitchen/index.html"><strong aria-hidden="true">1.</strong> Preparing Your Kitchen</a></li><li><ol class="section"><li class="expanded "><a href="../prepare-kitchen/1-build-node.html"><strong aria-hidden="true">1.1.</strong> Running A Node</a></li><li class="expanded "><a href="../prepare-kitchen/2-interact-node.html" class="active"><strong aria-hidden="true">1.2.</strong> Interacting with a Node</a></li><li class="expanded "><a href="../prepare-kitchen/3-kitchen-organization.html"><strong aria-hidden="true">1.3.</strong> Kitchen Organization</a></li></ol></li><li class="expanded "><a href="../appetizers/index.html"><strong aria-hidden="true">2.</strong> Appetizers</a></li><li><ol class="section"><li class="expanded "><a href="../appetizers/events.html"><strong aria-hidden="true">2.1.</strong> Events Verify Execution</a></li><li class="expanded "><a href="../appetizers/adder.html"><strong aria-hidden="true">2.2.</strong> Adding Machine</a></li><li class="expanded "><a href="../appetizers/value.html"><strong aria-hidden="true">2.3.</strong> Single Value Storage</a></li><li class="expanded "><a href="../appetizers/hello-substrate.html"><strong aria-hidden="true">2.4.</strong> Hello Substrate</a></li></ol></li><li class="expanded "><a href="../storage/index.html"><strong aria-hidden="true">3.</strong> Runtime Storage API</a></li><li><ol class="section"><li class="expanded "><a href="../storage/cache.html"><strong aria-hidden="true">3.1.</strong> Cache Locally &gt; Storage Calls</a></li><li class="expanded "><a href="../storage/iterate.html"><strong aria-hidden="true">3.2.</strong> Sets</a></li><li class="expanded "><a href="../storage/enumerated.html"><strong aria-hidden="true">3.3.</strong> Ordered Lists: Maps, Linked Maps</a></li><li class="expanded "><a href="../storage/double.html"><strong aria-hidden="true">3.4.</strong> Subgroup Removal by Subkey: Double Maps</a></li><li class="expanded "><a href="../storage/childtries.html"><strong aria-hidden="true">3.5.</strong> Efficient Subgroup Removal by Subkey: Child Tries</a></li><li class="expanded "><a href="../storage/constants.html"><strong aria-hidden="true">3.6.</strong> Configurable Constants</a></li></ol></li><li class="expanded "><a href="../traits/index.html"><strong aria-hidden="true">4.</strong> Types and Traits</a></li><li><ol class="section"><li class="expanded "><a href="../traits/currency.html"><strong aria-hidden="true">4.1.</strong> Currency Types</a></li><li class="expanded "><a href="../traits/weights.html"><strong aria-hidden="true">4.2.</strong> Weights for Resource Accounting</a></li><li class="expanded "><a href="../traits/fees.html"><strong aria-hidden="true">4.3.</strong> Transaction Fees for Economic Security</a></li><li class="expanded "><a href="../storage/instantiable.html"><strong aria-hidden="true">4.4.</strong> Instantiable Pallets</a></li><li class="expanded "><a href="../traits/charity.html"><strong aria-hidden="true">4.5.</strong> Charity and Imbalances</a></li><li class="expanded "><a href="../advanced/runtime-api.html"><strong aria-hidden="true">4.6.</strong> Runtime APIs</a></li><li class="expanded "><a href="../advanced/custom-rpc.html"><strong aria-hidden="true">4.7.</strong> Custom RPCs</a></li><li class="expanded "><a href="../advnced/execution-schedule.html"><strong aria-hidden="true">4.8.</strong> Execution Schedule</a></li></ol></li><li class="expanded "><a href="../declarative/index.html"><strong aria-hidden="true">5.</strong> Declarative Syntax</a></li><li><ol class="section"><li class="expanded "><a href="../declarative/ensure.html"><strong aria-hidden="true">5.1.</strong> Verify First, Write Last</a></li><li class="expanded "><a href="../declarative/safemath.html"><strong aria-hidden="true">5.2.</strong> Safe Math</a></li><li class="expanded "><a href="../declarative/permissioned.html"><strong aria-hidden="true">5.3.</strong> Permissioned Methods</a></li></ol></li><li class="expanded "><a href="../testing/index.html"><strong aria-hidden="true">6.</strong> Testing</a></li><li><ol class="section"><li class="expanded "><a href="../testing/mock.html"><strong aria-hidden="true">6.1.</strong> Basic Test Environments</a></li><li class="expanded "><a href="../testing/common.html"><strong aria-hidden="true">6.2.</strong> Common Tests</a></li><li class="expanded "><a href="../testing/externalities.html"><strong aria-hidden="true">6.3.</strong> Custom Test Environment</a></li><li class="spacer"></li></ol></li><li class="expanded "><a href="../more-resources.html">More Resources</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -154,60 +148,42 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#pallet-fundamentals" id="pallet-fundamentals">Pallet Fundamentals</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/kitchen/pallets/hello-substrate"><code>kitchen/pallets/hello-substrate</code></a></em></p>
-<p>Clone the <a href="https://github.com/substrate-developer-hub/substrate-pallet-template">substrate pallet template</a>:</p>
-<pre><code class="language-bash">git clone https://github.com/substrate-developer-hub/substrate-pallet-template
-</code></pre>
-<p>At the top of the <code>src/lib.rs</code> file, import the following from <a href="https://substrate.dev/rustdocs/master/frame_support/index.html"><code>frame-support</code></a>:</p>
-<pre><code class="language-rust ignore">use frame_support::{decl_module, decl_event, decl_storage, StorageValue, StorageMap};
-use system::ensure_signed;
-</code></pre>
-<p>The blockchain's runtime storage is configured in <a href="https://substrate.dev/rustdocs/master/frame_support/macro.decl_storage.html"><code>decl_storage</code></a>.</p>
-<pre><code class="language-rust ignore">decl_storage! {
-	trait Store for Module&lt;T: Trait&gt; as HelloWorld {
-		pub LastValue get(fn last_value): u64;
-		pub UserValue get(fn user_value): map T::AccountId =&gt; u64;
-	}
-}
-</code></pre>
-<p>Defined in <a href="https://substrate.dev/rustdocs/master/frame_support/macro.decl_module.html"><code>decl_module</code></a>, the runtime methods specify acceptable interaction with runtime storage.</p>
-<pre><code class="language-rust ignore">decl_module! {
-	pub struct Module&lt;T: Trait&gt; for enum Call where origin: T::Origin {
-		fn deposit_event() = default;
+                        <h1><a class="header" href="#interact-with-the-kitchen-node" id="interact-with-the-kitchen-node">Interact with the Kitchen Node</a></h1>
+<p>If you followed the instructions to <a href="./1-build-node.html">build the node</a>, you my proceed to launch your first blockchain.</p>
+<h2><a class="header" href="#launch-a-development-node" id="launch-a-development-node">Launch a Development Node</a></h2>
+<p>Before we launch our node we will purge any chain data. If you've followed the instructions exactly, you will not yet have any chain data to purge, but on each subsequent run, you will, and it is best to get in the habbit of purging your chain now. We will start our node in development mode (<code>--dev</code>).</p>
+<pre><code class="language-bash"># Purge existing blockchain data (if any)
+./target/release/kitchen-node purge-chain --dev
 
-		pub fn set_value(origin, value: u64) {
-			let sender = ensure_signed(origin)?;
-			LastValue::put(value);
-			UserValue::&lt;T&gt;::insert(&amp;sender, value);
-			Self::deposit_event(RawEvent::ValueSet(sender, value));
-		}
-	}
-}
+# Start a fresh development blockchain
+./target/release/kitchen-node --dev
 </code></pre>
-<p>Events are declared in <a href="https://substrate.dev/rustdocs/master/frame_support/macro.decl_event.html"><code>decl_event</code></a>. The emission of events is used to determine successful execution of the logic in the body of runtime methods.</p>
-<pre><code class="language-rust ignore">decl_event!{
-	pub enum Event&lt;T&gt; where
-		AccountId = &lt;T as system::Trait&gt;::AccountId,
-	{
-		ValueSet(AccountId, u64),
-	}
-}
-</code></pre>
-<p><em>It is also possible to declare an error type for pallets with <a href="https://substrate.dev/rustdocs/master/frame_support/macro.decl_error.html"><code>decl_error</code></a></em></p>
+<p>You should now see blocks created on the console.</p>
+<h2><a class="header" href="#launch-the-apps-user-interface" id="launch-the-apps-user-interface">Launch the Apps User Interface</a></h2>
+<p>You can navigate to the  <a href="https://polkadot.js.org/apps/#/settings/developer?rpc=ws://127.0.0.1:9944">Polkadot-JS Apps</a> user interface. This is a general purpose interface for interacting with many different Substrate-based blockchains including Polkadot. From now on we'll call it &quot;Apps&quot; for short. Before Apps will work with our blockchain, we need to give it a little chain-specific information known as the &quot;types&quot;. You'll learn what all this means as you work through the recipes; for now just follow the instructions.</p>
+<blockquote>
+<p>If you are not clicking the link above but visiting Apps directly, by default Apps connects to Polkadot Kusama network. You will need to switch the connecting network to your locally running network, with only one node, by clicking on the network icon on Apps top left corner.</p>
+<p><img src="../img/polkadot-apps-select-network.png" alt="Screenshot: Switching Network" /></p>
+</blockquote>
+<blockquote>
+<p>Some browsers, notably Firefox, will not connect to a local node from an https website. An easy work around is to try another browser, like Chromium. Another option is to <a href="https://github.com/polkadot-js/apps#development">host this interface locally</a>.</p>
+</blockquote>
+<p>If you're not already on the <code>Settings -&gt; Developer</code>page, please navigate there. Copy the contents of <code>runtimes/super-runtime/types.json</code> into Apps.</p>
+<p><img src="../img/apps-types.png" alt="Screenshot: pasting types into Apps UI" /></p>
+<p>As you work through the recipes, you will use the <strong>Chain State</strong> tab to query the blockchain status and <strong>Extrinsics</strong> to send transactions to the blockchain. Play around for a bit before moving on.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
-                            <a rel="prev" href="../base/kitchenoverview.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../prepare-kitchen/1-build-node.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
 
                         
-                            <a rel="next" href="../basics/events.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="../prepare-kitchen/3-kitchen-organization.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -219,13 +195,13 @@ use system::ensure_signed;
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
-                    <a href="../base/kitchenoverview.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a href="../prepare-kitchen/1-build-node.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
 
                 
-                    <a href="../basics/events.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a href="../prepare-kitchen/3-kitchen-organization.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 
@@ -238,7 +214,7 @@ use system::ensure_signed;
         
 
         
-
+        
         
         <script type="text/javascript">
             window.playpen_copyable = true;
@@ -259,11 +235,11 @@ use system::ensure_signed;
 
         <!-- Custom JS scripts -->
         
-        <script type="text/javascript" src="../analytics/load.js"></script>
+        <script type="text/javascript" src="../.analytics/load.js"></script>
         
-        <script type="text/javascript" src="../analytics/config.js"></script>
+        <script type="text/javascript" src="../.analytics/config.js"></script>
         
-        <script type="text/javascript" src="../analytics/klaro.min.js"></script>
+        <script type="text/javascript" src="../.analytics/klaro.min.js"></script>
         
 
         
