@@ -32,7 +32,7 @@ jobs:
     - name: Cache cargo build
       uses: actions/cache@v1
       with:
-        path: kitchen/target
+        path: target
         key: ${{ runner.os }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
 
     - name: Install toolchain
@@ -45,7 +45,7 @@ jobs:
         default: true
 
     - name: Check Kitchen
-      run: cd kitchen && cargo check --all
+      run: cargo check --all
 
     - name: Test Kitchen
-      run: cd kitchen/pallets && cargo test --all
+      run: cargo test --all

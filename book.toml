@@ -2,13 +2,13 @@
 authors = ["4meta5, Joshy Orndorff"]
 language = "en"
 multilingual = false
-src = "src"
+src = "text"
 title = "Substrate Recipes"
-description = "Substrate runtime design patterns"
+description = "A Hands-On Cookbook for Aspiring Blockchain Chefs"
 [output.html]
 additional-js = [
-  "analytics/load.js",
-  "analytics/config.js",
-  "analytics/klaro.min.js"
+  ".analytics/load.js",
+  ".analytics/config.js",
+  ".analytics/klaro.min.js"
 ]
 theme = "src/theme"

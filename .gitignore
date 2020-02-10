@@ -5,9 +5,9 @@ book
 **/.DS_Store
 
 # Rust directories
-**/*/target
-kitchen/modules/*/Cargo.lock
-kitchen/runtimes/*/Cargo.lock
+**/target
+modules/*/Cargo.lock
+runtimes/*/Cargo.lock
 
-# For javascript snippets burried in the code
+# Javascript snippets burried in the code
 **/node_modules
