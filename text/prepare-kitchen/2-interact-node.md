@@ -20,6 +20,10 @@ You should now see blocks created on the console.
 
 You can navigate to the  [Polkadot-JS Apps](https://polkadot.js.org/apps/#/settings/developer?rpc=ws://127.0.0.1:9944) user interface. This is a general purpose interface for interacting with many different Substrate-based blockchains including Polkadot. From now on we'll call it "Apps" for short. Before Apps will work with our blockchain, we need to give it a little chain-specific information known as the "types". You'll learn what all this means as you work through the recipes; for now just follow the instructions.
 
+> If you are not clicking the link above but visiting Apps directly, by default Apps connects to Polkadot Kusama network. You will need to switch the connecting network to your locally running network, with only one node, by clicking on the network icon on Apps top left corner.
+>
+> ![Screenshot: Switching Network](../img/polkadot-apps-select-network.png)
+
 > Some browsers, notably Firefox, will not connect to a local node from an https website. An easy work around is to try another browser, like Chromium. Another option is to [host this interface locally](https://github.com/polkadot-js/apps#development).
 
 If you're not already on the `Settings -> Developer`page, please navigate there. Copy the contents of `runtimes/super-runtime/types.json` into Apps.
