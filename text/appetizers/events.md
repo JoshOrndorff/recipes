@@ -27,7 +27,7 @@ Self::deposit_event(Event::EmitInput(new_number));
 
 ## Events with Generic Types
 
-[Sometimes](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/generic-event) events might contin types from the pallet's Configuration Trait. In this case, it is necessary to specify additional syntax
+[Sometimes](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/generic-event) events might contain types from the pallet's Configuration Trait. In this case, it is necessary to specify additional syntax
 
 ```rust, ignore
 decl_event!(
