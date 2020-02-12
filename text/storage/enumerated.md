@@ -11,7 +11,7 @@ use support::{StorageValue, StorageMap};
 decl_storage! {
     trait Store for Module<T: Trait> as Example {
         TheList get(fn the_list): map u32 => T::AccountId;
-        LargestIndex get(fn the_counter): u32;
+        LargestIndex get(fn largest_index): u32;
     }
 }
 ```
