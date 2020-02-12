@@ -364,7 +364,7 @@ basic-token = { path = &quot;../../pallets/basic-token&quot;, default-features =
 <pre><code class="language-rust ignore">Self::deposit_event(Event::EmitInput(new_number));
 </code></pre>
 <h2><a class="header" href="#events-with-generic-types" id="events-with-generic-types">Events with Generic Types</a></h2>
-<p><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/generic-event">Sometimes</a> events might contin types from the pallet's Configuration Trait. In this case, it is necessary to specify additional syntax</p>
+<p><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/generic-event">Sometimes</a> events might contain types from the pallet's Configuration Trait. In this case, it is necessary to specify additional syntax</p>
 <pre><code class="language-rust ignore">decl_event!(
     pub enum Event&lt;T&gt; where AccountId = &lt;T as system::Trait&gt;::AccountId {
         EmitInput(AccountId, u32),
