@@ -19,10 +19,9 @@ pub trait Trait: system::Trait {
 decl_storage! {
     trait Store for Module<T: Trait> as List {
         TheList get(fn the_list): map u32 => T::AccountId;
-        TheCounter get(fn the_counter): u32;
+        LargestIndex get(fn largest_index): u32;
 
-        LinkedList get(fn linked_list): linked_map u32 => T::AccountId;
-        LinkedCounter get(fn linked_counter): u32;
+        TheLinkedList get(fn linked_list): linked_map u32 => T::AccountId;
     }
 }
 
@@ -45,18 +44,16 @@ decl_module! {
         fn add_member(origin) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
-            // increment the counter
-            let new_count = <TheCounter>::get() + 1;
-
-            // add member at the largest_index
-            <TheList<T>>::insert(new_count, who.clone());
-            // incremement counter
-            <TheCounter>::put(new_count);
+            // Note: We use a 1-based (instead of 0-based) list here
+            // Note: Handle overflow here in production code!
+            let new_count = <LargestIndex>::get() + 1;
+            // insert new member past the end of the list
+            <TheList<T>>::insert(new_count, &who);
+            // store the incremented count
+            <LargestIndex>::put(new_count);
 
             // (keep linked list synced)
-            <LinkedList<T>>::insert(new_count, who.clone());
-            // increment the counter
-            <LinkedCounter>::put(new_count);
+            <TheLinkedList<T>>::insert(new_count, who.clone());
 
             Self::deposit_event(RawEvent::MemberAdded(who));
 
@@ -64,15 +61,14 @@ decl_module! {
         }
 
         // worst option
-        // -- only works if the list is *unbounded*
-        fn remove_member_unbounded(origin, index: u32) -> DispatchResult {
+        // -- only works if the list can be *discontiguous*
+        fn remove_member_discontiguous(origin, index: u32) -> DispatchResult {
             let _ = ensure_signed(origin)?;
 
             // verify existence
             ensure!(<TheList<T>>::exists(index), "an element doesn't exist at this index");
-            // for event emission (could be removed to minimize calls)
-            let removed_member = <TheList<T>>::get(index);
-            <TheList<T>>::remove(index);
+            // use take for event emission, use remove to drop value
+            let removed_member = <TheList<T>>::take(index);
             // assumes that we do not need to adjust the list because every add just increments counter
 
             Self::deposit_event(RawEvent::MemberRemoved(removed_member));
@@ -82,46 +78,38 @@ decl_module! {
 
         // ok option
         // swap and pop
-        // -- better than `remove_member_unbounded`
+        // -- better than `remove_member_discontiguous`
         // -- this pattern becomes unwieldy fast!
-        fn remove_member_bounded(origin, index: u32) -> DispatchResult {
+        fn remove_member_contiguous(origin, index: u32) -> DispatchResult {
             let _ = ensure_signed(origin)?;
 
             ensure!(<TheList<T>>::exists(index), "an element doesn't exist at this index");
 
-            let largest_index = <TheCounter>::get();
-            let member_to_remove = <TheList<T>>::take(index);
+            let largest_index = <LargestIndex>::get();
             // swap
             if index != largest_index {
-                let temp = <TheList<T>>::take(largest_index);
-                <TheList<T>>::insert(index, temp);
-                <TheList<T>>::insert(largest_index, member_to_remove.clone());
+                <TheList<T>>::swap(index, largest_index);
             }
-            // pop
-            <TheList<T>>::remove(largest_index);
-            <TheCounter>::put(largest_index - 1);
+            // pop, uses `take` to return the member in the event
+            let removed_member = <TheList<T>>::take(largest_index);
+            <LargestIndex>::put(largest_index - 1);
 
-            Self::deposit_event(RawEvent::MemberRemoved(member_to_remove.clone()));
+            Self::deposit_event(RawEvent::MemberRemoved(removed_member));
 
             Ok(())
         }
 
         // best option (atm)
-        // this uses the enumerable storage map to simplify `swap and pop`
+        // this uses the enumerable storage map
         // should be generally preferred
         fn remove_member_linked(origin, index: u32) -> DispatchResult {
             let _ = ensure_signed(origin)?;
 
-            ensure!(<LinkedList<T>>::exists(index), "A member does not exist at this index");
+            ensure!(<TheLinkedList<T>>::exists(index), "A member does not exist at this index");
 
-            let head_index = <LinkedList<T>>::head().unwrap();
-            let member_to_remove = <LinkedList<T>>::take(index);
-            let head_member = <LinkedList<T>>::take(head_index);
-            <LinkedList<T>>::insert(index, head_member);
-            <LinkedList<T>>::insert(head_index, member_to_remove.clone());
-            <LinkedList<T>>::remove(head_index);
+            let removed_member = <TheLinkedList<T>>::take(index);
 
-            Self::deposit_event(RawEvent::MemberRemoved(member_to_remove));
+            Self::deposit_event(RawEvent::MemberRemoved(removed_member));
 
             Ok(())
         }
@@ -211,19 +199,19 @@ mod tests {
                 TestEvent::linked_map(RawEvent::MemberAdded(1));
             assert!(System::events().iter().any(|a| a.event == expected_event));
 
-            let counter = LinkedMap::the_counter();
+            let counter = LinkedMap::largest_index();
             assert_eq!(counter, 1);
             assert_eq!(LinkedMap::the_list(counter), 1);
-            let lcounter = LinkedMap::the_counter();
+            let lcounter = LinkedMap::largest_index();
             assert_eq!(lcounter, 1);
             assert_eq!(LinkedMap::linked_list(lcounter), 1);
 
             assert_ok!(LinkedMap::add_member(Origin::signed(2)));
 
-            let counter2 = LinkedMap::the_counter();
+            let counter2 = LinkedMap::largest_index();
             assert_eq!(counter2, 2);
             assert_eq!(LinkedMap::the_list(counter2), 2);
-            let lcounter2 = LinkedMap::the_counter();
+            let lcounter2 = LinkedMap::largest_index();
             assert_eq!(lcounter2, 2);
             assert_eq!(LinkedMap::linked_list(lcounter2), 2);
         })
@@ -233,7 +221,7 @@ mod tests {
     fn remove_works() {
         ExtBuilder::build().execute_with(|| {
             assert_err!(
-                LinkedMap::remove_member_unbounded(Origin::signed(1), 1),
+                LinkedMap::remove_member_discontiguous(Origin::signed(1), 1),
                 "an element doesn't exist at this index"
             );
             assert_ok!(LinkedMap::add_member(Origin::signed(1)));
@@ -242,15 +230,15 @@ mod tests {
                 TestEvent::linked_map(RawEvent::MemberAdded(1));
             assert!(System::events().iter().any(|a| a.event == expected_event));
             // check event is emitted
-            let counter = LinkedMap::the_counter();
+            let counter = LinkedMap::largest_index();
             assert_eq!(counter, 1);
 
             // remove unbounded doesn't decrement counter
-            assert_ok!(LinkedMap::remove_member_unbounded(Origin::signed(1), 1));
+            assert_ok!(LinkedMap::remove_member_discontiguous(Origin::signed(1), 1));
             let expected_event =
                 TestEvent::linked_map(RawEvent::MemberRemoved(1));
             assert!(System::events().iter().any(|a| a.event == expected_event));
-            let counter2 = LinkedMap::the_counter();
+            let counter2 = LinkedMap::largest_index();
             // the counter doesn't decrement because the list was unbounded (counter always increases)
             assert_eq!(counter2, 1);
 
@@ -258,11 +246,11 @@ mod tests {
             assert_ok!(LinkedMap::add_member(Origin::signed(2))); // note: counter increments
 
             // remove bounded decrements counter
-            assert_ok!(LinkedMap::remove_member_bounded(Origin::signed(1), 2));
+            assert_ok!(LinkedMap::remove_member_contiguous(Origin::signed(1), 2));
             let expected_event2 =
                 TestEvent::linked_map(RawEvent::MemberRemoved(2));
             assert!(System::events().iter().any(|a| a.event == expected_event2));
-            let counter2 = LinkedMap::the_counter();
+            let counter2 = LinkedMap::largest_index();
             // counter decrements (from 2 to 1)
             assert_eq!(counter2, 1);
 
