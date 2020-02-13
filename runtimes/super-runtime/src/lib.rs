@@ -305,6 +305,8 @@ impl generic_event::Trait for Runtime {
     type Event = Event;
 }
 
+impl hello_substrate::Trait for Runtime {}
+
 // The following two configuration traits are for two different instances of the last-caller pallet
 impl last_caller::Trait<last_caller::Instance1> for Runtime {
     type Event = Event;
@@ -367,6 +369,7 @@ construct_runtime!(
 		DefaultInstance2: default_instance::<Instance2>::{Module, Call, Storage, Event<T>},
 		DoubleMap: double_map::{Module, Call, Storage, Event<T>},
 		ExecutionSchedule: execution_schedule::{Module, Call, Storage, Event<T>},
+		HelloSubstrate: hello_substrate::{Module, Call},
 		GenericEvent: generic_event::{Module, Call, Event<T>},
 		LastCaller1: last_caller::<Instance1>::{Module, Call, Storage, Event<T>},
 		LastCaller2: last_caller::<Instance2>::{Module, Call, Storage, Event<T>},

@@ -1,6 +1,20 @@
 # Single Value
 *[`pallets/single-value`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/single-value)*
 
+Storage is used for data that should be kept between blocks, and accessible to future transactions. Most blockchains will have many storage values, and together the storage values make up the blockchain's "state". The storage values themselves are _not_ stored in the blocks. Instead the blocks contains extrinsics which represent _changes_ to the storage values. It is the job of each node in a blockchain network to keep track of the current storage.
+
+
+The blockchain's runtime storage is configured in [`decl_storage`](https://substrate.dev/rustdocs/master/frame_support/macro.decl_storage.html).
+
+```rust, ignore
+decl_storage! {
+	trait Store for Module<T: Trait> as HelloWorld {
+		pub LastValue get(fn last_value): u64;
+		pub UserValue get(fn user_value): map T::AccountId => u64;
+	}
+}
+```
+
 Within a specific pallet, a single value (`u32` type) is stored in the runtime using the [`decl_storage`](https://wiki.parity.io/decl_storage) macro
 
 ```rust, ignore
