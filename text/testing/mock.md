@@ -36,14 +36,14 @@ impl Trait for TestRuntime {
 Next, we create a new type that wraps the mock `TestRuntime` in the pallet's `Module`.
 
 ```rust, ignore
-pub type HelloSubstrate = Module<TestRuntime>;
+pub type TestPallet = Module<TestRuntime>;
 ```
 
 It may be helpful to read this as type aliasing our configured mock runtime to work with the pallet's `Module`, which is what is ultimately being tested.
 
 ## `impl system::Trait`
 
-In many cases, the pallet's `Trait` inherits `system::Trait` like
+In many cases, the pallet's `Trait` inherits `system::Trait` like:
 
 ```rust, ignore
 pub trait Trait: system::Trait {
@@ -51,12 +51,41 @@ pub trait Trait: system::Trait {
 }
 ```
 
-The mock runtime must inherit and define the `system::Trait` associated types (*[remember](https://substrate.dev/recipes/traits/index.html)*). To do so, `impl` the `system::Trait` for `TestRuntime` with a few types imported from other crates,
+Before we can create a mock runtime that take our pallet to run tests, we first need to create the
+outer environment for the runtime, as follows:
 
 ```rust, ignore
 use support::{impl_outer_event, impl_outer_origin, parameter_types};
 use runtime_primitives::{Perbill, traits::{IdentityLookup, BlakeTwo256}, testing::Header};
+use runtime_io;
+use primitives::{H256};
 
+// We define the outer `Origin` enum, and `Event` enums.
+// You may not aware these enums are created when writing the pallet, it is because
+//   they are created through the macro `decl_event`, `decl_module` that we use.
+// Also these are not standard Rust but the syntax expected when parsed inside these macros.
+impl_outer_origin! {
+	pub enum Origin for TestRuntime {}
+}
+
+// -- If you want to test events, add the following. Otherwise, please ignore --
+mod test_events {
+	pub use crate::Event;
+}
+
+impl_outer_event! {
+	pub enum TestEvent for TestRuntime {
+		test_events,
+	}
+}
+// -- End: Code setup for testing events --
+```
+
+The mock runtime must inherit and define the `system::Trait` associated types
+(*[remember](https://substrate.dev/recipes/traits/index.html)*). To do so, `impl` the `system::Trait`
+for `TestRuntime` with types created previously and imported from other crates.
+
+```rust, ignore
 #[derive(Clone, PartialEq, Eq, Debug)]
 pub struct TestRuntime;
 parameter_types! {
@@ -70,19 +99,24 @@ impl system::Trait for TestRuntime {
 	type Index = u64;
 	type Call = ();
 	type BlockNumber = u64;
-	type Hash = BlakeTwo256;
+	type Hash = H256;
+	type Hashing = BlakeTwo256;
 	type AccountId = u64;
 	type Lookup = IdentityLookup<Self::AccountId>;
 	type Header = Header;
+	// To test events, use `TestEvent`. Otherwise, use the commented line
 	type Event = TestEvent;
+	// type Event = ();
 	type BlockHashCount = BlockHashCount;
 	type MaximumBlockWeight = MaximumBlockWeight;
 	type MaximumBlockLength = MaximumBlockLength;
 	type AvailableBlockRatio = AvailableBlockRatio;
 	type Version = ();
+	type ModuleToIndex = ();
 }
 
 pub type System = system::Module<TestRuntime>;
+pub type TestPallet = Module<TestRuntime>;
 ```
 
 With this, it is possible to use this type in the unit tests. For example, the block number can be set with [`set_block_number`](https://substrate.dev/rustdocs/master/frame_system/struct.Module.html#method.set_block_number)
@@ -247,8 +281,8 @@ NOTE: the input to `Origin::signed` is the `system::Trait`'s `AccountId` type wh
 
 ```rust, ignore
 pub trait Trait: 'static + Eq + Clone {
-    //...
-    type AccountId: Parameter + Member + MaybeSerializeDeserialize + Debug + MaybeDisplay + Ord + Default;
+	//...
+	type AccountId: Parameter + Member + MaybeSerializeDeserialize + Debug + MaybeDisplay + Ord + Default;
 	//...
 }
 ```
