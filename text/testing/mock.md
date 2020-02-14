@@ -1,20 +1,65 @@
 # Mock Runtime for Unit Testing
+
 *see [root](./index.md) for list of kitchen pallets with unit test coverage*
 
-At the bottom of the pallet, place unit tests in a separate Rust module with a special compilation flag
+There are two main patterns on writing tests for pallets. We can put the tests:
 
-```rust, ignore
-#[cfg(test)]
-mod tests {
-	...
-}
-```
+1. At the bottom of the pallet, place unit tests in a separate Rust module with a special compilation flag
 
-To use the logic from the pallet under test, bring `Module` and `Trait` into scope.
+	```rust, ignore
+	#[cfg(test)]
+	mod tests {
+		// -- snip --
+	}
+	```
+
+2. In a separate file called `tests.rs` inside `src` folder, and conditionally include tests inside the main `lib.rs`. At the top of the `lib.rs`
+
+	```rust, ignore
+	#[cfg(test)]
+	mod tests;
+	```
+
+Now, to use the logic from the pallet under test, bring `Module` and `Trait` into scope.
 
 ```rust, ignore
 use crate::{Module, Trait};
 ```
+
+## Create the Outer Environment for Mock Runtime
+
+Before we create the mock runtime that take our pallet to run tests, we first need to create the
+outer environment for the runtime as follows:
+
+```rust, ignore
+use support::{impl_outer_event, impl_outer_origin, parameter_types};
+use runtime_primitives::{Perbill, traits::{IdentityLookup, BlakeTwo256}, testing::Header};
+use runtime_io;
+use primitives::{H256};
+
+// We define the outer `Origin` enum and `Event` enum.
+// You may not aware these enums are created when writing the runtime/pallet, it is
+//   because they are created through the `construct_runtime!` macro.
+// Also, these are not standard Rust but the syntax expected when parsed inside
+//   these macros.
+impl_outer_origin! {
+	pub enum Origin for TestRuntime {}
+}
+
+// -- If you want to test events, add the following. Otherwise, please ignore --
+mod test_events {
+	pub use crate::Event;
+}
+
+impl_outer_event! {
+	pub enum TestEvent for TestRuntime {
+		test_events,
+	}
+}
+// -- End: Code setup for testing events --
+```
+
+## Define Mock Runtime and Implement Necessary Pallet Traits
 
 Now, declare the mock runtime as a unit structure
 
@@ -41,44 +86,12 @@ pub type TestPallet = Module<TestRuntime>;
 
 It may be helpful to read this as type aliasing our configured mock runtime to work with the pallet's `Module`, which is what is ultimately being tested.
 
-## `impl system::Trait`
-
-In many cases, the pallet's `Trait` inherits `system::Trait` like:
+In many cases, the pallet's `Trait` is further bound by `system::Trait` like:
 
 ```rust, ignore
 pub trait Trait: system::Trait {
 	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
 }
-```
-
-Before we can create a mock runtime that take our pallet to run tests, we first need to create the
-outer environment for the runtime, as follows:
-
-```rust, ignore
-use support::{impl_outer_event, impl_outer_origin, parameter_types};
-use runtime_primitives::{Perbill, traits::{IdentityLookup, BlakeTwo256}, testing::Header};
-use runtime_io;
-use primitives::{H256};
-
-// We define the outer `Origin` enum, and `Event` enums.
-// You may not aware these enums are created when writing the pallet, it is because
-//   they are created through the macro `decl_event`, `decl_module` that we use.
-// Also these are not standard Rust but the syntax expected when parsed inside these macros.
-impl_outer_origin! {
-	pub enum Origin for TestRuntime {}
-}
-
-// -- If you want to test events, add the following. Otherwise, please ignore --
-mod test_events {
-	pub use crate::Event;
-}
-
-impl_outer_event! {
-	pub enum TestEvent for TestRuntime {
-		test_events,
-	}
-}
-// -- End: Code setup for testing events --
 ```
 
 The mock runtime must inherit and define the `system::Trait` associated types
@@ -88,12 +101,15 @@ for `TestRuntime` with types created previously and imported from other crates.
 ```rust, ignore
 #[derive(Clone, PartialEq, Eq, Debug)]
 pub struct TestRuntime;
+
 parameter_types! {
 	pub const BlockHashCount: u64 = 250;
 	pub const MaximumBlockWeight: u32 = 1024;
 	pub const MaximumBlockLength: u32 = 2 * 1024;
 	pub const AvailableBlockRatio: Perbill = Perbill::one();
 }
+
+// First, implement the system pallet trait for test runtime
 impl system::Trait for TestRuntime {
 	type Origin = Origin;
 	type Index = u64;
@@ -115,6 +131,12 @@ impl system::Trait for TestRuntime {
 	type ModuleToIndex = ();
 }
 
+// Then implement our own pallet trait for test runtime
+impl Trait for TestRuntime {
+	type Event = TestEvent;
+}
+
+// Assign back to type variables so we can make dispatched calls of these modules later.
 pub type System = system::Module<TestRuntime>;
 pub type TestPallet = Module<TestRuntime>;
 ```
