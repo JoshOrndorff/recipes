@@ -69,7 +69,7 @@ fn set_account(origin) -> DispatchResult {
 
 Because `AccountId` type comes from the configuration trait, we must use slightly different syntax. Notice the `<T>` attached to the name of the storage value this time. Notice also that because `AccountId` is not primitive, we lend a reference to it rather than transferring ownership.
 
-## Constructing a Runtime
+## Constructing the Runtime
 
 We learned about the [`construct_runtime!` macro](https://substrate.dev/rustdocs/master/frame_support/macro.construct_runtime.html) in the previous section. Because this pallet uses storage items, we must add this to the line in construct runtime. In the Super Runtime, we see the additional `Storage` feature.
 

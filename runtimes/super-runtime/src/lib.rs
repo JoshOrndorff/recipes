@@ -246,9 +246,7 @@ impl sudo::Trait for Runtime {
 }
 
 // ---------------------- Recipe Pallet Configurations ----------------------
-impl adding_machine::Trait for Runtime {
-    type Event = Event;
-}
+impl adding_machine::Trait for Runtime {}
 
 impl basic_token::Trait for Runtime {
     type Event = Event;
@@ -358,7 +356,7 @@ construct_runtime!(
 		Sudo: sudo,
 		TransactionPayment: transaction_payment::{Module, Storage},
 		// The Recipe Pallets
-		AddingMachine: adding_machine::{Module, Call, Event},
+		AddingMachine: adding_machine::{Module, Call, Storage},
 		BasicToken: basic_token::{Module, Call, Storage, Event<T>},
 		Charity: charity::{Module, Call, Storage, Event<T>},
 		CheckMembership: check_membership::{Module, Call, Storage, Event<T>},

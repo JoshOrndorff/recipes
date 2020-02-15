@@ -1,21 +1,21 @@
 [package]
 name = "adding-machine"
 version = "0.1.0"
-authors = ["4meta5"]
+authors = ["4meta5, Joshy Orndorff"]
 edition = "2018"
 
 [features]
 default = ['std']
 std = [
     'parity-scale-codec/std',
-    'support/std',
+    'frame-support/std',
     'system/std',
     'sp-runtime/std',
 ]
 
 [dependencies]
 parity-scale-codec = { version = "1.1.0", features = ["derive"], default-features = false }
-support = { package = "frame-support", rev = '3e651110aa06aa835790df63410a29676243fc54', git = "https://github.com/paritytech/substrate.git", default_features = false }
+frame-support = { package = "frame-support", rev = '3e651110aa06aa835790df63410a29676243fc54', git = "https://github.com/paritytech/substrate.git", default_features = false }
 system = { package = "frame-system", rev = '3e651110aa06aa835790df63410a29676243fc54', git = "https://github.com/paritytech/substrate.git", default_features = false }
 sp-runtime = { rev = '3e651110aa06aa835790df63410a29676243fc54', git = "https://github.com/paritytech/substrate.git", default_features = false }
 
