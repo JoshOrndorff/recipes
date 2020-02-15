@@ -9,7 +9,7 @@
     - [Hello Substrate](./appetizers/1-hello-substrate.md)
     - [Single Value Storage](./appetizers/2-storage-values.md)
     - [Handling Errors](./appetizers/3-errors.md)
-    - [Events Verify Execution](./appetizers/events.md)
+    - [Events Verify Execution](./appetizers/4-events.md)
 - [Runtime Storage API](./storage/README.md)
     - [Cache Locally > Storage Calls](./storage/cache.md)
     - [Sets](./storage/iterate.md)
