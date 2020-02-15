@@ -1,6 +1,6 @@
-# Storage
+# Storage API
 
-The [`decl_storage`](https://wiki.parity.io/decl_storage) documentation specifies how to define type-safe, persistent data that needs to be stored on-chain.
+We've already encountered the [`decl_storage!` macro](https://substrate.dev/rustdocs/master/frame_support/macro.decl_storage.html) in the appetizer on [storage items](../../2-appetizers/2-storage-values.md). There is a rich storage API in Substrate which we will explore in this section.
 
 For crypto*currencies*, storage might consist of a mapping between account keys and corresponding balances.
 
@@ -8,12 +8,12 @@ More generally, blockchains provide an interface to store and interact with data
 
 Arbitrary data may be stored, as long as its data type is serializable in Substrate i.e. implements [`Encode`](https://docs.rs/parity-scale-codec/1.0.6/parity_scale_codec/#encode) and [`Decode`](https://docs.rs/parity-scale-codec/1.0.6/parity_scale_codec/#decode) traits.
 
-The previous *[single-value storage recipe](../basics/value.md)* showed how a single value can be stored in runtime storage. In this section, we cover
+The previous *[single-value storage recipe](../../2-appetizers/2-storage-values.md)* showed how a single value can be stored in runtime storage. In this section, we cover
 - [caching values rather than calling to storage multiple times](./cache.md)
 - [storing sets, checking membership, and iteration](./iterate.md)
 - [ordered lists with basic maps and linked maps](./enumerated.md)
 - [efficient subgroup removal by key prefix with double maps](./double.md)
-- [configurable pallet constants](./constants.md)
+- [storing custom structs](./structs.md)
 
 *in-progress*
 - [cheap inclusion proofs with child tries](./childtries.md)
