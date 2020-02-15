@@ -2,7 +2,7 @@
 
 [Introduction](./introduction.md)
 - [Preparing Your Kitchen](./prepare-kitchen/README.md)
-    - [Running A Node](./prepare-kitchen/1-build-node.md)
+    - [Building A Node](./prepare-kitchen/1-build-node.md)
     - [Interacting with a Node](./prepare-kitchen/2-interact-node.md)
     - [Kitchen Organization](./prepare-kitchen/3-kitchen-organization.md)
 - [Appetizers](./appetizers/README.md)
