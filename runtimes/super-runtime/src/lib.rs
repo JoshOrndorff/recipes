@@ -328,9 +328,7 @@ impl simple_map::Trait for Runtime {
     type Event = Event;
 }
 
-impl single_value::Trait for Runtime {
-    type Event = Event;
-}
+impl single_value::Trait for Runtime {}
 
 impl storage_cache::Trait for Runtime {
     type Event = Event;
@@ -376,7 +374,7 @@ construct_runtime!(
 		LinkedMap: linked_map::{Module, Call, Storage, Event<T>},
 		SimpleEvent: simple_event::{Module, Call, Event},
 		SimpleMap: simple_map::{Module, Call, Storage, Event<T>},
-		SingleValue: single_value::{Module, Call, Storage, Event<T>},
+		SingleValue: single_value::{Module, Call, Storage},
 		StorageCache: storage_cache::{Module, Call, Storage, Event<T>},
 		StructStorage: struct_storage::{Module, Call, Storage, Event<T>},
 		VecSet: vec_set::{Module, Call, Storage, Event<T>},
