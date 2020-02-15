@@ -4,7 +4,7 @@ This section of the cookbook will focus on Appetizers, small runtime pallets tha
 
 This section covers:
 
-* Dispatchable Calls
-* Events
-* Storage Values
-* Errors
+* [Dispatchable Calls](./1-hello-substrate.md) - How users submit transactions
+* [Storage Values](./2-storage-values.md) - Storing the state of the blockchain
+* [Errors](./3-errors.md) - When things go wrong during a transaction
+* [Events](./4-events.md) - Notifying the offchain world of success
