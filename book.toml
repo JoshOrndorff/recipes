@@ -5,6 +5,7 @@ multilingual = false
 src = "text"
 title = "Substrate Recipes"
 description = "A Hands-On Cookbook for Aspiring Blockchain Chefs"
+
 [output.html]
 additional-js = [
   ".analytics/load.js",
@@ -12,3 +13,5 @@ additional-js = [
   ".analytics/klaro.min.js"
 ]
 theme = "src/theme"
+
+[output.linkcheck]
