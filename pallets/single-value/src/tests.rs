@@ -1,5 +1,5 @@
 use frame_system::{ self as system, RawOrigin };
-use frame_support::{assert_err, assert_ok, impl_outer_origin, parameter_types, dispatch::DispatchError};
+use frame_support::{assert_noop, assert_ok, impl_outer_origin, parameter_types, dispatch::DispatchError};
 use sp_runtime::{Perbill, traits::{IdentityLookup, BlakeTwo256}, testing::Header};
 use sp_io::TestExternalities;
 use sp_core::H256;
@@ -63,7 +63,7 @@ fn set_value_works() {
 #[test]
 fn set_value_no_root() {
 	ExtBuilder::build().execute_with(|| {
-		assert_err!(SingleValue::set_value(RawOrigin::Root.into(), 10), DispatchError::BadOrigin);
+		assert_noop!(SingleValue::set_value(RawOrigin::Root.into(), 10), DispatchError::BadOrigin);
 	})
 }
 
@@ -80,6 +80,6 @@ fn set_account_works() {
 #[test]
 fn set_account_no_root() {
 	ExtBuilder::build().execute_with(|| {
-		assert_err!(SingleValue::set_account(RawOrigin::Root.into()), DispatchError::BadOrigin);
+		assert_noop!(SingleValue::set_account(RawOrigin::Root.into()), DispatchError::BadOrigin);
 	})
 }
