@@ -22,6 +22,8 @@ parameter_types! {
 	pub const MaximumBlockLength: u32 = 2 * 1024;
 	pub const AvailableBlockRatio: Perbill = Perbill::one();
 }
+
+// The TestRuntime implements two pallet/frame traits: system, and simple_event
 impl system::Trait for TestRuntime {
 	type Origin = Origin;
 	type Index = u64;
