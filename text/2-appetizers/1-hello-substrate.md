@@ -5,7 +5,7 @@ The first pallet we'll explore is a simple "hello world" example. This pallet wi
 
 ## No Std
 
-The very fisrt line of code tells the rust compiler that this crate should not use rust's standard library except when explicitly told to. This is useful because Substrate runtimes compile to Web Assembly where the standard library is not available.
+The very first line of code tells the rust compiler that this crate should not use rust's standard library except when explicitly told to. This is useful because Substrate runtimes compile to Web Assembly where the standard library is not available.
 
 ```rust, ignore
 #![cfg_attr(not(feature = "std"), no_std)]
