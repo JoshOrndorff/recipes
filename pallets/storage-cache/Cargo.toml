@@ -4,52 +4,25 @@ version = "0.1.0"
 authors = ["4meta5"]
 edition = "2018"
 
+[dependencies]
+# external dependencies
+parity-scale-codec = { default-features = false, features = ['derive'], version = '1.1.0' }
+
+# Substrate pallet/frame dependencies
+support = { package = 'frame-support', git = 'https://github.com/paritytech/substrate.git', rev = '3e651110aa06aa835790df63410a29676243fc54', default_features = false }
+system = { package = 'frame-system', git = 'https://github.com/paritytech/substrate.git', rev = '3e651110aa06aa835790df63410a29676243fc54', default_features = false }
+sp-runtime = { git = 'https://github.com/paritytech/substrate.git', rev = '3e651110aa06aa835790df63410a29676243fc54', default_features = false }
+sp-std = { git = 'https://github.com/paritytech/substrate.git', rev = '3e651110aa06aa835790df63410a29676243fc54', default_features = false }
+
+[dev-dependencies]
+sp-core = { git = 'https://github.com/paritytech/substrate.git', rev = '3e651110aa06aa835790df63410a29676243fc54', default_features = false }
+sp-io = { git = 'https://github.com/paritytech/substrate.git', rev = '3e651110aa06aa835790df63410a29676243fc54', default_features = false }
+
 [features]
 default = ['std']
 std = [
-    'parity-scale-codec/std',
-    'support/std',
-    'system/std',
-    'runtime-primitives/std',
+	'parity-scale-codec/std',
+	'support/std',
+	'system/std',
+	'sp-runtime/std',
 ]
-
-[dependencies.parity-scale-codec]
-default-features = false
-features = ['derive']
-version = '1.1.0'
-
-[dependencies.support]
-default_features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'frame-support'
-rev = '3e651110aa06aa835790df63410a29676243fc54'
-
-[dependencies.system]
-default_features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'frame-system'
-rev = '3e651110aa06aa835790df63410a29676243fc54'
-
-[dependencies.runtime-primitives]
-default_features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'sp-runtime'
-rev = '3e651110aa06aa835790df63410a29676243fc54'
-
-[dependencies.rstd]
-default_features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'sp-std'
-rev = '3e651110aa06aa835790df63410a29676243fc54'
-
-[dev-dependencies.primitives]
-default_features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'sp-core'
-rev = '3e651110aa06aa835790df63410a29676243fc54'
-
-[dev-dependencies.runtime-io]
-default_features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'sp-io'
-rev = '3e651110aa06aa835790df63410a29676243fc54'
