@@ -1,10 +1,6 @@
-name: mdBook
+name: Build and Deploy Book
 
 on:
-  # Don't build on PRs; only build when they're merged
-  # pull_request:
-  #   branches:
-  #   - master
   push:
     branches:
     - master
@@ -21,11 +17,17 @@ jobs:
         mdbook-version: '0.3.5'
         # mdbook-version: 'latest'
 
-    - run: mdbook build
+    - name: Install mdbook-linkcheck
+      run: |
+          curl -LSfs https://japaric.github.io/trust/install.sh | \
+            bash -s -- --git Michael-F-Bryan/mdbook-linkcheck
+
+    - name: Build Book
+      run: mdbook build
 
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v2
       env:
         PERSONAL_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
         PUBLISH_BRANCH: gh-pages
-        PUBLISH_DIR: ./book
+        PUBLISH_DIR: ./book/html

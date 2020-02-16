@@ -31,8 +31,9 @@
 	- [Permissioned Methods](./3-entrees/permissioned-methods.md)
 	- [Testing](./3-entrees/testing/README.md)
 		- [Basic Test Environments](./3-entrees/testing/mock.md)
-		- [Common Tests](./3-etrees/testing/common.md)
+		- [Common Tests](./3-entrees/testing/common.md)
 		- [Custom Test Environment](./3-entrees/testing/externalities.md)
+	- [Safe Math](./3-entrees/safemath.md)
 
 -----------
 

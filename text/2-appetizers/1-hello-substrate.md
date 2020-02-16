@@ -23,11 +23,11 @@ use sp_runtime::print;
 
 ## Tests
 
-Next we see a reference to the tests module. This pallet has tests written in a separate file called `tests.rs`. We will not discuss the tests further at this point, but they are covered in the [Testing section](../testing/README.md) of the book.
+Next we see a reference to the tests module. This pallet has tests written in a separate file called `tests.rs`. We will not discuss the tests further at this point, but they are covered in the [Testing section](../3-entrees/testing/README.md) of the book.
 
 ## Configuration Trait
 
-Next, each pallet has a configuration trait which is called `Trait`. The configuration trait can be used to access features from other pallets, or [constants](../storage/constants.md) that effect the pallet's behavior. This pallet is simple enough that our configuration trait can remain empty, although it must still exist.
+Next, each pallet has a configuration trait which is called `Trait`. The configuration trait can be used to access features from other pallets, or [constants](../3-entrees/constants.md) that effect the pallet's behavior. This pallet is simple enough that our configuration trait can remain empty, although it must still exist.
 
 ```rust, ignore
 pub trait Trait: system::Trait {}
@@ -99,7 +99,7 @@ hello-substrate = { path = "../../pallets/hello-substrate", default-features = f
 
 Because the runtime is built to both native and Wasm, we must ensure that our pallet is built to the correct target as well. At the bottom of the `Cargo.toml` file, we see this.
 
-``toml
+```toml
 [features]
 default = ["std"]
 std = [
@@ -136,7 +136,7 @@ construct_runtime!(
 
 This macro does the heavy lifting of composing each individual pallet into a single usable runtime. Let's explain the syntax for each line. Each Pallet listed in the macro needs several pieces of information.
 
-First is a convenient name to give to this pallet. We've chosen `HelloSubstrate`. It is common to choose the same name as the pallet itself except when there is [more than one instance](../storage/instantiable.md). Next is the name of the crate that the pallet lives in. And finally there is a list of features the pallet provides. All pallet require `Module`. Our pallet also provides dispatchable calls, so it requires `Call`.
+First is a convenient name to give to this pallet. We've chosen `HelloSubstrate`. It is common to choose the same name as the pallet itself except when there is [more than one instance](../3-entrees/instantiable.md). Next is the name of the crate that the pallet lives in. And finally there is a list of features the pallet provides. All pallet require `Module`. Our pallet also provides dispatchable calls, so it requires `Call`.
 
 ## Try it Out
 
