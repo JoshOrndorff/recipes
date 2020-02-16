@@ -23,7 +23,7 @@ Our first storage item is a `u32` value which is declared with this syntax
 ```rust, ignore
 StoredValue get(fn stored_value): u32;
 ```
-The `StorageValue` is the name of the storage item, similar to a variable name. We wil luse this name any time we write to the storage item. The `get(fn stored_value)` is optional. It tells the `decl_storage!` macro to create a getter function for us. That means we get a function called `stored_value` which returns the value in that storage item. Finally, the `: u32` declares the type of the item.
+The `StorageValue` is the name of the storage item, similar to a variable name. We will use this name any time we write to the storage item. The `get(fn stored_value)` is optional. It tells the `decl_storage!` macro to create a getter function for us. That means we get a function called `stored_value` which returns the value in that storage item. Finally, the `: u32` declares the type of the item.
 
 The next storage item is an `AccountId`. This is not a primitive type, but rather comes from the system pallet. Types like this need to be prefixed with a `T::` as we see here.
 ```rust, ignore
