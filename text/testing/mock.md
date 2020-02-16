@@ -1,6 +1,6 @@
 # Mock Runtime for Unit Testing
 
-*see [root](./index.md) for list of kitchen pallets with unit test coverage*
+*See [Testing](./index.md) page for list of kitchen pallets with unit test coverage.*
 
 There are two main patterns on writing tests for pallets. We can put the tests:
 
@@ -38,8 +38,8 @@ use runtime_io;
 use primitives::{H256};
 
 // We define the outer `Origin` enum and `Event` enum.
-// You may not aware these enums are created when writing the runtime/pallet, it is
-//   because they are created through the `construct_runtime!` macro.
+// You may not be aware that these enums are created when writing the runtime/pallet;
+//   it is because they are created through the `construct_runtime!` macro.
 // Also, these are not standard Rust but the syntax expected when parsed inside
 //   these macros.
 impl_outer_origin! {
@@ -109,7 +109,7 @@ parameter_types! {
 	pub const AvailableBlockRatio: Perbill = Perbill::one();
 }
 
-// First, implement the system pallet trait for test runtime
+// First, implement the system pallet's configuration trait for `TestRuntime`
 impl system::Trait for TestRuntime {
 	type Origin = Origin;
 	type Index = u64;
@@ -131,7 +131,7 @@ impl system::Trait for TestRuntime {
 	type ModuleToIndex = ();
 }
 
-// Then implement our own pallet trait for test runtime
+// Then implement our own pallet's configuration trait for `TestRuntime`
 impl Trait for TestRuntime {
 	type Event = TestEvent;
 }
