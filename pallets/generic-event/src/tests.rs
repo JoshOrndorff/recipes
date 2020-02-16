@@ -1,6 +1,5 @@
 
-use super::RawEvent;
-use crate::{Module, Trait};
+use crate::{Module, Trait, RawEvent};
 use sp_core::H256;
 use sp_io::TestExternalities;
 use sp_runtime::{
