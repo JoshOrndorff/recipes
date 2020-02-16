@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Permissioned Methods - Substrate Recipes</title>
+        <title>Safe Math - Substrate Recipes</title>
         
 
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
@@ -81,7 +81,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div id="sidebar-scrollbox" class="sidebar-scrollbox">
-                <ol class="chapter"><li class="expanded affix "><a href="../introduction.html">Introduction</a></li><li class="expanded "><a href="../1-prepare-kitchen/index.html"><strong aria-hidden="true">1.</strong> Preparing Your Kitchen</a></li><li><ol class="section"><li class="expanded "><a href="../1-prepare-kitchen/1-build-node.html"><strong aria-hidden="true">1.1.</strong> Building A Node</a></li><li class="expanded "><a href="../1-prepare-kitchen/2-interact-node.html"><strong aria-hidden="true">1.2.</strong> Interacting with a Node</a></li><li class="expanded "><a href="../1-prepare-kitchen/3-kitchen-organization.html"><strong aria-hidden="true">1.3.</strong> Kitchen Organization</a></li></ol></li><li class="expanded "><a href="../2-appetizers/index.html"><strong aria-hidden="true">2.</strong> Appetizers</a></li><li><ol class="section"><li class="expanded "><a href="../2-appetizers/1-hello-substrate.html"><strong aria-hidden="true">2.1.</strong> Hello Substrate</a></li><li class="expanded "><a href="../2-appetizers/2-storage-values.html"><strong aria-hidden="true">2.2.</strong> Single Value Storage</a></li><li class="expanded "><a href="../2-appetizers/3-errors.html"><strong aria-hidden="true">2.3.</strong> Handling Errors</a></li><li class="expanded "><a href="../2-appetizers/4-events.html"><strong aria-hidden="true">2.4.</strong> Events Verify Execution</a></li></ol></li><li class="expanded "><a href="../3-entrees/index.html"><strong aria-hidden="true">3.</strong> Entrees</a></li><li><ol class="section"><li class="expanded "><a href="../3-entrees/storage-api/index.html"><strong aria-hidden="true">3.1.</strong> Runtime Storage API</a></li><li><ol class="section"><li class="expanded "><a href="../3-entrees/storage-api/cache.html"><strong aria-hidden="true">3.1.1.</strong> Cache Locally &gt; Storage Calls</a></li><li class="expanded "><a href="../3-entrees/storage-api/iterate.html"><strong aria-hidden="true">3.1.2.</strong> Sets</a></li><li class="expanded "><a href="../3-entrees/storage-api/enumerated.html"><strong aria-hidden="true">3.1.3.</strong> Ordered Lists: Maps, Linked Maps</a></li><li class="expanded "><a href="../3-entrees/storage-api/double.html"><strong aria-hidden="true">3.1.4.</strong> Subgroup Removal by Subkey: Double Maps</a></li><li class="expanded "><a href="../3-entrees/storage-api/childtries.html"><strong aria-hidden="true">3.1.5.</strong> Efficient Subgroup Removal by Subkey: Child Tries</a></li><li class="expanded "><a href="../3-entrees/storage-api/structs.html"><strong aria-hidden="true">3.1.6.</strong> Storing custom structs</a></li></ol></li><li class="expanded "><a href="../3-entrees/constants.html"><strong aria-hidden="true">3.2.</strong> Configurable Constants</a></li><li class="expanded "><a href="../3-entrees/instantiable.html"><strong aria-hidden="true">3.3.</strong> Instantiable Pallets</a></li><li class="expanded "><a href="../3-entrees/weights.html"><strong aria-hidden="true">3.4.</strong> Weights for Resource Accounting</a></li><li class="expanded "><a href="../3-entrees/fees.html"><strong aria-hidden="true">3.5.</strong> Transaction Fees for Economic Security</a></li><li class="expanded "><a href="../3-entrees/charity.html"><strong aria-hidden="true">3.6.</strong> Charity and Imbalances</a></li><li class="expanded "><a href="../3-entrees/runtime-api.html"><strong aria-hidden="true">3.7.</strong> Runtime APIs</a></li><li class="expanded "><a href="../3-entrees/custom-rpc.html"><strong aria-hidden="true">3.8.</strong> Custom RPCs</a></li><li class="expanded "><a href="../3-entrees/currency.html"><strong aria-hidden="true">3.9.</strong> Currency Types</a></li><li class="expanded "><a href="../3-entrees/random.html"><strong aria-hidden="true">3.10.</strong> Generating Randomness</a></li><li class="expanded "><a href="../3-entrees/execution-schedule.html"><strong aria-hidden="true">3.11.</strong> Execution Schedule</a></li><li class="expanded "><a href="../3-entrees/permissioned-methods.html" class="active"><strong aria-hidden="true">3.12.</strong> Permissioned Methods</a></li><li class="expanded "><a href="../3-entrees/testing/index.html"><strong aria-hidden="true">3.13.</strong> Testing</a></li><li><ol class="section"><li class="expanded "><a href="../3-entrees/testing/mock.html"><strong aria-hidden="true">3.13.1.</strong> Basic Test Environments</a></li><li class="expanded "><a href="../3-entrees/testing/common.html"><strong aria-hidden="true">3.13.2.</strong> Common Tests</a></li><li class="expanded "><a href="../3-entrees/testing/externalities.html"><strong aria-hidden="true">3.13.3.</strong> Custom Test Environment</a></li></ol></li><li class="expanded "><a href="../3-entrees/safemath.html"><strong aria-hidden="true">3.14.</strong> Safe Math</a></li><li class="spacer"></li></ol></li><li class="expanded "><a href="../more-resources.html">More Resources</a></li></ol>
+                <ol class="chapter"><li class="expanded affix "><a href="../introduction.html">Introduction</a></li><li class="expanded "><a href="../1-prepare-kitchen/index.html"><strong aria-hidden="true">1.</strong> Preparing Your Kitchen</a></li><li><ol class="section"><li class="expanded "><a href="../1-prepare-kitchen/1-build-node.html"><strong aria-hidden="true">1.1.</strong> Building A Node</a></li><li class="expanded "><a href="../1-prepare-kitchen/2-interact-node.html"><strong aria-hidden="true">1.2.</strong> Interacting with a Node</a></li><li class="expanded "><a href="../1-prepare-kitchen/3-kitchen-organization.html"><strong aria-hidden="true">1.3.</strong> Kitchen Organization</a></li></ol></li><li class="expanded "><a href="../2-appetizers/index.html"><strong aria-hidden="true">2.</strong> Appetizers</a></li><li><ol class="section"><li class="expanded "><a href="../2-appetizers/1-hello-substrate.html"><strong aria-hidden="true">2.1.</strong> Hello Substrate</a></li><li class="expanded "><a href="../2-appetizers/2-storage-values.html"><strong aria-hidden="true">2.2.</strong> Single Value Storage</a></li><li class="expanded "><a href="../2-appetizers/3-errors.html"><strong aria-hidden="true">2.3.</strong> Handling Errors</a></li><li class="expanded "><a href="../2-appetizers/4-events.html"><strong aria-hidden="true">2.4.</strong> Events Verify Execution</a></li></ol></li><li class="expanded "><a href="../3-entrees/index.html"><strong aria-hidden="true">3.</strong> Entrees</a></li><li><ol class="section"><li class="expanded "><a href="../3-entrees/storage-api/index.html"><strong aria-hidden="true">3.1.</strong> Runtime Storage API</a></li><li><ol class="section"><li class="expanded "><a href="../3-entrees/storage-api/cache.html"><strong aria-hidden="true">3.1.1.</strong> Cache Locally &gt; Storage Calls</a></li><li class="expanded "><a href="../3-entrees/storage-api/iterate.html"><strong aria-hidden="true">3.1.2.</strong> Sets</a></li><li class="expanded "><a href="../3-entrees/storage-api/enumerated.html"><strong aria-hidden="true">3.1.3.</strong> Ordered Lists: Maps, Linked Maps</a></li><li class="expanded "><a href="../3-entrees/storage-api/double.html"><strong aria-hidden="true">3.1.4.</strong> Subgroup Removal by Subkey: Double Maps</a></li><li class="expanded "><a href="../3-entrees/storage-api/childtries.html"><strong aria-hidden="true">3.1.5.</strong> Efficient Subgroup Removal by Subkey: Child Tries</a></li><li class="expanded "><a href="../3-entrees/storage-api/structs.html"><strong aria-hidden="true">3.1.6.</strong> Storing custom structs</a></li></ol></li><li class="expanded "><a href="../3-entrees/constants.html"><strong aria-hidden="true">3.2.</strong> Configurable Constants</a></li><li class="expanded "><a href="../3-entrees/instantiable.html"><strong aria-hidden="true">3.3.</strong> Instantiable Pallets</a></li><li class="expanded "><a href="../3-entrees/weights.html"><strong aria-hidden="true">3.4.</strong> Weights for Resource Accounting</a></li><li class="expanded "><a href="../3-entrees/fees.html"><strong aria-hidden="true">3.5.</strong> Transaction Fees for Economic Security</a></li><li class="expanded "><a href="../3-entrees/charity.html"><strong aria-hidden="true">3.6.</strong> Charity and Imbalances</a></li><li class="expanded "><a href="../3-entrees/runtime-api.html"><strong aria-hidden="true">3.7.</strong> Runtime APIs</a></li><li class="expanded "><a href="../3-entrees/custom-rpc.html"><strong aria-hidden="true">3.8.</strong> Custom RPCs</a></li><li class="expanded "><a href="../3-entrees/currency.html"><strong aria-hidden="true">3.9.</strong> Currency Types</a></li><li class="expanded "><a href="../3-entrees/random.html"><strong aria-hidden="true">3.10.</strong> Generating Randomness</a></li><li class="expanded "><a href="../3-entrees/execution-schedule.html"><strong aria-hidden="true">3.11.</strong> Execution Schedule</a></li><li class="expanded "><a href="../3-entrees/permissioned-methods.html"><strong aria-hidden="true">3.12.</strong> Permissioned Methods</a></li><li class="expanded "><a href="../3-entrees/testing/index.html"><strong aria-hidden="true">3.13.</strong> Testing</a></li><li><ol class="section"><li class="expanded "><a href="../3-entrees/testing/mock.html"><strong aria-hidden="true">3.13.1.</strong> Basic Test Environments</a></li><li class="expanded "><a href="../3-entrees/testing/common.html"><strong aria-hidden="true">3.13.2.</strong> Common Tests</a></li><li class="expanded "><a href="../3-entrees/testing/externalities.html"><strong aria-hidden="true">3.13.3.</strong> Custom Test Environment</a></li></ol></li><li class="expanded "><a href="../3-entrees/safemath.html" class="active"><strong aria-hidden="true">3.14.</strong> Safe Math</a></li><li class="spacer"></li></ol></li><li class="expanded "><a href="../more-resources.html">More Resources</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -148,71 +148,40 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h2><a class="header" href="#permissioned-methods" id="permissioned-methods">Permissioned Methods</a></h2>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/check-membership">pallets/check-membership</a></em></p>
-<p>It is often useful to designate some functions as permissioned and, therefore, accessible only to a defined group. In this case, we check that the transaction that invokes the runtime function is signed before verifying that the signature corresponds to a member of the permissioned set.</p>
-<p>To manage the set of members allowed to access the methods in question, we may store a vector in runtime storage. Without access to the standard library, it is necessary to add the <code>sr-std</code> dependency to the <code>Cargo.toml</code> file and import its prelude:</p>
-<pre><code>[dependencies.rstd]
-default_features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'sr-std'
-rev = '3e651110aa06aa835790df63410a29676243fc54'
-</code></pre>
-<p>The alias for <code>sr-std</code> used is <code>rstd</code> which follows substrate's conventions. To import a vector type that can be stored in the runtime:</p>
-<pre><code class="language-rust ignore">use rstd::prelude::*;
-</code></pre>
-<p>In the runtime, the membership set can be stored as</p>
-<pre><code class="language-rust ignore">decl_storage! {
-    trait Store for Module&lt;T: Trait&gt; as PGeneric {
-        Members get(fn members): Vec&lt;&amp;T::AccountId&gt;;
-    }
-}
-</code></pre>
-<p>If the set was determined to be permissionless, we could express this in the runtime as</p>
-<pre><code class="language-rust ignore">fn add_member(origin) -&gt; Result {
-	// unwrap signed extrinsic into AccountId
-	let new_member = ensure_signed(origin)?;
-	// check that the AccountId is contained in the `Members` vector
-	ensure!(!Self::members().contains(&amp;new_member), &quot;already a member, don't add duplicates&quot;);
-	// append the new member to the vec storage value
-	&lt;Members&lt;T&gt;&gt;::append(&amp;[new_member.clone()])?;
-	Self::deposit_event(RawEvent::AddMember(new_member));
-	Ok(())
-}
-</code></pre>
-<p>To increase the readability of the code, the membership check can be extracted into its own auxiliary runtime method.</p>
-<pre><code class="language-rust ignore">impl&lt;T: Trait&gt; Module&lt;T&gt; {
-    pub fn is_member(who: &amp;T::AccountId) -&gt; bool {
-        Self::members().contains(who)
-    }
-}
-</code></pre>
-<p>The <code>add_member</code> method now reads</p>
-<pre><code class="language-rust ignore">fn add_member(origin) -&gt; Result {
-	let new_member = ensure_signed(origin)?;
-	// the membership check is now shorter
-	ensure!(!Self::is_member(&amp;new_member), &quot;already a member&quot;);
+                        <h1><a class="header" href="#safe-math" id="safe-math">Safe Math</a></h1>
+<p>We can use the <code>checked</code> traits in <a href="https://substrate.dev/rustdocs/master/sp_runtime/traits/index.html">substrate-primitives</a> to protect against <a href="https://medium.com/@taabishm2/integer-overflow-underflow-and-floating-point-imprecision-6ba869a99033">overflow/underflow</a> when incrementing/decrementing objects in our runtime. To follow the <a href="https://shawntabrizi.com/substrate-collectables-workshop/#/2/tracking-all-kitties?id=checking-for-overflowunderflow">Substrat collectable tutorial example</a>, use <a href="https://substrate.dev/rustdocs/master/sp_runtime/traits/trait.CheckedAdd.html"><code>checked_add()</code></a> to safely handle the possibility of overflow when incremementing a global counter. <em>Note that this check is similar to <a href="https://ethereumdev.io/safemath-protect-overflows/"><code>SafeMath</code></a> in Solidity</em>. </p>
+<pre><code class="language-rust ignore">use runtime_primitives::traits::CheckedAdd;
 
-	&lt;Members&lt;T&gt;&gt;::append(&amp;[new_member.clone()])?;
-	Self::deposit_event(RawEvent::AddMember(new_member));
-	Ok(())
-}
+let all_people_count = Self::num_of_people();
+
+let new_all_people_count = all_people_count.checked_add(1).ok_or(&quot;Overflow adding a new person&quot;)?;
 </code></pre>
-<h2><a class="header" href="#sudo" id="sudo">sudo</a></h2>
-<h2><a class="header" href="#custom-origin" id="custom-origin">custom origin</a></h2>
+<p><a href="https://doc.rust-lang.org/std/option/enum.Option.html#method.ok_or"><code>ok_or()</code></a> transforms an <code>Option</code> from <code>Some(value)</code> to <code>Ok(value)</code> or <code>None</code> to <code>Err(error)</code>. The <a href="https://doc.rust-lang.org/nightly/edition-guide/rust-2018/error-handling-and-panics/the-question-mark-operator-for-easier-error-handling.html"><code>?</code> operator</a> facilitates error propagation. In this case, using <code>ok_or()</code> is the same as writing</p>
+<pre><code class="language-rust ignore">let new_all_people_count = match all_people_count.checked_add(1) {
+    Some (c) =&gt; c,
+    None =&gt; return Err(&quot;Overflow adding a new person&quot;),
+};
+</code></pre>
+<h2><a class="header" href="#todo" id="todo">todo</a></h2>
+<ul>
+<li><code>?</code> for error propagation</li>
+<li>Permill, Perbill, Fixed64 types for large arithmetic</li>
+<li><code>quantization</code> benchmarks in the <code>treasury</code> tests to verify that large arithmetic stays in a comfortable error bound</li>
+<li>ADD BACK IN NEW RECIPE: <code>collide</code> and the question of whether maps prevent key collisions? could discuss <code>sort</code>, <code>sort_unstable</code>, and the ordering traits here...</li>
+</ul>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
-                            <a rel="prev" href="../3-entrees/execution-schedule.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../3-entrees/testing/externalities.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
 
                         
-                            <a rel="next" href="../3-entrees/testing/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="../more-resources.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -224,13 +193,13 @@ rev = '3e651110aa06aa835790df63410a29676243fc54'
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
-                    <a href="../3-entrees/execution-schedule.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a href="../3-entrees/testing/externalities.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
 
                 
-                    <a href="../3-entrees/testing/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a href="../more-resources.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 
