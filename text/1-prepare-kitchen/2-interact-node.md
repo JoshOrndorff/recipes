@@ -22,7 +22,7 @@ You can navigate to the  [Polkadot-JS Apps](https://polkadot.js.org/apps/#/setti
 
 > If you are not clicking the link above but visiting Apps directly, by default Apps connects to Polkadot Kusama network. You will need to switch the connecting network to your locally running network, with only one node, by clicking on the network icon on Apps top left corner.
 >
-> ![Screenshot: Switching Network](../img/polkadot-apps-select-network.png)
+> ![Screenshot: Switching Network](../img/apps-select-network.png)
 
 > Some browsers, notably Firefox, will not connect to a local node from an https website. An easy work around is to try another browser, like Chromium. Another option is to [host this interface locally](https://github.com/polkadot-js/apps#development).
 
