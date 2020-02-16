@@ -246,9 +246,7 @@ impl sudo::Trait for Runtime {
 }
 
 // ---------------------- Recipe Pallet Configurations ----------------------
-impl adding_machine::Trait for Runtime {
-    type Event = Event;
-}
+impl adding_machine::Trait for Runtime {}
 
 impl basic_token::Trait for Runtime {
     type Event = Event;
@@ -305,6 +303,8 @@ impl generic_event::Trait for Runtime {
     type Event = Event;
 }
 
+impl hello_substrate::Trait for Runtime {}
+
 // The following two configuration traits are for two different instances of the last-caller pallet
 impl last_caller::Trait<last_caller::Instance1> for Runtime {
     type Event = Event;
@@ -326,9 +326,7 @@ impl simple_map::Trait for Runtime {
     type Event = Event;
 }
 
-impl single_value::Trait for Runtime {
-    type Event = Event;
-}
+impl single_value::Trait for Runtime {}
 
 impl storage_cache::Trait for Runtime {
     type Event = Event;
@@ -358,7 +356,7 @@ construct_runtime!(
 		Sudo: sudo,
 		TransactionPayment: transaction_payment::{Module, Storage},
 		// The Recipe Pallets
-		AddingMachine: adding_machine::{Module, Call, Event},
+		AddingMachine: adding_machine::{Module, Call, Storage},
 		BasicToken: basic_token::{Module, Call, Storage, Event<T>},
 		Charity: charity::{Module, Call, Storage, Event<T>},
 		CheckMembership: check_membership::{Module, Call, Storage, Event<T>},
@@ -367,13 +365,14 @@ construct_runtime!(
 		DefaultInstance2: default_instance::<Instance2>::{Module, Call, Storage, Event<T>},
 		DoubleMap: double_map::{Module, Call, Storage, Event<T>},
 		ExecutionSchedule: execution_schedule::{Module, Call, Storage, Event<T>},
+		HelloSubstrate: hello_substrate::{Module, Call},
 		GenericEvent: generic_event::{Module, Call, Event<T>},
 		LastCaller1: last_caller::<Instance1>::{Module, Call, Storage, Event<T>},
 		LastCaller2: last_caller::<Instance2>::{Module, Call, Storage, Event<T>},
 		LinkedMap: linked_map::{Module, Call, Storage, Event<T>},
 		SimpleEvent: simple_event::{Module, Call, Event},
 		SimpleMap: simple_map::{Module, Call, Storage, Event<T>},
-		SingleValue: single_value::{Module, Call, Storage, Event<T>},
+		SingleValue: single_value::{Module, Call, Storage},
 		StorageCache: storage_cache::{Module, Call, Storage, Event<T>},
 		StructStorage: struct_storage::{Module, Call, Storage, Event<T>},
 		VecSet: vec_set::{Module, Call, Storage, Event<T>},
