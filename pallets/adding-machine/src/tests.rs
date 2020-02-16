@@ -5,7 +5,7 @@ use sp_runtime::{
 	Perbill,
 };
 use sp_core::H256;
-use frame_support::{assert_err, assert_ok, impl_outer_origin, parameter_types};
+use frame_support::{assert_noop, assert_ok, impl_outer_origin, parameter_types};
 use sp_io::TestExternalities;
 
 impl_outer_origin! {
@@ -78,7 +78,7 @@ fn reset_works() {
 fn overflow_fails() {
 	ExtBuilder::build().execute_with(|| {
 		assert_ok!(AddingMachine::add(Origin::signed(1), 5));
-		assert_err!(
+		assert_noop!(
 			AddingMachine::add(Origin::signed(3), u32::max_value()),
 			Error::<TestRuntime>::SumTooLarge
 		);
@@ -88,7 +88,7 @@ fn overflow_fails() {
 #[test]
 fn unlucky_fails() {
 	ExtBuilder::build().execute_with(|| {
-		assert_err!(
+		assert_noop!(
 			AddingMachine::add(Origin::signed(3), 13),
 			Error::<TestRuntime>::UnluckyThirteen
 		);

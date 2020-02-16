@@ -19,7 +19,7 @@ decl_storage! {
 
 decl_error! {
 	pub enum Error for Module<T: Trait> {
-		/// Thirteen is unlucky and prohibitted
+		/// Thirteen is unlucky and prohibited
 		UnluckyThirteen,
 		/// Sum would have overflowed if we had added
 		SumTooLarge,

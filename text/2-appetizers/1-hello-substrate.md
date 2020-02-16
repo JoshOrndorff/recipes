@@ -85,7 +85,7 @@ At the top of our pallet, we imported `sp_runtime`'s [`print` function](https://
 
 ## Installing the Pallet in a Runtime
 
-In order to actually use a pallet, it must be installed in a Substrate runtime. This particular pallet is installed in the `super-runtime` which you built as part of the ktitchen node. To install a pallet in a runtime, you must do three things.
+In order to actually use a pallet, it must be installed in a Substrate runtime. This particular pallet is installed in the `super-runtime` which you built as part of the kitchen node. To install a pallet in a runtime, you must do three things.
 
 ### Depend on the Pallet
 
