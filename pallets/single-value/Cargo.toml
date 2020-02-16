@@ -8,42 +8,17 @@ edition = "2018"
 default = ['std']
 std = [
     'parity-scale-codec/std',
-    'support/std',
-    'system/std',
-    'runtime-primitives/std',
+    'frame-support/std',
+    'frame-system/std',
+    'sp-runtime/std',
 ]
 
-[dependencies.parity-scale-codec]
-default-features = false
-features = ['derive']
-version = '1.0.6'
+[dependencies]
+parity-scale-codec = { default-features = false, features = ['derive'], version = '1.0.6' }
+frame-support = { git = 'https://github.com/paritytech/substrate.git', rev = '3e651110aa06aa835790df63410a29676243fc54',  default_features = false }
+frame-system  = { git = 'https://github.com/paritytech/substrate.git', rev = '3e651110aa06aa835790df63410a29676243fc54',  default_features = false }
+sp-runtime = { git = 'https://github.com/paritytech/substrate.git', rev = '3e651110aa06aa835790df63410a29676243fc54',  default_features = false }
 
-[dependencies.support]
-default_features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'frame-support'
-rev = '3e651110aa06aa835790df63410a29676243fc54'
-
-[dependencies.system]
-default_features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'frame-system'
-rev = '3e651110aa06aa835790df63410a29676243fc54'
-
-[dependencies.runtime-primitives]
-default_features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'sp-runtime'
-rev = '3e651110aa06aa835790df63410a29676243fc54'
-
-[dev-dependencies.primitives]
-default_features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'sp-core'
-rev = '3e651110aa06aa835790df63410a29676243fc54'
-
-[dev-dependencies.runtime-io]
-default_features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'sp-io'
-rev = '3e651110aa06aa835790df63410a29676243fc54'
+[dev-dependencies]
+sp-core = { rev = '3e651110aa06aa835790df63410a29676243fc54', git = "https://github.com/paritytech/substrate.git", default_features = false }
+sp-io = { rev = '3e651110aa06aa835790df63410a29676243fc54', git = "https://github.com/paritytech/substrate.git", default_features = false }

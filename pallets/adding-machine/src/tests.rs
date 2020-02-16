@@ -1,14 +1,12 @@
-
-use super::RawEvent;
-use crate::{Module, Trait};
-use sp_core::H256;
-use sp_io::TestExternalities;
+use crate::{Module, Trait, Error};
 use sp_runtime::{
 	testing::Header,
 	traits::{BlakeTwo256, IdentityLookup},
 	Perbill,
 };
-use frame_support::{assert_ok, impl_outer_event, impl_outer_origin, parameter_types};
+use sp_core::H256;
+use frame_support::{assert_noop, assert_ok, impl_outer_origin, parameter_types};
+use sp_io::TestExternalities;
 
 impl_outer_origin! {
 	pub enum Origin for TestRuntime {}
@@ -33,7 +31,7 @@ impl system::Trait for TestRuntime {
 	type AccountId = u64;
 	type Lookup = IdentityLookup<Self::AccountId>;
 	type Header = Header;
-	type Event = TestEvent;
+	type Event = ();
 	type BlockHashCount = BlockHashCount;
 	type MaximumBlockWeight = MaximumBlockWeight;
 	type MaximumBlockLength = MaximumBlockLength;
@@ -42,22 +40,9 @@ impl system::Trait for TestRuntime {
 	type ModuleToIndex = ();
 }
 
-mod generic_event {
-	pub use crate::Event;
-}
+impl Trait for TestRuntime {}
 
-impl_outer_event! {
-	pub enum TestEvent for TestRuntime {
-		generic_event<T>,
-	}
-}
-
-impl Trait for TestRuntime {
-	type Event = TestEvent;
-}
-
-pub type System = system::Module<TestRuntime>;
-pub type GenericEvent = Module<TestRuntime>;
+pub type AddingMachine = Module<TestRuntime>;
 
 pub struct ExtBuilder;
 
@@ -71,14 +56,41 @@ impl ExtBuilder {
 }
 
 #[test]
-fn test() {
+fn add_works() {
 	ExtBuilder::build().execute_with(|| {
-		assert_ok!(GenericEvent::do_something(Origin::signed(1), 32));
+		assert_ok!(AddingMachine::add(Origin::signed(1), 7));
+		assert_ok!(AddingMachine::add(Origin::signed(1), 7));
 
-		// construct event that should be emitted in the method call directly above
-		let expected_event = TestEvent::generic_event(RawEvent::EmitInput(1, 32));
+		assert_eq!(AddingMachine::sum(), 14);
+	})
+}
 
-		// iterate through array of `EventRecord`s
-		assert!(System::events().iter().any(|a| a.event == expected_event));
+#[test]
+fn reset_works() {
+	ExtBuilder::build().execute_with(|| {
+		assert_ok!(AddingMachine::add(Origin::signed(1), 5));
+		assert_ok!(AddingMachine::reset(Origin::signed(1)));
+		assert_eq!(AddingMachine::sum(), 0);
+	})
+}
+
+#[test]
+fn overflow_fails() {
+	ExtBuilder::build().execute_with(|| {
+		assert_ok!(AddingMachine::add(Origin::signed(1), 5));
+		assert_noop!(
+			AddingMachine::add(Origin::signed(3), u32::max_value()),
+			Error::<TestRuntime>::SumTooLarge
+		);
+	})
+}
+
+#[test]
+fn unlucky_fails() {
+	ExtBuilder::build().execute_with(|| {
+		assert_noop!(
+			AddingMachine::add(Origin::signed(3), 13),
+			Error::<TestRuntime>::UnluckyThirteen
+		);
 	})
 }

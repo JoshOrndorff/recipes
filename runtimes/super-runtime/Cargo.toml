@@ -19,6 +19,7 @@ default-instance = { path = "../../pallets/default-instance", default-features =
 double-map = { path = "../../pallets/double-map", default-features = false }
 execution-schedule = { path = "../../pallets/execution-schedule", default-features = false }
 generic-event = { path = "../../pallets/generic-event", default-features = false }
+hello-substrate = { path = "../../pallets/hello-substrate", default-features = false }
 last-caller = { path = "../../pallets/last-caller", default-features = false }
 linked-map = { path = "../../pallets/linked-map", default-features = false }
 simple-event = { path = "../../pallets/simple-event", default_features = false }
@@ -202,6 +203,7 @@ std = [
 	"double-map/std",
 	"execution-schedule/std",
 	"generic-event/std",
+	"hello-substrate/std",
 	"last-caller/std",
 	"linked-map/std",
 	"simple-event/std",

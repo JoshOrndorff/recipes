@@ -1,33 +1,21 @@
 use crate::{Module, Trait};
-use primitives::H256;
-use runtime_io;
-use runtime_primitives::{
+use sp_core::H256;
+use sp_io::TestExternalities;
+use sp_runtime::{
 	testing::Header,
 	traits::{BlakeTwo256, IdentityLookup},
 	Perbill,
 };
-use support::{assert_ok, impl_outer_event, impl_outer_origin, parameter_types};
+use frame_support::{assert_ok, impl_outer_event, impl_outer_origin, parameter_types};
 use system::{EventRecord, Phase};
 
-// Implement the outer environment: Origin, TestEvent
 impl_outer_origin! {
 	pub enum Origin for TestRuntime {}
-}
-
-mod simple_event {
-	pub use crate::Event;
-}
-
-impl_outer_event! {
-	pub enum TestEvent for TestRuntime {
-		simple_event,
-	}
 }
 
 // Workaround for https://github.com/rust-lang/rust/issues/26925 . Remove when sorted.
 #[derive(Clone, PartialEq, Eq, Debug)]
 pub struct TestRuntime;
-
 parameter_types! {
 	pub const BlockHashCount: u64 = 250;
 	pub const MaximumBlockWeight: u32 = 1024;
@@ -55,22 +43,31 @@ impl system::Trait for TestRuntime {
 	type ModuleToIndex = ();
 }
 
+mod simple_event {
+	pub use crate::Event;
+}
+
+impl_outer_event! {
+	pub enum TestEvent for TestRuntime {
+		simple_event,
+	}
+}
+
 impl Trait for TestRuntime {
 	type Event = TestEvent;
 }
 
-// Hook up modules so we can make dispatched calls later
 pub type System = system::Module<TestRuntime>;
 pub type SimpleEvent = Module<TestRuntime>;
 
 pub struct ExtBuilder;
 
 impl ExtBuilder {
-	pub fn build() -> runtime_io::TestExternalities {
+	pub fn build() -> TestExternalities {
 		let storage = system::GenesisConfig::default()
 			.build_storage::<TestRuntime>()
 			.unwrap();
-		runtime_io::TestExternalities::from(storage)
+		TestExternalities::from(storage)
 	}
 }
 

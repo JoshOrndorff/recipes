@@ -1,16 +1,12 @@
 
-use super::RawEvent;
-use crate::{Module, Trait};
-use sp_core::H256;
+use frame_system::{ self as system, RawOrigin };
+use frame_support::{assert_ok, assert_noop, impl_outer_origin, parameter_types, dispatch::DispatchError };
+use sp_runtime::{Perbill, traits::{IdentityLookup, BlakeTwo256}, testing::Header};
 use sp_io::TestExternalities;
-use sp_runtime::{
-	testing::Header,
-	traits::{BlakeTwo256, IdentityLookup},
-	Perbill,
-};
-use frame_support::{assert_ok, impl_outer_event, impl_outer_origin, parameter_types};
+use sp_core::H256;
+use crate::{Module, Trait};
 
-impl_outer_origin! {
+impl_outer_origin!{
 	pub enum Origin for TestRuntime {}
 }
 
@@ -33,7 +29,7 @@ impl system::Trait for TestRuntime {
 	type AccountId = u64;
 	type Lookup = IdentityLookup<Self::AccountId>;
 	type Header = Header;
-	type Event = TestEvent;
+	type Event = ();
 	type BlockHashCount = BlockHashCount;
 	type MaximumBlockWeight = MaximumBlockWeight;
 	type MaximumBlockLength = MaximumBlockLength;
@@ -42,43 +38,29 @@ impl system::Trait for TestRuntime {
 	type ModuleToIndex = ();
 }
 
-mod generic_event {
-	pub use crate::Event;
-}
+impl Trait for TestRuntime {}
 
-impl_outer_event! {
-	pub enum TestEvent for TestRuntime {
-		generic_event<T>,
-	}
-}
-
-impl Trait for TestRuntime {
-	type Event = TestEvent;
-}
-
-pub type System = system::Module<TestRuntime>;
-pub type GenericEvent = Module<TestRuntime>;
+pub type HelloSubstrate = Module<TestRuntime>;
 
 pub struct ExtBuilder;
 
 impl ExtBuilder {
 	pub fn build() -> TestExternalities {
-		let storage = system::GenesisConfig::default()
-			.build_storage::<TestRuntime>()
-			.unwrap();
+		let storage = system::GenesisConfig::default().build_storage::<TestRuntime>().unwrap();
 		TestExternalities::from(storage)
 	}
 }
 
 #[test]
-fn test() {
+fn say_hello_works() {
 	ExtBuilder::build().execute_with(|| {
-		assert_ok!(GenericEvent::do_something(Origin::signed(1), 32));
+		assert_ok!(HelloSubstrate::say_hello(Origin::signed(1)));
+	})
+}
 
-		// construct event that should be emitted in the method call directly above
-		let expected_event = TestEvent::generic_event(RawEvent::EmitInput(1, 32));
-
-		// iterate through array of `EventRecord`s
-		assert!(System::events().iter().any(|a| a.event == expected_event));
+#[test]
+fn say_hello_no_root() {
+	ExtBuilder::build().execute_with(|| {
+		assert_noop!(HelloSubstrate::say_hello(RawOrigin::Root.into()), DispatchError::BadOrigin);
 	})
 }
