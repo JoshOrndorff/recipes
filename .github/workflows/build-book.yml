@@ -1,7 +1,6 @@
 name: Build Book
 
 on:
-  Don't build on PRs; only build when they're merged
   pull_request:
     branches:
     - master
