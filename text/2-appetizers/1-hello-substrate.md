@@ -71,7 +71,7 @@ pub fn say_hello(origin) -> DispatchResult {
 }
 ```
 
-This function essentially does three things. First, it uses the [`ensure_signed!` macro](https://substrate.dev/rustdocs/master/frame_system/fn.ensure_signed.html) to ensure that the caller of the function was a regular user who owns a private key. This macro also returns who that caller was, but in this case we don't care who the caller was. In future recipes we'll explore origins other than signed.
+This function essentially does three things. First, it uses the [`ensure_signed` function](https://substrate.dev/rustdocs/master/frame_system/fn.ensure_signed.html) to ensure that the caller of the function was a regular user who owns a private key. This macro also returns who that caller was, but in this case we don't care who the caller was. In future recipes we'll explore origins other than signed.
 
 Second, it prints a message and log the caller. Notice that we aren't using rust's normal `println!` macro, but rather a special `print` function and `debug::info!` macro. The reason for this is explain in the next section.
 
