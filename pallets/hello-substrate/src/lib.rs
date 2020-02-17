@@ -3,7 +3,7 @@
 //! A simple Substrate pallet that demonstrates declaring dispatchable functions, and
 //! Printing text to the terminal.
 
-use frame_support::{ decl_module, dispatch::DispatchResult };
+use frame_support::{ decl_module, dispatch::DispatchResult, debug };
 use frame_system::{ self as system, ensure_signed };
 use sp_runtime::print;
 
@@ -17,10 +17,12 @@ decl_module! {
 
 		pub fn say_hello(origin) -> DispatchResult {
 			// Ensure that the caller is a regular keypair account
-			let _ = ensure_signed(origin)?;
+			let caller = ensure_signed(origin)?;
 
-			// Print something from the runtime
+			// Print a message
 			print("Hello World");
+			// Inspecting a variable as well
+			debug::info!("Request sent by: {:?}", caller);
 
 			// Indicate that this call succeeded
 			Ok(())
