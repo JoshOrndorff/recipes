@@ -1,6 +1,6 @@
 # Custom Test Environment
 
-[`execution-schedule`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/execution-schedule)'s configuration trait has three [configurable constants](../storage/constants.md). For this mock runtime, the `ExtBuilder` defines setters to enable the `TestExternalities` instance for each unit test to configure the local test runtime environment with different value assignments. For context, the `Trait` for [`execution-schedule`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/execution-schedule),
+[`execution-schedule`](../execution-schedule.md)'s configuration trait has three [configurable constants](../constants.md). For this mock runtime, the `ExtBuilder` defines setters to enable the `TestExternalities` instance for each unit test to configure the local test runtime environment with different value assignments. For context, the `Trait` for `execution-schedule`,
 
 ```rust, ignore
 // other type aliases
