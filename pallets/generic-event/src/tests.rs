@@ -1,4 +1,3 @@
-
 use crate::{Module, Trait, RawEvent};
 use sp_core::H256;
 use sp_io::TestExternalities;
