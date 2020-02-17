@@ -1,4 +1,4 @@
-use crate::{Module, Trait};
+use crate::{Module, Trait, Event};
 use sp_core::H256;
 use sp_io::TestExternalities;
 use sp_runtime::{
@@ -80,7 +80,7 @@ fn test() {
 			System::events(),
 			vec![EventRecord {
 				phase: Phase::ApplyExtrinsic(0),
-				event: TestEvent::simple_event(crate::Event::EmitInput(32)),
+				event: TestEvent::simple_event(Event::EmitInput(32)),
 				topics: vec![],
 			}]
 		);
