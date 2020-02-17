@@ -5,7 +5,7 @@ The first pallet we'll explore is a simple "hello world" example. This pallet wi
 
 ## No Std
 
-The very fisrt line of code tells the rust compiler that this crate should not use rust's standard library except when explicitly told to. This is useful because Substrate runtimes compile to Web Assembly where the standard library is not available.
+The very first line of code tells the rust compiler that this crate should not use rust's standard library except when explicitly told to. This is useful because Substrate runtimes compile to Web Assembly where the standard library is not available.
 
 ```rust, ignore
 #![cfg_attr(not(feature = "std"), no_std)]
@@ -79,7 +79,7 @@ Finally, the call returns `Ok(())` to indicate that the call has succeeded. At a
 
 Printing to the terminal from a rust program is typically very simple using the `println!` macro. However, Substrate runtimes are compiled to Web Assembly as well as a regular native binary, and do not have access to rust's standard library. That means we cannot use the regular `println!`. I encourage you to modify the code to try using `println!` and confirm that it will not compile. Nonetheless, printing a message from the runtime is useful both for logging information, and also for debugging.
 
-![Substrate Architecture Diagram](TODO)
+![Substrate Architecture Diagram](../img/substrate-architecture.png)
 
 At the top of our pallet, we imported `sp_runtime`'s [`print` function](https://substrate.dev/rustdocs/master/sp_runtime/fn.print.html). This special function allows the runtime to pass a message for printing to the outer part of the node which is not built to Wasm. This function is only able to print items that implement the [`Printable` trait](https://substrate.dev/rustdocs/master/sp_runtime/traits/trait.Printable.html). Luckily all the primitive types already implement this trait, and you can implement the trait for your own datatypes too.
 
