@@ -52,28 +52,30 @@ decl_module! {
 
 As you can see, our `hello-substrate` pallet has one dipatchable call that takes a single argument, called `origin` which we'll investigate shortly. Both calls return a [`DispatchResult`](https://substrate.dev/rustdocs/master/frame_support/dispatch/type.DispatchResult.html) which can be either `Ok(())` indicating that the call succeeded, or and `Err` which we'll investigate in the [appetizer about errors](./3-errors.md).
 
-## Inisde a Dispatchable Call
+## Inside a Dispatchable Call
 
 Let's take a closer look at our dispatchable call.
 
 ```rust, ignore
 pub fn say_hello(origin) -> DispatchResult {
 	// Ensure that the caller is a regular keypair account
-	let _ = ensure_signed(origin)?;
+	let caller = ensure_signed(origin)?;
 
 	// Print a message
 	print("Hello World");
+	// Inspecting variables
+	debug::info!("Request sent by: {:?}", caller);
 
 	// Indicate that this call succeeded
 	Ok(())
 }
 ```
 
-This function essentially does three things. First is uses the [`ensure_signed!` macro](https://substrate.dev/rustdocs/master/frame_system/fn.ensure_signed.html) to ensure that the caller of the function was a regular user who owns a private key. This macro also returns who that caller was, but in this case we don't care who the caller was. In future recipes we'll explore origins other than signed.
+This function essentially does three things. First, it uses the [`ensure_signed` function](https://substrate.dev/rustdocs/master/frame_system/fn.ensure_signed.html) to ensure that the caller of the function was a regular user who owns a private key. This macro also returns who that caller was. We store the caller's identity in the `caller` variable.
 
-Second, it actually prints the message. Notice that we aren't using rust's normal `println!` macro, but rather a special `print` function. The reason for this is explain in the next section.
+Second, it prints a message and logs the caller. Notice that we aren't using Rust's normal `println!` macro, but rather a special [`print` function](https://substrate.dev/rustdocs/master/sp_runtime/fn.print.html) and `[debug::info!` macro](https://substrate.dev/rustdocs/master/frame_support/debug/macro.info.html). The reason for this is explained in the next section.
 
-Finally, the call returns `Ok(())` to indicate that the call has succeeded. At a glance it seems that there is no way for this call to fail, but this is not quite true. The `ensure_signed!` macro, used at the beginning, can return an error if the call was not from a signed origin. This is the first time we're seeing the important paradigm "**Verify first, write last**". In Substrate development, it is important that you always ensure preconditions are met and return errors at the beginning. After these checks have completed, then you may begin the functions computation.
+Finally, the call returns `Ok(())` to indicate that the call has succeeded. At a glance it seems that there is no way for this call to fail, but this is not quite true. The `ensure_signed` function, used at the beginning, can return an error if the call was not from a signed origin. This is the first time we're seeing the important paradigm "**Verify first, write last**". In Substrate development, it is important that you always ensure preconditions are met and return errors at the beginning. After these checks have completed, then you may begin the functions computation.
 
 ## Printing from the Runtime
 
@@ -82,6 +84,8 @@ Printing to the terminal from a rust program is typically very simple using the 
 ![Substrate Architecture Diagram](../img/substrate-architecture.png)
 
 At the top of our pallet, we imported `sp_runtime`'s [`print` function](https://substrate.dev/rustdocs/master/sp_runtime/fn.print.html). This special function allows the runtime to pass a message for printing to the outer part of the node which is not built to Wasm. This function is only able to print items that implement the [`Printable` trait](https://substrate.dev/rustdocs/master/sp_runtime/traits/trait.Printable.html). Luckily all the primitive types already implement this trait, and you can implement the trait for your own datatypes too.
+
+The next line demonstrates using `debug::info!` macro to log to the screen and also inspecting the variable's content. The syntax inside the macro is very similar to what regular rust macro `println!` takes.
 
 ## Installing the Pallet in a Runtime
 
