@@ -59,7 +59,7 @@ fn add(origin, val_to_add: u32) -> DispatchResult {
 }
 ```
 
-Notice the pattern of `.ok_or("my error message")?;`. This is really handy when you have a function call that returns an `Option` and you expect there should be a value inside. If not, returns early with an error message, all the while unwrapping the value for your further process.
+Notice the pattern of `.ok_or("my error message")?;`. This is really handy when you have a function call that returns an `Option` and you expect there should be a value inside. If not, returns early with an error message, all the while unwrapping the value for your further processing.
 
 If your function returns a `Result<T, E>`, you could apply `.map_err(|_e| "my error message")?;` in the same spirit.
 
