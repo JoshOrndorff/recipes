@@ -73,7 +73,7 @@ pub fn say_hello(origin) -> DispatchResult {
 
 This function essentially does three things. First, it uses the [`ensure_signed` function](https://substrate.dev/rustdocs/master/frame_system/fn.ensure_signed.html) to ensure that the caller of the function was a regular user who owns a private key. This macro also returns who that caller was. We store the caller's identity in the `caller` variable.
 
-Second, it prints a message and logs the caller. Notice that we aren't using Rust's normal `println!` macro, but rather a special [`print` function](https://substrate.dev/rustdocs/master/sp_runtime/fn.print.html) and `[debug::info!` macro](https://substrate.dev/rustdocs/master/frame_support/debug/macro.info.html). The reason for this is explained in the next section.
+Second, it prints a message and logs the caller. Notice that we aren't using Rust's normal `println!` macro, but rather a special [`print` function](https://substrate.dev/rustdocs/master/sp_runtime/fn.print.html) and [`debug::info!` macro](https://substrate.dev/rustdocs/master/frame_support/debug/macro.info.html). The reason for this is explained in the next section.
 
 Finally, the call returns `Ok(())` to indicate that the call has succeeded. At a glance it seems that there is no way for this call to fail, but this is not quite true. The `ensure_signed` function, used at the beginning, can return an error if the call was not from a signed origin. This is the first time we're seeing the important paradigm "**Verify first, write last**". In Substrate development, it is important that you always ensure preconditions are met and return errors at the beginning. After these checks have completed, then you may begin the functions computation.
 
