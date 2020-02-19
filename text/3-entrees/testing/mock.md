@@ -94,8 +94,7 @@ pub trait Trait: system::Trait {
 }
 ```
 
-The mock runtime must inherit and define the `system::Trait` associated types
-(*[remember](https://substrate.dev/recipes/traits/index.html)*). To do so, `impl` the `system::Trait`
+The mock runtime must inherit and define the `system::Trait` associated types. To do so, `impl` the `system::Trait`
 for `TestRuntime` with types created previously and imported from other crates.
 
 ```rust, ignore
@@ -177,9 +176,9 @@ There is more than one pattern for building a mock runtime environment for testi
 * [`ExtBuilder`](#extbuilder) - define methods on the unit struct `ExtBuilder` to facilitate a flexible environment for tests (i.e. can reconfigure pallet constants in every test if necessary)
 
 ## new_test_ext <a name = "newext"><a/>
-*[`pallets/smpl-treasury`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/smpl-treasury)*
+*[`pallets/smpl-treasury`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/charity)*
 
-In [`smpl-treasury`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/smpl-treasury), use the `balances::GenesisConfig` and the pallet's `Genesis::<TestRuntime>` to set the balances of the test accounts and establish council membership in the returned test environment.
+In [`smpl-treasury`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/charity), use the `balances::GenesisConfig` and the pallet's `Genesis::<TestRuntime>` to set the balances of the test accounts and establish council membership in the returned test environment.
 
 ```rust, ignore
 pub fn new_test_ext() -> runtime_io::TestExternalities {

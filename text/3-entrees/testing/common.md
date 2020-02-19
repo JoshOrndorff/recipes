@@ -7,7 +7,7 @@ To verify that our pallet code behaves as expected, it is necessary to check a f
 
 ### Checks before Changes are Enforced (i.e. Panics Panic) <a name = "panicspanic"></a>
 
-The [`Verify First, Write Last`](https://substrate.dev/recipes/declarative/ensure.html) recipe encourages verifying certain conditions before changing storage values. In tests, it might be desirable to verify that invalid inputs return the expected error message.
+The `Verify First, Write Last` paradigm encourages verifying certain conditions before changing storage values. In tests, it might be desirable to verify that invalid inputs return the expected error message.
 
 In [`pallets/adding-machine`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/adding-machine), the runtime method `add` checks for overflow
 
