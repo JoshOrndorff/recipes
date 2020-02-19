@@ -1,3 +1,4 @@
+use crate::*;
 use frame_system::{ self as system, RawOrigin };
 use frame_support::{assert_noop, assert_ok, impl_outer_origin, parameter_types, dispatch::DispatchError};
 use sp_runtime::{Perbill, traits::{IdentityLookup, BlakeTwo256}, testing::Header};
@@ -56,7 +57,10 @@ fn set_value_works() {
 
 		assert_ok!(SingleValue::set_value(Origin::signed(1), 10));
 
-		assert_eq!(SingleValue::stored_value(), 10)
+		assert_eq!(SingleValue::stored_value(), 10);
+		// Another way of accessing the storage. This pattern is needed if it is a more complexed data
+		//   type, e.g. StorageMap, StorageLinkedMap
+		assert_eq!(<StoredValue>::get(), 10);
 	})
 }
 
