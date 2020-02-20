@@ -61,7 +61,7 @@ fn add_alternate(origin, val_to_add: u32) -> DispatchResult {
 
 	// Using `ok_or()` to check if the returned value is `Ok` and unwrap the value.
 	//   If not, returns error from the function.
-	let result = match Self::sum().checked_add(val_to_add).ok_or(<Error<T>>::SumTooLarge))?;
+	let result = Self::sum().checked_add(val_to_add).ok_or(<Error<T>>::SumTooLarge)?;
 
 	Sum::put(result);
 	Ok(())
