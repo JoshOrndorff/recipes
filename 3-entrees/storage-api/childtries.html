@@ -210,7 +210,7 @@ child::do(trie_id, key, value);
 </code></pre>
 <h2><a class="header" href="#smpl-crowdfund-a-name--smplcrwda" id="smpl-crowdfund-a-name--smplcrwda">smpl-crowdfund <a name = "smplcrwd"></a></a></h2>
 <p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/smpl-crowdfund"><code>pallets/smpl-crowdfund</code></a></em></p>
-<p>Child tries are useful for batch deletion of <code>(key, value)</code> pairs associated with a specific <code>trie_id</code>. This is relevant to the <a href="https://github.com/paritytech/polkadot/blob/master/runtime/src/crowdfund.rs">polkadot/crowdfund</a> pallet, which tracks <code>(AccountId, BalanceOf&lt;T&gt;)</code> associated with a specific crowdfund. <code>BalanceOf&lt;T&gt;</code> represents the contributions of an <code>AccountId</code>. The identifier for each crowdfund is defined</p>
+<p>Child tries are useful for batch deletion of <code>(key, value)</code> pairs associated with a specific <code>trie_id</code>. This is relevant to the <a href="https://github.com/paritytech/polkadot/blob/master/runtime/common/src/crowdfund.rs">polkadot/crowdfund</a> pallet, which tracks <code>(AccountId, BalanceOf&lt;T&gt;)</code> associated with a specific crowdfund. <code>BalanceOf&lt;T&gt;</code> represents the contributions of an <code>AccountId</code>. The identifier for each crowdfund is defined</p>
 <pre><code class="language-rust ignore">type FundIndex = u32
 </code></pre>
 <p>With these three types, this storage item effectively manages <code>(FundIndex, AccountId, BalanceOf&lt;T&gt;)</code>. By maintaining a separate <code>child</code> for every <code>FundIndex</code>, this api allows for efficient batch deletions when crowdfunds are ended and dissolved.</p>

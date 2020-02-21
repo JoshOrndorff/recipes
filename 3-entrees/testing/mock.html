@@ -219,8 +219,7 @@ pub struct TestRuntime;
 	type Event: From&lt;Event&lt;Self&gt;&gt; + Into&lt;&lt;Self as system::Trait&gt;::Event&gt;;
 }
 </code></pre>
-<p>The mock runtime must inherit and define the <code>system::Trait</code> associated types
-(<em><a href="https://substrate.dev/recipes/traits/index.html">remember</a></em>). To do so, <code>impl</code> the <code>system::Trait</code>
+<p>The mock runtime must inherit and define the <code>system::Trait</code> associated types. To do so, <code>impl</code> the <code>system::Trait</code>
 for <code>TestRuntime</code> with types created previously and imported from other crates.</p>
 <pre><code class="language-rust ignore">#[derive(Clone, PartialEq, Eq, Debug)]
 pub struct TestRuntime;
@@ -290,8 +289,8 @@ rev = '6ae3b6c4ddc03d4cdb10bd1d417b95d20f4c1b6e'
 <li><a href="#extbuilder"><code>ExtBuilder</code></a> - define methods on the unit struct <code>ExtBuilder</code> to facilitate a flexible environment for tests (i.e. can reconfigure pallet constants in every test if necessary)</li>
 </ul>
 <h2><a class="header" href="#new_test_ext-a-name--newexta" id="new_test_ext-a-name--newexta">new_test_ext <a name = "newext"><a/></a></h2>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/smpl-treasury"><code>pallets/smpl-treasury</code></a></em></p>
-<p>In <a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/smpl-treasury"><code>smpl-treasury</code></a>, use the <code>balances::GenesisConfig</code> and the pallet's <code>Genesis::&lt;TestRuntime&gt;</code> to set the balances of the test accounts and establish council membership in the returned test environment.</p>
+<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/charity"><code>pallets/smpl-treasury</code></a></em></p>
+<p>In <a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/charity"><code>smpl-treasury</code></a>, use the <code>balances::GenesisConfig</code> and the pallet's <code>Genesis::&lt;TestRuntime&gt;</code> to set the balances of the test accounts and establish council membership in the returned test environment.</p>
 <pre><code class="language-rust ignore">pub fn new_test_ext() -&gt; runtime_io::TestExternalities {
 	let mut t = system::GenesisConfig::default().build_storage::&lt;TestRuntime&gt;().unwrap();
 	balances::GenesisConfig::&lt;TestRuntime&gt; {

@@ -162,7 +162,7 @@
 	}
 }
 </code></pre>
-<h2><a class="header" href="#throwing-errors" id="throwing-errors">Throwing Errors</a></h2>
+<h2><a class="header" href="#throwing-errors-in-match-statement" id="throwing-errors-in-match-statement">Throwing Errors in <code>match</code> Statement</a></h2>
 <p>Errors can be thrown in two different ways, both of which are demonstrated in the the <code>add</code> dispatchable call. The first is with the <a href="https://substrate.dev/rustdocs/master/frame_support/macro.ensure.html"><code>ensure!</code> macro</a> where the error to throw is the second parameter. The second is to throw the error by explicitly returning it.</p>
 <pre><code class="language-rust ignore">fn add(origin, val_to_add: u32) -&gt; DispatchResult {
 	let _ = ensure_signed(origin)?;
@@ -183,6 +183,28 @@
 }
 </code></pre>
 <p>Notice that the <code>Error</code> type always takes the generic parameter <code>T</code>. Notice also that we have verified all preconditions, and thrown all possible errors before ever writing to storage.</p>
+<h2><a class="header" href="#throwing-errors-with-ok_or-and-map_err" id="throwing-errors-with-ok_or-and-map_err">Throwing Errors with <code>.ok_or</code> and <code>.map_err</code></a></h2>
+<p>In fact, the pattern of:</p>
+<ul>
+<li>calling functions that returned a <code>Result</code> or <code>Option</code>, and</li>
+<li>checking if the result is <code>Some</code> or <code>Ok</code>. If not, returns from the function early with an error</li>
+</ul>
+<p>are so common that there are two standard Rust methods help performing the task.</p>
+<pre><code class="language-rust ignore">fn add_alternate(origin, val_to_add: u32) -&gt; DispatchResult {
+	let _ = ensure_signed(origin)?;
+
+	ensure!(val_to_add != 13, &lt;Error&lt;T&gt;&gt;::UnluckyThirteen);
+
+	// Using `ok_or()` to check if the returned value is `Ok` and unwrap the value.
+	//   If not, returns error from the function.
+	let result = Self::sum().checked_add(val_to_add).ok_or(&lt;Error&lt;T&gt;&gt;::SumTooLarge)?;
+
+	Sum::put(result);
+	Ok(())
+}
+</code></pre>
+<p>Notice the pattern of <code>.ok_or(&lt;Error&lt;T&gt;&gt;::MyError)?;</code>. This is really handy when you have a function call that returns an <code>Option</code> and you expect there should be a value inside. If not, returns early with an error message, all the while unwrapping the value for your further processing.</p>
+<p>If your function returns a <code>Result&lt;T, E&gt;</code>, you could apply <code>.map_err(|_e| &lt;Error&lt;T&gt;&gt;::MyError)?;</code> in the same spirit.</p>
 <h2><a class="header" href="#constructing-the-runtime" id="constructing-the-runtime">Constructing the Runtime</a></h2>
 <p>Unlike before, adding errors to our pallet does <em>not</em> require a change to the line in <code>construct_runtime!</code>. This is just an idiosyncrasy of developing in Substrate.</p>
 

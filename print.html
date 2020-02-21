@@ -519,7 +519,7 @@ let my_val = Self::stored_value();
 	}
 }
 </code></pre>
-<h2><a class="header" href="#throwing-errors" id="throwing-errors">Throwing Errors</a></h2>
+<h2><a class="header" href="#throwing-errors-in-match-statement" id="throwing-errors-in-match-statement">Throwing Errors in <code>match</code> Statement</a></h2>
 <p>Errors can be thrown in two different ways, both of which are demonstrated in the the <code>add</code> dispatchable call. The first is with the <a href="https://substrate.dev/rustdocs/master/frame_support/macro.ensure.html"><code>ensure!</code> macro</a> where the error to throw is the second parameter. The second is to throw the error by explicitly returning it.</p>
 <pre><code class="language-rust ignore">fn add(origin, val_to_add: u32) -&gt; DispatchResult {
 	let _ = ensure_signed(origin)?;
@@ -540,6 +540,28 @@ let my_val = Self::stored_value();
 }
 </code></pre>
 <p>Notice that the <code>Error</code> type always takes the generic parameter <code>T</code>. Notice also that we have verified all preconditions, and thrown all possible errors before ever writing to storage.</p>
+<h2><a class="header" href="#throwing-errors-with-ok_or-and-map_err" id="throwing-errors-with-ok_or-and-map_err">Throwing Errors with <code>.ok_or</code> and <code>.map_err</code></a></h2>
+<p>In fact, the pattern of:</p>
+<ul>
+<li>calling functions that returned a <code>Result</code> or <code>Option</code>, and</li>
+<li>checking if the result is <code>Some</code> or <code>Ok</code>. If not, returns from the function early with an error</li>
+</ul>
+<p>are so common that there are two standard Rust methods help performing the task.</p>
+<pre><code class="language-rust ignore">fn add_alternate(origin, val_to_add: u32) -&gt; DispatchResult {
+	let _ = ensure_signed(origin)?;
+
+	ensure!(val_to_add != 13, &lt;Error&lt;T&gt;&gt;::UnluckyThirteen);
+
+	// Using `ok_or()` to check if the returned value is `Ok` and unwrap the value.
+	//   If not, returns error from the function.
+	let result = Self::sum().checked_add(val_to_add).ok_or(&lt;Error&lt;T&gt;&gt;::SumTooLarge)?;
+
+	Sum::put(result);
+	Ok(())
+}
+</code></pre>
+<p>Notice the pattern of <code>.ok_or(&lt;Error&lt;T&gt;&gt;::MyError)?;</code>. This is really handy when you have a function call that returns an <code>Option</code> and you expect there should be a value inside. If not, returns early with an error message, all the while unwrapping the value for your further processing.</p>
+<p>If your function returns a <code>Result&lt;T, E&gt;</code>, you could apply <code>.map_err(|_e| &lt;Error&lt;T&gt;&gt;::MyError)?;</code> in the same spirit.</p>
 <h2><a class="header" href="#constructing-the-runtime-1" id="constructing-the-runtime-1">Constructing the Runtime</a></h2>
 <p>Unlike before, adding errors to our pallet does <em>not</em> require a change to the line in <code>construct_runtime!</code>. This is just an idiosyncrasy of developing in Substrate.</p>
 <h1><a class="header" href="#using-events" id="using-events">Using Events</a></h1>
@@ -1031,7 +1053,7 @@ child::do(trie_id, key, value);
 </code></pre>
 <h2><a class="header" href="#smpl-crowdfund-a-name--smplcrwda" id="smpl-crowdfund-a-name--smplcrwda">smpl-crowdfund <a name = "smplcrwd"></a></a></h2>
 <p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/smpl-crowdfund"><code>pallets/smpl-crowdfund</code></a></em></p>
-<p>Child tries are useful for batch deletion of <code>(key, value)</code> pairs associated with a specific <code>trie_id</code>. This is relevant to the <a href="https://github.com/paritytech/polkadot/blob/master/runtime/src/crowdfund.rs">polkadot/crowdfund</a> pallet, which tracks <code>(AccountId, BalanceOf&lt;T&gt;)</code> associated with a specific crowdfund. <code>BalanceOf&lt;T&gt;</code> represents the contributions of an <code>AccountId</code>. The identifier for each crowdfund is defined</p>
+<p>Child tries are useful for batch deletion of <code>(key, value)</code> pairs associated with a specific <code>trie_id</code>. This is relevant to the <a href="https://github.com/paritytech/polkadot/blob/master/runtime/common/src/crowdfund.rs">polkadot/crowdfund</a> pallet, which tracks <code>(AccountId, BalanceOf&lt;T&gt;)</code> associated with a specific crowdfund. <code>BalanceOf&lt;T&gt;</code> represents the contributions of an <code>AccountId</code>. The identifier for each crowdfund is defined</p>
 <pre><code class="language-rust ignore">type FundIndex = u32
 </code></pre>
 <p>With these three types, this storage item effectively manages <code>(FundIndex, AccountId, BalanceOf&lt;T&gt;)</code>. By maintaining a separate <code>child</code> for every <code>FundIndex</code>, this api allows for efficient batch deletions when crowdfunds are ended and dissolved.</p>
@@ -2144,7 +2166,7 @@ rev = '3e651110aa06aa835790df63410a29676243fc54'
 <p>Enter the path to the pallet to be tested</p>
 <pre><code class="language-bash">$ cd pallets/&lt;some-module&gt;
 </code></pre>
-<p>For example, to test <code>constant-config</code>, used in <a href="https://substrate.dev/recipes/storage/constants.html">Configurable Constants</a>,</p>
+<p>For example, to test <code>constant-config</code>, used in <a href="https://substrate.dev/recipes/3-entrees/constants.html">Configurable Constants</a>,</p>
 <pre><code class="language-bash">$ cd pallets/constant-config/
 $ cargo test
 </code></pre>
@@ -2220,8 +2242,7 @@ pub struct TestRuntime;
 	type Event: From&lt;Event&lt;Self&gt;&gt; + Into&lt;&lt;Self as system::Trait&gt;::Event&gt;;
 }
 </code></pre>
-<p>The mock runtime must inherit and define the <code>system::Trait</code> associated types
-(<em><a href="https://substrate.dev/recipes/traits/index.html">remember</a></em>). To do so, <code>impl</code> the <code>system::Trait</code>
+<p>The mock runtime must inherit and define the <code>system::Trait</code> associated types. To do so, <code>impl</code> the <code>system::Trait</code>
 for <code>TestRuntime</code> with types created previously and imported from other crates.</p>
 <pre><code class="language-rust ignore">#[derive(Clone, PartialEq, Eq, Debug)]
 pub struct TestRuntime;
@@ -2291,8 +2312,8 @@ rev = '6ae3b6c4ddc03d4cdb10bd1d417b95d20f4c1b6e'
 <li><a href="3-entrees/testing/mock.html#extbuilder"><code>ExtBuilder</code></a> - define methods on the unit struct <code>ExtBuilder</code> to facilitate a flexible environment for tests (i.e. can reconfigure pallet constants in every test if necessary)</li>
 </ul>
 <h2><a class="header" href="#new_test_ext-a-name--newexta" id="new_test_ext-a-name--newexta">new_test_ext <a name = "newext"><a/></a></h2>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/smpl-treasury"><code>pallets/smpl-treasury</code></a></em></p>
-<p>In <a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/smpl-treasury"><code>smpl-treasury</code></a>, use the <code>balances::GenesisConfig</code> and the pallet's <code>Genesis::&lt;TestRuntime&gt;</code> to set the balances of the test accounts and establish council membership in the returned test environment.</p>
+<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/charity"><code>pallets/smpl-treasury</code></a></em></p>
+<p>In <a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/charity"><code>smpl-treasury</code></a>, use the <code>balances::GenesisConfig</code> and the pallet's <code>Genesis::&lt;TestRuntime&gt;</code> to set the balances of the test accounts and establish council membership in the returned test environment.</p>
 <pre><code class="language-rust ignore">pub fn new_test_ext() -&gt; runtime_io::TestExternalities {
 	let mut t = system::GenesisConfig::default().build_storage::&lt;TestRuntime&gt;().unwrap();
 	balances::GenesisConfig::&lt;TestRuntime&gt; {
@@ -2399,7 +2420,7 @@ fn last_value_updates() {
 <li>Finally, check that the <a href="3-entrees/testing/common.html#events">expected events were emitted</a> with correct values.</li>
 </ol>
 <h3><a class="header" href="#checks-before-changes-are-enforced-ie-panics-panic-a-name--panicspanica" id="checks-before-changes-are-enforced-ie-panics-panic-a-name--panicspanica">Checks before Changes are Enforced (i.e. Panics Panic) <a name = "panicspanic"></a></a></h3>
-<p>The <a href="https://substrate.dev/recipes/declarative/ensure.html"><code>Verify First, Write Last</code></a> recipe encourages verifying certain conditions before changing storage values. In tests, it might be desirable to verify that invalid inputs return the expected error message.</p>
+<p>The <code>Verify First, Write Last</code> paradigm encourages verifying certain conditions before changing storage values. In tests, it might be desirable to verify that invalid inputs return the expected error message.</p>
 <p>In <a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/adding-machine"><code>pallets/adding-machine</code></a>, the runtime method <code>add</code> checks for overflow</p>
 <pre><code class="language-rust ignore">decl_module! {
     pub struct Module&lt;T: Trait&gt; for enum Call where origin: T::Origin {
@@ -2438,26 +2459,29 @@ mod tests {
 </code></pre>
 <p>For more examples, see <a href="https://github.com/paritytech/substrate/tree/master/frame">Substrate's own pallets</a> -- <code>mock.rs</code> for mock runtime scaffolding and <code>test.rs</code> for unit tests.</p>
 <h3><a class="header" href="#expected-changes-to-storage-are-triggered-a-name--storagea" id="expected-changes-to-storage-are-triggered-a-name--storagea">Expected Changes to Storage are Triggered <a name = "storage"></a></a></h3>
-<p>Changes to storage can be checked by direct calls to the storage values. The syntax is the same as it would be in the pallet's runtime methods</p>
-<pre><code class="language-rust ignore">#[test]
-fn last_value_updates() {
-	ExtBuilder::build().execute_with(|| {
-		let expected = 10u64;
-		HelloSubstrate::set_value(Origin::signed(1), expected);
-		assert_eq!(HelloSubstrate::last_value(), expected);
-		// .. more assert statements
-	})
+<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/single-value">pallets/single-value</a></em></p>
+<p>Changes to storage can be checked by direct calls to the storage values. The syntax is the same as it would be in the pallet's runtime methods.</p>
+<pre><code class="language-rust ignore">use crate::*;
+
+#[test]
+fn set_value_works() {
+  ExtBuilder::build().execute_with(|| {
+    assert_ok!(SingleValue::set_value(Origin::signed(1), 10));
+    assert_eq!(SingleValue::stored_value(), 10);
+    // Another way of accessing the storage. This pattern is needed if it is a more complexed data
+    //   type, e.g. StorageMap, StorageLinkedMap
+    assert_eq!(&lt;StoredValue&gt;::get(), 10);
+  })
 }
 </code></pre>
 <p>For context, the tested pallets's <code>decl_storage</code> block looks like</p>
 <pre><code class="language-rust ignore">decl_storage! {
-	trait Store for Module&lt;T: Trait&gt; as HelloSubstrate{
-		pub LastValue get(fn last_value): u64;
-		pub UserValue get(fn user_value): map T::AccountId =&gt; u64;
-	}
+  trait Store for Module&lt;T: Trait&gt; as SingleValue {
+    StoredValue get(fn stored_value): u32;
+    StoredAccount get(fn stored_account): T::AccountId;
+  }
 }
 </code></pre>
-<p>Updates to <code>UserValue</code> are tested in <code>last_value_updates</code> in <a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/hello-substrate"><code>pallets/hello-substrate</code></a>.</p>
 <h3><a class="header" href="#expected-events-are-emitted-a-name--eventsa" id="expected-events-are-emitted-a-name--eventsa">Expected Events are Emitted <a name = "events"></a></a></h3>
 <p>The common way of testing expected event emission behavior requires importing <code>support</code>'s <a href="https://substrate.dev/rustdocs/master/frame_support/macro.impl_outer_event.html"><code>impl_outer_event!</code></a> macro</p>
 <pre><code class="language-rust ignore">use support::impl_outer_event;
