@@ -36,7 +36,7 @@ Enter the path to the pallet to be tested
 $ cd pallets/<some-module>
 ```
 
-For example, to test `constant-config`, used in [Configurable Constants](https://substrate.dev/recipes/storage/constants.html),
+For example, to test `constant-config`, used in [Configurable Constants](https://substrate.dev/recipes/3-entrees/constants.html),
 
 ```bash
 $ cd pallets/constant-config/

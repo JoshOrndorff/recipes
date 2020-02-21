@@ -80,7 +80,7 @@ pub fn kv_put(index: ObjectCount, who: &T::AccountId, value_type: ValueType) {
 ## smpl-crowdfund <a name = "smplcrwd"></a>
 *[`pallets/smpl-crowdfund`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/smpl-crowdfund)*
 
-Child tries are useful for batch deletion of `(key, value)` pairs associated with a specific `trie_id`. This is relevant to the [polkadot/crowdfund](https://github.com/paritytech/polkadot/blob/master/runtime/src/crowdfund.rs) pallet, which tracks `(AccountId, BalanceOf<T>)` associated with a specific crowdfund. `BalanceOf<T>` represents the contributions of an `AccountId`. The identifier for each crowdfund is defined
+Child tries are useful for batch deletion of `(key, value)` pairs associated with a specific `trie_id`. This is relevant to the [polkadot/crowdfund](https://github.com/paritytech/polkadot/blob/master/runtime/common/src/crowdfund.rs) pallet, which tracks `(AccountId, BalanceOf<T>)` associated with a specific crowdfund. `BalanceOf<T>` represents the contributions of an `AccountId`. The identifier for each crowdfund is defined
 
 ```rust, ignore
 type FundIndex = u32

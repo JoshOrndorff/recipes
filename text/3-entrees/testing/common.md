@@ -7,7 +7,7 @@ To verify that our pallet code behaves as expected, it is necessary to check a f
 
 ### Checks before Changes are Enforced (i.e. Panics Panic) <a name = "panicspanic"></a>
 
-The [`Verify First, Write Last`](https://substrate.dev/recipes/declarative/ensure.html) recipe encourages verifying certain conditions before changing storage values. In tests, it might be desirable to verify that invalid inputs return the expected error message.
+The `Verify First, Write Last` paradigm encourages verifying certain conditions before changing storage values. In tests, it might be desirable to verify that invalid inputs return the expected error message.
 
 In [`pallets/adding-machine`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/adding-machine), the runtime method `add` checks for overflow
 
@@ -58,17 +58,22 @@ For more examples, see [Substrate's own pallets](https://github.com/paritytech/s
 
 ### Expected Changes to Storage are Triggered <a name = "storage"></a>
 
-Changes to storage can be checked by direct calls to the storage values. The syntax is the same as it would be in the pallet's runtime methods
+*[pallets/single-value](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/single-value)*
+
+Changes to storage can be checked by direct calls to the storage values. The syntax is the same as it would be in the pallet's runtime methods.
 
 ```rust, ignore
+use crate::*;
+
 #[test]
-fn last_value_updates() {
-	ExtBuilder::build().execute_with(|| {
-		let expected = 10u64;
-		HelloSubstrate::set_value(Origin::signed(1), expected);
-		assert_eq!(HelloSubstrate::last_value(), expected);
-		// .. more assert statements
-	})
+fn set_value_works() {
+  ExtBuilder::build().execute_with(|| {
+    assert_ok!(SingleValue::set_value(Origin::signed(1), 10));
+    assert_eq!(SingleValue::stored_value(), 10);
+    // Another way of accessing the storage. This pattern is needed if it is a more complexed data
+    //   type, e.g. StorageMap, StorageLinkedMap
+    assert_eq!(<StoredValue>::get(), 10);
+  })
 }
 ```
 
@@ -76,14 +81,12 @@ For context, the tested pallets's `decl_storage` block looks like
 
 ```rust, ignore
 decl_storage! {
-	trait Store for Module<T: Trait> as HelloSubstrate{
-		pub LastValue get(fn last_value): u64;
-		pub UserValue get(fn user_value): map T::AccountId => u64;
-	}
+  trait Store for Module<T: Trait> as SingleValue {
+    StoredValue get(fn stored_value): u32;
+    StoredAccount get(fn stored_account): T::AccountId;
+  }
 }
 ```
-
-Updates to `UserValue` are tested in `last_value_updates` in [`pallets/hello-substrate`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/hello-substrate).
 
 ### Expected Events are Emitted <a name = "events"></a>
 

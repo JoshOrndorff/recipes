@@ -7,261 +7,105 @@
 // the second key might be a unique identifier
 // `remove_prefix` enables clean removal of all values with the group identifier
 
+#[cfg(test)]
+mod tests;
+
 use sp_std::prelude::*;
 use frame_support::{
-    decl_event, decl_module, decl_storage,
-    dispatch::DispatchResult,
-    ensure,
-    storage::{StorageDoubleMap, StorageMap, StorageValue},
+	decl_event, decl_module, decl_storage,
+	dispatch::DispatchResult,
+	ensure,
+	storage::{StorageDoubleMap, StorageMap, StorageValue},
 };
 use frame_system::{self as system, ensure_signed};
 
 pub trait Trait: system::Trait {
-    type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
+	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
 }
 
 pub type GroupIndex = u32; // this is Encode (which is necessary for double_map)
 
 decl_storage! {
-    trait Store for Module<T: Trait> as Dmap {
-        /// Member score (double map)
-        MemberScore get(fn member_score): double_map GroupIndex, twox_128(T::AccountId) => u32;
-        /// Get group ID for member
-        GroupMembership get(fn group_membership): map T::AccountId => GroupIndex;
-        /// For fast membership checks, see check-membership recipe for more details
-        AllMembers get(fn all_members): Vec<T::AccountId>;
-    }
+	trait Store for Module<T: Trait> as Dmap {
+		/// Member score (double map)
+		MemberScore get(fn member_score): double_map GroupIndex, twox_128(T::AccountId) => u32;
+		/// Get group ID for member
+		GroupMembership get(fn group_membership): map T::AccountId => GroupIndex;
+		/// For fast membership checks, see check-membership recipe for more details
+		AllMembers get(fn all_members): Vec<T::AccountId>;
+	}
 }
 
 decl_event!(
-    pub enum Event<T>
-    where
-        AccountId = <T as system::Trait>::AccountId,
-    {
-        /// New member for `AllMembers` group
-        NewMember(AccountId),
-        /// Put member score (id, index, score)
-        MemberJoinsGroup(AccountId, GroupIndex, u32),
-        /// Remove a single member with AccountId
-        RemoveMember(AccountId),
-        /// Remove all members with GroupId
-        RemoveGroup(GroupIndex),
-    }
+	pub enum Event<T>
+	where
+		AccountId = <T as system::Trait>::AccountId,
+	{
+		/// New member for `AllMembers` group
+		NewMember(AccountId),
+		/// Put member score (id, index, score)
+		MemberJoinsGroup(AccountId, GroupIndex, u32),
+		/// Remove a single member with AccountId
+		RemoveMember(AccountId),
+		/// Remove all members with GroupId
+		RemoveGroup(GroupIndex),
+	}
 );
 
 decl_module! {
-    pub struct Module<T: Trait> for enum Call where origin: T::Origin {
-        fn deposit_event() = default;
+	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
+		fn deposit_event() = default;
 
-        /// Join the `AllMembers` vec before joining a group
-        fn join_all_members(origin) -> DispatchResult {
-            let new_member = ensure_signed(origin)?;
-            ensure!(!Self::is_member(&new_member), "already a member, can't join");
-            <AllMembers<T>>::mutate(|v| v.push(new_member.clone()));
-            Self::deposit_event(RawEvent::NewMember(new_member));
-            Ok(())
-        }
+		/// Join the `AllMembers` vec before joining a group
+		fn join_all_members(origin) -> DispatchResult {
+			let new_member = ensure_signed(origin)?;
+			ensure!(!Self::is_member(&new_member), "already a member, can't join");
+			<AllMembers<T>>::append(vec!(new_member.clone())).map_err(|_e| "appending new member error")?;
 
-        /// Put MemberScore (for testing purposes)
-        fn join_a_group(origin, index: GroupIndex, score: u32) -> DispatchResult {
-            let member = ensure_signed(origin)?;
-            ensure!(Self::is_member(&member), "not a member, can't remove");
-            <MemberScore<T>>::insert(&index, &member, score);
-            <GroupMembership<T>>::insert(&member, &index);
-            Self::deposit_event(RawEvent::MemberJoinsGroup(member, index, score));
-            Ok(())
-        }
+			Self::deposit_event(RawEvent::NewMember(new_member));
+			Ok(())
+		}
 
-        fn remove_member(origin) -> DispatchResult {
-            let member_to_remove = ensure_signed(origin)?;
-            ensure!(Self::is_member(&member_to_remove), "not a member, can't remove");
-            let group_id = <GroupMembership<T>>::take(member_to_remove.clone());
-            <MemberScore<T>>::remove(&group_id, &member_to_remove);
-            Self::deposit_event(RawEvent::RemoveMember(member_to_remove));
-            Ok(())
-        }
+		/// Put MemberScore (for testing purposes)
+		fn join_a_group(origin, index: GroupIndex, score: u32) -> DispatchResult {
+			let member = ensure_signed(origin)?;
+			ensure!(Self::is_member(&member), "not a member, can't remove");
+			<MemberScore<T>>::insert(&index, &member, score);
+			<GroupMembership<T>>::insert(&member, &index);
 
-        fn remove_group(origin, group: GroupIndex) -> DispatchResult {
-            let member = ensure_signed(origin)?;
+			Self::deposit_event(RawEvent::MemberJoinsGroup(member, index, score));
+			Ok(())
+		}
 
-            let group_id = <GroupMembership<T>>::get(member);
-            // check that the member is in the group (at least)
-            ensure!(group_id == group, "member isn't in the group, can't remove it");
+		fn remove_member(origin) -> DispatchResult {
+			let member_to_remove = ensure_signed(origin)?;
+			ensure!(Self::is_member(&member_to_remove), "not a member, can't remove");
+			let group_id = <GroupMembership<T>>::take(member_to_remove.clone());
+			<MemberScore<T>>::remove(&group_id, &member_to_remove);
 
-            // remove all group members from MemberScore at once
-            <MemberScore<T>>::remove_prefix(&group_id);
+			Self::deposit_event(RawEvent::RemoveMember(member_to_remove));
+			Ok(())
+		}
 
-            Self::deposit_event(RawEvent::RemoveGroup(group_id));
-            Ok(())
-        }
-    }
+		fn remove_group_score(origin, group: GroupIndex) -> DispatchResult {
+			let member = ensure_signed(origin)?;
+
+			let group_id = <GroupMembership<T>>::get(member);
+			// check that the member is in the group
+			ensure!(group_id == group, "member isn't in the group, can't remove it");
+
+			// remove all group members from MemberScore at once
+			<MemberScore<T>>::remove_prefix(&group_id);
+
+			Self::deposit_event(RawEvent::RemoveGroup(group_id));
+			Ok(())
+		}
+	}
 }
 
 impl<T: Trait> Module<T> {
-    // for fast membership checks (see check-membership recipe for more details)
-    fn is_member(who: &T::AccountId) -> bool {
-        <AllMembers<T>>::get().contains(who)
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::RawEvent;
-    use crate::{Module, Trait};
-    use sp_core::H256;
-    use sp_io::TestExternalities;
-    use sp_runtime::{
-        testing::Header,
-        traits::{BlakeTwo256, IdentityLookup},
-        Perbill,
-    };
-    use frame_support::{assert_ok, assert_err, impl_outer_event, impl_outer_origin, parameter_types};
-    use frame_system as system;
-
-    impl_outer_origin! {
-        pub enum Origin for TestRuntime {}
-    }
-
-    // Workaround for https://github.com/rust-lang/rust/issues/26925 . Remove when sorted.
-    #[derive(Clone, PartialEq, Eq, Debug)]
-    pub struct TestRuntime;
-    parameter_types! {
-        pub const BlockHashCount: u64 = 250;
-        pub const MaximumBlockWeight: u32 = 1024;
-        pub const MaximumBlockLength: u32 = 2 * 1024;
-        pub const AvailableBlockRatio: Perbill = Perbill::one();
-    }
-    impl system::Trait for TestRuntime {
-        type Origin = Origin;
-        type Index = u64;
-        type Call = ();
-        type BlockNumber = u64;
-        type Hash = H256;
-        type Hashing = BlakeTwo256;
-        type AccountId = u64;
-        type Lookup = IdentityLookup<Self::AccountId>;
-        type Header = Header;
-        type Event = TestEvent;
-        type BlockHashCount = BlockHashCount;
-        type MaximumBlockWeight = MaximumBlockWeight;
-        type MaximumBlockLength = MaximumBlockLength;
-        type AvailableBlockRatio = AvailableBlockRatio;
-        type Version = ();
-        type ModuleToIndex = ();
-    }
-
-    mod double_map {
-        pub use crate::Event;
-    }
-
-    impl_outer_event! {
-        pub enum TestEvent for TestRuntime {
-            double_map<T>,
-        }
-    }
-
-    impl Trait for TestRuntime {
-        type Event = TestEvent;
-    }
-
-    pub type System = system::Module<TestRuntime>;
-    pub type DoubleMap = Module<TestRuntime>;
-
-    pub struct ExtBuilder;
-
-    impl ExtBuilder {
-        pub fn build() -> TestExternalities {
-            let storage = system::GenesisConfig::default()
-                .build_storage::<TestRuntime>()
-                .unwrap();
-            TestExternalities::from(storage)
-        }
-    }
-
-    #[test]
-    fn join_all_members_works() {
-        ExtBuilder::build().execute_with(|| {
-            assert_ok!(DoubleMap::join_all_members(Origin::signed(1)));
-            // correct panic upon existing member trying to join
-            assert_err!(
-                DoubleMap::join_all_members(Origin::signed(1)),
-                "already a member, can't join"
-            );
-
-            // correct event emission
-            let expected_event = TestEvent::double_map(RawEvent::NewMember(1));
-            assert!(System::events().iter().any(|a| a.event == expected_event));
-            // correct storage changes
-            assert_eq!(DoubleMap::all_members(), vec![1]);
-        })
-    }
-
-    #[test]
-    fn group_join_works() {
-        ExtBuilder::build().execute_with(|| {
-            // expected panic
-            assert_err!(
-                DoubleMap::join_a_group(Origin::signed(1), 3, 5),
-                "not a member, can't remove"
-            );
-
-            assert_ok!(DoubleMap::join_all_members(Origin::signed(1)));
-            assert_ok!(DoubleMap::join_a_group(Origin::signed(1), 3, 5));
-
-            // correct event emission
-            let expected_event =
-                TestEvent::double_map(RawEvent::MemberJoinsGroup(1, 3, 5));
-            assert!(System::events().iter().any(|a| a.event == expected_event));
-
-            // correct storage changes
-            assert_eq!(DoubleMap::group_membership(1), 3);
-            assert_eq!(DoubleMap::member_score(3, 1), 5);
-        })
-    }
-
-    #[test]
-    fn remove_member_works() {
-        ExtBuilder::build().execute_with(|| {
-            assert_ok!(DoubleMap::join_all_members(Origin::signed(1)));
-            assert_ok!(DoubleMap::join_a_group(Origin::signed(1), 3, 5));
-            assert_ok!(DoubleMap::remove_member(Origin::signed(1)));
-
-            // correct event emission
-            let expected_event =
-                TestEvent::double_map(RawEvent::RemoveMember(1));
-            assert!(System::events().iter().any(|a| a.event == expected_event));
-
-            // TODO: test correct changes to storage
-        })
-    }
-
-    #[test]
-    fn remove_group_works() {
-        ExtBuilder::build().execute_with(|| {
-            assert_ok!(DoubleMap::join_all_members(Origin::signed(1)));
-            assert_ok!(DoubleMap::join_all_members(Origin::signed(2)));
-            assert_ok!(DoubleMap::join_all_members(Origin::signed(3)));
-            assert_ok!(DoubleMap::join_a_group(Origin::signed(1), 3, 5));
-            assert_ok!(DoubleMap::join_a_group(Origin::signed(2), 3, 5));
-            assert_ok!(DoubleMap::join_a_group(Origin::signed(3), 3, 5));
-
-            assert_err!(
-                DoubleMap::remove_group(Origin::signed(4), 3),
-                "member isn't in the group, can't remove it"
-            );
-
-            assert_err!(
-                DoubleMap::remove_group(Origin::signed(1), 2),
-                "member isn't in the group, can't remove it"
-            );
-
-            assert_ok!(DoubleMap::remove_group(Origin::signed(1), 3));
-
-            // correct event emission
-            let expected_event = TestEvent::double_map(RawEvent::RemoveGroup(3));
-            assert!(System::events().iter().any(|a| a.event == expected_event));
-
-            // TODO: test correct changes to storage
-        })
-    }
+	// for fast membership checks (see check-membership recipe for more details)
+	fn is_member(who: &T::AccountId) -> bool {
+		Self::all_members().contains(who)
+	}
 }

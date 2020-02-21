@@ -18,7 +18,7 @@ decl_error! {
 }
 ```
 
-## Throwing Errors
+## Throwing Errors in `match` Statement
 
 Errors can be thrown in two different ways, both of which are demonstrated in the the `add` dispatchable call. The first is with the [`ensure!` macro](https://substrate.dev/rustdocs/master/frame_support/macro.ensure.html) where the error to throw is the second parameter. The second is to throw the error by explicitly returning it.
 
@@ -43,6 +43,34 @@ fn add(origin, val_to_add: u32) -> DispatchResult {
 ```
 
 Notice that the `Error` type always takes the generic parameter `T`. Notice also that we have verified all preconditions, and thrown all possible errors before ever writing to storage.
+
+## Throwing Errors with `.ok_or` and `.map_err`
+
+In fact, the pattern of:
+
+* calling functions that returned a `Result` or `Option`, and
+* checking if the result is `Some` or `Ok`. If not, returns from the function early with an error
+
+are so common that there are two standard Rust methods help performing the task.
+
+```rust, ignore
+fn add_alternate(origin, val_to_add: u32) -> DispatchResult {
+	let _ = ensure_signed(origin)?;
+
+	ensure!(val_to_add != 13, <Error<T>>::UnluckyThirteen);
+
+	// Using `ok_or()` to check if the returned value is `Ok` and unwrap the value.
+	//   If not, returns error from the function.
+	let result = Self::sum().checked_add(val_to_add).ok_or(<Error<T>>::SumTooLarge)?;
+
+	Sum::put(result);
+	Ok(())
+}
+```
+
+Notice the pattern of `.ok_or(<Error<T>>::MyError)?;`. This is really handy when you have a function call that returns an `Option` and you expect there should be a value inside. If not, returns early with an error message, all the while unwrapping the value for your further processing.
+
+If your function returns a `Result<T, E>`, you could apply `.map_err(|_e| <Error<T>>::MyError)?;` in the same spirit.
 
 ## Constructing the Runtime
 
