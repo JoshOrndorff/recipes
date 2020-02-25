@@ -1,0 +1,15 @@
+[package]
+name = "off-chain-workers"
+version = "0.1.0"
+authors = ["Jimmy Chu"]
+edition = "2018"
+
+[features]
+default = ['std']
+std = [
+    'parity-scale-codec/std',
+    'support/std',
+    'system/std',
+    'balances/std',
+    'runtime-primitives/std',
+]

@@ -23,6 +23,7 @@
 	- [Weights for Resource Accounting](./3-entrees/weights.md)
 	- [Transaction Fees for Economic Security](./3-entrees/fees.md)
 	- [Charity and Imbalances](./3-entrees/charity.md)
+	- [Off-chain Workers](./3-entrees/off-chain-workers.md)
 	- [Runtime APIs](./3-entrees/runtime-api.md)
 	- [Custom RPCs](./3-entrees/custom-rpc.md)
 	- [Currency Types](./3-entrees/currency.md)
