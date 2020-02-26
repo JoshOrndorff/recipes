@@ -11,7 +11,7 @@ dependencies = [
 
 [[package]]
 name = "adding-machine"
-version = "0.1.0"
+version = "2.0.0-alpha.1"
 dependencies = [
  "frame-support 2.0.0 (git+https://github.com/paritytech/substrate.git?rev=3e651110aa06aa835790df63410a29676243fc54)",
  "frame-system 2.0.0 (git+https://github.com/paritytech/substrate.git?rev=3e651110aa06aa835790df63410a29676243fc54)",
@@ -5237,7 +5237,7 @@ dependencies = [
 name = "super-runtime"
 version = "2.0.0"
 dependencies = [
- "adding-machine 0.1.0",
+ "adding-machine 2.0.0-alpha.1",
  "basic-token 0.1.0",
  "charity 0.1.0",
  "check-membership 0.1.0",
