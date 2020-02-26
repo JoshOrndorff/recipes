@@ -39,6 +39,9 @@ impl system::Trait for TestRuntime {
 	type AvailableBlockRatio = AvailableBlockRatio;
 	type Version = ();
 	type ModuleToIndex = ();
+	type AccountData = ();
+	type OnNewAccount = ();
+	type OnKilledAccount = ();
 }
 
 mod double_map {
@@ -48,6 +51,7 @@ mod double_map {
 impl_outer_event! {
 	pub enum TestEvent for TestRuntime {
 		double_map<T>,
+		system<T>,
 	}
 }
 
@@ -126,8 +130,8 @@ fn remove_member_works() {
 		assert!(System::events().iter().any(|a| a.event == expected_event));
 
 		// check: user 1 should no longer belongs to group 3
-		assert!(!<GroupMembership<TestRuntime>>::exists(1));
-		assert!(!<MemberScore<TestRuntime>>::exists(3, 1));
+		assert!(!<GroupMembership<TestRuntime>>::contains_key(1));
+		assert!(!<MemberScore<TestRuntime>>::contains_key(3, 1));
 	})
 }
 
@@ -158,8 +162,8 @@ fn remove_group_score_works() {
 		assert!(System::events().iter().any(|a| a.event == expected_event));
 
 		// check: user 1, 2, 3 should no longer in the group
-		assert!(!<MemberScore<TestRuntime>>::exists(3, 1));
-		assert!(!<MemberScore<TestRuntime>>::exists(3, 2));
-		assert!(!<MemberScore<TestRuntime>>::exists(3, 3));
+		assert!(!<MemberScore<TestRuntime>>::contains_key(3, 1));
+		assert!(!<MemberScore<TestRuntime>>::contains_key(3, 2));
+		assert!(!<MemberScore<TestRuntime>>::contains_key(3, 3));
 	})
 }
