@@ -10,7 +10,6 @@ std = [
     'parity-scale-codec/std',
     'frame-support/std',
     'frame-system/std',
-    'sp-runtime/std',
 ]
 
 [dependencies.parity-scale-codec]
