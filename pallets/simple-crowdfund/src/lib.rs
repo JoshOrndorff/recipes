@@ -21,9 +21,10 @@ use system::ensure_signed;
 
 const PALLET_ID: ModuleId = ModuleId(*b"ex/cfund");
 
-type BalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::Balance;
-type NegativeImbalanceOf<T> =
-    <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::NegativeImbalance;
+type BalanceOf<T> = <<T as Trait>::Currency as Currency<AccountIdOf<T>>>::Balance;
+type AccountIdOf<T> = <T as system::Trait>::AccountId;
+type NegativeImbalanceOf<T> = <<T as Trait>::Currency as Currency<AccountIdOf<T>>>::NegativeImbalance;
+type FundInfoOf<T> = FundInfo<AccountIdOf<T>, BalanceOf<T>, <T as system::Trait>::BlockNumber>;
 
 pub trait Trait: system::Trait {
     type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
@@ -37,7 +38,7 @@ pub trait Trait: system::Trait {
     /// least ExistentialDeposit.
     type MinContribution: Get<BalanceOf<Self>>;
 
-    /// The period of time (in blocks) after an unsuccessful crowdfund ending when
+    /// The period of time (in blocks) after an unsuccessful crowdfund ending during which
     /// contributors are able to withdraw their funds. After this period, their funds are lost.
     type RetirementPeriod: Get<Self::BlockNumber>;
 
@@ -69,7 +70,7 @@ decl_storage! {
     trait Store for Module<T: Trait> as ChildTrie {
         /// Info on all of the funds.
         Funds get(funds):
-            map FundIndex => Option<FundInfo<T::AccountId, BalanceOf<T>, T::BlockNumber>>;
+            map hasher(blake2_256) FundIndex => Option<FundInfoOf<T>>;
 
         /// The total number of funds that have so far been allocated.
         FundCount get(fund_count): FundIndex;
