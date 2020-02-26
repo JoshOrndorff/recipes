@@ -1,13 +1,13 @@
 //! borrows collateral locking logic from staking/lib.rs
 // demonstrates https://substrate.dev/rustdocs/master/frame_support/traits/trait.LockableCurrency.html
-use support::{
+use frame_support::{
     decl_event, decl_module,
     dispatch::DispatchResult,
     traits::{
-        Currency, Get, LockIdentifier, LockableCurrency, WithdrawReason, WithdrawReasons,
+        Currency, LockIdentifier, LockableCurrency, WithdrawReason, WithdrawReasons,
     },
 };
-use system::ensure_signed;
+use frame_system::{self as system, ensure_signed};
 
 const EXAMPLE_ID: LockIdentifier = *b"example ";
 
@@ -19,9 +19,6 @@ pub trait Trait: system::Trait {
 
     /// The overarching event type
     type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
-
-    /// Period for Single Lock Invocation (could be a voting or application period for proposals)
-    type LockPeriod: Get<Self::BlockNumber>;
 }
 
 decl_event!(
@@ -40,8 +37,6 @@ decl_module! {
     pub struct Module<T: Trait> for enum Call where origin: T::Origin {
         fn deposit_event() = default;
 
-        const LockPeriod: T::BlockNumber = T::LockPeriod::get();
-
         fn lock_capital(origin, amount: BalanceOf<T>) -> DispatchResult {
             let user = ensure_signed(origin)?;
 
@@ -49,9 +44,7 @@ decl_module! {
                 EXAMPLE_ID,
                 &user,
                 amount,
-                T::LockPeriod::get(),
                 WithdrawReasons::except(WithdrawReason::TransactionPayment),
-                // https://substrate.dev/rustdocs/master/frame_support/traits/struct.WithdrawReasons.html
             );
 
             Self::deposit_event(RawEvent::Locked(user, amount));
@@ -65,7 +58,6 @@ decl_module! {
                 EXAMPLE_ID,
                 &user,
                 amount,
-                T::LockPeriod::get(),
                 WithdrawReasons::except(WithdrawReason::TransactionPayment),
             );
 
