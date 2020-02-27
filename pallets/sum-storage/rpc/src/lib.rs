@@ -22,8 +22,9 @@ use jsonrpc_core::{Error as RpcError, ErrorCode, Result};
 use jsonrpc_derive::rpc;
 use sp_runtime::{
 	generic::BlockId,
-	traits::{Block as BlockT, ProvideRuntimeApi},
+	traits::{Block as BlockT},
 };
+use sp_api::ProvideRuntimeApi;
 use sum_storage_rpc_runtime_api::SumStorageApi as SumStorageRuntimeApi;
 
 #[rpc]
@@ -72,7 +73,7 @@ impl<C, Block> SumStorageApi<<Block as BlockT>::Hash>
 where
 	Block: BlockT,
 	C: Send + Sync + 'static,
-	C: ProvideRuntimeApi,
+	C: ProvideRuntimeApi<Block>,
 	C: HeaderBackend<Block>,
 	C::Api: SumStorageRuntimeApi<Block>,
 {

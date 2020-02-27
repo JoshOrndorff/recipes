@@ -41,6 +41,9 @@ impl system::Trait for TestRuntime {
 	type AvailableBlockRatio = AvailableBlockRatio;
 	type Version = ();
 	type ModuleToIndex = ();
+	type AccountData = ();
+	type OnNewAccount = ();
+	type OnKilledAccount = ();
 }
 
 mod simple_event {
@@ -50,6 +53,7 @@ mod simple_event {
 impl_outer_event! {
 	pub enum TestEvent for TestRuntime {
 		simple_event,
+		system<T>,
 	}
 }
 

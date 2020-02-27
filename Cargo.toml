@@ -20,7 +20,7 @@ members = [
   "pallets/simple-event",
   "pallets/simple-map",
   "pallets/single-value",
-  #"pallets/smpl-crowdfund",
+  # "pallets/simple-crowdfund",
   # "pallets/pallet-panic",
   "pallets/storage-cache",
   "pallets/struct-storage",
@@ -34,5 +34,8 @@ members = [
   "runtimes/api-runtime",
   "runtimes/api-genesis",
   "nodes/kitchen-node",
-  "nodes/rpc-node",
+
+  # Seems lot of API changes regarding to calls used in rpc-node.
+  # Try uncomment and run cargo test.
+  # "nodes/rpc-node",
 ]

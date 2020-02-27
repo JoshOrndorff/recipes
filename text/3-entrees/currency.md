@@ -76,16 +76,7 @@ pub fn unlock_funds(origin, amount: BalanceOf<T>) -> Result {
 Substrate's [Staking pallet](https://substrate.dev/rustdocs/master/pallet_staking/index.html) similarly uses [`LockableCurrency`](https://substrate.dev/rustdocs/master/frame_support/traits/trait.LockableCurrency.html) trait for more nuanced handling of capital locking based on time increments. This type can be very useful in the context of economic systems that enforce accountability by collateralizing fungible resources. Import this trait in the usual way
 
 ```rust, ignore
-use support::traits::{LockIdentifier, LockableCurrency}
-
-pub trait Trait: system::Trait {
-    /// The lockable currency type
-    type Currency: LockableCurrency<Self::AccountId, Moment=Self::BlockNumber>;
-
-    // Example length of a generic lock period
-    type LockPeriod: Get<Self::BlockNumber>;
-    ...
-}
+use frame_support::traits::{LockIdentifier, LockableCurrency}
 ```
 
 To use `LockableCurrency`, it is necessary to define a [`LockIdentifier`](https://substrate.dev/rustdocs/master/frame_support/traits/type.LockIdentifier.html).
@@ -104,7 +95,6 @@ fn lock_capital(origin, amount: BalanceOf<T>) -> Result {
         EXAMPLE_ID,
         user.clone(),
         amount,
-        T::LockPeriod::get(),
         WithdrawReasons::except(WithdrawReason::TransactionPayment),
     );
 

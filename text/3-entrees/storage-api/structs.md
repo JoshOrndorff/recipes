@@ -1,111 +1,87 @@
-# Generic Structs
+# Using and Storing Structs
+*[`pallets/struct-storage`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/struct-storage)*
 
-In Rust, a `struct`, or structure, is a custom a custom data type that lets you name and package together multiple related values that make up a meaningful group. If you’re familiar with an object-oriented language, a `struct` is like an object’s data attributes (read more in [The Rust Book](https://doc.rust-lang.org/book/ch05-01-defining-structs.html)).
+In Rust, a `struct`, or structure, is a custom data type that lets you name and package together multiple related values that make up a meaningful group. If you’re familiar with an object-oriented language, a `struct` is like an object’s data attributes (read more in [The Rust Book](https://doc.rust-lang.org/book/ch05-01-defining-structs.html)).
 
-To define a custom struct for the runtime, the following syntax may be used:
+## Defining a Struct
+To define a _simple_ custom struct for the runtime, the following syntax may be used:
 
 ```rust, ignore
 #[derive(Encode, Decode, Default, Clone, PartialEq)]
-pub struct MyStruct<A, B> {
+pub struct MyStruct {
     some_number: u32,
-    some_generic: A,
-    some_other_generic: B,
+    optional_number: Option<u32>,
 }
 ```
 
-In the code snippet above, the [derive macro](https://doc.rust-lang.org/rust-by-example/trait/derive.html) is declared to ensure `MyStruct` conforms to shared behavior according to the specified [traits](https://doc.rust-lang.org/book/ch10-02-traits.html): `Encode, Decode, Default, Clone, PartialEq`
+In the code snippet above, the [derive macro](https://doc.rust-lang.org/rust-by-example/trait/derive.html) is declared to ensure `MyStruct` conforms to shared behavior according to the specified [traits](https://doc.rust-lang.org/book/ch10-02-traits.html): `Encode, Decode, Default, Clone, PartialEq`. If you wish the store this struct in blockchain storage, you will need to derive (or manually ipmlement) each of these traits.
 
-To use the `Encode` and `Decode` traits, it is necessary to import them from `support::codec`:
+To use the `Encode` and `Decode` traits, it is necessary to import them.
 
 ```rust, ignore
-use support::codec::{Encode, Decode};
+use frame_support::codec::{Encode, Decode};
 ```
 
-By storing types in `MyStruct` as generics, it is possible to access custom Substrate types like `AccountId`, `Balance`, and `Hash`.
+## Structs with Generic Fields
 
-For example, to store a mapping from `AccountId` to `MyStruct` with `some_generic` as the `Balance` type and `some_other_generic` as the `Hash` type:
+The simple struct shown earlier only uses Rust primitive types for its fields. In the common case where you want to store types that come from your pallet's configuration trait (or the configuration trait of another pallet in your runtime), you must use generic type parameters in your struct's definition.
+
+```rust, ignore
+#[derive(Encode, Decode, Clone, Default, RuntimeDebug)]
+pub struct InnerThing<Hash, Balance> {
+	number: u32,
+	hash: Hash,
+	balance: Balance,
+}
+```
+
+Here you can see that we want to store items of type `Hash` and `Balance` in the struct. Because these types come from the system and balances pallets' configuration traits, we must specify them as generics when declaring the struct.
+
+It is often convenient to make a type alias that takes `T`, your pallet's configuration trait, as a single type parameter. Doing so simply saves you typing in the future.
+
+```rust, ignore
+type InnerThingOf<T> = InnerThing<<T as system::Trait>::Hash, <T as balances::Trait>::Balance>;
+```
+
+## Structs in Storage
+
+Using one of our structs as a storage item is not significantly different than using a primitive type. When using a generic struct, we must supply all of the generic type parameters. This snippet shows how to supply thos parameters when you have a type alias (like we do for `InnerThing`) as well as when you don't. Whether to include the type alias is a matter of style and taste, but it is generally preferred when the entire type exceeds the preferred line length.
 
 ```rust, ignore
 decl_storage! {
-    trait Store for Module<T: Trait> as Example {
-        MyMap: map T::AccountId => MyStruct<T::Balance, T::Hash>;
-    }
+	trait Store for Module<T: Trait> as NestedStructs {
+		InnerThingsByNumbers get(fn inner_things_by_numbers):
+			map hasher(blake2_256) u32 => InnerThingOf<T>;
+		SuperThingsBySuperNumbers get(fn super_things_by_super_numbers):
+			map hasher(blake2_256) u32 => SuperThing<T::Hash, T::Balance>;
+	}
 }
 ```
 
-## Basic Interaction
-
-To push values and modify the map
+Interacting with the storage maps is now exactly as it was when we didn't use any custom structs
 
 ```rust, ignore
-decl_module! {
-    pub struct Module<T: Trait> for enum Call where origin: T::Origin {
-        fn create_struct(origin, number: u32, balance: T::Balance, secret: T::Hash) -> Result {
-            let sender = ensure_signed(origin)?;
-
-            let new_struct = MyStruct {
-                some_number: number,
-                some_generic: balance,
-                some_other_generic: secret,
-            };
-
-            <MyMap<T>>::insert(sender, new_struct);
-            Ok(())
-        }
-    }
+fn insert_inner_thing(origin, number: u32, hash: T::Hash, balance: T::Balance) -> DispatchResult {
+	let _ = ensure_signed(origin)?;
+	let thing = InnerThing {
+					number,
+					hash,
+					balance,
+				};
+	<InnerThingsByNumbers<T>>::insert(number, thing);
+	Self::deposit_event(RawEvent::NewInnerThing(number, hash, balance));
+	Ok(())
 }
 ```
 
 ## Nested Structs
 
-This basic runtime shows how to store custom, nested structs using a combination of Rust primitive types and Substrate specific types via generics.
+Structs can also contain other structs as their fields. We have demonstrated this with the type `SuperThing`. As you see, any generic types needed by the inner struct must also be supplied to the outer.
 
 ```rust, ignore
-pub trait Trait: balances::Trait {}
-
-#[derive(Encode, Decode, Default)]
-pub struct Thing <Hash, Balance> {
-    my_num: u32,
-    my_hash: Hash,
-    my_balance: Balance,
-}
-
-#[derive(Encode, Decode, Default)]
-pub struct SuperThing <Hash, Balance> {
-    my_super_num: u32,
-    my_thing: Thing<Hash, Balance>,
-}
-
-decl_module! {
-    pub struct Module<T: Trait> for enum Call where origin: T::Origin {
-        fn set_mapping(_origin, key: u32, num: u32, hash: T::Hash, balance: T::Balance) -> Result {
-            let thing = Thing {
-                            my_num: num,
-                            my_hash: hash,
-                            my_balance: balance
-                        };
-            <Value<T>>::insert(key, thing);
-            Ok(())
-        }
-
-        fn set_super_mapping(_origin, key: u32, super_num: u32, thing_key: u32) -> Result {
-            let thing = Self::value(thing_key);
-            let super_thing = SuperThing {
-                            my_super_num: super_num,
-                            my_thing: thing
-                        };
-            <SuperValue<T>>::insert(key, super_thing);
-            Ok(())
-        }
-    }
-}
-
-decl_storage! {
-    trait Store for Module<T: Trait> as RuntimeExampleStorage {
-        Value get(fn value): map u32 => Thing<T::Hash, T::Balance>;
-        SuperValue get(fn super_value): map u32 => SuperThing<T::Hash, T::Balance>;
-    }
+#[derive(Encode, Decode, Default, RuntimeDebug)]
+pub struct SuperThing<Hash, Balance> {
+	super_number: u32,
+	inner_thing: InnerThing<Hash, Balance>,
 }
 ```
-
-For more information, see the [Substrate TCR](https://github.com/parity-samples/substrate-tcr/blob/master/runtime/src/tcr.rs) and the [full tutorial](https://docs.substrate.dev/docs/building-a-token-curated-registry-dappchain-using-substrate)

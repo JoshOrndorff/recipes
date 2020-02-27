@@ -28,9 +28,10 @@ pub type GroupIndex = u32; // this is Encode (which is necessary for double_map)
 decl_storage! {
 	trait Store for Module<T: Trait> as Dmap {
 		/// Member score (double map)
-		MemberScore get(fn member_score): double_map GroupIndex, twox_128(T::AccountId) => u32;
+		MemberScore get(fn member_score):
+			double_map hasher(blake2_256) GroupIndex, hasher(blake2_256) T::AccountId => u32;
 		/// Get group ID for member
-		GroupMembership get(fn group_membership): map T::AccountId => GroupIndex;
+		GroupMembership get(fn group_membership): map hasher(blake2_256) T::AccountId => GroupIndex;
 		/// For fast membership checks, see check-membership recipe for more details
 		AllMembers get(fn all_members): Vec<T::AccountId>;
 	}
