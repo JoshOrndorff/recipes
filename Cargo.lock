@@ -5466,6 +5466,7 @@ dependencies = [
  "jsonrpc-derive 14.0.5 (registry+https://github.com/rust-lang/crates.io-index)",
  "parity-scale-codec 1.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde 1.0.104 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-api 2.0.0-alpha.1 (git+https://github.com/paritytech/substrate.git?tag=v2.0.0-alpha.1)",
  "sp-blockchain 2.0.0-alpha.1 (git+https://github.com/paritytech/substrate.git?tag=v2.0.0-alpha.1)",
  "sp-rpc 2.0.0-alpha.1 (git+https://github.com/paritytech/substrate.git?tag=v2.0.0-alpha.1)",
  "sp-runtime 2.0.0-alpha.1 (git+https://github.com/paritytech/substrate.git?tag=v2.0.0-alpha.1)",
