@@ -2693,6 +2693,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "off-chain-workers"
+version = "0.1.0"
+dependencies = [
+ "frame-support 2.0.0-alpha.1 (git+https://github.com/paritytech/substrate.git?tag=v2.0.0-alpha.1)",
+ "frame-system 2.0.0-alpha.1 (git+https://github.com/paritytech/substrate.git?tag=v2.0.0-alpha.1)",
+ "parity-scale-codec 1.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "serde 1.0.104 (registry+https://github.com/rust-lang/crates.io-index)",
+ "serde_json 1.0.48 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core 2.0.0-alpha.1 (git+https://github.com/paritytech/substrate.git?tag=v2.0.0-alpha.1)",
+ "sp-io 2.0.0-alpha.1 (git+https://github.com/paritytech/substrate.git?tag=v2.0.0-alpha.1)",
+ "sp-runtime 2.0.0-alpha.1 (git+https://github.com/paritytech/substrate.git?tag=v2.0.0-alpha.1)",
+ "sp-std 2.0.0-alpha.1 (git+https://github.com/paritytech/substrate.git?tag=v2.0.0-alpha.1)",
+]
+
+[[package]]
 name = "ole32-sys"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -5418,6 +5433,7 @@ dependencies = [
  "hello-substrate 0.1.0",
  "last-caller 0.1.0",
  "linked-map 0.1.0",
+ "off-chain-workers 0.1.0",
  "pallet-babe 2.0.0-alpha.1 (git+https://github.com/paritytech/substrate.git?tag=v2.0.0-alpha.1)",
  "pallet-balances 2.0.0-alpha.1 (git+https://github.com/paritytech/substrate.git?tag=v2.0.0-alpha.1)",
  "pallet-grandpa 2.0.0-alpha.1 (git+https://github.com/paritytech/substrate.git?tag=v2.0.0-alpha.1)",

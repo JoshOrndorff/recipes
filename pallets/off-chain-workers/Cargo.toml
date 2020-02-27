@@ -1,15 +1,32 @@
 [package]
 name = "off-chain-workers"
 version = "0.1.0"
-authors = ["Jimmy Chu"]
+authors = ["Parity Technologies <admin@parity.io>"]
 edition = "2018"
+homepage = "https://substrate.dev/recipes/"
+repository = "https://github.com/substrate-developer-hub/recipes/"
+
+[dependencies]
+# external dependencies
+codec = { package = "parity-scale-codec", version = "1.0.0", default-features = false }
+serde = { version = "1.0.101", optional = true }
+serde_json = { version = "1.0.46", default-features = false, features = ["alloc"] }
+# Substrate dependencies
+support = { package = "frame-support", default-features = false, git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.1' }
+system = { package = "frame-system", default-features = false, git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.1' }
+sp-core = { default-features = false, git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.1' }
+sp-io = { default-features = false, git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.1' }
+sp-runtime = { default-features = false, git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.1' }
+sp-std = { default-features = false, git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.1' }
 
 [features]
 default = ['std']
 std = [
-    'parity-scale-codec/std',
-    'support/std',
-    'system/std',
-    'balances/std',
-    'runtime-primitives/std',
+  'codec/std',
+  'serde/std',
+  'support/std',
+  'system/std',
+  'sp-io/std',
+  'sp-runtime/std',
+  'sp-std/std'
 ]
