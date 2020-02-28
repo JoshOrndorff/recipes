@@ -2693,7 +2693,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "off-chain-workers"
+name = "offchain-demo"
 version = "0.1.0"
 dependencies = [
  "frame-support 2.0.0-alpha.1 (git+https://github.com/paritytech/substrate.git?tag=v2.0.0-alpha.1)",
@@ -5433,7 +5433,7 @@ dependencies = [
  "hello-substrate 0.1.0",
  "last-caller 0.1.0",
  "linked-map 0.1.0",
- "off-chain-workers 0.1.0",
+ "offchain-demo 0.1.0",
  "pallet-babe 2.0.0-alpha.1 (git+https://github.com/paritytech/substrate.git?tag=v2.0.0-alpha.1)",
  "pallet-balances 2.0.0-alpha.1 (git+https://github.com/paritytech/substrate.git?tag=v2.0.0-alpha.1)",
  "pallet-grandpa 2.0.0-alpha.1 (git+https://github.com/paritytech/substrate.git?tag=v2.0.0-alpha.1)",

@@ -16,6 +16,7 @@ members = [
   "pallets/last-caller",
   "pallets/linked-map",
   "pallets/lockable-currency",
+  "pallets/offchain-demo",
   "pallets/reservable-currency",
   "pallets/simple-event",
   "pallets/simple-map",
