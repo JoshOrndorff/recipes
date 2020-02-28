@@ -39,7 +39,7 @@ pub fn get_account_id_from_seed<TPublic: Public>(seed: &str) -> AccountId where
 	AccountPublic::from(get_from_seed::<TPublic>(seed)).into_account()
 }
 
-/// Helper function to generate session key from seed
+/// Helper function to generate an authority key for Aura
 pub fn get_authority_keys_from_seed(s: &str) -> (AuraId, GrandpaId) {
 	(
 		get_from_seed::<AuraId>(s),
@@ -54,17 +54,19 @@ impl Alternative {
 			Alternative::Development => ChainSpec::from_genesis(
 				"Development",
 				"dev",
-				|| testnet_genesis(vec![
-					get_authority_keys_from_seed("Alice"),
-				],
-				get_account_id_from_seed::<sr25519::Public>("Alice"),
-				vec![
+				|| testnet_genesis(
+					vec![
+						get_authority_keys_from_seed("Alice"),
+					],
 					get_account_id_from_seed::<sr25519::Public>("Alice"),
-					get_account_id_from_seed::<sr25519::Public>("Bob"),
-					get_account_id_from_seed::<sr25519::Public>("Alice//stash"),
-					get_account_id_from_seed::<sr25519::Public>("Bob//stash"),
-				],
-				true),
+					vec![
+						get_account_id_from_seed::<sr25519::Public>("Alice"),
+						get_account_id_from_seed::<sr25519::Public>("Bob"),
+						get_account_id_from_seed::<sr25519::Public>("Alice//stash"),
+						get_account_id_from_seed::<sr25519::Public>("Bob//stash"),
+					],
+					true,
+				),
 				vec![],
 				None,
 				None,
@@ -74,26 +76,28 @@ impl Alternative {
 			Alternative::LocalTestnet => ChainSpec::from_genesis(
 				"Local Testnet",
 				"local_testnet",
-				|| testnet_genesis(vec![
-					get_authority_keys_from_seed("Alice"),
-					get_authority_keys_from_seed("Bob"),
-				],
-				get_account_id_from_seed::<sr25519::Public>("Alice"),
-				vec![
+				|| testnet_genesis(
+					vec![
+						get_authority_keys_from_seed("Alice"),
+						get_authority_keys_from_seed("Bob"),
+					],
 					get_account_id_from_seed::<sr25519::Public>("Alice"),
-					get_account_id_from_seed::<sr25519::Public>("Bob"),
-					get_account_id_from_seed::<sr25519::Public>("Charlie"),
-					get_account_id_from_seed::<sr25519::Public>("Dave"),
-					get_account_id_from_seed::<sr25519::Public>("Eve"),
-					get_account_id_from_seed::<sr25519::Public>("Ferdie"),
-					get_account_id_from_seed::<sr25519::Public>("Alice//stash"),
-					get_account_id_from_seed::<sr25519::Public>("Bob//stash"),
-					get_account_id_from_seed::<sr25519::Public>("Charlie//stash"),
-					get_account_id_from_seed::<sr25519::Public>("Dave//stash"),
-					get_account_id_from_seed::<sr25519::Public>("Eve//stash"),
-					get_account_id_from_seed::<sr25519::Public>("Ferdie//stash"),
-				],
-				true),
+					vec![
+						get_account_id_from_seed::<sr25519::Public>("Alice"),
+						get_account_id_from_seed::<sr25519::Public>("Bob"),
+						get_account_id_from_seed::<sr25519::Public>("Charlie"),
+						get_account_id_from_seed::<sr25519::Public>("Dave"),
+						get_account_id_from_seed::<sr25519::Public>("Eve"),
+						get_account_id_from_seed::<sr25519::Public>("Ferdie"),
+						get_account_id_from_seed::<sr25519::Public>("Alice//stash"),
+						get_account_id_from_seed::<sr25519::Public>("Bob//stash"),
+						get_account_id_from_seed::<sr25519::Public>("Charlie//stash"),
+						get_account_id_from_seed::<sr25519::Public>("Dave//stash"),
+						get_account_id_from_seed::<sr25519::Public>("Eve//stash"),
+						get_account_id_from_seed::<sr25519::Public>("Ferdie//stash"),
+					],
+					true,
+				),
 				vec![],
 				None,
 				None,
@@ -110,4 +114,11 @@ impl Alternative {
 			_ => None,
 		}
 	}
+}
+
+pub fn load_spec(id: &str) -> Result<Option<ChainSpec>, String> {
+	Ok(match Alternative::from(id) {
+		Some(spec) => Some(spec.load()?),
+		None => None,
+	})
 }
