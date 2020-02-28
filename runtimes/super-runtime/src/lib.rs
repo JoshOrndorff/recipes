@@ -307,6 +307,9 @@ impl linked_map::Trait for Runtime {
 	type Event = Event;
 }
 
+// For offchain_demo
+pub use offchain_demo;
+
 parameter_types! {
 	pub const GracePeriod: BlockNumber = 5;
 }
