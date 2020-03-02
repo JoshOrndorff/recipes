@@ -41,7 +41,7 @@ macro_rules! new_full_start {
 				let select_chain = select_chain.take()
 					.ok_or_else(|| sc_service::Error::SelectChainRequired)?;
 				let (grandpa_block_import, grandpa_link) =
-					sc_finality_grandpa::block_import::<_, _, _, runtime::RuntimeApi, _>(
+					sc_finality_grandpa::block_import(
 						client.clone(), &*client, select_chain
 					)?;
 				let justification_import = grandpa_block_import.clone();
@@ -98,10 +98,10 @@ pub fn new_full(config: Configuration<GenesisConfig>)
 		.build()?;
 
 	if participates_in_consensus {
-		let proposer = sc_basic_authorship::ProposerFactory {
-			client: service.client(),
-			transaction_pool: service.transaction_pool(),
-		};
+		let proposer = sc_basic_authorship::ProposerFactory::new(
+			service.client(),
+			service.transaction_pool(),
+		);
 
 		let client = service.client();
 		let select_chain = service.select_chain()
@@ -202,7 +202,7 @@ pub fn new_light(config: Configuration<GenesisConfig>)
 			let fetch_checker = fetcher
 				.map(|fetcher| fetcher.checker().clone())
 				.ok_or_else(|| "Trying to start light import queue without active fetch checker")?;
-			let grandpa_block_import = sc_finality_grandpa::light_block_import::<_, _, _, RuntimeApi>(
+			let grandpa_block_import = sc_finality_grandpa::light_block_import(
 				client.clone(), backend, &*client.clone(), Arc::new(fetch_checker)
 			)?;
 
