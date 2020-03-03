@@ -1,5 +1,5 @@
-// Reads in the type definitions from all pallets in the runtime, naively aggregates them,
-// and writes them to disk.
+// Reads in the type definitions from all pallets in the runtime and the runtime's own tpes
+// Naively aggregates types and writes them to disk.
 
 const fs = require('fs');
 
@@ -26,8 +26,15 @@ const pallets = [
   "vec-set",
 ]
 
+// Types that are native to the runtime itself (ie come from lib.rs)
+// These specifics are from https://polkadot.js.org/api/start/types.extend.html#impact-on-extrinsics
+const runtimeOwnTypes = {
+  "Address": "AccountId",
+  "LookupSource": "AccountId"
+}
+
 // Loop through all pallets aggregating types
-let finalTypes = {}
+let finalTypes = runtimeOwnTypes;
 let palletTypes;
 for (let dirname of pallets) {
   let path = `../../pallets/${dirname}/types.json`;

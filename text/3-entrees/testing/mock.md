@@ -54,6 +54,7 @@ mod test_events {
 impl_outer_event! {
 	pub enum TestEvent for TestRuntime {
 		test_events,
+		system<T>,
 	}
 }
 // -- End: Code setup for testing events --
@@ -128,6 +129,9 @@ impl system::Trait for TestRuntime {
 	type AvailableBlockRatio = AvailableBlockRatio;
 	type Version = ();
 	type ModuleToIndex = ();
+	type AccountData = ();
+	type OnNewAccount = ();
+	type OnKilledAccount = ();
 }
 
 // Then implement our own pallet's configuration trait for `TestRuntime`
@@ -161,14 +165,13 @@ To build the test runtime environment, import `runtime_io`
 use runtime_io;
 ```
 
-In the `Cargo.toml`, this only needs to be imported under `dev-dependencies` since it is only used in the `tests` module,
+In the `Cargo.toml`, this only needs to be imported under `dev-dependencies` since it is only used in the `tests` module. It also doesn't need to be feature gated in the `std` feature.
 
 ```
-[dev-dependencies.runtime-io]
+[dev-dependencies.sp-io]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
-package = 'sr-io'
-rev = '6ae3b6c4ddc03d4cdb10bd1d417b95d20f4c1b6e'
+tag = 'v2.0.0-alpha.3'
 ```
 
 There is more than one pattern for building a mock runtime environment for testing pallet logic. Two patterns are presented below. The latter is generally favored for reasons discussed in [custom test environment](./externalities.md)

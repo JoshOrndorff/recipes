@@ -8,10 +8,9 @@ edition = "2018"
 default = ['std']
 std = [
     'parity-scale-codec/std',
-    'support/std',
-    'system/std',
+    'frame-support/std',
+    'frame-system/std',
     'balances/std',
-    'runtime-primitives/std',
 ]
 
 [dependencies.parity-scale-codec]
@@ -19,38 +18,28 @@ default-features = false
 features = ['derive']
 version = '1.0.6'
 
-[dependencies.support]
+[dependencies.frame-support]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
-package = 'frame-support'
-rev = '3e651110aa06aa835790df63410a29676243fc54'
+tag = 'v2.0.0-alpha.3'
 
-[dependencies.system]
+[dependencies.frame-system]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
-package = 'frame-system'
-rev = '3e651110aa06aa835790df63410a29676243fc54'
+tag = 'v2.0.0-alpha.3'
 
 [dependencies.balances]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'pallet-balances'
-rev = '3e651110aa06aa835790df63410a29676243fc54'
+tag = 'v2.0.0-alpha.3'
 
-[dependencies.runtime-primitives]
+[dev-dependencies.sp-core]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
-package = 'sp-runtime'
-rev = '3e651110aa06aa835790df63410a29676243fc54'
+tag = 'v2.0.0-alpha.3'
 
-[dev-dependencies.primitives]
+[dev-dependencies.sp-io]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
-package = 'sp-core'
-rev = '3e651110aa06aa835790df63410a29676243fc54'
-
-[dev-dependencies.runtime-io]
-default_features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'sp-io'
-rev = '3e651110aa06aa835790df63410a29676243fc54'
+tag = 'v2.0.0-alpha.3'

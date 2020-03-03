@@ -1,5 +1,5 @@
 [package]
-name = "smpl-crowdfund"
+name = "simple-crowdfund"
 version = "0.1.0"
 authors = ["4meta5"]
 edition = "2018"
@@ -26,37 +26,37 @@ version = '1.0.6'
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'frame-support'
-rev = '3e651110aa06aa835790df63410a29676243fc54'
+tag = 'v2.0.0-alpha.3'
 
 [dependencies.system]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'frame-system'
-rev = '3e651110aa06aa835790df63410a29676243fc54'
+tag = 'v2.0.0-alpha.3'
 
 [dependencies.sp-storage]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
-rev = '3e651110aa06aa835790df63410a29676243fc54'
+tag = 'v2.0.0-alpha.3'
 
 [dependencies.balances]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'pallet-balances'
-rev = '3e651110aa06aa835790df63410a29676243fc54'
+tag = 'v2.0.0-alpha.3'
 
 [dependencies.sp-runtime]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
-rev = '3e651110aa06aa835790df63410a29676243fc54'
+tag = 'v2.0.0-alpha.3'
 
 [dependencies.rstd]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-std'
-rev = '3e651110aa06aa835790df63410a29676243fc54'
+tag = 'v2.0.0-alpha.3'
 
 [dependencies.sp-core]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
-rev = '3e651110aa06aa835790df63410a29676243fc54'
+tag = 'v2.0.0-alpha.3'

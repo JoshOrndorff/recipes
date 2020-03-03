@@ -22,29 +22,29 @@ version = '1.1.0'
 [dependencies.frame-support]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
-rev = '3e651110aa06aa835790df63410a29676243fc54'
+tag = 'v2.0.0-alpha.3'
 
 [dependencies.frame-system]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
-rev = '3e651110aa06aa835790df63410a29676243fc54'
+tag = 'v2.0.0-alpha.3'
 
 [dependencies.sp-runtime]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
-rev = '3e651110aa06aa835790df63410a29676243fc54'
+tag = 'v2.0.0-alpha.3'
 
 [dependencies.sp-std]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
-rev = '3e651110aa06aa835790df63410a29676243fc54'
+tag = 'v2.0.0-alpha.3'
 
 [dev-dependencies.sp-core]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
-rev = '3e651110aa06aa835790df63410a29676243fc54'
+tag = 'v2.0.0-alpha.3'
 
 [dev-dependencies.sp-io]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
-rev = '3e651110aa06aa835790df63410a29676243fc54'
+tag = 'v2.0.0-alpha.3'

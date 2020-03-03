@@ -15,10 +15,10 @@ std = [
 
 [dependencies]
 parity-scale-codec = { version = "1.1.0", features = ["derive"], default-features = false }
-frame-support = { package = "frame-support", rev = '3e651110aa06aa835790df63410a29676243fc54', git = "https://github.com/paritytech/substrate.git", default_features = false }
-system = { package = "frame-system", rev = '3e651110aa06aa835790df63410a29676243fc54', git = "https://github.com/paritytech/substrate.git", default_features = false }
-sp-runtime = { rev = '3e651110aa06aa835790df63410a29676243fc54', git = "https://github.com/paritytech/substrate.git", default_features = false }
+frame-support = { package = "frame-support", tag = 'v2.0.0-alpha.3', git = "https://github.com/paritytech/substrate.git", default_features = false }
+system = { package = "frame-system", tag = 'v2.0.0-alpha.3', git = "https://github.com/paritytech/substrate.git", default_features = false }
+sp-runtime = { tag = 'v2.0.0-alpha.3', git = "https://github.com/paritytech/substrate.git", default_features = false }
 
 [dev-dependencies]
-sp-core = { rev = '3e651110aa06aa835790df63410a29676243fc54', git = "https://github.com/paritytech/substrate.git", default_features = false }
-sp-io = { rev = '3e651110aa06aa835790df63410a29676243fc54', git = "https://github.com/paritytech/substrate.git", default_features = false }
+sp-core = { tag = 'v2.0.0-alpha.3', git = "https://github.com/paritytech/substrate.git", default_features = false }
+sp-io = { tag = 'v2.0.0-alpha.3', git = "https://github.com/paritytech/substrate.git", default_features = false }

@@ -39,6 +39,9 @@ impl system::Trait for TestRuntime {
 	type AvailableBlockRatio = AvailableBlockRatio;
 	type Version = ();
 	type ModuleToIndex = ();
+	type AccountData = ();
+	type OnNewAccount = ();
+	type OnKilledAccount = ();
 }
 
 mod storage_cache {
@@ -48,6 +51,7 @@ mod storage_cache {
 impl_outer_event! {
 	pub enum TestEvent for TestRuntime {
 		storage_cache<T>,
+		system<T>,
 	}
 }
 

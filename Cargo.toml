@@ -20,7 +20,7 @@ members = [
   "pallets/simple-event",
   "pallets/simple-map",
   "pallets/single-value",
-  #"pallets/smpl-crowdfund",
+  # "pallets/simple-crowdfund",
   # "pallets/pallet-panic",
   "pallets/storage-cache",
   "pallets/struct-storage",

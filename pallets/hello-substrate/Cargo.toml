@@ -15,17 +15,17 @@ std = [
 
 [dependencies]
 parity-scale-codec = { version = '1.0.6', features = ['derive'], default-features = false}
-frame-support = { git = 'https://github.com/paritytech/substrate.git', rev = '3e651110aa06aa835790df63410a29676243fc54', default-features = false }
-frame-system = { git = 'https://github.com/paritytech/substrate.git', rev = '3e651110aa06aa835790df63410a29676243fc54', default-features = false }
-sp-runtime = { git = 'https://github.com/paritytech/substrate.git', rev = '3e651110aa06aa835790df63410a29676243fc54', default-features = false }
+frame-support = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3', default-features = false }
+frame-system = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3', default-features = false }
+sp-runtime = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3', default-features = false }
 
 
 [dev-dependencies.sp-core]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
-rev = '3e651110aa06aa835790df63410a29676243fc54'
+tag = 'v2.0.0-alpha.3'
 
 [dev-dependencies.sp-io]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
-rev = '3e651110aa06aa835790df63410a29676243fc54'
+tag = 'v2.0.0-alpha.3'

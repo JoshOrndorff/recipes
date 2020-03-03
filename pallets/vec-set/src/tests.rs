@@ -39,6 +39,9 @@ impl system::Trait for TestRuntime {
 	type AvailableBlockRatio = AvailableBlockRatio;
 	type Version = ();
 	type ModuleToIndex = ();
+	type AccountData = ();
+	type OnNewAccount = ();
+	type OnKilledAccount = ();
 }
 
 mod vec_set {
@@ -48,6 +51,7 @@ mod vec_set {
 impl_outer_event! {
 	pub enum TestEvent for TestRuntime {
 		vec_set<T>,
+		system<T>,
 	}
 }
 

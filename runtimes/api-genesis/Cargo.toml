@@ -9,5 +9,5 @@ package = 'api-runtime'
 path = '../api-runtime'
 
 [dependencies]
-sp-consensus-aura = { git = "https://github.com/paritytech/substrate", rev = '3e651110aa06aa835790df63410a29676243fc54' }
-sp-finality-grandpa = { git = "https://github.com/paritytech/substrate", rev = '3e651110aa06aa835790df63410a29676243fc54' }
+sp-consensus-aura = { git = "https://github.com/paritytech/substrate", tag = 'v2.0.0-alpha.3' }
+sp-finality-grandpa = { git = "https://github.com/paritytech/substrate", tag = 'v2.0.0-alpha.3' }
