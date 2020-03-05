@@ -8,25 +8,26 @@ repository = "https://github.com/substrate-developer-hub/recipes/"
 
 [dependencies]
 # external dependencies
-codec = { package = "parity-scale-codec", version = "1.0.0", default-features = false }
+codec = { package = "parity-scale-codec", version = "1.0.6", default-features = false }
 serde = { version = "1.0.101", optional = true }
 serde_json = { version = "1.0.46", default-features = false, features = ["alloc"] }
+
 # Substrate dependencies
-support = { package = "frame-support", default-features = false, git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.1' }
-system = { package = "frame-system", default-features = false, git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.1' }
-sp-core = { default-features = false, git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.1' }
-sp-io = { default-features = false, git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.1' }
-sp-runtime = { default-features = false, git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.1' }
-sp-std = { default-features = false, git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.1' }
+support = { package = "frame-support", default-features = false, git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
+system = { package = "frame-system", default-features = false, git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
+sp-core = { default-features = false, git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
+sp-io = { default-features = false, git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
+sp-runtime = { default-features = false, git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
+sp-std = { default-features = false, git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
 
 [features]
 default = ['std']
 std = [
-  'codec/std',
-  'serde/std',
-  'support/std',
-  'system/std',
-  'sp-io/std',
-  'sp-runtime/std',
-  'sp-std/std'
+	'codec/std',
+	'serde/std',
+	'support/std',
+	'system/std',
+	'sp-io/std',
+	'sp-runtime/std',
+	'sp-std/std'
 ]
