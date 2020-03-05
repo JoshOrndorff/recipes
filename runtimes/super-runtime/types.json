@@ -1,4 +1,6 @@
 {
+  "Address": "AccountId",
+  "LookupSource": "AccountId",
   "GroupIndex": "u32",
   "TaskId": "Vec<u8>",
   "PriorityScore": "u32",

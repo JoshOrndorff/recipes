@@ -85,7 +85,11 @@ Printing to the terminal from a rust program is typically very simple using the 
 
 At the top of our pallet, we imported `sp_runtime`'s [`print` function](https://substrate.dev/rustdocs/master/sp_runtime/fn.print.html). This special function allows the runtime to pass a message for printing to the outer part of the node which is not built to Wasm. This function is only able to print items that implement the [`Printable` trait](https://substrate.dev/rustdocs/master/sp_runtime/traits/trait.Printable.html). Luckily all the primitive types already implement this trait, and you can implement the trait for your own datatypes too.
 
+**Print function note:** We also need to include the flag `-lruntime=debug` when running the kitchen node.
+
 The next line demonstrates using `debug::info!` macro to log to the screen and also inspecting the variable's content. The syntax inside the macro is very similar to what regular rust macro `println!` takes.
+
+**Runtime logger note:** When we execute the runtime in native, `debug::info!` messages are printed. However, if we execute the runtime in Wasm, then an additional step to initialise [RuntimeLogger](https://substrate.dev/rustdocs/master/frame_support/debug/struct.RuntimeLogger.html) is required.
 
 ## Installing the Pallet in a Runtime
 
@@ -144,4 +148,6 @@ First is a convenient name to give to this pallet. We've chosen `HelloSubstrate`
 
 ## Try it Out
 
-If you haven't already, try interacting with the pallet using the Apps UI. You should see your message printed to the log of your node. You're now well on your way to becoming a blockchain chef. Let's continue to build our skills with another appetizer.
+If you haven't already, try interacting with the pallet using the Apps UI. You should see your message printed to the log of your node. Remember to run the kitchen node with the correct flags: `./kitchen-node --dev -lruntime=debug`
+
+You're now well on your way to becoming a blockchain chef. Let's continue to build our skills with another appetizer.

@@ -7,24 +7,7 @@ const fs = require('fs');
 // Does not include system pallets because Apps already supports them.
 // Redundant with construct_runtime!
 const pallets = [
-  "adding-machine",
-  "basic-token",
-  "charity",
-  "check-membership",
-  "constant-config",
-  "default-instance",
-  "double-map",
-  "execution-schedule",
-  "generic-event",
-  "last-caller",
-  "linked-map",
-  "off-chain-workers",
-  "simple-event",
-  "simple-map",
-  "single-value",
-  "storage-cache",
-  "struct-storage",
-  "vec-set",
+  "weights",
 ]
 
 // Types that are native to the runtime itself (ie come from lib.rs)
