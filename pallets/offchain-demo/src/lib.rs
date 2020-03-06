@@ -58,6 +58,7 @@ pub trait Trait: system::Trait {
 }
 
 // Custom data type
+#[derive(Debug)]
 enum TransactionType {
 	Signed,
 	Unsigned,
@@ -70,7 +71,7 @@ decl_storage! {
 		Numbers get(fn numbers): Vec<u32>;
 
 		/// Defines the block when next unsigned transaction will be accepted.
-		NextUnsignedAt get(fn next_unsigned_at): T::BlockNumber;
+		NextTx get(fn next_tx): T::BlockNumber;
 	}
 }
 
@@ -98,6 +99,9 @@ decl_module! {
 		fn offchain_worker(block_number: T::BlockNumber) {
 			debug::native::info!("Entering off-chain workers");
 
+			let chosen = Self::choose_tx_type(block_number);
+			debug::native::info!("block: {} | chosen: {:?}", block_number, chosen);
+
 			let res = match Self::choose_tx_type(block_number) {
 				TransactionType::Signed => Self::send_signed(block_number),
 				// Transaction::Unsigned => Self::send_unsigned(block_number),
@@ -113,7 +117,7 @@ decl_module! {
 impl<T: Trait> Module<T> {
 	/// Add new price to the list.
 	fn append_or_replace_number(who: T::AccountId, number: u32) -> DispatchResult {
-		debug::info!("Adding to the average: {}", number);
+		debug::native::info!("Adding to the average: {}", number);
 
 		Numbers::mutate(|numbers| {
 			if numbers.len() < NUM_VEC_LEN {
@@ -127,27 +131,24 @@ impl<T: Trait> Module<T> {
 		let average = 1234;
 		debug::info!("Current average of numbers is: {}", average);
 
+		// Update the storage for next update block
+		<NextTx<T>>::mutate(|block| *block + T::GracePeriod::get());
+
 		// Raise the NewPrice event
 		Self::deposit_event(RawEvent::NewNumber(number, who));
 		Ok(())
 	}
 
 	fn choose_tx_type(block_number: T::BlockNumber) -> TransactionType {
-		const RECENTLY_SENT: () = ();
+		let next_tx = Self::next_tx();
 
-		let val = StorageValueRef::persistent(b"example_ocw::last_sent");
+		// Do not perform transaction if still within grace period
+		if next_tx + T::GracePeriod::get() > block_number { return TransactionType::None; }
 
-		let res = val.mutate(|last_sent: Option<Option<T::BlockNumber>>| {
-			match last_sent {
-				Some(Some(block)) if block + T::GracePeriod::get() < block_number => Err(RECENTLY_SENT),
-				_ => Ok(block_number),
-			}
-		});
-
-		match res {
-			Ok(Ok(block_number)) => if block_number % 2.into() == Zero::zero() { TransactionType::Signed } else { TransactionType::Unsigned },
-			Err(RECENTLY_SENT) => TransactionType::None,
-			Ok(Err(_)) => TransactionType::None,
+		if block_number % 2.into() == Zero::zero() {
+			TransactionType::Signed
+		} else {
+			TransactionType::Unsigned
 		}
 	}
 

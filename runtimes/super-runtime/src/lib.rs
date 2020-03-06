@@ -312,7 +312,7 @@ impl linked_map::Trait for Runtime {
 // For offchain_demo
 
 parameter_types! {
-	pub const GracePeriod: BlockNumber = 5;
+	pub const GracePeriod: BlockNumber = 3;
 }
 
 type SubmitTransaction = system::offchain::TransactionSubmitter<
