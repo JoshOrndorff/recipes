@@ -5516,6 +5516,7 @@ dependencies = [
  "hello-substrate 0.1.0",
  "last-caller 0.1.0",
  "linked-map 0.1.0",
+ "offchain-demo 0.1.0",
  "pallet-babe 2.0.0-alpha.3 (git+https://github.com/paritytech/substrate.git?tag=v2.0.0-alpha.3)",
  "pallet-balances 2.0.0-alpha.3 (git+https://github.com/paritytech/substrate.git?tag=v2.0.0-alpha.3)",
  "pallet-grandpa 2.0.0-alpha.3 (git+https://github.com/paritytech/substrate.git?tag=v2.0.0-alpha.3)",

@@ -79,6 +79,7 @@ pub fn new_full(config: Configuration<GenesisConfig>)
 	let force_authoring = config.force_authoring;
 	let name = config.name.clone();
 	let disable_grandpa = config.disable_grandpa;
+	let dev_seed = config.dev_key_seed.clone();
 
 	// sentry nodes announce themselves as authorities to the network
 	// and should run the same protocols authorities do, but it should
@@ -96,6 +97,18 @@ pub fn new_full(config: Configuration<GenesisConfig>)
 			Ok(Arc::new(GrandpaFinalityProofProvider::new(backend, client)) as _)
 		)?
 		.build()?;
+
+	// Initialize seed for signing transaction using off-chain workers
+	if let Some(seed) = dev_seed {
+		service
+			.keystore()
+			.write()
+			.insert_ephemeral_from_seed_by_type::<runtime::offchain_demo::crypto::Pair>(
+				&seed,
+				runtime::offchain_demo::KEY_TYPE,
+			)
+			.expect("Dev Seed should always succeed.");
+	}
 
 	if participates_in_consensus {
 		let proposer = sc_basic_authorship::ProposerFactory::new(

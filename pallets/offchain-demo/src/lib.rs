@@ -52,8 +52,8 @@ pub trait Trait: system::Trait {
 	type SubmitSignedTransaction:
 		offchain::SubmitSignedTransaction<Self, <Self as Trait>::Call>;
 	/// The type to submit unsigned transactions.
-	type SubmitUnsignedTransaction:
-		offchain::SubmitUnsignedTransaction<Self, <Self as Trait>::Call>;
+	// type SubmitUnsignedTransaction:
+	// 	offchain::SubmitUnsignedTransaction<Self, <Self as Trait>::Call>;
 	type GracePeriod: Get<Self::BlockNumber>;
 }
 
