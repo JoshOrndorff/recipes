@@ -91,6 +91,7 @@ decl_module! {
 
 		#[weight = SimpleDispatchInfo::FixedNormal(10_000)]
 		pub fn submit_number(origin, number: u32) -> DispatchResult {
+			debug::native::info!("submit_number: {:?}", number);
 			let who = ensure_signed(origin)?;
 			Self::append_or_replace_number(who, number)
 		}
@@ -98,17 +99,13 @@ decl_module! {
 		fn offchain_worker(block_number: T::BlockNumber) {
 			debug::native::info!("Entering off-chain workers");
 
-			let chosen = Self::choose_tx_type(block_number);
-			debug::native::info!("off-chain tx type: {:?}", chosen);
-
 			let res = match Self::choose_tx_type(block_number) {
 				TransactionType::Signed => Self::send_signed(block_number),
-				// Transaction::Unsigned => Self::send_unsigned(block_number),
-				TransactionType::Unsigned => Ok(()),
+				TransactionType::Unsigned => Self::send_unsigned(block_number),
 				TransactionType::None => Ok(())
 			};
 
-			if let Err(e) = res { debug::error!("Error: {}", e); }
+			if let Err(e) = res { debug::native::error!("Error: {}", e); }
 		}
 	}
 }
@@ -118,12 +115,17 @@ impl<T: Trait> Module<T> {
 	fn append_or_replace_number(who: T::AccountId, number: u32) -> DispatchResult {
 		let current_seq = Self::add_seq();
 		Numbers::mutate(|numbers| {
-			numbers[current_seq as usize % NUM_VEC_LEN] = number;
+			if (current_seq as usize) < NUM_VEC_LEN {
+				numbers.push(number);
+			} else {
+				numbers[current_seq as usize % NUM_VEC_LEN] = number;
+			}
+
+			// displaying the average
+			let average = numbers.iter().fold(0, {|acc, num| acc + num}) / (numbers.len() as u32);
+			debug::native::info!("Current average of numbers is: {}", average);
 		});
 
-		// TODO: work on averaging
-		let average = 1234.0;
-		debug::info!("Current average of numbers is: {}", average);
 
 		// Update the storage & seq for next update block
 		<NextTx<T>>::mutate(|block| *block += T::GracePeriod::get());
@@ -138,6 +140,7 @@ impl<T: Trait> Module<T> {
 		let next_tx = Self::next_tx();
 		// Do not perform transaction if still within grace period
 		if next_tx > block_number { return TransactionType::None; }
+
 		if Self::add_seq() % 2 == 0 {
 			TransactionType::Signed
 		} else {
@@ -161,14 +164,15 @@ impl<T: Trait> Module<T> {
 		let results = T::SubmitSignedTransaction::submit_signed(call);
 		for (acc, res) in &results {
 			match res {
-				Ok(()) => { debug::native::info!("[{:?}] send_signed: {}", acc, submission); },
-				Err(e) => { debug::error!("[{:?}] Failed to submit transaction: {:?}", acc, e); }
+				Ok(()) => { debug::native::info!("[{:?}] off-chain send_signed: {}", acc, submission); },
+				Err(e) => { debug::native::error!("[{:?}] Failed to submit transaction: {:?}", acc, e); }
 			};
 		}
 		Ok(())
 	}
 
 	fn send_unsigned(block_number: T::BlockNumber) -> Result<(), &'static str> {
+		debug::native::info!("off-chain send_unsigned: {}", block_number);
 		Ok(())
 	}
 }
