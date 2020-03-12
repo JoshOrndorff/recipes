@@ -37,6 +37,7 @@ pub use support::{
 	StorageValue, construct_runtime, parameter_types,
 	traits::Randomness,
 	weights::Weight,
+	debug,
 };
 
 /// An index to a block.
@@ -312,7 +313,7 @@ impl linked_map::Trait for Runtime {
 // For offchain_demo
 
 parameter_types! {
-	pub const GracePeriod: BlockNumber = 3;
+	pub const GracePeriod: BlockNumber = 2;
 }
 
 type SubmitTransaction = system::offchain::TransactionSubmitter<
@@ -338,8 +339,13 @@ impl system::offchain::CreateTransaction<Runtime, UncheckedExtrinsic> for Runtim
 		account: AccountId,
 		index: Index,
 	) -> Option<(Call, <UncheckedExtrinsic as sp_runtime::traits::Extrinsic>::SignaturePayload)> {
-		let period = 1 << 8;
-		let current_block = System::block_number().saturated_into::<u64>();
+		// take the biggest period possible.
+		let period = BlockHashCount::get()
+			.checked_next_power_of_two()
+			.map(|c| c / 2)
+			.unwrap_or(2) as u64;
+		let current_block = System::block_number()
+			.saturated_into::<u64>().saturating_sub(1);
 		let tip = 0;
 		let extra: SignedExtra = (
 			system::CheckVersion::<Runtime>::new(),
@@ -349,11 +355,12 @@ impl system::offchain::CreateTransaction<Runtime, UncheckedExtrinsic> for Runtim
 			system::CheckWeight::<Runtime>::new(),
 			transaction_payment::ChargeTransactionPayment::<Runtime>::from(tip),
 		);
-		let raw_payload = SignedPayload::new(call, extra).ok()?;
-		let signature = TSigner::sign(public, &raw_payload)?;
 
-		// TODO: possible error
-		//   something about IdentifyAccount also
+		let raw_payload = SignedPayload::new(call, extra).map_err(|e| {
+			debug::native::warn!("SignedPayload error: {:?}", e);
+		}).ok()?;
+
+		let signature = TSigner::sign(public, &raw_payload)?;
 		let address = account;
 		let (call, extra, _) = raw_payload.deconstruct();
 		Some((call, (address, signature, extra)))
