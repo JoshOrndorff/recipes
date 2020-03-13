@@ -5,7 +5,7 @@ mod tests;
 
 use support::{
 	debug,
-	dispatch::DispatchResult, decl_module, decl_storage, decl_event,
+	dispatch::DispatchResult, decl_module, decl_storage, decl_event, decl_error,
 	traits::Get,
 	weights::SimpleDispatchInfo,
 };
@@ -17,7 +17,6 @@ use system::{self as system, ensure_signed, ensure_none, offchain};
 use sp_core::crypto::KeyTypeId;
 use sp_runtime::{
 	offchain::{http},
-	traits::Zero,
 	transaction_validity::{InvalidTransaction, ValidTransaction, TransactionValidity},
 };
 use sp_std::prelude::*;
@@ -84,8 +83,14 @@ decl_event!(
 	}
 );
 
-decl_module! {
+decl_error! {
+	pub enum Error for Module<T: Trait> {
+		SendSignedError,
+		SendUnsignedError
+	}
+}
 
+decl_module! {
 	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
 		fn deposit_event() = default;
 
@@ -112,7 +117,7 @@ decl_module! {
 				TransactionType::None => Ok(())
 			};
 
-			if let Err(e) = res { debug::native::error!("Error: {}", e); }
+			if let Err(e) = res { debug::native::error!("Error: {:?}", e); }
 		}
 	}
 }
@@ -155,10 +160,11 @@ impl<T: Trait> Module<T> {
 		}
 	}
 
-	fn send_signed(block_number: T::BlockNumber) -> Result<(), &'static str> {
+	fn send_signed(block_number: T::BlockNumber) -> Result<(), Error<T>> {
 		use system::offchain::SubmitSignedTransaction;
 		if !T::SubmitSignedTransaction::can_sign() {
-			return Err("No local account available");
+			debug::native::error!("No local account available");
+			return Err(<Error<T>>::SendSignedError);
 		}
 
 		let submission: u32 = block_number.try_into().ok().unwrap() as u32;
@@ -172,13 +178,16 @@ impl<T: Trait> Module<T> {
 		for (acc, res) in &results {
 			match res {
 				Ok(()) => { debug::native::info!("off-chain send_signed: acc: {}| number: {}", acc, submission); },
-				Err(e) => { debug::native::error!("[{:?}] Failed to submit signed tx: {:?}", acc, e); }
+				Err(e) => {
+					debug::native::error!("[{:?}] Failed to submit signed tx: {:?}", acc, e);
+					return Err(<Error<T>>::SendSignedError);
+				}
 			};
 		}
 		Ok(())
 	}
 
-	fn send_unsigned(block_number: T::BlockNumber) -> Result<(), &'static str> {
+	fn send_unsigned(block_number: T::BlockNumber) -> Result<(), Error<T>> {
 		use system::offchain::SubmitUnsignedTransaction;
 
 		let submission: u32 = block_number.try_into().ok().unwrap() as u32;
@@ -186,7 +195,7 @@ impl<T: Trait> Module<T> {
 
 		T::SubmitUnsignedTransaction::submit_unsigned(call).map_err(|e| {
 			debug::native::error!("Failed to submit unsigned tx: {:?}", e);
-			"Unable to submit unsigned transaction".into()
+			<Error<T>>::SendUnsignedError
 		})
 	}
 }
