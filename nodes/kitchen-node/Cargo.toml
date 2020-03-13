@@ -23,6 +23,7 @@ codec = { package = "parity-scale-codec", version = "1.0.0" }
 trie-root = "0.15.2"
 sp-io = { git = 'https://github.com/paritytech/substrate.git', rev = 'ba5c85add52897acbd98f382ae11f7a11583e322' }
 sc-cli = { git = 'https://github.com/paritytech/substrate.git', rev = 'ba5c85add52897acbd98f382ae11f7a11583e322' }
+sc-client-api = { git = 'https://github.com/paritytech/substrate.git', rev = 'ba5c85add52897acbd98f382ae11f7a11583e322' }
 sp-core = { git = 'https://github.com/paritytech/substrate.git', rev = 'ba5c85add52897acbd98f382ae11f7a11583e322' }
 sp-runtime = { git = 'https://github.com/paritytech/substrate.git', rev = 'ba5c85add52897acbd98f382ae11f7a11583e322' }
 sc-executor = { git = 'https://github.com/paritytech/substrate.git', rev = 'ba5c85add52897acbd98f382ae11f7a11583e322' }

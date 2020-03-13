@@ -2077,6 +2077,7 @@ dependencies = [
  "sc-basic-authorship",
  "sc-cli",
  "sc-client",
+ "sc-client-api",
  "sc-consensus-babe",
  "sc-executor",
  "sc-finality-grandpa",
