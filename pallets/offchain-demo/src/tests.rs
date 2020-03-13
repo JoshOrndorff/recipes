@@ -1,12 +1,21 @@
 use crate::*;
-
-use codec::Decode;
+use parking_lot::{RwLock};
+use codec::{
+	Decode,
+	alloc::sync::{Arc}
+};
 use support::{
 	assert_ok, impl_outer_event, impl_outer_origin, parameter_types,
-	weights::{GetDispatchInfo, Weight},
 };
 use sp_io::TestExternalities;
-use sp_core::{H256, sr25519};
+use sp_core::{
+	H256, sr25519,
+	offchain::{OffchainExt, TransactionPoolExt,
+		testing::{self, PoolState, OffchainState},
+	},
+	testing::KeyStore,
+	traits::KeystoreExt,
+};
 use sp_runtime::{
 	testing::{Header, TestXt},
 	traits::{BlakeTwo256, IdentityLookup},
@@ -100,19 +109,37 @@ pub type OffchainDemo = Module<TestRuntime>;
 pub struct ExtBuilder;
 
 impl ExtBuilder {
-	pub fn build() -> TestExternalities {
+	pub fn build() -> (TestExternalities, Arc<RwLock<PoolState>>, Arc<RwLock<OffchainState>>) {
+		const PHRASE: &str = "expire stage crawl shell boss any story swamp skull yellow bamboo copy";
+
+		let (offchain, offchain_state) = testing::TestOffchainExt::new();
+		let (pool, pool_state) = testing::TestTransactionPoolExt::new();
+		let keystore = KeyStore::new();
+		keystore.write().sr25519_generate_new(
+			KEY_TYPE,
+			Some(&format!("{}/hunter1", PHRASE))
+		).unwrap();
+
 		let storage = system::GenesisConfig::default()
 			.build_storage::<TestRuntime>()
 			.unwrap();
-		TestExternalities::from(storage)
+
+		let mut t = TestExternalities::from(storage);
+		t.register_extension(OffchainExt::new(offchain));
+		t.register_extension(TransactionPoolExt::new(pool));
+		t.register_extension(KeystoreExt(keystore));
+
+		(t, pool_state, offchain_state)
 	}
 }
 
 #[test]
 fn submit_number_signed_works() {
-	ExtBuilder::build().execute_with(|| {
+	let (mut t, _, _) = ExtBuilder::build();
+	t.execute_with(|| {
 		// call submit_number_signed
 		let num = 32;
+		let num2 = num * 2;
 		let acct: <TestRuntime as system::Trait>::AccountId = Default::default();
 		assert_ok!(OffchainDemo::submit_number_signed(Origin::signed(acct), num));
 		// A number is inserted to <Numbers> vec
@@ -124,15 +151,49 @@ fn submit_number_signed_works() {
 		// An event is emitted
 		assert!(System::events().iter().any(|er| er.event ==
 			TestEvent::offchain_demo(RawEvent::NewNumber(Some(acct), num))));
-	})
+
+		// Insert another number
+		let num2 = num * 2;
+		assert_ok!(OffchainDemo::submit_number_signed(Origin::signed(acct), num2));
+		// A number is inserted to <Numbers> vec
+		assert_eq!(<Numbers>::get(), vec![num, num2]);
+		// storage <NextTx> is incremented
+		assert_eq!(<NextTx<TestRuntime>>::get(), <TestRuntime as Trait>::GracePeriod::get() * 2);
+		// AddSeq is incremented
+		assert_eq!(<AddSeq>::get(), 2);
+	});
 }
 
 #[test]
 fn offchain_send_signed_tx() {
+	let (mut t, pool_state, offchain_state) = ExtBuilder::build();
 
+	t.execute_with(|| {
+		// when
+		let num = 32;
+		OffchainDemo::send_signed(num).unwrap();
+		// then
+		let tx = pool_state.write().transactions.pop().unwrap();
+		assert!(pool_state.read().transactions.is_empty());
+		let tx = TestExtrinsic::decode(&mut &*tx).unwrap();
+		assert_eq!(tx.signature.unwrap().0, 0);
+		assert_eq!(tx.call, Call::submit_number_signed(num));
+	});
 }
 
 #[test]
 fn offchain_send_unsigned_tx() {
+	let (mut t, pool_state, offchain_state) = ExtBuilder::build();
 
+	t.execute_with(|| {
+		// when
+		let num = 32;
+		OffchainDemo::send_unsigned(num).unwrap();
+		// then
+		let tx = pool_state.write().transactions.pop().unwrap();
+		assert!(pool_state.read().transactions.is_empty());
+		let tx = TestExtrinsic::decode(&mut &*tx).unwrap();
+		assert_eq!(tx.signature, None);
+		assert_eq!(tx.call, Call::submit_number_unsigned(num, num));
+	});
 }
