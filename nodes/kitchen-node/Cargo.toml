@@ -21,23 +21,23 @@ exit-future = "0.2.0"
 parking_lot = "0.9.0"
 codec = { package = "parity-scale-codec", version = "1.0.0" }
 trie-root = "0.15.2"
-sp-io = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
-sc-cli = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
-sp-core = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
-sp-runtime = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
-sc-executor = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
-sc-service = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
-sp-inherents = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
-sc-transaction-pool = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
-sp-transaction-pool = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
-sc-network = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
-sc-consensus-babe = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
-sp-consensus-babe = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
-sc-finality-grandpa = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
-sp-finality-grandpa = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
-sc-client = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
-sc-basic-authorship = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
-sp-consensus = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
+sp-io = { git = 'https://github.com/paritytech/substrate.git', rev = 'ba5c85add52897acbd98f382ae11f7a11583e322' }
+sc-cli = { git = 'https://github.com/paritytech/substrate.git', rev = 'ba5c85add52897acbd98f382ae11f7a11583e322' }
+sp-core = { git = 'https://github.com/paritytech/substrate.git', rev = 'ba5c85add52897acbd98f382ae11f7a11583e322' }
+sp-runtime = { git = 'https://github.com/paritytech/substrate.git', rev = 'ba5c85add52897acbd98f382ae11f7a11583e322' }
+sc-executor = { git = 'https://github.com/paritytech/substrate.git', rev = 'ba5c85add52897acbd98f382ae11f7a11583e322' }
+sc-service = { git = 'https://github.com/paritytech/substrate.git', rev = 'ba5c85add52897acbd98f382ae11f7a11583e322' }
+sp-inherents = { git = 'https://github.com/paritytech/substrate.git', rev = 'ba5c85add52897acbd98f382ae11f7a11583e322' }
+sc-transaction-pool = { git = 'https://github.com/paritytech/substrate.git', rev = 'ba5c85add52897acbd98f382ae11f7a11583e322' }
+sp-transaction-pool = { git = 'https://github.com/paritytech/substrate.git', rev = 'ba5c85add52897acbd98f382ae11f7a11583e322' }
+sc-network = { git = 'https://github.com/paritytech/substrate.git', rev = 'ba5c85add52897acbd98f382ae11f7a11583e322' }
+sc-consensus-babe = { git = 'https://github.com/paritytech/substrate.git', rev = 'ba5c85add52897acbd98f382ae11f7a11583e322' }
+sp-consensus-babe = { git = 'https://github.com/paritytech/substrate.git', rev = 'ba5c85add52897acbd98f382ae11f7a11583e322' }
+sc-finality-grandpa = { git = 'https://github.com/paritytech/substrate.git', rev = 'ba5c85add52897acbd98f382ae11f7a11583e322' }
+sp-finality-grandpa = { git = 'https://github.com/paritytech/substrate.git', rev = 'ba5c85add52897acbd98f382ae11f7a11583e322' }
+sc-client = { git = 'https://github.com/paritytech/substrate.git', rev = 'ba5c85add52897acbd98f382ae11f7a11583e322' }
+sc-basic-authorship = { git = 'https://github.com/paritytech/substrate.git', rev = 'ba5c85add52897acbd98f382ae11f7a11583e322' }
+sp-consensus = { git = 'https://github.com/paritytech/substrate.git', rev = 'ba5c85add52897acbd98f382ae11f7a11583e322' }
 
 # Edit these lines to point to a different runtime.
 # Your runtime must have the necessary pallets to support consensus (Babe, Grandpa, etc)
