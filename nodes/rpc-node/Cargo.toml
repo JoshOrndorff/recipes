@@ -22,6 +22,7 @@ jsonrpc-core = "14.0.3"
 jsonrpc-core-client = "14.0.3"
 jsonrpc-derive = "14.0.3"
 sc-rpc = { git = 'https://github.com/paritytech/substrate.git', rev = 'ba5c85add52897acbd98f382ae11f7a11583e322' }
+sc-client-api = { git = 'https://github.com/paritytech/substrate.git', rev = 'ba5c85add52897acbd98f382ae11f7a11583e322' }
 sum-storage-rpc = { path = "../../pallets/sum-storage/rpc" }
 
 [dependencies.codec]
