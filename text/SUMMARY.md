@@ -26,6 +26,7 @@
 	- [Charity and Imbalances](./3-entrees/charity.md)
 	- [Runtime APIs](./3-entrees/runtime-api.md)
 	- [Custom RPCs](./3-entrees/custom-rpc.md)
+	- [Simple Proof of Work](./3-entrees/basic-pow.md)
 	- [Currency Types](./3-entrees/currency.md)
 	- [Generating Randomness](./3-entrees/random.md)
 	- [Execution Schedule](./3-entrees/execution-schedule.md)
