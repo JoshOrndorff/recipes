@@ -326,6 +326,7 @@ impl offchain_demo::Trait for Runtime {
 	type Call = Call;
 	type Event = Event;
 	type SubmitSignedTransaction = SubmitTransaction;
+	type SubmitUnsignedTransaction = SubmitTransaction;
 	type GracePeriod = GracePeriod;
 }
 
@@ -420,7 +421,7 @@ construct_runtime!(
 		LastCaller1: last_caller::<Instance1>::{Module, Call, Storage, Event<T>},
 		LastCaller2: last_caller::<Instance2>::{Module, Call, Storage, Event<T>},
 		LinkedMap: linked_map::{Module, Call, Storage, Event<T>},
-		OffchainDemo: offchain_demo::{Module, Call, Storage, Event<T>},
+		OffchainDemo: offchain_demo::{Module, Call, Storage, Event<T>, ValidateUnsigned},
 		SimpleEvent: simple_event::{Module, Call, Event},
 		SimpleMap: simple_map::{Module, Call, Storage, Event<T>},
 		SingleValue: single_value::{Module, Call, Storage},
