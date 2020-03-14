@@ -74,7 +74,6 @@ macro_rules! new_full_start {
 pub fn new_full(config: Configuration<GenesisConfig>)
 	-> Result<impl AbstractService, ServiceError>
 {
-
 	let is_authority = config.roles.is_authority();
 	let force_authoring = config.force_authoring;
 	let name = config.name.clone();
