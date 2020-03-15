@@ -45,7 +45,6 @@ pub trait Trait: system::Trait {
 	type Call: From<Call<Self>>;
 	/// The overarching event type.
 	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
-
 	/// The type to sign and submit transactions.
 	type SubmitSignedTransaction:
 		offchain::SubmitSignedTransaction<Self, <Self as Trait>::Call>;
@@ -200,7 +199,6 @@ impl<T: Trait> Module<T> {
 	}
 }
 
-#[allow(deprecated)] // ValidateUnsigned
 impl<T: Trait> support::unsigned::ValidateUnsigned for Module<T> {
 	type Call = Call<T>;
 

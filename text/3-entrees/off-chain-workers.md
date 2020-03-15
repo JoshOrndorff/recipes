@@ -140,7 +140,7 @@ pub type SignedExtra = (
 );
 ```
 
-Basically, we sign the call and extra (also called signed extension). Finally the actual call, sender, the data, and its signature are sent on-chain to be run.
+Basically, we sign the `call` and `extra` (also called signed extension). Finally the actual call, sender, the data, and its signature are sent on-chain to be run.
 
 ### Sending Signed Transactions
 
@@ -210,7 +210,113 @@ pub fn new_full(config: Configuration<GenesisConfig>)
 
 ### Setup
 
+For unsigned transactions, you would see we have the equivalent setup in the pallet configrable trait.
+
+src: [pallets/offchain-demo/src/lib.rs](TK)
+
+```rust
+pub trait Trait: system::Trait {
+	/// The overarching dispatch call type.
+	type Call: From<Call<Self>>;
+	/// The overarching event type.
+	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
+	/// The type to submit unsigned transactions.
+	type SubmitUnsignedTransaction:
+		offchain::SubmitUnsignedTransaction<Self, <Self as Trait>::Call>;
+	// ...snip
+}
+```
+
+By default, unsigned transactions are rejected by Substrate runtime unless they are explcitly allowed. So we need to write additional logics to allow unsigned transactions for that particular dispatched function, as follows:
+
+```rust
+impl<T: Trait> support::unsigned::ValidateUnsigned for Module<T> {
+	type Call = Call<T>;
+
+	fn validate_unsigned(call: &Self::Call) -> TransactionValidity {
+		if let Call::submit_number_unsigned(block_num, number) = call {
+			debug::native::info!("off-chain send_unsigned: block_num: {}| number: {}", block_num, number);
+
+			Ok(ValidTransaction {
+				priority: 1 << 20,
+				requires: vec![],
+				provides: vec![codec::Encode::encode(&(KEY_TYPE.0, block_num))],
+				longevity: 3,
+				propagate: false,
+			})
+		} else {
+			InvalidTransaction::Call.into()
+		}
+	}
+}
+```
+
+We implement `ValidateUnsigned`, and the allowance logic is added in the `fn validate_unsigned()` function. We check if the call is to `Call::submit_number_unsigned`, it returns an `Ok()`. Otherwise, `InvalidTransaction::Call`.
+
+The `ValidTransaction` object has a few fields touches on concept we have not talked about before.
+
+- `priority`: it determines the ordering of two transactions given their dependencies are satisfied.
+- `requires`: list of other tags that this transaction depends on.
+- `provides`: list of tags provided by this transaction. Successfully importing the transaction will enable other transactions that depend on those tags to be included as well. Provided and required tags allow Substrate to build a dependency graph of transactions and import them in the right order.
+- `longevity`: Transaction longevity, which describes minimum number of blocks the validity is correct. After this period transaction should be removed from the pool or revalidated.
+- `propagate`: A flag indicating if the transaction should be propagated to other peers. By setting false the transaction will still be considered for including in blocks that are authored on the current node, but will never be sent to other peers.
+
+Third, we specify the associated type of `SubmitUnsignedTransaction` in runtime setup.
+
+src: [runtimes/super-runtime/src/lib.rs](TK)
+
+```rust
+type SubmitTransaction = system::offchain::TransactionSubmitter<
+	offchain_demo::crypto::Public,
+	Runtime,
+	UncheckedExtrinsic
+>;
+
+impl offchain_demo::Trait for Runtime {
+	//...snip
+	type SubmitUnsignedTransaction = SubmitTransaction;
+}
+```
+
+Finally, to tell the runtime you have your own `ValidateUnsigned` logic, you also need to pass this as a parameter when contructing the runtime.
+
+src: [runtimes/super-runtime/src/lib.rs](TK)
+
+```rust
+construct_runtime!(
+	pub enum Runtime where
+		Block = Block,
+		NodeBlock = opaque::Block,
+		UncheckedExtrinsic = UncheckedExtrinsic
+	{
+		//...snip
+		OffchainDemo: offchain_demo::{Module, Call, Storage, Event<T>, ValidateUnsigned},
+	}
+);
+```
+
 ### Sending Unsigned Transactions
+
+You can then make an unsigned transaction from offchain worker with `T::SubmitUnsignedTransaction::submit_unsigned()`, as shown in the code.
+
+src: [pallets/offchain-demo/src/lib.rs](TK)
+
+```rust
+fn send_unsigned(block_number: T::BlockNumber) -> Result<(), Error<T>> {
+	use system::offchain::SubmitUnsignedTransaction;
+
+	let submission: u64 = block_number.try_into().ok().unwrap() as u64;
+	// the `block_number` param should be unique within each block generation phase
+	let call = Call::submit_number_unsigned(block_number, submission);
+
+	T::SubmitUnsignedTransaction::submit_unsigned(call).map_err(|e| {
+		debug::native::error!("Failed to submit unsigned tx: {:?}", e);
+		<Error<T>>::SendUnsignedError
+	})
+}
+```
+
+You still prepare a function reference with its parameters, as needed for signed transaction, and then call `T::SubmitUnsignedTransaction::submit_unsigned()`.
 
 ## Off-chain HTTP Requests
 
@@ -222,4 +328,4 @@ pub fn new_full(config: Configuration<GenesisConfig>)
 
 ## Testing
 
-[TODO] Refer to testing
+Now for writing test cases to test off-chain worker, refer to our [testing section](TK).
