@@ -17,7 +17,7 @@ decl_storage! {
 
 The code above is boilerplate that does not change with the exception of the `SingleValue`. The macro uses this as the name for a struct that it creates. As a pallet author you don't need to worry about this value much, and it is fine to use the name of the pallet itself.
 
-This pallet has two storage items, both of which are single storage values. Substrate's storage API also supports more complex storage types which are [covered in the entrees](../3-entrees/storage-api/README.md). The fundamentals for all types are the same.
+This pallet has two storage items, both of which are single storage values. Substrate's storage API also supports more complex storage types which are [covered in the entrees](../3-entrees/storage-api/index.html). The fundamentals for all types are the same.
 
 Our first storage item is a `u32` value which is declared with this syntax
 ```rust, ignore
