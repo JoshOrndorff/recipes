@@ -46,11 +46,9 @@ pub trait Trait: system::Trait {
 	/// The overarching event type.
 	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
 	/// The type to sign and submit transactions.
-	type SubmitSignedTransaction:
-		offchain::SubmitSignedTransaction<Self, <Self as Trait>::Call>;
+	type SubmitSignedTransaction: offchain::SubmitSignedTransaction<Self, <Self as Trait>::Call>;
 	/// The type to submit unsigned transactions.
-	type SubmitUnsignedTransaction:
-		offchain::SubmitUnsignedTransaction<Self, <Self as Trait>::Call>;
+	type SubmitUnsignedTransaction: offchain::SubmitUnsignedTransaction<Self, <Self as Trait>::Call>;
 	type GracePeriod: Get<Self::BlockNumber>;
 }
 

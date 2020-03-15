@@ -1,12 +1,14 @@
-# Mock Runtime Setup
+# Off-chain Worker Test Environment
 
-In addition to everything we need to do to setup [Basic Test Environment](./mock.md), we also need to have extra setup details below.
+Learn more about how to setup and use offchain-worker in [this entree](../off-chain-workers.md).
 
-Refer to our [offchain-demo test](TK), the additional associated type wt need to define is the `SubmitTransaction` associated type, and have our runtime implements the `CreateTransaction` trait.
+## Mock Runtime Setup
 
-So we have the following code:
+In addition to everything we need to setup in [Basic Test Environment](./mock.md), we also need to setup the mock for `SubmitTransaction`, and implement `CreateTransaction` trait for the runtime.
 
-src: [pallets/offchain-demo/src/tests.rs](TK)
+Refer to our [offchain-demo test](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/test.rs).
+
+src: [`pallets/offchain-demo/src/tests.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/test.rs)
 
 ```rust
 type TestExtrinsic = TestXt<Call<TestRuntime>, ()>;
@@ -40,13 +42,11 @@ impl system::offchain::CreateTransaction<TestRuntime, TestExtrinsic> for TestRun
 }
 ```
 
-# Testing on Off-chain Worker
-
 ## Getting the Transaction Pool and Off-chain State
 
-When writing test cases, we usually need to look into the transaction pool and current off-chain state. This is how we build up and retrieve them, shown in our offchain-demo test.
+When writing test cases for off-chain workers, we need to look into the transaction pool and current off-chain state to ensure a certain transaction has made its way, and passed with the right parameters and signature. This is how we build them up for our mock runtime:
 
-src: [pallets/offchain-demo/src/tests.rs](TK)
+src: [`pallets/offchain-demo/src/tests.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/test.rs)
 
 ```rust
 pub struct ExtBuilder;
@@ -55,7 +55,7 @@ impl ExtBuilder {
 	pub fn build() -> (TestExternalities, Arc<RwLock<PoolState>>, Arc<RwLock<OffchainState>>) {
 		const PHRASE: &str = "expire stage crawl shell boss any story swamp skull yellow bamboo copy";
 
-		// getting the transaction pool and off-chain state. Return them for future inspection.
+		// Getting the transaction pool and off-chain state. Return them for future inspection.
 		let (offchain, offchain_state) = testing::TestOffchainExt::new();
 		let (pool, pool_state) = testing::TestTransactionPoolExt::new();
 
@@ -66,7 +66,7 @@ impl ExtBuilder {
 			Some(&format!("{}/hunter1", PHRASE))
 		).unwrap();
 
-		// initialize our genesis config
+		// Initialize our genesis config
 		let storage = system::GenesisConfig::default()
 			.build_storage::<TestRuntime>()
 			.unwrap();
@@ -83,13 +83,13 @@ impl ExtBuilder {
 }
 ```
 
-## Testing in Off-chain Worker
+## Testing Off-chain Worker
 
-When we write tests on off-chain worker, we should test only what our off-chain workers do. For example, when our off-chain worker eventually will make a signed transaction to dispatched function A, which does B, C, and D. We write our test for off-chain worker to test if function A is eventually dispatched. But whether function A actually does B, C, and D, it should be tested separately in another test case.
+When we write tests for off-chain worker, we should test only what our off-chain worker do. For example, when our off-chain worker eventually will make a signed transaction to dispatched function A, which does B, C, and D. We write our test for off-chain worker to test only if function A is dispatched. But whether function A actually does B, C, and D, it should be tested separately in another test case. This way we keep our test more robust.
 
-This is what happen exactly in our test cases.
+This is how we write our test cases.
 
-src: [pallets/offchain-demo/src/tests.rs](TK)
+src: [`pallets/offchain-demo/src/tests.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/test.rs)
 
 ```rust
 #[test]
@@ -101,10 +101,15 @@ fn offchain_send_signed_tx() {
 		let num = 32;
 		OffchainDemo::send_signed(num).unwrap();
 		// then
+
+		// Test only one transaction is in the pool.
 		let tx = pool_state.write().transactions.pop().unwrap();
 		assert!(pool_state.read().transactions.is_empty());
+
 		let tx = TestExtrinsic::decode(&mut &*tx).unwrap();
+		// Test the transaction is signed
 		assert_eq!(tx.signature.unwrap().0, 0);
+		// Test the transaction is calling the expected extrinsics with expected parameter
 		assert_eq!(tx.call, Call::submit_number_signed(num));
 	});
 }
@@ -112,8 +117,8 @@ fn offchain_send_signed_tx() {
 
 We test that when `OffchainDemo::send_signed(num)` function is being called,
 
-- There is only one transaction is made into the transaction pool
-- The transaction has a signature associated with it
+- There is only one transaction made to the transaction pool.
+- The transaction is signed.
 - The transaction is calling `Call::submit_number_signed` on-chain function with the parameter `num`.
 
-What's performed by the `Call::submit_number_signed` on-chain function is tested in another test case, which would similar to how you [test for on-chain function](./common.md).
+What's performed by the `Call::submit_number_signed` on-chain function is tested in another test case, which would be similar to how you [test for dispatched extrinsic call](./common.md).

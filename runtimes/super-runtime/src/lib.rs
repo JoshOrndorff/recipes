@@ -340,13 +340,8 @@ impl system::offchain::CreateTransaction<Runtime, UncheckedExtrinsic> for Runtim
 		account: AccountId,
 		index: Index,
 	) -> Option<(Call, <UncheckedExtrinsic as sp_runtime::traits::Extrinsic>::SignaturePayload)> {
-		// take the biggest period possible.
-		let period = BlockHashCount::get()
-			.checked_next_power_of_two()
-			.map(|c| c / 2)
-			.unwrap_or(2) as u64;
-		let current_block = System::block_number()
-			.saturated_into::<u64>().saturating_sub(1);
+		let period = 10 as u64;
+		let current_block = System::block_number() as u64;
 		let tip = 0;
 		let extra: SignedExtra = (
 			system::CheckVersion::<Runtime>::new(),

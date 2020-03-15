@@ -34,7 +34,7 @@
 	- [Testing](./3-entrees/testing/README.md)
 		- [Basic Test Environments](./3-entrees/testing/mock.md)
 		- [Common Tests](./3-entrees/testing/common.md)
-		- [Off-chain Worker Test Environment](./3-entrees/testing/offchain-worker.md)
+		- [Off-chain Worker Test Environment](./3-entrees/testing/off-chain-workers.md)
 		- [Custom Test Environment](./3-entrees/testing/externalities.md)
 	- [Safe Math](./3-entrees/safemath.md)
 
