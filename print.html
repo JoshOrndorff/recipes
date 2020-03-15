@@ -156,8 +156,8 @@
 <h2><a class="header" href="#how-to-use-this-book" id="how-to-use-this-book">How to Use This Book</a></h2>
 <p>The easiest place to read this book is at <a href="https://substrate.dev/recipes">https://substrate.dev/recipes</a>.</p>
 <p>The first two chapters are meant to be read in order.</p>
-<p>In Chapter 1, <a href="./1-prepare-kitchen/README.html">Preparing your Kitchen</a>, you will set up your toolchain, compile a blockchain node, and learn to interact with the blockchain.</p>
-<p>In Chapter 2, <a href="./2-appetizers/README.html">Appetizers</a>, you will cook your first few recipes, learning the fundamentals of Substrate development.</p>
+<p>In Chapter 1, <a href="./1-prepare-kitchen/index.html">Preparing your Kitchen</a>, you will set up your toolchain, compile a blockchain node, and learn to interact with the blockchain.</p>
+<p>In Chapter 2, <a href="./2-appetizers/index.html">Appetizers</a>, you will cook your first few recipes, learning the fundamentals of Substrate development.</p>
 <p>The rest of the book, the &quot;Entrees&quot;, can be read in any order, and you should skip to whichever recipes interest you.</p>
 <p>Remember, you can't learn to cook by reading alone. As you work through the book, put on your apron, get out some pots and pans, and practice compiling, testing, and hacking on the recipes. Play with the code in the kitchen, extract patterns, and apply them to a problem that you want to solve!</p>
 <h2><a class="header" href="#getting-help" id="getting-help">Getting Help</a></h2>
@@ -365,7 +365,7 @@ use frame_system::{ self as system, ensure_signed };
 use sp_runtime::print;
 </code></pre>
 <h2><a class="header" href="#tests" id="tests">Tests</a></h2>
-<p>Next we see a reference to the tests module. This pallet has tests written in a separate file called <code>tests.rs</code>. We will not discuss the tests further at this point, but they are covered in the <a href="2-appetizers/../3-entrees/testing/README.html">Testing section</a> of the book.</p>
+<p>Next we see a reference to the tests module. This pallet has tests written in a separate file called <code>tests.rs</code>. We will not discuss the tests further at this point, but they are covered in the <a href="2-appetizers/../3-entrees/testing/index.html">Testing section</a> of the book.</p>
 <h2><a class="header" href="#configuration-trait" id="configuration-trait">Configuration Trait</a></h2>
 <p>Next, each pallet has a configuration trait which is called <code>Trait</code>. The configuration trait can be used to access features from other pallets, or <a href="2-appetizers/../3-entrees/constants.html">constants</a> that effect the pallet's behavior. This pallet is simple enough that our configuration trait can remain empty, although it must still exist.</p>
 <pre><code class="language-rust ignore">pub trait Trait: system::Trait {}
@@ -460,7 +460,7 @@ std = [
 }
 </code></pre>
 <p>The code above is boilerplate that does not change with the exception of the <code>SingleValue</code>. The macro uses this as the name for a struct that it creates. As a pallet author you don't need to worry about this value much, and it is fine to use the name of the pallet itself.</p>
-<p>This pallet has two storage items, both of which are single storage values. Substrate's storage API also supports more complex storage types which are <a href="2-appetizers/../3-entrees/storage-api/README.html">covered in the entrees</a>. The fundamentals for all types are the same.</p>
+<p>This pallet has two storage items, both of which are single storage values. Substrate's storage API also supports more complex storage types which are <a href="2-appetizers/../3-entrees/storage-api/index.html">covered in the entrees</a>. The fundamentals for all types are the same.</p>
 <p>Our first storage item is a <code>u32</code> value which is declared with this syntax</p>
 <pre><code class="language-rust ignore">StoredValue get(fn stored_value): u32;
 </code></pre>
@@ -2194,7 +2194,7 @@ $ cargo test
 </code></pre>
 <p>Writing unit tests is one of the best ways to understand the code. Although unit tests are not comprehensive, they provide a first check to verify that the programmer's basic invariants are not violated in the presence of obvious, expected state changes.</p>
 <h1><a class="header" href="#mock-runtime-for-unit-testing" id="mock-runtime-for-unit-testing">Mock Runtime for Unit Testing</a></h1>
-<p><em>See <a href="3-entrees/testing/./README.html">Testing</a> page for list of kitchen pallets with unit test coverage.</em></p>
+<p><em>See <a href="3-entrees/testing/./index.html">Testing</a> page for list of kitchen pallets with unit test coverage.</em></p>
 <p>There are two main patterns on writing tests for pallets. We can put the tests:</p>
 <ol>
 <li>

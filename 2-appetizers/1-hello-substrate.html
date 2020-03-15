@@ -162,7 +162,7 @@ use frame_system::{ self as system, ensure_signed };
 use sp_runtime::print;
 </code></pre>
 <h2><a class="header" href="#tests" id="tests">Tests</a></h2>
-<p>Next we see a reference to the tests module. This pallet has tests written in a separate file called <code>tests.rs</code>. We will not discuss the tests further at this point, but they are covered in the <a href="../3-entrees/testing/README.html">Testing section</a> of the book.</p>
+<p>Next we see a reference to the tests module. This pallet has tests written in a separate file called <code>tests.rs</code>. We will not discuss the tests further at this point, but they are covered in the <a href="../3-entrees/testing/index.html">Testing section</a> of the book.</p>
 <h2><a class="header" href="#configuration-trait" id="configuration-trait">Configuration Trait</a></h2>
 <p>Next, each pallet has a configuration trait which is called <code>Trait</code>. The configuration trait can be used to access features from other pallets, or <a href="../3-entrees/constants.html">constants</a> that effect the pallet's behavior. This pallet is simple enough that our configuration trait can remain empty, although it must still exist.</p>
 <pre><code class="language-rust ignore">pub trait Trait: system::Trait {}
