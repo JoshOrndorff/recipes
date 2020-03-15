@@ -23,7 +23,7 @@ use sp_runtime::print;
 
 ## Tests
 
-Next we see a reference to the tests module. This pallet has tests written in a separate file called `tests.rs`. We will not discuss the tests further at this point, but they are covered in the [Testing section](../3-entrees/testing/README.md) of the book.
+Next we see a reference to the tests module. This pallet has tests written in a separate file called `tests.rs`. We will not discuss the tests further at this point, but they are covered in the [Testing section](../3-entrees/testing/index.md) of the book.
 
 ## Configuration Trait
 
