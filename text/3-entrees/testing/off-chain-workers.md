@@ -1,10 +1,10 @@
 # Off-chain Worker Test Environment
 
-Learn more about how to setup and use offchain-worker in [this entree](../off-chain-workers.md).
+Learn more about how to set up and use offchain-workers in [this entree](../off-chain-workers.md).
 
 ## Mock Runtime Setup
 
-In addition to everything we need to setup in [Basic Test Environment](./mock.md), we also need to setup the mock for `SubmitTransaction`, and implement `CreateTransaction` trait for the runtime.
+In addition to everything we need to set up in [Basic Test Environment](./mock.md), we also need to set up the mock for `SubmitTransaction`, and implement the `CreateTransaction` trait for the runtime.
 
 Refer to our [offchain-demo test](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/test.rs).
 
@@ -44,7 +44,7 @@ impl system::offchain::CreateTransaction<TestRuntime, TestExtrinsic> for TestRun
 
 ## Getting the Transaction Pool and Off-chain State
 
-When writing test cases for off-chain workers, we need to look into the transaction pool and current off-chain state to ensure a certain transaction has made its way, and passed with the right parameters and signature. This is how we build them up for our mock runtime:
+When writing test cases for off-chain workers, we need to look into the transaction pool and current off-chain state to ensure a certain transaction has made its way, and was passed with the right parameters and signature. This is how we build them up for our mock runtime:
 
 src: [`pallets/offchain-demo/src/tests.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/test.rs)
 
@@ -71,7 +71,7 @@ impl ExtBuilder {
 			.build_storage::<TestRuntime>()
 			.unwrap();
 
-		// Get the TestExternalities, register additional extension we just setup
+		// Get the TestExternalities, register additional extension we just set up
 		let mut t = TestExternalities::from(storage);
 		t.register_extension(OffchainExt::new(offchain));
 		t.register_extension(TransactionPoolExt::new(pool));
@@ -85,7 +85,7 @@ impl ExtBuilder {
 
 ## Testing Off-chain Worker
 
-When we write tests for off-chain worker, we should test only what our off-chain worker do. For example, when our off-chain worker eventually will make a signed transaction to dispatched function A, which does B, C, and D. We write our test for off-chain worker to test only if function A is dispatched. But whether function A actually does B, C, and D, it should be tested separately in another test case. This way we keep our test more robust.
+When we write tests for off-chain workers, we should test only what our off-chain workers do. For example, when our off-chain workers will eventually make a signed transaction to dispatch function A, which does B, C, and D, we write our test for the off-chain worker to test only if function A is dispatched. But whether function A actually does B, C, and D should be tested separately in another test case. This way we keep our tests more robust.
 
 This is how we write our test cases.
 
@@ -109,7 +109,7 @@ fn offchain_send_signed_tx() {
 		let tx = TestExtrinsic::decode(&mut &*tx).unwrap();
 		// Test the transaction is signed
 		assert_eq!(tx.signature.unwrap().0, 0);
-		// Test the transaction is calling the expected extrinsics with expected parameter
+		// Test the transaction is calling the expected extrinsics with expected parameters
 		assert_eq!(tx.call, Call::submit_number_signed(num));
 	});
 }
@@ -119,6 +119,6 @@ We test that when `OffchainDemo::send_signed(num)` function is being called,
 
 - There is only one transaction made to the transaction pool.
 - The transaction is signed.
-- The transaction is calling `Call::submit_number_signed` on-chain function with the parameter `num`.
+- The transaction is calling the `Call::submit_number_signed` on-chain function with the parameter `num`.
 
-What's performed by the `Call::submit_number_signed` on-chain function is tested in another test case, which would be similar to how you [test for dispatched extrinsic call](./common.md).
+What's performed by the `Call::submit_number_signed` on-chain function is tested in another test case, which would be similar to how you [test for dispatched extrinsic calls](./common.md).
