@@ -6,9 +6,9 @@ Learn more about how to set up and use offchain-workers in [this entree](../off-
 
 In addition to everything we need to set up in [Basic Test Environment](./mock.md), we also need to set up the mock for `SubmitTransaction`, and implement the `CreateTransaction` trait for the runtime.
 
-Refer to our [offchain-demo test](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/test.rs).
+Refer to our [offchain-demo test](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/tests.rs).
 
-src: [`pallets/offchain-demo/src/tests.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/test.rs)
+src: [`pallets/offchain-demo/src/tests.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/tests.rs)
 
 ```rust
 type TestExtrinsic = TestXt<Call<TestRuntime>, ()>;
@@ -46,7 +46,7 @@ impl system::offchain::CreateTransaction<TestRuntime, TestExtrinsic> for TestRun
 
 When writing test cases for off-chain workers, we need to look into the transaction pool and current off-chain state to ensure a certain transaction has made its way, and was passed with the right parameters and signature. So in addition to the regular test environment `TestExternalities`, we also need to return references to the transaction pool state and off-chain state for future inspection.
 
-src: [`pallets/offchain-demo/src/tests.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/test.rs)
+src: [`pallets/offchain-demo/src/tests.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/tests.rs)
 
 ```rust
 pub struct ExtBuilder;
@@ -89,7 +89,7 @@ When we write tests for off-chain workers, we should test only what our off-chai
 
 This is how we write our test cases.
 
-src: [`pallets/offchain-demo/src/tests.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/test.rs)
+src: [`pallets/offchain-demo/src/tests.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/tests.rs)
 
 ```rust
 #[test]
