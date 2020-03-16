@@ -26,15 +26,15 @@ Running the `kitchen-node`, you will see the off-chain worker is run after each 
 ...
 ```
 
-Referring to the code at [`pallets/offchain-demo/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/lib.rs), there is an `offchain_worker` function inside `decl_module!`. This is the entry point of the off-chain worker that is executed once after each block generation. So we put all the off-chain logic here, and eventually signed and unsigned transactions will be sent from this entry-point.
+Referring to the code at [`pallets/offchain-demo/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/lib.rs), there is an `offchain_worker` function inside `decl_module!`. This is the entry point of the off-chain worker that is executed once after each block generation. So we put all the off-chain logic here.
 
-We can have two kinds of transactions sent back on-chain from off-chain workers, signed and unsigned transactions. Signed transactions are used if the transaction requires the sender to be specified. Unsigned transactions are used when the sender does not need to be known, and additional logic is written in the code to provide extra data verification. They are set up differently.
+Eventually two kind of transactions are sent back on-chain from off-chain workers, **Signed Transactions** and **Unsigned Transactions**. Signed transactions are used if the transaction requires the sender to be specified. Unsigned transactions are used when the sender does not need to be known, and additional logic is written in the code to provide extra data verification. They are set up differently and detail as follow.
 
 ## Signed Transactions
 
 ### Setup
 
-For signed transaction, the first thing you will notice is that we have defined another sub-module here:
+For signed transactions, the first thing you will notice is that we have defined another sub-module here:
 
 src: [`pallets/offchain-demo/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/lib.rs)
 
@@ -63,7 +63,7 @@ pub trait Trait: system::Trait {
 
 This associated type needs to be specified by the runtime when the runtime is to include this pallet (implement this pallet trait).
 
-Looking at the [rustdoc of `SubmitSignedTransaction`](https://substrate.dev/rustdocs/v2.0.0-alpha.3/frame_system/offchain/trait.SubmitSignedTransaction.html), it says that we should use the `TransactionSubmitter` implementation type.
+Looking at the [rustdoc of `SubmitSignedTransaction`](https://substrate.dev/rustdocs/v2.0.0-alpha.3/frame_system/offchain/trait.SubmitSignedTransaction.html), it says that we should use the `TransactionSubmitter` implementation type. Let's do that in our runtime.
 
 src: [`runtimes/super-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/super-runtime/src/lib.rs)
 
@@ -82,7 +82,7 @@ impl offchain_demo::Trait for Runtime {
 }
 ```
 
-Now if we build the `kitchen-node`, we will see the compiler complain that the trait bound for `Runtime: frame_system::offchain::CreateTransaction` is not satisfied. We learn that when using `SubmitSignedTransaction`, we also need to have our Runtime implement the [`CreateTransaction` trait](https://substrate.dev/rustdocs/v2.0.0-alpha.3/frame_system/offchain/trait.CreateTransaction.html). So we have our runtime implement this.
+Now if we build the `kitchen-node`, we will see the compiler complain that the trait bound for `Runtime: frame_system::offchain::CreateTransaction` is not satisfied. We learn that when using `SubmitSignedTransaction`, we also need to have our runtime to implement the [`CreateTransaction` trait](https://substrate.dev/rustdocs/v2.0.0-alpha.3/frame_system/offchain/trait.CreateTransaction.html). So let's have our runtime implement this.
 
 src: [`runtimes/super-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/super-runtime/src/lib.rs)
 
@@ -97,11 +97,7 @@ impl system::offchain::CreateTransaction<Runtime, UncheckedExtrinsic> for Runtim
 		account: AccountId,
 		index: Index,
 	) -> Option<(Call, <UncheckedExtrinsic as sp_runtime::traits::Extrinsic>::SignaturePayload)> {
-		// take the biggest period possible.
-		let period = BlockHashCount::get()
-			.checked_next_power_of_two()
-			.map(|c| c / 2)
-			.unwrap_or(2) as u64;
+		let period = BlockHashCount::get() as u64;
 		let current_block = System::block_number()
 			.saturated_into::<u64>().saturating_sub(1);
 		let tip = 0;
@@ -151,7 +147,7 @@ pub type SignedExtra = (
 
 ### Sending Signed Transactions
 
-A signed transaction is sent from:
+A signed transaction is sent with `T::SubmitSignedTransaction::submit_signed`, as shown below:
 
 src: [`pallets/offchain-demo/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/lib.rs)
 
@@ -183,9 +179,9 @@ We have a function reference to `Call::submit_number_signed(submission)`. This i
 
 You will notice that we run a for loop in the returned result. This implies that this call may make multiple transactions and return multiple results. It is because this call actually signs and sends the transaction with each of the accounts that can be found locally under the application crypto (which we defined earlier in `pub mod crypto {...}`). You can view this as the local accounts that are managed under this pallet namespace. Right now, we only have one key in the app crypto, so only one signed transaction is made.
 
-Eventually, the `call` transaction is made on-chain via the `create_transaction` function we defined earlier when we implemented `CreateTransaction` trait for our runtime.
+Eventually, the `call` transaction is made on-chain via the `create_transaction` function we defined earlier when we implemented `CreateTransaction` trait in our runtime.
 
-If you want to dig deeper to see where we insert the local account in the pallet app crypto, it is actually inserted in the node runtime.
+If you wonder where we insert the local account in the pallet app crypto, it is actually inserted in the node runtime.
 
 src: [`nodes/kitchen-node/src/service.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/nodes/kitchen-node/src/service.rs)
 
@@ -233,7 +229,7 @@ pub trait Trait: system::Trait {
 }
 ```
 
-By default, unsigned transactions are rejected by the Substrate runtime unless they are explicitly allowed. So in the second step, we need to write the logic to allow unsigned transactions for certain particular dispatched functions as follows:
+By default, unsigned transactions are rejected by Substrate runtime unless they are explicitly allowed. So in the second step, we write the logic to allow unsigned transactions for certain particular dispatched functions as follows:
 
 src: [`pallets/offchain-demo/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/lib.rs)
 
@@ -259,9 +255,9 @@ impl<T: Trait> support::unsigned::ValidateUnsigned for Module<T> {
 }
 ```
 
-We implement `ValidateUnsigned`, and the allowance logic is added in the `validate_unsigned` function. We check if the call is to `Call::submit_number_unsigned` and it returns an `Ok()`. Otherwise, `InvalidTransaction::Call`.
+We implement `ValidateUnsigned`, and the allowance logic is added inside the `validate_unsigned` function. We check if the call is to `Call::submit_number_unsigned` and returns `Ok()` if this is the case. Otherwise, `InvalidTransaction::Call`.
 
-The `ValidTransaction` object has some fields that touch on concepts that we have not talked about before:
+The `ValidTransaction` object has some fields that touch on concepts that we have not discussed before:
 
 - `priority`: Ordering of two transactions, given their dependencies are satisfied.
 - `requires`: List of tags this transaction depends on.

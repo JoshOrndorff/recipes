@@ -44,7 +44,7 @@ impl system::offchain::CreateTransaction<TestRuntime, TestExtrinsic> for TestRun
 
 ## Getting the Transaction Pool and Off-chain State
 
-When writing test cases for off-chain workers, we need to look into the transaction pool and current off-chain state to ensure a certain transaction has made its way, and was passed with the right parameters and signature. This is how we build them up for our mock runtime:
+When writing test cases for off-chain workers, we need to look into the transaction pool and current off-chain state to ensure a certain transaction has made its way, and was passed with the right parameters and signature. So in addition to the regular test environment `TestExternalities`, we also need to return references to the transaction pool state and off-chain state for future inspection.
 
 src: [`pallets/offchain-demo/src/tests.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/test.rs)
 
