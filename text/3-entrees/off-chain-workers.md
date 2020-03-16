@@ -229,7 +229,7 @@ pub trait Trait: system::Trait {
 }
 ```
 
-By default, unsigned transactions are rejected by Substrate runtime unless they are explicitly allowed. So in the second step, we write the logic to allow unsigned transactions for certain particular dispatched functions as follows:
+By default, unsigned transactions are rejected by the Substrate runtime unless they are explicitly allowed. So in the second step, we need to write the logic to allow unsigned transactions for certain particular dispatched functions as follows:
 
 src: [`pallets/offchain-demo/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/lib.rs)
 
