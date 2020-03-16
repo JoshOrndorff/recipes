@@ -9,5 +9,5 @@ package = 'weight-fee-runtime'
 path = '../weight-fee-runtime'
 
 [dependencies]
-babe-primitives = { package = "sp-consensus-babe", git = "https://github.com/paritytech/substrate", rev = 'ba5c85add52897acbd98f382ae11f7a11583e322' }
-grandpa-primitives = { package = "sp-finality-grandpa", git = "https://github.com/paritytech/substrate", rev = 'ba5c85add52897acbd98f382ae11f7a11583e322' }
+babe-primitives = { package = "sp-consensus-babe", git = "https://github.com/paritytech/substrate", rev = '0bd9ffacdeb9bf3c97c04114de2cca5490ee98b6' }
+grandpa-primitives = { package = "sp-finality-grandpa", git = "https://github.com/paritytech/substrate", rev = '0bd9ffacdeb9bf3c97c04114de2cca5490ee98b6' }

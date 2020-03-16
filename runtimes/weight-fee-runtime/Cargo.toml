@@ -18,141 +18,141 @@ version = '1.0.6'
 default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = "sp-std"
-rev = 'ba5c85add52897acbd98f382ae11f7a11583e322'
+rev = '0bd9ffacdeb9bf3c97c04114de2cca5490ee98b6'
 
 [dependencies.runtime-io]
 default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-io'
-rev = 'ba5c85add52897acbd98f382ae11f7a11583e322'
+rev = '0bd9ffacdeb9bf3c97c04114de2cca5490ee98b6'
 
 [dependencies.version]
 default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-version'
-rev = 'ba5c85add52897acbd98f382ae11f7a11583e322'
+rev = '0bd9ffacdeb9bf3c97c04114de2cca5490ee98b6'
 
 [dependencies.support]
 default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'frame-support'
-rev = 'ba5c85add52897acbd98f382ae11f7a11583e322'
+rev = '0bd9ffacdeb9bf3c97c04114de2cca5490ee98b6'
 
 [dependencies.sp-core]
 default-features = false
 git = 'https://github.com/paritytech/substrate.git'
-rev = 'ba5c85add52897acbd98f382ae11f7a11583e322'
+rev = '0bd9ffacdeb9bf3c97c04114de2cca5490ee98b6'
 
 [dependencies.substrate-session]
 default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-session'
-rev = 'ba5c85add52897acbd98f382ae11f7a11583e322'
+rev = '0bd9ffacdeb9bf3c97c04114de2cca5490ee98b6'
 
 [dependencies.balances]
 default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'pallet-balances'
-rev = 'ba5c85add52897acbd98f382ae11f7a11583e322'
+rev = '0bd9ffacdeb9bf3c97c04114de2cca5490ee98b6'
 
 [dependencies.generic-asset]
 default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'pallet-generic-asset'
-rev = 'ba5c85add52897acbd98f382ae11f7a11583e322'
+rev = '0bd9ffacdeb9bf3c97c04114de2cca5490ee98b6'
 
 [dependencies.transaction-payment]
 default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'pallet-transaction-payment'
-rev = 'ba5c85add52897acbd98f382ae11f7a11583e322'
+rev = '0bd9ffacdeb9bf3c97c04114de2cca5490ee98b6'
 
 [dependencies.babe]
 default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'pallet-babe'
-rev = 'ba5c85add52897acbd98f382ae11f7a11583e322'
+rev = '0bd9ffacdeb9bf3c97c04114de2cca5490ee98b6'
 
 [dependencies.sp-consensus-babe]
 default-features = false
 git = 'https://github.com/paritytech/substrate.git'
-rev = 'ba5c85add52897acbd98f382ae11f7a11583e322'
+rev = '0bd9ffacdeb9bf3c97c04114de2cca5490ee98b6'
 
 [dependencies.executive]
 default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'frame-executive'
-rev = 'ba5c85add52897acbd98f382ae11f7a11583e322'
+rev = '0bd9ffacdeb9bf3c97c04114de2cca5490ee98b6'
 
 [dependencies.indices]
 default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'pallet-indices'
-rev = 'ba5c85add52897acbd98f382ae11f7a11583e322'
+rev = '0bd9ffacdeb9bf3c97c04114de2cca5490ee98b6'
 
 [dependencies.grandpa]
 default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'pallet-grandpa'
-rev = 'ba5c85add52897acbd98f382ae11f7a11583e322'
+rev = '0bd9ffacdeb9bf3c97c04114de2cca5490ee98b6'
 
 [dependencies.randomness-collective-flip]
 default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'pallet-randomness-collective-flip'
-rev = 'ba5c85add52897acbd98f382ae11f7a11583e322'
+rev = '0bd9ffacdeb9bf3c97c04114de2cca5490ee98b6'
 
 [dependencies.system]
 default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'frame-system'
-rev = 'ba5c85add52897acbd98f382ae11f7a11583e322'
+rev = '0bd9ffacdeb9bf3c97c04114de2cca5490ee98b6'
 
 [dependencies.timestamp]
 default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'pallet-timestamp'
-rev = 'ba5c85add52897acbd98f382ae11f7a11583e322'
+rev = '0bd9ffacdeb9bf3c97c04114de2cca5490ee98b6'
 
 [dependencies.sudo]
 default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'pallet-sudo'
-rev = 'ba5c85add52897acbd98f382ae11f7a11583e322'
+rev = '0bd9ffacdeb9bf3c97c04114de2cca5490ee98b6'
 
 [dependencies.sp-runtime]
 default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-runtime'
-rev = 'ba5c85add52897acbd98f382ae11f7a11583e322'
+rev = '0bd9ffacdeb9bf3c97c04114de2cca5490ee98b6'
 
 [dependencies.sp-api]
 default-features = false
 git = 'https://github.com/paritytech/substrate.git'
-rev = 'ba5c85add52897acbd98f382ae11f7a11583e322'
+rev = '0bd9ffacdeb9bf3c97c04114de2cca5490ee98b6'
 
 [dependencies.block-builder-api]
 default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-block-builder'
-rev = 'ba5c85add52897acbd98f382ae11f7a11583e322'
+rev = '0bd9ffacdeb9bf3c97c04114de2cca5490ee98b6'
 
 [dependencies.sp-transaction-pool]
 default-features = false
 git = 'https://github.com/paritytech/substrate.git'
-rev = 'ba5c85add52897acbd98f382ae11f7a11583e322'
+rev = '0bd9ffacdeb9bf3c97c04114de2cca5490ee98b6'
 
 [dependencies.inherents]
 default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-inherents'
-rev = 'ba5c85add52897acbd98f382ae11f7a11583e322'
+rev = '0bd9ffacdeb9bf3c97c04114de2cca5490ee98b6'
 
 [dependencies.offchain-primitives]
 default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-offchain'
-rev = 'ba5c85add52897acbd98f382ae11f7a11583e322'
+rev = '0bd9ffacdeb9bf3c97c04114de2cca5490ee98b6'
 
 
 [build-dependencies]
