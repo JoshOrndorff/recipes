@@ -181,7 +181,7 @@ You will notice that we run a for loop in the returned result. This implies that
 
 Eventually, the `call` transaction is made on-chain via the `create_transaction` function we defined earlier when we implemented `CreateTransaction` trait in our runtime.
 
-If you wonder where we insert the local account in the pallet app crypto, it is actually inserted in the node runtime.
+If you are wondering where we insert the local account in the pallet app crypto, it is actually in the node runtime.
 
 src: [`nodes/kitchen-node/src/service.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/nodes/kitchen-node/src/service.rs)
 
