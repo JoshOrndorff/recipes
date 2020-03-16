@@ -48,6 +48,7 @@ pub trait Trait: system::Trait {
 	type SubmitSignedTransaction: offchain::SubmitSignedTransaction<Self, <Self as Trait>::Call>;
 	/// The type to submit unsigned transactions.
 	type SubmitUnsignedTransaction: offchain::SubmitUnsignedTransaction<Self, <Self as Trait>::Call>;
+	/// The period (specified in block time) during which new prices will not be submitted
 	type GracePeriod: Get<Self::BlockNumber>;
 }
 
@@ -66,6 +67,8 @@ decl_storage! {
 
 		/// Defines the block when next unsigned transaction will be accepted.
 		NextTx get(fn next_tx): T::BlockNumber;
+
+		/// How many transactions have been submitted by the offchain worker so far.
 		AddSeq get(fn add_seq): u32;
 	}
 }
