@@ -209,7 +209,7 @@ pub fn new_full(config: Configuration<GenesisConfig>)
 
 ### Setup
 
-For unsigned transactions, we have the equivalent setup in the pallet configrable trait. In the first step, we add back the `SubmitUnsignedTransaction` associated type.
+For unsigned transactions, we have the equivalent setup in the pallet configuration trait. In the first step, we add back the `SubmitUnsignedTransaction` associated type.
 
 src: [`pallets/offchain-demo/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/lib.rs)
 
