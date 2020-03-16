@@ -82,7 +82,7 @@ impl offchain_demo::Trait for Runtime {
 }
 ```
 
-Now if we build the `kitchen-node`, we will see the compiler complain that the trait bound for `Runtime: frame_system::offchain::CreateTransaction` is not satisfied. We learn that when using `SubmitSignedTransaction`, we also need to have our runtime to implement the [`CreateTransaction` trait](https://substrate.dev/rustdocs/v2.0.0-alpha.3/frame_system/offchain/trait.CreateTransaction.html). So let's have our runtime implement this.
+Now if we build the `kitchen-node`, we will see the compiler complain that the trait bound for `Runtime: frame_system::offchain::CreateTransaction` is not satisfied. We learn that when using `SubmitSignedTransaction`, we also need to have our runtime implement the [`CreateTransaction` trait](https://substrate.dev/rustdocs/v2.0.0-alpha.3/frame_system/offchain/trait.CreateTransaction.html). So let's implement this in our runtime.
 
 src: [`runtimes/super-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/super-runtime/src/lib.rs)
 
