@@ -1,10 +1,7 @@
 # Off-chain Workers
+*[`pallets/offchain-demo`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo)*
 
-## Overview
-
-Before learning how to build your own off-chain worker in Substrate, you may want to learn about what off-chain workers are, why you want to use them, and what kinds of problems they solve best. These topics are covered in [our guide](https://substrate.dev/docs/en/conceptual/core/off-chain-workers).
-
-Here, we will focus on implementing an off-chain worker in Substrate. The example we will discuss is in [pallets/offchain-demo](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo).
+Before learning how to build your own off-chain worker in Substrate, you may want to learn about what off-chain workers are, why you want to use them, and what kinds of problems they solve best. These topics are covered in [our guide](https://substrate.dev/docs/en/conceptual/core/off-chain-workers). Here, we will focus on implementing an off-chain worker in Substrate.
 
 ## Life-cycle of Off-chain Worker
 
