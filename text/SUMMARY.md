@@ -24,6 +24,7 @@
 	- [Weights for Resource Accounting](./3-entrees/weights.md)
 	- [Transaction Fees for Economic Security](./3-entrees/fees.md)
 	- [Charity and Imbalances](./3-entrees/charity.md)
+	- [Off-chain Workers](./3-entrees/off-chain-workers.md)
 	- [Runtime APIs](./3-entrees/runtime-api.md)
 	- [Custom RPCs](./3-entrees/custom-rpc.md)
 	- [Currency Types](./3-entrees/currency.md)
@@ -33,6 +34,7 @@
 	- [Testing](./3-entrees/testing/index.md)
 		- [Basic Test Environments](./3-entrees/testing/mock.md)
 		- [Common Tests](./3-entrees/testing/common.md)
+		- [Off-chain Worker Test Environment](./3-entrees/testing/off-chain-workers.md)
 		- [Custom Test Environment](./3-entrees/testing/externalities.md)
 	- [Safe Math](./3-entrees/safemath.md)
 

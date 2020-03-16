@@ -9,6 +9,7 @@ const fs = require('fs');
 const pallets = [
   "adding-machine",
   "basic-token",
+  "charity",
   "check-membership",
   "constant-config",
   "default-instance",
@@ -17,9 +18,9 @@ const pallets = [
   "generic-event",
   "last-caller",
   "linked-map",
+  "off-chain-workers",
   "simple-event",
   "simple-map",
-  "charity",
   "single-value",
   "storage-cache",
   "struct-storage",
