@@ -10,9 +10,9 @@ The easiest place to read this book is at [https://substrate.dev/recipes](https:
 
 The first two chapters are meant to be read in order.
 
-In Chapter 1, [Preparing your Kitchen](./1-prepare-kitchen/README.md), you will set up your toolchain, compile a blockchain node, and learn to interact with the blockchain.
+In Chapter 1, [Preparing your Kitchen](./1-prepare-kitchen/index.md), you will set up your toolchain, compile a blockchain node, and learn to interact with the blockchain.
 
-In Chapter 2, [Appetizers](./2-appetizers/README.md), you will cook your first few recipes, learning the fundamentals of Substrate development.
+In Chapter 2, [Appetizers](./2-appetizers/index.md), you will cook your first few recipes, learning the fundamentals of Substrate development.
 
 The rest of the book, the "Entrees", can be read in any order, and you should skip to whichever recipes interest you.
 
