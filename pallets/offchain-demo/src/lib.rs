@@ -81,8 +81,10 @@ decl_event!(
 
 decl_error! {
 	pub enum Error for Module<T: Trait> {
+		// Error returned when making signed transactions in off-chain worker
 		SendSignedError,
-		SendUnsignedError
+		// Error returned when making unsigned transactions in off-chain worker
+		SendUnsignedError,
 	}
 }
 
