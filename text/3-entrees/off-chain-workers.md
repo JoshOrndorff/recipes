@@ -28,7 +28,7 @@ Running the `kitchen-node`, you will see the off-chain worker is run after each 
 
 Referring to the code at [`pallets/offchain-demo/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/lib.rs), there is an `offchain_worker` function inside `decl_module!`. This is the entry point of the off-chain worker that is executed once after each block generation, so we put all the off-chain logic here.
 
-Eventually two kind of transactions are sent back on-chain from off-chain workers, **Signed Transactions** and **Unsigned Transactions**. Signed transactions are used if the transaction requires the sender to be specified. Unsigned transactions are used when the sender does not need to be known, and additional logic is written in the code to provide extra data verification. They are set up differently and detail as follow.
+Two kinds of transactions can be sent back on-chain from off-chain workers, **Signed Transactions** and **Unsigned Transactions**. Signed transactions are used if the transaction requires the sender to be specified. Unsigned transactions are used when the sender does not need to be known, and additional logic is written in the code to provide extra data verification. Let's walk through how to set up each one.
 
 ## Signed Transactions
 
