@@ -4,7 +4,7 @@ use codec::{
 	Decode,
 	alloc::sync::{Arc}
 };
-use support::{
+use frame_support::{
 	assert_ok, impl_outer_event, impl_outer_origin, parameter_types,
 };
 use sp_io::TestExternalities;
