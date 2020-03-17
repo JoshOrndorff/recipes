@@ -59,7 +59,7 @@ impl<B: BlockT<Hash=H256>> PowAlgorithm<B> for Sha3Algorithm {
 	fn difficulty(&self, _parent: &BlockId<B>) -> Result<Self::Difficulty, Error<B>> {
 		// This basic PoW uses a fixed difficulty.
 		// Raising this difficulty will make the block time slower.
-		Ok(U256::from(1000))
+		Ok(U256::from(1000_000))
 	}
 
 	fn verify(
