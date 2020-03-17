@@ -1,10 +1,7 @@
 # Off-chain Workers
+*[`pallets/offchain-demo`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo)*
 
-## Overview
-
-Before learning how to build your own off-chain worker in Substrate, you may want to learn about what off-chain workers are, why you want to use them, and what kinds of problems they solve best. These topics are covered in [our guide](https://substrate.dev/docs/en/conceptual/core/off-chain-workers).
-
-Here, we will focus on implementing an off-chain worker in Substrate. The example we will discuss is in [pallets/offchain-demo](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo).
+Before learning how to build your own off-chain worker in Substrate, you may want to learn about what off-chain workers are, why you want to use them, and what kinds of problems they solve best. These topics are covered in [our guide](https://substrate.dev/docs/en/conceptual/core/off-chain-workers). Here, we will focus on implementing an off-chain worker in Substrate.
 
 ## Life-cycle of Off-chain Worker
 
@@ -181,7 +178,7 @@ You will notice that we run a for loop in the returned result. This implies that
 
 Eventually, the `call` transaction is made on-chain via the `create_transaction` function we defined earlier when we implemented `CreateTransaction` trait in our runtime.
 
-If you are wondering where we insert the local account in the pallet app crypto, it is actually in the node runtime.
+If you are wondering where we insert the local account in the pallet app crypto, it is actually in the outer node's [service](https://substrate.dev/rustdocs/master/sc_service/index.html).
 
 src: [`nodes/kitchen-node/src/service.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/nodes/kitchen-node/src/service.rs)
 
@@ -212,7 +209,7 @@ pub fn new_full(config: Configuration<GenesisConfig>)
 
 ### Setup
 
-For unsigned transactions, we have the equivalent setup in the pallet configrable trait. In the first step, we add back the `SubmitUnsignedTransaction` associated type.
+For unsigned transactions, we have the equivalent setup in the pallet configuration trait. In the first step, we add back the `SubmitUnsignedTransaction` associated type.
 
 src: [`pallets/offchain-demo/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/lib.rs)
 

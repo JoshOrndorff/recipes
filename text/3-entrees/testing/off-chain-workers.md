@@ -1,12 +1,10 @@
 # Off-chain Worker Test Environment
 
-Learn more about how to set up and use offchain-workers in [this entree](../off-chain-workers.md).
+Learn more about how to set up and use offchain-workers in the [offchain-demo entree](../off-chain-workers.md).
 
 ## Mock Runtime Setup
 
 In addition to everything we need to set up in [Basic Test Environment](./mock.md), we also need to set up the mock for `SubmitTransaction`, and implement the `CreateTransaction` trait for the runtime.
-
-Refer to our [offchain-demo test](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/tests.rs).
 
 src: [`pallets/offchain-demo/src/tests.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/tests.rs)
 

@@ -14,8 +14,8 @@ serde = { version = "1.0.101", optional = true }
 serde_json = { version = "1.0.46", default-features = false, features = ["alloc"] }
 
 # Substrate dependencies
-support = { package = "frame-support", default-features = false, git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
-system = { package = "frame-system", default-features = false, git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
+frame-support = { package = "frame-support", default-features = false, git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
+frame-system = { package = "frame-system", default-features = false, git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
 sp-core = { default-features = false, git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
 sp-io = { default-features = false, git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
 sp-runtime = { default-features = false, git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
@@ -26,8 +26,8 @@ default = ['std']
 std = [
 	'codec/std',
 	'serde/std',
-	'support/std',
-	'system/std',
+	'frame-support/std',
+	'frame-system/std',
 	'sp-io/std',
 	'sp-runtime/std',
 	'sp-std/std'

@@ -4,7 +4,7 @@ use codec::{
 	Decode,
 	alloc::sync::{Arc}
 };
-use support::{
+use frame_support::{
 	assert_ok, impl_outer_event, impl_outer_origin, parameter_types,
 };
 use sp_io::TestExternalities;
@@ -95,7 +95,7 @@ impl system::offchain::CreateTransaction<TestRuntime, TestExtrinsic> for TestRun
 
 	fn create_transaction<TSigner: system::offchain::Signer<Self::Public, Self::Signature>> (
 		call: Call<TestRuntime>,
-		public: Self::Public,
+		_public: Self::Public,
 		_account: <TestRuntime as system::Trait>::AccountId,
 		index: <TestRuntime as system::Trait>::Index,
 	) -> Option<(Call<TestRuntime>, <TestExtrinsic as sp_runtime::traits::Extrinsic>::SignaturePayload)> {
@@ -139,7 +139,6 @@ fn submit_number_signed_works() {
 	t.execute_with(|| {
 		// call submit_number_signed
 		let num = 32;
-		let num2 = num * 2;
 		let acct: <TestRuntime as system::Trait>::AccountId = Default::default();
 		assert_ok!(OffchainDemo::submit_number_signed(Origin::signed(acct), num));
 		// A number is inserted to <Numbers> vec
@@ -166,7 +165,7 @@ fn submit_number_signed_works() {
 
 #[test]
 fn offchain_send_signed_tx() {
-	let (mut t, pool_state, offchain_state) = ExtBuilder::build();
+	let (mut t, pool_state, _offchain_state) = ExtBuilder::build();
 
 	t.execute_with(|| {
 		// when
@@ -183,7 +182,7 @@ fn offchain_send_signed_tx() {
 
 #[test]
 fn offchain_send_unsigned_tx() {
-	let (mut t, pool_state, offchain_state) = ExtBuilder::build();
+	let (mut t, pool_state, _offchain_state) = ExtBuilder::build();
 
 	t.execute_with(|| {
 		// when
