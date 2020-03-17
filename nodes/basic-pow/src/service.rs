@@ -28,7 +28,7 @@ pub fn build_inherent_data_providers() -> Result<InherentDataProviders, ServiceE
 	// Attempt to register the babe inherent  because the super-runtime expects the babe inherent.
 	// See https://github.com/substrate-developer-hub/recipes/pull/173#issuecomment-599129425
 	// This hack didn't work: Checking inherents failed: timestamp set in block doesn't match slot in seal
-	
+
 	// let bogus_babe_inherent = sp_consensus_babe::inherents::InherentDataProvider::new(1);
 	// providers
 	// 	.register_provider(bogus_babe_inherent)
@@ -44,7 +44,7 @@ pub fn build_inherent_data_providers() -> Result<InherentDataProviders, ServiceE
 /// be able to perform chain operations.
 macro_rules! new_full_start {
 	($config:expr) => {{
-		let mut import_setup = None;
+		let mut import_setup : Option<_> = None;
 		let inherent_data_providers = crate::service::build_inherent_data_providers()?;
 
 		let builder = sc_service::ServiceBuilder::new_full::<
@@ -99,11 +99,12 @@ pub fn new_full(config: Configuration<GenesisConfig>)
 		.expect("Block Import is present for Full Services or setup failed before. qed");
 
 	let service = builder
-		.with_finality_proof_provider(|_client, _backend|
-			// Question. Why bother giving () as a finality proof provider when I can just
-			// not call `with_finality_proof_provider` at all?
-			Ok(Arc::new(()) as _)
-		)?
+		// This chain does not have deterministic finality. It uses probabalistic finality
+		// based on accumulated work. Thus we don't need a finality proof provider.
+		// You may explicitly set no provider by calling with () as demonstrated in the commented code.
+		// .with_finality_proof_provider(|_client, _backend|
+		// 	Ok(Arc::new(()) as _)
+		// )?
 		.build()?;
 
 	if participates_in_consensus {
@@ -131,7 +132,9 @@ pub fn new_full(config: Configuration<GenesisConfig>)
 			rounds,
 			service.network(),
 			std::time::Duration::new(2, 0),
-			Some(select_chain), // Question: What does it mean to put None here?
+			// Choosing not to supply a select_chain means we will use the client's
+			// possibly-outdated metadata when fetching the block to mine on
+			Some(select_chain),
 			inherent_data_providers.clone(),
 			can_author_with,
 		);

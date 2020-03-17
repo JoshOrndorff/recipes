@@ -32,8 +32,6 @@ sp-consensus-pow = { git = "https://github.com/paritytech/substrate", tag = 'v2.
 sc-client-api = { git = "https://github.com/paritytech/substrate", tag = 'v2.0.0-alpha.3' }
 sp-blockchain = { git = "https://github.com/paritytech/substrate", tag = 'v2.0.0-alpha.3' }
 
-# Edit these lines to point to a different runtime.
-# Your runtime must have the necessary pallets to support consensus
 runtime = { package = "pow-runtime", path = "../../runtimes/pow-runtime" }
 runtime-genesis = { package = "pow-genesis", path = "../../runtimes/pow-genesis" }
 
@@ -41,7 +39,6 @@ runtime-genesis = { package = "pow-genesis", path = "../../runtimes/pow-genesis"
 # [dependencies.sp-consensus-babe]
 # git = "https://github.com/paritytech/substrate"
 # tag = 'v2.0.0-alpha.3'
-
 
 [dependencies.sp-timestamp]
 git = 'https://github.com/paritytech/substrate.git'

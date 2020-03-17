@@ -6,20 +6,8 @@ use sc_consensus_pow::{PowAlgorithm, Error};
 use sp_consensus_pow::Seal as RawSeal;
 use sha3::{Sha3_256, Digest};
 use rand::{thread_rng, SeedableRng, rngs::SmallRng};
-use std::time::Duration;
 
-/// Specific PoW Algorithm that uses Sha3 hashing.
-/// Needs a reference to the client so it can grab the difficulty from the runtime.
-// pub struct Sha3Algorithm<C> {
-// 	client: Arc<C>,
-// }
-//
-// impl<C> Sha3Algorithm<C> {
-// 	pub fn new(client: Arc<C>) -> Self {
-// 		Self { client }
-// 	}
-// }
-
+/// A concrete PoW Algorithm that uses Sha3 hashing.
 #[derive(Clone)]
 pub struct Sha3Algorithm;
 
@@ -43,7 +31,8 @@ pub struct Seal {
 	pub nonce: H256,
 }
 
-/// TODO Docs
+/// A not-yet-computed attempt to solve the proof of work. Calling the
+/// compute method will compute the hash and return the seal.
 #[derive(Clone, PartialEq, Eq, Encode, Decode, Debug)]
 pub struct Compute {
 	pub difficulty: U256,
@@ -58,24 +47,19 @@ impl Compute {
 		Seal {
 			nonce: self.nonce,
 			difficulty: self.difficulty,
-			work: H256::from(work), //TODO Can I just use `work` here directly?
+			work: work,
 		}
 	}
 }
 
-// impl<B: BlockT<Hash=H256>, C> PowAlgorithm<B> for Sha3Algorithm<C> where
-// 	C: HeaderBackend<B> + AuxStore + ProvideRuntimeApi,
-// 	C::Api: DifficultyApi<B, U256>,
-// {
+// Here we implement the general PowAlgorithm trait for our concrete Sha3Algorithm
 impl<B: BlockT<Hash=H256>> PowAlgorithm<B> for Sha3Algorithm {
 	type Difficulty = U256;
 
 	fn difficulty(&self, _parent: &BlockId<B>) -> Result<Self::Difficulty, Error<B>> {
-		// self.client.runtime_api().difficulty(parent)
-		// 	.map_err(|e| sc_consensus_pow::Error::Environment(
-		// 		format!("Fetching difficulty from runtime failed: {:?}", e)
-		// 	))
-		Ok(U256::from(10000))
+		// This basic PoW uses a fixed difficulty.
+		// Raising this difficulty will make the block time slower.
+		Ok(U256::from(1000))
 	}
 
 	fn verify(
@@ -115,16 +99,14 @@ impl<B: BlockT<Hash=H256>> PowAlgorithm<B> for Sha3Algorithm {
 		_parent: &BlockId<B>,
 		pre_hash: &H256,
 		difficulty: Self::Difficulty,
-		round: u32 // The number of nonces to try suring this call
+		round: u32 // The number of nonces to try during this call
 	) -> Result<Option<RawSeal>, Error<B>> {
-		// Get a randomness source from the environment and fail if one isn't available
+		// Get a randomness source from the environment; fail if one isn't available
 		let mut rng = SmallRng::from_rng(&mut thread_rng())
 			.map_err(|e| Error::Environment(format!("Initialize RNG failed for mining: {:?}", e)))?;
 
 		// Loop the specified number of times
 		for _ in 0..round {
-			// Artificially throttle the mining
-			std::thread::sleep(Duration::new(0, 1_000_000));
 
 			// Choose a new nonce
 			let nonce = H256::random_using(&mut rng);
