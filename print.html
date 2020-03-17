@@ -1560,9 +1560,8 @@ impl&lt;T: Trait&gt; OnUnbalanced&lt;NegativeImbalanceOf&lt;T&gt;&gt; for Module
 <h1><a class="header" href="#allocating-funds" id="allocating-funds">Allocating Funds</a></h1>
 <p>In order for the charity to affect change with the funds it has collected it must be able to allocate those funds. Our charity pallet abstracts the governance of where funds will be allocated to the rest of the runtime. Funds can be allocated by a root call to the <code>allocate</code> extrinsic. One good example of a governance mechanism for such decisions is Substrate's own <a href="https://substrate.dev/rustdocs/master/pallet_democracy/index.html">Democracy pallet</a>.</p>
 <h1><a class="header" href="#off-chain-workers" id="off-chain-workers">Off-chain Workers</a></h1>
-<h2><a class="header" href="#overview" id="overview">Overview</a></h2>
-<p>Before learning how to build your own off-chain worker in Substrate, you may want to learn about what off-chain workers are, why you want to use them, and what kinds of problems they solve best. These topics are covered in <a href="https://substrate.dev/docs/en/conceptual/core/off-chain-workers">our guide</a>.</p>
-<p>Here, we will focus on implementing an off-chain worker in Substrate. The example we will discuss is in <a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo">pallets/offchain-demo</a>.</p>
+<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo"><code>pallets/offchain-demo</code></a></em></p>
+<p>Before learning how to build your own off-chain worker in Substrate, you may want to learn about what off-chain workers are, why you want to use them, and what kinds of problems they solve best. These topics are covered in <a href="https://substrate.dev/docs/en/conceptual/core/off-chain-workers">our guide</a>. Here, we will focus on implementing an off-chain worker in Substrate.</p>
 <h2><a class="header" href="#life-cycle-of-off-chain-worker" id="life-cycle-of-off-chain-worker">Life-cycle of Off-chain Worker</a></h2>
 <p>Running the <code>kitchen-node</code>, you will see the off-chain worker is run after each block generation phase, as shown by <code>Entering off-chain workers</code> in the node output message:</p>
 <pre><code>...
@@ -1724,7 +1723,7 @@ pub type SignedExtra = (
 <p>We have a function reference to <code>Call::submit_number_signed(submission)</code>. This is the function we are going to submit back to on-chain, and passing it to <code>T::SubmitSignedTransaction::submit_signed(call)</code>.</p>
 <p>You will notice that we run a for loop in the returned result. This implies that this call may make multiple transactions and return multiple results. It is because this call actually signs and sends the transaction with each of the accounts that can be found locally under the application crypto (which we defined earlier in <code>pub mod crypto {...}</code>). You can view this as the local accounts that are managed under this pallet namespace. Right now, we only have one key in the app crypto, so only one signed transaction is made.</p>
 <p>Eventually, the <code>call</code> transaction is made on-chain via the <code>create_transaction</code> function we defined earlier when we implemented <code>CreateTransaction</code> trait in our runtime.</p>
-<p>If you are wondering where we insert the local account in the pallet app crypto, it is actually in the node runtime.</p>
+<p>If you are wondering where we insert the local account in the pallet app crypto, it is actually in the outer node's <a href="https://substrate.dev/rustdocs/master/sc_service/index.html">service</a>.</p>
 <p>src: <a href="https://github.com/substrate-developer-hub/recipes/tree/master/nodes/kitchen-node/src/service.rs"><code>nodes/kitchen-node/src/service.rs</code></a></p>
 <pre><pre class="playpen"><code class="language-rust">
 <span class="boring">#![allow(unused_variables)]
@@ -1753,7 +1752,7 @@ pub type SignedExtra = (
 </span></code></pre></pre>
 <h2><a class="header" href="#unsigned-transactions" id="unsigned-transactions">Unsigned Transactions</a></h2>
 <h3><a class="header" href="#setup-1" id="setup-1">Setup</a></h3>
-<p>For unsigned transactions, we have the equivalent setup in the pallet configrable trait. In the first step, we add back the <code>SubmitUnsignedTransaction</code> associated type.</p>
+<p>For unsigned transactions, we have the equivalent setup in the pallet configuration trait. In the first step, we add back the <code>SubmitUnsignedTransaction</code> associated type.</p>
 <p>src: <a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/lib.rs"><code>pallets/offchain-demo/src/lib.rs</code></a></p>
 <pre><pre class="playpen"><code class="language-rust">
 <span class="boring">#![allow(unused_variables)]
@@ -2879,10 +2878,9 @@ fn last_value_updates() {
 </code></pre>
 <p>This test constructs an <code>expected_event1</code> based on the event that the developer expects will be emitted upon the successful execution of logic in <code>HelloSubstrate::set_value</code>. The <code>assert!()</code> statement checks if the <code>expected_event1</code> matches the <code>.event</code> field for any <code>EventRecord</code> in the <code>System::events()</code> vector.</p>
 <h1><a class="header" href="#off-chain-worker-test-environment" id="off-chain-worker-test-environment">Off-chain Worker Test Environment</a></h1>
-<p>Learn more about how to set up and use offchain-workers in <a href="3-entrees/testing/../off-chain-workers.html">this entree</a>.</p>
+<p>Learn more about how to set up and use offchain-workers in the <a href="3-entrees/testing/../off-chain-workers.html">offchain-demo entree</a>.</p>
 <h2><a class="header" href="#mock-runtime-setup" id="mock-runtime-setup">Mock Runtime Setup</a></h2>
 <p>In addition to everything we need to set up in <a href="3-entrees/testing/./mock.html">Basic Test Environment</a>, we also need to set up the mock for <code>SubmitTransaction</code>, and implement the <code>CreateTransaction</code> trait for the runtime.</p>
-<p>Refer to our <a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/tests.rs">offchain-demo test</a>.</p>
 <p>src: <a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/tests.rs"><code>pallets/offchain-demo/src/tests.rs</code></a></p>
 <pre><pre class="playpen"><code class="language-rust">
 <span class="boring">#![allow(unused_variables)]
