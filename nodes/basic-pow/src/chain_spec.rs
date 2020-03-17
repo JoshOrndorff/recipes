@@ -45,7 +45,6 @@ impl Alternative {
 				"Development",
 				"dev",
 				|| testnet_genesis(
-					vec![], // No initial_authorities needed for PoW
 					get_account_id_from_seed::<sr25519::Public>("Alice"),
 					vec![
 						get_account_id_from_seed::<sr25519::Public>("Alice"),
@@ -65,7 +64,6 @@ impl Alternative {
 				"Local Testnet",
 				"local_testnet",
 				|| testnet_genesis(
-					vec![], // No initial_authorities needed for PoW
 					get_account_id_from_seed::<sr25519::Public>("Alice"),
 					vec![
 						get_account_id_from_seed::<sr25519::Public>("Alice"),
