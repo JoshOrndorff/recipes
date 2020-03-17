@@ -3630,6 +3630,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "ringbuffer-queue"
+version = "0.1.0"
+dependencies = [
+ "frame-support 2.0.0-alpha.3 (git+https://github.com/paritytech/substrate.git?tag=v2.0.0-alpha.3)",
+ "frame-system 2.0.0-alpha.3 (git+https://github.com/paritytech/substrate.git?tag=v2.0.0-alpha.3)",
+ "parity-scale-codec 1.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core 2.0.0-alpha.3 (git+https://github.com/paritytech/substrate.git?tag=v2.0.0-alpha.3)",
+ "sp-io 2.0.0-alpha.3 (git+https://github.com/paritytech/substrate.git?tag=v2.0.0-alpha.3)",
+ "sp-runtime 2.0.0-alpha.3 (git+https://github.com/paritytech/substrate.git?tag=v2.0.0-alpha.3)",
+]
+
+[[package]]
 name = "rocksdb"
 version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"

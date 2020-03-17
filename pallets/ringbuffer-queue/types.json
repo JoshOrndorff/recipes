@@ -1,0 +1,6 @@
+{
+    "ValueStruct": {
+        "integer": "i32",
+        "boolean": "bool"
+    }
+}
