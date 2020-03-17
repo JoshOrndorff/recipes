@@ -33,10 +33,14 @@ sc-client-api = { git = "https://github.com/paritytech/substrate", tag = 'v2.0.0
 sp-blockchain = { git = "https://github.com/paritytech/substrate", tag = 'v2.0.0-alpha.3' }
 
 # Edit these lines to point to a different runtime.
-# Your runtime must have the necessary pallets to support consensus (Babe, Grandpa, etc)
-runtime = { package = "super-runtime", path = "../../runtimes/super-runtime" }
-runtime-genesis = { package = "super-genesis", path = "../../runtimes/super-genesis" }
+# Your runtime must have the necessary pallets to support consensus
+runtime = { package = "pow-runtime", path = "../../runtimes/pow-runtime" }
+runtime-genesis = { package = "pow-genesis", path = "../../runtimes/pow-genesis" }
 
+# Attempt to use the babe inherent that the super-runtime expects. This hack didn't work.
+# [dependencies.sp-consensus-babe]
+# git = "https://github.com/paritytech/substrate"
+# tag = 'v2.0.0-alpha.3'
 
 
 [dependencies.sp-timestamp]

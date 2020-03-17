@@ -25,6 +25,16 @@ pub fn build_inherent_data_providers() -> Result<InherentDataProviders, ServiceE
 		.map_err(Into::into)
 		.map_err(sp_consensus::error::Error::InherentData)?;
 
+	// Attempt to register the babe inherent  because the super-runtime expects the babe inherent.
+	// See https://github.com/substrate-developer-hub/recipes/pull/173#issuecomment-599129425
+	// This hack didn't work: Checking inherents failed: timestamp set in block doesn't match slot in seal
+	
+	// let bogus_babe_inherent = sp_consensus_babe::inherents::InherentDataProvider::new(1);
+	// providers
+	// 	.register_provider(bogus_babe_inherent)
+	// 	.map_err(Into::into)
+	// 	.map_err(sp_consensus::error::Error::InherentData)?;
+
 	Ok(providers)
 }
 

@@ -19,9 +19,9 @@ use sp_runtime::{
 use sp_runtime::traits::{BlakeTwo256, Block as BlockT, IdentityLookup, Verify, Convert};
 use support::traits::Get;
 use support::weights::Weight;
-use babe::SameAuthoritiesForever;
-use grandpa::{AuthorityId as GrandpaId, AuthorityWeight as GrandpaWeight};
-use grandpa::fg_primitives;
+// use babe::SameAuthoritiesForever;
+// use grandpa::{AuthorityId as GrandpaId, AuthorityWeight as GrandpaWeight};
+// use grandpa::fg_primitives;
 use sp_api::impl_runtime_apis;
 use version::RuntimeVersion;
 #[cfg(feature = "std")]
@@ -84,20 +84,20 @@ pub mod opaque {
 	/// Opaque block identifier type.
 	pub type BlockId = generic::BlockId<Block>;
 
-	pub type SessionHandlers = (Grandpa, Babe);
+	pub type SessionHandlers = (/*Grandpa, Babe*/);
 
 	impl_opaque_keys! {
 		pub struct SessionKeys {
-			pub grandpa: Grandpa,
-			pub babe: Babe,
+			// pub grandpa: Grandpa,
+			// pub babe: Babe,
 		}
 	}
 }
 
 /// This runtime version.
 pub const VERSION: RuntimeVersion = RuntimeVersion {
-	spec_name: create_runtime_str!("weight-fee-runtime"),
-	impl_name: create_runtime_str!("weight-fee-runtime"),
+	spec_name: create_runtime_str!("pow-runtime"),
+	impl_name: create_runtime_str!("pow-runtime"),
 	authoring_version: 1,
 	spec_version: 1,
 	impl_version: 1,
@@ -105,19 +105,19 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
 };
 
 /// Constants for Babe.
-pub const MILLISECS_PER_BLOCK: u64 = 6000;
-
-pub const SLOT_DURATION: u64 = MILLISECS_PER_BLOCK;
-
-pub const EPOCH_DURATION_IN_BLOCKS: u32 = 10 * MINUTES;
+// pub const MILLISECS_PER_BLOCK: u64 = 6000;
+//
+// pub const SLOT_DURATION: u64 = MILLISECS_PER_BLOCK;
+//
+// pub const EPOCH_DURATION_IN_BLOCKS: u32 = 10 * MINUTES;
 
 // These time units are defined in number of blocks.
-pub const MINUTES: BlockNumber = 60_000 / (MILLISECS_PER_BLOCK as BlockNumber);
-pub const HOURS: BlockNumber = MINUTES * 60;
-pub const DAYS: BlockNumber = HOURS * 24;
+// pub const MINUTES: BlockNumber = 60_000 / (MILLISECS_PER_BLOCK as BlockNumber);
+// pub const HOURS: BlockNumber = MINUTES * 60;
+// pub const DAYS: BlockNumber = HOURS * 24;
 
 // 1 in 4 blocks (on average, not counting collisions) will be primary babe blocks.
-pub const PRIMARY_PROBABILITY: (u64, u64) = (1, 4);
+// pub const PRIMARY_PROBABILITY: (u64, u64) = (1, 4);
 
 /// The version infromation used to identify this runtime when compiled natively.
 #[cfg(feature = "std")]
@@ -179,29 +179,29 @@ impl system::Trait for Runtime {
 	type AccountData = balances::AccountData<Balance>;
 }
 
+// parameter_types! {
+// 	pub const EpochDuration: u64 = EPOCH_DURATION_IN_BLOCKS as u64;
+// 	pub const ExpectedBlockTime: u64 = MILLISECS_PER_BLOCK;
+// }
+//
+// impl babe::Trait for Runtime {
+// 	type EpochDuration = EpochDuration;
+// 	type ExpectedBlockTime = ExpectedBlockTime;
+// 	type EpochChangeTrigger = SameAuthoritiesForever;
+// }
+//
+// impl grandpa::Trait for Runtime {
+// 	type Event = Event;
+// }
+
 parameter_types! {
-	pub const EpochDuration: u64 = EPOCH_DURATION_IN_BLOCKS as u64;
-	pub const ExpectedBlockTime: u64 = MILLISECS_PER_BLOCK;
-}
-
-impl babe::Trait for Runtime {
-	type EpochDuration = EpochDuration;
-	type ExpectedBlockTime = ExpectedBlockTime;
-	type EpochChangeTrigger = SameAuthoritiesForever;
-}
-
-impl grandpa::Trait for Runtime {
-	type Event = Event;
-}
-
-parameter_types! {
-	pub const MinimumPeriod: u64 = SLOT_DURATION / 2;
+	pub const MinimumPeriod: u64 = 100;
 }
 
 impl timestamp::Trait for Runtime {
 	/// A timestamp: milliseconds since the unix epoch.
 	type Moment = u64;
-	type OnTimestampSet = Babe;
+	type OnTimestampSet = ();
 	type MinimumPeriod = MinimumPeriod;
 }
 
@@ -344,8 +344,8 @@ construct_runtime!(
 	{
 		System: system::{Module, Call, Storage, Config, Event<T>},
 		Timestamp: timestamp::{Module, Call, Storage, Inherent},
-		Babe: babe::{Module, Call, Storage, Config, Inherent(Timestamp)},
-		Grandpa: grandpa::{Module, Call, Storage, Config, Event},
+		// Babe: babe::{Module, Call, Storage, Config, Inherent(Timestamp)},
+		// Grandpa: grandpa::{Module, Call, Storage, Config, Event},
 		Balances: balances::{Module, Call, Storage, Config<T>, Event<T>},
 		GenericAsset: generic_asset::{Module, Call, Storage, Config<T>, Event<T>},
 		RandomnessCollectiveFlip: randomness_collective_flip::{Module, Call, Storage},
@@ -444,33 +444,33 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl fg_primitives::GrandpaApi<Block> for Runtime {
-		fn grandpa_authorities() -> Vec<(GrandpaId, GrandpaWeight)> {
-			Grandpa::grandpa_authorities()
-		}
-	}
-
-	impl sp_consensus_babe::BabeApi<Block> for Runtime {
-		fn configuration() -> sp_consensus_babe::BabeConfiguration {
-			// The choice of `c` parameter (where `1 - c` represents the
-			// probability of a slot being empty), is done in accordance to the
-			// slot duration and expected target block time, for safely
-			// resisting network delays of maximum two seconds.
-			// <https://research.web3.foundation/en/latest/polkadot/BABE/Babe/#6-practical-results>
-			sp_consensus_babe::BabeConfiguration {
-				slot_duration: Babe::slot_duration(),
-				epoch_length: EpochDuration::get(),
-				c: PRIMARY_PROBABILITY,
-				genesis_authorities: Babe::authorities(),
-				randomness: Babe::randomness(),
-				secondary_slots: true,
-			}
-		}
-
-		fn current_epoch_start() -> sp_consensus_babe::SlotNumber {
-			Babe::current_epoch_start()
-		}
-	}
+	// impl fg_primitives::GrandpaApi<Block> for Runtime {
+	// 	fn grandpa_authorities() -> Vec<(GrandpaId, GrandpaWeight)> {
+	// 		Grandpa::grandpa_authorities()
+	// 	}
+	// }
+	//
+	// impl sp_consensus_babe::BabeApi<Block> for Runtime {
+	// 	fn configuration() -> sp_consensus_babe::BabeConfiguration {
+	// 		// The choice of `c` parameter (where `1 - c` represents the
+	// 		// probability of a slot being empty), is done in accordance to the
+	// 		// slot duration and expected target block time, for safely
+	// 		// resisting network delays of maximum two seconds.
+	// 		// <https://research.web3.foundation/en/latest/polkadot/BABE/Babe/#6-practical-results>
+	// 		sp_consensus_babe::BabeConfiguration {
+	// 			slot_duration: Babe::slot_duration(),
+	// 			epoch_length: EpochDuration::get(),
+	// 			c: PRIMARY_PROBABILITY,
+	// 			genesis_authorities: Babe::authorities(),
+	// 			randomness: Babe::randomness(),
+	// 			secondary_slots: true,
+	// 		}
+	// 	}
+	//
+	// 	fn current_epoch_start() -> sp_consensus_babe::SlotNumber {
+	// 		Babe::current_epoch_start()
+	// 	}
+	// }
 
 	impl substrate_session::SessionKeys<Block> for Runtime {
 		fn generate_session_keys(seed: Option<Vec<u8>>) -> Vec<u8> {
