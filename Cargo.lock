@@ -3639,6 +3639,7 @@ dependencies = [
  "sp-core 2.0.0-alpha.3 (git+https://github.com/paritytech/substrate.git?tag=v2.0.0-alpha.3)",
  "sp-io 2.0.0-alpha.3 (git+https://github.com/paritytech/substrate.git?tag=v2.0.0-alpha.3)",
  "sp-runtime 2.0.0-alpha.3 (git+https://github.com/paritytech/substrate.git?tag=v2.0.0-alpha.3)",
+ "sp-std 2.0.0-alpha.3 (git+https://github.com/paritytech/substrate.git?tag=v2.0.0-alpha.3)",
 ]
 
 [[package]]

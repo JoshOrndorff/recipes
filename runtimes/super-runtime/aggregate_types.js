@@ -19,6 +19,7 @@ const pallets = [
   "last-caller",
   "linked-map",
   "off-chain-workers",
+  "ringbuffer-queue",
   "simple-event",
   "simple-map",
   "single-value",

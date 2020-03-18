@@ -366,6 +366,10 @@ impl system::offchain::CreateTransaction<Runtime, UncheckedExtrinsic> for Runtim
 
 // end of offchain_demo setting
 
+impl ringbuffer_queue::Trait for Runtime {
+	type Event = Event;
+}
+
 impl simple_event::Trait for Runtime {
 	type Event = Event;
 }
@@ -418,6 +422,7 @@ construct_runtime!(
 		LastCaller2: last_caller::<Instance2>::{Module, Call, Storage, Event<T>},
 		LinkedMap: linked_map::{Module, Call, Storage, Event<T>},
 		OffchainDemo: offchain_demo::{Module, Call, Storage, Event<T>, ValidateUnsigned},
+		RingbufferQueue: ringbuffer_queue::{Module, Call, Storage, Event<T>},
 		SimpleEvent: simple_event::{Module, Call, Event},
 		SimpleMap: simple_map::{Module, Call, Storage, Event<T>},
 		SingleValue: single_value::{Module, Call, Storage},

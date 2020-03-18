@@ -42,7 +42,7 @@ decl_event!(
 	where
 		AccountId = <T as system::Trait>::AccountId,
 	{
-		Popped(ValueStruct),
+		Popped(i32, bool),
 		DummyEvent(AccountId),
 	}
 );
@@ -78,8 +78,8 @@ decl_module! {
 			let _user = ensure_signed(origin)?;
 
 			let mut queue = Self::queue_transient();
-			if let Some(value) = queue.pop() {
-				Self::deposit_event(RawEvent::Popped(value));
+			if let Some(ValueStruct{ integer, boolean }) = queue.pop() {
+				Self::deposit_event(RawEvent::Popped(integer, boolean));
 			}
 
 			Ok(())
