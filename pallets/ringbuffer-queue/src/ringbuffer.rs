@@ -1,6 +1,6 @@
 //! # Transient RingBuffer implementation
 //!
-//! This module provides a trait and implementation for a ringbuffer that
+//! This pallet provides a trait and implementation for a ringbuffer that
 //! abstracts over storage items and presents them as a FIFO queue.
 //!
 //! Usage Example:
