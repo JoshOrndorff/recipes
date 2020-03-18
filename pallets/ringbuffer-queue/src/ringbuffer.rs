@@ -8,17 +8,12 @@
 //! use ringbuffer::{RingBufferTrait, RingBufferTransient};
 //!
 //! // Trait object that we will be interacting with.
-//! type RingBuffer = dyn RingBufferTrait<
-//!     SomeStruct,
-//!     Bounds = <TestModule as Store>::TestRange,
-//!     Map = <TestModule as Store>::TestMap,
-//! >;
+//! type RingBuffer = dyn RingBufferTrait<SomeStruct>;
 //! // Implementation that we will instantiate.
 //! type Transient = RingBufferTransient<
 //!     SomeStruct,
 //!     <TestModule as Store>::TestRange,
 //!     <TestModule as Store>::TestMap,
-//!     RingBuffer,
 //! >;
 //! {
 //!     let mut ring: Box<RingBuffer> = Box::new(Transient::new());
@@ -32,6 +27,27 @@
 use codec::{Codec, EncodeLike};
 use core::marker::PhantomData;
 use frame_support::storage::{StorageMap, StorageValue};
+
+/// Trait object presenting the ringbuffer interface.
+pub trait RingBufferTrait<Item>
+where
+	Item: Codec + EncodeLike,
+{
+	/// Store all changes made in the underlying storage.
+	///
+	/// Data is not guaranteed to be consistent before this call.
+	/// 
+	/// Implementation note: Call in `drop` to increase ergonomics.
+	fn commit(&self);
+	/// Push an item onto the end of the queue.
+	fn push(&mut self, i: Item);
+	/// Pop an item from the start of the queue.
+	///
+	/// Returns `None` if the queue is empty.
+	fn pop(&mut self) -> Option<Item>;
+	/// Return whether the queue is empty.
+	fn is_empty(&self) -> bool;
+}
 
 // There is no equivalent trait in std so we create one.
 pub trait WrappingOps
@@ -60,104 +76,69 @@ impl_wrapping_ops!(u64);
 
 type DefaultIdx = u16;
 /// Transient backing data that is the backbone of the trait object.
-pub struct RingBufferTransient<Item, B, M, T, Index = DefaultIdx>
+pub struct RingBufferTransient<Item, B, M, Index = DefaultIdx>
 where
 	Item: Codec + EncodeLike,
 	B: StorageValue<(Index, Index), Query = (Index, Index)>,
 	M: StorageMap<Index, Item, Query = Item>,
-	T: RingBufferTrait<Item, Index, Bounds = B, Map = M> + ?Sized,
 	Index: Codec + EncodeLike + Eq + WrappingOps + From<u8> + Copy,
 {
 	start: Index,
 	end: Index,
-	_t: PhantomData<(Item, B, M, T)>,
+	_phantom: PhantomData<(Item, B, M)>,
 }
 
-impl<Item, B, M, T, Index> RingBufferTransient<Item, B, M, T, Index>
+impl<Item, B, M, Index> RingBufferTransient<Item, B, M, Index>
 where
 	Item: Codec + EncodeLike,
 	B: StorageValue<(Index, Index), Query = (Index, Index)>,
 	M: StorageMap<Index, Item, Query = Item>,
-	T: RingBufferTrait<Item, Index, Bounds = B, Map = M> + ?Sized,
 	Index: Codec + EncodeLike + Eq + WrappingOps + From<u8> + Copy,
 {
 	/// Create a new `RingBufferTransient` that backs the ringbuffer implementation.
 	///
 	/// Initializes itself from the `Bounds` storage.
-	pub fn new() -> RingBufferTransient<Item, B, M, T, Index> {
-		let (start, end) = <<T as RingBufferTrait<Item, Index>>::Bounds>::get();
+	pub fn new() -> RingBufferTransient<Item, B, M, Index> {
+		let (start, end) = B::get();
 		RingBufferTransient {
 			start,
 			end,
-			_t: PhantomData,
+			_phantom: PhantomData,
 		}
 	}
 }
 
-impl<Item, B, M, T, Index> Drop for RingBufferTransient<Item, B, M, T, Index>
+impl<Item, B, M, Index> Drop for RingBufferTransient<Item, B, M, Index>
 where
 	Item: Codec + EncodeLike,
 	B: StorageValue<(Index, Index), Query = (Index, Index)>,
 	M: StorageMap<Index, Item, Query = Item>,
-	T: RingBufferTrait<Item, Index, Bounds = B, Map = M> + ?Sized,
 	Index: Codec + EncodeLike + Eq + WrappingOps + From<u8> + Copy,
 {
 	/// Commit on `drop`.
 	fn drop(&mut self) {
-		<Self as RingBufferTrait<Item, Index>>::commit(self);
+		<Self as RingBufferTrait<Item>>::commit(self);
 	}
 }
 
-/// Trait object presenting the ringbuffer interface.
-pub trait RingBufferTrait<Item, Index = DefaultIdx>
-where
-	Item: Codec + EncodeLike,
-	Index: Codec + EncodeLike,
-{
-	type Bounds: StorageValue<(Index, Index)>;
-	type Map: StorageMap<Index, Item>;
-
-	/// Store all changes made in the underlying storage.
-	///
-	/// Data is not guaranteed to be consistent before this call.
-	/// 
-	/// Implementation note: Call in `drop` to increase ergonomics.
-	fn commit(&self);
-
-	/// Push an item onto the end of the queue.
-	fn push(&mut self, i: Item);
-
-	/// Pop an item from the start of the queue.
-	///
-	/// Returns `None` if the queue is empty.
-	fn pop(&mut self) -> Option<Item>;
-
-	/// Return whether the queue is empty.
-	fn is_empty(&self) -> bool;
-}
-
 /// Ringbuffer implementation based on `RingBufferTransient`
-impl<Item, B, M, T, Index> RingBufferTrait<Item, Index> for RingBufferTransient<Item, B, M, T, Index>
+impl<Item, B, M, Index> RingBufferTrait<Item> for RingBufferTransient<Item, B, M, Index>
 where
 	Item: Codec + EncodeLike,
 	B: StorageValue<(Index, Index), Query = (Index, Index)>,
 	M: StorageMap<Index, Item, Query = Item>,
-	T: RingBufferTrait<Item, Index, Bounds = B, Map = M> + ?Sized,
 	Index: Codec + EncodeLike + Eq + WrappingOps + From<u8> + Copy,
 {
-	type Bounds = B;
-	type Map = M;
-
 	/// Commit the (potentially) changed bounds to storage.
 	fn commit(&self) {
-		Self::Bounds::put((self.start, self.end));
+		B::put((self.start, self.end));
 	}
 
 	/// Push an item onto the end of the queue.
 	///
 	/// Will insert the new item, but will not update the bounds in storage.
 	fn push(&mut self, item: Item) {
-		Self::Map::insert(self.end, item);
+		M::insert(self.end, item);
 		// this will intentionally overflow and wrap around when bonds_end
 		// reaches `Index::max_value` because we want a ringbuffer.
 		let next_index = self.end.wrapping_add(1.into());
@@ -176,7 +157,7 @@ where
 		if self.is_empty() {
 			return None;
 		}
-		let item = Self::Map::take(self.start);
+		let item = M::take(self.start);
 		self.start = self.start.wrapping_add(1.into());
 
 		item.into()
@@ -279,18 +260,12 @@ mod tests {
 	// ringbuffer
 
 	// Trait object that we will be interacting with.
-	type RingBuffer = dyn RingBufferTrait<
-		SomeStruct,
-		TestIdx,
-		Bounds = <TestModule as Store>::TestRange,
-		Map = <TestModule as Store>::TestMap,
-	>;
+	type RingBuffer = dyn RingBufferTrait<SomeStruct>;
 	// Implementation that we will instantiate.
 	type Transient = RingBufferTransient<
 		SomeStruct,
 		<TestModule as Store>::TestRange,
 		<TestModule as Store>::TestMap,
-		RingBuffer,
 		TestIdx
 	>;
 

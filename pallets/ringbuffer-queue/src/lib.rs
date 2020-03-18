@@ -91,23 +91,12 @@ impl<T: Trait> Module<T> {
 	/// Constructs a ringbuffer transient and returns it as a boxed trait object.
 	/// See [this part of the Rust book](https://doc.rust-lang.org/book/ch17-02-trait-objects.html#trait-objects-perform-dynamic-dispatch)
 	fn queue_transient() -> Box<
-		dyn RingBufferTrait<
-			ValueStruct,
-			BufferIndex,
-			Bounds = <Self as Store>::BufferRange,
-			Map = <Self as Store>::BufferMap,
-		>,
+		dyn RingBufferTrait<ValueStruct>,
 	> {
 		Box::new(RingBufferTransient::<
 			ValueStruct,
 			<Self as Store>::BufferRange,
 			<Self as Store>::BufferMap,
-			dyn RingBufferTrait<
-				ValueStruct,
-				BufferIndex,
-				Bounds = <Self as Store>::BufferRange,
-				Map = <Self as Store>::BufferMap,
-			>,
 			BufferIndex,
 		>::new())
 	}
