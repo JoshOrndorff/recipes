@@ -13,6 +13,7 @@ transaction-payment = { package = 'pallet-transaction-payment', git = 'https://g
 # Recipe Pallets
 adding-machine = { path = "../../pallets/adding-machine", default-features = false }
 basic-token = { path = "../../pallets/basic-token", default-features = false }
+charity = { path = "../../pallets/charity", default-features = false }
 check-membership = { path = "../../pallets/check-membership", default-features = false }
 constant-config = { path = "../../pallets/constant-config", default-features = false }
 default-instance = { path = "../../pallets/default-instance", default-features = false }
@@ -22,9 +23,9 @@ generic-event = { path = "../../pallets/generic-event", default-features = false
 hello-substrate = { path = "../../pallets/hello-substrate", default-features = false }
 last-caller = { path = "../../pallets/last-caller", default-features = false }
 linked-map = { path = "../../pallets/linked-map", default-features = false }
+offchain-demo = { path = "../../pallets/offchain-demo", default-features = false }
 simple-event = { path = "../../pallets/simple-event", default_features = false }
 simple-map = { path = "../../pallets/simple-map", default-features = false }
-charity = { path = "../../pallets/charity", default-features = false }
 single-value = { path = "../../pallets/single-value", default-features = false }
 storage-cache = { path = "../../pallets/storage-cache", default-features = false }
 struct-storage = { path = "../../pallets/struct-storage", default-features = false }
@@ -182,7 +183,7 @@ std = [
 	"serde",
 	"sp-api/std",
 	"sp-runtime/std",
-  "sp-transaction-pool/std",
+	"sp-transaction-pool/std",
 	"substrate-session/std",
 	"sudo/std",
 	"support/std",
@@ -204,10 +205,11 @@ std = [
 	"hello-substrate/std",
 	"last-caller/std",
 	"linked-map/std",
+	"offchain-demo/std",
 	"simple-event/std",
 	"simple-map/std",
-	"storage-cache/std",
 	"single-value/std",
+	"storage-cache/std",
 	"struct-storage/std",
 	"vec-set/std",
 ]

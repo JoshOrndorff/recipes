@@ -92,7 +92,7 @@ decl_module! {
 
 		/// Allocate the Charity's funds
 		///
-		/// Take funds from the Charity's pot and send them somewhere. This cal lrequires root origin,
+		/// Take funds from the Charity's pot and send them somewhere. This call requires root origin,
 		/// which means it must come from a governance mechanism such as Substrate's Democracy pallet.
 		fn allocate(
 			origin,
