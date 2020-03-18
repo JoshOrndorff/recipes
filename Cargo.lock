@@ -5896,6 +5896,7 @@ dependencies = [
  "pallet-timestamp",
  "pallet-transaction-payment",
  "parity-scale-codec",
+ "randomness",
  "safe-mix",
  "serde",
  "simple-event",
