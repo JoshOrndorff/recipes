@@ -40,5 +40,6 @@ where
 ```
 
 ## The WrappingOps Trait <a name = "wrapping_ops"></a>
+The ringbuffer should be agnostic to the concrete `Index` type used. In order to be able to decrement and increment the start and end index, though, any concrete type needs to implement `wrapping_add` and `wrapping_sub`. Because `std` does not provide such a trait we need another way to require this behavior. One possbility would be using the [`num_traits` crate](https://crates.io/crates/num-traits), but to keep things simple here we just implement our own trait `WrappingOps` for the types we want to support (`u8`, `u16`, `u32` and `u64`).
 
 ## Typical Usage
