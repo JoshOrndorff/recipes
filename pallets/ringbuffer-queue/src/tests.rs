@@ -7,7 +7,7 @@ use sp_runtime::{
 	traits::{BlakeTwo256, IdentityLookup},
 	Perbill,
 };
-use frame_support::{assert_ok, assert_err, impl_outer_event, impl_outer_origin, parameter_types};
+use frame_support::{assert_ok, impl_outer_event, impl_outer_origin, parameter_types};
 use frame_system as system;
 
 impl_outer_origin! {
@@ -45,13 +45,13 @@ impl system::Trait for TestRuntime {
 	type OnKilledAccount = ();
 }
 
-mod simple_map {
+mod ringbuffer {
 	pub use crate::Event;
 }
 
 impl_outer_event! {
 	pub enum TestEvent for TestRuntime {
-		simple_map<T>,
+		ringbuffer<T>,
 		system<T>,
 	}
 }
@@ -80,5 +80,30 @@ fn add_to_queue_works() {
 		assert_ok!(RingBuffer::add_to_queue(Origin::signed(1), 1, true));
 		assert_eq!(RingBuffer::get_value(0), ValueStruct{ integer: 1, boolean: true});
 		assert_eq!(RingBuffer::range(), (0, 1));
+	})
+}
+
+#[test]
+fn add_multiple_works() {
+	ExtBuilder::build().execute_with(|| {
+		assert_ok!(RingBuffer::add_multiple(Origin::signed(1), vec![1, 2, 3], true));
+		assert_eq!(RingBuffer::get_value(0), ValueStruct{ integer: 1, boolean: true});
+		assert_eq!(RingBuffer::range(), (0, 3));
+	})
+}
+
+#[test]
+fn pop_works() {
+	ExtBuilder::build().execute_with(|| {
+		assert_ok!(RingBuffer::add_to_queue(Origin::signed(1), 1, true));
+		assert_eq!(RingBuffer::get_value(0), ValueStruct{ integer: 1, boolean: true});
+		assert_eq!(RingBuffer::range(), (0, 1));
+
+		assert_ok!(RingBuffer::pop_from_queue(Origin::signed(1)));
+		assert_eq!(RingBuffer::range(), (1, 1));
+
+		let expected_event = TestEvent::ringbuffer(RawEvent::Popped(ValueStruct{ integer: 1, boolean: true}));
+
+		assert!(System::events().iter().any(|a| a.event == expected_event));
 	})
 }

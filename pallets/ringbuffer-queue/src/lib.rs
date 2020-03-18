@@ -3,7 +3,7 @@
 // Ringbuffer
 use codec::{Decode, Encode};
 use frame_support::{
-	decl_event, decl_module, decl_storage, dispatch::DispatchResult, ensure, StorageMap,
+	decl_event, decl_module, decl_storage, dispatch::DispatchResult,
 };
 use frame_system::{self as system, ensure_signed};
 
@@ -87,6 +87,10 @@ decl_module! {
 }
 
 impl<T: Trait> Module<T> {
+	/// Constructor function so we don't have to specify the types every time.
+	/// 
+	/// Constructs a ringbuffer transient and returns it as a boxed trait object.
+	/// See [this part of the Rust book](https://doc.rust-lang.org/book/ch17-02-trait-objects.html#trait-objects-perform-dynamic-dispatch)
 	fn queue_transient() -> Box<
 		dyn RingBufferTrait<
 			ValueStruct,

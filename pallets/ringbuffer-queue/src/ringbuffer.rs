@@ -33,6 +33,7 @@ use codec::{Codec, EncodeLike};
 use core::marker::PhantomData;
 use frame_support::storage::{StorageMap, StorageValue};
 
+// There is no equivalent trait in std so we create one.
 pub trait WrappingOps
 {
 	fn wrapping_add(self, rhs: Self) -> Self;
@@ -125,8 +126,6 @@ where
 
 	/// Push an item onto the end of the queue.
 	fn push(&mut self, i: Item);
-	/// Push an item onto the front of the queue.
-	fn push_front(&mut self, i: Item);
 
 	/// Pop an item from the start of the queue.
 	///
@@ -168,28 +167,6 @@ where
 			self.start = self.start.wrapping_add(1.into());
 		}
 		self.end = next_index;
-	}
-
-	/// Push an item onto the front of the queue.
-	///
-	/// Equivalent to `push` if the queue is empty.
-	/// 
-	/// Will insert the new item, but will not update the bounds in storage.
-	fn push_front(&mut self, item: Item) {
-		if self.is_empty() {
-			// queue is empty --> regular push
-			self.push(item);
-			return;
-		}
-		let index = self.start.wrapping_sub(1.into());
-		Self::Map::insert(index, item);
-		self.start = index;
-		if self.start == self.end {
-			// queue presents as empty but is not
-			// --> overwrite the most recent item in the queue
-			// TODO: Should we remove the item at the new `end` index?
-			self.end = self.end.wrapping_sub(1.into());
-		}
 	}
 
 	/// Pop an item from the start of the queue.
@@ -400,28 +377,6 @@ mod tests {
 			ring.commit();
 			let start_end = TestModule::get_test_range();
 			assert_eq!(start_end, (4, 3));
-
-			// push_front should overwrite the most recent entry if the queue is full
-			ring.push_front(SomeStruct { foo: 4, bar: 4 });
-			ring.commit();
-			let start_end = TestModule::get_test_range();
-			assert_eq!(start_end, (3, 2));
-		})
-	}
-
-	#[test]
-	fn simple_push_front() {
-		new_test_ext().execute_with(|| {
-			let mut ring: Box<RingBuffer> = Box::new(Transient::new());
-			ring.push_front(SomeStruct { foo: 1, bar: 2 });
-			ring.commit();
-			let start_end = TestModule::get_test_range();
-			assert_eq!(start_end, (0, 1));
-
-			ring.push_front(SomeStruct { foo: 20, bar: 42 });
-			ring.commit();
-			let start_end = TestModule::get_test_range();
-			assert_eq!(start_end, (TestIdx::max_value(), 1));
 		})
 	}
 }
