@@ -15,7 +15,7 @@ use ringbuffer::{RingBufferTrait, RingBufferTransient};
 #[cfg(test)]
 mod tests;
 
-type Index = u8;
+type BufferIndex = u8;
 
 #[derive(Encode, Decode, Default, Clone, PartialEq, Eq)]
 #[cfg_attr(feature = "std", derive(Debug))]
@@ -30,10 +30,8 @@ pub trait Trait: system::Trait {
 
 decl_storage! {
 	trait Store for Module<T: Trait> as RingBufferQueue {
-		BufferMap get(fn get_value): map hasher(twox_64_concat) Index => ValueStruct;
-		BufferRange get(fn range): (Index, Index);
-
-		AMap: map hasher(twox_64_concat) &str => u32;
+		BufferMap get(fn get_value): map hasher(twox_64_concat) BufferIndex => ValueStruct;
+		BufferRange get(fn range): (BufferIndex, BufferIndex) = (0, 0);
 	}
 }
 
@@ -95,7 +93,7 @@ impl<T: Trait> Module<T> {
 	fn queue_transient() -> Box<
 		dyn RingBufferTrait<
 			ValueStruct,
-			Index,
+			BufferIndex,
 			Bounds = <Self as Store>::BufferRange,
 			Map = <Self as Store>::BufferMap,
 		>,
@@ -106,11 +104,11 @@ impl<T: Trait> Module<T> {
 			<Self as Store>::BufferMap,
 			dyn RingBufferTrait<
 				ValueStruct,
-				Index,
+				BufferIndex,
 				Bounds = <Self as Store>::BufferRange,
 				Map = <Self as Store>::BufferMap,
 			>,
-			Index,
+			BufferIndex,
 		>::new())
 	}
 }

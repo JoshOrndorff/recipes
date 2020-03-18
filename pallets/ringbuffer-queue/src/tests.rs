@@ -102,7 +102,7 @@ fn pop_works() {
 		assert_ok!(RingBuffer::pop_from_queue(Origin::signed(1)));
 		assert_eq!(RingBuffer::range(), (1, 1));
 
-		let expected_event = TestEvent::ringbuffer(RawEvent::Popped(ValueStruct{ integer: 1, boolean: true}));
+		let expected_event = TestEvent::ringbuffer(RawEvent::Popped(1, true));
 
 		assert!(System::events().iter().any(|a| a.event == expected_event));
 	})

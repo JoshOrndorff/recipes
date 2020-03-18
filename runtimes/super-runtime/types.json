@@ -10,6 +10,11 @@
     "score": "PriorityScore",
     "proposed_at": "BlockNumber"
   },
+  "ValueStruct": {
+    "integer": "i32",
+    "boolean": "bool"
+  },
+  "BufferIndex": "u8",
   "InnerThing": {
     "number": "u32",
     "hash": "Hash",

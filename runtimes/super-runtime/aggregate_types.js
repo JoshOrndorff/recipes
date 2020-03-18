@@ -18,7 +18,7 @@ const pallets = [
   "generic-event",
   "last-caller",
   "linked-map",
-  "off-chain-workers",
+  "offchain-demo",
   "ringbuffer-queue",
   "simple-event",
   "simple-map",
