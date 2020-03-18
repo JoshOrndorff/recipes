@@ -49,7 +49,7 @@ decl_module! {
 	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
 		fn deposit_event() = default;
 
-		fn add_to_queue(origin, integer: i32, boolean: bool) -> DispatchResult {
+		pub fn add_to_queue(origin, integer: i32, boolean: bool) -> DispatchResult {
 			// only a user can push into the queue
 			let _user = ensure_signed(origin)?;
 
@@ -59,7 +59,7 @@ decl_module! {
 			Ok(())
 		}
 
-		fn add_multiple(origin, integers: Vec<i32>, boolean: bool) -> DispatchResult {
+		pub fn add_multiple(origin, integers: Vec<i32>, boolean: bool) -> DispatchResult {
 			// only a user can push into the queue
 			let _user = ensure_signed(origin)?;
 
@@ -71,7 +71,7 @@ decl_module! {
 			Ok(())
 		}
 
-		fn pop_from_queue(origin) -> DispatchResult {
+		pub fn pop_from_queue(origin) -> DispatchResult {
 			// only a user can pop from the queue
 			let _user = ensure_signed(origin)?;
 
