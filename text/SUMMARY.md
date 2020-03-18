@@ -29,6 +29,7 @@
 	- [Custom RPCs](./3-entrees/custom-rpc.md)
 	- [Currency Types](./3-entrees/currency.md)
 	- [Generating Randomness](./3-entrees/random.md)
+	- [Customizing the CLI](./3-entrees/cli.md)
 	- [Execution Schedule](./3-entrees/execution-schedule.md)
 	- [Permissioned Methods](./3-entrees/permissioned-methods.md)
 	- [Testing](./3-entrees/testing/index.md)
