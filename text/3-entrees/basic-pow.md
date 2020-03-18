@@ -13,8 +13,7 @@ You may remember from the [hello-substrate recipe](../2-appetizers/1-hello-subst
 
 ![Substrate Architecture Diagram](../img/substrate-architecture.png)
 
-In principle the consensus engine, part of the outer node, is agnostic over the runtime that is used with it. But in practice, most consensus engines will require the runtime to provide certain [runtime APIs](./runtime-api.md) that effect the engine. For example Aura, and Babe, query the runtime for the set of validators. A more real-world PoW consensus would query the runtime for the bock difficulty. Additionally, some runtimes, rely on the consensus engine to provide [PreRuntime Digests](https://substrate.dev/rustdocs/v2.0.0-alpha.3/sp_runtime/generic/enum.DigestItem.html#variant.PreRuntime). For example Runtimes that include the Babe pallet, expect a preruntime digest containing information about the current babe slot. Because of these requirements, this node will use a dedicated `pow-runtime`. The contents of that runtime should be familiar, and will not be discussed here.
-
+In principle the consensus engine, part of the outer node, is agnostic over the runtime that is used with it. But in practice, most consensus engines will require the runtime to provide certain [runtime APIs](./runtime-api.md) that affect the engine. For example Aura, and Babe, query the runtime for the set of validators. A more real-world PoW consensus would query the runtime for the bock difficulty. Additionally, some runtimes, rely on the consensus engine to provide [PreRuntime Digests](https://substrate.dev/rustdocs/master/sp_runtime/generic/enum.DigestItem.html#variant.PreRuntime). For example Runtimes that include the Babe pallet, expect a preruntime digest containing information about the current babe slot. Because of these requirements, this node will use a dedicated `pow-runtime`. The contents of that runtime should be familiar, and will not be discussed here.
 
 ## Proof of Work Algorithms
 
@@ -166,8 +165,66 @@ You may have noticed that when we created the `PowBlockImport` we gave it two se
 
 ### Inherent Data Providers
 
-Both the BlockImport and the import_queue contain are given an instance called `inherent_data_providers`.
+Both the BlockImport and the import_queue are given an instance called `inherent_data_providers`. This object is created in a helper function defined at the beginning of `service.rs`
+
+```rust, ignore
+pub fn build_inherent_data_providers() -> Result<InherentDataProviders, ServiceError> {
+	let providers = InherentDataProviders::new();
+
+	providers
+		.register_provider(sp_timestamp::InherentDataProvider)
+		.map_err(Into::into)
+		.map_err(sp_consensus::error::Error::InherentData)?;
+
+	Ok(providers)
+}
+```
+
+Anything tye that implements the [`ProvideInherentData` trait](https://substrate.dev/rustdocs/master/sp_inherents/trait.ProvideInherentData.html) may be used here. The block authoring logic must supply all inherent's that the runtime expects. In this case of this basic-pow chain, that is just the [`TimestampInherentData`](https://substrate.dev/rustdocs/master/sp_timestamp/trait.TimestampInherentData.html) expected by the [timestamp pallet](https://substrate.dev/rustdocs/master/pallet_timestamp/index.html). In order to register other inherents, you would call `register_provider` multiple times, and map errors accordingly.
 
 ## Mining
 
+We've already implemented a mining algorithm as part of our `Sha3Algorithm`, but we haven't yet told our service to actually mine with that algorithm. This is our last task in the `new_full` function.
+
+```rust, ignore
+if participates_in_consensus {
+	let proposer = sc_basic_authorship::ProposerFactory::new(
+		service.client(),
+		service.transaction_pool()
+	);
+
+	// The number of rounds of mining to try in a single call
+	let rounds = 500;
+
+	let client = service.client();
+	let select_chain = service.select_chain()
+		.ok_or(ServiceError::SelectChainRequired)?;
+
+	let can_author_with =
+		sp_consensus::CanAuthorWithNativeVersion::new(service.client().executor().clone());
+
+	sc_consensus_pow::start_mine(
+		Box::new(block_import),
+		client,
+		Sha3Algorithm,
+		proposer,
+		None, // No preruntime digests
+		rounds,
+		service.network(),
+		std::time::Duration::new(2, 0),
+		Some(select_chain),
+		inherent_data_providers.clone(),
+		can_author_with,
+	);
+}
+```
+
+We begin by testing whether this node participates in consensus, which is to say we check whether the user wants the node to act as a miner. If this node is to be a miner, we gather references to various parts of the node that the [`start mine` function](https://substrate.dev/rustdocs/master/sc_consensus_pow/fn.start_mine.html) requires, and define that we will attempt 500 rounds of mining for each block before pausing. Finally we call `start_mine`.
+
 ## The light Client
+
+The last thing in the `service.rs` file is constructing the [light client](https://www.parity.io/what-is-a-light-client/)'s service. This code is quite simpilar to the construction of the full service.
+
+Instead of using the `with_import_queue` function we used previously, we use the `with_import_queue_and_fprb` function. FPRB stand for [`FinalityProofRequestBuilder`](https://substrate.dev/rustdocs/master/sc_network/config/trait.FinalityProofRequestBuilder.html). In chains with deterministic finality, light client must request proofs of finality from full nodes. But in our chain, we do not have deterministic finality, so we can use the [`DummyFinalityProofRequestBuilder`](https://substrate.dev/rustdocs/master/sc_network/config/struct.DummyFinalityProofRequestBuilder.html) which does nothing except satisfy Rust's type checker.
+
+Once the dummy request builder is configured, the `BlockImport` and import queue are configured exactly as they were in the full node.
