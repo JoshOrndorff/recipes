@@ -1,0 +1,12 @@
+{
+  "name": "sum-storage",
+  "version": "1.0.0",
+  "description": "Example of using Polkadot-js API to query custom rpc",
+  "main": "index.js",
+  "author": "Joshy Orndorff",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "@polkadot/api": "^1.0.0-beta.4"
+  }
+}

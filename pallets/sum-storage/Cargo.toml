@@ -1,0 +1,27 @@
+[package]
+name = "sum-storage"
+version = "2.0.0"
+authors = ["Joshy Orndorff"]
+edition = "2018"
+
+[dependencies]
+codec = { package = "parity-scale-codec", version = "1.0.0", default-features = false, features = ["derive"] }
+sp-std = { tag = 'v2.0.0-alpha.3', git = 'https://github.com/paritytech/substrate.git', default_features = false}
+sp-runtime = { tag = 'v2.0.0-alpha.3', git = 'https://github.com/paritytech/substrate.git', default_features = false}
+frame-support = { tag = 'v2.0.0-alpha.3', git = 'https://github.com/paritytech/substrate.git', default_features = false}
+frame-system = { tag = 'v2.0.0-alpha.3', git = 'https://github.com/paritytech/substrate.git', default_features = false}
+
+
+[dev-dependencies]
+sp-io = { tag = 'v2.0.0-alpha.3', git = 'https://github.com/paritytech/substrate.git', default_features = false}
+sp-core = { tag = 'v2.0.0-alpha.3', git = 'https://github.com/paritytech/substrate.git', default_features = false}
+
+[features]
+default = ["std"]
+std = [
+	"codec/std",
+	"sp-std/std",
+	"sp-runtime/std",
+	"frame-support/std",
+	"frame-system/std",
+]

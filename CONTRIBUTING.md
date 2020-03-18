@@ -1,57 +1,57 @@
 # Contributing Guidelines
 
-The **purpose** of [Substrate Recipes](https://substrate.dev/recipes/) is to identify best practices in Substrate runtime code and extract useful patterns.
+The **purpose** of [Substrate Recipes](https://substrate.dev/recipes/) is to identify best practices and extract useful patterns for developing on Substrate, and to present those patterns in an approachable and fun format.
 
-* [Template](./src/TEMPLATE.md)
-* [Scope and Structure](#scope)
-* [Getting Involved](#involve)
-* [Mdbook Local Build Instructions](#instructions)
-* [Etiquette](#etiquette)
+The recipes onboards aspiring blockchain developers by focusing first on **FRAME pallet development** patterns before reusing these patterns in the context of **runtime configurations**, and finally installing those runtimes in full substrate-based nodes.
 
-## Scope and Structure <a name = "scope"></a>
+The recipes supplements existing resources by providing usage examples, demonstrating best practices in context, and extending simple samples/tutorials. Likewise, it is necessary to **frequently link to/from [reference docs](https://substrate.dev/rustdocs/master/), [tutorials](https://substrate.dev/tutorials/), and [high-level docs](https://substrate.dev/docs)**.
 
-At the moment, the recipes onboards developers by focusing primarily on **module development** patterns before reusing these patterns in the context of **runtime configuration** (runtime section is *in-progress*).
+## Chef's Workflow
 
-The **[kitchen](./kitchen)** contains code from the recipes in the context of modules/runtimes, while **[src](./src)** houses the commentary for related explanations and references. The structure of the `src` can be found in [src/SUMMARY.md](./src/SUMMARY.md).
+1. Isolate useful pattern(s) from the main [Substrate](https://github.com/paritytech/substrate) repository and other code that builds on Substrate.
 
-In practice, the recipes supplements existing resources by providing usage examples, demonstrating best practices in context, and extending simple samples/tutorials. Likewise, it is necessary to **frequently link to/from [reference docs](https://crates.parity.io/substrate_service/index.html?search=srml), [tutorials](https://github.com/substrate-developer-hub/), and [high-level docs](https://substrate.dev/)**.
+2. Open an [issue](https://github.com/substrate-developer-hub/recipes/issues/new) describing how the pattern can be condensed into a recipe.
 
-The recipes do NOT cover:
-* module testing
-* rpc, cli, and other [`node/`](https://github.com/paritytech/substrate/tree/master/node) stuff outside the runtime
-* frontend UI
-* protocol engineering (consensus, networking, etc.)
+3. Fork the [recipes](https://github.com/substrate-developer-hub/recipes). Before making any changes, checkout another branch.
 
-If you're interested in adding new chapters for any of these sections, [create an issue](https://github.com/substrate-developer-hub/recipes/issues/new) and convince us :)
+4. Write complete working code in one of the `pallets`, `runtimes`, or `nodes` directories, and add it the the workspace in `Cargo.toml`.
 
-## Getting Involved <a name = "involve"></a>
+5. Write the companion text in the `text` directory, referencing the code you wrote.
 
-1. isolate useful pattern (in [`issues`](https://github.com/substrate-developer-hub/recipes/issues))
-2. build a module/runtime example with context (in [`kitchen`](https://github.com/substrate-developer-hub/recipes/tree/master/kitchen))
-3. walk through logic of useful pattern in piecewise steps (in [`src/`](https://github.com/substrate-developer-hub/recipes/tree/master/src))
-4. link `src` and `kitchen` (in [`src/`](https://github.com/substrate-developer-hub/recipes/tree/master/src)) 
+6. Stage your changes locally (see below).
 
-## Local Build Instructions <a name = "instructions"></a>
+7. Open a new pull request. Thanks for you contributions <3.
 
-**Stage locally before making a PR.** Don't forget to switch to a new branch before you make edits.
-
-1. install [`mdbook`](https://github.com/rust-lang-nursery/mdBook)
-
+### Testing and Staging Locally
 ```bash
-$ cargo install mdbook
+# Test code
+cargo test --all
+
+# Install mdbook
+cargo install mdbook
+
+#Build and open rendered book in default browser
+mdbook build --open
 ```
 
-2. build and open rendered book in default browser
+## Style
 
-```bash
-$ mdbook build --open
-```
+### Rust Code
+There is not yet strict enforcement of the [Rust in Substrate coding style](https://wiki.parity.io/Substrate-Style-Guide), but it is highly encouraged to wrap lines at 120 characters a line (or less) for improving reviewer experience on github.
 
-3. If everything looks good, open a [Pull Request](https://github.com/substrate-developer-hub/recipes/compare)
+Graciously invoke `cargo fmt` on any Rust code -- this should soon be enforced by CI!
 
-## Etiquette <a name = "etiquette"></a>
+### Cargo.toml
+Prefer listing dependencies under a single `[dependencies]` header in lieu of using a `[dependencies.some_import]` for every `some_import` module imported. This preference is not enforced. See [`adding-machine/Cargo.toml`](https://github.com/substrate-developer-hub/recipes/blob/master/pallets/adding-machine/Cargo.toml) for an example of the recommended less verbose `Cargo.toml` syntax.
 
-* don't use "we" or "our" because it often is conducive to unnecessary language
-* use active voice (instead of passive voice ie "you may want to use active voice")
-* link as often as possible to outside content and useful resources including other recipes, [documentation](https://substrate.dev/docs/en/getting-started/), [tutorials](https://substrate.dev/en/tutorials), and [code](https://github.com/substrate)
-* **be nice, abide by the [Rust CoC](https://www.rust-lang.org/policies/code-of-conduct)**
+### English
+No standards for language style are enforced aside from the common English spelling/grammar rules. @4meta5 has a few *preferences*:
+* Avoid using "we", "our", "you" because it often is conducive to unnecessary language
+* Prefer active voice (instead of "you may want to use active voice" `=>` "use active voice")
+* Link as often as possible to outside content and useful resources including other recipes, docs,
+tutorials, and code. It is not necessary to re-link the same external resource on subsequent
+mentions in a single document.
+
+## Test Coverage
+Not all code is covered, and not all covered code is covered well, but we have a good start and will continue to improve. Your help is warmly welcomed.
+Run the tests with `cargo test -- all`.

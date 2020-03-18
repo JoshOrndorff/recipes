@@ -1,15 +1,13 @@
-# todos are scattered in these files
-k.md
-# to be made into a larger PR for Substrate soon
-v002.md
-**/*/drafts/
-**/*/*/drafts/
-
-# local staging; need not be pushed
+# md book build directory
 book
 
-# need not push the executables
-**/*/target
-**/*/Cargo.lock
-**/*/.DS_Store
+# MacOS thing
 **/.DS_Store
+
+# Rust directories
+**/target
+modules/*/Cargo.lock
+runtimes/*/Cargo.lock
+
+# Javascript snippets burried in the code
+**/node_modules
