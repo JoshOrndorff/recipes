@@ -12,33 +12,13 @@ std = [
     'frame-system/std',
 ]
 
-[dependencies.codec]
-default-features = false
-features = ['derive']
-version = '1.1.0'
-package = 'parity-scale-codec'
+[dependencies]
+codec = { package = 'parity-scale-codec', default-features = false, features = ['derive'], version = '1.1.0' }
+frame-support = { default_features = false, git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
+frame-system = { default_features = false, git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
+sp-std = { default_features = false, git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
 
-[dependencies.frame-support]
-default_features = false
-git = 'https://github.com/paritytech/substrate.git'
-tag = 'v2.0.0-alpha.3'
-
-[dependencies.frame-system]
-default_features = false
-git = 'https://github.com/paritytech/substrate.git'
-tag = 'v2.0.0-alpha.3'
-
-[dev-dependencies.sp-runtime]
-default_features = false
-git = 'https://github.com/paritytech/substrate.git'
-tag = 'v2.0.0-alpha.3'
-
-[dev-dependencies.sp-core]
-default_features = false
-git = 'https://github.com/paritytech/substrate.git'
-tag = 'v2.0.0-alpha.3'
-
-[dev-dependencies.sp-io]
-default_features = false
-git = 'https://github.com/paritytech/substrate.git'
-tag = 'v2.0.0-alpha.3'
+[dev-dependencies]
+sp-runtime = { default_features = false, git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
+sp-core = { default_features = false, git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
+sp-io = { default_features = false, git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
