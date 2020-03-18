@@ -5540,6 +5540,7 @@ dependencies = [
  "pallet-timestamp 2.0.0-alpha.3 (git+https://github.com/paritytech/substrate.git?tag=v2.0.0-alpha.3)",
  "pallet-transaction-payment 2.0.0-alpha.3 (git+https://github.com/paritytech/substrate.git?tag=v2.0.0-alpha.3)",
  "parity-scale-codec 1.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "ringbuffer-queue 0.1.0",
  "safe-mix 1.0.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde 1.0.104 (registry+https://github.com/rust-lang/crates.io-index)",
  "simple-event 0.1.0",
