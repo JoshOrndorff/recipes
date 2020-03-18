@@ -15,12 +15,12 @@ pub trait Trait: system::Trait {
 
 	/// Connection to Collective Flip pallet. Typically the type would be called something like
 	/// `RandomnessSource` but because we are using two sources in this pallet, we will name
-	/// them exlicitly
+	/// them explicitly
 	type CollectiveFlipRandomnessSource: Randomness<H256>;
 
 	/// Connection to Babe pallet. Typically the type would be called something like
 	/// `RandomnessSource` but because we are using two sources in this pallet, we will name
-	/// them exlicitly
+	/// them explicitly
 	type BabeRandomnessSource: Randomness<H256>;
 }
 
