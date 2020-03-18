@@ -129,23 +129,45 @@ Notice that this function takes a parameter for the number of rounds of mining i
 
 ## The Service Builder
 
-talk about builder pattern
-link to https://substrate.dev/rustdocs/master/sc_service/struct.ServiceBuilder.html
+The [Substrate Service](https://substrate.dev/rustdocs/v2.0.0-alpha.3/sc_service/trait.AbstractService.html) is the main coordinator of the various parts of a Substrate node, including consensus. The service is large and take many parameters, so it is built with a [ServiceBuilder](https://substrate.dev/rustdocs/v2.0.0-alpha.3/sc_service/struct.ServiceBuilder.html) following [Rust's builder pattern](https://doc.rust-lang.org/1.0.0/style/ownership/builders.html).
 
-structure of service.rs
-	macro
-	new full
-	new light
+The particular builder method that is relevant here is [`with_import_queue`](https://substrate.dev/rustdocs/v2.0.0-alpha.3/sc_service/struct.ServiceBuilder.html#method.with_import_queue). Here we construct an instance of the [`PowBlockImport` struct](https://substrate.dev/rustdocs/v2.0.0-alpha.3/sc_consensus_pow/struct.PowBlockImport.html), providing it with references to our client, our Sha3Algorithm, and some other necessary data.
 
-## Chain Spec
-
-All of the node's in the recipes have a `chain_spec.rs` file, and they mostly look the same. `basic-pow`'s chain spec will also be familiar, but it is shorter and simpler. There are a few specific differences worth observing.
-
-We don't need the help function
 ```rust, ignore
-/// Taken from the super-runtime chain_spec.rs
-/// Helper function to generate session key from seed
-pub fn get_authority_keys_from_seed(seed: &str) -> (BabeId, GrandpaId)
+builder
+	.with_import_queue(|_config, client, select_chain, _transaction_pool| {
+
+		let pow_block_import = sc_consensus_pow::PowBlockImport::new(
+			client.clone(),
+			client.clone(),
+			crate::pow::Sha3Algorithm,
+			0, // check inherents starting at block 0
+			select_chain,
+			inherent_data_providers.clone(),
+		);
+
+		let import_queue = sc_consensus_pow::import_queue(
+			Box::new(pow_block_import.clone()),
+			crate::pow::Sha3Algorithm,
+			inherent_data_providers.clone(),
+		)?;
+
+		import_setup = Some(pow_block_import);
+
+		Ok(import_queue)
+	})?;
 ```
 
-We don't provide any initial authorities
+Once the `PowBlockImport` is constructed, we can use it to create an actual import queue that the service will use for importing blocks into the client.
+
+### The Block Import Pipeline
+
+You may have noticed that when we created the `PowBlockImport` we gave it two separate references to the client. The second reference will always be to a client. But the first is interesting. The rustdocs tell us that the first parameter is `inner: BlockImport<B, Transaction = TransactionFor<C, B>>`. Whay would a block import have a reference to another block import? Because the "block import pipeline" is constructed in an onion-like fashion, where one layer of block import wraps the next. In this minimal pow node, there is only one layer to the onion. But in other nodes, including our own kitchen node, there are two layers, one for babe, and one for grandpa.
+
+### Inherent Data Providers
+
+Both the BlockImport and the import_queue contain are given an instance called `inherent_data_providers`.
+
+## Mining
+
+## The light Client
