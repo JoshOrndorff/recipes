@@ -157,9 +157,11 @@
 <li>Weight fee - A fee calculated from the transaction's weight. Weights are intended to capture the actual resources consumed by the transaction. Learn more in the <a href="./weights.html">recipe on weights</a>. It doesn't need to be linear, although it often is. The same conversion function is applied across all transactions from all pallets in the runtime.</li>
 <li>Fee Multiplier - A multiplier for the computed fee, that can change as the chain progresses. This topic is not (yet) covered further in the recipes.</li>
 </ul>
-<p><code>total_fee = base_fee + transaction_length * length_fee + weight_to_fee(total_weight)</code></p>
+<pre><code>total_fee = base_fee + transaction_length * length_fee + weight_to_fee(total_weight)
+</code></pre>
 <h2><a class="header" href="#setting-the-constants" id="setting-the-constants">Setting the Constants</a></h2>
 <p>Each of the parameters described above is set in the <code>transaction_payment</code> pallet's configuration trait. For example, the <code>super-runtime</code> sets these parameters as follows.</p>
+<p>src: <a href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/super-runtime/src/lib.rs"><code>runtimes/super-runtime/src/lib.rs</code></a></p>
 <pre><code class="language-rust ignore">parameter_types! {
     pub const TransactionBaseFee: u128 = 0;
     pub const TransactionByteFee: u128 = 1;
@@ -175,8 +177,9 @@ impl transaction_payment::Trait for Runtime {
 }
 </code></pre>
 <h2><a class="header" href="#converting-weight-to-fees" id="converting-weight-to-fees">Converting Weight To Fees</a></h2>
-<p>In many cases converting weight to fees 1:1, as shown above, will suffice and can be accomplished with <a href="https://substrate.dev/rustdocs/master/sp_runtime/traits/struct.ConvertInto.html"><code>ConvertInto</code></a>. This approach is also taken in the <a href="https://github.com/substrate-developer-hub/substrate-node-template/blob/43ee95347b6626580b1d9d554c3c8b77dc85bc01/runtime/src/lib.rs#L230">node template</a>. It is also possible to provide a type that makes a more complex calculation. Any type that implements <code>Convert&lt;Weight, Balance&gt;</code> will suffice.</p>
-<p>This example uses a quadratic conversion and supports custom coefficients</p>
+<p>In many cases converting weight to fees in a one-to-one fashion, as shown above, will suffice and can be accomplished with <a href="https://substrate.dev/rustdocs/master/sp_runtime/traits/struct.ConvertInto.html"><code>ConvertInto</code></a>. This approach is also taken in the <a href="https://github.com/substrate-developer-hub/substrate-node-template/blob/43ee95347b6626580b1d9d554c3c8b77dc85bc01/runtime/src/lib.rs#L230">node template</a>. It is also possible to provide a type that makes a more complex calculation. Any type that implements <code>Convert&lt;Weight, Balance&gt;</code> will suffice.</p>
+<p>This example uses a quadratic conversion and supports custom coefficients.</p>
+<p>src: <a href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/weight-fee-runtime/src/lib.rs"><code>runtimes/weight-fee-runtime/src/lib.rs</code></a></p>
 <pre><code class="language-rust ignore">pub struct QuadraticWeightToFee&lt;C0, C1, C2&gt;(C0, C1, C2);
 
 impl&lt;C0, C1, C2&gt; Convert&lt;Weight, Balance&gt; for QuadraticWeightToFee&lt;C0, C1, C2&gt;
@@ -193,9 +196,9 @@ impl&lt;C0, C1, C2&gt; Convert&lt;Weight, Balance&gt; for QuadraticWeightToFee&l
 	}
 }
 </code></pre>
-<p>This examples, and several others can be compiled in the kitchen's <a href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/weight-fee-runtime">weight-fee-runtime</a></p>
 <h2><a class="header" href="#collecting-fees" id="collecting-fees">Collecting Fees</a></h2>
 <p>Having calculated the amount of fees due, runtime authors must decide which asset the fees should be paid in. A common choice is the use the <a href="https://substrate.dev/rustdocs/master/pallet_balances/index.html"><code>Ballances</code> pallet</a>, but any type that implements the <a href="https://substrate.dev/rustdocs/master/frame_support/traits/trait.Currency.html"><code>Currency</code> trait</a> can be used. The weight-fee-runtime demonstrates how to use an asset provided by the <a href="https://substrate.dev/rustdocs/master/pallet_generic_asset/index.html"><code>Generic Asset</code> pallet</a>.</p>
+<p>src: <a href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/weight-fee-runtime/src/lib.rs"><code>runtimes/weight-fee-runtime/src/lib.rs</code></a></p>
 <pre><code class="language-rust ignore">impl transaction_payment::Trait for Runtime {
 
 	// A generic asset whose ID is stored in the generic_asset pallet's runtime storage
@@ -204,7 +207,6 @@ impl&lt;C0, C1, C2&gt; Convert&lt;Weight, Balance&gt; for QuadraticWeightToFee&l
 	// --snip--
 }
 </code></pre>
-<p>This examples, and several others can be compiled in the kitchen's <a href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/weight-fee-runtime">weight-fee-runtime</a></p>
 
                     </main>
 
