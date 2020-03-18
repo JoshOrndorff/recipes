@@ -2,7 +2,7 @@
 *[`pallets/ringbuffer-queue`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/ringbuffer-queue)*
 > Building a transient adapter on top of storage.
 
-This pallet provides a trait and implementation for a [ringbuffer](https://en.wikipedia.org/wiki/Circular_buffer) that abstracts over storage items and presents them as a FIFO queue.
+This pallet provides a trait and implementation for a [ringbuffer](https://en.wikipedia.org/wiki/Circular_buffer) that abstracts over storage items and presents them as a [FIFO](https://en.wikipedia.org/wiki/FIFO_(computing_and_electronics)) queue.
 
 When building more sophisticated pallets there might develop a need for more complex data structures stored in storage. This recipe shows how to build a transient storage adapter by walking through the implementation of a ringbuffer FIFO queue. The adapter in this recipe manages a queue that is persisted as a `StorageMap` and a `(start, end)` range in storage.
 
