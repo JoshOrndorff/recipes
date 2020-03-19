@@ -25,7 +25,7 @@ Proof of work is not a single consensus algorithm. Rather it is a class of algor
 pub struct Sha3Algorithm;
 ```
 
-We will use the [sha3 hashing algorithm](https://en.wikipedia.org/wiki/SHA-3) which we have indicated in the name of our struct. Because this is a _minimal_ PoW algorithm, our struct can also be quite simple. In fact, it is a [unit struct](https://doc.rust-lang.org/rust-by-example/custom_types/structs.html). A more complex PoW algorithm that interfaces with the runtime, would need to hold a reference to the client. An example of this (on an older Substrate codebase) can be seen in [Kulupu](https://github.com/kulupu/kulupu/)'s [RandomXAlgorithm](https://github.com/kulupu/kulupu/blob/3500b7f62fdf90be7608b2d813735a063ad1c458/pow/src/lib.rs#L137-L145).
+We will use the [sha3 hashing algorithm](https://en.wikipedia.org/wiki/SHA-3), which we have indicated in the name of our struct. Because this is a _minimal_ PoW algorithm, our struct can also be quite simple. In fact, it is a [unit struct](https://doc.rust-lang.org/rust-by-example/custom_types/structs.html). A more complex PoW algorithm that interfaces with the runtime would need to hold a reference to the client. An example of this (on an older Substrate codebase) can be seen in [Kulupu](https://github.com/kulupu/kulupu/)'s [RandomXAlgorithm](https://github.com/kulupu/kulupu/blob/3500b7f62fdf90be7608b2d813735a063ad1c458/pow/src/lib.rs#L137-L145).
 
 ### Difficulty
 
