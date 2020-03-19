@@ -1,4 +1,4 @@
-//! Generating randomness with weak entropy
+//! Generating (insecure) randomness
 #![cfg_attr(not(feature = "std"), no_std)]
 
 use sp_core::H256;
@@ -10,6 +10,10 @@ use sp_std::vec::Vec;
 #[cfg(test)]
 mod tests;
 
+
+/// The pallet's configuration trait.
+/// This trait includes two randomness sources. In production you will only ever need one. This pallet
+/// includes both merely to demonstrate both.
 pub trait Trait: system::Trait {
 	type Event: From<Event> + Into<<Self as system::Trait>::Event>;
 
