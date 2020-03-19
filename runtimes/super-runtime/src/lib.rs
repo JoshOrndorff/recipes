@@ -170,6 +170,9 @@ impl system::Trait for Runtime {
 	type OnKilledAccount = ();
 	/// The data to be stored in an account.
 	type AccountData = balances::AccountData<Balance>;
+
+	//TODO delete this shit
+	type MigrateAccount = ();
 }
 
 parameter_types! {
@@ -302,10 +305,6 @@ impl last_caller::Trait<last_caller::Instance2> for Runtime {
 	type Event = Event;
 }
 
-impl linked_map::Trait for Runtime {
-	type Event = Event;
-}
-
 impl simple_event::Trait for Runtime {
 	type Event = Event;
 }
@@ -356,7 +355,6 @@ construct_runtime!(
 		GenericEvent: generic_event::{Module, Call, Event<T>},
 		LastCaller1: last_caller::<Instance1>::{Module, Call, Storage, Event<T>},
 		LastCaller2: last_caller::<Instance2>::{Module, Call, Storage, Event<T>},
-		LinkedMap: linked_map::{Module, Call, Storage, Event<T>},
 		SimpleEvent: simple_event::{Module, Call, Event},
 		SimpleMap: simple_map::{Module, Call, Storage, Event<T>},
 		SingleValue: single_value::{Module, Call, Storage},

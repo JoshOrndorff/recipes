@@ -16,7 +16,6 @@ const pallets = [
   "execution-schedule",
   "generic-event",
   "last-caller",
-  "linked-map",
   "simple-event",
   "simple-map",
   "charity",
