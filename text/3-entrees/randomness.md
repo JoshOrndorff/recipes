@@ -7,10 +7,7 @@ Randomness is useful in computer programs for everything from gambling, to gener
 
 All of the randomness sources described here have limitations on their usefulness and security. This recipe shows how to use these randomness sources and makes an effort to explain their trade-offs. However, the author of this recipe is a blockchain chef, **not a trained cryptographer**. It is your responsibility to understand the security implications of using any of the techniques described in this recipe, before putting them to use. When in doubt, consult a trustworthy cryptographer.
 
-These resources may also be helpful in assessing the security and limitations of these randomness sources.
-
-* https://github.com/paritytech/ink/issues/57
-* https://wiki.polkadot.network/docs/en/learn-randomness
+The resources linked at the end of this recipe may be helpful in assessing the security and limitations of these randomness sources.
 
 ## Randomness Trait
 
@@ -60,7 +57,7 @@ let random_seed = T::CollectiveFlipRandomnessSource::random_seed();
 let random_result = T::CollectiveFlipRandomnessSource::random(&subject);
 ```
 
-Although it may seem harmless, **you should not hash the result** of the randomness provided by the collective flip pallet. Secure hash functions satisfy the [Avalance effect](https://en.wikipedia.org/wiki/Avalanche_effect) which means that each bit of input is equally likely to affect a given bit of the output. Hashing will negate the low-influence property provided by the pallet.
+Although it may _seem_ harmless, **you should not hash the result** of the randomness provided by the collective flip pallet. Secure hash functions satisfy the [Avalance effect](https://en.wikipedia.org/wiki/Avalanche_effect) which means that each bit of input is equally likely to affect a given bit of the output. Hashing will negate the low-influence property provided by the pallet.
 
 ## Babe VRF Output
 
@@ -72,3 +69,14 @@ Because we are accessing the randomness via the `Randomness` trait, the calls lo
 let random_seed = T::BabeRandomnessSource::random_seed();
 let random_result = T::BabeRandomnessSource::random(&subject);
 ```
+
+In production networks, Babe VRF output is preferable to Collective Flip.
+
+## Down the Rabbit Hole
+
+Ad mentioned previously, there are many tradeoffs and security concerns to be aware of when using these randomness sources. If you'd like to get into the research, here are some jumping off points.
+
+* https://github.com/paritytech/ink/issues/57
+* https://wiki.polkadot.network/docs/en/learn-randomness
+* https://www.cse.huji.ac.il/~nati/PAPERS/coll_coin_fl.pdf
+* https://eccc.weizmann.ac.il/report/2018/140/
