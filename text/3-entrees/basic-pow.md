@@ -223,7 +223,7 @@ We begin by testing whether this node participates in consensus, which is to say
 
 ## The light Client
 
-The last thing in the `service.rs` file is constructing the [light client](https://www.parity.io/what-is-a-light-client/)'s service. This code is quite simpilar to the construction of the full service.
+The last thing in the `service.rs` file is constructing the [light client](https://www.parity.io/what-is-a-light-client/)'s service. This code is quite similar to the construction of the full service.
 
 Instead of using the `with_import_queue` function we used previously, we use the `with_import_queue_and_fprb` function. FPRB stand for [`FinalityProofRequestBuilder`](https://substrate.dev/rustdocs/master/sc_network/config/trait.FinalityProofRequestBuilder.html). In chains with deterministic finality, light client must request proofs of finality from full nodes. But in our chain, we do not have deterministic finality, so we can use the [`DummyFinalityProofRequestBuilder`](https://substrate.dev/rustdocs/master/sc_network/config/struct.DummyFinalityProofRequestBuilder.html) which does nothing except satisfy Rust's type checker.
 
