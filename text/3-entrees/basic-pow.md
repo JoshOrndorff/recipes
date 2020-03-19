@@ -29,7 +29,7 @@ We will use the [sha3 hashing algorithm](https://en.wikipedia.org/wiki/SHA-3), w
 
 ### Difficulty
 
-The first fucntion we must provide returns the difficults of the next block to be mined. In our basic PoW, this function is quite simple. The difficulty is fixed. This means that as more mining power joins the network, te block time will become faster.
+The first fucntion we must provide returns the difficulty of the next block to be mined. In our basic PoW, this function is quite simple. The difficulty is fixed. This means that as more mining power joins the network, the block time will become faster.
 
 ```rust, ignore
 impl<B: BlockT<Hash=H256>> PowAlgorithm<B> for Sha3Algorithm {
