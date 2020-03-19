@@ -65,18 +65,18 @@ decl_storage! {
 	trait Store for Module<T: Trait> as ExecutionSchedule {
 		/// Outstanding tasks getter
 		PendingTasks get(fn pending_tasks):
-			map hasher(blake2_256) TaskId => Option<Task<T::BlockNumber>>;
+			map hasher(blake2_128_concat) TaskId => Option<Task<T::BlockNumber>>;
 
 		/// Dispatch queue for task execution
 		ExecutionQueue get(fn execution_queue): Vec<TaskId>;
 
 		/// The signalling quota left in terms of `PriorityScore` for all members of the council (until it is killed `on_initialize` on `ExecutionFrequency` blocks)
 		SignalBank get(fn signal_bank):
-			double_map hasher(blake2_256) RoundIndex, hasher(blake2_256) T::AccountId => PriorityScore;
+			double_map hasher(blake2_128_concat) RoundIndex, hasher(blake2_128_concat) T::AccountId => PriorityScore;
 
 		/// The (closed and static) council of members (anyone can submit tasks but only members can signal priority)
 		Council get(fn council): Vec<T::AccountId>;
-		
+
 		/// The nonce that increments every `ExecutionFrequency` for a new `SignalBank` instantiation
 		Era get(fn era): RoundIndex;
 	}

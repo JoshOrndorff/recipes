@@ -61,8 +61,7 @@ fn set_value_works() {
 		assert_ok!(SingleValue::set_value(Origin::signed(1), 10));
 
 		assert_eq!(SingleValue::stored_value(), 10);
-		// Another way of accessing the storage. This pattern is needed if it is a more complexed data
-		//   type, e.g. StorageMap, StorageLinkedMap
+		// Another way of accessing the storage. This pattern is needed if it is a StorageMap
 		assert_eq!(<StoredValue>::get(), 10);
 	})
 }
