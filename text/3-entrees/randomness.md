@@ -46,9 +46,7 @@ We've provided the `Output` type as [`H256`](https://substrate.dev/rustdocs/mast
 
 Substrate's [Randomness Collective Flip pallet](https://substrate.dev/rustdocs/master/pallet_randomness_collective_flip/index.html) uses a safe mixing algorithm to generate randomness using the entropy of previous block hashes. Because it is dependent on previous blocks, it can take many blocks for the seed to change.
 
-A naive randomness source based on block hashes would take the hash of the previous block and use it as a random seed. Such a technique has the significant disadvantage that the block author can preview the random seed, and choose to discard the block choosing a slightly modified block with a more desirable hash.
-
-This pallet reduces the block author's influence over the random seed, by distributing that influence to the authors of the last 81 blocks.
+A naive randomness source based on block hashes would take the hash of the previous block and use it as a random seed. Such a technique has the significant disadvantage that the block author can preview the random seed, and choose to discard the block choosing a slightly modified block with a more desirable hash. This pallet is subject to similar manipulation by the previous 81 block authors rather than just the previous 1.
 
 Calling the randomness source from rust code is straightforward.
 
@@ -70,7 +68,7 @@ let random_seed = T::BabeRandomnessSource::random_seed();
 let random_result = T::BabeRandomnessSource::random(&subject);
 ```
 
-In production networks, Babe VRF output is preferable to Collective Flip.
+In production networks, Babe VRF output is preferable to Collective Flip. Collective Flip provides essentially no real security.
 
 ## Down the Rabbit Hole
 
