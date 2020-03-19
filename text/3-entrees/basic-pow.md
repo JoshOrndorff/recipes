@@ -17,7 +17,7 @@ In principle the consensus engine, part of the outer node, is agnostic over the 
 
 ## Proof of Work Algorithms
 
-Proof of work is not a single consensus algorithm. Rather it is a class of Algorithms represented by the [`PowAlgorithm` trait](https://substrate.dev/rustdocs/master/sc_consensus_pow/trait.PowAlgorithm.html). Before we can build a PoW node we must specify a concrete PoW algorithm by implementing this trait. We specify our algorithm in the `pow.rs` file.
+Proof of work is not a single consensus algorithm. Rather it is a class of algorithms represented by the [`PowAlgorithm` trait](https://substrate.dev/rustdocs/master/sc_consensus_pow/trait.PowAlgorithm.html). Before we can build a PoW node we must specify a concrete PoW algorithm by implementing this trait. We specify our algorithm in the `pow.rs` file.
 
 ```rust, ignore
 /// A concrete PoW Algorithm that uses Sha3 hashing.
