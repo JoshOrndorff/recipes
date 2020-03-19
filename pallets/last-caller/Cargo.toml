@@ -36,12 +36,6 @@ git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-runtime'
 rev = '0bd9ffacdeb9bf3c97c04114de2cca5490ee98b6'
 
-# [dependencies.rstd]
-# default-features = false
-# git = 'https://github.com/paritytech/substrate.git'
-# package = "sp-std"
-# rev = '0bd9ffacdeb9bf3c97c04114de2cca5490ee98b6'
-
 [dev-dependencies.primitives]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
