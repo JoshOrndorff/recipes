@@ -165,7 +165,7 @@ You may have noticed that when we created the `PowBlockImport` we gave it two se
 
 ### Inherent Data Providers
 
-Both the BlockImport and the import_queue are given an instance called `inherent_data_providers`. This object is created in a helper function defined at the beginning of `service.rs`
+Both the BlockImport and the `import_queue` are given an instance called `inherent_data_providers`. This object is created in a helper function defined at the beginning of `service.rs`
 
 ```rust, ignore
 pub fn build_inherent_data_providers() -> Result<InherentDataProviders, ServiceError> {
