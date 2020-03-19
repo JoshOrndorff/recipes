@@ -5,7 +5,7 @@ The `basic-pow` node uses a minimal [Proof of Work](https://en.wikipedia.org/wik
 * Substrate's [`BlockImport` trait](https://substrate.dev/rustdocs/master/sp_consensus/block_import/trait.BlockImport.html)
 * Substrate's [import pipeline](https://substrate.dev/rustdocs/master/sp_consensus/import_queue/index.html)
 * Structure of a typical [Substrate Service](https://substrate.dev/rustdocs/master/sc_service/index.html)
-* Configuring [`InherentDataProvider`](https://substrate.dev/rustdocs/master/sp_authorship/struct.InherentDataProvider.html)s
+* Configuration of [`InherentDataProvider`](https://substrate.dev/rustdocs/master/sp_authorship/struct.InherentDataProvider.html)s
 
 ## The Structure of a Node
 
