@@ -3846,6 +3846,9 @@ version = "0.1.0"
 dependencies = [
  "frame-support",
  "frame-system",
+ "pallet-babe",
+ "pallet-randomness-collective-flip",
+ "pallet-timestamp",
  "parity-scale-codec",
  "sp-core",
  "sp-io",

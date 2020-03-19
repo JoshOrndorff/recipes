@@ -16,7 +16,10 @@ sp-std = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-al
 sp-core = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3', default_features = false }
 
 [dev-dependencies]
-sp-io = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3', default_features = false }
+sp-io = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
+pallet-randomness-collective-flip = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
+pallet-babe = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
+pallet-timestamp = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
 
 [features]
 default = ['std']

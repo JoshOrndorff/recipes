@@ -1,4 +1,4 @@
-use crate::{Module, Trait, RawEvent};
+use crate::{Module, Trait, Event};
 use sp_core::H256;
 use sp_io;
 use sp_runtime::{
@@ -6,8 +6,10 @@ use sp_runtime::{
 	traits::{BlakeTwo256, IdentityLookup},
 	Perbill,
 };
-use support::{assert_ok, assert_err, impl_outer_event, impl_outer_origin, parameter_types};
-use system as system;
+use frame_support::{assert_ok, impl_outer_event, impl_outer_origin, parameter_types};
+use frame_system::{self as system, EventRecord, Phase};
+use pallet_babe::SameAuthoritiesForever;
+
 
 impl_outer_origin! {
 	pub enum Origin for TestRuntime {}
@@ -44,23 +46,48 @@ impl system::Trait for TestRuntime {
 	type OnKilledAccount = ();
 }
 
-mod storage_cache {
+mod randomness {
 	pub use crate::Event;
 }
 
 impl_outer_event! {
 	pub enum TestEvent for TestRuntime {
-		storage_cache<T>,
+		randomness,
 		system<T>,
 	}
 }
 
 impl Trait for TestRuntime {
 	type Event = TestEvent;
+	type CollectiveFlipRandomnessSource = CollectiveFlip;
+	type BabeRandomnessSource = Babe;
+}
+
+parameter_types! {
+	pub const EpochDuration: u64 = 10;
+	pub const ExpectedBlockTime: u64 = 3000;
+}
+
+impl pallet_babe::Trait for TestRuntime {
+	type EpochDuration = EpochDuration;
+	type ExpectedBlockTime = ExpectedBlockTime;
+	type EpochChangeTrigger = SameAuthoritiesForever;
+}
+
+parameter_types! {
+	pub const MinimumPeriod: u64 = 1500;
+}
+
+impl pallet_timestamp::Trait for TestRuntime {
+	type Moment = u64;
+	type OnTimestampSet = Babe;
+	type MinimumPeriod = MinimumPeriod;
 }
 
 pub type System = system::Module<TestRuntime>;
-pub type StorageCache = Module<TestRuntime>;
+pub type Randomness = Module<TestRuntime>;
+pub type CollectiveFlip = pallet_randomness_collective_flip::Module<TestRuntime>;
+pub type Babe = pallet_babe::Module<TestRuntime>;
 
 pub struct ExtBuilder;
 
@@ -74,122 +101,40 @@ impl ExtBuilder {
 }
 
 #[test]
-fn init_storage() {
+fn flip_works() {
 	ExtBuilder::build().execute_with(|| {
-		assert_ok!(StorageCache::set_copy(Origin::signed(1), 10));
-		assert_eq!(StorageCache::some_copy_value(), 10);
+		assert_ok!(Randomness::call_collective_flip(Origin::signed(1)));
 
-		assert_ok!(StorageCache::set_king(Origin::signed(2)));
-		assert_eq!(StorageCache::king_member(), 2);
-
-		assert_ok!(StorageCache::mock_add_member(Origin::signed(1)));
-		assert_err!(
-			StorageCache::mock_add_member(Origin::signed(1)),
-			"member already in group"
-		);
-		assert!(StorageCache::group_members().contains(&1));
+		// Check for the event
+		assert_eq!(System::events(), vec![
+			EventRecord {
+				phase: Phase::ApplyExtrinsic(0),
+				event: TestEvent::randomness(Event::CollectiveFlip(
+					H256::zero(),
+					H256::zero(),
+				)),
+				topics: vec![],
+			}
+		]);
 	})
 }
 
 #[test]
-fn increase_value_errs_on_overflow() {
+fn babe_works() {
 	ExtBuilder::build().execute_with(|| {
-		let num1: u32 = u32::max_value() - 9;
-		assert_ok!(StorageCache::set_copy(Origin::signed(1), num1));
-		// test first overflow panic for both methods
-		assert_err!(
-			StorageCache::increase_value_no_cache(Origin::signed(1), 10),
-			"addition overflowed1"
-		);
-		assert_err!(
-			StorageCache::increase_value_w_copy(Origin::signed(1), 10),
-			"addition overflowed1"
-		);
+		assert_ok!(Randomness::call_babe_vrf(Origin::signed(1)));
 
-		let num2: u32 = 2147483643;
-		assert_ok!(StorageCache::set_copy(Origin::signed(1), num2));
-		// test second overflow panic for both methods
-		assert_err!(
-			StorageCache::increase_value_no_cache(Origin::signed(1), 10),
-			"addition overflowed2"
-		);
-		assert_err!(
-			StorageCache::increase_value_w_copy(Origin::signed(1), 10),
-			"addition overflowed2"
-		);
-	})
-}
-
-#[test]
-fn increase_value_works() {
-	ExtBuilder::build().execute_with(|| {
-		System::set_block_number(5);
-		assert_ok!(StorageCache::set_copy(Origin::signed(1), 25));
-		assert_ok!(StorageCache::increase_value_no_cache(Origin::signed(1), 10));
-		// proof: x = 25, 2x + 10 = 60 qed
-		let expected_event1 = TestEvent::storage_cache(RawEvent::InefficientValueChange(60, 5));
-		assert!(System::events().iter().any(|a| a.event == expected_event1));
-
-		// Ensure the storage value has actually changed from the first call
-		assert_eq!(StorageCache::some_copy_value(), 60);
-
-		assert_ok!(StorageCache::increase_value_w_copy(Origin::signed(1), 10));
-		// proof: x = 60, 2x + 10 = 130
-		let expected_event2 = TestEvent::storage_cache(RawEvent::BetterValueChange(130, 5));
-		assert!(System::events().iter().any(|a| a.event == expected_event2));
-
-		// check storage
-		assert_eq!(StorageCache::some_copy_value(), 130);
-	})
-}
-
-#[test]
-fn swap_king_errs_as_intended() {
-	ExtBuilder::build().execute_with(|| {
-		assert_ok!(StorageCache::mock_add_member(Origin::signed(1)));
-		assert_ok!(StorageCache::set_king(Origin::signed(1)));
-		assert_err!(
-			StorageCache::swap_king_no_cache(Origin::signed(3)),
-			"current king is a member so maintains priority"
-		);
-		assert_err!(
-			StorageCache::swap_king_with_cache(Origin::signed(3)),
-			"current king is a member so maintains priority"
-		);
-
-		assert_ok!(StorageCache::set_king(Origin::signed(2)));
-		assert_err!(
-			StorageCache::swap_king_no_cache(Origin::signed(3)),
-			"new king is not a member so doesn't get priority"
-		);
-		assert_err!(
-			StorageCache::swap_king_with_cache(Origin::signed(3)),
-			"new king is not a member so doesn't get priority"
-		);
-	})
-}
-
-#[test]
-fn swap_king_works() {
-	ExtBuilder::build().execute_with(|| {
-		assert_ok!(StorageCache::mock_add_member(Origin::signed(2)));
-		assert_ok!(StorageCache::mock_add_member(Origin::signed(3)));
-
-		assert_ok!(StorageCache::set_king(Origin::signed(1)));
-		assert_ok!(StorageCache::swap_king_no_cache(Origin::signed(2)));
-
-		let expected_event = TestEvent::storage_cache(RawEvent::InefficientKingSwap(1, 2));
-		assert!(System::events().iter().any(|a| a.event == expected_event));
-		assert_eq!(StorageCache::king_member(), 2);
-
-		assert_ok!(StorageCache::set_king(Origin::signed(1)));
-		assert_eq!(StorageCache::king_member(), 1);
-		assert_ok!(StorageCache::swap_king_with_cache(Origin::signed(3)));
-
-		let expected_event =
-			TestEvent::storage_cache(RawEvent::BetterKingSwap(1, 3));
-		assert!(System::events().iter().any(|a| a.event == expected_event));
-
-		assert_eq!(StorageCache::king_member(), 3);
+		// Check for the event
+		assert_eq!(System::events(), vec![
+			EventRecord {
+				phase: Phase::ApplyExtrinsic(0),
+				event: TestEvent::randomness(Event::BabeVRF(
+					// Let's see how deterministic these are...
+					H256::from_slice(&[0x89, 0xeb, 0x0d, 0x6a, 0x8a, 0x69, 0x1d, 0xae, 0x2c, 0xd1, 0x5e, 0xd0, 0x36, 0x99, 0x31, 0xce, 0x0a, 0x94, 0x9e, 0xca, 0xfa, 0x5c, 0x3f, 0x93, 0xf8, 0x12, 0x18, 0x33, 0x64, 0x6e, 0x15, 0xc3]),
+					H256::from_slice(&[0x9f, 0x0e, 0x44, 0x4c, 0x69, 0xf7, 0x7a, 0x49, 0xbd, 0x0b, 0xe8, 0x9d, 0xb9, 0x2c, 0x38, 0xfe, 0x71, 0x3e, 0x09, 0x63, 0x16, 0x5c, 0xca, 0x12, 0xfa, 0xf5, 0x71, 0x2d, 0x76, 0x57, 0x12, 0x0f]),
+				)),
+				topics: vec![],
+			}
+		]);
 	})
 }
