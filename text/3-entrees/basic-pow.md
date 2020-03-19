@@ -219,7 +219,7 @@ if participates_in_consensus {
 }
 ```
 
-We begin by testing whether this node participates in consensus, which is to say we check whether the user wants the node to act as a miner. If this node is to be a miner, we gather references to various parts of the node that the [`start mine` function](https://substrate.dev/rustdocs/master/sc_consensus_pow/fn.start_mine.html) requires, and define that we will attempt 500 rounds of mining for each block before pausing. Finally we call `start_mine`.
+We begin by testing whether this node participates in consensus, which is to say we check whether the user wants the node to act as a miner. If this node is to be a miner, we gather references to various parts of the node that the [`start_mine` function](https://substrate.dev/rustdocs/master/sc_consensus_pow/fn.start_mine.html) requires, and define that we will attempt 500 rounds of mining for each block before pausing. Finally we call `start_mine`.
 
 ## The light Client
 
