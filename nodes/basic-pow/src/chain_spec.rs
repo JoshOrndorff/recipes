@@ -1,4 +1,4 @@
-use sp_core::{Pair, Public, sr25519};
+use sp_core::{Pair, sr25519};
 use sc_service;
 use sp_runtime::traits::{Verify, IdentifyAccount};
 use runtime::{AccountId, GenesisConfig, Signature};
@@ -22,8 +22,8 @@ pub enum Alternative {
 }
 
 /// Helper function to generate a crypto pair from seed
-pub fn get_from_seed<TPublic: Public>(seed: &str) -> <TPublic::Pair as Pair>::Public {
-	TPublic::Pair::from_string(&format!("//{}", seed), None)
+pub fn get_from_seed<TPair: Pair>(seed: &str) -> TPair::Public {
+	TPair::from_string(&format!("//{}", seed), None)
 		.expect("static values are valid; qed")
 		.public()
 }
@@ -31,10 +31,10 @@ pub fn get_from_seed<TPublic: Public>(seed: &str) -> <TPublic::Pair as Pair>::Pu
 type AccountPublic = <Signature as Verify>::Signer;
 
 /// Helper function to generate an account ID from seed
-pub fn get_account_id_from_seed<TPublic: Public>(seed: &str) -> AccountId where
-	AccountPublic: From<<TPublic::Pair as Pair>::Public>
+pub fn get_account_id_from_seed<TPair: Pair>(seed: &str) -> AccountId where
+	AccountPublic: From<TPair::Public>
 {
-	AccountPublic::from(get_from_seed::<TPublic>(seed)).into_account()
+	AccountPublic::from(get_from_seed::<TPair>(seed)).into_account()
 }
 
 impl Alternative {
@@ -45,12 +45,12 @@ impl Alternative {
 				"Development",
 				"dev",
 				|| testnet_genesis(
-					get_account_id_from_seed::<sr25519::Public>("Alice"),
+					get_account_id_from_seed::<sr25519::Pair>("Alice"),
 					vec![
-						get_account_id_from_seed::<sr25519::Public>("Alice"),
-						get_account_id_from_seed::<sr25519::Public>("Bob"),
-						get_account_id_from_seed::<sr25519::Public>("Alice//stash"),
-						get_account_id_from_seed::<sr25519::Public>("Bob//stash"),
+						get_account_id_from_seed::<sr25519::Pair>("Alice"),
+						get_account_id_from_seed::<sr25519::Pair>("Bob"),
+						get_account_id_from_seed::<sr25519::Pair>("Alice//stash"),
+						get_account_id_from_seed::<sr25519::Pair>("Bob//stash"),
 					],
 					true,
 				),
@@ -64,20 +64,20 @@ impl Alternative {
 				"Local Testnet",
 				"local_testnet",
 				|| testnet_genesis(
-					get_account_id_from_seed::<sr25519::Public>("Alice"),
+					get_account_id_from_seed::<sr25519::Pair>("Alice"),
 					vec![
-						get_account_id_from_seed::<sr25519::Public>("Alice"),
-						get_account_id_from_seed::<sr25519::Public>("Bob"),
-						get_account_id_from_seed::<sr25519::Public>("Charlie"),
-						get_account_id_from_seed::<sr25519::Public>("Dave"),
-						get_account_id_from_seed::<sr25519::Public>("Eve"),
-						get_account_id_from_seed::<sr25519::Public>("Ferdie"),
-						get_account_id_from_seed::<sr25519::Public>("Alice//stash"),
-						get_account_id_from_seed::<sr25519::Public>("Bob//stash"),
-						get_account_id_from_seed::<sr25519::Public>("Charlie//stash"),
-						get_account_id_from_seed::<sr25519::Public>("Dave//stash"),
-						get_account_id_from_seed::<sr25519::Public>("Eve//stash"),
-						get_account_id_from_seed::<sr25519::Public>("Ferdie//stash"),
+						get_account_id_from_seed::<sr25519::Pair>("Alice"),
+						get_account_id_from_seed::<sr25519::Pair>("Bob"),
+						get_account_id_from_seed::<sr25519::Pair>("Charlie"),
+						get_account_id_from_seed::<sr25519::Pair>("Dave"),
+						get_account_id_from_seed::<sr25519::Pair>("Eve"),
+						get_account_id_from_seed::<sr25519::Pair>("Ferdie"),
+						get_account_id_from_seed::<sr25519::Pair>("Alice//stash"),
+						get_account_id_from_seed::<sr25519::Pair>("Bob//stash"),
+						get_account_id_from_seed::<sr25519::Pair>("Charlie//stash"),
+						get_account_id_from_seed::<sr25519::Pair>("Dave//stash"),
+						get_account_id_from_seed::<sr25519::Pair>("Eve//stash"),
+						get_account_id_from_seed::<sr25519::Pair>("Ferdie//stash"),
 					],
 					true,
 				),
