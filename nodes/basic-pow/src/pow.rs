@@ -23,7 +23,7 @@ fn hash_meets_difficulty(hash: &H256, difficulty: U256) -> bool {
 }
 
 /// A Seal struct that will be encoded to a Vec<u8> as used as the
-/// RawSeal type
+/// `RawSeal` type.
 #[derive(Clone, PartialEq, Eq, Encode, Decode, Debug)]
 pub struct Seal {
 	pub difficulty: U256,
