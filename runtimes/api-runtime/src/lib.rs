@@ -165,9 +165,6 @@ impl system::Trait for Runtime {
 	type OnKilledAccount = ();
 	/// The data to be stored in an account.
 	type AccountData = balances::AccountData<Balance>;
-
-	//TODO delete this shit
-	type MigrateAccount = ();
 }
 
 impl aura::Trait for Runtime {

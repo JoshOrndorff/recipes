@@ -21,25 +21,25 @@ version = '1.0.6'
 [dependencies.frame-support]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
-rev = '68e51d6e24862d499b5f042321cc87b172579e74'
+rev = '34c5cb3f66ba47cea6c50aefbf24d35cbf742630'
 
 [dependencies.frame-system]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
-rev = '68e51d6e24862d499b5f042321cc87b172579e74'
+rev = '34c5cb3f66ba47cea6c50aefbf24d35cbf742630'
 
 [dependencies.balances]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'pallet-balances'
-rev = '68e51d6e24862d499b5f042321cc87b172579e74'
+rev = '34c5cb3f66ba47cea6c50aefbf24d35cbf742630'
 
 [dev-dependencies.sp-core]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
-rev = '68e51d6e24862d499b5f042321cc87b172579e74'
+rev = '34c5cb3f66ba47cea6c50aefbf24d35cbf742630'
 
 [dev-dependencies.sp-io]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
-rev = '68e51d6e24862d499b5f042321cc87b172579e74'
+rev = '34c5cb3f66ba47cea6c50aefbf24d35cbf742630'

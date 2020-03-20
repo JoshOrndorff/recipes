@@ -43,7 +43,6 @@ impl system::Trait for TestRuntime {
 	type AccountData = ();
 	type OnNewAccount = ();
 	type OnKilledAccount = ();
-	type MigrateAccount = ();
 }
 
 mod simple_map {

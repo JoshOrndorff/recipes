@@ -83,7 +83,7 @@ fn test() {
 		assert_eq!(
 			System::events(),
 			vec![EventRecord {
-				phase: Phase::ApplyExtrinsic(0),
+				phase: Phase::Initialization,
 				event: TestEvent::simple_event(Event::EmitInput(32)),
 				topics: vec![],
 			}]

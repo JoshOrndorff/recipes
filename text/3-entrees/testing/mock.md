@@ -171,7 +171,7 @@ In the `Cargo.toml`, this only needs to be imported under `dev-dependencies` sin
 [dev-dependencies.sp-io]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
-rev = '68e51d6e24862d499b5f042321cc87b172579e74'
+rev = '34c5cb3f66ba47cea6c50aefbf24d35cbf742630'
 ```
 
 There is more than one pattern for building a mock runtime environment for testing pallet logic. Two patterns are presented below. The latter is generally favored for reasons discussed in [custom test environment](./externalities.md)
