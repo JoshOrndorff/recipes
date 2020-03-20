@@ -32,10 +32,9 @@ git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-version'
 tag = 'v2.0.0-alpha.3'
 
-[dependencies.support]
+[dependencies.frame-support]
 default-features = false
 git = 'https://github.com/paritytech/substrate.git'
-package = 'frame-support'
 tag = 'v2.0.0-alpha.3'
 
 [dependencies.sp-core]
@@ -43,10 +42,9 @@ default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 tag = 'v2.0.0-alpha.3'
 
-[dependencies.substrate-session]
+[dependencies.sp-session]
 default-features = false
 git = 'https://github.com/paritytech/substrate.git'
-package = 'sp-session'
 tag = 'v2.0.0-alpha.3'
 
 [dependencies.balances]
@@ -90,22 +88,15 @@ git = 'https://github.com/paritytech/substrate.git'
 package = 'pallet-indices'
 tag = 'v2.0.0-alpha.3'
 
-# [dependencies.grandpa]
-# default-features = false
-# git = 'https://github.com/paritytech/substrate.git'
-# package = 'pallet-grandpa'
-# tag = 'v2.0.0-alpha.3'
-
 [dependencies.randomness-collective-flip]
 default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'pallet-randomness-collective-flip'
 tag = 'v2.0.0-alpha.3'
 
-[dependencies.system]
+[dependencies.frame-system]
 default-features = false
 git = 'https://github.com/paritytech/substrate.git'
-package = 'frame-system'
 tag = 'v2.0.0-alpha.3'
 
 [dependencies.timestamp]
@@ -180,10 +171,10 @@ std = [
 	# "sp-consensus-babe/std",
 	"sp-core/std",
 	"sp-runtime/std",
-	"substrate-session/std",
+	"sp-session/std",
 	"sudo/std",
-	"support/std",
-	"system/std",
+	"frame-support/std",
+	"frame-system/std",
 	"timestamp/std",
 	"transaction-payment/std",
 	"version/std",
