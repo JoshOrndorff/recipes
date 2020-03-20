@@ -1,5 +1,5 @@
 //! A Runtime for use in Proof of Work nodes. It is simpler than other runtimes
-//! beecause it does not have session key stuff.
+//! because it does not have session key stuff.
 
 #![cfg_attr(not(feature = "std"), no_std)]
 // `construct_runtime!` does a lot of recursion and requires us to increase the limit to 256.
