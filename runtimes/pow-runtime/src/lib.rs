@@ -1,5 +1,5 @@
-//! A Super Runtime. This runtime demonstrates all the recipes in the kitchen
-//! in a single super runtime.
+//! A Runtime for use in Proof of Work nodes. It is simpler than other runtimes
+//! beecause it does not have session key stuff.
 
 #![cfg_attr(not(feature = "std"), no_std)]
 // `construct_runtime!` does a lot of recursion and requires us to increase the limit to 256.
@@ -14,10 +14,11 @@ use sp_core::{OpaqueMetadata, H256};
 use sp_runtime::{
     ApplyExtrinsicResult,
 	transaction_validity::TransactionValidity, generic, create_runtime_str,
-	impl_opaque_keys, AnySignature
+	impl_opaque_keys, MultiSignature
 };
-use sp_runtime::traits::{BlakeTwo256, Block as BlockT, IdentityLookup, Verify, ConvertInto};
-use support::weights::Weight;
+use sp_runtime::traits::{
+	BlakeTwo256, Block as BlockT, IdentityLookup, ConvertInto, Verify, IdentifyAccount,
+};
 use sp_api::impl_runtime_apis;
 use version::RuntimeVersion;
 #[cfg(feature = "std")]
@@ -29,18 +30,23 @@ pub use sp_runtime::BuildStorage;
 pub use timestamp::Call as TimestampCall;
 pub use balances::Call as BalancesCall;
 pub use sp_runtime::{Permill, Perbill};
-pub use support::{StorageValue, construct_runtime, parameter_types, traits::Randomness};
+pub use support::{
+	StorageValue, construct_runtime, parameter_types,
+	traits::Randomness,
+	weights::Weight,
+};
 
 /// An index to a block.
 pub type BlockNumber = u32;
 
 /// Alias to 512-bit hash when used in the context of a transaction signature on the chain.
-pub type Signature = AnySignature;
+pub type Signature = MultiSignature;
 
 /// Some way of identifying an account on the chain. We intentionally make it equivalent
 /// to the public key of our transaction signing scheme.
-pub type AccountId = <Signature as Verify>::Signer;
+pub type AccountId = <<Signature as Verify>::Signer as IdentifyAccount>::AccountId;
 
+//TODO Can this be removed?
 /// The type for looking up accounts. We don't expect more than 4 billion of them, but you
 /// never know...
 pub type AccountIndex = u32;
@@ -101,7 +107,7 @@ pub fn native_version() -> NativeVersion {
 
 parameter_types! {
 	pub const BlockHashCount: BlockNumber = 250;
-	pub const MaximumBlockWeight: Weight = 1_000_000;
+	pub const MaximumBlockWeight: Weight = 1_000_000_000;
 	pub const AvailableBlockRatio: Perbill = Perbill::from_percent(75);
 	pub const MaximumBlockLength: u32 = 5 * 1024 * 1024;
 	pub const Version: RuntimeVersion = VERSION;
