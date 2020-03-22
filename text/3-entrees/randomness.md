@@ -74,7 +74,7 @@ In production networks, Babe VRF output is preferable to Collective Flip. Collec
 
 Ad mentioned previously, there are many tradeoffs and security concerns to be aware of when using these randomness sources. If you'd like to get into the research, here are some jumping off points.
 
-* https://github.com/paritytech/ink/issues/57
-* https://wiki.polkadot.network/docs/en/learn-randomness
-* https://www.cse.huji.ac.il/~nati/PAPERS/coll_coin_fl.pdf
-* https://eccc.weizmann.ac.il/report/2018/140/
+* [https://github.com/paritytech/ink/issues/57](https://github.com/paritytech/ink/issues/57)
+* [https://wiki.polkadot.network/docs/en/learn-randomness](https://wiki.polkadot.network/docs/en/learn-randomness)
+* [https://www.cse.huji.ac.il/~nati/PAPERS/coll_coin_fl.pdf](https://www.cse.huji.ac.il/~nati/PAPERS/coll_coin_fl.pdf)
+* [https://eccc.weizmann.ac.il/report/2018/140/](https://eccc.weizmann.ac.il/report/2018/140/)
