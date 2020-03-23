@@ -366,6 +366,12 @@ impl system::offchain::CreateTransaction<Runtime, UncheckedExtrinsic> for Runtim
 
 // end of offchain_demo setting
 
+impl randomness::Trait for Runtime {
+	type Event = Event;
+	type CollectiveFlipRandomnessSource = RandomnessCollectiveFlip;
+	type BabeRandomnessSource = Babe;
+}
+
 impl simple_event::Trait for Runtime {
 	type Event = Event;
 }
@@ -418,6 +424,7 @@ construct_runtime!(
 		LastCaller2: last_caller::<Instance2>::{Module, Call, Storage, Event<T>},
 		LinkedMap: linked_map::{Module, Call, Storage, Event<T>},
 		OffchainDemo: offchain_demo::{Module, Call, Storage, Event<T>, ValidateUnsigned},
+		RandomnessDemo: randomness::{Module, Call, Storage, Event},
 		SimpleEvent: simple_event::{Module, Call, Event},
 		SimpleMap: simple_map::{Module, Call, Storage, Event<T>},
 		SingleValue: single_value::{Module, Call, Storage},

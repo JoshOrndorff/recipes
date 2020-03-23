@@ -16,4 +16,7 @@ theme = "src/theme"
 
 [output.linkcheck]
 follow-web-links = true
-exclude = [ "www4\\.comp\\.polyu\\.edu\\.hk/~csxluo/" ]
+exclude = [
+	"https://github.com/substrate-developer-hub/recipes/",
+	"www4\\.comp\\.polyu\\.edu\\.hk/~csxluo/"
+]
