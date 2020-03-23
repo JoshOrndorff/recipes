@@ -1,0 +1,11 @@
+{
+  "name": "js-test",
+  "version": "1.0.0",
+  "description": "Try to figure out why the transaction fails from js api",
+  "main": "index.js",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "@polkadot/api": "^1.8.0-beta.3"
+  }
+}

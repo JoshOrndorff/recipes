@@ -327,6 +327,39 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b41b7ea54a0c9d92199de89e20e58d49f02f8e699814ef3fdf266f6f748d15c7"
 
 [[package]]
+name = "basic-pow"
+version = "2.0.0"
+dependencies = [
+ "futures 0.3.4",
+ "log",
+ "parity-scale-codec",
+ "pow-genesis",
+ "pow-runtime",
+ "rand 0.7.3",
+ "sc-basic-authorship",
+ "sc-cli",
+ "sc-client",
+ "sc-client-api",
+ "sc-consensus-pow",
+ "sc-executor",
+ "sc-network",
+ "sc-service",
+ "sc-transaction-pool",
+ "sha3",
+ "sp-blockchain",
+ "sp-consensus",
+ "sp-consensus-pow",
+ "sp-core",
+ "sp-inherents",
+ "sp-runtime",
+ "sp-timestamp",
+ "sp-transaction-pool",
+ "structopt",
+ "substrate-build-script-utils",
+ "vergen",
+]
+
+[[package]]
 name = "basic-token"
 version = "0.1.0"
 dependencies = [
@@ -3374,9 +3407,9 @@ dependencies = [
 
 [[package]]
 name = "paste"
-version = "0.1.7"
+version = "0.1.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "63e1afe738d71b1ebab5f1207c055054015427dbfc7bbe9ee1266894156ec046"
+checksum = "8292c1e1e81ddb552c4c90c36af201a0ce7e34995f55f0480f01052f242811c9"
 dependencies = [
  "paste-impl",
  "proc-macro-hack",
@@ -3384,9 +3417,9 @@ dependencies = [
 
 [[package]]
 name = "paste-impl"
-version = "0.1.7"
+version = "0.1.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6d4dc4a7f6f743211c5aab239640a65091535d97d43d92a52bca435a640892bb"
+checksum = "5e9c43f2645f06ee452544ad032886a75f3d1797b9487dcadcae9100ba58a51c"
 dependencies = [
  "proc-macro-hack",
  "proc-macro2 1.0.9",
@@ -3475,6 +3508,45 @@ name = "pkg-config"
 version = "0.3.17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "05da548ad6865900e60eaba7f589cc0783590a92e940c26953ff81ddbab2d677"
+
+[[package]]
+name = "pow-genesis"
+version = "2.0.0"
+dependencies = [
+ "pow-runtime",
+]
+
+[[package]]
+name = "pow-runtime"
+version = "2.0.0"
+dependencies = [
+ "frame-executive",
+ "frame-support",
+ "frame-system",
+ "pallet-balances",
+ "pallet-generic-asset",
+ "pallet-indices",
+ "pallet-randomness-collective-flip",
+ "pallet-sudo",
+ "pallet-timestamp",
+ "pallet-transaction-payment",
+ "parity-scale-codec",
+ "safe-mix",
+ "serde",
+ "sp-api",
+ "sp-block-builder",
+ "sp-core",
+ "sp-inherents",
+ "sp-io",
+ "sp-offchain",
+ "sp-runtime",
+ "sp-session",
+ "sp-std",
+ "sp-transaction-pool",
+ "sp-version",
+ "substrate-wasm-builder-runner",
+ "weights",
+]
 
 [[package]]
 name = "ppv-lite86"
@@ -3702,7 +3774,7 @@ dependencies = [
  "rand_isaac",
  "rand_jitter",
  "rand_os",
- "rand_pcg",
+ "rand_pcg 0.1.2",
  "rand_xorshift",
  "winapi 0.3.8",
 ]
@@ -3718,6 +3790,7 @@ dependencies = [
  "rand_chacha 0.2.2",
  "rand_core 0.5.1",
  "rand_hc 0.2.0",
+ "rand_pcg 0.2.1",
 ]
 
 [[package]]
@@ -3824,6 +3897,15 @@ checksum = "abf9b09b01790cfe0364f52bf32995ea3c39f4d2dd011eac241d2914146d0b44"
 dependencies = [
  "autocfg 0.1.7",
  "rand_core 0.4.2",
+]
+
+[[package]]
+name = "rand_pcg"
+version = "0.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "16abd0c1b639e9eb4d7c50c0b8100b0d0f849be2349829c740fe8e6eb4816429"
+dependencies = [
+ "rand_core 0.5.1",
 ]
 
 [[package]]
@@ -4392,6 +4474,27 @@ dependencies = [
  "sc-client-api",
  "sp-blockchain",
  "sp-runtime",
+]
+
+[[package]]
+name = "sc-consensus-pow"
+version = "0.8.0-alpha.3"
+source = "git+https://github.com/paritytech/substrate.git?tag=v2.0.0-alpha.3#013c1ee167354a08283fb69915fda56a62fee943"
+dependencies = [
+ "derive_more 0.99.3",
+ "futures 0.3.4",
+ "log",
+ "parity-scale-codec",
+ "sc-client-api",
+ "sp-api",
+ "sp-block-builder",
+ "sp-blockchain",
+ "sp-consensus",
+ "sp-consensus-pow",
+ "sp-core",
+ "sp-inherents",
+ "sp-runtime",
+ "sp-timestamp",
 ]
 
 [[package]]
@@ -5341,6 +5444,18 @@ dependencies = [
  "sp-runtime",
  "sp-std",
  "sp-timestamp",
+]
+
+[[package]]
+name = "sp-consensus-pow"
+version = "0.8.0-alpha.3"
+source = "git+https://github.com/paritytech/substrate.git?tag=v2.0.0-alpha.3#013c1ee167354a08283fb69915fda56a62fee943"
+dependencies = [
+ "parity-scale-codec",
+ "sp-api",
+ "sp-core",
+ "sp-runtime",
+ "sp-std",
 ]
 
 [[package]]

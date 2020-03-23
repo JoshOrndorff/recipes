@@ -1,5 +1,5 @@
-//! A Super Runtime. This runtime demonstrates all the recipes in the kitchen
-//! in a single super runtime.
+//! A Runtime for use in Proof of Work nodes. It is simpler than other runtimes
+//! because it does not have session key stuff.
 
 #![cfg_attr(not(feature = "std"), no_std)]
 // `construct_runtime!` does a lot of recursion and requires us to increase the limit to 256.
@@ -12,27 +12,24 @@ include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 use rstd::prelude::*;
 use sp_core::{OpaqueMetadata, H256};
 use sp_runtime::{
-    ApplyExtrinsicResult,
+	ApplyExtrinsicResult,
 	transaction_validity::TransactionValidity, generic, create_runtime_str,
-	impl_opaque_keys, AnySignature
+	impl_opaque_keys,
+	MultiSignature
 };
-use sp_runtime::traits::{BlakeTwo256, Block as BlockT, IdentityLookup, Verify, Convert};
-use support::traits::Get;
-use support::weights::Weight;
-use babe::SameAuthoritiesForever;
-use grandpa::{AuthorityId as GrandpaId, AuthorityWeight as GrandpaWeight};
-use grandpa::fg_primitives;
+use sp_runtime::traits::{
+	BlakeTwo256,
+	Block as BlockT,
+	IdentityLookup,
+	ConvertInto,
+	Verify,
+	IdentifyAccount,
+};
 use sp_api::impl_runtime_apis;
-use version::RuntimeVersion;
+use frame_system as system;
 #[cfg(feature = "std")]
 use version::NativeVersion;
-
-// These structs are used in one of the commented-by-default implementations of
-// transaction_payment::Trait. Don't warn when they are unused.
-#[allow(unused_imports)]
-use sp_runtime::traits::ConvertInto;
-#[allow(unused_imports)]
-use generic_asset::{SpendingAssetCurrency, AssetCurrency, AssetIdProvider};
+use version::RuntimeVersion;
 
 // A few exports that help ease life for downstream crates.
 #[cfg(any(feature = "std", test))]
@@ -40,18 +37,23 @@ pub use sp_runtime::BuildStorage;
 pub use timestamp::Call as TimestampCall;
 pub use balances::Call as BalancesCall;
 pub use sp_runtime::{Permill, Perbill};
-pub use support::{StorageValue, construct_runtime, parameter_types, traits::Randomness};
+pub use frame_support::{
+	StorageValue, construct_runtime, parameter_types,
+	traits::Randomness,
+	weights::Weight,
+};
 
 /// An index to a block.
 pub type BlockNumber = u32;
 
 /// Alias to 512-bit hash when used in the context of a transaction signature on the chain.
-pub type Signature = AnySignature;
+pub type Signature = MultiSignature;
 
 /// Some way of identifying an account on the chain. We intentionally make it equivalent
 /// to the public key of our transaction signing scheme.
-pub type AccountId = <Signature as Verify>::Signer;
+pub type AccountId = <<Signature as Verify>::Signer as IdentifyAccount>::AccountId;
 
+//TODO Can this be removed?
 /// The type for looking up accounts. We don't expect more than 4 billion of them, but you
 /// never know...
 pub type AccountIndex = u32;
@@ -84,42 +86,22 @@ pub mod opaque {
 	/// Opaque block identifier type.
 	pub type BlockId = generic::BlockId<Block>;
 
-	pub type SessionHandlers = (Grandpa, Babe);
-
 	impl_opaque_keys! {
-		pub struct SessionKeys {
-			pub grandpa: Grandpa,
-			pub babe: Babe,
-		}
+		pub struct SessionKeys {}
 	}
 }
 
 /// This runtime version.
 pub const VERSION: RuntimeVersion = RuntimeVersion {
-	spec_name: create_runtime_str!("weight-fee-runtime"),
-	impl_name: create_runtime_str!("weight-fee-runtime"),
+	spec_name: create_runtime_str!("pow-runtime"),
+	impl_name: create_runtime_str!("pow-runtime"),
 	authoring_version: 1,
 	spec_version: 1,
 	impl_version: 1,
 	apis: RUNTIME_API_VERSIONS,
 };
 
-/// Constants for Babe.
-pub const MILLISECS_PER_BLOCK: u64 = 6000;
-
-pub const SLOT_DURATION: u64 = MILLISECS_PER_BLOCK;
-
-pub const EPOCH_DURATION_IN_BLOCKS: u32 = 10 * MINUTES;
-
-// These time units are defined in number of blocks.
-pub const MINUTES: BlockNumber = 60_000 / (MILLISECS_PER_BLOCK as BlockNumber);
-pub const HOURS: BlockNumber = MINUTES * 60;
-pub const DAYS: BlockNumber = HOURS * 24;
-
-// 1 in 4 blocks (on average, not counting collisions) will be primary babe blocks.
-pub const PRIMARY_PROBABILITY: (u64, u64) = (1, 4);
-
-/// The version infromation used to identify this runtime when compiled natively.
+/// The version information used to identify this runtime when compiled natively.
 #[cfg(feature = "std")]
 pub fn native_version() -> NativeVersion {
 	NativeVersion {
@@ -180,28 +162,13 @@ impl system::Trait for Runtime {
 }
 
 parameter_types! {
-	pub const EpochDuration: u64 = EPOCH_DURATION_IN_BLOCKS as u64;
-	pub const ExpectedBlockTime: u64 = MILLISECS_PER_BLOCK;
-}
-
-impl babe::Trait for Runtime {
-	type EpochDuration = EpochDuration;
-	type ExpectedBlockTime = ExpectedBlockTime;
-	type EpochChangeTrigger = SameAuthoritiesForever;
-}
-
-impl grandpa::Trait for Runtime {
-	type Event = Event;
-}
-
-parameter_types! {
-	pub const MinimumPeriod: u64 = SLOT_DURATION / 2;
+	pub const MinimumPeriod: u64 = 100;
 }
 
 impl timestamp::Trait for Runtime {
 	/// A timestamp: milliseconds since the unix epoch.
 	type Moment = u64;
-	type OnTimestampSet = Babe;
+	type OnTimestampSet = ();
 	type MinimumPeriod = MinimumPeriod;
 }
 
@@ -221,120 +188,24 @@ impl balances::Trait for Runtime {
 	type AccountStore = System;
 }
 
-impl generic_asset::Trait for Runtime {
-    /// The type for recording an account's balance.
-    type Balance = Balance;
-    type AssetId = u32;
-    type Event = Event;
-}
-
 impl sudo::Trait for Runtime {
 	type Event = Event;
 	type Call = Call;
 }
 
-impl weights::Trait for Runtime {}
-
-
-// --------------------- Multiple Options for WeightToFee -----------------------
-
-/// Convert from weight to balance via a simple coefficient multiplication. The associated type C
-/// encapsulates a constant in units of balance per weight.
-pub struct LinearWeightToFee<C>(rstd::marker::PhantomData<C>);
-
-impl<C> Convert<Weight, Balance> for LinearWeightToFee<C>
-	where C: Get<Balance> {
-
-	fn convert(w: Weight) -> Balance {
-		// substrate-node a weight of 10_000 (smallest non-zero weight) to be mapped to 10^7 units of
-		// fees, hence:
-		let coefficient = C::get();
-		Balance::from(w).saturating_mul(coefficient)
-	}
-}
-
-/// Convert from weight to balance via a quadratic curve. The type parameters encapsulate the
-/// coefficients.
-pub struct QuadraticWeightToFee<C0, C1, C2>(C0, C1, C2);
-
-impl<C0, C1, C2> Convert<Weight, Balance> for QuadraticWeightToFee<C0, C1, C2>
-	where C0: Get<Balance>, C1: Get<Balance>, C2: Get<Balance> {
-
-	fn convert(w: Weight) -> Balance {
-		let c0 = C0::get();
-		let c1 = C1::get();
-		let c2 = C2::get();
-		let w = Balance::from(w);
-
-		// All the safe math reduces to
-		// c0 + c1 * w + c2 * w * w
-
-		let c1w = c1.saturating_mul(w);
-		let c2w2 = c2.saturating_mul(w).saturating_mul(w);
-
-		c0.saturating_add(c1w).saturating_add(c2w2)
-	}
-}
-
-// --------------------- An Option to Currency to Collect Fees -----------------------
-#[allow(dead_code)]
-type FixedGenericAsset<T> = AssetCurrency<T, FixedAssetId>;
-
-pub struct FixedAssetId;
-impl AssetIdProvider for FixedAssetId {
-	type AssetId = u32;
-	fn asset_id() -> Self::AssetId {
-		13
-	}
-}
-
 parameter_types! {
-	// Used with LinearWeightToFee conversion. Leaving this constant in tact when using other
-	// conversion techniques is harmless.
-	pub const FeeWeightRatio: u128 = 1_000;
-
-	// Used with QuadraticWeightToFee conversion. Leaving these constants in tact when using other
-	// conversion techniques is harmless.
-	pub const WeightFeeConstant: u128 = 1_000;
-	pub const WeightFeeLinear: u128 = 100;
-	pub const WeightFeeQuadratic : u128 = 10;
-
-	// Establish the base- and byte-fees. These are used in all configurations.
 	pub const TransactionBaseFee: u128 = 0;
 	pub const TransactionByteFee: u128 = 1;
 }
 
 impl transaction_payment::Trait for Runtime {
-
-	// The asset in which fees will be collected.
-	// Enable exactly one of the following options.
-	type Currency = Balances; // The balances pallet (The most common choice)
-	//type Currency = FixedGenericAsset<Self>; // A generic asset whose ID is hard-coded above.
-	//type Currency = SpendingAssetCurrency<Self>; // A generic asset whose ID is stored in the
-	                                               // generic_asset pallet's runtime storage
-
-	// What to do when fees are paid. () means take no additional actions.
+	type Currency = Balances;
 	type OnTransactionPayment = ();
-
-	// Base fee is a fixed amount applied to every transaction
 	type TransactionBaseFee = TransactionBaseFee;
-
-	// Byte fee is multiplied by the length of the
-	// serialized transaction in bytes
 	type TransactionByteFee = TransactionByteFee;
-
-	// Function to convert dispatch weight to a chargeable fee.
-	// Enable exactly one of the following options.
-	//type WeightToFee = ConvertInto;
-	//type WeightToFee = LinearWeightToFee<FeeWeightRatio>;
-	type WeightToFee = QuadraticWeightToFee<WeightFeeConstant, WeightFeeLinear, WeightFeeQuadratic>;
-
-	//TODO Explore how to change FeeMultiplierUpdate
+	type WeightToFee = ConvertInto;
 	type FeeMultiplierUpdate = ();
 }
-
-// --------------------------------------------
-
 
 construct_runtime!(
 	pub enum Runtime where
@@ -344,15 +215,10 @@ construct_runtime!(
 	{
 		System: system::{Module, Call, Storage, Config, Event<T>},
 		Timestamp: timestamp::{Module, Call, Storage, Inherent},
-		Babe: babe::{Module, Call, Storage, Config, Inherent(Timestamp)},
-		Grandpa: grandpa::{Module, Call, Storage, Config, Event},
 		Balances: balances::{Module, Call, Storage, Config<T>, Event<T>},
-		GenericAsset: generic_asset::{Module, Call, Storage, Config<T>, Event<T>},
 		RandomnessCollectiveFlip: randomness_collective_flip::{Module, Call, Storage},
 		Sudo: sudo::{Module, Call, Config<T>, Storage, Event<T>},
 		TransactionPayment: transaction_payment::{Module, Storage},
-		// The Recipe Pallets
-		Weights: weights::{Module, Call, Storage},
 	}
 );
 
@@ -444,35 +310,7 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl fg_primitives::GrandpaApi<Block> for Runtime {
-		fn grandpa_authorities() -> Vec<(GrandpaId, GrandpaWeight)> {
-			Grandpa::grandpa_authorities()
-		}
-	}
-
-	impl sp_consensus_babe::BabeApi<Block> for Runtime {
-		fn configuration() -> sp_consensus_babe::BabeConfiguration {
-			// The choice of `c` parameter (where `1 - c` represents the
-			// probability of a slot being empty), is done in accordance to the
-			// slot duration and expected target block time, for safely
-			// resisting network delays of maximum two seconds.
-			// <https://research.web3.foundation/en/latest/polkadot/BABE/Babe/#6-practical-results>
-			sp_consensus_babe::BabeConfiguration {
-				slot_duration: Babe::slot_duration(),
-				epoch_length: EpochDuration::get(),
-				c: PRIMARY_PROBABILITY,
-				genesis_authorities: Babe::authorities(),
-				randomness: Babe::randomness(),
-				secondary_slots: true,
-			}
-		}
-
-		fn current_epoch_start() -> sp_consensus_babe::SlotNumber {
-			Babe::current_epoch_start()
-		}
-	}
-
-	impl substrate_session::SessionKeys<Block> for Runtime {
+	impl sp_session::SessionKeys<Block> for Runtime {
 		fn generate_session_keys(seed: Option<Vec<u8>>) -> Vec<u8> {
 			opaque::SessionKeys::generate(seed)
 		}
