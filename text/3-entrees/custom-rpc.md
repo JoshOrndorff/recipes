@@ -47,7 +47,7 @@ With our RPC written, we're ready to install it on our node. We begin with a few
 jsonrpc-core = "14.0.3"
 jsonrpc-core-client = "14.0.3"
 jsonrpc-derive = "14.0.3"
-sc-rpc = { git = 'https://github.com/paritytech/substrate.git', rev = '34c5cb3f66ba47cea6c50aefbf24d35cbf742630' }
+sc-rpc = { git = 'https://github.com/paritytech/substrate.git', rev = '1d8fa432949b99fac4ea0bebfdd6675dee973aa1' }
 ```
 
 Next, in our `rpc-node`'s `service.rs` file, we extend the service with our RPC. We've chosen to install this RPC for full nodes, so we've included the code in the `new_full_start!` macro. You could also install the RPC on a light client by making the corresponding changes to `new_light`.

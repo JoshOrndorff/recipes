@@ -5,7 +5,7 @@ authors = ["Joshy Orndorff"]
 edition = "2018"
 
 [dependencies]
-sp-api = { rev = '34c5cb3f66ba47cea6c50aefbf24d35cbf742630', git = 'https://github.com/paritytech/substrate.git', default_features = false}
+sp-api = { rev = '1d8fa432949b99fac4ea0bebfdd6675dee973aa1', git = 'https://github.com/paritytech/substrate.git', default_features = false}
 
 [dev-dependencies]
 serde_json = "1.0.41"

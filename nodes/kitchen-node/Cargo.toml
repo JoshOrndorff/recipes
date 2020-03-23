@@ -21,24 +21,24 @@ exit-future = "0.2.0"
 parking_lot = "0.9.0"
 codec = { package = "parity-scale-codec", version = "1.0.0" }
 trie-root = "0.15.2"
-sp-io = { git = 'https://github.com/paritytech/substrate.git', rev = '34c5cb3f66ba47cea6c50aefbf24d35cbf742630' }
-sc-cli = { git = 'https://github.com/paritytech/substrate.git', rev = '34c5cb3f66ba47cea6c50aefbf24d35cbf742630' }
-sc-client-api = { git = 'https://github.com/paritytech/substrate.git', rev = '34c5cb3f66ba47cea6c50aefbf24d35cbf742630' }
-sp-core = { git = 'https://github.com/paritytech/substrate.git', rev = '34c5cb3f66ba47cea6c50aefbf24d35cbf742630' }
-sp-runtime = { git = 'https://github.com/paritytech/substrate.git', rev = '34c5cb3f66ba47cea6c50aefbf24d35cbf742630' }
-sc-executor = { git = 'https://github.com/paritytech/substrate.git', rev = '34c5cb3f66ba47cea6c50aefbf24d35cbf742630' }
-sc-service = { git = 'https://github.com/paritytech/substrate.git', rev = '34c5cb3f66ba47cea6c50aefbf24d35cbf742630' }
-sp-inherents = { git = 'https://github.com/paritytech/substrate.git', rev = '34c5cb3f66ba47cea6c50aefbf24d35cbf742630' }
-sc-transaction-pool = { git = 'https://github.com/paritytech/substrate.git', rev = '34c5cb3f66ba47cea6c50aefbf24d35cbf742630' }
-sp-transaction-pool = { git = 'https://github.com/paritytech/substrate.git', rev = '34c5cb3f66ba47cea6c50aefbf24d35cbf742630' }
-sc-network = { git = 'https://github.com/paritytech/substrate.git', rev = '34c5cb3f66ba47cea6c50aefbf24d35cbf742630' }
-sc-consensus-babe = { git = 'https://github.com/paritytech/substrate.git', rev = '34c5cb3f66ba47cea6c50aefbf24d35cbf742630' }
-sp-consensus-babe = { git = 'https://github.com/paritytech/substrate.git', rev = '34c5cb3f66ba47cea6c50aefbf24d35cbf742630' }
-sc-finality-grandpa = { git = 'https://github.com/paritytech/substrate.git', rev = '34c5cb3f66ba47cea6c50aefbf24d35cbf742630' }
-sp-finality-grandpa = { git = 'https://github.com/paritytech/substrate.git', rev = '34c5cb3f66ba47cea6c50aefbf24d35cbf742630' }
-sc-client = { git = 'https://github.com/paritytech/substrate.git', rev = '34c5cb3f66ba47cea6c50aefbf24d35cbf742630' }
-sc-basic-authorship = { git = 'https://github.com/paritytech/substrate.git', rev = '34c5cb3f66ba47cea6c50aefbf24d35cbf742630' }
-sp-consensus = { git = 'https://github.com/paritytech/substrate.git', rev = '34c5cb3f66ba47cea6c50aefbf24d35cbf742630' }
+sp-io = { git = 'https://github.com/paritytech/substrate.git', rev = '1d8fa432949b99fac4ea0bebfdd6675dee973aa1' }
+sc-cli = { git = 'https://github.com/paritytech/substrate.git', rev = '1d8fa432949b99fac4ea0bebfdd6675dee973aa1' }
+sc-client-api = { git = 'https://github.com/paritytech/substrate.git', rev = '1d8fa432949b99fac4ea0bebfdd6675dee973aa1' }
+sp-core = { git = 'https://github.com/paritytech/substrate.git', rev = '1d8fa432949b99fac4ea0bebfdd6675dee973aa1' }
+sp-runtime = { git = 'https://github.com/paritytech/substrate.git', rev = '1d8fa432949b99fac4ea0bebfdd6675dee973aa1' }
+sc-executor = { git = 'https://github.com/paritytech/substrate.git', rev = '1d8fa432949b99fac4ea0bebfdd6675dee973aa1' }
+sc-service = { git = 'https://github.com/paritytech/substrate.git', rev = '1d8fa432949b99fac4ea0bebfdd6675dee973aa1' }
+sp-inherents = { git = 'https://github.com/paritytech/substrate.git', rev = '1d8fa432949b99fac4ea0bebfdd6675dee973aa1' }
+sc-transaction-pool = { git = 'https://github.com/paritytech/substrate.git', rev = '1d8fa432949b99fac4ea0bebfdd6675dee973aa1' }
+sp-transaction-pool = { git = 'https://github.com/paritytech/substrate.git', rev = '1d8fa432949b99fac4ea0bebfdd6675dee973aa1' }
+sc-network = { git = 'https://github.com/paritytech/substrate.git', rev = '1d8fa432949b99fac4ea0bebfdd6675dee973aa1' }
+sc-consensus-babe = { git = 'https://github.com/paritytech/substrate.git', rev = '1d8fa432949b99fac4ea0bebfdd6675dee973aa1' }
+sp-consensus-babe = { git = 'https://github.com/paritytech/substrate.git', rev = '1d8fa432949b99fac4ea0bebfdd6675dee973aa1' }
+sc-finality-grandpa = { git = 'https://github.com/paritytech/substrate.git', rev = '1d8fa432949b99fac4ea0bebfdd6675dee973aa1' }
+sp-finality-grandpa = { git = 'https://github.com/paritytech/substrate.git', rev = '1d8fa432949b99fac4ea0bebfdd6675dee973aa1' }
+sc-client = { git = 'https://github.com/paritytech/substrate.git', rev = '1d8fa432949b99fac4ea0bebfdd6675dee973aa1' }
+sc-basic-authorship = { git = 'https://github.com/paritytech/substrate.git', rev = '1d8fa432949b99fac4ea0bebfdd6675dee973aa1' }
+sp-consensus = { git = 'https://github.com/paritytech/substrate.git', rev = '1d8fa432949b99fac4ea0bebfdd6675dee973aa1' }
 
 # Edit these lines to point to a different runtime.
 # Your runtime must have the necessary pallets to support consensus (Babe, Grandpa, etc)
