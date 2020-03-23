@@ -36,4 +36,5 @@ members = [
 	"runtimes/api-genesis",
 	"nodes/kitchen-node",
 	"nodes/rpc-node",
+	"nodes/basic-pow",
 ]

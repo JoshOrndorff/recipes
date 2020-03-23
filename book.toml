@@ -17,6 +17,7 @@ theme = "src/theme"
 [output.linkcheck]
 follow-web-links = true
 exclude = [
-	"https://github.com/substrate-developer-hub/recipes/",
-	"www4\\.comp\\.polyu\\.edu\\.hk/~csxluo/"
+  "www4\\.comp\\.polyu\\.edu\\.hk/~csxluo/",
+  # Links to code in new recipe PRs always fail because the code is not merged yet
+  "github\\.com/substrate-developer-hub/recipes/tree/",
 ]
