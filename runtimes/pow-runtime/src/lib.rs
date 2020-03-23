@@ -26,9 +26,6 @@ use sp_runtime::traits::{
 	IdentifyAccount,
 };
 use sp_api::impl_runtime_apis;
-
-
-
 use frame_system as system;
 #[cfg(feature = "std")]
 use version::NativeVersion;
@@ -90,10 +87,7 @@ pub mod opaque {
 	pub type BlockId = generic::BlockId<Block>;
 
 	impl_opaque_keys! {
-		pub struct SessionKeys {
-
-
-		}
+		pub struct SessionKeys {}
 	}
 }
 
@@ -106,15 +100,6 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
 	impl_version: 1,
 	apis: RUNTIME_API_VERSIONS,
 };
-
-
-
-
-
-
-
-
-
 
 /// The version information used to identify this runtime when compiled natively.
 #[cfg(feature = "std")]
@@ -176,14 +161,6 @@ impl system::Trait for Runtime {
 	type AccountData = balances::AccountData<Balance>;
 }
 
-
-
-
-
-
-
-
-
 parameter_types! {
 	pub const MinimumPeriod: u64 = 100;
 }
@@ -230,11 +207,6 @@ impl transaction_payment::Trait for Runtime {
 	type FeeMultiplierUpdate = ();
 }
 
-
-
-
-
-
 construct_runtime!(
 	pub enum Runtime where
 		Block = Block,
@@ -243,13 +215,10 @@ construct_runtime!(
 	{
 		System: system::{Module, Call, Storage, Config, Event<T>},
 		Timestamp: timestamp::{Module, Call, Storage, Inherent},
-
-
 		Balances: balances::{Module, Call, Storage, Config<T>, Event<T>},
 		RandomnessCollectiveFlip: randomness_collective_flip::{Module, Call, Storage},
 		Sudo: sudo::{Module, Call, Config<T>, Storage, Event<T>},
 		TransactionPayment: transaction_payment::{Module, Storage},
-
 	}
 );
 
