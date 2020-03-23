@@ -29,7 +29,7 @@
 	- [Custom RPCs](./3-entrees/custom-rpc.md)
 	- [Basic Proof of Work](./3-entrees/basic-pow.md)
 	- [Currency Types](./3-entrees/currency.md)
-	- [Generating Randomness](./3-entrees/random.md)
+	- [Generating Randomness](./3-entrees/randomness.md)
 	- [Execution Schedule](./3-entrees/execution-schedule.md)
 	- [Permissioned Methods](./3-entrees/permissioned-methods.md)
 	- [Testing](./3-entrees/testing/index.md)
