@@ -222,6 +222,6 @@ pub fn add_multiple(origin, integers: Vec<i32>, boolean: bool) -> DispatchResult
 	Ok(())
 } // commit happens on drop
 ```
- 
+
 Here we use the `queue_transient` function defined above to get a `queue` object. We then `push` into it repeatedly with `commit` happening on `drop` of the `queue` object at the end of the function.
 `pop` works analogously and can of course be intermixed with `push`es.
