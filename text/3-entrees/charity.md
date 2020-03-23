@@ -7,7 +7,7 @@ The Charity pallet represents a simple charitable organization that collects fun
 
 ## Instantiate a Pot
 
-Our charity needs an acocunt to hold its funds. Unlike other acocunts, it will not be controlled by a user's cryptographic key pair, but directly by the pallet. To instantiate such a pool of funds, import [`ModuleId`](https://substrate.dev/rustdocs/master/sp_runtime/struct.ModuleId.html) and [`AccountIdConversion`](https://substrate.dev/rustdocs/master/sp_runtime/traits/trait.AccountIdConversion.html) from [`sp-runtime`](https://substrate.dev/rustdocs/master/sp_runtime/index.html).
+Our charity needs an account to hold its funds. Unlike other accounts, it will not be controlled by a user's cryptographic key pair, but directly by the pallet. To instantiate such a pool of funds, import [`ModuleId`](https://substrate.dev/rustdocs/master/sp_runtime/struct.ModuleId.html) and [`AccountIdConversion`](https://substrate.dev/rustdocs/master/sp_runtime/traits/trait.AccountIdConversion.html) from [`sp-runtime`](https://substrate.dev/rustdocs/master/sp_runtime/index.html).
 
 ```rust, ignore
 use sp-runtime::{ModuleId, traits::AccountIdConversion};

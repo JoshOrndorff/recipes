@@ -4,6 +4,7 @@ Although the Rust compiler ensures safe memory management, it cannot formally ve
 
 * [Basic Test Environments](./mock.md)
 * [Common Tests](./common.md)
+* [Off-chain Worker Test Environment](./off-chain-workers.md)
 * [Custom Test Environment](./externalities.md)
 
 There's also more rigorous testing systems ranging from mocking and fuzzing to formal verification. See [quickcheck](https://docs.rs/quickcheck/0.9.0/quickcheck/) for an example of a property-based testing framework ported from Haskell to Rust.
@@ -11,16 +12,17 @@ There's also more rigorous testing systems ranging from mocking and fuzzing to f
 ## Kitchen Pallets with Unit Tests
 
 The following modules in the kitchen have partial unit test coverage
-- [`struct-storage`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/struct-storage)
 - [`adding-machine`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/adding-machine)
-- [`simple-event`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-event)
-- [`generic-event`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/generic-event)
-- [`single-value`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/single-value)
-- [`simple-map`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-map)
-- [`double-map`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/double-map)
-- [`storage-cache`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/storage-cache)
-- [`vec-set`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/vec-set)
 - [`constant-config`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/constant-config)
+- [`double-map`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/double-map)
+- [`generic-event`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/generic-event)
+- [`offchain-demo](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo)
+- [`simple-event`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-event)
+- [`simple-map`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-map)
+- [`single-value`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/single-value)
+- [`storage-cache`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/storage-cache)
+- [`struct-storage`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/struct-storage)
+- [`vec-set`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/vec-set)
 
 ### Cooking in the Kitchen (Running Tests)
 

@@ -2078,6 +2078,7 @@ dependencies = [
  "sp-runtime",
  "sp-transaction-pool",
  "structopt",
+ "substrate-build-script-utils",
  "super-genesis",
  "super-runtime",
  "tokio 0.1.22",
@@ -2935,6 +2936,22 @@ checksum = "46203554f085ff89c235cd12f7075f3233af9b11ed7c9e16dfe2560d03313ce6"
 dependencies = [
  "hermit-abi",
  "libc",
+]
+
+[[package]]
+name = "offchain-demo"
+version = "0.1.0"
+dependencies = [
+ "frame-support",
+ "frame-system",
+ "parity-scale-codec",
+ "parking_lot 0.10.0",
+ "serde",
+ "serde_json",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
 ]
 
 [[package]]
@@ -5790,6 +5807,7 @@ dependencies = [
  "generic-event",
  "hello-substrate",
  "last-caller",
+ "offchain-demo",
  "pallet-babe",
  "pallet-balances",
  "pallet-grandpa",
