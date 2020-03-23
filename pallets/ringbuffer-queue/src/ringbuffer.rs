@@ -97,7 +97,7 @@ where
 {
 	/// Create a new `RingBufferTransient` that backs the ringbuffer implementation.
 	///
-	/// Initializes itself from the `Bounds` storage.
+	/// Initializes itself from the bounds storage `B`.
 	pub fn new() -> RingBufferTransient<Item, B, M, Index> {
 		let (start, end) = B::get();
 		RingBufferTransient {
