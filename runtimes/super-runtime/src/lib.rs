@@ -127,7 +127,7 @@ pub fn native_version() -> NativeVersion {
 
 parameter_types! {
 	pub const BlockHashCount: BlockNumber = 250;
-	pub const MaximumBlockWeight: Weight = 1_000_000;
+	pub const MaximumBlockWeight: Weight = 1_000_000_000;
 	pub const AvailableBlockRatio: Perbill = Perbill::from_percent(75);
 	pub const MaximumBlockLength: u32 = 5 * 1024 * 1024;
 	pub const Version: RuntimeVersion = VERSION;
@@ -370,6 +370,12 @@ impl ringbuffer_queue::Trait for Runtime {
 	type Event = Event;
 }
 
+impl randomness::Trait for Runtime {
+	type Event = Event;
+	type CollectiveFlipRandomnessSource = RandomnessCollectiveFlip;
+	type BabeRandomnessSource = Babe;
+}
+
 impl simple_event::Trait for Runtime {
 	type Event = Event;
 }
@@ -423,6 +429,7 @@ construct_runtime!(
 		LinkedMap: linked_map::{Module, Call, Storage, Event<T>},
 		OffchainDemo: offchain_demo::{Module, Call, Storage, Event<T>, ValidateUnsigned},
 		RingbufferQueue: ringbuffer_queue::{Module, Call, Storage, Event<T>},
+		RandomnessDemo: randomness::{Module, Call, Storage, Event},
 		SimpleEvent: simple_event::{Module, Call, Event},
 		SimpleMap: simple_map::{Module, Call, Storage, Event<T>},
 		SingleValue: single_value::{Module, Call, Storage},
