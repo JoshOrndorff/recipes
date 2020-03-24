@@ -221,10 +221,25 @@ if participates_in_consensus {
 
 We begin by testing whether this node participates in consensus, which is to say we check whether the user wants the node to act as a miner. If this node is to be a miner, we gather references to various parts of the node that the [`start_mine` function](https://substrate.dev/rustdocs/master/sc_consensus_pow/fn.start_mine.html) requires, and define that we will attempt 500 rounds of mining for each block before pausing. Finally we call `start_mine`.
 
-## The light Client
+## The Light Client
 
 The last thing in the `service.rs` file is constructing the [light client](https://www.parity.io/what-is-a-light-client/)'s service. This code is quite similar to the construction of the full service.
 
 Instead of using the `with_import_queue` function we used previously, we use the `with_import_queue_and_fprb` function. FPRB stand for [`FinalityProofRequestBuilder`](https://substrate.dev/rustdocs/master/sc_network/config/trait.FinalityProofRequestBuilder.html). In chains with deterministic finality, light clients must request proofs of finality from full nodes. But in our chain, we do not have deterministic finality, so we can use the [`DummyFinalityProofRequestBuilder`](https://substrate.dev/rustdocs/master/sc_network/config/struct.DummyFinalityProofRequestBuilder.html) which does nothing except satisfying Rust's type checker.
 
 Once the dummy request builder is configured, the `BlockImport` and import queue are configured exactly as they were in the full node.
+
+## Note of Finality
+
+If we run the `basic-pow` node now, we see in console logs, that the finalized block always remains at 0.
+
+```
+...
+2020-03-22 12:50:09 Starting consensus session on top of parent 0x85811577d1033e918b425380222fd8c5aef980f81fa843d064d80fe027c79f5a
+2020-03-22 12:50:09 Imported #189 (0x8581…9f5a)
+2020-03-22 12:50:09 Prepared block for proposing at 190 [hash: 0xdd83ba96582acbed59aacd5304a9258962d1d4c2180acb8b77f725bd81461c4f; parent_hash: 0x8581…9f5a; extrinsics (1): [0x77a5…f7ad]]
+2020-03-22 12:50:10 Idle (1 peers), best: #189 (0x8581…9f5a), finalized #0 (0xff0d…5cb9), ⬇ 0.2kiB/s ⬆ 0.4kiB/s
+2020-03-22 12:50:15 Idle (1 peers), best: #189 (0x8581…9f5a), finalized #0 (0xff0d…5cb9), ⬇ 0 ⬆ 0
+```
+
+This is expected because Proof of Work is a consensus mechanism with probabilistic finality. This means a block is never truly finalized and can always be reverted. The further behind the blockchain head a block is, the less likely it is going to be reverted.
