@@ -231,7 +231,7 @@ Once the dummy request builder is configured, the `BlockImport` and import queue
 
 ## Note of Finality
 
-If we run the PoW node now, we will see console logs as follow, that the finalized block always remains at 0.
+If we run the `basic-pow` node now, we see in console logs, that the finalized block always remains at 0.
 
 ```
 ...
