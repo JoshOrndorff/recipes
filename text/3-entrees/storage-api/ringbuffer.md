@@ -152,7 +152,7 @@ The `is_empty` function just checks whether the start and end bounds have the sa
 	}
 ```
 
-In the `push` function we insert the pushed `item` into the map and calculate the new bounds by using the `wrapping_add` function. This way our ringbuffer will wrap around when reaching `max_value` of the `Index` type. This is why we need the `WrappingOps` type trait for `Index`.
+In the `push` function, we insert the pushed `item` into the map and calculate the new bounds by using the `wrapping_add` function. This way our ringbuffer will wrap around when reaching `max_value` of the `Index` type. This is why we need the `WrappingOps` type trait for `Index`.
 
 The `if` is necessary because we need to keep the invariant that `start == end` means that the queue is empty, otherwise we would need to keep track of this state separately. We thus "toss away" the oldest item in the queue if a new item is pushed into a full queue by incrementing the start index.
 
