@@ -325,7 +325,6 @@ dependencies = [
  "futures 0.3.4",
  "log",
  "parity-scale-codec",
- "pow-genesis",
  "pow-runtime",
  "rand 0.7.3",
  "sc-basic-authorship",
@@ -3499,13 +3498,6 @@ name = "pkg-config"
 version = "0.3.17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "05da548ad6865900e60eaba7f589cc0783590a92e940c26953ff81ddbab2d677"
-
-[[package]]
-name = "pow-genesis"
-version = "2.0.0"
-dependencies = [
- "pow-runtime",
-]
 
 [[package]]
 name = "pow-runtime"

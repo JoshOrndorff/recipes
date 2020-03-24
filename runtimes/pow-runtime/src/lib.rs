@@ -9,6 +9,10 @@
 #[cfg(feature = "std")]
 include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 
+// Include the genesis helper module when building to std
+#[cfg(feature = "std")]
+pub mod genesis;
+
 use rstd::prelude::*;
 use sp_core::{OpaqueMetadata, H256};
 use sp_runtime::{

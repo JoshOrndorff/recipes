@@ -31,14 +31,7 @@ sc-consensus-pow = { git = "https://github.com/paritytech/substrate", tag = 'v2.
 sp-consensus-pow = { git = "https://github.com/paritytech/substrate", tag = 'v2.0.0-alpha.3' }
 sc-client-api = { git = "https://github.com/paritytech/substrate", tag = 'v2.0.0-alpha.3' }
 sp-blockchain = { git = "https://github.com/paritytech/substrate", tag = 'v2.0.0-alpha.3' }
-
 runtime = { package = "pow-runtime", path = "../../runtimes/pow-runtime" }
-runtime-genesis = { package = "pow-genesis", path = "../../runtimes/pow-genesis" }
-
-# Attempt to use the babe inherent that the super-runtime expects. This hack didn't work.
-# [dependencies.sp-consensus-babe]
-# git = "https://github.com/paritytech/substrate"
-# tag = 'v2.0.0-alpha.3'
 
 [dependencies.sp-timestamp]
 git = 'https://github.com/paritytech/substrate.git'
