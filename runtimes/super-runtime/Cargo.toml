@@ -24,6 +24,7 @@ hello-substrate = { path = "../../pallets/hello-substrate", default-features = f
 last-caller = { path = "../../pallets/last-caller", default-features = false }
 linked-map = { path = "../../pallets/linked-map", default-features = false }
 offchain-demo = { path = "../../pallets/offchain-demo", default-features = false }
+ringbuffer-queue = { path = "../../pallets/ringbuffer-queue", default_features = false }
 randomness = { path = "../../pallets/randomness", default_features = false }
 simple-event = { path = "../../pallets/simple-event", default_features = false }
 simple-map = { path = "../../pallets/simple-map", default-features = false }

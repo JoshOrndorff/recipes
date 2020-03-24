@@ -4028,6 +4028,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "ringbuffer-queue"
+version = "0.1.0"
+dependencies = [
+ "frame-support",
+ "frame-system",
+ "parity-scale-codec",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
+]
+
+[[package]]
 name = "rocksdb"
 version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -6010,6 +6023,7 @@ dependencies = [
  "pallet-transaction-payment",
  "parity-scale-codec",
  "randomness",
+ "ringbuffer-queue",
  "safe-mix",
  "serde",
  "simple-event",

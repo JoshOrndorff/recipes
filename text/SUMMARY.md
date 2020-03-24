@@ -18,6 +18,7 @@
 		- [Subgroup Removal by Subkey: Double Maps](./3-entrees/storage-api/double.md)
 		- [Efficient Subgroup Removal by Subkey: Child Tries](./3-entrees/storage-api/childtries.md)
 		- [Storing custom structs](./3-entrees/storage-api/structs.md)
+		- [Ringbuffer Queue](./3-entrees/storage-api/ringbuffer.md)
 	- [Basic Token](./3-entrees/basic-token.md)
 	- [Configurable Constants](./3-entrees/constants.md)
 	- [Instantiable Pallets](./3-entrees/instantiable.md)
