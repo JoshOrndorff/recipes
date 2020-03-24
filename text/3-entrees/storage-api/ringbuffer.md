@@ -107,9 +107,9 @@ where // ... same where clause as the type, elided here
 
 Here we access the bounds stored in storage to initialize the transient.
 
-_Aside: Of course we could also provide a `with_bounds` function that takes the bounds as a parameter. Feel free to add that function as an exercise._
+> **Aside**: Of course we could also provide a `with_bounds` function that takes the bounds as a parameter. Feel free to add that function as an exercise.
 
-_Second Aside: This `B::get()` is one of the reasons for specifying the `Query` associated type on the `StorageValue` type constraint._
+>**Second Aside**: This `B::get()` is one of the reasons for specifying the `Query` associated type on the `StorageValue` type constraint.
 
 ### Implementing the `RingBufferTrait`
 We will now implement the `RingBufferTrait`:
@@ -156,10 +156,9 @@ In the `push` function we insert the pushed `item` into the map and calculate th
 
 The `if` is necessary because we need to keep the invariant that `start == end` means that the queue is empty, otherwise we would need to keep track of this state separately. We thus "toss away" the oldest item in the queue if a new item is pushed into a full queue by incrementing the start index.
 
-#### Note: The `WrappingOps` Trait <a name = "wrapping_ops"></a>
-The ringbuffer should be agnostic to the concrete `Index` type used. In order to be able to decrement and increment the start and end index, though, any concrete type needs to implement `wrapping_add` and `wrapping_sub`. Because `std` does not provide such a trait we need another way to require this behavior. One possbility would be using the [`num_traits` crate](https://crates.io/crates/num-traits), but to keep things simple here we just implement our own trait `WrappingOps` for the types we want to support (`u8`, `u16`, `u32` and `u64`).
+> ##### Note: The `WrappingOps` Trait <a name = "wrapping_ops"></a>
+> The ringbuffer should be agnostic to the concrete `Index` type used. In order to be able to decrement and increment the start and end index, though, any concrete type needs to implement `wrapping_add` and `wrapping_sub`. Because `std` does not provide such a trait we need another way to require this behavior. One possbility would be using the [`num_traits` crate](https://crates.io/crates/num-traits), but to keep things simple here we just implement our own trait `WrappingOps` for the types we want to support (`u8`, `u16`, `u32` and `u64`).
 
-#### Trait Implementation (continued)
 The last function we implement is `pop`:
 
 ```rust, ignore
