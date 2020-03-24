@@ -1,10 +1,14 @@
-use runtime::{
+//! Helper module to build a genesis configuration for the api-runtime
+
+use super::{
 	AccountId, AuraConfig, BalancesConfig, GenesisConfig, GrandpaConfig,
 	SudoConfig, SystemConfig, WASM_BINARY,
 };
+
 use sp_consensus_aura::sr25519::{AuthorityId as AuraId};
 use sp_finality_grandpa::{AuthorityId as GrandpaId};
 
+/// Helper function to build a genesis configuration
 pub fn testnet_genesis(initial_authorities: Vec<(AuraId, GrandpaId)>,
 	root_key: AccountId,
 	endowed_accounts: Vec<AccountId>,

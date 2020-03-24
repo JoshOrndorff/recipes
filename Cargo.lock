@@ -105,15 +105,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "013a6e0a2cbe3d20f9c60b65458f7a7f7a5e636c5d0f45a5a6aee5d4b1f01785"
 
 [[package]]
-name = "api-genesis"
-version = "2.0.0"
-dependencies = [
- "api-runtime",
- "sp-consensus-aura",
- "sp-finality-grandpa",
-]
-
-[[package]]
 name = "api-runtime"
 version = "2.0.0"
 dependencies = [
@@ -135,6 +126,7 @@ dependencies = [
  "sp-block-builder",
  "sp-consensus-aura",
  "sp-core",
+ "sp-finality-grandpa",
  "sp-inherents",
  "sp-io",
  "sp-offchain",
@@ -4063,7 +4055,6 @@ dependencies = [
 name = "rpc-node"
 version = "2.0.0"
 dependencies = [
- "api-genesis",
  "api-runtime",
  "ctrlc",
  "futures 0.1.29",
