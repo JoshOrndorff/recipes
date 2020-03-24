@@ -208,7 +208,7 @@ impl<T: Trait> Module<T> {
 ```
 
 First we define a constructor function (`queue_transient`) so we don't have to specify the types every time we want to access the transient. This function constructs a ringbuffer transient and returns it as a boxed trait object.
-See [this part of the Rust book](https://doc.rust-lang.org/book/ch17-02-trait-objects.html#trait-objects-perform-dynamic-dispatch) for an explanation of why we need a boxed trait object (defined with the syntax `dyn TraitName`) when using dynamic dispatch.
+See the Rust book's section on [trait objects](https://doc.rust-lang.org/book/ch17-02-trait-objects.html#trait-objects-perform-dynamic-dispatch) for an explanation of why we need a boxed trait object (defined with the syntax `dyn TraitName`) when using dynamic dispatch.
 
 The `add_multiple` function shows the actual typical usage of our transient:
 
