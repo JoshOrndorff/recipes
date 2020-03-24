@@ -1,5 +1,5 @@
 # Basic Token
-*[`pallets/constant-config`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/constant-config)*
+*[`pallets/basic-token`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/basic-token)*
 
 This recipe demonstrates a simple but functional token in a pallet.
 
