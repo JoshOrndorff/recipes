@@ -127,7 +127,7 @@ where // same as the struct definition
 	}
 ```
 
-`commit` just consists of putting the potentially changed bounds into storage. You will notice that we don't update the bounds storage when changing them in the other functions.
+`commit` just consists of putting the potentially changed bounds into storage. You will notice that we don't update the bounds' storage when changing them in the other functions.
 
 ```rust, ignore
 	fn is_empty(&self) -> bool {
