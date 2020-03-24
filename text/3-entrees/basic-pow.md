@@ -229,7 +229,7 @@ Instead of using the `with_import_queue` function we used previously, we use the
 
 Once the dummy request builder is configured, the `BlockImport` and import queue are configured exactly as they were in the full node.
 
-## Other Notes
+## Note of Finality
 
 If we run the PoW node now, we will see console logs as follow, that the finalized block always remains at 0.
 
