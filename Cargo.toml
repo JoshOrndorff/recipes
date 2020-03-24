@@ -32,7 +32,6 @@ members = [
 	"runtimes/pow-runtime",
 	"runtimes/super-runtime",
 	"runtimes/weight-fee-runtime",
-	"runtimes/weight-fee-genesis",
 	"runtimes/api-runtime",
 	"runtimes/api-genesis",
 	"nodes/kitchen-node",

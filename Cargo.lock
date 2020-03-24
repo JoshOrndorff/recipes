@@ -6911,15 +6911,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "weight-fee-genesis"
-version = "2.0.0"
-dependencies = [
- "sp-consensus-babe",
- "sp-finality-grandpa",
- "weight-fee-runtime",
-]
-
-[[package]]
 name = "weight-fee-runtime"
 version = "2.0.0"
 dependencies = [
@@ -6942,6 +6933,7 @@ dependencies = [
  "sp-block-builder",
  "sp-consensus-babe",
  "sp-core",
+ "sp-finality-grandpa",
  "sp-inherents",
  "sp-io",
  "sp-offchain",

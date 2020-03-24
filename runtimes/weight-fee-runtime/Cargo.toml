@@ -78,6 +78,11 @@ default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 tag = 'v2.0.0-alpha.3'
 
+[dependencies.sp-finality-grandpa]
+default-features = false
+git = 'https://github.com/paritytech/substrate.git'
+tag = 'v2.0.0-alpha.3'
+
 [dependencies.executive]
 default-features = false
 git = 'https://github.com/paritytech/substrate.git'
@@ -178,6 +183,7 @@ std = [
 	"serde",
 	"sp-api/std",
 	"sp-consensus-babe/std",
+	"sp-finality-grandpa/std",
 	"sp-core/std",
 	"sp-runtime/std",
 	"substrate-session/std",
