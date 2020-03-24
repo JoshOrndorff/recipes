@@ -66,7 +66,7 @@ fn init(origin) -> DispatchResult {
 }
 ```
 
-As usual, we first check for preconditions. I this case that means making sure that the token is not already initialized. Then we do any mutation necessary.
+As usual, we first check for preconditions. In this case that means making sure that the token is not already initialized. Then we do any mutation necessary.
 
 ## Transferring Tokens
 To transfer tokens, a user who owns some tokens calls the `transfer` method specifying the recipient and the amount of tokens to transfer as parameters.
