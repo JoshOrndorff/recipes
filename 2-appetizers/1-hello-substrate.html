@@ -180,7 +180,7 @@ use sp_runtime::print;
 	}
 }
 </code></pre>
-<p>As you can see, our <code>hello-substrate</code> pallet has one dipatchable call that takes a single argument, called <code>origin</code> which we'll investigate shortly. Both calls return a <a href="https://substrate.dev/rustdocs/master/frame_support/dispatch/type.DispatchResult.html"><code>DispatchResult</code></a> which can be either <code>Ok(())</code> indicating that the call succeeded, or and <code>Err</code> which we'll investigate in the <a href="./3-errors.html">appetizer about errors</a>.</p>
+<p>As you can see, our <code>hello-substrate</code> pallet has one dipatchable call that takes a single argument, called <code>origin</code> which we'll investigate shortly. The call returns a <a href="https://substrate.dev/rustdocs/master/frame_support/dispatch/type.DispatchResult.html"><code>DispatchResult</code></a> which can be either <code>Ok(())</code> indicating that the call succeeded, or an <code>Err</code> which we'll investigate in the <a href="./3-errors.html">appetizer about errors</a>.</p>
 <h2><a class="header" href="#inside-a-dispatchable-call" id="inside-a-dispatchable-call">Inside a Dispatchable Call</a></h2>
 <p>Let's take a closer look at our dispatchable call.</p>
 <pre><code class="language-rust ignore">pub fn say_hello(origin) -&gt; DispatchResult {
@@ -196,7 +196,7 @@ use sp_runtime::print;
 	Ok(())
 }
 </code></pre>
-<p>This function essentially does three things. First, it uses the <a href="https://substrate.dev/rustdocs/master/frame_system/fn.ensure_signed.html"><code>ensure_signed</code> function</a> to ensure that the caller of the function was a regular user who owns a private key. This macro also returns who that caller was. We store the caller's identity in the <code>caller</code> variable.</p>
+<p>This function essentially does three things. First, it uses the <a href="https://substrate.dev/rustdocs/master/frame_system/fn.ensure_signed.html"><code>ensure_signed</code> function</a> to ensure that the caller of the function was a regular user who owns a private key. This function also returns who that caller was. We store the caller's identity in the <code>caller</code> variable.</p>
 <p>Second, it prints a message and logs the caller. Notice that we aren't using Rust's normal <code>println!</code> macro, but rather a special <a href="https://substrate.dev/rustdocs/master/sp_runtime/fn.print.html"><code>print</code> function</a> and <a href="https://substrate.dev/rustdocs/master/frame_support/debug/macro.info.html"><code>debug::info!</code> macro</a>. The reason for this is explained in the next section.</p>
 <p>Finally, the call returns <code>Ok(())</code> to indicate that the call has succeeded. At a glance it seems that there is no way for this call to fail, but this is not quite true. The <code>ensure_signed</code> function, used at the beginning, can return an error if the call was not from a signed origin. This is the first time we're seeing the important paradigm &quot;<strong>Verify first, write last</strong>&quot;. In Substrate development, it is important that you always ensure preconditions are met and return errors at the beginning. After these checks have completed, then you may begin the functions computation.</p>
 <h2><a class="header" href="#printing-from-the-runtime" id="printing-from-the-runtime">Printing from the Runtime</a></h2>
