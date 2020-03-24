@@ -1,0 +1,13 @@
+[package]
+name = 'pow-genesis'
+version = "2.0.0"
+authors = ["Anonymous"]
+edition = "2018"
+
+[dependencies.runtime]
+package = 'pow-runtime'
+path = '../pow-runtime'
+
+[dependencies]
+# babe-primitives = { package = "sp-consensus-babe", git = "https://github.com/paritytech/substrate", tag = 'v2.0.0-alpha.3' }
+# grandpa-primitives = { package = "sp-finality-grandpa", git = "https://github.com/paritytech/substrate", tag = 'v2.0.0-alpha.3' }

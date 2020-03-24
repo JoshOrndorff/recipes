@@ -127,7 +127,7 @@ where // same as the struct definition
 	}
 ```
 
-`commit` just consists of putting the potentially changed bounds into storage. You will notice that we don't update the bounds storage when changing them in the other functions.
+`commit` just consists of putting the potentially changed bounds into storage. You will notice that we don't update the bounds' storage when changing them in the other functions.
 
 ```rust, ignore
 	fn is_empty(&self) -> bool {
@@ -152,12 +152,12 @@ The `is_empty` function just checks whether the start and end bounds have the sa
 	}
 ```
 
-In the `push` function we insert the pushed `item` into the map and calculate the new bounds by using the `wrapping_add` function. This way our ringbuffer will wrap around when reaching `max_value` of the `Index` type. This is why we need the `WrappingOps` type trait for `Index`.
+In the `push` function, we insert the pushed `item` into the map and calculate the new bounds by using the `wrapping_add` function. This way our ringbuffer will wrap around when reaching `max_value` of the `Index` type. This is why we need the `WrappingOps` type trait for `Index`.
 
 The `if` is necessary because we need to keep the invariant that `start == end` means that the queue is empty, otherwise we would need to keep track of this state separately. We thus "toss away" the oldest item in the queue if a new item is pushed into a full queue by incrementing the start index.
 
 > ##### Note: The `WrappingOps` Trait <a name = "wrapping_ops"></a>
-> The ringbuffer should be agnostic to the concrete `Index` type used. In order to be able to decrement and increment the start and end index, though, any concrete type needs to implement `wrapping_add` and `wrapping_sub`. Because `std` does not provide such a trait we need another way to require this behavior. One possbility would be using the [`num_traits` crate](https://crates.io/crates/num-traits), but to keep things simple here we just implement our own trait `WrappingOps` for the types we want to support (`u8`, `u16`, `u32` and `u64`).
+> The ringbuffer should be agnostic to the concrete `Index` type used. In order to be able to decrement and increment the start and end index, though, any concrete type needs to implement `wrapping_add` and `wrapping_sub`. Because `std` does not provide such a trait, we need another way to require this behavior. One possbility would be using the [`num_traits` crate](https://crates.io/crates/num-traits), but to keep things simple here we just implement our own trait `WrappingOps` for the types we want to support (`u8`, `u16`, `u32` and `u64`).
 
 The last function we implement is `pop`:
 
@@ -207,7 +207,7 @@ impl<T: Trait> Module<T> {
 ```
 
 First we define a constructor function (`queue_transient`) so we don't have to specify the types every time we want to access the transient. This function constructs a ringbuffer transient and returns it as a boxed trait object.
-See [this part of the Rust book](https://doc.rust-lang.org/book/ch17-02-trait-objects.html#trait-objects-perform-dynamic-dispatch) for an explanation of why we need a boxed trait object (defined with the syntax `dyn TraitName`) when using dynamic dispatch.
+See the Rust book's section on [trait objects](https://doc.rust-lang.org/book/ch17-02-trait-objects.html#trait-objects-perform-dynamic-dispatch) for an explanation of why we need a boxed trait object (defined with the syntax `dyn TraitName`) when using dynamic dispatch.
 
 The `add_multiple` function shows the actual typical usage of our transient:
 
