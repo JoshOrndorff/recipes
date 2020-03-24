@@ -285,9 +285,9 @@ checksum = "f8aac770f1885fd7e387acedd76065302551364496e46b3dd00860b2f8359b9d"
 
 [[package]]
 name = "backtrace"
-version = "0.3.45"
+version = "0.3.46"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ad235dabf00f36301792cfe82499880ba54c6486be094d1047b02bacb67c14e8"
+checksum = "b1e692897359247cc6bb902933361652380af0f1b7651ae5c5013407f30e109e"
 dependencies = [
  "backtrace-sys",
  "cfg-if",
@@ -297,9 +297,9 @@ dependencies = [
 
 [[package]]
 name = "backtrace-sys"
-version = "0.1.34"
+version = "0.1.35"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ca797db0057bae1a7aa2eef3283a874695455cecf08a43bfb8507ee0ebc1ed69"
+checksum = "7de8aba10a69c8e8d7622c5710229485ec32e9d55fdad160ea559c086fdcd118"
 dependencies = [
  "cc",
  "libc",
@@ -3921,9 +3921,9 @@ dependencies = [
 
 [[package]]
 name = "protobuf"
-version = "2.10.3"
+version = "2.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2981b632a240efd4605316365d76e4fa6cfddc7a317cf87fdce1635d6b14e7fd"
+checksum = "fc1b4a8efc42cf150049e8a490f618c7c60e82332405065f202a7e33aa5a1f06"
 
 [[package]]
 name = "quick-error"
@@ -4248,6 +4248,19 @@ dependencies = [
  "untrusted",
  "web-sys",
  "winapi 0.3.8",
+]
+
+[[package]]
+name = "ringbuffer-queue"
+version = "0.1.0"
+dependencies = [
+ "frame-support 2.0.0-alpha.3",
+ "frame-system 2.0.0-alpha.3",
+ "parity-scale-codec",
+ "sp-core 2.0.0-alpha.3",
+ "sp-io 2.0.0-alpha.3",
+ "sp-runtime 2.0.0-alpha.3",
+ "sp-std 2.0.0-alpha.3",
 ]
 
 [[package]]
@@ -5431,12 +5444,12 @@ dependencies = [
 name = "simple-map"
 version = "0.1.0"
 dependencies = [
- "frame-support 2.0.0-alpha.4",
- "frame-system 2.0.0-alpha.4",
+ "frame-support 2.0.0-alpha.3",
+ "frame-system 2.0.0-alpha.3",
  "parity-scale-codec",
- "sp-core 2.0.0-alpha.4",
- "sp-io 2.0.0-alpha.4",
- "sp-runtime 2.0.0-alpha.4",
+ "sp-core 2.0.0-alpha.3",
+ "sp-io 2.0.0-alpha.3",
+ "sp-runtime 2.0.0-alpha.3",
 ]
 
 [[package]]
@@ -6642,6 +6655,7 @@ dependencies = [
  "pallet-transaction-payment",
  "parity-scale-codec",
  "randomness",
+ "ringbuffer-queue",
  "safe-mix",
  "serde",
  "simple-event",

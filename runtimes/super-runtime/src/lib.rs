@@ -359,6 +359,19 @@ impl system::offchain::CreateTransaction<Runtime, UncheckedExtrinsic> for Runtim
 		Some((call, (address, signature, extra)))
 	}
 }
+
+// end of offchain_demo setting
+
+impl ringbuffer_queue::Trait for Runtime {
+	type Event = Event;
+}
+
+impl randomness::Trait for Runtime {
+	type Event = Event;
+	type CollectiveFlipRandomnessSource = RandomnessCollectiveFlip;
+	type BabeRandomnessSource = Babe;
+}
+
 impl simple_event::Trait for Runtime {
 	type Event = Event;
 }
@@ -410,6 +423,7 @@ construct_runtime!(
 		LastCaller1: last_caller::<Instance1>::{Module, Call, Storage, Event<T>},
 		LastCaller2: last_caller::<Instance2>::{Module, Call, Storage, Event<T>},
 		OffchainDemo: offchain_demo::{Module, Call, Storage, Event<T>, ValidateUnsigned},
+		RingbufferQueue: ringbuffer_queue::{Module, Call, Storage, Event<T>},
 		RandomnessDemo: randomness::{Module, Call, Storage, Event},
 		SimpleEvent: simple_event::{Module, Call, Event},
 		SimpleMap: simple_map::{Module, Call, Storage, Event<T>},

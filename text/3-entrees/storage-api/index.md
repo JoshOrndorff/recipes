@@ -17,3 +17,4 @@ The previous *[single-value storage recipe](../../2-appetizers/2-storage-values.
 
 *in-progress*
 - [cheap inclusion proofs with child tries](./childtries.md)
+- [transient storage adapters by example of a ringbuffer queue](./ringbuffer.md)

@@ -106,7 +106,7 @@ Here we see that the runtime depends on many pallets. Some of these pallets come
 
 We will not yet look closely at individual Pallets. We will begin that endeavor in the next chapter -- Appetizers.
 
-We've just observed the general pattern used throughout the recipes. From the inside out, we see a piece of pallet code stored in `pallets/<pallet-name>/src/lib.rs`. The pallet is then included into a runtime by adding its name and relative path in `runtimes/<runtime-name>/Cargo.toml`. that runtime is then installed in a node by adding its name and relative path in `nodes/<node-name>/Cargo.toml`. Of course adding pallets and runtimes also requires changing actual _code_ as well. We will cover those details in due course. For now we're just focusing on macroscopic relationships between the parts of a Substrate node.
+We've just observed the general pattern used throughout the recipes. From the inside out, we see a piece of pallet code stored in `pallets/<pallet-name>/src/lib.rs`. The pallet is then included into a runtime by adding its name and relative path in `runtimes/<runtime-name>/Cargo.toml`. That runtime is then installed in a node by adding its name and relative path in `nodes/<node-name>/Cargo.toml`. Of course adding pallets and runtimes also requires changing actual _code_ as well. We will cover those details in due course. For now we're just focusing on macroscopic relationships between the parts of a Substrate node.
 
 Some recipes explore aspects of Blockchain development that are outside of the runtime. Looking back to our node architecture at the beginning of this section, you can imagine that changing a node's RPC or Consensus would be conceptually similar to changing its runtime.
 

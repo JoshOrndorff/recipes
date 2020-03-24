@@ -1,7 +1,7 @@
 # Using Events
 *[`pallets/simple-event`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-event)*, *[`pallets/generic-event`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/generic-event)*
 
-Having a [transaction](https://docs.substrate.dev/docs/glossary#section-transaction) included in a block does not guarantee that the function executed successfully. As we saw in the previous recipe, many calls can cause errors, but still be included in a block. To verify that functions have executed successfully, emit an [event](https://docs.substrate.dev/docs/glossary#section-events) at the bottom of the function body.
+Having a [transaction](https://substrate.dev/docs/en/overview/glossary#transaction) included in a block does not guarantee that the function executed successfully. As we saw in the previous recipe, many calls can cause errors, but still be included in a block. To verify that functions have executed successfully, emit an [event](https://substrate.dev/docs/en/overview/glossary#events) at the bottom of the function body.
 
 Events notify the off-chain world of successful state transitions.
 

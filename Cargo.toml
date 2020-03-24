@@ -17,6 +17,7 @@ members = [
 	"pallets/offchain-demo",
 	"pallets/randomness",
 	"pallets/reservable-currency",
+	"pallets/ringbuffer-queue",
 	"pallets/simple-event",
 	"pallets/simple-map",
 	"pallets/single-value",
