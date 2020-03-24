@@ -3,8 +3,8 @@ use sp_consensus_babe::{AuthorityId as BabeId};
 use sp_finality_grandpa::{AuthorityId as GrandpaId};
 use sc_service;
 use sp_runtime::traits::{Verify, IdentifyAccount};
-use runtime::{AccountId, GenesisConfig, Signature};
-use runtime_genesis::testnet_genesis;
+use runtime::{AccountId, GenesisConfig, Signature, genesis::testnet_genesis};
+// use runtime_genesis::testnet_genesis;
 
 // Note this is the URL for the telemetry server
 //const STAGING_TELEMETRY_URL: &str = "wss://telemetry.polkadot.io/submit/";

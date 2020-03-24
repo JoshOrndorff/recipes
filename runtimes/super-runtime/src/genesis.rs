@@ -1,10 +1,14 @@
-use runtime::{
+//! Helper module to build a genesis configuration for the super-runtime
+
+use super::{
 	AccountId, BabeConfig, BalancesConfig, GenesisConfig, GrandpaConfig,
 	SudoConfig, SystemConfig, WASM_BINARY,
 };
-use babe_primitives::{AuthorityId as BabeId};
-use grandpa_primitives::{AuthorityId as GrandpaId};
 
+use sp_consensus_babe::{AuthorityId as BabeId};
+use sp_finality_grandpa::{AuthorityId as GrandpaId};
+
+/// Helper function to build a genesis configuration
 pub fn testnet_genesis(initial_authorities: Vec<(BabeId, GrandpaId)>,
 	root_key: AccountId,
 	endowed_accounts: Vec<AccountId>,

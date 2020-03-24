@@ -2092,7 +2092,6 @@ dependencies = [
  "sp-transaction-pool",
  "structopt",
  "substrate-build-script-utils",
- "super-genesis",
  "super-runtime",
  "tokio 0.1.22",
  "trie-root 0.15.2",
@@ -5985,15 +5984,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "super-genesis"
-version = "2.0.0"
-dependencies = [
- "sp-consensus-babe",
- "sp-finality-grandpa",
- "super-runtime",
-]
-
-[[package]]
 name = "super-runtime"
 version = "2.0.0"
 dependencies = [
@@ -6033,6 +6023,7 @@ dependencies = [
  "sp-block-builder",
  "sp-consensus-babe",
  "sp-core",
+ "sp-finality-grandpa",
  "sp-inherents",
  "sp-io",
  "sp-offchain",
