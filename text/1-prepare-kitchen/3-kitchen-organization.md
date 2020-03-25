@@ -43,11 +43,11 @@ recipes
 |
 +-- runtimes
 	|
+	+-- api-runtime
+	|
 	+-- super-runtime    <-- You built this too (it is part of the kitchen-node)
 	|
 	+-- weight-fee-runtime
-	|
-	+-- weight-fee-genesis
 	|
 	+ ...
 |
