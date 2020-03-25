@@ -15,8 +15,7 @@ use frame_system::{self as system, ensure_signed};
 #[cfg(test)]
 mod tests;
 
-pub trait Trait: system::Trait
-{
+pub trait Trait: system::Trait {
 	type Event: From<Event> + Into<<Self as system::Trait>::Event>;
 }
 

@@ -46,8 +46,7 @@ default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 tag = 'v2.0.0-alpha.3'
 
-[dev-dependencies.runtime-io]
+[dev-dependencies.sp-io]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
-package = 'sp-io'
 tag = 'v2.0.0-alpha.3'
