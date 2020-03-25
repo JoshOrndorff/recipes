@@ -9,6 +9,10 @@
 #[cfg(feature = "std")]
 include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 
+// Include the genesis helper module when building to std
+#[cfg(feature = "std")]
+pub mod genesis;
+
 use sp_std::prelude::*;
 use sp_core::{OpaqueMetadata, H256};
 use sp_runtime::{
@@ -28,7 +32,6 @@ use sp_runtime::traits::{
 use sp_api::impl_runtime_apis;
 use sp_consensus_aura::sr25519::AuthorityId as AuraId;
 use grandpa::AuthorityList as GrandpaAuthorityList;
-use grandpa::fg_primitives;
 use frame_system as system;
 #[cfg(feature = "std")]
 use sp_version::NativeVersion;
@@ -374,7 +377,7 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl fg_primitives::GrandpaApi<Block> for Runtime {
+	impl sp_finality_grandpa::GrandpaApi<Block> for Runtime {
 		fn grandpa_authorities() -> GrandpaAuthorityList {
 			Grandpa::grandpa_authorities()
 		}

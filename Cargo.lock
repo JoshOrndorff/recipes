@@ -105,15 +105,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "013a6e0a2cbe3d20f9c60b65458f7a7f7a5e636c5d0f45a5a6aee5d4b1f01785"
 
 [[package]]
-name = "api-genesis"
-version = "2.0.0"
-dependencies = [
- "api-runtime",
- "sp-consensus-aura",
- "sp-finality-grandpa",
-]
-
-[[package]]
 name = "api-runtime"
 version = "2.0.0"
 dependencies = [
@@ -135,6 +126,7 @@ dependencies = [
  "sp-block-builder",
  "sp-consensus-aura",
  "sp-core",
+ "sp-finality-grandpa",
  "sp-inherents",
  "sp-io",
  "sp-offchain",
@@ -333,7 +325,6 @@ dependencies = [
  "futures 0.3.4",
  "log",
  "parity-scale-codec",
- "pow-genesis",
  "pow-runtime",
  "rand 0.7.3",
  "sc-basic-authorship",
@@ -2092,7 +2083,6 @@ dependencies = [
  "sp-transaction-pool",
  "structopt",
  "substrate-build-script-utils",
- "super-genesis",
  "super-runtime",
  "tokio 0.1.22",
  "trie-root 0.15.2",
@@ -3510,13 +3500,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "05da548ad6865900e60eaba7f589cc0783590a92e940c26953ff81ddbab2d677"
 
 [[package]]
-name = "pow-genesis"
-version = "2.0.0"
-dependencies = [
- "pow-runtime",
-]
-
-[[package]]
 name = "pow-runtime"
 version = "2.0.0"
 dependencies = [
@@ -4064,7 +4047,6 @@ dependencies = [
 name = "rpc-node"
 version = "2.0.0"
 dependencies = [
- "api-genesis",
  "api-runtime",
  "ctrlc",
  "futures 0.1.29",
@@ -5985,15 +5967,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "super-genesis"
-version = "2.0.0"
-dependencies = [
- "sp-consensus-babe",
- "sp-finality-grandpa",
- "super-runtime",
-]
-
-[[package]]
 name = "super-runtime"
 version = "2.0.0"
 dependencies = [
@@ -6033,6 +6006,7 @@ dependencies = [
  "sp-block-builder",
  "sp-consensus-babe",
  "sp-core",
+ "sp-finality-grandpa",
  "sp-inherents",
  "sp-io",
  "sp-offchain",
@@ -6920,15 +6894,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "weight-fee-genesis"
-version = "2.0.0"
-dependencies = [
- "sp-consensus-babe",
- "sp-finality-grandpa",
- "weight-fee-runtime",
-]
-
-[[package]]
 name = "weight-fee-runtime"
 version = "2.0.0"
 dependencies = [
@@ -6951,6 +6916,7 @@ dependencies = [
  "sp-block-builder",
  "sp-consensus-babe",
  "sp-core",
+ "sp-finality-grandpa",
  "sp-inherents",
  "sp-io",
  "sp-offchain",

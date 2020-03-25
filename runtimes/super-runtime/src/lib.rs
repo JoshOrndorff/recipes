@@ -8,6 +8,10 @@
 #[cfg(feature = "std")]
 include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 
+// Include the genesis helper module when building to std
+#[cfg(feature = "std")]
+pub mod genesis;
+
 use rstd::prelude::*;
 use sp_core::{OpaqueMetadata, H256};
 use sp_runtime::{
@@ -21,7 +25,6 @@ use sp_runtime::traits::{
 use sp_api::impl_runtime_apis;
 use babe::SameAuthoritiesForever;
 use grandpa::AuthorityList as GrandpaAuthorityList;
-use grandpa::fg_primitives;
 
 #[cfg(feature = "std")]
 use version::NativeVersion;
@@ -83,7 +86,7 @@ pub mod opaque {
 	pub type Block = generic::Block<Header, UncheckedExtrinsic>;
 	/// Opaque block identifier type.
 	pub type BlockId = generic::BlockId<Block>;
-//	pub type SessionHandlers = (Grandpa, Babe); // TODO delete this if it isn't needed
+
 	impl_opaque_keys! {
 		pub struct SessionKeys {
 			pub grandpa: Grandpa, //TODO is this order correct? I changed stuff in chainspec.
@@ -530,7 +533,7 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl fg_primitives::GrandpaApi<Block> for Runtime {
+	impl sp_finality_grandpa::GrandpaApi<Block> for Runtime {
 		fn grandpa_authorities() -> GrandpaAuthorityList {
 			Grandpa::grandpa_authorities()
 		}

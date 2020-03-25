@@ -43,13 +43,11 @@ recipes
 |
 +-- runtimes
 	|
+	+-- api-runtime
+	|
 	+-- super-runtime    <-- You built this too (it is part of the kitchen-node)
 	|
-	+-- super-genesis    <-- You built this too (it is part of the kitchen-node)
-	|
 	+-- weight-fee-runtime
-	|
-	+-- weight-fee-genesis
 	|
 	+ ...
 |
@@ -72,9 +70,7 @@ Let us take a deeper look at the [Kitchen Node](https://github.com/substrate-dev
 ```TOML
 # -- snip --
 runtime = { package = "super-runtime", path = "../../runtimes/super-runtime" }
-runtime-genesis = { package = "super-genesis", path = "../../runtimes/super-genesis" }
 # runtime = { package = "weight-fee-runtime", path = "../../runtimes/weight-fee-runtime"}
-# runtime-genesis = { package = "weight-fee-genesis", path = "../../runtimes/weight-fee-genesis"}
 ```
 
 Looking inside the Kitchen Node's `Cargo.toml` file we see that it has many dependencies. Most of them come from Substrate itself. Indeed most parts of this Kitchen Node are not unique or specialized, and Substrate offers robust implementations that we can use. The lines quoted above show that the runtime does not come from Substrate. Rather, we use our super-runtime which is in the `runtimes` folder.
