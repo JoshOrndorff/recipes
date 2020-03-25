@@ -75,10 +75,13 @@ impl ExtBuilder {
 }
 
 #[test]
-fn deposit_discrete_works() {
+fn deposit_withdraw_discrete_works() {
 	ExtBuilder::build().execute_with(|| {
 		// Deposit 10 tokens
 		assert_ok!(FixedPoint::deposit_discrete(Origin::signed(1), 10));
+
+		// Withdraw 5 tokens
+		assert_ok!(FixedPoint::withdraw_discrete(Origin::signed(1), 5));
 
 		// Check for the correct event
 		assert_eq!(System::events(), vec![
@@ -88,10 +91,53 @@ fn deposit_discrete_works() {
 					10,
 				)),
 				topics: vec![],
-			}
+			},
+			EventRecord {
+				phase: Phase::ApplyExtrinsic(0),
+				event: TestEvent::fixed_point(Event::WithdrewDiscrete(
+					5,
+				)),
+				topics: vec![],
+			},
 		]);
 
-		// Check that the tokens are still there
-		assert_eq!(FixedPoint::discrete_account(), 10);
+		// Check that five tokens are still there
+		assert_eq!(FixedPoint::discrete_account(), 5);
+	})
+}
+
+#[test]
+fn discrete_interest_works() {
+	ExtBuilder::build().execute_with(|| {
+		// Deposit 100 tokens
+		assert_ok!(FixedPoint::deposit_discrete(Origin::signed(1), 100));
+
+		// balance should not change after the 3rd block
+		FixedPoint::on_finalize(3);
+		assert_eq!(FixedPoint::discrete_account(), 100);
+
+		// on_finalize should compute interest on 10th block
+		FixedPoint::on_finalize(10);
+
+		// Check for the correct event
+		assert_eq!(System::events(), vec![
+			EventRecord {
+				phase: Phase::ApplyExtrinsic(0),
+				event: TestEvent::fixed_point(Event::DepositedDiscrete(
+					100,
+				)),
+				topics: vec![],
+			},
+			EventRecord {
+				phase: Phase::ApplyExtrinsic(0),
+				event: TestEvent::fixed_point(Event::DiscreteInterestApplied(
+					5,
+				)),
+				topics: vec![],
+			},
+		]);
+
+		// Check that the balance has updated
+		assert_eq!(FixedPoint::discrete_account(), 105);
 	})
 }
