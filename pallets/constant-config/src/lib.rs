@@ -1,17 +1,16 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 /// configurable pallet constants in substrate
-use runtime_primitives::traits::Zero;
-use support::traits::Get;
-use support::{
+use sp_runtime::traits::Zero;
+use frame_support::{
 	decl_event,
 	decl_module,
 	decl_storage,
 	dispatch::{DispatchResult, DispatchError},
 	ensure,
-	StorageValue
+	traits::Get,
 };
-use system::ensure_signed;
+use frame_system::{self as system, ensure_signed};
 
 #[cfg(test)]
 mod tests;

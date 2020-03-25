@@ -8,9 +8,9 @@ edition = "2018"
 default = ['std']
 std = [
     'parity-scale-codec/std',
-    'support/std',
-    'system/std',
-    'runtime-primitives/std',
+    'frame-support/std',
+    'frame-system/std',
+    'sp-runtime/std',
 ]
 
 [dependencies.parity-scale-codec]
@@ -18,32 +18,27 @@ default-features = false
 features = ['derive']
 version = '1.0.6'
 
-[dependencies.support]
+[dependencies.frame-support]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
-package = 'frame-support'
 tag = 'v2.0.0-alpha.3'
 
-[dependencies.system]
+[dependencies.frame-system]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
-package = 'frame-system'
 tag = 'v2.0.0-alpha.3'
 
-[dependencies.runtime-primitives]
+[dependencies.sp-runtime]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
-package = 'sp-runtime'
 tag = 'v2.0.0-alpha.3'
 
-[dev-dependencies.primitives]
+[dev-dependencies.sp-core]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
-package = 'sp-core'
 tag = 'v2.0.0-alpha.3'
 
-[dev-dependencies.runtime-io]
+[dev-dependencies.sp-io]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
-package = 'sp-io'
 tag = 'v2.0.0-alpha.3'

@@ -1,13 +1,14 @@
 use super::Event;
 use crate::{Module, Trait};
-use primitives::H256;
-use runtime_io;
-use runtime_primitives::{
+use sp_core::H256;
+use sp_io::TestExternalities;
+use sp_runtime::{
 	testing::Header,
 	traits::{BlakeTwo256, IdentityLookup, OnFinalize},
 	Perbill,
 };
-use support::{assert_ok, assert_err, impl_outer_event, impl_outer_origin, parameter_types};
+use frame_support::{assert_ok, assert_err, impl_outer_event, impl_outer_origin, parameter_types};
+use frame_system as system;
 
 impl_outer_origin! {
 	pub enum Origin for TestRuntime {}
@@ -71,11 +72,11 @@ pub type ConstantConfig = Module<TestRuntime>;
 pub struct ExtBuilder;
 
 impl ExtBuilder {
-	pub fn build() -> runtime_io::TestExternalities {
+	pub fn build() -> TestExternalities {
 		let storage = system::GenesisConfig::default()
 			.build_storage::<TestRuntime>()
 			.unwrap();
-		runtime_io::TestExternalities::from(storage)
+		TestExternalities::from(storage)
 	}
 }
 
