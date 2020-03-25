@@ -14,7 +14,9 @@ std = [
     'sp-runtime/std',
 ]
 
-
+[dependencies.substrate-fixed]
+git = 'https://github.com/encointer/substrate-fixed.git'
+version = "0.5.4"
 
 [dependencies.parity-scale-codec]
 default-features = false

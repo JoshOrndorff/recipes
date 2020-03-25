@@ -3,7 +3,7 @@
 //! A pallet that demonstrates Fixed Point arithmetic
 use parity_scale_codec::{Encode, Decode};
 use sp_runtime::traits::Zero;
-use sp_arithmetic::Percent;
+use sp_arithmetic::{Percent, traits::AtLeast32Bit};
 use frame_support::{
 	decl_event,
 	decl_module,
@@ -11,6 +11,10 @@ use frame_support::{
 	dispatch::DispatchResult,
 };
 use frame_system::{self as system, ensure_signed};
+use substrate_fixed::{
+	transcendental::exp,
+	types::U32F32,
+};
 
 #[cfg(test)]
 mod tests;
@@ -32,8 +36,6 @@ pub struct ContinuousAccountData<BlockNumber> {
 
 decl_storage! {
 	trait Store for Module<T: Trait> as Example {
-		/// The interest rate for the accounts
-		InterestRate get(fn rate): Percent = Percent::from_percent(5);
 		/// Balance for the continuously compounded account
 		ContinuousAccount get(fn balance_compound): ContinuousAccountData<T::BlockNumber>;
 		/// Balance for the discrete interest account
@@ -137,11 +139,11 @@ decl_module! {
 				// Calculate interest
 				// We can use the `*` operator for multiplying a `Percent` by a u64
 				// because `Percent` implements the trait Mul<u64>
-				let interest = InterestRate::get() * DiscreteAccount::get();
+				let interest = Self::discrete_interest_rate() * DiscreteAccount::get();
 
 				// The following line, although similar, does not work because
 				// u64 does not implement the trait Mul<Percent>
-				// let interest = DiscreteAccount::get() * InterestRate::get();
+				// let interest = DiscreteAccount::get() * Self::discrete_interest_rate();
 
 				// Update the balance
 				let old_balance = DiscreteAccount::get();
@@ -163,11 +165,28 @@ impl<T: Trait> Module<T> {
 			deposit_date,
 		} = ContinuousAccount::<T>::get();
 
-		// let current_block = system::Module::<T>::block_number();
-		let elapsed_time = *now - deposit_date;
-		// TODO calculate this using exponential shit
-		let interest = 0;
 
-		principle + interest
+		// let elapsed_time = *now - deposit_date;
+		// let elapsed_time : u32 = 5;
+		let elapsed_time = 5; // Why can I multiply by integer, but not u32
+		// How can I actually multiply by the elapsed time?
+		let exponent = Self::continuous_interest_rate() * elapsed_time;
+
+
+		// principle * exp(Self::continuous_interest_rate() * elapsed_time)
+		1 //TODO
+	}
+
+	/// A helper function to return the hard-coded 5% interest rate
+	fn discrete_interest_rate() -> Percent {
+		Percent::from_percent(5)
+	}
+
+	/// A helper function to return the hard-coded 5% interest rate
+	fn continuous_interest_rate() -> U32F32 {
+		// 1 / 20 is 5%. Same interest rate as the discrete account, but in the
+		// fancy substrate-fixed format. This U32F32 type represents a 32 bit
+		// unsigned integer where all 32 bits are fractional.
+		U32F32::from_num(1) / 20
 	}
 }

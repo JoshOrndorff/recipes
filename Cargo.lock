@@ -1119,6 +1119,7 @@ dependencies = [
  "sp-core",
  "sp-io",
  "sp-runtime",
+ "substrate-fixed",
 ]
 
 [[package]]
@@ -5927,6 +5928,15 @@ dependencies = [
 name = "substrate-build-script-utils"
 version = "2.0.0-alpha.3"
 source = "git+https://github.com/paritytech/substrate.git?tag=v2.0.0-alpha.3#013c1ee167354a08283fb69915fda56a62fee943"
+
+[[package]]
+name = "substrate-fixed"
+version = "0.5.4"
+source = "git+https://github.com/encointer/substrate-fixed.git#0e1a79ddbfda567dd242961e628ebf4271781221"
+dependencies = [
+ "parity-scale-codec",
+ "typenum",
+]
 
 [[package]]
 name = "substrate-prometheus-endpoint"
