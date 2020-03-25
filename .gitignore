@@ -5,6 +5,6 @@ book
 **/.DS_Store
 
 # Rust directories
-**/*/target
+**/target
 kitchen/modules/*/Cargo.lock
 kitchen/runtimes/*/Cargo.lock
