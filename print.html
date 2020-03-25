@@ -285,13 +285,11 @@ cargo build --release -p kitchen-node
 |
 +-- runtimes
 	|
+	+-- api-runtime
+	|
 	+-- super-runtime    &lt;-- You built this too (it is part of the kitchen-node)
 	|
-	+-- super-genesis    &lt;-- You built this too (it is part of the kitchen-node)
-	|
 	+-- weight-fee-runtime
-	|
-	+-- weight-fee-genesis
 	|
 	+ ...
 |
@@ -310,9 +308,7 @@ cargo build --release -p kitchen-node
 <p><strong><code>nodes/kitchen-node/Cargo.toml</code></strong></p>
 <pre><code class="language-TOML"># -- snip --
 runtime = { package = &quot;super-runtime&quot;, path = &quot;../../runtimes/super-runtime&quot; }
-runtime-genesis = { package = &quot;super-genesis&quot;, path = &quot;../../runtimes/super-genesis&quot; }
 # runtime = { package = &quot;weight-fee-runtime&quot;, path = &quot;../../runtimes/weight-fee-runtime&quot;}
-# runtime-genesis = { package = &quot;weight-fee-genesis&quot;, path = &quot;../../runtimes/weight-fee-genesis&quot;}
 </code></pre>
 <p>Looking inside the Kitchen Node's <code>Cargo.toml</code> file we see that it has many dependencies. Most of them come from Substrate itself. Indeed most parts of this Kitchen Node are not unique or specialized, and Substrate offers robust implementations that we can use. The lines quoted above show that the runtime does not come from Substrate. Rather, we use our super-runtime which is in the <code>runtimes</code> folder.</p>
 <p>The commented lines, also quoted above, show that the Super Runtime is not the only runtime we could have chosen. We could also use the Weight-Fee runtime, and I encourage you to try that experiment (remember, instructions to re-compile the node are in the previous section).</p>
@@ -1311,7 +1307,7 @@ See the Rust book's section on <a href="https://doc.rust-lang.org/book/ch17-02-t
 <p>Here we use the <code>queue_transient</code> function defined above to get a <code>queue</code> object. We then <code>push</code> into it repeatedly with <code>commit</code> happening on <code>drop</code> of the <code>queue</code> object at the end of the function.
 <code>pop</code> works analogously and can of course be intermixed with <code>push</code>es.</p>
 <h1><a class="header" href="#basic-token" id="basic-token">Basic Token</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/constant-config"><code>pallets/constant-config</code></a></em></p>
+<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/basic-token"><code>pallets/basic-token</code></a></em></p>
 <p>This recipe demonstrates a simple but functional token in a pallet.</p>
 <h2><a class="header" href="#mapping-accounts-to-balances" id="mapping-accounts-to-balances">Mapping Accounts to Balances</a></h2>
 <p>Mappings are a very powerful primitive. A <em>stateful</em> cryptocurrency might store a mapping between accounts and balances. Likewise, mappings prove useful when representing <em>owned</em> data. By tracking ownership with maps, it is easy manage permissions for modifying values specific to individual users or groups.</p>
@@ -1363,7 +1359,7 @@ decl_error! {
 	Ok(())
 }
 </code></pre>
-<p>As usual, we first check for preconditions. I this case that means making sure that the token is not already initialized. Then we do any mutation necessary.</p>
+<p>As usual, we first check for preconditions. In this case that means making sure that the token is not already initialized. Then we do any mutation necessary.</p>
 <h2><a class="header" href="#transferring-tokens" id="transferring-tokens">Transferring Tokens</a></h2>
 <p>To transfer tokens, a user who owns some tokens calls the <code>transfer</code> method specifying the recipient and the amount of tokens to transfer as parameters.</p>
 <p>We again check for error conditions before mutating storage. In this case it is <em>not</em> necessary to check whether the token has been initialized. If it has not, nobody has any funds and the transfer will simply fail with <code>InsufficientFunds</code>.</p>
@@ -1385,7 +1381,8 @@ fn transfer(_origin, to: T::AccountId, value: u64) -&gt; DispatchResult {
 	Ok(())
 }
 </code></pre>
-<p>Here we notice the peculiar syntax of <code>.expect</code>. Because you must never panic in a runtime function, it is considered good style to use the <code>expect</code> method and provide a proof of why the panic will never happen.</p>
+<h2><a class="header" href="#dont-panic" id="dont-panic">Don't Panic!</a></h2>
+<p>When adding the incoming balance, notice the peculiar <code>.expect</code> method. In a Substrate runtime, <strong>you must never panic</strong>. To encourage careful thinking about your code, you use the <code>.expect</code> method and provide a proof of why the potential panic will never happen.</p>
 <h1><a class="header" href="#configurable-pallet-constants" id="configurable-pallet-constants">Configurable Pallet Constants</a></h1>
 <p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/constant-config"><code>pallets/constant-config</code></a></em></p>
 <p>To declare constant values within a runtime, it is necessary to import the <a href="https://substrate.dev/rustdocs/master/frame_support/traits/trait.Get.html"><code>Get</code></a> trait from <code>frame_support</code></p>
