@@ -1,6 +1,11 @@
 {
   "Address": "AccountId",
   "LookupSource": "AccountId",
+  "FPBalance": "u64",
+  "ContinuousAccountData": {
+    "principle": "FPBalance",
+    "deposit_date": "BlockNumber"
+  },
   "GroupIndex": "u32",
   "TaskId": "Vec<u8>",
   "PriorityScore": "u32",
