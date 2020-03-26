@@ -126,8 +126,9 @@ decl_module! {
 
 			let old_accumulated = Self::fixed_value();
 
-			// TODO check for overflow
-			let new_product = old_accumulated * new_factor;
+			// Multiply, handling overflow
+			let new_product = old_accumulated.checked_mul(new_factor)
+				.ok_or(Error::<T>::Overflow)?;
 
 			// Write the new value to storage
 			FixedAccumulator::put(new_product);

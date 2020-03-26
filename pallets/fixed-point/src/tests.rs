@@ -244,9 +244,6 @@ fn fixed_impl_overflows() {
 		// U16F16 has 16 bits of integer storage, so just like with our manual
 		// implementation, a value of 2 ^ 17 will cause overflow.
 
-		// Setup some constants
-		let one = U16F16::from_num(1);
-
 		// Multiply by 2 ^ 10
 		assert_ok!(FixedPoint::update_fixed(Origin::signed(1), U16F16::from_num(1 << 10)));
 
