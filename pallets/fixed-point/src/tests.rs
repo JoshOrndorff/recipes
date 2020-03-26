@@ -10,6 +10,7 @@ use sp_runtime::{
 use sp_arithmetic::Permill;
 use frame_support::{assert_ok, assert_noop, impl_outer_event, impl_outer_origin, parameter_types};
 use frame_system::{self as system, EventRecord, Phase};
+use substrate_fixed::types::U16F16;
 
 impl_outer_origin! {
 	pub enum Origin for TestRuntime {}
@@ -193,3 +194,66 @@ fn permill_impl_works() {
 // Permill can only hold values in the range [0, 1] so it is impossible to overflow.
 // #[test]
 // fn manual_impl_overflows() {}
+
+#[test]
+fn fixed_impl_works() {
+	ExtBuilder::build().execute_with(|| {
+		// Setup some constants
+		let one = U16F16::from_num(1);
+		let half = one / 2;
+		let quarter = half / 2;
+
+		// Multiply by half
+		assert_ok!(FixedPoint::update_fixed(Origin::signed(1), half));
+
+		// Ensure the new value is correct
+		assert_eq!(FixedPoint::fixed_value(), half);
+
+		// Multiply by half again
+		assert_ok!(FixedPoint::update_fixed(Origin::signed(1), half));
+
+		// Ensure the new value is correct
+		assert_eq!(FixedPoint::fixed_value(), quarter);
+
+		// Check for the correct events
+		assert_eq!(System::events(), vec![
+			EventRecord {
+				phase: Phase::ApplyExtrinsic(0),
+				event: TestEvent::fixed_point(Event::FixedUpdated(
+					half,
+					half,
+				)),
+				topics: vec![],
+			},
+			EventRecord {
+				phase: Phase::ApplyExtrinsic(0),
+				event: TestEvent::fixed_point(Event::FixedUpdated(
+					half,
+					quarter,
+				)),
+				topics: vec![],
+			},
+		]);
+	})
+}
+
+#[test]
+fn fixed_impl_overflows() {
+	ExtBuilder::build().execute_with(|| {
+
+		// U16F16 has 16 bits of integer storage, so just like with our manual
+		// implementation, a value of 2 ^ 17 will cause overflow.
+
+		// Setup some constants
+		let one = U16F16::from_num(1);
+
+		// Multiply by 2 ^ 10
+		assert_ok!(FixedPoint::update_fixed(Origin::signed(1), U16F16::from_num(1 << 10)));
+
+		// Multiple by an additional 2 ^  7 which should cause the overflow
+		assert_noop!(
+			FixedPoint::update_fixed(Origin::signed(1), U16F16::from_num(1 << 7)),
+			Error::<TestRuntime>::Overflow
+		);
+	})
+}

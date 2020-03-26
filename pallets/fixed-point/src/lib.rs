@@ -24,7 +24,7 @@ use frame_support::{
 	dispatch::DispatchResult,
 };
 use frame_system::{self as system, ensure_signed};
-use substrate_fixed::types::U32F32;
+use substrate_fixed::types::U16F16;
 
 #[cfg(test)]
 mod tests;
@@ -40,7 +40,7 @@ decl_storage! {
 		/// Permill accumulator, value starts at 1 (multiplicative identity)
 		PermillAccumulator get(fn permill_value): Permill = Permill::one();
 		/// Substrate-fixed accumulator, value starts at 1 (multiplicative identity)
-		FixedAccumulator get(fn fixed_value): U32F32 = U32F32::from_num(1);
+		FixedAccumulator get(fn fixed_value): U16F16 = U16F16::from_num(1);
 	}
 }
 
@@ -53,7 +53,7 @@ decl_event!(
 		/// Permill accumulator has been updated.
 		PermillUpdated(Permill, Permill),
 		/// Substrate-fixed accumulator has been updated.
-		FixedUpdated(U32F32, U32F32),
+		FixedUpdated(U16F16, U16F16),
 	}
 );
 
@@ -109,13 +109,31 @@ decl_module! {
 
 			// There is no need to check for overflow here. Permill holds values in the range
 			// [0, 1] so it is impossible to ever overflow.
-			let new_product : Permill = old_accumulated.saturating_mul(new_factor);
+			let new_product = old_accumulated.saturating_mul(new_factor);
 
 			// Write the new value to storage
 			PermillAccumulator::put(new_product);
 
 			// Emit event
 			Self::deposit_event(Event::PermillUpdated(new_factor, new_product));
+			Ok(())
+		}
+
+		/// Update the Substrate-fixed accumulator implementation's value by multiplying it
+		/// by the new factor given in the extrinsic
+		fn update_fixed(origin, new_factor: U16F16) -> DispatchResult {
+			let _ = ensure_signed(origin)?;
+
+			let old_accumulated = Self::fixed_value();
+
+			// TODO check for overflow
+			let new_product = old_accumulated * new_factor;
+
+			// Write the new value to storage
+			FixedAccumulator::put(new_product);
+
+			// Emit event
+			Self::deposit_event(Event::FixedUpdated(new_factor, new_product));
 			Ok(())
 		}
 	}
