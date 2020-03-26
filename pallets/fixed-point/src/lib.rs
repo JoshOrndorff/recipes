@@ -3,7 +3,7 @@
 //! A pallet that demonstrates Fixed Point arithmetic
 use parity_scale_codec::{Encode, Decode};
 use sp_runtime::traits::Zero;
-use sp_arithmetic::{Percent, traits::AtLeast32Bit};
+use sp_arithmetic::Percent;
 use frame_support::{
 	decl_event,
 	decl_module,
@@ -13,8 +13,9 @@ use frame_support::{
 use frame_system::{self as system, ensure_signed};
 use substrate_fixed::{
 	transcendental::exp,
-	types::U32F32,
+	types::I32F32,
 };
+use sp_std::convert::TryInto;
 
 #[cfg(test)]
 mod tests;
@@ -29,7 +30,7 @@ type FPBalance = u64;
 #[derive(Encode, Decode, Default)]
 pub struct ContinuousAccountData<BlockNumber> {
 	/// The balance of the account after last manual adjustment
-	principle: U32F32,
+	principle: I32F32,
 	/// The time (block height) at which the balance was last adjusted
 	deposit_date: BlockNumber,
 }
@@ -46,9 +47,9 @@ decl_storage! {
 decl_event!(
 	pub enum Event {
 		/// Deposited some balance into the compounding interest account
-		DepositedContinuous(U32F32),
+		DepositedContinuous(FPBalance),
 		/// Withdrew some balance from the compounding interest account
-		WithdrewContinuous(U32F32),
+		WithdrewContinuous(FPBalance),
 		/// Deposited some balance into the discrete interest account
 		DepositedDiscrete(FPBalance),
 		/// Withdrew some balance from the discrete interest account
@@ -74,7 +75,7 @@ decl_module! {
 			// Update storage for compounding account
 			ContinuousAccount::<T>::put(
 				ContinuousAccountData {
-					principle: old_value + val_to_add,
+					principle: old_value + I32F32::from_num(val_to_add),
 					deposit_date: current_block,
 				}
 			);
@@ -94,7 +95,7 @@ decl_module! {
 			// Update storage for compounding account
 			ContinuousAccount::<T>::put(
 				ContinuousAccountData {
-					principle: old_value - val_to_take,
+					principle: old_value - I32F32::from_num(val_to_take),
 					deposit_date: current_block,
 				}
 			);
@@ -159,19 +160,19 @@ decl_module! {
 impl<T: Trait> Module<T> {
 	/// A helper function to evaluate the current value of the continuously compounding interest
 	/// account
-	fn value_of_continuous_account(now: &<T as system::Trait>::BlockNumber) -> FPBalance {
+	fn value_of_continuous_account(now: &<T as system::Trait>::BlockNumber) -> I32F32 {
 		let ContinuousAccountData{
 			principle,
 			deposit_date,
 		} = ContinuousAccount::<T>::get();
 
 		let elapsed_time_block_number = *now - deposit_date;
-		let elapsed_time_u32 : u32 = TryInto::try_into(elapsed_time_block_number).ok();
-		let elapsed_time_u32f32 = U32F32::from_num(elapsed_time_u32);
-		let exponent = Self::continuous_interest_rate() * elapsed_time_u32f32;
+		let elapsed_time_u32 = TryInto::try_into(elapsed_time_block_number).ok().expect("fuck!");
+		let elapsed_time_i32f32 = I32F32::from_num(elapsed_time_u32);
+		let exponent : I32F32 = Self::continuous_interest_rate() * elapsed_time_i32f32;
+		let exp_result : I32F32 = exp(exponent).ok().expect("fuck!");
 
-
-		principle * exp(Self::continuous_interest_rate() * elapsed_time_u32f32)
+		principle * exp_result
 	}
 
 	/// A helper function to return the hard-coded 5% interest rate
@@ -180,10 +181,10 @@ impl<T: Trait> Module<T> {
 	}
 
 	/// A helper function to return the hard-coded 5% interest rate
-	fn continuous_interest_rate() -> U32F32 {
+	fn continuous_interest_rate() -> I32F32 {
 		// 1 / 20 is 5%. Same interest rate as the discrete account, but in the
-		// fancy substrate-fixed format. This U32F32 type represents a 32 bit
-		// unsigned integer where all 32 bits are fractional.
-		U32F32::from_num(1) / 20
+		// fancy substrate-fixed format. This I32F32 type represents a 32 bit
+		// signed integer where all 32 bits are fractional.
+		I32F32::from_num(1) / 20
 	}
 }
