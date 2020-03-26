@@ -25,7 +25,6 @@ use frame_support::{
 };
 use frame_system::{self as system, ensure_signed};
 use substrate_fixed::types::U32F32;
-use parity_scale_codec::EncodeLike;
 
 #[cfg(test)]
 mod tests;
@@ -107,12 +106,13 @@ decl_module! {
 			let _ = ensure_signed(origin)?;
 
 			let old_accumulated = Self::permill_value();
-			// let new_factor_permill = new_factor as u64;
 
-			let new_product : Permill = old_accumulated.saturating_mul(new_factor); // TODO handle overflow
+			// There is no need to check for overflow here. Permill holds values in the range
+			// [0, 1] so it is impossible to ever overflow.
+			let new_product : Permill = old_accumulated.saturating_mul(new_factor);
 
 			// Write the new value to storage
-			ManualAccumulator::put(new_product);
+			PermillAccumulator::put(new_product);
 
 			// Emit event
 			Self::deposit_event(Event::PermillUpdated(new_factor, new_product));

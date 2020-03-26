@@ -96,7 +96,6 @@ fn manual_impl_works() {
 		assert_ok!(FixedPoint::update_manual(Origin::signed(1), half));
 
 		// Ensure the new value is correct
-		println!("Half is {}", half);
 		assert_eq!(FixedPoint::manual_value(), half);
 
 		// Multiply by half again
@@ -149,3 +148,48 @@ fn manual_impl_overflows() {
 		);
 	})
 }
+
+#[test]
+fn permill_impl_works() {
+	ExtBuilder::build().execute_with(|| {
+		// Setup some constants
+		let half = Permill::from_percent(50);
+		let quarter = Permill::from_percent(25);
+
+		// Multiply by half
+		assert_ok!(FixedPoint::update_permill(Origin::signed(1), half));
+
+		// Ensure the new value is correct
+		assert_eq!(FixedPoint::permill_value(), half);
+
+		// Multiply by half again
+		assert_ok!(FixedPoint::update_permill(Origin::signed(1), half));
+
+		// Ensure the new value is correct
+		assert_eq!(FixedPoint::permill_value(), quarter);
+
+		// Check for the correct events
+		assert_eq!(System::events(), vec![
+			EventRecord {
+				phase: Phase::ApplyExtrinsic(0),
+				event: TestEvent::fixed_point(Event::PermillUpdated(
+					half,
+					half,
+				)),
+				topics: vec![],
+			},
+			EventRecord {
+				phase: Phase::ApplyExtrinsic(0),
+				event: TestEvent::fixed_point(Event::PermillUpdated(
+					half,
+					quarter,
+				)),
+				topics: vec![],
+			},
+		]);
+	})
+}
+
+// Permill can only hold values in the range [0, 1] so it is impossible to overflow.
+// #[test]
+// fn manual_impl_overflows() {}
