@@ -5,6 +5,7 @@ members = [
 	"pallets/charity",
 	"pallets/check-membership",
 	"pallets/child-trie",
+	"pallets/compounding-interest",
 	"pallets/constant-config",
 	"pallets/currency-imbalances",
 	"pallets/default-instance",

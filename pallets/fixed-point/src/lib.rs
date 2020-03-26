@@ -1,21 +1,30 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
-//! A pallet that demonstrates Fixed Point arithmetic
-use parity_scale_codec::{Encode, Decode};
-use sp_runtime::traits::Zero;
-use sp_arithmetic::Percent;
+//! A pallet that demonstrates the fundamentals of Fixed Point arithmetic.
+//! This pallet implements three multiplicative accumulators using fixed point.
+//!
+//! ## Manual Implementation
+//! Here we use simple u32 values, and just keep in mind that the high-order 16 bits
+//! represent the integer part while the low 16 bits represent fractional places.
+//!
+//! ## Permill Implementation
+//! Here we use Substrate's built-in Permill type. We'll use the saturating_mul function
+//!
+//!
+//! ## Substrate-fixed Implementation
+//! Here we use an external crate called substrate-fixed which implements more advanced
+//! mathematical operations including transcendental functions.
+
+use sp_arithmetic::Permill;
 use frame_support::{
 	decl_event,
+	decl_error,
 	decl_module,
 	decl_storage,
 	dispatch::DispatchResult,
 };
 use frame_system::{self as system, ensure_signed};
-use substrate_fixed::{
-	transcendental::exp,
-	types::I32F32,
-};
-use sp_std::convert::TryInto;
+use substrate_fixed::types::U32F32;
 
 #[cfg(test)]
 mod tests;
@@ -24,167 +33,68 @@ pub trait Trait: system::Trait {
 	type Event: From<Event> + Into<<Self as system::Trait>::Event>;
 }
 
-/// Special Balance type for this fixed point pallet
-type FPBalance = u64;
-
-#[derive(Encode, Decode, Default)]
-pub struct ContinuousAccountData<BlockNumber> {
-	/// The balance of the account after last manual adjustment
-	principle: I32F32,
-	/// The time (block height) at which the balance was last adjusted
-	deposit_date: BlockNumber,
-}
-
 decl_storage! {
 	trait Store for Module<T: Trait> as Example {
-		/// Balance for the continuously compounded account
-		ContinuousAccount get(fn balance_compound): ContinuousAccountData<T::BlockNumber>;
-		/// Balance for the discrete interest account
-		DiscreteAccount get(fn discrete_account): FPBalance;
+		/// Manual accumulator
+		ManualAccumulator get(fn manual_value): u32;
+		/// Permill accumulator
+		PermillAccumulator get(fn permill_value): Permill;
+		/// Substrate-fixed accumulator
+		FixedAccumulator get(fn fixed_value): U32F32;
 	}
 }
 
 decl_event!(
 	pub enum Event {
-		/// Deposited some balance into the compounding interest account
-		DepositedContinuous(FPBalance),
-		/// Withdrew some balance from the compounding interest account
-		WithdrewContinuous(FPBalance),
-		/// Deposited some balance into the discrete interest account
-		DepositedDiscrete(FPBalance),
-		/// Withdrew some balance from the discrete interest account
-		WithdrewDiscrete(FPBalance),
-		/// Some interest has been applied to the discrete interest account
-		/// The associated data is just the interest amout (not the new or old balance)
-		/// This happens every ten blocks
-		DiscreteInterestApplied(FPBalance),
+		// For all varients of the event, the contained data is
+		// (new_factor, new_product)
+		/// Manual accumulator has been updated.
+		ManualUpdated(u32, u32),
+		/// Permill accumulator has been updated.
+		PermillUpdated(Permill, Permill),
+		/// Substrate-fixed accumulator has been updated.
+		FixedUpdated(U32F32, U32F32),
 	}
 );
+
+decl_error! {
+	pub enum Error for Module<T: Trait> {
+		/// Some math operation overflowed
+		Overflow,
+	}
+}
 
 decl_module! {
 	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
 		fn deposit_event() = default;
 
-		/// Deposit some funds into the compounding interest account
-		fn deposit_compounding(origin, val_to_add: FPBalance) -> DispatchResult {
+		/// Update the manually-implemented accumulator's value by multiplying it
+		/// by the new factor given in the extrinsic
+		fn update_manual(origin, new_factor: u32) -> DispatchResult {
 			let _ = ensure_signed(origin)?;
 
-			let current_block = system::Module::<T>::block_number();
-			let old_value = Self::value_of_continuous_account(&current_block);
+			// To ensure we don't overflow, the values are cast up to u64 before multiplying
+			let old_accumulated = Self::manual_value() as u64;
+			let new_factor_u64 = new_factor as u64;
 
-			// Update storage for compounding account
-			ContinuousAccount::<T>::put(
-				ContinuousAccountData {
-					principle: old_value + I32F32::from_num(val_to_add),
-					deposit_date: current_block,
-				}
-			);
+			// Perform the multiplication on the u64 values
+			let raw_product = old_accumulated * new_factor_u64;
 
-			// Emit event
-			Self::deposit_event(Event::DepositedContinuous(val_to_add));
-			Ok(())
-		}
+			// Convert back to a u32 to store the new value. We right shift to maintain the
+			// convention that 16 bits are fractional
+			let shifted_product = raw_product >> 16;
 
-		/// Withdraw some funds from the compounding interest account
-		fn withdraw_compounding(origin, val_to_take: FPBalance) -> DispatchResult {
-			let _ = ensure_signed(origin)?;
-
-			let current_block = system::Module::<T>::block_number();
-			let old_value = Self::value_of_continuous_account(&current_block);
-
-			// Update storage for compounding account
-			ContinuousAccount::<T>::put(
-				ContinuousAccountData {
-					principle: old_value - I32F32::from_num(val_to_take),
-					deposit_date: current_block,
-				}
-			);
-
-			// Emit event
-			Self::deposit_event(Event::WithdrewContinuous(val_to_take));
-			Ok(())
-		}
-
-		/// Deposit some funds into the discrete interest account
-		fn deposit_discrete(origin, val_to_add: FPBalance) -> DispatchResult {
-			let _ = ensure_signed(origin)?;
-
-			let old_value = DiscreteAccount::get();
-
-			// Update storage for compounding account
-			DiscreteAccount::put(old_value + val_to_add);
-
-			// Emit event
-			Self::deposit_event(Event::DepositedDiscrete(val_to_add));
-			Ok(())
-		}
-
-		/// Withdraw some funds from the discrete interest account
-		fn withdraw_discrete(origin, val_to_take: FPBalance) -> DispatchResult {
-			let _ = ensure_signed(origin)?;
-
-			let old_value = DiscreteAccount::get();
-
-			// Update storage for compounding account
-			DiscreteAccount::put(old_value - val_to_take);
-
-			// Emit event
-			Self::deposit_event(Event::WithdrewDiscrete(val_to_take));
-			Ok(())
-		}
-
-		fn on_finalize(n: T::BlockNumber) {
-			// Apply newly-accrued discrete interest every ten blocks
-			if (n % 10.into()).is_zero() {
-
-				// Calculate interest
-				// We can use the `*` operator for multiplying a `Percent` by a u64
-				// because `Percent` implements the trait Mul<u64>
-				let interest = Self::discrete_interest_rate() * DiscreteAccount::get();
-
-				// The following line, although similar, does not work because
-				// u64 does not implement the trait Mul<Percent>
-				// let interest = DiscreteAccount::get() * Self::discrete_interest_rate();
-
-				// Update the balance
-				let old_balance = DiscreteAccount::get();
-				DiscreteAccount::put(old_balance + interest);
-
-				// Emit the event
-				Self::deposit_event(Event::DiscreteInterestApplied(interest));
+			// Ensure that the product fits in the u32, and error if it doesn't
+			if shifted_product > u32::max_value() as u64 {
+				return Err(Error::<T>::Overflow.into())
 			}
+
+			// Write the new value to storage
+			ManualAccumulator::put(shifted_product as u32);
+
+			// Emit event
+			Self::deposit_event(Event::ManualUpdated(new_factor, shifted_product as u32));
+			Ok(())
 		}
-	}
-}
-
-impl<T: Trait> Module<T> {
-	/// A helper function to evaluate the current value of the continuously compounding interest
-	/// account
-	fn value_of_continuous_account(now: &<T as system::Trait>::BlockNumber) -> I32F32 {
-		let ContinuousAccountData{
-			principle,
-			deposit_date,
-		} = ContinuousAccount::<T>::get();
-
-		let elapsed_time_block_number = *now - deposit_date;
-		let elapsed_time_u32 = TryInto::try_into(elapsed_time_block_number).ok().expect("fuck!");
-		let elapsed_time_i32f32 = I32F32::from_num(elapsed_time_u32);
-		let exponent : I32F32 = Self::continuous_interest_rate() * elapsed_time_i32f32;
-		let exp_result : I32F32 = exp(exponent).ok().expect("fuck!");
-
-		principle * exp_result
-	}
-
-	/// A helper function to return the hard-coded 5% interest rate
-	fn discrete_interest_rate() -> Percent {
-		Percent::from_percent(5)
-	}
-
-	/// A helper function to return the hard-coded 5% interest rate
-	fn continuous_interest_rate() -> I32F32 {
-		// 1 / 20 is 5%. Same interest rate as the discrete account, but in the
-		// fancy substrate-fixed format. This I32F32 type represents a 32 bit
-		// signed integer where all 32 bits are fractional.
-		I32F32::from_num(1) / 20
 	}
 }
