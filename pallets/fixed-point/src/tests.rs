@@ -1,13 +1,14 @@
 use super::Event;
-use crate::{Module, Trait};
+use crate::{Module, Trait, Error};
 use sp_core::H256;
 use sp_io::TestExternalities;
 use sp_runtime::{
 	testing::Header,
-	traits::{BlakeTwo256, IdentityLookup, OnFinalize},
+	traits::{BlakeTwo256, IdentityLookup},
 	Perbill,
 };
-use frame_support::{assert_ok, impl_outer_event, impl_outer_origin, parameter_types};
+use sp_arithmetic::Permill;
+use frame_support::{assert_ok, assert_noop, impl_outer_event, impl_outer_origin, parameter_types};
 use frame_system::{self as system, EventRecord, Phase};
 
 impl_outer_origin! {
@@ -75,69 +76,76 @@ impl ExtBuilder {
 }
 
 #[test]
-fn deposit_withdraw_discrete_works() {
+fn all_accumulators_start_at_one() {
 	ExtBuilder::build().execute_with(|| {
-		// Deposit 10 tokens
-		assert_ok!(FixedPoint::deposit_discrete(Origin::signed(1), 10));
-
-		// Withdraw 5 tokens
-		assert_ok!(FixedPoint::withdraw_discrete(Origin::signed(1), 5));
-
-		// Check for the correct event
-		assert_eq!(System::events(), vec![
-			EventRecord {
-				phase: Phase::ApplyExtrinsic(0),
-				event: TestEvent::fixed_point(Event::DepositedDiscrete(
-					10,
-				)),
-				topics: vec![],
-			},
-			EventRecord {
-				phase: Phase::ApplyExtrinsic(0),
-				event: TestEvent::fixed_point(Event::WithdrewDiscrete(
-					5,
-				)),
-				topics: vec![],
-			},
-		]);
-
-		// Check that five tokens are still there
-		assert_eq!(FixedPoint::discrete_account(), 5);
+		assert_eq!(FixedPoint::manual_value(), 1 << 16);
+		assert_eq!(FixedPoint::permill_value(), Permill::one());
+		assert_eq!(FixedPoint::fixed_value(), 1);
 	})
 }
 
 #[test]
-fn discrete_interest_works() {
+fn manual_impl_works() {
 	ExtBuilder::build().execute_with(|| {
-		// Deposit 100 tokens
-		assert_ok!(FixedPoint::deposit_discrete(Origin::signed(1), 100));
+		// Setup some constants
+		let one : u32 = 1 << 16;
+		let half : u32 = one / 2;
+		let quarter : u32 = half / 2;
 
-		// balance should not change after the 3rd block
-		FixedPoint::on_finalize(3);
-		assert_eq!(FixedPoint::discrete_account(), 100);
+		// Multiply by half
+		assert_ok!(FixedPoint::update_manual(Origin::signed(1), half));
 
-		// on_finalize should compute interest on 10th block
-		FixedPoint::on_finalize(10);
+		// Ensure the new value is correct
+		println!("Half is {}", half);
+		assert_eq!(FixedPoint::manual_value(), half);
 
-		// Check for the correct event
+		// Multiply by half again
+		assert_ok!(FixedPoint::update_manual(Origin::signed(1), half));
+
+		// Ensure the new value is correct
+		assert_eq!(FixedPoint::manual_value(), quarter);
+
+		// Check for the correct events
 		assert_eq!(System::events(), vec![
 			EventRecord {
 				phase: Phase::ApplyExtrinsic(0),
-				event: TestEvent::fixed_point(Event::DepositedDiscrete(
-					100,
+				event: TestEvent::fixed_point(Event::ManualUpdated(
+					half,
+					half,
 				)),
 				topics: vec![],
 			},
 			EventRecord {
 				phase: Phase::ApplyExtrinsic(0),
-				event: TestEvent::fixed_point(Event::DiscreteInterestApplied(
-					5,
+				event: TestEvent::fixed_point(Event::ManualUpdated(
+					half,
+					quarter,
 				)),
 				topics: vec![],
 			},
 		]);
+	})
+}
 
-		// Check that the balance has updated
-		assert_eq!(FixedPoint::discrete_account(), 105);
+#[test]
+fn manual_impl_overflows() {
+	ExtBuilder::build().execute_with(|| {
+
+		// Although 2^17 is able to fit in a u32, we're using our u32s in a weird way where
+		// only the first 16 bits represent integer positions, and the remaining 16 bits
+		// represent fractional positions. 2^17 cannot fit in the 16 available integer
+		// positions, thus we expect this to overflow.
+
+		// Setup some constants
+		let one : u32 = 1 << 16;
+
+		// Multiply by 2 ^ 10
+		assert_ok!(FixedPoint::update_manual(Origin::signed(1), one << 10));
+
+		// Multiple by an additional 2 ^  7 which should cause the overflow
+		assert_noop!(
+			FixedPoint::update_manual(Origin::signed(1), one << 7),
+			Error::<TestRuntime>::Overflow
+		);
 	})
 }

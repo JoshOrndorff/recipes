@@ -35,12 +35,12 @@ pub trait Trait: system::Trait {
 
 decl_storage! {
 	trait Store for Module<T: Trait> as Example {
-		/// Manual accumulator
-		ManualAccumulator get(fn manual_value): u32;
-		/// Permill accumulator
-		PermillAccumulator get(fn permill_value): Permill;
-		/// Substrate-fixed accumulator
-		FixedAccumulator get(fn fixed_value): U32F32;
+		/// Manual accumulator, value starts at 1 (multiplicative identity)
+		ManualAccumulator get(fn manual_value): u32 = 1 << 16;
+		/// Permill accumulator, value starts at 1 (multiplicative identity)
+		PermillAccumulator get(fn permill_value): Permill = Permill::one();
+		/// Substrate-fixed accumulator, value starts at 1 (multiplicative identity)
+		FixedAccumulator get(fn fixed_value): U32F32 = U32F32::from_num(1);
 	}
 }
 
@@ -73,19 +73,22 @@ decl_module! {
 		fn update_manual(origin, new_factor: u32) -> DispatchResult {
 			let _ = ensure_signed(origin)?;
 
-			// To ensure we don't overflow, the values are cast up to u64 before multiplying
-			let old_accumulated = Self::manual_value() as u64;
-			let new_factor_u64 = new_factor as u64;
+			// To ensure we don't overflow unnecessarily, the values are cast up to u64 before multiplying.
+			// This intermediate format has 48 integer positions and 16 fractional.
+			let old_accumulated : u64 = Self::manual_value() as u64;
+			let new_factor_u64 : u64 = new_factor as u64;
 
 			// Perform the multiplication on the u64 values
-			let raw_product = old_accumulated * new_factor_u64;
+			// This intermediate format has 32 integer positions and 32 fractional.
+			let raw_product : u64 = old_accumulated * new_factor_u64;
 
-			// Convert back to a u32 to store the new value. We right shift to maintain the
-			// convention that 16 bits are fractional
-			let shifted_product = raw_product >> 16;
+			// Right shift to restore the convention that 16 bits are fractional.
+			// This is a lossy conversion.
+			// This intermediate format has 48 integer positions and 16 fractional.
+			let shifted_product : u64 = raw_product >> 16;
 
 			// Ensure that the product fits in the u32, and error if it doesn't
-			if shifted_product > u32::max_value() as u64 {
+			if shifted_product > (u32::max_value() as u64) {
 				return Err(Error::<T>::Overflow.into())
 			}
 
