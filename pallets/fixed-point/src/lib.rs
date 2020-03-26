@@ -29,7 +29,7 @@ type FPBalance = u64;
 #[derive(Encode, Decode, Default)]
 pub struct ContinuousAccountData<BlockNumber> {
 	/// The balance of the account after last manual adjustment
-	principle: FPBalance,
+	principle: U32F32,
 	/// The time (block height) at which the balance was last adjusted
 	deposit_date: BlockNumber,
 }
@@ -46,9 +46,9 @@ decl_storage! {
 decl_event!(
 	pub enum Event {
 		/// Deposited some balance into the compounding interest account
-		DepositedContinuous(FPBalance),
+		DepositedContinuous(U32F32),
 		/// Withdrew some balance from the compounding interest account
-		WithdrewContinuous(FPBalance),
+		WithdrewContinuous(U32F32),
 		/// Deposited some balance into the discrete interest account
 		DepositedDiscrete(FPBalance),
 		/// Withdrew some balance from the discrete interest account
@@ -165,16 +165,13 @@ impl<T: Trait> Module<T> {
 			deposit_date,
 		} = ContinuousAccount::<T>::get();
 
-
-		// let elapsed_time = *now - deposit_date;
-		// let elapsed_time : u32 = 5;
-		let elapsed_time = 5; // Why can I multiply by integer, but not u32
-		// How can I actually multiply by the elapsed time?
-		let exponent = Self::continuous_interest_rate() * elapsed_time;
+		let elapsed_time_block_number = *now - deposit_date;
+		let elapsed_time_u32 : u32 = TryInto::try_into(elapsed_time_block_number).ok();
+		let elapsed_time_u32f32 = U32F32::from_num(elapsed_time_u32);
+		let exponent = Self::continuous_interest_rate() * elapsed_time_u32f32;
 
 
-		// principle * exp(Self::continuous_interest_rate() * elapsed_time)
-		1 //TODO
+		principle * exp(Self::continuous_interest_rate() * elapsed_time_u32f32)
 	}
 
 	/// A helper function to return the hard-coded 5% interest rate
