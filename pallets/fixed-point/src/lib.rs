@@ -15,7 +15,7 @@
 //! Here we use an external crate called substrate-fixed which implements more advanced
 //! mathematical operations including transcendental functions.
 
-use sp_arithmetic::{Permill, traits::Saturating};
+use sp_arithmetic::{Permill, traits::Saturating, PerThing};
 use frame_support::{
 	decl_event,
 	decl_error,
