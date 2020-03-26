@@ -15,7 +15,7 @@
 //! Here we use an external crate called substrate-fixed which implements more advanced
 //! mathematical operations including transcendental functions.
 
-use sp_arithmetic::Permill;
+use sp_arithmetic::{Permill, traits::Saturating};
 use frame_support::{
 	decl_event,
 	decl_error,
@@ -25,6 +25,7 @@ use frame_support::{
 };
 use frame_system::{self as system, ensure_signed};
 use substrate_fixed::types::U32F32;
+use parity_scale_codec::EncodeLike;
 
 #[cfg(test)]
 mod tests;
@@ -97,6 +98,24 @@ decl_module! {
 
 			// Emit event
 			Self::deposit_event(Event::ManualUpdated(new_factor, shifted_product as u32));
+			Ok(())
+		}
+
+		/// Update the Permill accumulator implementation's value by multiplying it
+		/// by the new factor given in the extrinsic
+		fn update_permill(origin, new_factor: Permill) -> DispatchResult {
+			let _ = ensure_signed(origin)?;
+
+			let old_accumulated = Self::permill_value();
+			// let new_factor_permill = new_factor as u64;
+
+			let new_product : Permill = old_accumulated.saturating_mul(new_factor); // TODO handle overflow
+
+			// Write the new value to storage
+			ManualAccumulator::put(new_product);
+
+			// Emit event
+			Self::deposit_event(Event::PermillUpdated(new_factor, new_product));
 			Ok(())
 		}
 	}
