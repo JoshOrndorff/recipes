@@ -5985,7 +5985,6 @@ dependencies = [
  "hello-substrate",
  "last-caller",
  "linked-map",
- "offchain-demo",
  "pallet-babe",
  "pallet-balances",
  "pallet-grandpa",
