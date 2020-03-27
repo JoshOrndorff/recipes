@@ -10,7 +10,7 @@ When programmers learn to use non-integer numbers in their programs, they are us
 
 ## What's Wrong with Floats?
 
-Floats are cool for all kinds of reasons, but they also have one important drawback. Floating point arithmetic is **nondeterministic**. In order for the nodes in a blockchain network to reach agreement on the state of the chain, all operations must be completely deterministic. Luckily fixed point arithmetic is deterministic, and is often not much harder to use once you get the hang of it.
+Floats are cool for all kinds of reasons, but they also have one important drawback. Floating point arithmetic is **nondeterministic** which means that different processors compute (slightly) different results for the same operation. Although there is an [IEEE spec](https://en.wikipedia.org/wiki/IEEE_754), nondeterminism can come from specific libraries used, or even hardware. In order for the nodes in a blockchain network to reach agreement on the state of the chain, all operations must be completely deterministic. Luckily fixed point arithmetic is deterministic, and is often not much harder to use once you get the hang of it.
 
 ## Multiplicative Accumulators
 *[`pallets/fixed-point`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/fixed-point)*
