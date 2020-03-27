@@ -74,7 +74,7 @@ decl_module! {
 		/// Update the Permill accumulator implementation's value by multiplying it
 		/// by the new factor given in the extrinsic
 		fn update_permill(origin, new_factor: Permill) -> DispatchResult {
-			let _ = ensure_signed(origin)?;
+			ensure_signed(origin)?;
 
 			let old_accumulated = Self::permill_value();
 
@@ -93,7 +93,7 @@ decl_module! {
 		/// Update the Substrate-fixed accumulator implementation's value by multiplying it
 		/// by the new factor given in the extrinsic
 		fn update_fixed(origin, new_factor: U16F16) -> DispatchResult {
-			let _ = ensure_signed(origin)?;
+			ensure_signed(origin)?;
 
 			let old_accumulated = Self::fixed_value();
 
@@ -112,7 +112,7 @@ decl_module! {
 		/// Update the manually-implemented accumulator's value by multiplying it
 		/// by the new factor given in the extrinsic
 		fn update_manual(origin, new_factor: u32) -> DispatchResult {
-			let _ = ensure_signed(origin)?;
+			ensure_signed(origin)?;
 
 			// To ensure we don't overflow unnecessarily, the values are cast up to u64 before multiplying.
 			// This intermediate format has 48 integer positions and 16 fractional.

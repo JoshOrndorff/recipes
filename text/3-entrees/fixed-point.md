@@ -38,7 +38,7 @@ The only extrinsic for this Permill accumulator is the one that allows users to 
 
 ```rust, ignore
 fn update_permill(origin, new_factor: Permill) -> DispatchResult {
-	let _ = ensure_signed(origin)?;
+	ensure_signed(origin)?;
 
 	let old_accumulated = Self::permill_value();
 
@@ -80,7 +80,7 @@ Next we implement the extrinsic that allows users to update the accumulator by m
 
 ```rust, ignore
 fn update_fixed(origin, new_factor: U16F16) -> DispatchResult {
-	let _ = ensure_signed(origin)?;
+	ensure_signed(origin)?;
 
 	let old_accumulated = Self::fixed_value();
 
@@ -138,7 +138,7 @@ The extrinsic to multiply a new factor into the accumulator follows the same gen
 
 ```rust, ignore
 fn update_manual(origin, new_factor: u32) -> DispatchResult {
-	let _ = ensure_signed(origin)?;
+	ensure_signed(origin)?;
 
 	// To ensure we don't overflow unnecessarily, the values are cast up to u64 before multiplying.
 	// This intermediate format has 48 integer positions and 16 fractional.
@@ -200,7 +200,7 @@ There are two extrinsics associated with the discrete interest account. The `dep
 
 ```rust, ignore
 fn deposit_discrete(origin, val_to_add: u64) -> DispatchResult {
-	let _ = ensure_signed(origin)?;
+	ensure_signed(origin)?;
 
 	let old_value = DiscreteAccount::get();
 
@@ -281,7 +281,7 @@ As before, there are two relevant extrinsics, `deposit_continuous` and `withdraw
 
 ```rust, ignore
 fn deposit_continuous(origin, val_to_add: u64) -> DispatchResult {
-	let _ = ensure_signed(origin)?;
+	ensure_signed(origin)?;
 
 	let current_block = system::Module::<T>::block_number();
 	let old_value = Self::value_of_continuous_account(&current_block);

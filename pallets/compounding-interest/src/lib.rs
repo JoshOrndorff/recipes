@@ -64,7 +64,7 @@ decl_module! {
 
 		/// Deposit some funds into the compounding interest account
 		fn deposit_continuous(origin, val_to_add: u64) -> DispatchResult {
-			let _ = ensure_signed(origin)?;
+			ensure_signed(origin)?;
 
 			let current_block = system::Module::<T>::block_number();
 			let old_value = Self::value_of_continuous_account(&current_block);
@@ -84,7 +84,7 @@ decl_module! {
 
 		/// Withdraw some funds from the compounding interest account
 		fn withdraw_continuous(origin, val_to_take: u64) -> DispatchResult {
-			let _ = ensure_signed(origin)?;
+			ensure_signed(origin)?;
 
 			let current_block = system::Module::<T>::block_number();
 			let old_value = Self::value_of_continuous_account(&current_block);
@@ -104,7 +104,7 @@ decl_module! {
 
 		/// Deposit some funds into the discrete interest account
 		fn deposit_discrete(origin, val_to_add: u64) -> DispatchResult {
-			let _ = ensure_signed(origin)?;
+			ensure_signed(origin)?;
 
 			let old_value = DiscreteAccount::get();
 
@@ -118,7 +118,7 @@ decl_module! {
 
 		/// Withdraw some funds from the discrete interest account
 		fn withdraw_discrete(origin, val_to_take: u64) -> DispatchResult {
-			let _ = ensure_signed(origin)?;
+			ensure_signed(origin)?;
 
 			let old_value = DiscreteAccount::get();
 
