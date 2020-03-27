@@ -19,7 +19,7 @@ The first pallet covered in this recipe contains three implementations of a mult
 
 ### Permill Accumulator
 
-We'll using the most common approach which takes its fixed point implementation from Substrate itself. There are a few fixed-point structs available in Substrate, all of which implement the [`PerThing` trait](https://substrate.dev/rustdocs/master/sp_arithmetic/trait.PerThing.html), that cover different amounts of precision. For this accumulator example, we'll use the [`PerMill` struct](https://substrate.dev/rustdocs/master/sp_arithmetic/struct.Permill.html) which represents fractions as parts per million. There are also [`Perbill`](https://substrate.dev/rustdocs/master/sp_arithmetic/struct.Perbill.html), [`PerCent`](https://substrate.dev/rustdocs/master/sp_arithmetic/struct.Percent.html), and [`PerU16`](https://substrate.dev/rustdocs/master/sp_arithmetic/struct.PerU16.html), which all provide the same interface (because it comes from the trait). Substrate's fixed-point structs are somewhat unique because they represent _only_ fractional parts of numbers. That means they can represent numbers between 0 and 1 inclusive, but _not_ numbers with whole parts like 2.718 or 3.14.
+We'll using the most common approach which takes it's fixed point implementation from Substrate itself. There are a few fixed-point structs available in Substrate, all of which implement the [`PerThing` trait](https://substrate.dev/rustdocs/master/sp_arithmetic/trait.PerThing.html), that cover different amounts of precision. For this accumulator example, we'll use the [`PerMill` struct](https://substrate.dev/rustdocs/master/sp_arithmetic/struct.Permill.html) which represents fractions as parts per million. There are also [`Perbill`](https://substrate.dev/rustdocs/master/sp_arithmetic/struct.Perbill.html), [`PerCent`](https://substrate.dev/rustdocs/master/sp_arithmetic/struct.Percent.html), and [`PerU16`](https://substrate.dev/rustdocs/master/sp_arithmetic/struct.PerU16.html), which all provide the same interface (because it comes from the trait). Substrate's fixed-point structs are somewhat unique because they represent _only_ fractional parts of numbers. That means they can represent numbers between 0 and 1 inclusive, but _not_ numbers with whole parts like 2.718 or 3.14.
 
 To begin we declare the storage item that will hold our accumulated product. You can see that the trait provides a handy function for getting the identity value which we use to set the default storage value to `1`.
 
@@ -38,7 +38,7 @@ The only extrinsic for this Permill accumulator is the one that allows users to 
 
 ```rust, ignore
 fn update_permill(origin, new_factor: Permill) -> DispatchResult {
-	let _ = ensure_signed(origin)?;
+	ensure_signed(origin)?;
 
 	let old_accumulated = Self::permill_value();
 
@@ -80,7 +80,7 @@ Next we implement the extrinsic that allows users to update the accumulator by m
 
 ```rust, ignore
 fn update_fixed(origin, new_factor: U16F16) -> DispatchResult {
-	let _ = ensure_signed(origin)?;
+	ensure_signed(origin)?;
 
 	let old_accumulated = Self::fixed_value();
 
@@ -101,7 +101,7 @@ This extrinsic is quite similar to the `Permill` ersion with one notable differe
 
 ### Manual Accumulator
 
-In this final accumulator implementation, we manually track fixed point numbers using Rust's native `u32` as the underlying data type. This example is educational, but is only practical in the simplest scenarios. Generally you will have a ~~more fun~~ less error-prone time coding if you use one of the previous two fixed-point types in your real-world applications.
+In this final accumulator implementation, we manually track fixed point numbers using Rust's native `u32` as the underlying data type. This example is educational, but is only practical in the simplest scenarios. Generally you will have a more fun a less error-prone time coding if you use one of the previous two fixed-point types in your real-world applications.
 
 Fixed point is not very complex conceptually. We represent fractional numbers as regular old integers, and we decide in advance to consider some of the place values fractional. It's just like saying we'll omit the decimal point when talking about money and all agree that "1995" actually _means_ €19.95. This is exactly how Substrate's [Balances pallet](https://substrate.dev/rustdocs/master/pallet_balances/index.html) works, a tradition that's been in blockchain since Bitcon. In our example we will treat 16 bits as integer values, and 16 as fractional, just as substrate-fixed's `U16F16` did.
 
@@ -136,7 +136,7 @@ The extrinsic to multiply a new factor into the accumulator follows the same gen
 
 ```rust, ignore
 fn update_manual(origin, new_factor: u32) -> DispatchResult {
-	let _ = ensure_signed(origin)?;
+	ensure_signed(origin)?;
 
 	// To ensure we don't overflow unnecessarily, the values are cast up to u64 before multiplying.
 	// This intermediate format has 48 integer positions and 16 fractional.
@@ -198,7 +198,7 @@ There are two extrinsics associated with the discrete interest account. The `dep
 
 ```rust, ignore
 fn deposit_discrete(origin, val_to_add: u64) -> DispatchResult {
-	let _ = ensure_signed(origin)?;
+	ensure_signed(origin)?;
 
 	let old_value = DiscreteAccount::get();
 
@@ -244,9 +244,9 @@ fn on_finalize(n: T::BlockNumber) {
 
 ### Continuously Compounding
 
-You can imagine increasing the frequency at which the interest is paid out. Increasing the frequency enough approaches [continuously compounding interest](https://en.wikipedia.org/wiki/Compound_interest#Continuous_compounding). Calculating continuously compounding interest requires the [exponential function](https://en.wikipedia.org/wiki/Exponential_function) which is not available using Substrate's `PerThing` types. Luckily exponential and other [transcendental functions](https://en.wikipedia.org/wiki/Transcendental_function) are available in substrate-fixed, which is why we've chosen to use it for this example.
+You can imagine increasing the frequency a which the interest is paid out. Increasing the frequency enough approaches [continuously compounding interest](https://en.wikipedia.org/wiki/Compound_interest#Continuous_compounding). Calculating continuously compounding interest requires the [exponential function](https://en.wikipedia.org/wiki/Exponential_function) which is not available using Substrate's `PerThing` types. Luckily exponential and other [transcendental functions](https://en.wikipedia.org/wiki/Transcendental_function) are available in substrate-fixed, which is why we've chosen to use it for this example.
 
-With continuously compounded interest, we _could_ update the interest in `on_finalize` as we did before, but it would need to be updated every single block. Instead we wait until a user tries to use the account (to deposit or withdraw funds), and then calculate the account's current value "just in time".
+With continuously compounded interest, we _could_ update the interest in `on_finalize` as we did before, but it woudl need to be updated every single block. Instead we wait until a user tries to use the account (to deposit or withdraw funds), and then calculate the account's current value "just in time".
 
 To facilitate this implementation, we represent the state of the account not only as a balance, but as a balance, paired with the time when that balance was last updated.
 
@@ -279,7 +279,7 @@ As before, there are two relevant extrinsics, `deposit_continuous` and `withdraw
 
 ```rust, ignore
 fn deposit_continuous(origin, val_to_add: u64) -> DispatchResult {
-	let _ = ensure_signed(origin)?;
+	ensure_signed(origin)?;
 
 	let current_block = system::Module::<T>::block_number();
 	let old_value = Self::value_of_continuous_account(&current_block);
@@ -310,7 +310,7 @@ fn value_of_continuous_account(now: &<T as system::Trait>::BlockNumber) -> I32F3
 
 	// Calculate the exponential function (lots of type conversion)
 	let elapsed_time_block_number = *now - deposit_date;
-	let elapsed_time_u32 = TryInto::try_into(elapsed_time_block_number)
+	let elapsed_time_u32 = TryInto::try_into(elapsed_time_block_number).ok()
 		.expect("blockchain will not exceed 2^32 blocks; qed");
 	let elapsed_time_i32f32 = I32F32::from_num(elapsed_time_u32);
 	let exponent : I32F32 = Self::continuous_interest_rate() * elapsed_time_i32f32;
