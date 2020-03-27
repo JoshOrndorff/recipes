@@ -10,7 +10,7 @@ Arbitrary data may be stored, as long as its data type is serializable in Substr
 
 The previous *[single-value storage recipe](../../2-appetizers/2-storage-values.md)* showed how a single value can be stored in runtime storage. In this section, we cover
 - [caching values rather than calling to storage multiple times](./cache.md)
-- [storing sets, checking membership, and iteration](./iterate.md)
+- [storing sets, checking membership, and iteration](./sets-vecs-iteration.md)
 - [ordered lists with basic maps and linked maps](./enumerated.md)
 - [efficient subgroup removal by key prefix with double maps](./double.md)
 - [storing custom structs](./structs.md)
