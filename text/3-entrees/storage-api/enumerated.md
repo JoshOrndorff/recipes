@@ -104,7 +104,7 @@ fn remove_member_bounded(origin, index: u32) -> Result {
 
 ### Linked Map <a name = "linkedmap"></a>
 
-To trade performance for *relatively* simple code, use the `linked_map` data structure. By implementing [`StorageLinkedMap`](https://substrate.dev/rustdocs/master/frame_support/storage/trait.StorageLinkedMap.html) in addition to [`StorageMap`](https://substrate.dev/rustdocs/master/frame_support/storage/trait.StorageMap.html), `linked_map` provides a method `head` which yields the head of the *list*, thereby making it unnecessary to also store the `LargestIndex` (the *counters*). The `enumerate` method also returns an `Iterator` ordered according to when `(key, value)` pairs were inserted into the map.
+To trade performance for *relatively* simple code, use the `linked_map` data structure. By implementing `StorageLinkedMap` in addition to [`StorageMap`](https://substrate.dev/rustdocs/master/frame_support/storage/trait.StorageMap.html), `linked_map` provides a method `head` which yields the head of the *list*, thereby making it unnecessary to also store the `LargestIndex` (the *counters*). The `enumerate` method also returns an `Iterator` ordered according to when `(key, value)` pairs were inserted into the map.
 
 To use `linked_map`, import `EnumerableStorageMap`. Here is the new declaration in the `decl_storage` block:
 
@@ -140,4 +140,4 @@ fn remove_member_linked(origin, index: u32) -> Result {
 }
 ```
 
-This implementation incurs some performance costs (vs solely using `StorageMap` and `StorageValue`) because `linked_map` heap allocates the entire map as an iterator in order to implement the [`enumerate` method](https://substrate.dev/rustdocs/master/frame_support/storage/trait.StorageLinkedMap.html#tymethod.enumerate).
+This implementation incurs some performance costs (vs solely using `StorageMap` and `StorageValue`) because `linked_map` heap allocates the entire map as an iterator in order to implement the `enumerate` method.
