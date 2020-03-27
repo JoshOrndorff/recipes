@@ -243,4 +243,85 @@ fn on_finalize(n: T::BlockNumber) {
 
 
 ### Continuously Compounding
-You can imagine increasing the frequency a which the interest is paid out. Increasing the frequency enough approaches [continuously compounding interest](https://en.wikipedia.org/wiki/Compound_interest#Continuous_compounding). Calculating continuously compounding interest requires the [exponential function](https://en.wikipedia.org/wiki/Exponential_function) which is only available in Substrate-fixed.
+
+You can imagine increasing the frequency a which the interest is paid out. Increasing the frequency enough approaches [continuously compounding interest](https://en.wikipedia.org/wiki/Compound_interest#Continuous_compounding). Calculating continuously compounding interest requires the [exponential function](https://en.wikipedia.org/wiki/Exponential_function) which is not available using Substrate's `PerThing` types. Luckily exponential and other [transcendental functions](https://en.wikipedia.org/wiki/Transcendental_function) are available in substrate-fixed, which is why we've chosen to use it for this example.
+
+With continuously compounded interest, we _could_ update the interest in `on_finalize` as we did before, but it woudl need to be updated every single block. Instead we wait until a user tries to use the account (to deposit or withdraw funds), and then calculate the account's current value "just in time".
+
+To facilitate this implementation, we represent the state of the account not only as a balance, but as a balance, paired with the time when that balance was last updated.
+
+```rust, ignore
+#[derive(Encode, Decode, Default)]
+pub struct ContinuousAccountData<BlockNumber> {
+	/// The balance of the account after last manual adjustment
+	principle: I32F32,
+	/// The time (block height) at which the balance was last adjusted
+	deposit_date: BlockNumber,
+}
+```
+
+You can see we've chosen substrate-fixed's `I32F32` as our balance type this time. While we don't intend to handle negative balances, there is currently a limitation in the transcendental functions that requires using signed types.
+
+With the struct to represent the account's state defined, we can initialize the storage value.
+
+```rust, ignore
+decl_storage! {
+	trait Store for Module<T: Trait> as Example {
+		// --snip--
+
+		/// Balance for the continuously compounded account
+		ContinuousAccount get(fn balance_compound): ContinuousAccountData<T::BlockNumber>;
+	}
+}
+```
+
+As before, there are two relevant extrinsics, `deposit_continuous` and `withdraw_continuous`. They are nearly identical so we'll only show one.
+
+```rust, ignore
+fn deposit_continuous(origin, val_to_add: u64) -> DispatchResult {
+	let _ = ensure_signed(origin)?;
+
+	let current_block = system::Module::<T>::block_number();
+	let old_value = Self::value_of_continuous_account(&current_block);
+
+	// Update storage for compounding account
+	ContinuousAccount::<T>::put(
+		ContinuousAccountData {
+			principle: old_value + I32F32::from_num(val_to_add),
+			deposit_date: current_block,
+		}
+	);
+
+	// Emit event
+	Self::deposit_event(Event::DepositedContinuous(val_to_add));
+	Ok(())
+}
+```
+
+This function itself isn't too insightful. It does the same basic things as the discrete variant: lookup the old value, and the deposit, update storage, emit event. The one interesting part is that it calls a helper function to get the account's previous value. This helper function calculates the value of the account considering all the interest that has accrued since the last time the account was touched. Let's take a closer look.
+
+```rust, ignore
+fn value_of_continuous_account(now: &<T as system::Trait>::BlockNumber) -> I32F32 {
+	// Get the old state of the accout
+	let ContinuousAccountData{
+		principle,
+		deposit_date,
+	} = ContinuousAccount::<T>::get();
+
+	// Calculate the exponential function (lots of type conversion)
+	let elapsed_time_block_number = *now - deposit_date;
+	let elapsed_time_u32 = TryInto::try_into(elapsed_time_block_number).ok()
+		.expect("blockchain will not exceed 2^32 blocks; qed");
+	let elapsed_time_i32f32 = I32F32::from_num(elapsed_time_u32);
+	let exponent : I32F32 = Self::continuous_interest_rate() * elapsed_time_i32f32;
+	let exp_result : I32F32 = exp(exponent).ok()
+		.expect("Interest will not overflow account (at least not until the learner has learned enough about fixed point :)");
+
+	// Return the result interest = principal * e ^ (rate * time)
+	principle * exp_result
+}
+```
+
+This function gets the previous state of the account, makes the interest calculation and returns the result. The reality of making these fixed point calculations is that type conversion will likely be your biggest pain point. Most of the lines are doing type conversion between the `BlockNumber`, `u32`, and `I32F32` types.
+
+We've already seen that this helper function is used within the runtime for calculating the current balance "just in time" to make adjustments. In a real-world scenario, chain users would also want to check their balance at any given time. Because the current balance is not stored in runtime storage, it would be wise to [implement a runtime API](../runtime-api.md) so this helper can be called from outside the runtime.

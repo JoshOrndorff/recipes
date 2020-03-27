@@ -63,7 +63,7 @@ decl_module! {
 		fn deposit_event() = default;
 
 		/// Deposit some funds into the compounding interest account
-		fn deposit_compounding(origin, val_to_add: u64) -> DispatchResult {
+		fn deposit_continuous(origin, val_to_add: u64) -> DispatchResult {
 			let _ = ensure_signed(origin)?;
 
 			let current_block = system::Module::<T>::block_number();
@@ -83,7 +83,7 @@ decl_module! {
 		}
 
 		/// Withdraw some funds from the compounding interest account
-		fn withdraw_compounding(origin, val_to_take: u64) -> DispatchResult {
+		fn withdraw_continuous(origin, val_to_take: u64) -> DispatchResult {
 			let _ = ensure_signed(origin)?;
 
 			let current_block = system::Module::<T>::block_number();
@@ -158,17 +158,22 @@ impl<T: Trait> Module<T> {
 	/// A helper function to evaluate the current value of the continuously compounding interest
 	/// account
 	fn value_of_continuous_account(now: &<T as system::Trait>::BlockNumber) -> I32F32 {
+		// Get the old state of the accout
 		let ContinuousAccountData{
 			principle,
 			deposit_date,
 		} = ContinuousAccount::<T>::get();
 
+		// Calculate the exponential function (lots of type conversion)
 		let elapsed_time_block_number = *now - deposit_date;
-		let elapsed_time_u32 = TryInto::try_into(elapsed_time_block_number).ok().expect("fuck!");
+		let elapsed_time_u32 = TryInto::try_into(elapsed_time_block_number).ok()
+			.expect("blockchain will not exceed 2^32 blocks; qed");
 		let elapsed_time_i32f32 = I32F32::from_num(elapsed_time_u32);
 		let exponent : I32F32 = Self::continuous_interest_rate() * elapsed_time_i32f32;
-		let exp_result : I32F32 = exp(exponent).ok().expect("fuck!");
+		let exp_result : I32F32 = exp(exponent).ok()
+			.expect("Interest will not overflow account (at least not until the learner has learned enough about fixed point :)");
 
+		// Return the result interest = principal * e ^ (rate * time)
 		principle * exp_result
 	}
 
