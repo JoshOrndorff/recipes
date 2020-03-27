@@ -101,7 +101,7 @@ This extrinsic is quite similar to the `Permill` ersion with one notable differe
 
 ### Manual Accumulator
 
-In this final accumulator implementation, we manually track fixed point numbers using Rust's native `u32` as the underlying data type. This example is educational, but is only practical in the simplest scenarios. Generally you will have a more fun a less error-prone time coding if you use one of the previous two fixed-point types in your real-world applications.
+In this final accumulator implementation, we manually track fixed point numbers using Rust's native `u32` as the underlying data type. This example is educational, but is only practical in the simplest scenarios. Generally you will have a ~~more fun~~ less error-prone time coding if you use one of the previous two fixed-point types in your real-world applications.
 
 Fixed point is not very complex conceptually. We represent fractional numbers as regular old integers, and we decide in advance to consider some of the place values fractional. It's just like saying we'll omit the decimal point when talking about money and all agree that "1995" actually _means_ €19.95. This is exactly how Substrate's [Balances pallet](https://substrate.dev/rustdocs/master/pallet_balances/index.html) works, a tradition that's been in blockchain since Bitcon. In our example we will treat 16 bits as integer values, and 16 as fractional, just as substrate-fixed's `U16F16` did.
 
