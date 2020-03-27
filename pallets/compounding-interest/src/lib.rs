@@ -108,7 +108,7 @@ decl_module! {
 
 			let old_value = DiscreteAccount::get();
 
-			// Update storage for compounding account
+			// Update storage for discrete account
 			DiscreteAccount::put(old_value + val_to_add);
 
 			// Emit event
@@ -122,7 +122,7 @@ decl_module! {
 
 			let old_value = DiscreteAccount::get();
 
-			// Update storage for compounding account
+			// Update storage for discrete account
 			DiscreteAccount::put(old_value - val_to_take);
 
 			// Emit event
@@ -134,14 +134,14 @@ decl_module! {
 			// Apply newly-accrued discrete interest every ten blocks
 			if (n % 10.into()).is_zero() {
 
-				// Calculate interest
+				// Calculate interest Interest = principle * rate * time
 				// We can use the `*` operator for multiplying a `Percent` by a u64
 				// because `Percent` implements the trait Mul<u64>
-				let interest = Self::discrete_interest_rate() * DiscreteAccount::get();
+				let interest = Self::discrete_interest_rate() * DiscreteAccount::get() * 10;
 
 				// The following line, although similar, does not work because
 				// u64 does not implement the trait Mul<Percent>
-				// let interest = DiscreteAccount::get() * Self::discrete_interest_rate();
+				// let interest = DiscreteAccount::get() * Self::discrete_interest_rate() * 10;
 
 				// Update the balance
 				let old_balance = DiscreteAccount::get();

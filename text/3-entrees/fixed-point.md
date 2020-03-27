@@ -171,14 +171,76 @@ As mentioned above, when you multiply two 32-bit numbers, you can end up with as
 > If this business about having more bits after the multiplication is confusing, try this exercise in the more familiar decimal system. Consider these numbers that have 4 total digits (2 integer, and two fractional): 12.34 and 56.78. Multiply them together. How many integer and fractional digits are in the product? Try that again with larger numbers like 01.23 * 02.48 and smaller like 11.11 and 22.22. Which of these products can be fit back into a 4-digit number like the ones we started with?
 
 ## Compounding Interest
+*[`pallets/compounding-interest`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/compounding-interest)*
 
-Many financial agreements involve interest for loaned money. [Compounding interest](https://en.wikipedia.org/wiki/Compound_interest) is when interest is paid on top of not only the original loan amount, the so-called principle, but also any interest that has been previously paid.
+Many financial agreements involve interest for loaned or borrowed money. [Compounding interest](https://en.wikipedia.org/wiki/Compound_interest) is when new interest is paid on top of not only the original loan amount, the so-called "principle", but also any interest that has been previously paid.
 
 ### Discrete Compounding
 
 Our first example will look at discrete compounding interest. This is when interest is paid at a fixed interval. In our case, interest will be paid every ten blocks.
 
-For this implementation we've chosen to use Substrate's [`Percent` type]. It works nearly the same as `Permill`. We could also have used Substrate-fixed for this implementation, but chose to save it for the next example.
+For this implementation we've chosen to use Substrate's [`Percent` type](https://substrate.dev/rustdocs/master/sp_arithmetic/struct.Percent.html). It works nearly the same as `Permill`, but it represents numbers as "parts per hundred" rather than "parts er million". We could also have used Substrate-fixed for this implementation, but chose to save it for the next example.
+
+The only storage item needed is a tracker of the account's balance. In order to focus on the fixed-point- and interest-related topics, this pallet does not actually interface with a `Currency`. Instead we just allow anyone to "deposit" or "withdraw" funds with no source or destination.
+
+```rust, ignore
+decl_storage! {
+	trait Store for Module<T: Trait> as Example {
+		// --snip--
+
+		/// Balance for the discrete interest account
+		DiscreteAccount get(fn discrete_account): u64;
+	}
+}
+```
+
+There are two extrinsics associated with the discrete interest account. The `deposit_discrete` extrinsic is shown here, and the `withdraw_discrete` extrinsic is nearly identical. Check it out in the kitchen.
+
+```rust, ignore
+fn deposit_discrete(origin, val_to_add: u64) -> DispatchResult {
+	let _ = ensure_signed(origin)?;
+
+	let old_value = DiscreteAccount::get();
+
+	// Update storage for discrete account
+	DiscreteAccount::put(old_value + val_to_add);
+
+	// Emit event
+	Self::deposit_event(Event::DepositedDiscrete(val_to_add));
+	Ok(())
+}
+```
+
+The flow of these deposit and withdraw extrinsics is entirely straight-forward. They each perform a simple addition or substraction from the stored value, and they have nothing to do with interest.
+
+Because the interest is paid discretely every ten blocks it can be handled independently of deposits and withdrawals. The interest calculation happens automatically in the `on_finalize` block.
+
+```rust, ignore
+fn on_finalize(n: T::BlockNumber) {
+	// Apply newly-accrued discrete interest every ten blocks
+	if (n % 10.into()).is_zero() {
+
+		// Calculate interest Interest = principle * rate * time
+		// We can use the `*` operator for multiplying a `Percent` by a u64
+		// because `Percent` implements the trait Mul<u64>
+		let interest = Self::discrete_interest_rate() * DiscreteAccount::get() * 10;
+
+		// The following line, although similar, does not work because
+		// u64 does not implement the trait Mul<Percent>
+		// let interest = DiscreteAccount::get() * Self::discrete_interest_rate() * 10;
+
+		// Update the balance
+		let old_balance = DiscreteAccount::get();
+		DiscreteAccount::put(old_balance + interest);
+
+		// Emit the event
+		Self::deposit_event(Event::DiscreteInterestApplied(interest));
+	}
+}
+```
+
+`on_finalize` is called at the end of every block, but we only want to pay interest every ten blocks, so the first thing we do is check whether this block is a multiple of ten. If it is we calculate the interest due by the formula `interest = principle * rate * time`. As the comments explain, there is some subtlety in the order of the multiplication. You can multiply `PerCent * u64` but not `u64 * PerCent`.
+
 
 ### Continuously Compounding
 You can imagine increasing the frequency a which the interest is paid out. Increasing the frequency enough approaches [continuously compounding interest](https://en.wikipedia.org/wiki/Compound_interest#Continuous_compounding). Calculating continuously compounding interest requires the [exponential function](https://en.wikipedia.org/wiki/Exponential_function) which is only available in Substrate-fixed.

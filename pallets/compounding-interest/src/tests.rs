@@ -131,13 +131,13 @@ fn discrete_interest_works() {
 			EventRecord {
 				phase: Phase::ApplyExtrinsic(0),
 				event: TestEvent::fixed_point(Event::DiscreteInterestApplied(
-					5,
+					50,
 				)),
 				topics: vec![],
 			},
 		]);
 
 		// Check that the balance has updated
-		assert_eq!(FixedPoint::discrete_account(), 105);
+		assert_eq!(FixedPoint::discrete_account(), 150);
 	})
 }
