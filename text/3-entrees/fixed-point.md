@@ -246,7 +246,7 @@ fn on_finalize(n: T::BlockNumber) {
 
 You can imagine increasing the frequency at which the interest is paid out. Increasing the frequency enough approaches [continuously compounding interest](https://en.wikipedia.org/wiki/Compound_interest#Continuous_compounding). Calculating continuously compounding interest requires the [exponential function](https://en.wikipedia.org/wiki/Exponential_function) which is not available using Substrate's `PerThing` types. Luckily exponential and other [transcendental functions](https://en.wikipedia.org/wiki/Transcendental_function) are available in substrate-fixed, which is why we've chosen to use it for this example.
 
-With continuously compounded interest, we _could_ update the interest in `on_finalize` as we did before, but it woudl need to be updated every single block. Instead we wait until a user tries to use the account (to deposit or withdraw funds), and then calculate the account's current value "just in time".
+With continuously compounded interest, we _could_ update the interest in `on_finalize` as we did before, but it would need to be updated every single block. Instead we wait until a user tries to use the account (to deposit or withdraw funds), and then calculate the account's current value "just in time".
 
 To facilitate this implementation, we represent the state of the account not only as a balance, but as a balance, paired with the time when that balance was last updated.
 
