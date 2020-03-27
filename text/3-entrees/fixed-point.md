@@ -59,7 +59,7 @@ The code of this extrinsic largely speaks for itself. One thing to take particul
 
 ### Substrate-fixed Accumulator
 
-[Substrate-fixed](https://github.com/encointer/substrate-fixed/) takes a more traditional approach in that their types represent numbers with both whole _and_ fractional parts. For this fractional part, we'll use the `U16F16` type. This type contains an unsigned number (indicated by the `U` at the beginning) and has 32 _total_ bits of precision - 16 for the integer part, and 16 for the fractional part. There are several other types provided that follow the same naming convention. Some examples include `U32F32` and `I32F32` where the `I` indicates a signed number, just like in Rust primitive types.
+[Substrate-fixed](https://github.com/encointer/substrate-fixed/) takes a more traditional approach in that their types represent numbers with both whole _and_ fractional parts. For this implementation, we'll use the `U16F16` type. This type contains an unsigned number (indicated by the `U` at the beginning) and has 32 _total_ bits of precision - 16 for the integer part, and 16 for the fractional part. There are several other types provided that follow the same naming convention. Some examples include `U32F32` and `I32F32` where the `I` indicates a signed number, just like in Rust primitive types.
 
 As in the `Permill` example, we begin by declaring the storage item. With substrate-fixed, there is not a `one` function, but there is a `from_num` function that we use to set the storage item's default value. This `from_num` method and it's counterpart `to-num` are your primary ways of converting between substrate-fixed types and Rust primitive types. If your use case does a lot of fixed-point arithmetic, like ours does, it is advisable to keep your data in substrate-fixed types.
 
@@ -97,7 +97,9 @@ fn update_fixed(origin, new_factor: U16F16) -> DispatchResult {
 }
 ```
 
-This extrinsic is quite similar to the `Permill` ersion with one notable difference. Because `U16F16` handles numbers greater than one, overflow is possible, and we need to handle it. The error handling here is straightforward, the important part is just that you remember to do it.
+This extrinsic is quite similar to the `Permill` version with one notable difference. Because `U16F16` handles numbers greater than one, overflow is possible, and we need to handle it. The error handling here is straightforward, the important part is just that you remember to do it.
+
+This example has shown the fundamentals of substrate-fixed, but this library has much more to offer as we'll see in the compounding interest example.
 
 ### Manual Accumulator
 
