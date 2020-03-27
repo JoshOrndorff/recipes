@@ -310,7 +310,7 @@ fn value_of_continuous_account(now: &<T as system::Trait>::BlockNumber) -> I32F3
 
 	// Calculate the exponential function (lots of type conversion)
 	let elapsed_time_block_number = *now - deposit_date;
-	let elapsed_time_u32 = TryInto::try_into(elapsed_time_block_number).ok()
+	let elapsed_time_u32 = TryInto::try_into(elapsed_time_block_number)
 		.expect("blockchain will not exceed 2^32 blocks; qed");
 	let elapsed_time_i32f32 = I32F32::from_num(elapsed_time_u32);
 	let exponent : I32F32 = Self::continuous_interest_rate() * elapsed_time_i32f32;
