@@ -1,7 +1,1 @@
-{
-	"FPBalance": "u64",
-	"ContinuousAccountData": {
-		"principle": "FPBalance",
-		"deposit_date": "BlockNumber"
-	}
-}
+{}

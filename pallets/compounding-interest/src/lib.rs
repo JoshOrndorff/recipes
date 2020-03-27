@@ -24,9 +24,6 @@ pub trait Trait: system::Trait {
 	type Event: From<Event> + Into<<Self as system::Trait>::Event>;
 }
 
-/// Special Balance type for this fixed point pallet
-type FPBalance = u64;
-
 #[derive(Encode, Decode, Default)]
 pub struct ContinuousAccountData<BlockNumber> {
 	/// The balance of the account after last manual adjustment
@@ -40,24 +37,24 @@ decl_storage! {
 		/// Balance for the continuously compounded account
 		ContinuousAccount get(fn balance_compound): ContinuousAccountData<T::BlockNumber>;
 		/// Balance for the discrete interest account
-		DiscreteAccount get(fn discrete_account): FPBalance;
+		DiscreteAccount get(fn discrete_account): u64;
 	}
 }
 
 decl_event!(
 	pub enum Event {
 		/// Deposited some balance into the compounding interest account
-		DepositedContinuous(FPBalance),
+		DepositedContinuous(u64),
 		/// Withdrew some balance from the compounding interest account
-		WithdrewContinuous(FPBalance),
+		WithdrewContinuous(u64),
 		/// Deposited some balance into the discrete interest account
-		DepositedDiscrete(FPBalance),
+		DepositedDiscrete(u64),
 		/// Withdrew some balance from the discrete interest account
-		WithdrewDiscrete(FPBalance),
+		WithdrewDiscrete(u64),
 		/// Some interest has been applied to the discrete interest account
 		/// The associated data is just the interest amout (not the new or old balance)
 		/// This happens every ten blocks
-		DiscreteInterestApplied(FPBalance),
+		DiscreteInterestApplied(u64),
 	}
 );
 
@@ -66,7 +63,7 @@ decl_module! {
 		fn deposit_event() = default;
 
 		/// Deposit some funds into the compounding interest account
-		fn deposit_compounding(origin, val_to_add: FPBalance) -> DispatchResult {
+		fn deposit_compounding(origin, val_to_add: u64) -> DispatchResult {
 			let _ = ensure_signed(origin)?;
 
 			let current_block = system::Module::<T>::block_number();
@@ -86,7 +83,7 @@ decl_module! {
 		}
 
 		/// Withdraw some funds from the compounding interest account
-		fn withdraw_compounding(origin, val_to_take: FPBalance) -> DispatchResult {
+		fn withdraw_compounding(origin, val_to_take: u64) -> DispatchResult {
 			let _ = ensure_signed(origin)?;
 
 			let current_block = system::Module::<T>::block_number();
@@ -106,7 +103,7 @@ decl_module! {
 		}
 
 		/// Deposit some funds into the discrete interest account
-		fn deposit_discrete(origin, val_to_add: FPBalance) -> DispatchResult {
+		fn deposit_discrete(origin, val_to_add: u64) -> DispatchResult {
 			let _ = ensure_signed(origin)?;
 
 			let old_value = DiscreteAccount::get();
@@ -120,7 +117,7 @@ decl_module! {
 		}
 
 		/// Withdraw some funds from the discrete interest account
-		fn withdraw_discrete(origin, val_to_take: FPBalance) -> DispatchResult {
+		fn withdraw_discrete(origin, val_to_take: u64) -> DispatchResult {
 			let _ = ensure_signed(origin)?;
 
 			let old_value = DiscreteAccount::get();
