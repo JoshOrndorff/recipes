@@ -17,8 +17,8 @@ theme = "src/theme"
 [output.linkcheck]
 follow-web-links = true
 exclude = [
-	# A few one-off sites that load fine but trip up the link checker
-	"https://crates.io/crates/num-traits",
+	# A few one-off sites that load fine in browser but trip up the link checker with 404
+	"https://crates.io/",
 	"www4\\.comp\\.polyu\\.edu\\.hk/~csxluo/",
 
 	# Links to code in new recipe PRs always fail because the code is not merged yet

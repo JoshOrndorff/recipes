@@ -1,5 +1,5 @@
 # Basic Token
-*[`pallets/constant-config`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/constant-config)*
+*[`pallets/basic-token`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/basic-token)*
 
 This recipe demonstrates a simple but functional token in a pallet.
 
@@ -66,7 +66,7 @@ fn init(origin) -> DispatchResult {
 }
 ```
 
-As usual, we first check for preconditions. I this case that means making sure that the token is not already initialized. Then we do any mutation necessary.
+As usual, we first check for preconditions. In this case that means making sure that the token is not already initialized. Then we do any mutation necessary.
 
 ## Transferring Tokens
 To transfer tokens, a user who owns some tokens calls the `transfer` method specifying the recipient and the amount of tokens to transfer as parameters.
@@ -93,4 +93,6 @@ fn transfer(_origin, to: T::AccountId, value: u64) -> DispatchResult {
 }
 ```
 
-Here we notice the peculiar syntax of `.expect`. Because you must never panic in a runtime function, it is considered good style to use the `expect` method and provide a proof of why the panic will never happen.
+## Don't Panic!
+
+When adding the incoming balance, notice the peculiar `.expect` method. In a Substrate runtime, **you must never panic**. To encourage careful thinking about your code, you use the `.expect` method and provide a proof of why the potential panic will never happen.

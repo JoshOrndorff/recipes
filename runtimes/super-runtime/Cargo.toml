@@ -86,6 +86,11 @@ default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 tag = 'v2.0.0-alpha.3'
 
+[dependencies.sp-finality-grandpa]
+default-features = false
+git = 'https://github.com/paritytech/substrate.git'
+tag = 'v2.0.0-alpha.3'
+
 [dependencies.executive]
 default-features = false
 git = 'https://github.com/paritytech/substrate.git'
@@ -170,7 +175,6 @@ default = ["std"]
 std = [
 	# Substrate dependencies alphabetically
 	"babe/std",
-	"sp-consensus-babe/std",
 	"balances/std",
 	"block-builder-api/std",
 	"executive/std",
@@ -179,7 +183,9 @@ std = [
 	"inherents/std",
 	"offchain-primitives/std",
 	"parity-scale-codec/std",
+	"sp-consensus-babe/std",
 	"sp-core/std",
+	"sp-finality-grandpa/std",
 	"randomness-collective-flip/std",
 	"rstd/std",
 	"runtime-io/std",

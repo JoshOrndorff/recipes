@@ -17,7 +17,6 @@ tokio = '0.1.22'
 trie-root = '0.15.2'
 structopt = "0.3.8"
 runtime = { package = "api-runtime", path = "../../runtimes/api-runtime" }
-runtime-genesis = { package = "api-genesis", path = "../../runtimes/api-genesis" }
 jsonrpc-core = "14.0.3"
 jsonrpc-core-client = "14.0.3"
 jsonrpc-derive = "14.0.3"

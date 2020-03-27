@@ -1,11 +1,13 @@
-use runtime::{
+//! Helper module to build a genesis configuration for the pow-runtime
+
+use super::{
 	AccountId, BalancesConfig, GenesisConfig,
 	SudoConfig, SystemConfig, WASM_BINARY,
 };
 
-// This function is unlike the testnet_genesis functions in other genesis crates.
-// It does not accept a list of initial authorities because there are no authorities
-// in a purely PoW chain.
+/// This helper function is unlike the testnet_genesis functions in other runtimes.
+/// It does not accept a list of initial authorities because there is no concept of
+/// authorities in a purely PoW chain.
 pub fn testnet_genesis(
 	root_key: AccountId,
 	endowed_accounts: Vec<AccountId>,

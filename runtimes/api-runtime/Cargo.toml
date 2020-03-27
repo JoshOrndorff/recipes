@@ -24,6 +24,7 @@ sp-api = { tag = 'v2.0.0-alpha.3', git = 'https://github.com/paritytech/substrat
 sp-block-builder = { tag = 'v2.0.0-alpha.3', git = 'https://github.com/paritytech/substrate.git', default_features = false}
 sp-consensus-aura = { tag = 'v2.0.0-alpha.3', git = 'https://github.com/paritytech/substrate.git', default_features = false}
 sp-core = { tag = 'v2.0.0-alpha.3', git = 'https://github.com/paritytech/substrate.git', default_features = false}
+sp-finality-grandpa = { tag = 'v2.0.0-alpha.3', git = 'https://github.com/paritytech/substrate.git', default_features = false}
 sp-inherents = { tag = 'v2.0.0-alpha.3', git = 'https://github.com/paritytech/substrate.git', default_features = false}
 sp-io = { tag = 'v2.0.0-alpha.3', git = 'https://github.com/paritytech/substrate.git', default_features = false}
 sp-offchain = { tag = 'v2.0.0-alpha.3', git = 'https://github.com/paritytech/substrate.git', default_features = false}
@@ -56,6 +57,7 @@ std = [
 	"sp-block-builder/std",
 	"sp-consensus-aura/std",
 	"sp-core/std",
+	"sp-finality-grandpa/std",
 	"sp-inherents/std",
 	"sp-io/std",
 	"sp-offchain/std",
