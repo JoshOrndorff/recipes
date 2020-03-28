@@ -22,7 +22,6 @@ execution-schedule = { path = "../../pallets/execution-schedule", default-featur
 generic-event = { path = "../../pallets/generic-event", default-features = false }
 hello-substrate = { path = "../../pallets/hello-substrate", default-features = false }
 last-caller = { path = "../../pallets/last-caller", default-features = false }
-linked-map = { path = "../../pallets/linked-map", default-features = false }
 offchain-demo = { path = "../../pallets/offchain-demo", default-features = false }
 ringbuffer-queue = { path = "../../pallets/ringbuffer-queue", default_features = false }
 randomness = { path = "../../pallets/randomness", default_features = false }
@@ -212,8 +211,9 @@ std = [
 	"generic-event/std",
 	"hello-substrate/std",
 	"last-caller/std",
-	"linked-map/std",
 	"offchain-demo/std",
+	"randomness/std",
+	"ringbuffer-queue/std",
 	"simple-event/std",
 	"simple-map/std",
 	"single-value/std",
