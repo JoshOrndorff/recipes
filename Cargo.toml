@@ -13,7 +13,6 @@ members = [
 	"pallets/generic-event",
 	"pallets/hello-substrate",
 	"pallets/last-caller",
-	"pallets/linked-map",
 	"pallets/lockable-currency",
 	"pallets/offchain-demo",
 	"pallets/randomness",

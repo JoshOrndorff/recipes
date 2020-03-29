@@ -307,9 +307,6 @@ impl last_caller::Trait<last_caller::Instance2> for Runtime {
 	type Event = Event;
 }
 
-impl linked_map::Trait for Runtime {
-	type Event = Event;
-}
 
 impl ringbuffer_queue::Trait for Runtime {
 	type Event = Event;
@@ -373,7 +370,6 @@ construct_runtime!(
 		GenericEvent: generic_event::{Module, Call, Event<T>},
 		LastCaller1: last_caller::<Instance1>::{Module, Call, Storage, Event<T>},
 		LastCaller2: last_caller::<Instance2>::{Module, Call, Storage, Event<T>},
-		LinkedMap: linked_map::{Module, Call, Storage, Event<T>},
 		RingbufferQueue: ringbuffer_queue::{Module, Call, Storage, Event<T>},
 		RandomnessDemo: randomness::{Module, Call, Storage, Event},
 		SimpleEvent: simple_event::{Module, Call, Event},
