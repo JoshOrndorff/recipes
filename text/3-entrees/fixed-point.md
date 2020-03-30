@@ -63,7 +63,7 @@ The code of this extrinsic largely speaks for itself. One thing to take particul
 
 As in the `Permill` example, we begin by declaring the storage item. With substrate-fixed, there is not a `one` function, but there is a `from_num` function that we use to set the storage item's default value. This `from_num` method and its counterpart `to-num` are your primary ways of converting between substrate-fixed types and Rust primitive types. If your use case does a lot of fixed-point arithmetic, like ours does, it is advisable to keep your data in substrate-fixed types.
 
-> We're able to use `U16F16` as a storage item type because it, and the other substrate-fixed types, implement the parity scale codec.
+> We're able to use `U16F16` as a storage item type because it, and the other substrate-fixed types, implements the parity scale codec.
 
 ```rust, ignore
 decl_storage! {
