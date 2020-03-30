@@ -450,6 +450,14 @@ impl offchain_demo::Trait for Runtime {
 <p>As in signed transactions, we prepare a function reference with its parameters and then call <code>T::SubmitUnsignedTransaction::submit_unsigned</code>.</p>
 <h2><a class="header" href="#testing" id="testing">Testing</a></h2>
 <p>For writing test cases for off-chain worker, refer to our <a href="./testing/off-chain-workers.html">testing section</a>.</p>
+<h2><a class="header" href="#compiling-this-pallet" id="compiling-this-pallet">Compiling this Pallet</a></h2>
+<p>This <code>offchain-demo</code> pallet is included in the <a href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime">ocw-runtime</a>. That runtime can be used in the kitchen node. Edit <code>nodes/kitchen-node/Cargo.toml</code> to enable the <code>ocw-runtime</code>. In order to use the Offchain worker, the node must inject some keys into its keystore, and that is enabled with a feature flag. To build the kitchen node with this feature use these commands.</p>
+<pre><code class="language-bash"># Switch to kitchen-node directory
+cd nodes/kitchen-node
+
+# Compile with OCW feature
+cargo build --release --features ocw
+</code></pre>
 
                     </main>
 
