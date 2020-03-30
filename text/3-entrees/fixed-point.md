@@ -300,7 +300,7 @@ fn deposit_continuous(origin, val_to_add: u64) -> DispatchResult {
 }
 ```
 
-This function itself isn't too insightful. It does the same basic things as the discrete variant: lookup the old value, and the deposit, update storage, emit event. The one interesting part is that it calls a helper function to get the account's previous value. This helper function calculates the value of the account considering all the interest that has accrued since the last time the account was touched. Let's take a closer look.
+This function itself isn't too insightful. It does the same basic things as the discrete variant: look up the old value and the deposit, update storage, and emit an event. The one interesting part is that it calls a helper function to get the account's previous value. This helper function calculates the value of the account considering all the interest that has accrued since the last time the account was touched. Let's take a closer look.
 
 ```rust, ignore
 fn value_of_continuous_account(now: &<T as system::Trait>::BlockNumber) -> I32F32 {
