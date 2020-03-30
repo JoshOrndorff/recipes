@@ -1,7 +1,7 @@
 [package]
-name = "constant-config"
+name = "compounding-interest"
 version = "0.1.0"
-authors = ["4meta5"]
+authors = ["Joshy Orndorff"]
 edition = "2018"
 
 [features]
@@ -10,8 +10,14 @@ std = [
     'parity-scale-codec/std',
     'frame-support/std',
     'frame-system/std',
+    'sp-arithmetic/std',
     'sp-runtime/std',
+    'sp-std/std',
 ]
+
+[dependencies.substrate-fixed]
+git = 'https://github.com/encointer/substrate-fixed.git'
+tag = "v0.5.4+sub_v0.1"
 
 [dependencies.parity-scale-codec]
 default-features = false
@@ -28,12 +34,22 @@ default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 tag = 'v2.0.0-alpha.3'
 
-[dependencies.sp-runtime]
+[dependencies.sp-arithmetic]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 tag = 'v2.0.0-alpha.3'
 
 [dev-dependencies.sp-core]
+default_features = false
+git = 'https://github.com/paritytech/substrate.git'
+tag = 'v2.0.0-alpha.3'
+
+[dependencies.sp-runtime]
+default_features = false
+git = 'https://github.com/paritytech/substrate.git'
+tag = 'v2.0.0-alpha.3'
+
+[dependencies.sp-std]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
 tag = 'v2.0.0-alpha.3'

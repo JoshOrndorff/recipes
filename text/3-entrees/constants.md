@@ -4,7 +4,7 @@
 To declare constant values within a runtime, it is necessary to import the [`Get`](https://substrate.dev/rustdocs/master/frame_support/traits/trait.Get.html) trait from `frame_support`
 
 ```rust, ignore
-use support::traits::Get;
+use frame_support::traits::Get;
 ```
 
 Configurable constants are declared as associated types in the pallet's `pub trait Trait` block using the `Get<T>` syntax for any type `T`.
@@ -52,7 +52,7 @@ decl_storage! {
 fn on_finalize(n: T::BlockNumber) {
     if (n % T::ClearFrequency::get()).is_zero() {
         let c_val = <SingleValue>::get();
-        <SingleValue>::put(0u32); // is this cheaper than killing?
+        <SingleValue>::put(0u32);
         Self::deposit_event(Event::Cleared(c_val));
     }
 }

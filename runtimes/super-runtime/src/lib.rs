@@ -250,6 +250,10 @@ impl charity::Trait for Runtime {
 	type Currency = Balances;
 }
 
+impl compounding_interest::Trait for Runtime {
+	type Event = Event;
+}
+
 parameter_types! {
 	pub const MaxAddend: u32 = 1738;
 	pub const ClearFrequency: u32 = 10;
@@ -290,6 +294,10 @@ impl execution_schedule::Trait for Runtime {
 	type ExecutionFrequency = ExecutionFrequency;
 	type SignalQuota = SignalQuota;
 	type TaskLimit = TaskLimit;
+}
+
+impl fixed_point::Trait for Runtime {
+	type Event = Event;
 }
 
 impl generic_event::Trait for Runtime {
@@ -361,11 +369,13 @@ construct_runtime!(
 		BasicToken: basic_token::{Module, Call, Storage, Event<T>},
 		Charity: charity::{Module, Call, Storage, Event<T>},
 		CheckMembership: check_membership::{Module, Call, Storage, Event<T>},
+		ConmpoundingInterest: compounding_interest::{Module, Call, Storage, Event},
 		ConstantConfig: constant_config::{Module, Call, Storage, Event},
 		DefaultInstance1: default_instance::{Module, Call, Storage, Event<T>},
 		DefaultInstance2: default_instance::<Instance2>::{Module, Call, Storage, Event<T>},
 		DoubleMap: double_map::{Module, Call, Storage, Event<T>},
 		ExecutionSchedule: execution_schedule::{Module, Call, Storage, Event<T>},
+		FixedPoint: fixed_point::{Module, Call, Storage, Event},
 		HelloSubstrate: hello_substrate::{Module, Call},
 		GenericEvent: generic_event::{Module, Call, Event<T>},
 		LastCaller1: last_caller::<Instance1>::{Module, Call, Storage, Event<T>},

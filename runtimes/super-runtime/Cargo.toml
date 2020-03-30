@@ -15,10 +15,12 @@ adding-machine = { path = "../../pallets/adding-machine", default-features = fal
 basic-token = { path = "../../pallets/basic-token", default-features = false }
 charity = { path = "../../pallets/charity", default-features = false }
 check-membership = { path = "../../pallets/check-membership", default-features = false }
+compounding-interest = { path = "../../pallets/compounding-interest", default-features = false }
 constant-config = { path = "../../pallets/constant-config", default-features = false }
 default-instance = { path = "../../pallets/default-instance", default-features = false }
 double-map = { path = "../../pallets/double-map", default-features = false }
 execution-schedule = { path = "../../pallets/execution-schedule", default-features = false }
+fixed-point = { path = "../../pallets/fixed-point", default-features = false }
 generic-event = { path = "../../pallets/generic-event", default-features = false }
 hello-substrate = { path = "../../pallets/hello-substrate", default-features = false }
 last-caller = { path = "../../pallets/last-caller", default-features = false }
@@ -203,10 +205,12 @@ std = [
 	"basic-token/std",
 	"charity/std",
 	"check-membership/std",
+	"compounding-interest/std",
 	"constant-config/std",
 	"default-instance/std",
 	"double-map/std",
 	"execution-schedule/std",
+	"fixed-point/std",
 	"generic-event/std",
 	"hello-substrate/std",
 	"last-caller/std",
