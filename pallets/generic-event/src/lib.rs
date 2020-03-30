@@ -33,6 +33,7 @@ decl_event!(
 	where
 		AccountId = <T as system::Trait>::AccountId,
 	{
+		/// Some input was sent
 		EmitInput(AccountId, u32),
 	}
 );
