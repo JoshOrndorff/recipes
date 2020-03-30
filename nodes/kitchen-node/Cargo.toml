@@ -42,7 +42,7 @@ sp-consensus = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.
 # Pick one of the runtimes below.
 # Your runtime must have the necessary pallets to support consensus (Babe, Grandpa, etc).
 # ---
-# Common runtime configured with most pallets included in the recipe.
+# Common runtime configured with most Recipes pallets.
 runtime = { package = "super-runtime", path = "../../runtimes/super-runtime" }
 
 # Runtime with custom weight and fee calculation.
