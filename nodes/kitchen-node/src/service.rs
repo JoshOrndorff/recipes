@@ -78,7 +78,11 @@ pub fn new_full(config: Configuration<GenesisConfig>)
 	let force_authoring = config.force_authoring;
 	let name = config.name.clone();
 	let disable_grandpa = config.disable_grandpa;
-	let _dev_seed = config.dev_key_seed.clone();
+
+	// This variable is only used when ocw feature is enabled.
+	// Suppress the warning when ocw feature is not enabled.
+	#[allow(unused_variables)]
+	let dev_seed = config.dev_key_seed.clone();
 
 	// sentry nodes announce themselves as authorities to the network
 	// and should run the same protocols authorities do, but it should
@@ -100,7 +104,7 @@ pub fn new_full(config: Configuration<GenesisConfig>)
 	// Initialize seed for signing transaction using off-chain workers
 	#[cfg(feature = "ocw")]
 	{
-		if let Some(seed) = _dev_seed {
+		if let Some(seed) = dev_seed {
 			service
 				.keystore()
 				.write()
