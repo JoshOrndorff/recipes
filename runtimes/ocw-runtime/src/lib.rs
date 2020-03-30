@@ -1,4 +1,5 @@
-//! A Super Runtime. This runtime demonstrates most the recipe pallets in a single super runtime.
+//! This Runtime demonstrates how to config signed and unsigned transaction handler to be used
+//   by off-chain worker in its including pallets.
 
 #![cfg_attr(not(feature = "std"), no_std)]
 // `construct_runtime!` does a lot of recursion and requires us to increase the limit to 256.
@@ -20,6 +21,7 @@ use sp_runtime::{
 };
 use sp_runtime::traits::{
 	BlakeTwo256, Block as BlockT, IdentityLookup, ConvertInto, Verify, IdentifyAccount,
+	SaturatedConversion
 };
 use sp_api::impl_runtime_apis;
 use babe::SameAuthoritiesForever;
@@ -68,6 +70,8 @@ pub type Hash = H256;
 /// Digest item type.
 pub type DigestItem = generic::DigestItem<Hash>;
 
+pub use offchain_demo;
+
 /// Opaque types. These are used by the CLI to instantiate machinery that don't need to know
 /// the specifics of the runtime. They can then be made to be agnostic over specific formats
 /// of data like extrinsics, allowing for them to continue syncing the network through upgrades
@@ -94,8 +98,8 @@ pub mod opaque {
 
 /// This runtime version.
 pub const VERSION: RuntimeVersion = RuntimeVersion {
-	spec_name: create_runtime_str!("super-runtime"),
-	impl_name: create_runtime_str!("super-runtime"),
+	spec_name: create_runtime_str!("ocw-runtime"),
+	impl_name: create_runtime_str!("ocw-runtime"),
 	authoring_version: 1,
 	spec_version: 1,
 	impl_version: 1,
@@ -239,105 +243,62 @@ impl sudo::Trait for Runtime {
 
 // ---------------------- Recipe Pallet Configurations ----------------------
 
-impl adding_machine::Trait for Runtime {}
-
-impl basic_token::Trait for Runtime {
-	type Event = Event;
-}
-
-impl charity::Trait for Runtime {
-	type Event = Event;
-	type Currency = Balances;
-}
+// For `offchain-demo` pallet
 
 parameter_types! {
-	pub const MaxAddend: u32 = 1738;
-	pub const ClearFrequency: u32 = 10;
+	pub const GracePeriod: BlockNumber = 2;
 }
 
-impl constant_config::Trait for Runtime {
+type SubmitTransaction = system::offchain::TransactionSubmitter<
+	offchain_demo::crypto::Public,
+	Runtime,
+	UncheckedExtrinsic
+>;
+
+/// Payload data to be signed when making signed transaction from off-chain workers,
+///   inside `create_transaction` function.
+pub type SignedPayload = generic::SignedPayload<Call, SignedExtra>;
+
+impl offchain_demo::Trait for Runtime {
+	type Call = Call;
 	type Event = Event;
-	type MaxAddend = MaxAddend;
-	type ClearFrequency = ClearFrequency;
+	type SubmitSignedTransaction = SubmitTransaction;
+	type SubmitUnsignedTransaction = SubmitTransaction;
+	type GracePeriod = GracePeriod;
 }
 
-impl check_membership::Trait for Runtime {
-	type Event = Event;
-}
+impl system::offchain::CreateTransaction<Runtime, UncheckedExtrinsic> for Runtime {
+	type Public = <Signature as Verify>::Signer;
+	type Signature = Signature;
 
-// The following two configuration traits are for two different instances of the deafult-instance
-// pallet. Notice that only the second instance has to explicitly specify an instance.
-impl default_instance::Trait for Runtime {
-	type Event = Event;
-}
+	fn create_transaction<TSigner: system::offchain::Signer<Self::Public, Self::Signature>> (
+		call: Call,
+		public: Self::Public,
+		account: AccountId,
+		index: Index,
+	) -> Option<(Call, <UncheckedExtrinsic as sp_runtime::traits::Extrinsic>::SignaturePayload)> {
+		let period = BlockHashCount::get() as u64;
+		let current_block = System::block_number()
+			.saturated_into::<u64>().saturating_sub(1);
+		let tip = 0;
+		let extra: SignedExtra = (
+			system::CheckVersion::<Runtime>::new(),
+			system::CheckGenesis::<Runtime>::new(),
+			system::CheckEra::<Runtime>::from(generic::Era::mortal(period, current_block)),
+			system::CheckNonce::<Runtime>::from(index),
+			system::CheckWeight::<Runtime>::new(),
+			transaction_payment::ChargeTransactionPayment::<Runtime>::from(tip),
+		);
 
-impl default_instance::Trait<default_instance::Instance2> for Runtime {
-	type Event = Event;
-}
+		let raw_payload = SignedPayload::new(call, extra).map_err(|e| {
+			debug::native::warn!("SignedPayload error: {:?}", e);
+		}).ok()?;
 
-impl double_map::Trait for Runtime {
-	type Event = Event;
-}
-
-parameter_types! {
-	pub const ExecutionFrequency: u32 = 10;
-	pub const SignalQuota: u32 = 1000;
-	pub const TaskLimit: u32 = 10;
-}
-
-impl execution_schedule::Trait for Runtime {
-	type Event = Event;
-	type ExecutionFrequency = ExecutionFrequency;
-	type SignalQuota = SignalQuota;
-	type TaskLimit = TaskLimit;
-}
-
-impl generic_event::Trait for Runtime {
-	type Event = Event;
-}
-
-impl hello_substrate::Trait for Runtime {}
-
-// The following two configuration traits are for two different instances of the last-caller pallet
-impl last_caller::Trait<last_caller::Instance1> for Runtime {
-	type Event = Event;
-}
-
-impl last_caller::Trait<last_caller::Instance2> for Runtime {
-	type Event = Event;
-}
-
-
-impl ringbuffer_queue::Trait for Runtime {
-	type Event = Event;
-}
-
-impl randomness::Trait for Runtime {
-	type Event = Event;
-	type CollectiveFlipRandomnessSource = RandomnessCollectiveFlip;
-	type BabeRandomnessSource = Babe;
-}
-
-impl simple_event::Trait for Runtime {
-	type Event = Event;
-}
-
-impl simple_map::Trait for Runtime {
-	type Event = Event;
-}
-
-impl single_value::Trait for Runtime {}
-
-impl storage_cache::Trait for Runtime {
-	type Event = Event;
-}
-
-impl struct_storage::Trait for Runtime {
-	type Event = Event;
-}
-
-impl vec_set::Trait for Runtime {
-	type Event = Event;
+		let signature = TSigner::sign(public, &raw_payload)?;
+		let address = account;
+		let (call, extra, _) = raw_payload.deconstruct();
+		Some((call, (address, signature, extra)))
+	}
 }
 
 // ---------------------- End of Recipe Pallet Configurations ----------------------
@@ -357,27 +318,7 @@ construct_runtime!(
 		Sudo: sudo::{Module, Call, Config<T>, Storage, Event<T>},
 		TransactionPayment: transaction_payment::{Module, Storage},
 		// The Recipe Pallets
-		AddingMachine: adding_machine::{Module, Call, Storage},
-		BasicToken: basic_token::{Module, Call, Storage, Event<T>},
-		Charity: charity::{Module, Call, Storage, Event<T>},
-		CheckMembership: check_membership::{Module, Call, Storage, Event<T>},
-		ConstantConfig: constant_config::{Module, Call, Storage, Event},
-		DefaultInstance1: default_instance::{Module, Call, Storage, Event<T>},
-		DefaultInstance2: default_instance::<Instance2>::{Module, Call, Storage, Event<T>},
-		DoubleMap: double_map::{Module, Call, Storage, Event<T>},
-		ExecutionSchedule: execution_schedule::{Module, Call, Storage, Event<T>},
-		HelloSubstrate: hello_substrate::{Module, Call},
-		GenericEvent: generic_event::{Module, Call, Event<T>},
-		LastCaller1: last_caller::<Instance1>::{Module, Call, Storage, Event<T>},
-		LastCaller2: last_caller::<Instance2>::{Module, Call, Storage, Event<T>},
-		RingbufferQueue: ringbuffer_queue::{Module, Call, Storage, Event<T>},
-		RandomnessDemo: randomness::{Module, Call, Storage, Event},
-		SimpleEvent: simple_event::{Module, Call, Event},
-		SimpleMap: simple_map::{Module, Call, Storage, Event<T>},
-		SingleValue: single_value::{Module, Call, Storage},
-		StorageCache: storage_cache::{Module, Call, Storage, Event<T>},
-		StructStorage: struct_storage::{Module, Call, Storage, Event<T>},
-		VecSet: vec_set::{Module, Call, Storage, Event<T>},
+		OffchainDemo: offchain_demo::{Module, Call, Storage, Event<T>, ValidateUnsigned},
 	}
 );
 

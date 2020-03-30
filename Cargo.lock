@@ -5972,7 +5972,6 @@ dependencies = [
  "generic-event",
  "hello-substrate",
  "last-caller",
- "offchain-demo",
  "pallet-babe",
  "pallet-balances",
  "pallet-grandpa",

@@ -1,5 +1,5 @@
 [package]
-name = "super-runtime"
+name = "ocw-runtime"
 version = "2.0.0"
 authors = ["Anonymous"]
 edition = "2018"
@@ -11,25 +11,7 @@ safe-mix = { version = "1.0", default-features = false }
 balances = { package = 'pallet-balances', git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3', default-features = false }
 transaction-payment = { package = 'pallet-transaction-payment', git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3', default-features = false }
 # Recipe Pallets
-adding-machine = { path = "../../pallets/adding-machine", default-features = false }
-basic-token = { path = "../../pallets/basic-token", default-features = false }
-charity = { path = "../../pallets/charity", default-features = false }
-check-membership = { path = "../../pallets/check-membership", default-features = false }
-constant-config = { path = "../../pallets/constant-config", default-features = false }
-default-instance = { path = "../../pallets/default-instance", default-features = false }
-double-map = { path = "../../pallets/double-map", default-features = false }
-execution-schedule = { path = "../../pallets/execution-schedule", default-features = false }
-generic-event = { path = "../../pallets/generic-event", default-features = false }
-hello-substrate = { path = "../../pallets/hello-substrate", default-features = false }
-last-caller = { path = "../../pallets/last-caller", default-features = false }
-ringbuffer-queue = { path = "../../pallets/ringbuffer-queue", default_features = false }
-randomness = { path = "../../pallets/randomness", default_features = false }
-simple-event = { path = "../../pallets/simple-event", default_features = false }
-simple-map = { path = "../../pallets/simple-map", default-features = false }
-single-value = { path = "../../pallets/single-value", default-features = false }
-storage-cache = { path = "../../pallets/storage-cache", default-features = false }
-struct-storage = { path = "../../pallets/struct-storage", default-features = false }
-vec-set = { path = "../../pallets/vec-set", default-features = false }
+offchain-demo = { path = "../../pallets/offchain-demo", default-features = false }
 
 [dependencies.parity-scale-codec]
 default-features = false
@@ -199,23 +181,5 @@ std = [
 	"version/std",
 
 	# Recipes pallets
-	"adding-machine/std",
-	"basic-token/std",
-	"charity/std",
-	"check-membership/std",
-	"constant-config/std",
-	"default-instance/std",
-	"double-map/std",
-	"execution-schedule/std",
-	"generic-event/std",
-	"hello-substrate/std",
-	"last-caller/std",
-	"randomness/std",
-	"ringbuffer-queue/std",
-	"simple-event/std",
-	"simple-map/std",
-	"single-value/std",
-	"storage-cache/std",
-	"struct-storage/std",
-	"vec-set/std",
+	"offchain-demo/std",
 ]

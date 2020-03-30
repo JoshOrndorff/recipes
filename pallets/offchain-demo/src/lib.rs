@@ -94,20 +94,20 @@ decl_module! {
 
 		#[weight = SimpleDispatchInfo::FixedNormal(1000)]
 		pub fn submit_number_signed(origin, number: u64) -> DispatchResult {
-			debug::native::info!("submit_number_signed: {:?}", number);
+			debug::info!("submit_number_signed: {:?}", number);
 			let who = ensure_signed(origin)?;
 			Self::append_or_replace_number(Some(who), number)
 		}
 
 		#[weight = SimpleDispatchInfo::FixedNormal(1000)]
 		pub fn submit_number_unsigned(origin, _block: T::BlockNumber, number: u64) -> DispatchResult {
-			debug::native::info!("submit_number_unsigned: {:?}", number);
+			debug::info!("submit_number_unsigned: {:?}", number);
 			let _ = ensure_none(origin)?;
 			Self::append_or_replace_number(None, number)
 		}
 
 		fn offchain_worker(block_number: T::BlockNumber) {
-			debug::native::info!("Entering off-chain workers");
+			debug::info!("Entering off-chain workers");
 
 			let res = match Self::choose_tx_type(block_number) {
 				TransactionType::Signed => Self::send_signed(block_number),
@@ -115,7 +115,7 @@ decl_module! {
 				TransactionType::None => Ok(())
 			};
 
-			if let Err(e) = res { debug::native::error!("Error: {:?}", e); }
+			if let Err(e) = res { debug::error!("Error: {:?}", e); }
 		}
 	}
 }
@@ -134,7 +134,7 @@ impl<T: Trait> Module<T> {
 
 			// displaying the average
 			let average = numbers.iter().fold(0, {|acc, num| acc + num}) / (numbers.len() as u64);
-			debug::native::info!("Current average of numbers is: {}", average);
+			debug::info!("Current average of numbers is: {}", average);
 		});
 
 
@@ -162,7 +162,7 @@ impl<T: Trait> Module<T> {
 	fn send_signed(block_number: T::BlockNumber) -> Result<(), Error<T>> {
 		use system::offchain::SubmitSignedTransaction;
 		if !T::SubmitSignedTransaction::can_sign() {
-			debug::native::error!("No local account available");
+			debug::error!("No local account available");
 			return Err(<Error<T>>::SendSignedError);
 		}
 
@@ -175,11 +175,11 @@ impl<T: Trait> Module<T> {
 		// Submit signed will return a vector of results for all accounts that were found in the
 		// local keystore with expected `KEY_TYPE`.
 		let results = T::SubmitSignedTransaction::submit_signed(call);
-		for (acc, res) in &results {
+		for (_acc, res) in &results {
 			match res {
-				Ok(()) => { debug::native::info!("off-chain send_signed: acc: {}| number: {}", acc, submission); },
+				Ok(()) => { debug::native::info!("off-chain send_signed: acc: {}| number: {}", _acc, submission); },
 				Err(e) => {
-					debug::native::error!("[{:?}] Failed to submit signed tx: {:?}", acc, e);
+					debug::error!("[{:?}] Failed to submit signed tx: {:?}", _acc, e);
 					return Err(<Error<T>>::SendSignedError);
 				}
 			};
@@ -200,7 +200,7 @@ impl<T: Trait> Module<T> {
 		let call = Call::submit_number_unsigned(block_number, submission);
 
 		T::SubmitUnsignedTransaction::submit_unsigned(call).map_err(|e| {
-			debug::native::error!("Failed to submit unsigned tx: {:?}", e);
+			debug::error!("Failed to submit unsigned tx: {:?}", e);
 			<Error<T>>::SendUnsignedError
 		})
 	}

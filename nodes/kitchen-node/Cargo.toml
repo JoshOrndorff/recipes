@@ -39,13 +39,23 @@ sc-client = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0
 sc-basic-authorship = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
 sp-consensus = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
 
-# Edit these lines to point to a different runtime.
-# Your runtime must have the necessary pallets to support consensus (Babe, Grandpa, etc)
+# Pick one of the runtimes below.
+# Your runtime must have the necessary pallets to support consensus (Babe, Grandpa, etc).
+# ---
+# Common runtime configured with most Recipes pallets.
 runtime = { package = "super-runtime", path = "../../runtimes/super-runtime" }
+
+# Runtime with custom weight and fee calculation.
 # runtime = { package = "weight-fee-runtime", path = "../../runtimes/weight-fee-runtime"}
+
+# Runtime with off-chain worker enabled.
+# To use this runtime, compile kitchen-node with `ocw` feature enabled,
+#   `cargo build --release --features ocw`.
+# runtime = { package = "ocw-runtime", path = "../../runtimes/ocw-runtime" }
 
 # TODO Can't use this until the API runtime implements babe api
 # runtime = { package = "api-runtime", path = "../../runtimes/api-runtime" }
+# ---
 
 [build-dependencies]
 vergen = "3.0.4"
@@ -54,3 +64,6 @@ vergen = "3.0.4"
 git = 'https://github.com/paritytech/substrate.git'
 package = 'substrate-build-script-utils'
 tag = 'v2.0.0-alpha.3'
+
+[features]
+ocw = []
