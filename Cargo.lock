@@ -5930,7 +5930,7 @@ source = "git+https://github.com/paritytech/substrate.git?tag=v2.0.0-alpha.3#013
 [[package]]
 name = "substrate-fixed"
 version = "0.5.4"
-source = "git+https://github.com/encointer/substrate-fixed.git#0e1a79ddbfda567dd242961e628ebf4271781221"
+source = "git+https://github.com/encointer/substrate-fixed.git?tag=v0.5.4+sub_v0.1#2c52170fa02507dc5b52c516061302670860869a"
 dependencies = [
  "parity-scale-codec",
  "typenum",
