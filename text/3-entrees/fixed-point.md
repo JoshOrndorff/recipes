@@ -181,7 +181,7 @@ Many financial agreements involve interest for loaned or borrowed money. [Compou
 
 Our first example will look at discrete compounding interest. This is when interest is paid at a fixed interval. In our case, interest will be paid every ten blocks.
 
-For this implementation we've chosen to use Substrate's [`Percent` type](https://substrate.dev/rustdocs/master/sp_arithmetic/struct.Percent.html). It works nearly the same as `Permill`, but it represents numbers as "parts per hundred" rather than "parts er million". We could also have used Substrate-fixed for this implementation, but chose to save it for the next example.
+For this implementation we've chosen to use Substrate's [`Percent` type](https://substrate.dev/rustdocs/master/sp_arithmetic/struct.Percent.html). It works nearly the same as `Permill`, but it represents numbers as "parts per hundred" rather than "parts per million". We could also have used Substrate-fixed for this implementation, but chose to save it for the next example.
 
 The only storage item needed is a tracker of the account's balance. In order to focus on the fixed-point- and interest-related topics, this pallet does not actually interface with a `Currency`. Instead we just allow anyone to "deposit" or "withdraw" funds with no source or destination.
 
