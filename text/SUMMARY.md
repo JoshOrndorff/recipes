@@ -13,7 +13,7 @@
 - [Entrees](./3-entrees/index.md)
 	- [Runtime Storage API](./3-entrees/storage-api/index.md)
 		- [Cache Locally > Storage Calls](./3-entrees/storage-api/cache.md)
-		- [Sets](./3-entrees/storage-api/iterate.md)
+		- [Sets, Vectors, Iteration](./3-entrees/storage-api/sets-vecs-iteration.md)
 		- [Ordered Lists: Maps, Linked Maps](./3-entrees/storage-api/enumerated.md)
 		- [Subgroup Removal by Subkey: Double Maps](./3-entrees/storage-api/double.md)
 		- [Efficient Subgroup Removal by Subkey: Child Tries](./3-entrees/storage-api/childtries.md)
