@@ -175,7 +175,7 @@ As mentioned above, when you multiply two 32-bit numbers, you can end up with as
 ## Compounding Interest
 *[`pallets/compounding-interest`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/compounding-interest)*
 
-Many financial agreements involve interest for loaned or borrowed money. [Compounding interest](https://en.wikipedia.org/wiki/Compound_interest) is when new interest is paid on top of not only the original loan amount, the so-called "principle", but also any interest that has been previously paid.
+Many financial agreements involve interest for loaned or borrowed money. [Compounding interest](https://en.wikipedia.org/wiki/Compound_interest) is when new interest is paid on top of not only the original loan amount, the so-called "principal", but also any interest that has been previously paid.
 
 ### Discrete Compounding
 
@@ -222,7 +222,7 @@ fn on_finalize(n: T::BlockNumber) {
 	// Apply newly-accrued discrete interest every ten blocks
 	if (n % 10.into()).is_zero() {
 
-		// Calculate interest Interest = principle * rate * time
+		// Calculate interest Interest = principal * rate * time
 		// We can use the `*` operator for multiplying a `Percent` by a u64
 		// because `Percent` implements the trait Mul<u64>
 		let interest = Self::discrete_interest_rate() * DiscreteAccount::get() * 10;
@@ -241,7 +241,7 @@ fn on_finalize(n: T::BlockNumber) {
 }
 ```
 
-`on_finalize` is called at the end of every block, but we only want to pay interest every ten blocks, so the first thing we do is check whether this block is a multiple of ten. If it is we calculate the interest due by the formula `interest = principle * rate * time`. As the comments explain, there is some subtlety in the order of the multiplication. You can multiply `PerCent * u64` but not `u64 * PerCent`.
+`on_finalize` is called at the end of every block, but we only want to pay interest every ten blocks, so the first thing we do is check whether this block is a multiple of ten. If it is we calculate the interest due by the formula `interest = principal * rate * time`. As the comments explain, there is some subtlety in the order of the multiplication. You can multiply `PerCent * u64` but not `u64 * PerCent`.
 
 
 ### Continuously Compounding
@@ -256,7 +256,7 @@ To facilitate this implementation, we represent the state of the account not onl
 #[derive(Encode, Decode, Default)]
 pub struct ContinuousAccountData<BlockNumber> {
 	/// The balance of the account after last manual adjustment
-	principle: I32F32,
+	principal: I32F32,
 	/// The time (block height) at which the balance was last adjusted
 	deposit_date: BlockNumber,
 }
@@ -289,7 +289,7 @@ fn deposit_continuous(origin, val_to_add: u64) -> DispatchResult {
 	// Update storage for compounding account
 	ContinuousAccount::<T>::put(
 		ContinuousAccountData {
-			principle: old_value + I32F32::from_num(val_to_add),
+			principal: old_value + I32F32::from_num(val_to_add),
 			deposit_date: current_block,
 		}
 	);
@@ -306,7 +306,7 @@ This function itself isn't too insightful. It does the same basic things as the 
 fn value_of_continuous_account(now: &<T as system::Trait>::BlockNumber) -> I32F32 {
 	// Get the old state of the accout
 	let ContinuousAccountData{
-		principle,
+		principal,
 		deposit_date,
 	} = ContinuousAccount::<T>::get();
 
@@ -320,7 +320,7 @@ fn value_of_continuous_account(now: &<T as system::Trait>::BlockNumber) -> I32F3
 		.expect("Interest will not overflow account (at least not until the learner has learned enough about fixed point :)");
 
 	// Return the result interest = principal * e ^ (rate * time)
-	principle * exp_result
+	principal * exp_result
 }
 ```
 

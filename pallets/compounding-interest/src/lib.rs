@@ -27,7 +27,7 @@ pub trait Trait: system::Trait {
 #[derive(Encode, Decode, Default)]
 pub struct ContinuousAccountData<BlockNumber> {
 	/// The balance of the account after last manual adjustment
-	principle: I32F32,
+	principal: I32F32,
 	/// The time (block height) at which the balance was last adjusted
 	deposit_date: BlockNumber,
 }
@@ -72,7 +72,7 @@ decl_module! {
 			// Update storage for compounding account
 			ContinuousAccount::<T>::put(
 				ContinuousAccountData {
-					principle: old_value + I32F32::from_num(val_to_add),
+					principal: old_value + I32F32::from_num(val_to_add),
 					deposit_date: current_block,
 				}
 			);
@@ -92,7 +92,7 @@ decl_module! {
 			// Update storage for compounding account
 			ContinuousAccount::<T>::put(
 				ContinuousAccountData {
-					principle: old_value - I32F32::from_num(val_to_take),
+					principal: old_value - I32F32::from_num(val_to_take),
 					deposit_date: current_block,
 				}
 			);
@@ -134,7 +134,7 @@ decl_module! {
 			// Apply newly-accrued discrete interest every ten blocks
 			if (n % 10.into()).is_zero() {
 
-				// Calculate interest Interest = principle * rate * time
+				// Calculate interest Interest = principal * rate * time
 				// We can use the `*` operator for multiplying a `Percent` by a u64
 				// because `Percent` implements the trait Mul<u64>
 				let interest = Self::discrete_interest_rate() * DiscreteAccount::get() * 10;
@@ -160,7 +160,7 @@ impl<T: Trait> Module<T> {
 	fn value_of_continuous_account(now: &<T as system::Trait>::BlockNumber) -> I32F32 {
 		// Get the old state of the accout
 		let ContinuousAccountData{
-			principle,
+			principal,
 			deposit_date,
 		} = ContinuousAccount::<T>::get();
 
@@ -174,7 +174,7 @@ impl<T: Trait> Module<T> {
 			.expect("Interest will not overflow account (at least not until the learner has learned enough about fixed point :)");
 
 		// Return the result interest = principal * e ^ (rate * time)
-		principle * exp_result
+		principal * exp_result
 	}
 
 	/// A helper function to return the hard-coded 5% interest rate

@@ -2,7 +2,7 @@
   "Address": "AccountId",
   "LookupSource": "AccountId",
   "ContinuousAccountData": {
-    "principle": "u64",
+    "principal": "u64",
     "deposit_date": "BlockNumber"
   },
   "GroupIndex": "u32",
