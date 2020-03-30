@@ -1,6 +1,13 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
-/// configurable pallet constants in substrate
+//! A pallet to demonstrate configurable pallet constants.
+//! This pallet has a single storage value that can be added to by calling the
+//! `add_value` extrinsic.
+//!
+//! The value added cannot exceed a maximum which is specified as a configuration constant.
+//! The stored value is cleared (set to zero) at a regular interval which is specified
+//! as a configuration constant.
+
 use sp_runtime::traits::Zero;
 use frame_support::{
 	decl_event,
@@ -18,24 +25,25 @@ mod tests;
 pub trait Trait: system::Trait {
 	type Event: From<Event> + Into<<Self as system::Trait>::Event>;
 
-	// maximum amount added per invocation
+	/// Maximum amount added per invocation
 	type MaxAddend: Get<u32>;
 
-	// frequency with which the this value is deleted
+	/// Frequency with which the stored value is deleted
 	type ClearFrequency: Get<Self::BlockNumber>;
 }
 
 decl_storage! {
-	trait Store for Module<T: Trait> as Example {
+	trait Store for Module<T: Trait> as ConfigurableConstants {
 		SingleValue get(fn single_value): u32;
 	}
 }
 
 decl_event!(
 	pub enum Event {
-		// initial amount, amount added, final amount
+		/// The value has ben added to. The parameters are
+		/// ( initial amount, amount added, final amount)
 		Added(u32, u32, u32),
-		// cleared amount
+		/// The value has been cleared. The parameter is the value before clearing.
 		Cleared(u32),
 	}
 );
@@ -48,6 +56,7 @@ decl_module! {
 
 		const ClearFrequency: T::BlockNumber = T::ClearFrequency::get();
 
+		/// Add to the stored value. The `val_to_add` parameter cannot exceed the specified manimum.
 		fn add_value(origin, val_to_add: u32) -> DispatchResult {
 			let _ = ensure_signed(origin)?;
 			ensure!(val_to_add <= T::MaxAddend::get(), "value must be <= maximum add amount constant");
