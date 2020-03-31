@@ -3014,6 +3014,7 @@ dependencies = [
  "sc-consensus-manual-seal",
  "sc-executor 0.8.0-alpha.5",
  "sc-network 0.8.0-alpha.5",
+ "sc-rpc 2.0.0-alpha.5",
  "sc-service 0.8.0-alpha.5",
  "sc-transaction-pool 2.0.0-alpha.5",
  "sha3",

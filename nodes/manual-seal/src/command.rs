@@ -35,12 +35,13 @@ pub fn run(version: VersionInfo) -> sc_cli::Result<()> {
 			)
 		},
 		None => {
+			let instant_seal = opt.run.instant_seal;
 			opt.run.run.init(&version)?;
 			opt.run.run.update_config(&mut config, chain_spec::load_spec, &version)?;
 			opt.run.run.run(
 				config,
 				service::new_light,
-				|config: _| service::new_full(config, opt.run.manual_seal),
+				move |config: _| service::new_full(config, instant_seal),
 				&version,
 			)
 		},

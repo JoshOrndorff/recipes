@@ -17,7 +17,7 @@ repository = 'https://github.com/paritytech/substrate/'
 version = "2.0.0"
 
 [[bin]]
-name = 'basic-pow'
+name = 'manual-seal'
 path = 'src/main.rs'
 
 [dependencies]
@@ -33,6 +33,7 @@ sc-client-db = { git = "https://github.com/paritytech/substrate", branch = 'seun
 sc-client-api = { git = "https://github.com/paritytech/substrate", branch = 'seun-manual-seal-finalizer' }
 sp-blockchain = { git = "https://github.com/paritytech/substrate", branch = 'seun-manual-seal-finalizer' }
 sc-consensus-manual-seal = { git = "https://github.com/paritytech/substrate", branch = 'seun-manual-seal-finalizer' }
+sc-rpc = { git = "https://github.com/paritytech/substrate", branch = 'seun-manual-seal-finalizer' }
 runtime = { package = "pow-runtime", path = "../../runtimes/pow-runtime" }
 
 [dependencies.sp-timestamp]

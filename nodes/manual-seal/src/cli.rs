@@ -16,5 +16,5 @@ pub struct SuperRunCmd {
 	pub run: RunCmd,
 
 	#[structopt(long)]
-	pub manual_seal: bool,
+	pub instant_seal: bool,
 }

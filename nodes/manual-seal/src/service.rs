@@ -1,14 +1,13 @@
 //! Service and ServiceFactory implementation. Specialized wrapper over substrate service.
 
-use std::sync::Arc;
-use sc_client::LongestChain;
-use runtime::{self, GenesisConfig, opaque::Block, RuntimeApi};
-use sc_service::{error::{Error as ServiceError}, AbstractService, Configuration, ServiceBuilder};
+use sc_service::{
+	error::{Error as ServiceError}, AbstractService, Configuration,
+};
 use sp_inherents::InherentDataProviders;
 use sc_executor::native_executor_instance;
 pub use sc_executor::NativeExecutor;
-use sc_network::{config::DummyFinalityProofRequestBuilder};
-use sc_consensus_manual_seal::rpc::{ManualSealApi, ManualSeal};
+use sc_consensus_manual_seal::{rpc, self as manual_seal};
+use futures::future::Either;
 
 // Our native executor instance.
 native_executor_instance!(
@@ -16,17 +15,6 @@ native_executor_instance!(
 	runtime::api::dispatch,
 	runtime::native_version,
 );
-
-pub fn build_inherent_data_providers() -> Result<InherentDataProviders, ServiceError> {
-	let providers = InherentDataProviders::new();
-
-	providers
-		.register_provider(sp_timestamp::InherentDataProvider)
-		.map_err(Into::into)
-		.map_err(sp_consensus::error::Error::InherentData)?;
-
-	Ok(providers)
-}
 
 /// Starts a `ServiceBuilder` for a full service.
 ///
@@ -44,68 +32,77 @@ macro_rules! new_full_start {
 				let pool_api = sc_transaction_pool::FullChainApi::new(client.clone());
 				Ok(sc_transaction_pool::BasicPool::new(config, std::sync::Arc::new(pool_api)))
 			})?
-			.with_import_queue(|_config, client, select_chain, _transaction_pool| {
+			.with_import_queue(|_config, client, _select_chain, _transaction_pool| {
 				Ok(sc_consensus_manual_seal::import_queue::<_, sc_client_db::Backend<_>>(Box::new(client)))
 			})?;
 
 		builder
 	}}
 }
-type RpcExtension = jsonrpc_core::IoHandler<()>;
+type RpcExtension = jsonrpc_core::IoHandler<sc_rpc::Metadata>;
 /// Builds a new service for a full client.
-pub fn new_full(config: Configuration, manual_seal: bool)
-	-> Result<impl AbstractService, ServiceError>
-{
+pub fn new_full(config: Configuration, instant_seal: bool) -> Result<impl AbstractService, ServiceError> {
 	let inherent_data_providers = InherentDataProviders::new();
-	inherent_data_providers.register_provider(sp_timestamp::InherentDataProvider);
+	inherent_data_providers
+		.register_provider(sp_timestamp::InherentDataProvider)
+		.map_err(Into::into)
+		.map_err(sp_consensus::error::Error::InherentData)?;
 
-	let (tx, rx) = futures::channel::mpsc::channel(1000);
+	// channel for the rpc handler to communicate with the authorship task.
+	let (command_sink, commands_stream) = futures::channel::mpsc::channel(1000);
 	let builder = new_full_start!(config);
-	let service = builder
-		.with_rpc_extensions(|_| -> Result<RpcExtension, _> {
-			let mut io = jsonrpc_core::IoHandler::default();
-			if manual_seal {
+
+	let service = if instant_seal {
+		builder.build()?
+	} else {
+		builder
+			// manual-seal relies on receiving sealing requests aka EngineCommands over rpc.
+			.with_rpc_extensions(|_| -> Result<RpcExtension, _> {
+				let mut io = jsonrpc_core::IoHandler::default();
 				io.extend_with(
-					ManualSealApi::to_delegate(ManualSeal::new(tx)),
+					// We provide the rpc handler with the sending end of the channel to allow the rpc
+					// send EngineCommands to the background block authorship task.
+					rpc::ManualSealApi::to_delegate(rpc::ManualSeal::new(command_sink)),
 				);
-			}
+				Ok(io)
+			})?
+			.build()?
+	};
 
-			Ok(io)
-		})?
-		.build()?;
 
+	// Proposer object for block authorship.
 	let proposer = sc_basic_authorship::ProposerFactory::new(
 		service.client().clone(),
 		service.transaction_pool(),
 	);
 
-	let future = if manual_seal {
-		println!("Running Manual-seal");
-
-		futures::future::Either::Left(sc_consensus_manual_seal::run_manual_seal(
+	// Background authorship future.
+	let future = if instant_seal {
+		log::info!("Running Instant Sealing Engine");
+		Either::Right(manual_seal::run_instant_seal(
 			Box::new(service.client()),
 			proposer,
 			service.client().clone(),
 			service.transaction_pool().pool().clone(),
-			stream.unwrap(),
 			service.select_chain().unwrap(),
 			inherent_data_providers
 		))
 	} else {
-		println!("Running Instant-seal");
-
-		futures::future::Either::Right(sc_consensus_manual_seal::run_instant_seal(
+		log::info!("Running Manual Sealing Engine");
+		Either::Left(manual_seal::run_manual_seal(
 			Box::new(service.client()),
 			proposer,
 			service.client().clone(),
 			service.transaction_pool().pool().clone(),
+			commands_stream,
 			service.select_chain().unwrap(),
 			inherent_data_providers
 		))
 	};
 
+	// we spawn the future on a background thread managed by service.
 	service.spawn_essential_task(
-		if manual_seal { "manual-seal" } else { "instant-seal" },
+		if instant_seal { "instant-seal" } else { "manual-seal" },
 		future
 	);
 
