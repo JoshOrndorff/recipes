@@ -1,6 +1,6 @@
 use sp_core::{Pair, Public, sr25519};
 use sp_consensus_aura::sr25519::{AuthorityId as AuraId};
-use grandpa_primitives::{AuthorityId as GrandpaId};
+use sp_finality_grandpa::{AuthorityId as GrandpaId};
 use sc_service;
 use sp_runtime::traits::{Verify, IdentifyAccount};
 use runtime::{AccountId, GenesisConfig, Signature, genesis::testnet_genesis};
