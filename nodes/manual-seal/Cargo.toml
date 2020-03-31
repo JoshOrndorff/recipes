@@ -1,0 +1,88 @@
+[build-dependencies]
+vergen = '3.0.4'
+
+[build-dependencies.build-script-utils]
+git = 'https://github.com/paritytech/substrate.git'
+package = 'substrate-build-script-utils'
+branch = 'seun-manual-seal-finalizer'
+
+[package]
+authors = ['Anonymous']
+build = 'build.rs'
+edition = '2018'
+homepage = 'https://substrate.dev'
+license = 'Unlicense'
+name = 'manual-seal'
+repository = 'https://github.com/paritytech/substrate/'
+version = "2.0.0"
+
+[[bin]]
+name = 'basic-pow'
+path = 'src/main.rs'
+
+[dependencies]
+futures = '0.3.1'
+log = '0.4.8'
+structopt = '0.3.8'
+parity-scale-codec = '1.0.0'
+sha3 = "0.8"
+rand = { version = "0.7", features = ["small_rng"] }
+jsonrpc-core = "14.0.5"
+
+sc-client-db = { git = "https://github.com/paritytech/substrate", branch = 'seun-manual-seal-finalizer' }
+sc-client-api = { git = "https://github.com/paritytech/substrate", branch = 'seun-manual-seal-finalizer' }
+sp-blockchain = { git = "https://github.com/paritytech/substrate", branch = 'seun-manual-seal-finalizer' }
+sc-consensus-manual-seal = { git = "https://github.com/paritytech/substrate", branch = 'seun-manual-seal-finalizer' }
+runtime = { package = "pow-runtime", path = "../../runtimes/pow-runtime" }
+
+[dependencies.sp-timestamp]
+git = 'https://github.com/paritytech/substrate.git'
+branch = 'seun-manual-seal-finalizer'
+
+[dependencies.sc-basic-authorship]
+git = 'https://github.com/paritytech/substrate.git'
+branch = 'seun-manual-seal-finalizer'
+
+[dependencies.sc-cli]
+git = 'https://github.com/paritytech/substrate.git'
+branch = 'seun-manual-seal-finalizer'
+
+[dependencies.sc-client]
+git = 'https://github.com/paritytech/substrate.git'
+branch = 'seun-manual-seal-finalizer'
+
+[dependencies.sc-executor]
+git = 'https://github.com/paritytech/substrate.git'
+branch = 'seun-manual-seal-finalizer'
+
+[dependencies.sc-network]
+git = 'https://github.com/paritytech/substrate.git'
+branch = 'seun-manual-seal-finalizer'
+
+[dependencies.sc-service]
+git = 'https://github.com/paritytech/substrate.git'
+branch = 'seun-manual-seal-finalizer'
+
+[dependencies.sc-transaction-pool]
+git = 'https://github.com/paritytech/substrate.git'
+branch = 'seun-manual-seal-finalizer'
+
+[dependencies.sp-consensus]
+git = 'https://github.com/paritytech/substrate.git'
+branch = 'seun-manual-seal-finalizer'
+
+[dependencies.sp-core]
+git = 'https://github.com/paritytech/substrate.git'
+branch = 'seun-manual-seal-finalizer'
+
+[dependencies.sp-inherents]
+git = 'https://github.com/paritytech/substrate.git'
+branch = 'seun-manual-seal-finalizer'
+
+[dependencies.sp-runtime]
+git = 'https://github.com/paritytech/substrate.git'
+branch = 'seun-manual-seal-finalizer'
+
+[dependencies.sp-transaction-pool]
+git = 'https://github.com/paritytech/substrate.git'
+branch = 'seun-manual-seal-finalizer'
