@@ -5979,7 +5979,6 @@ dependencies = [
  "pallet-babe",
  "pallet-balances",
  "pallet-grandpa",
- "pallet-indices",
  "pallet-randomness-collective-flip",
  "pallet-sudo",
  "pallet-timestamp",
