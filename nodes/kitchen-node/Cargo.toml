@@ -1,9 +1,10 @@
 [package]
 name = "kitchen-node"
 version = "2.0.0"
-authors = ["Anonymous"]
-build = "build.rs"
 edition = "2018"
+authors = ['Joshy Orndorff', '4meta5', 'Jimmy Chu']
+homepage = 'https://substrate.dev/recipes'
+repository = 'https://github.com/substrate-developer-hub/recipes'
 
 [[bin]]
 name = "kitchen-node"
@@ -19,26 +20,25 @@ log = "0.4.8"
 tokio = "0.1.22"
 exit-future = "0.2.0"
 parking_lot = "0.9.0"
-codec = { package = "parity-scale-codec", version = "1.0.0" }
 trie-root = "0.15.2"
-sp-io = { version = '2.0.0-alpha.5' }
-sc-cli = { version = '0.8.0-alpha.5' }
-sc-client-api = { version = '2.0.0-alpha.5' }
-sp-core = { version = '2.0.0-alpha.5' }
-sp-runtime = { version = '2.0.0-alpha.5' }
-sc-executor = { version = '0.8.0-alpha.5' }
-sc-service = { version = '0.8.0-alpha.5' }
-sp-inherents = { version = '2.0.0-alpha.5' }
-sc-transaction-pool = { version = '2.0.0-alpha.5' }
-sp-transaction-pool = { version = '2.0.0-alpha.5' }
-sc-network = { version = '0.8.0-alpha.5' }
-sc-consensus-babe = { version = '0.8.0-alpha.5' }
-sp-consensus-babe = { version = '0.8.0-alpha.5' }
-sc-finality-grandpa = { version = '0.8.0-alpha.5' }
-sp-finality-grandpa = { version = '2.0.0-alpha.5' }
-sc-client = { version = '0.8.0-alpha.5' }
-sc-basic-authorship = { version = '0.8.0-alpha.5' }
-sp-consensus = { version = '0.8.0-alpha.5' }
+sp-io = '2.0.0-alpha.5'
+sc-cli = '0.8.0-alpha.5'
+sc-client-api = '2.0.0-alpha.5'
+sp-core = '2.0.0-alpha.5'
+sp-runtime = '2.0.0-alpha.5'
+sc-executor = '0.8.0-alpha.5'
+sc-service = '0.8.0-alpha.5'
+sp-inherents = '2.0.0-alpha.5'
+sc-transaction-pool = '2.0.0-alpha.5'
+sp-transaction-pool = '2.0.0-alpha.5'
+sc-network = '0.8.0-alpha.5'
+sc-consensus-babe = '0.8.0-alpha.5'
+sp-consensus-babe = '0.8.0-alpha.5'
+sc-finality-grandpa = '0.8.0-alpha.5'
+sp-finality-grandpa = '2.0.0-alpha.5'
+sc-client = '0.8.0-alpha.5'
+sc-basic-authorship = '0.8.0-alpha.5'
+sp-consensus = '0.8.0-alpha.5'
 
 # Pick one of the runtimes below.
 # Your runtime must have the necessary pallets to support consensus (Babe, Grandpa, etc).
