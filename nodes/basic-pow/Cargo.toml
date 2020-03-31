@@ -1,15 +1,9 @@
-[build-dependencies]
-vergen = '3.0.4'
-substrate-build-script-utils = '2.0.0-alpha.5'
-
 [package]
-authors = ['Anonymous']
-build = 'build.rs'
+authors = ['Joshy Orndorff']
 edition = '2018'
-homepage = 'https://substrate.dev'
-license = 'Unlicense'
+homepage = 'https://substrate.dev/recipes'
 name = 'basic-pow'
-repository = 'https://github.com/paritytech/substrate/'
+repository = 'https://github.com/substrate-developer-hub/recipes'
 version = "2.0.0"
 
 [[bin]]
@@ -28,53 +22,20 @@ sp-consensus-pow = { version = '0.8.0-alpha.5' }
 sc-client-api = { version = '2.0.0-alpha.5' }
 sp-blockchain = { version = '2.0.0-alpha.5' }
 runtime = { package = "pow-runtime", path = "../../runtimes/pow-runtime" }
+sp-timestamp = '2.0.0-alpha.5'
+sc-basic-authorship = '0.8.0-alpha.5'
+sc-cli = '0.8.0-alpha.5'
+sc-client = '0.8.0-alpha.5'
+sc-executor = '0.8.0-alpha.5'
+sc-network = '0.8.0-alpha.5'
+sc-service = '0.8.0-alpha.5'
+sc-transaction-pool = '2.0.0-alpha.5'
+sp-consensus = '0.8.0-alpha.5'
+sp-core = '2.0.0-alpha.5'
+sp-inherents = '2.0.0-alpha.5'
+sp-runtime = '2.0.0-alpha.5'
+sp-transaction-pool = '2.0.0-alpha.5'
 
-[dependencies.sp-timestamp]
-
-version = '2.0.0-alpha.5'
-
-[dependencies.sc-basic-authorship]
-version = '0.8.0-alpha.5'
-
-[dependencies.sc-cli]
-
-version = '0.8.0-alpha.5'
-
-[dependencies.sc-client]
-version = '0.8.0-alpha.5'
-
-[dependencies.sc-executor]
-
-version = '0.8.0-alpha.5'
-
-[dependencies.sc-network]
-
-version = '0.8.0-alpha.5'
-
-[dependencies.sc-service]
-
-version = '0.8.0-alpha.5'
-
-[dependencies.sc-transaction-pool]
-
-version = '2.0.0-alpha.5'
-
-[dependencies.sp-consensus]
-
-version = '0.8.0-alpha.5'
-
-[dependencies.sp-core]
-
-version = '2.0.0-alpha.5'
-
-[dependencies.sp-inherents]
-
-version = '2.0.0-alpha.5'
-
-[dependencies.sp-runtime]
-
-version = '2.0.0-alpha.5'
-
-[dependencies.sp-transaction-pool]
-
-version = '2.0.0-alpha.5'
+[build-dependencies]
+vergen = '3.0.4'
+substrate-build-script-utils = '2.0.0-alpha.5'
