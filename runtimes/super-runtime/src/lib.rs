@@ -8,6 +8,10 @@
 #[cfg(feature = "std")]
 include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 
+// Include the genesis helper module when building to std
+#[cfg(feature = "std")]
+pub mod genesis;
+
 use rstd::prelude::*;
 use sp_core::{OpaqueMetadata, H256};
 use sp_runtime::{
@@ -16,12 +20,10 @@ use sp_runtime::{
 };
 use sp_runtime::traits::{
 	BlakeTwo256, Block as BlockT, IdentityLookup, ConvertInto, Verify, IdentifyAccount,
-	SaturatedConversion
 };
 use sp_api::impl_runtime_apis;
 use babe::SameAuthoritiesForever;
 use grandpa::AuthorityList as GrandpaAuthorityList;
-use grandpa::fg_primitives;
 
 #[cfg(feature = "std")]
 use version::NativeVersion;
@@ -66,8 +68,6 @@ pub type Hash = H256;
 /// Digest item type.
 pub type DigestItem = generic::DigestItem<Hash>;
 
-pub use offchain_demo;
-
 /// Opaque types. These are used by the CLI to instantiate machinery that don't need to know
 /// the specifics of the runtime. They can then be made to be agnostic over specific formats
 /// of data like extrinsics, allowing for them to continue syncing the network through upgrades
@@ -83,7 +83,7 @@ pub mod opaque {
 	pub type Block = generic::Block<Header, UncheckedExtrinsic>;
 	/// Opaque block identifier type.
 	pub type BlockId = generic::BlockId<Block>;
-//	pub type SessionHandlers = (Grandpa, Babe); // TODO delete this if it isn't needed
+
 	impl_opaque_keys! {
 		pub struct SessionKeys {
 			pub grandpa: Grandpa, //TODO is this order correct? I changed stuff in chainspec.
@@ -238,6 +238,7 @@ impl sudo::Trait for Runtime {
 }
 
 // ---------------------- Recipe Pallet Configurations ----------------------
+
 impl adding_machine::Trait for Runtime {}
 
 impl basic_token::Trait for Runtime {
@@ -247,6 +248,10 @@ impl basic_token::Trait for Runtime {
 impl charity::Trait for Runtime {
 	type Event = Event;
 	type Currency = Balances;
+}
+
+impl compounding_interest::Trait for Runtime {
+	type Event = Event;
 }
 
 parameter_types! {
@@ -291,6 +296,10 @@ impl execution_schedule::Trait for Runtime {
 	type TaskLimit = TaskLimit;
 }
 
+impl fixed_point::Trait for Runtime {
+	type Event = Event;
+}
+
 impl generic_event::Trait for Runtime {
 	type Event = Event;
 }
@@ -306,61 +315,6 @@ impl last_caller::Trait<last_caller::Instance2> for Runtime {
 	type Event = Event;
 }
 
-// For offchain_demo
-
-parameter_types! {
-	pub const GracePeriod: BlockNumber = 2;
-}
-
-type SubmitTransaction = system::offchain::TransactionSubmitter<
-	offchain_demo::crypto::Public,
-	Runtime,
-	UncheckedExtrinsic
->;
-
-impl offchain_demo::Trait for Runtime {
-	type Call = Call;
-	type Event = Event;
-	type SubmitSignedTransaction = SubmitTransaction;
-	type SubmitUnsignedTransaction = SubmitTransaction;
-	type GracePeriod = GracePeriod;
-}
-
-impl system::offchain::CreateTransaction<Runtime, UncheckedExtrinsic> for Runtime {
-	type Public = <Signature as Verify>::Signer;
-	type Signature = Signature;
-
-	fn create_transaction<TSigner: system::offchain::Signer<Self::Public, Self::Signature>> (
-		call: Call,
-		public: Self::Public,
-		account: AccountId,
-		index: Index,
-	) -> Option<(Call, <UncheckedExtrinsic as sp_runtime::traits::Extrinsic>::SignaturePayload)> {
-		let period = BlockHashCount::get() as u64;
-		let current_block = System::block_number()
-			.saturated_into::<u64>().saturating_sub(1);
-		let tip = 0;
-		let extra: SignedExtra = (
-			system::CheckVersion::<Runtime>::new(),
-			system::CheckGenesis::<Runtime>::new(),
-			system::CheckEra::<Runtime>::from(generic::Era::mortal(period, current_block)),
-			system::CheckNonce::<Runtime>::from(index),
-			system::CheckWeight::<Runtime>::new(),
-			transaction_payment::ChargeTransactionPayment::<Runtime>::from(tip),
-		);
-
-		let raw_payload = SignedPayload::new(call, extra).map_err(|e| {
-			debug::native::warn!("SignedPayload error: {:?}", e);
-		}).ok()?;
-
-		let signature = TSigner::sign(public, &raw_payload)?;
-		let address = account;
-		let (call, extra, _) = raw_payload.deconstruct();
-		Some((call, (address, signature, extra)))
-	}
-}
-
-// end of offchain_demo setting
 
 impl ringbuffer_queue::Trait for Runtime {
 	type Event = Event;
@@ -394,6 +348,8 @@ impl vec_set::Trait for Runtime {
 	type Event = Event;
 }
 
+// ---------------------- End of Recipe Pallet Configurations ----------------------
+
 construct_runtime!(
 	pub enum Runtime where
 		Block = Block,
@@ -413,16 +369,17 @@ construct_runtime!(
 		BasicToken: basic_token::{Module, Call, Storage, Event<T>},
 		Charity: charity::{Module, Call, Storage, Event<T>},
 		CheckMembership: check_membership::{Module, Call, Storage, Event<T>},
+		ConmpoundingInterest: compounding_interest::{Module, Call, Storage, Event},
 		ConstantConfig: constant_config::{Module, Call, Storage, Event},
 		DefaultInstance1: default_instance::{Module, Call, Storage, Event<T>},
 		DefaultInstance2: default_instance::<Instance2>::{Module, Call, Storage, Event<T>},
 		DoubleMap: double_map::{Module, Call, Storage, Event<T>},
 		ExecutionSchedule: execution_schedule::{Module, Call, Storage, Event<T>},
+		FixedPoint: fixed_point::{Module, Call, Storage, Event},
 		HelloSubstrate: hello_substrate::{Module, Call},
 		GenericEvent: generic_event::{Module, Call, Event<T>},
 		LastCaller1: last_caller::<Instance1>::{Module, Call, Storage, Event<T>},
 		LastCaller2: last_caller::<Instance2>::{Module, Call, Storage, Event<T>},
-		OffchainDemo: offchain_demo::{Module, Call, Storage, Event<T>, ValidateUnsigned},
 		RingbufferQueue: ringbuffer_queue::{Module, Call, Storage, Event<T>},
 		RandomnessDemo: randomness::{Module, Call, Storage, Event},
 		SimpleEvent: simple_event::{Module, Call, Event},
@@ -459,9 +416,6 @@ pub type UncheckedExtrinsic = generic::UncheckedExtrinsic<Address, Call, Signatu
 pub type CheckedExtrinsic = generic::CheckedExtrinsic<AccountId, Call, SignedExtra>;
 /// Executive: handles dispatch to the various pallets.
 pub type Executive = executive::Executive<Runtime, Block, system::ChainContext<Runtime>, Runtime, AllModules>;
-/// Payload data to be signed when making signed transaction from off-chain workers,
-///   inside `create_transaction` function.
-pub type SignedPayload = generic::SignedPayload<Call, SignedExtra>;
 
 impl_runtime_apis! {
 	impl sp_api::Core<Block> for Runtime {
@@ -515,13 +469,13 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl offchain_primitives::OffchainWorkerApi<Block> for Runtime {
+	impl sp_offchain::OffchainWorkerApi<Block> for Runtime {
 		fn offchain_worker(header: &<Block as BlockT>::Header) {
 			Executive::offchain_worker(header)
 		}
 	}
 
-	impl fg_primitives::GrandpaApi<Block> for Runtime {
+	impl sp_finality_grandpa::GrandpaApi<Block> for Runtime {
 		fn grandpa_authorities() -> GrandpaAuthorityList {
 			Grandpa::grandpa_authorities()
 		}

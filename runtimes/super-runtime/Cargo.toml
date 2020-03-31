@@ -15,14 +15,15 @@ adding-machine = { path = "../../pallets/adding-machine", default-features = fal
 basic-token = { path = "../../pallets/basic-token", default-features = false }
 charity = { path = "../../pallets/charity", default-features = false }
 check-membership = { path = "../../pallets/check-membership", default-features = false }
+compounding-interest = { path = "../../pallets/compounding-interest", default-features = false }
 constant-config = { path = "../../pallets/constant-config", default-features = false }
 default-instance = { path = "../../pallets/default-instance", default-features = false }
 double-map = { path = "../../pallets/double-map", default-features = false }
 execution-schedule = { path = "../../pallets/execution-schedule", default-features = false }
+fixed-point = { path = "../../pallets/fixed-point", default-features = false }
 generic-event = { path = "../../pallets/generic-event", default-features = false }
 hello-substrate = { path = "../../pallets/hello-substrate", default-features = false }
 last-caller = { path = "../../pallets/last-caller", default-features = false }
-offchain-demo = { path = "../../pallets/offchain-demo", default-features = false }
 ringbuffer-queue = { path = "../../pallets/ringbuffer-queue", default_features = false }
 randomness = { path = "../../pallets/randomness", default_features = false }
 simple-event = { path = "../../pallets/simple-event", default_features = false }
@@ -47,6 +48,11 @@ rev = '1d8fa432949b99fac4ea0bebfdd6675dee973aa1'
 default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-io'
+rev = '1d8fa432949b99fac4ea0bebfdd6675dee973aa1'
+
+[dependencies.sp-offchain]
+default-features = false
+git = 'https://github.com/paritytech/substrate.git'
 rev = '1d8fa432949b99fac4ea0bebfdd6675dee973aa1'
 
 [dependencies.version]
@@ -79,6 +85,11 @@ package = 'pallet-babe'
 rev = '1d8fa432949b99fac4ea0bebfdd6675dee973aa1'
 
 [dependencies.sp-consensus-babe]
+default-features = false
+git = 'https://github.com/paritytech/substrate.git'
+rev = '1d8fa432949b99fac4ea0bebfdd6675dee973aa1'
+
+[dependencies.sp-finality-grandpa]
 default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 rev = '1d8fa432949b99fac4ea0bebfdd6675dee973aa1'
@@ -153,12 +164,6 @@ git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-inherents'
 rev = '1d8fa432949b99fac4ea0bebfdd6675dee973aa1'
 
-[dependencies.offchain-primitives]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'sp-offchain'
-rev = '1d8fa432949b99fac4ea0bebfdd6675dee973aa1'
-
 [build-dependencies]
 wasm-builder-runner = { package = "substrate-wasm-builder-runner", version = "1.0.4" }
 
@@ -167,16 +172,17 @@ default = ["std"]
 std = [
 	# Substrate dependencies alphabetically
 	"babe/std",
-	"sp-consensus-babe/std",
 	"balances/std",
 	"block-builder-api/std",
 	"executive/std",
 	"grandpa/std",
 	"indices/std",
 	"inherents/std",
-	"offchain-primitives/std",
 	"parity-scale-codec/std",
+	"sp-consensus-babe/std",
 	"sp-core/std",
+	"sp-offchain/std",
+	"sp-finality-grandpa/std",
 	"randomness-collective-flip/std",
 	"rstd/std",
 	"runtime-io/std",
@@ -198,14 +204,17 @@ std = [
 	"basic-token/std",
 	"charity/std",
 	"check-membership/std",
+	"compounding-interest/std",
 	"constant-config/std",
 	"default-instance/std",
 	"double-map/std",
 	"execution-schedule/std",
+	"fixed-point/std",
 	"generic-event/std",
 	"hello-substrate/std",
 	"last-caller/std",
-	"offchain-demo/std",
+	"randomness/std",
+	"ringbuffer-queue/std",
 	"simple-event/std",
 	"simple-map/std",
 	"single-value/std",

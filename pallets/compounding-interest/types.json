@@ -1,0 +1,6 @@
+{
+	"ContinuousAccountData": {
+		"principal": "u64",
+		"deposit_date": "BlockNumber"
+	}
+}

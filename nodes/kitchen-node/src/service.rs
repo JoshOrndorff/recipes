@@ -83,6 +83,10 @@ pub fn new_full(config: Configuration)
 	let force_authoring = config.force_authoring;
 	let name = config.name.clone();
 	let disable_grandpa = config.disable_grandpa;
+
+	// This variable is only used when ocw feature is enabled.
+	// Suppress the warning when ocw feature is not enabled.
+	#[allow(unused_variables)]
 	let dev_seed = config.dev_key_seed.clone();
 
 	// sentry nodes announce themselves as authorities to the network
@@ -104,15 +108,18 @@ pub fn new_full(config: Configuration)
 		.build()?;
 
 	// Initialize seed for signing transaction using off-chain workers
-	if let Some(seed) = dev_seed {
-		service
-			.keystore()
-			.write()
-			.insert_ephemeral_from_seed_by_type::<runtime::offchain_demo::crypto::Pair>(
-				&seed,
-				runtime::offchain_demo::KEY_TYPE,
-			)
-			.expect("Dev Seed should always succeed.");
+	#[cfg(feature = "ocw")]
+	{
+		if let Some(seed) = dev_seed {
+			service
+				.keystore()
+				.write()
+				.insert_ephemeral_from_seed_by_type::<runtime::offchain_demo::crypto::Pair>(
+					&seed,
+					runtime::offchain_demo::KEY_TYPE,
+				)
+				.expect("Dev Seed should always succeed.");
+		}
 	}
 
 	if participates_in_consensus {

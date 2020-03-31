@@ -60,7 +60,7 @@ pub trait Trait: system::Trait {
 
 This associated type needs to be specified by the runtime when the runtime is to include this pallet (implement this pallet trait).
 
-Looking at the [rustdoc of `SubmitSignedTransaction`](https://substrate.dev/rustdocs/v2.0.0-alpha.3/frame_system/offchain/trait.SubmitSignedTransaction.html), it says that we should use the `TransactionSubmitter` implementation type. Let's do that in our runtime.
+Looking at the [rustdoc of `SubmitSignedTransaction`](https://substrate.dev/rustdocs/master/frame_system/offchain/trait.SubmitSignedTransaction.html), it says that we should use the `TransactionSubmitter` implementation type. Let's do that in our runtime.
 
 src: [`runtimes/super-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/super-runtime/src/lib.rs)
 
@@ -79,7 +79,7 @@ impl offchain_demo::Trait for Runtime {
 }
 ```
 
-Now if we build the `kitchen-node`, we will see the compiler complain that the trait bound for `Runtime: frame_system::offchain::CreateTransaction` is not satisfied. We learn that when using `SubmitSignedTransaction`, we also need to have our runtime implement the [`CreateTransaction` trait](https://substrate.dev/rustdocs/v2.0.0-alpha.3/frame_system/offchain/trait.CreateTransaction.html). So let's implement this in our runtime.
+Now if we build the `kitchen-node`, we will see the compiler complain that the trait bound for `Runtime: frame_system::offchain::CreateTransaction` is not satisfied. We learn that when using `SubmitSignedTransaction`, we also need to have our runtime implement the [`CreateTransaction` trait](https://substrate.dev/rustdocs/master/frame_system/offchain/trait.CreateTransaction.html). So let's implement this in our runtime.
 
 src: [`runtimes/super-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/super-runtime/src/lib.rs)
 
@@ -322,3 +322,15 @@ As in signed transactions, we prepare a function reference with its parameters a
 ## Testing
 
 For writing test cases for off-chain worker, refer to our [testing section](./testing/off-chain-workers.md).
+
+## Compiling this Pallet
+
+This `offchain-demo` pallet is included in the [ocw-runtime](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime). That runtime can be used in the kitchen node. Edit `nodes/kitchen-node/Cargo.toml` to enable the `ocw-runtime`. In order to use the Offchain worker, the node must inject some keys into its keystore, and that is enabled with a feature flag. To build the kitchen node with this feature use these commands.
+
+```bash
+# Switch to kitchen-node directory
+cd nodes/kitchen-node
+
+# Compile with OCW feature
+cargo build --release --features ocw
+```

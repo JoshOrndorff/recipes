@@ -1,9 +1,0 @@
-[package]
-name = 'pow-genesis'
-version = "2.0.0"
-authors = ["Anonymous"]
-edition = "2018"
-
-[dependencies.runtime]
-package = 'pow-runtime'
-path = '../pow-runtime'

@@ -1,6 +1,10 @@
 {
   "Address": "AccountId",
   "LookupSource": "AccountId",
+  "ContinuousAccountData": {
+    "principal": "u64",
+    "deposit_date": "BlockNumber"
+  },
   "GroupIndex": "u32",
   "TaskId": "Vec<u8>",
   "PriorityScore": "u32",

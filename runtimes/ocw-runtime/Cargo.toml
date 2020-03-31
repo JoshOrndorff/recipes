@@ -1,5 +1,5 @@
 [package]
-name = "weight-fee-runtime"
+name = "ocw-runtime"
 version = "2.0.0"
 authors = ["Anonymous"]
 edition = "2018"
@@ -7,7 +7,11 @@ edition = "2018"
 [dependencies]
 serde = { version = "1.0", optional = true, features = ["derive"] }
 safe-mix = { version = "1.0", default-features = false }
-weights = { path = "../../pallets/weights", default-features = false }
+# Substrate Pallets
+balances = { package = 'pallet-balances', git = 'https://github.com/paritytech/substrate.git', rev = '1d8fa432949b99fac4ea0bebfdd6675dee973aa1', default-features = false }
+transaction-payment = { package = 'pallet-transaction-payment', git = 'https://github.com/paritytech/substrate.git', rev = '1d8fa432949b99fac4ea0bebfdd6675dee973aa1', default-features = false }
+# Recipe Pallets
+offchain-demo = { path = "../../pallets/offchain-demo", default-features = false }
 
 [dependencies.parity-scale-codec]
 default-features = false
@@ -47,24 +51,6 @@ rev = '1d8fa432949b99fac4ea0bebfdd6675dee973aa1'
 default-features = false
 git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-session'
-rev = '1d8fa432949b99fac4ea0bebfdd6675dee973aa1'
-
-[dependencies.balances]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'pallet-balances'
-rev = '1d8fa432949b99fac4ea0bebfdd6675dee973aa1'
-
-[dependencies.generic-asset]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'pallet-generic-asset'
-rev = '1d8fa432949b99fac4ea0bebfdd6675dee973aa1'
-
-[dependencies.transaction-payment]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'pallet-transaction-payment'
 rev = '1d8fa432949b99fac4ea0bebfdd6675dee973aa1'
 
 [dependencies.babe]
@@ -159,33 +145,33 @@ git = 'https://github.com/paritytech/substrate.git'
 package = 'sp-offchain'
 rev = '1d8fa432949b99fac4ea0bebfdd6675dee973aa1'
 
-
 [build-dependencies]
 wasm-builder-runner = { package = "substrate-wasm-builder-runner", version = "1.0.4" }
 
 [features]
 default = ["std"]
 std = [
+	# Substrate dependencies alphabetically
 	"babe/std",
 	"balances/std",
 	"block-builder-api/std",
 	"executive/std",
-	"generic-asset/std",
 	"grandpa/std",
 	"indices/std",
 	"inherents/std",
 	"offchain-primitives/std",
 	"parity-scale-codec/std",
+	"sp-consensus-babe/std",
+	"sp-core/std",
+	"sp-finality-grandpa/std",
 	"randomness-collective-flip/std",
 	"rstd/std",
 	"runtime-io/std",
 	"safe-mix/std",
 	"serde",
 	"sp-api/std",
-	"sp-consensus-babe/std",
-	"sp-finality-grandpa/std",
-	"sp-core/std",
 	"sp-runtime/std",
+	"sp-transaction-pool/std",
 	"substrate-session/std",
 	"sudo/std",
 	"support/std",
@@ -193,6 +179,7 @@ std = [
 	"timestamp/std",
 	"transaction-payment/std",
 	"version/std",
-	"weights/std",
-  "sp-transaction-pool/std",
+
+	# Recipes pallets
+	"offchain-demo/std",
 ]

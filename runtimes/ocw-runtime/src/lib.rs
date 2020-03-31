@@ -1,9 +1,9 @@
-//! A Super Runtime. This runtime demonstrates all the recipes in the kitchen
-//! in a single super runtime.
+//! This Runtime demonstrates how to config signed and unsigned transaction handler to be used
+//   by off-chain worker in its including pallets.
 
 #![cfg_attr(not(feature = "std"), no_std)]
 // `construct_runtime!` does a lot of recursion and requires us to increase the limit to 256.
-#![recursion_limit="256"]
+#![recursion_limit = "256"]
 
 // Make the WASM binary available.
 #[cfg(feature = "std")]
@@ -16,44 +16,43 @@ pub mod genesis;
 use rstd::prelude::*;
 use sp_core::{OpaqueMetadata, H256};
 use sp_runtime::{
-    ApplyExtrinsicResult,
-	transaction_validity::TransactionValidity, generic, create_runtime_str,
-	impl_opaque_keys, AnySignature
+	ApplyExtrinsicResult, transaction_validity::TransactionValidity, generic, create_runtime_str,
+	impl_opaque_keys, MultiSignature
 };
-use sp_runtime::traits::{BlakeTwo256, Block as BlockT, IdentityLookup, Verify, Convert};
-use support::traits::Get;
-use support::weights::Weight;
-use babe::SameAuthoritiesForever;
-use grandpa::{AuthorityId as GrandpaId, AuthorityWeight as GrandpaWeight};
+use sp_runtime::traits::{
+	BlakeTwo256, Block as BlockT, IdentityLookup, ConvertInto, Verify, IdentifyAccount,
+	SaturatedConversion
+};
 use sp_api::impl_runtime_apis;
-use version::RuntimeVersion;
+use babe::SameAuthoritiesForever;
+use grandpa::AuthorityList as GrandpaAuthorityList;
+
 #[cfg(feature = "std")]
 use version::NativeVersion;
-
-// These structs are used in one of the commented-by-default implementations of
-// transaction_payment::Trait. Don't warn when they are unused.
-#[allow(unused_imports)]
-use sp_runtime::traits::ConvertInto;
-#[allow(unused_imports)]
-use generic_asset::{SpendingAssetCurrency, AssetCurrency, AssetIdProvider};
+use version::RuntimeVersion;
 
 // A few exports that help ease life for downstream crates.
 #[cfg(any(feature = "std", test))]
 pub use sp_runtime::BuildStorage;
 pub use timestamp::Call as TimestampCall;
 pub use balances::Call as BalancesCall;
-pub use sp_runtime::{Permill, Perbill};
-pub use support::{StorageValue, construct_runtime, parameter_types, traits::Randomness};
+pub use sp_runtime::{Perbill, Permill};
+pub use support::{
+	StorageValue, construct_runtime, parameter_types,
+	traits::Randomness,
+	weights::Weight,
+	debug,
+};
 
 /// An index to a block.
 pub type BlockNumber = u32;
 
 /// Alias to 512-bit hash when used in the context of a transaction signature on the chain.
-pub type Signature = AnySignature;
+pub type Signature = MultiSignature;
 
 /// Some way of identifying an account on the chain. We intentionally make it equivalent
 /// to the public key of our transaction signing scheme.
-pub type AccountId = <Signature as Verify>::Signer;
+pub type AccountId = <<Signature as Verify>::Signer as IdentifyAccount>::AccountId;
 
 /// The type for looking up accounts. We don't expect more than 4 billion of them, but you
 /// never know...
@@ -71,6 +70,8 @@ pub type Hash = H256;
 /// Digest item type.
 pub type DigestItem = generic::DigestItem<Hash>;
 
+pub use offchain_demo;
+
 /// Opaque types. These are used by the CLI to instantiate machinery that don't need to know
 /// the specifics of the runtime. They can then be made to be agnostic over specific formats
 /// of data like extrinsics, allowing for them to continue syncing the network through upgrades
@@ -87,11 +88,9 @@ pub mod opaque {
 	/// Opaque block identifier type.
 	pub type BlockId = generic::BlockId<Block>;
 
-	pub type SessionHandlers = (Grandpa, Babe);
-
 	impl_opaque_keys! {
 		pub struct SessionKeys {
-			pub grandpa: Grandpa,
+			pub grandpa: Grandpa, //TODO is this order correct? I changed stuff in chainspec.
 			pub babe: Babe,
 		}
 	}
@@ -99,28 +98,27 @@ pub mod opaque {
 
 /// This runtime version.
 pub const VERSION: RuntimeVersion = RuntimeVersion {
-	spec_name: create_runtime_str!("weight-fee-runtime"),
-	impl_name: create_runtime_str!("weight-fee-runtime"),
+	spec_name: create_runtime_str!("ocw-runtime"),
+	impl_name: create_runtime_str!("ocw-runtime"),
 	authoring_version: 1,
 	spec_version: 1,
 	impl_version: 1,
 	apis: RUNTIME_API_VERSIONS,
 };
 
-/// Constants for Babe.
 pub const MILLISECS_PER_BLOCK: u64 = 6000;
 
 pub const SLOT_DURATION: u64 = MILLISECS_PER_BLOCK;
-
-pub const EPOCH_DURATION_IN_BLOCKS: u32 = 10 * MINUTES;
 
 // These time units are defined in number of blocks.
 pub const MINUTES: BlockNumber = 60_000 / (MILLISECS_PER_BLOCK as BlockNumber);
 pub const HOURS: BlockNumber = MINUTES * 60;
 pub const DAYS: BlockNumber = HOURS * 24;
 
+// Some BABE-specific stuff
 // 1 in 4 blocks (on average, not counting collisions) will be primary babe blocks.
 pub const PRIMARY_PROBABILITY: (u64, u64) = (1, 4);
+pub const EPOCH_DURATION_IN_BLOCKS: u32 = 10 * MINUTES;
 
 /// The version infromation used to identify this runtime when compiled natively.
 #[cfg(feature = "std")]
@@ -224,11 +222,18 @@ impl balances::Trait for Runtime {
 	type AccountStore = System;
 }
 
-impl generic_asset::Trait for Runtime {
-    /// The type for recording an account's balance.
-    type Balance = Balance;
-    type AssetId = u32;
-    type Event = Event;
+parameter_types! {
+	pub const TransactionBaseFee: u128 = 0;
+	pub const TransactionByteFee: u128 = 1;
+}
+
+impl transaction_payment::Trait for Runtime {
+	type Currency = balances::Module<Runtime>;
+	type OnTransactionPayment = ();
+	type TransactionBaseFee = TransactionBaseFee;
+	type TransactionByteFee = TransactionByteFee;
+	type WeightToFee = ConvertInto;
+	type FeeMultiplierUpdate = ();
 }
 
 impl sudo::Trait for Runtime {
@@ -236,108 +241,67 @@ impl sudo::Trait for Runtime {
 	type Call = Call;
 }
 
-impl weights::Trait for Runtime {}
+// ---------------------- Recipe Pallet Configurations ----------------------
 
-
-// --------------------- Multiple Options for WeightToFee -----------------------
-
-/// Convert from weight to balance via a simple coefficient multiplication. The associated type C
-/// encapsulates a constant in units of balance per weight.
-pub struct LinearWeightToFee<C>(rstd::marker::PhantomData<C>);
-
-impl<C> Convert<Weight, Balance> for LinearWeightToFee<C>
-	where C: Get<Balance> {
-
-	fn convert(w: Weight) -> Balance {
-		// substrate-node a weight of 10_000 (smallest non-zero weight) to be mapped to 10^7 units of
-		// fees, hence:
-		let coefficient = C::get();
-		Balance::from(w).saturating_mul(coefficient)
-	}
-}
-
-/// Convert from weight to balance via a quadratic curve. The type parameters encapsulate the
-/// coefficients.
-pub struct QuadraticWeightToFee<C0, C1, C2>(C0, C1, C2);
-
-impl<C0, C1, C2> Convert<Weight, Balance> for QuadraticWeightToFee<C0, C1, C2>
-	where C0: Get<Balance>, C1: Get<Balance>, C2: Get<Balance> {
-
-	fn convert(w: Weight) -> Balance {
-		let c0 = C0::get();
-		let c1 = C1::get();
-		let c2 = C2::get();
-		let w = Balance::from(w);
-
-		// All the safe math reduces to
-		// c0 + c1 * w + c2 * w * w
-
-		let c1w = c1.saturating_mul(w);
-		let c2w2 = c2.saturating_mul(w).saturating_mul(w);
-
-		c0.saturating_add(c1w).saturating_add(c2w2)
-	}
-}
-
-// --------------------- An Option to Currency to Collect Fees -----------------------
-#[allow(dead_code)]
-type FixedGenericAsset<T> = AssetCurrency<T, FixedAssetId>;
-
-pub struct FixedAssetId;
-impl AssetIdProvider for FixedAssetId {
-	type AssetId = u32;
-	fn asset_id() -> Self::AssetId {
-		13
-	}
-}
+// For `offchain-demo` pallet
 
 parameter_types! {
-	// Used with LinearWeightToFee conversion. Leaving this constant in tact when using other
-	// conversion techniques is harmless.
-	pub const FeeWeightRatio: u128 = 1_000;
-
-	// Used with QuadraticWeightToFee conversion. Leaving these constants in tact when using other
-	// conversion techniques is harmless.
-	pub const WeightFeeConstant: u128 = 1_000;
-	pub const WeightFeeLinear: u128 = 100;
-	pub const WeightFeeQuadratic : u128 = 10;
-
-	// Establish the base- and byte-fees. These are used in all configurations.
-	pub const TransactionBaseFee: u128 = 0;
-	pub const TransactionByteFee: u128 = 1;
+	pub const GracePeriod: BlockNumber = 2;
 }
 
-impl transaction_payment::Trait for Runtime {
+type SubmitTransaction = system::offchain::TransactionSubmitter<
+	offchain_demo::crypto::Public,
+	Runtime,
+	UncheckedExtrinsic
+>;
 
-	// The asset in which fees will be collected.
-	// Enable exactly one of the following options.
-	type Currency = Balances; // The balances pallet (The most common choice)
-	//type Currency = FixedGenericAsset<Self>; // A generic asset whose ID is hard-coded above.
-	//type Currency = SpendingAssetCurrency<Self>; // A generic asset whose ID is stored in the
-	                                               // generic_asset pallet's runtime storage
+/// Payload data to be signed when making signed transaction from off-chain workers,
+///   inside `create_transaction` function.
+pub type SignedPayload = generic::SignedPayload<Call, SignedExtra>;
 
-	// What to do when fees are paid. () means take no additional actions.
-	type OnTransactionPayment = ();
-
-	// Base fee is a fixed amount applied to every transaction
-	type TransactionBaseFee = TransactionBaseFee;
-
-	// Byte fee is multiplied by the length of the
-	// serialized transaction in bytes
-	type TransactionByteFee = TransactionByteFee;
-
-	// Function to convert dispatch weight to a chargeable fee.
-	// Enable exactly one of the following options.
-	//type WeightToFee = ConvertInto;
-	//type WeightToFee = LinearWeightToFee<FeeWeightRatio>;
-	type WeightToFee = QuadraticWeightToFee<WeightFeeConstant, WeightFeeLinear, WeightFeeQuadratic>;
-
-	//TODO Explore how to change FeeMultiplierUpdate
-	type FeeMultiplierUpdate = ();
+impl offchain_demo::Trait for Runtime {
+	type Call = Call;
+	type Event = Event;
+	type SubmitSignedTransaction = SubmitTransaction;
+	type SubmitUnsignedTransaction = SubmitTransaction;
+	type GracePeriod = GracePeriod;
 }
 
-// --------------------------------------------
+impl system::offchain::CreateTransaction<Runtime, UncheckedExtrinsic> for Runtime {
+	type Public = <Signature as Verify>::Signer;
+	type Signature = Signature;
 
+	fn create_transaction<TSigner: system::offchain::Signer<Self::Public, Self::Signature>> (
+		call: Call,
+		public: Self::Public,
+		account: AccountId,
+		index: Index,
+	) -> Option<(Call, <UncheckedExtrinsic as sp_runtime::traits::Extrinsic>::SignaturePayload)> {
+		let period = BlockHashCount::get() as u64;
+		let current_block = System::block_number()
+			.saturated_into::<u64>().saturating_sub(1);
+		let tip = 0;
+		let extra: SignedExtra = (
+			system::CheckVersion::<Runtime>::new(),
+			system::CheckGenesis::<Runtime>::new(),
+			system::CheckEra::<Runtime>::from(generic::Era::mortal(period, current_block)),
+			system::CheckNonce::<Runtime>::from(index),
+			system::CheckWeight::<Runtime>::new(),
+			transaction_payment::ChargeTransactionPayment::<Runtime>::from(tip),
+		);
+
+		let raw_payload = SignedPayload::new(call, extra).map_err(|e| {
+			debug::native::warn!("SignedPayload error: {:?}", e);
+		}).ok()?;
+
+		let signature = TSigner::sign(public, &raw_payload)?;
+		let address = account;
+		let (call, extra, _) = raw_payload.deconstruct();
+		Some((call, (address, signature, extra)))
+	}
+}
+
+// ---------------------- End of Recipe Pallet Configurations ----------------------
 
 construct_runtime!(
 	pub enum Runtime where
@@ -350,12 +314,11 @@ construct_runtime!(
 		Babe: babe::{Module, Call, Storage, Config, Inherent(Timestamp)},
 		Grandpa: grandpa::{Module, Call, Storage, Config, Event},
 		Balances: balances::{Module, Call, Storage, Config<T>, Event<T>},
-		GenericAsset: generic_asset::{Module, Call, Storage, Config<T>, Event<T>},
 		RandomnessCollectiveFlip: randomness_collective_flip::{Module, Call, Storage},
 		Sudo: sudo::{Module, Call, Config<T>, Storage, Event<T>},
 		TransactionPayment: transaction_payment::{Module, Storage},
 		// The Recipe Pallets
-		Weights: weights::{Module, Call, Storage},
+		OffchainDemo: offchain_demo::{Module, Call, Storage, Event<T>, ValidateUnsigned},
 	}
 );
 
@@ -376,7 +339,7 @@ pub type SignedExtra = (
 	system::CheckEra<Runtime>,
 	system::CheckNonce<Runtime>,
 	system::CheckWeight<Runtime>,
-	transaction_payment::ChargeTransactionPayment<Runtime>
+	transaction_payment::ChargeTransactionPayment<Runtime>,
 );
 /// Unchecked extrinsic type as expected by this runtime.
 pub type UncheckedExtrinsic = generic::UncheckedExtrinsic<Address, Call, Signature, SignedExtra>;
@@ -409,6 +372,10 @@ impl_runtime_apis! {
 	impl block_builder_api::BlockBuilder<Block> for Runtime {
 		fn apply_extrinsic(extrinsic: <Block as BlockT>::Extrinsic) -> ApplyExtrinsicResult {
 			Executive::apply_extrinsic(extrinsic)
+		}
+
+		fn apply_trusted_extrinsic(extrinsic: <Block as BlockT>::Extrinsic) -> ApplyExtrinsicResult {
+			Executive::apply_trusted_extrinsic(extrinsic)
 		}
 
 		fn finalize_block() -> <Block as BlockT>::Header {
@@ -444,7 +411,7 @@ impl_runtime_apis! {
 	}
 
 	impl sp_finality_grandpa::GrandpaApi<Block> for Runtime {
-		fn grandpa_authorities() -> Vec<(GrandpaId, GrandpaWeight)> {
+		fn grandpa_authorities() -> GrandpaAuthorityList {
 			Grandpa::grandpa_authorities()
 		}
 	}
