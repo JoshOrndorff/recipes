@@ -86,14 +86,14 @@ fn deposit_withdraw_discrete_works() {
 		// Check for the correct event
 		assert_eq!(System::events(), vec![
 			EventRecord {
-				phase: Phase::ApplyExtrinsic(0),
+				phase: Phase::Initialization,
 				event: TestEvent::fixed_point(Event::DepositedDiscrete(
 					10,
 				)),
 				topics: vec![],
 			},
 			EventRecord {
-				phase: Phase::ApplyExtrinsic(0),
+				phase: Phase::Initialization,
 				event: TestEvent::fixed_point(Event::WithdrewDiscrete(
 					5,
 				)),
@@ -122,14 +122,14 @@ fn discrete_interest_works() {
 		// Check for the correct event
 		assert_eq!(System::events(), vec![
 			EventRecord {
-				phase: Phase::ApplyExtrinsic(0),
+				phase: Phase::Initialization,
 				event: TestEvent::fixed_point(Event::DepositedDiscrete(
 					100,
 				)),
 				topics: vec![],
 			},
 			EventRecord {
-				phase: Phase::ApplyExtrinsic(0),
+				phase: Phase::Initialization,
 				event: TestEvent::fixed_point(Event::DiscreteInterestApplied(
 					50,
 				)),

@@ -108,7 +108,7 @@ fn flip_works() {
 		// Check for the event
 		assert_eq!(System::events(), vec![
 			EventRecord {
-				phase: Phase::ApplyExtrinsic(0),
+				phase: Phase::Initialization,
 				event: TestEvent::randomness(Event::CollectiveFlip(
 					H256::zero(),
 					H256::zero(),
@@ -127,7 +127,7 @@ fn babe_works() {
 		// Check for the event
 		assert_eq!(System::events(), vec![
 			EventRecord {
-				phase: Phase::ApplyExtrinsic(0),
+				phase: Phase::Initialization,
 				event: TestEvent::randomness(Event::BabeVRF(
 					// Let's see how deterministic these are...
 					H256::from_slice(&[0x89, 0xeb, 0x0d, 0x6a, 0x8a, 0x69, 0x1d, 0xae, 0x2c, 0xd1, 0x5e, 0xd0, 0x36, 0x99, 0x31, 0xce, 0x0a, 0x94, 0x9e, 0xca, 0xfa, 0x5c, 0x3f, 0x93, 0xf8, 0x12, 0x18, 0x33, 0x64, 0x6e, 0x15, 0xc3]),
