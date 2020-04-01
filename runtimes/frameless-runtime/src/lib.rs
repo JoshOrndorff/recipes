@@ -21,7 +21,7 @@ use parity_scale_codec::{Decode, Encode};
 use rstd::prelude::*;
 use sp_api::impl_runtime_apis;
 use sp_runtime::traits::{
-    BlakeTwo256, Block as BlockT, Extrinsic, GetNodeBlockType, GetRuntimeBlockType, NumberFor,
+    BlakeTwo256, Block as BlockT, Extrinsic, GetNodeBlockType, GetRuntimeBlockType,
 };
 use sp_runtime::{
     create_runtime_str, generic,
@@ -178,7 +178,7 @@ pub const HEADER_KEY: [u8; 6] = *b"header";
 // );
 /// Unchecked extrinsic type as expected by this runtime.
 
-#[cfg_attr(feature = "std", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "std", derive(Serialize, Deserialize, parity_util_mem::MallocSizeOf))]
 #[derive(Encode, Decode, Debug, PartialEq, Eq, Clone)]
 pub enum FramelessTransaction {
     Set,
@@ -326,7 +326,7 @@ impl_runtime_apis! {
     }
 
     impl offchain_primitives::OffchainWorkerApi<Block> for Runtime {
-        fn offchain_worker(_number: NumberFor<Block>) {
+        fn offchain_worker(_header: &<Block as BlockT>::Header) {
             // we do not do anything.
         }
     }
@@ -334,6 +334,12 @@ impl_runtime_apis! {
     impl sp_session::SessionKeys<Block> for Runtime {
         fn generate_session_keys(seed: Option<Vec<u8>>) -> Vec<u8> {
             seed.unwrap_or(vec![0])
+        }
+
+        fn decode_session_keys(
+            _encoded: Vec<u8>,
+        ) -> Option<Vec<(Vec<u8>, primitives::crypto::KeyTypeId)>> {
+            None
         }
     }
 

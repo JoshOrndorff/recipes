@@ -12,6 +12,10 @@ default-features = false
 features = ['derive']
 version = '1.3.0'
 
+[dependencies.parity-util-mem]
+optional = true
+version = '0.6.0'
+
 [dependencies.rstd]
 default-features = false
 package = "sp-std"
@@ -91,4 +95,6 @@ std = [
 	"sp-finality-grandpa/std",
 	"sp-transaction-pool/std",
 	"sp-version/std",
+	#
+	"parity-util-mem",
 ]
