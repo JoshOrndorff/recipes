@@ -342,10 +342,10 @@ checksum = "b41b7ea54a0c9d92199de89e20e58d49f02f8e699814ef3fdf266f6f748d15c7"
 name = "basic-pow"
 version = "2.0.0"
 dependencies = [
+ "frameless-runtime",
  "futures 0.3.4",
  "log",
  "parity-scale-codec",
- "pow-runtime",
  "rand 0.7.3",
  "sc-basic-authorship",
  "sc-cli",

@@ -21,7 +21,7 @@ sc-consensus-pow = { version = '0.8.0-alpha.5' }
 sp-consensus-pow = { version = '0.8.0-alpha.5' }
 sc-client-api = { version = '2.0.0-alpha.5' }
 sp-blockchain = { version = '2.0.0-alpha.5' }
-runtime = { package = "pow-runtime", path = "../../runtimes/pow-runtime" }
+runtime = { package = "frameless-runtime", path = "../../runtimes/frameless-runtime" }
 sp-timestamp = '2.0.0-alpha.5'
 sc-basic-authorship = '0.8.0-alpha.5'
 sc-cli = '0.8.0-alpha.5'

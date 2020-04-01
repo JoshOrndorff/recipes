@@ -12,11 +12,23 @@ use parity_scale_codec::{Decode, Encode};
 use sp_std::prelude::*;
 use sp_api::impl_runtime_apis;
 use sp_runtime::{
-	create_runtime_str, generic,
-	transaction_validity::{TransactionLongevity, TransactionValidity, ValidTransaction},
 	ApplyExtrinsicResult,
+	create_runtime_str,
+	generic,
+	MultiSignature,
+	transaction_validity::{
+		TransactionLongevity,
+		TransactionValidity,
+		ValidTransaction
+	},
 	traits::{
-		BlakeTwo256, Block as BlockT, Extrinsic, GetNodeBlockType, GetRuntimeBlockType,
+		BlakeTwo256,
+		Block as BlockT,
+		Extrinsic,
+		GetNodeBlockType,
+		GetRuntimeBlockType,
+		IdentifyAccount,
+		Verify,
 	}
 };
 #[cfg(any(feature = "std", test))]
@@ -33,15 +45,23 @@ use sp_version::RuntimeVersion;
 #[cfg(feature = "std")]
 use serde::{Deserialize, Serialize};
 
+// Include the genesis helper module when building to std
+#[cfg(feature = "std")]
+pub mod genesis;
+
 /// An index to a block.
 pub type BlockNumber = u32;
 
 /// Alias to 512-bit hash when used in the context of a transaction signature on the chain.
-// pub type Signature = AnySignature;
+/// This is not currently used in the runtime but is exposed for compatability with outer
+/// nodes that expect it.
+pub type Signature = MultiSignature;
 
 /// Some way of identifying an account on the chain. We intentionally make it equivalent
 /// to the public key of our transaction signing scheme.
-// pub type AccountId = <Signature as Verify>::Signer;
+/// This is not currently used in the runtime but is exposed for compatability with outer
+/// nodes that expect it.
+pub type AccountId = <<Signature as Verify>::Signer as IdentifyAccount>::AccountId;
 
 /// Balance of an account.
 //pub type Balance = u128;
