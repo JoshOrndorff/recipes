@@ -12,11 +12,11 @@ use parity_scale_codec::{Decode, Encode};
 use sp_std::prelude::*;
 use sp_api::impl_runtime_apis;
 use sp_runtime::{
-    create_runtime_str, generic,
-    transaction_validity::{TransactionLongevity, TransactionValidity, ValidTransaction},
-    ApplyExtrinsicResult,
+	create_runtime_str, generic,
+	transaction_validity::{TransactionLongevity, TransactionValidity, ValidTransaction},
+	ApplyExtrinsicResult,
 	traits::{
-	    BlakeTwo256, Block as BlockT, Extrinsic, GetNodeBlockType, GetRuntimeBlockType,
+		BlakeTwo256, Block as BlockT, Extrinsic, GetNodeBlockType, GetRuntimeBlockType,
 	}
 };
 #[cfg(any(feature = "std", test))]
@@ -60,52 +60,52 @@ pub type BlockNumber = u32;
 /// of data like extrinsics, allowing for them to continue syncing the network through upgrades
 /// to even the core datastructures.
 pub mod opaque {
-    use super::*;
+	use super::*;
 
-    pub use sp_runtime::OpaqueExtrinsic as UncheckedExtrinsic;
+	pub use sp_runtime::OpaqueExtrinsic as UncheckedExtrinsic;
 
-    /// Opaque block header type.
-    pub type Header = generic::Header<BlockNumber, BlakeTwo256>;
-    /// Opaque block type.
-    pub type Block = generic::Block<Header, UncheckedExtrinsic>;
-    /// Opaque block identifier type.
-    pub type BlockId = generic::BlockId<Block>;
+	/// Opaque block header type.
+	pub type Header = generic::Header<BlockNumber, BlakeTwo256>;
+	/// Opaque block type.
+	pub type Block = generic::Block<Header, UncheckedExtrinsic>;
+	/// Opaque block identifier type.
+	pub type BlockId = generic::BlockId<Block>;
 
-    // impl_opaque_keys! {
-    //     pub struct SessionKeys {
-    //         pub babe: Babe,
-    //     }
-    // }
+	// impl_opaque_keys! {
+	//	 pub struct SessionKeys {
+	//		 pub babe: Babe,
+	//	 }
+	// }
 }
 
 /// This runtime version.
 pub const VERSION: RuntimeVersion = RuntimeVersion {
-    spec_name: create_runtime_str!("frameless-runtime"),
-    impl_name: create_runtime_str!("frameless-runtime"),
-    authoring_version: 1,
-    spec_version: 1,
-    impl_version: 1,
-    apis: RUNTIME_API_VERSIONS,
+	spec_name: create_runtime_str!("frameless-runtime"),
+	impl_name: create_runtime_str!("frameless-runtime"),
+	authoring_version: 1,
+	spec_version: 1,
+	impl_version: 1,
+	apis: RUNTIME_API_VERSIONS,
 };
 
 /// The version infromation used to identify this runtime when compiled natively.
 #[cfg(feature = "std")]
 pub fn native_version() -> NativeVersion {
-    NativeVersion {
-        runtime_version: VERSION,
-        can_author_with: Default::default(),
-    }
+	NativeVersion {
+		runtime_version: VERSION,
+		can_author_with: Default::default(),
+	}
 }
 
 /// The main struct in this module. In frame this comes from `construct_runtime!`
 pub struct Runtime;
 
 impl GetNodeBlockType for Runtime {
-    type NodeBlock = opaque::Block;
+	type NodeBlock = opaque::Block;
 }
 
 impl GetRuntimeBlockType for Runtime {
-    type RuntimeBlock = opaque::Block;
+	type RuntimeBlock = opaque::Block;
 }
 
 #[cfg_attr(feature = "std", derive(Serialize, Deserialize, Default))]
@@ -113,9 +113,9 @@ pub struct GenesisConfig;
 
 #[cfg(feature = "std")]
 impl BuildStorage for GenesisConfig {
-    fn assimilate_storage(&self, _storage: &mut Storage) -> Result<(), String> {
-        Ok(())
-    }
+	fn assimilate_storage(&self, _storage: &mut Storage) -> Result<(), String> {
+		Ok(())
+	}
 }
 
 /// The address format for describing accounts.
@@ -135,171 +135,171 @@ pub const HEADER_KEY: [u8; 6] = *b"header";
 // I guess we won't need any of this when using our own unchecked extrinsic type
 // The SignedExtension to the basic transaction logic.
 // pub type SignedExtra = (
-//     system::CheckVersion<Runtime>,
-//     system::CheckGenesis<Runtime>,
+//	 system::CheckVersion<Runtime>,
+//	 system::CheckGenesis<Runtime>,
 // );
 /// Unchecked extrinsic type as expected by this runtime.
 
 #[cfg_attr(feature = "std", derive(Serialize, Deserialize, parity_util_mem::MallocSizeOf))]
 #[derive(Encode, Decode, Debug, PartialEq, Eq, Clone)]
 pub enum FramelessTransaction {
-    Set,
-    Clear,
-    Toggle,
-    //TODO in future define call
+	Set,
+	Clear,
+	Toggle,
+	//TODO in future define call
 }
 
 impl Extrinsic for FramelessTransaction {
-    type Call = ();
-    type SignaturePayload = ();
+	type Call = ();
+	type SignaturePayload = ();
 
-    fn new(_call: Self::Call, _signed_data: Option<Self::SignaturePayload>) -> Option<Self> {
-        Some(Self::Toggle)
-    }
+	fn new(_call: Self::Call, _signed_data: Option<Self::SignaturePayload>) -> Option<Self> {
+		Some(Self::Toggle)
+	}
 }
 
 impl_runtime_apis! {
-    // https://substrate.dev/rustdocs/master/sp_api/trait.Core.html
-    impl sp_api::Core<Block> for Runtime {
-        fn version() -> RuntimeVersion {
-            VERSION
-        }
+	// https://substrate.dev/rustdocs/master/sp_api/trait.Core.html
+	impl sp_api::Core<Block> for Runtime {
+		fn version() -> RuntimeVersion {
+			VERSION
+		}
 
-        fn execute_block(block: Block) {
-            for transaction in block.extrinsics {
-                let previous_state = sp_io::storage::get(&ONLY_KEY)
-                    .map(|bytes| <bool as Decode>::decode(&mut &*bytes).unwrap_or(false))
-                    .unwrap_or(false);
+		fn execute_block(block: Block) {
+			for transaction in block.extrinsics {
+				let previous_state = sp_io::storage::get(&ONLY_KEY)
+					.map(|bytes| <bool as Decode>::decode(&mut &*bytes).unwrap_or(false))
+					.unwrap_or(false);
 
-                let next_state = match (previous_state, transaction) {
-                    (_, FramelessTransaction::Set) => true,
-                    (_, FramelessTransaction::Clear) => false,
-                    (prev_state, FramelessTransaction::Toggle) => !prev_state,
-                };
+				let next_state = match (previous_state, transaction) {
+					(_, FramelessTransaction::Set) => true,
+					(_, FramelessTransaction::Clear) => false,
+					(prev_state, FramelessTransaction::Toggle) => !prev_state,
+				};
 
-                sp_io::storage::set(&ONLY_KEY, &next_state.encode());
-            }
-        }
+				sp_io::storage::set(&ONLY_KEY, &next_state.encode());
+			}
+		}
 
-        fn initialize_block(header: &<Block as BlockT>::Header) {
-            // Store the header info we're given for later use when finalizing block.
-            sp_io::storage::set(&HEADER_KEY, &header.encode());
-        }
-    }
+		fn initialize_block(header: &<Block as BlockT>::Header) {
+			// Store the header info we're given for later use when finalizing block.
+			sp_io::storage::set(&HEADER_KEY, &header.encode());
+		}
+	}
 
-    // https://substrate.dev/rustdocs/master/sp_api/trait.Metadata.html
-    // "The Metadata api trait that returns metadata for the runtime."
-    // impl sp_api::Metadata<Block> for Runtime {
-    //     fn metadata() -> OpaqueMetadata {
-    //         // Runtime::metadata().into()
-    //         // Maybe this one can be omitted or just return () or something?
-    //         // Would be really cool to return something that makes polkadot-js api happy,
-    //         // but that seems unlikely.
-    //         unimplemented!()
-    //     }
-    // }
+	// https://substrate.dev/rustdocs/master/sp_api/trait.Metadata.html
+	// "The Metadata api trait that returns metadata for the runtime."
+	// impl sp_api::Metadata<Block> for Runtime {
+	//	 fn metadata() -> OpaqueMetadata {
+	//		 // Runtime::metadata().into()
+	//		 // Maybe this one can be omitted or just return () or something?
+	//		 // Would be really cool to return something that makes polkadot-js api happy,
+	//		 // but that seems unlikely.
+	//		 unimplemented!()
+	//	 }
+	// }
 
-    // https://substrate.dev/rustdocs/master/sc_block_builder/trait.BlockBuilderApi.html
-    impl sp_block_builder::BlockBuilder<Block> for Runtime {
-        fn apply_extrinsic(_extrinsic: <Block as BlockT>::Extrinsic) -> ApplyExtrinsicResult {
-            // Executive::apply_extrinsic(extrinsic)
-            // Maybe this is where the core flipping logic goes?
-            Ok(Ok(()))
-        }
+	// https://substrate.dev/rustdocs/master/sc_block_builder/trait.BlockBuilderApi.html
+	impl sp_block_builder::BlockBuilder<Block> for Runtime {
+		fn apply_extrinsic(_extrinsic: <Block as BlockT>::Extrinsic) -> ApplyExtrinsicResult {
+			// Executive::apply_extrinsic(extrinsic)
+			// Maybe this is where the core flipping logic goes?
+			Ok(Ok(()))
+		}
 
-        fn finalize_block() -> <Block as BlockT>::Header {
-            // https://substrate.dev/rustdocs/master/sp_runtime/generic/struct.Header.html
-            let raw_header = sp_io::storage::get(&HEADER_KEY)
-                .expect("We initialized with header, it never got mutated, qed");
+		fn finalize_block() -> <Block as BlockT>::Header {
+			// https://substrate.dev/rustdocs/master/sp_runtime/generic/struct.Header.html
+			let raw_header = sp_io::storage::get(&HEADER_KEY)
+				.expect("We initialized with header, it never got mutated, qed");
 
-            let mut header = <Block as BlockT>::Header::decode(&mut &*raw_header)
-                .expect("we put a valid header in in the first place, qed");
+			let mut header = <Block as BlockT>::Header::decode(&mut &*raw_header)
+				.expect("we put a valid header in in the first place, qed");
 
-            let raw_root = &sp_io::storage::root()[..];
+			let raw_root = &sp_io::storage::root()[..];
 
-            header.state_root = sp_core::H256::from(sp_io::hashing::blake2_256(raw_root));
-            header
-        }
+			header.state_root = sp_core::H256::from(sp_io::hashing::blake2_256(raw_root));
+			header
+		}
 
-        fn inherent_extrinsics(_data: sp_inherents::InherentData) -> Vec<<Block as BlockT>::Extrinsic> {
-            // I'm not using any inherents, so I guess I'll just return an empty vec
-            Vec::new()
-        }
+		fn inherent_extrinsics(_data: sp_inherents::InherentData) -> Vec<<Block as BlockT>::Extrinsic> {
+			// I'm not using any inherents, so I guess I'll just return an empty vec
+			Vec::new()
+		}
 
-        fn check_inherents(
-            _block: Block,
-            _data: sp_inherents::InherentData
-        ) -> sp_inherents::CheckInherentsResult {
-            sp_inherents::CheckInherentsResult::default()
-        }
+		fn check_inherents(
+			_block: Block,
+			_data: sp_inherents::InherentData
+		) -> sp_inherents::CheckInherentsResult {
+			sp_inherents::CheckInherentsResult::default()
+		}
 
-        fn random_seed() -> <Block as BlockT>::Hash {
-            // Lol how bad is this? What actually depends on it?
-            <Block as BlockT>::Hash::from([0u8;32])
-        }
-    }
+		fn random_seed() -> <Block as BlockT>::Hash {
+			// Lol how bad is this? What actually depends on it?
+			<Block as BlockT>::Hash::from([0u8;32])
+		}
+	}
 
-    impl sp_transaction_pool::runtime_api::TaggedTransactionQueue<Block> for Runtime {
-        fn validate_transaction(_tx: <Block as BlockT>::Extrinsic) -> TransactionValidity {
-            // Any transaction of the correct type is valid
-            Ok(ValidTransaction{
-                priority: 1u64,
-                requires: Vec::new(),
-                provides: Vec::new(),
-                longevity: TransactionLongevity::max_value(),
-                propagate: true,
-            })
-        }
-    }
+	impl sp_transaction_pool::runtime_api::TaggedTransactionQueue<Block> for Runtime {
+		fn validate_transaction(_tx: <Block as BlockT>::Extrinsic) -> TransactionValidity {
+			// Any transaction of the correct type is valid
+			Ok(ValidTransaction{
+				priority: 1u64,
+				requires: Vec::new(),
+				provides: Vec::new(),
+				longevity: TransactionLongevity::max_value(),
+				propagate: true,
+			})
+		}
+	}
 
-    impl sp_consensus_aura::AuraApi<Block, AuraId> for Runtime {
-        fn slot_duration() -> u64 {
-            3000 //milliseconds
-        }
+	impl sp_consensus_aura::AuraApi<Block, AuraId> for Runtime {
+		fn slot_duration() -> u64 {
+			3000 //milliseconds
+		}
 
 
-        fn authorities() -> Vec<AuraId> {
-            // Do we need 32 bytes?
-            let alice = AuraId::from_slice(&[0]);
+		fn authorities() -> Vec<AuraId> {
+			// Do we need 32 bytes?
+			let alice = AuraId::from_slice(&[0]);
 
-            let mut authorities = Vec::new();
-            authorities.push(alice);
-            authorities
-        }
-    }
+			let mut authorities = Vec::new();
+			authorities.push(alice);
+			authorities
+		}
+	}
 
-    impl sp_finality_grandpa::GrandpaApi<Block> for Runtime {
-        fn grandpa_authorities() -> GrandpaAuthorityList {
-            let alice = GrandpaId::from_slice(&[0]);
+	impl sp_finality_grandpa::GrandpaApi<Block> for Runtime {
+		fn grandpa_authorities() -> GrandpaAuthorityList {
+			let alice = GrandpaId::from_slice(&[0]);
 
-            let mut authorities = Vec::new();
-            authorities.push((alice, 1));
-            authorities
-        }
-    }
+			let mut authorities = Vec::new();
+			authorities.push((alice, 1));
+			authorities
+		}
+	}
 
-    impl sp_api::Metadata<Block> for Runtime {
-        fn metadata() -> OpaqueMetadata {
-            OpaqueMetadata::new(vec![0])
-        }
-    }
+	impl sp_api::Metadata<Block> for Runtime {
+		fn metadata() -> OpaqueMetadata {
+			OpaqueMetadata::new(vec![0])
+		}
+	}
 
-    impl sp_offchain::OffchainWorkerApi<Block> for Runtime {
-        fn offchain_worker(_header: &<Block as BlockT>::Header) {
-            // we do not do anything.
-        }
-    }
+	impl sp_offchain::OffchainWorkerApi<Block> for Runtime {
+		fn offchain_worker(_header: &<Block as BlockT>::Header) {
+			// we do not do anything.
+		}
+	}
 
-    impl sp_session::SessionKeys<Block> for Runtime {
-        fn generate_session_keys(seed: Option<Vec<u8>>) -> Vec<u8> {
-            seed.unwrap_or(vec![0])
-        }
+	impl sp_session::SessionKeys<Block> for Runtime {
+		fn generate_session_keys(seed: Option<Vec<u8>>) -> Vec<u8> {
+			seed.unwrap_or(vec![0])
+		}
 
-        fn decode_session_keys(
-            _encoded: Vec<u8>,
-        ) -> Option<Vec<(Vec<u8>, sp_core::crypto::KeyTypeId)>> {
-            None
-        }
-    }
+		fn decode_session_keys(
+			_encoded: Vec<u8>,
+		) -> Option<Vec<(Vec<u8>, sp_core::crypto::KeyTypeId)>> {
+			None
+		}
+	}
 
 }
