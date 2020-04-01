@@ -1,16 +1,7 @@
 //! A dead simple runtime that has a single boolean storage value and three transactions. The transactions
 //! available are Set, Clear, and Toggle.
 
-// Some open questions:
-// * How do I use storage? Can I do decl_storage! here like I would in a pallet?
-// * What are core apis (eg. initialize_block, execute_block) actually supposed to do?
-// * Which block authoring will be easiest to start with? Seems not babe because of the need to collect randomness in the runtime
-// * Where does this core logic belong?
-
 #![cfg_attr(not(feature = "std"), no_std)]
-// `construct_runtime!` does a lot of recursion and requires us to increase the limit to 256.
-// Shouldn't be necessary if we're not using construct_runtime
-// #![recursion_limit = "256"]
 
 // Make the WASM binary available.
 #[cfg(feature = "std")]
@@ -18,20 +9,20 @@ include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 
 use parity_scale_codec::{Decode, Encode};
 
-use rstd::prelude::*;
+use sp_std::prelude::*;
 use sp_api::impl_runtime_apis;
-use sp_runtime::traits::{
-    BlakeTwo256, Block as BlockT, Extrinsic, GetNodeBlockType, GetRuntimeBlockType,
-};
 use sp_runtime::{
     create_runtime_str, generic,
     transaction_validity::{TransactionLongevity, TransactionValidity, ValidTransaction},
     ApplyExtrinsicResult,
+	traits::{
+	    BlakeTwo256, Block as BlockT, Extrinsic, GetNodeBlockType, GetRuntimeBlockType,
+	}
 };
 #[cfg(any(feature = "std", test))]
 use sp_runtime::{BuildStorage, Storage};
 
-use primitives::{crypto::Public, OpaqueMetadata};
+use sp_core::{crypto::Public, OpaqueMetadata};
 use sp_consensus_aura::sr25519::AuthorityId as AuraId;
 use sp_finality_grandpa::{AuthorityId as GrandpaId, AuthorityList as GrandpaAuthorityList};
 
@@ -51,10 +42,6 @@ pub type BlockNumber = u32;
 /// Some way of identifying an account on the chain. We intentionally make it equivalent
 /// to the public key of our transaction signing scheme.
 // pub type AccountId = <Signature as Verify>::Signer;
-
-/// The type for looking up accounts. We don't expect more than 4 billion of them, but you
-/// never know...
-// pub type AccountIndex = u32;
 
 /// Balance of an account.
 //pub type Balance = u128;
@@ -84,8 +71,6 @@ pub mod opaque {
     /// Opaque block identifier type.
     pub type BlockId = generic::BlockId<Block>;
 
-    // pub type SessionHandlers = Babe;
-
     // impl_opaque_keys! {
     //     pub struct SessionKeys {
     //         pub babe: Babe,
@@ -102,29 +87,6 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
     impl_version: 1,
     apis: RUNTIME_API_VERSIONS,
 };
-
-/// Constants for Babe.
-
-/// Since BABE is probabilistic this is the average expected block time that
-/// we are targetting. Blocks will be produced at a minimum duration defined
-/// by `SLOT_DURATION`, but some slots will not be allocated to any
-/// authority and hence no block will be produced. We expect to have this
-/// block time on average following the defined slot duration and the value
-/// of `c` configured for BABE (where `1 - c` represents the probability of
-/// a slot being empty).
-/// This value is only used indirectly to define the unit constants below
-/// that are expressed in blocks. The rest of the code should use
-/// `SLOT_DURATION` instead (like the timestamp pallet for calculating the
-/// minimum period).
-/// <https://research.web3.foundation/en/latest/polkadot/BABE/Babe/#6-practical-results>
-pub const MILLISECS_PER_BLOCK: u64 = 6000;
-
-pub const SLOT_DURATION: u64 = MILLISECS_PER_BLOCK;
-
-pub const EPOCH_DURATION_IN_BLOCKS: u32 = 100;
-
-// 1 in 4 blocks (on average, not counting collisions) will be primary babe blocks.
-pub const PRIMARY_PROBABILITY: (u64, u64) = (1, 4);
 
 /// The version infromation used to identify this runtime when compiled natively.
 #[cfg(feature = "std")]
@@ -204,8 +166,6 @@ impl_runtime_apis! {
         }
 
         fn execute_block(block: Block) {
-            //TODO prolly need to do something with pre-runtime digest? This may be another reason to use
-            // consensus that is totally out of the runtime.
             for transaction in block.extrinsics {
                 let previous_state = sp_io::storage::get(&ONLY_KEY)
                     .map(|bytes| <bool as Decode>::decode(&mut &*bytes).unwrap_or(false))
@@ -222,7 +182,7 @@ impl_runtime_apis! {
         }
 
         fn initialize_block(header: &<Block as BlockT>::Header) {
-            // Store the header info we're give nfor later use when finalizing block.
+            // Store the header info we're given for later use when finalizing block.
             sp_io::storage::set(&HEADER_KEY, &header.encode());
         }
     }
@@ -240,7 +200,7 @@ impl_runtime_apis! {
     // }
 
     // https://substrate.dev/rustdocs/master/sc_block_builder/trait.BlockBuilderApi.html
-    impl block_builder_api::BlockBuilder<Block> for Runtime {
+    impl sp_block_builder::BlockBuilder<Block> for Runtime {
         fn apply_extrinsic(_extrinsic: <Block as BlockT>::Extrinsic) -> ApplyExtrinsicResult {
             // Executive::apply_extrinsic(extrinsic)
             // Maybe this is where the core flipping logic goes?
@@ -257,21 +217,20 @@ impl_runtime_apis! {
 
             let raw_root = &sp_io::storage::root()[..];
 
-            header.state_root = primitives::H256::from(sp_io::hashing::blake2_256(raw_root));
+            header.state_root = sp_core::H256::from(sp_io::hashing::blake2_256(raw_root));
             header
         }
 
-        fn inherent_extrinsics(_data: inherents::InherentData) -> Vec<<Block as BlockT>::Extrinsic> {
+        fn inherent_extrinsics(_data: sp_inherents::InherentData) -> Vec<<Block as BlockT>::Extrinsic> {
             // I'm not using any inherents, so I guess I'll just return an empty vec
             Vec::new()
         }
 
         fn check_inherents(
             _block: Block,
-            _data: inherents::InherentData
-        ) -> inherents::CheckInherentsResult {
-            // I'm not using any inherents, so it should be safe to just return ok
-            inherents::CheckInherentsResult::default()
+            _data: sp_inherents::InherentData
+        ) -> sp_inherents::CheckInherentsResult {
+            sp_inherents::CheckInherentsResult::default()
         }
 
         fn random_seed() -> <Block as BlockT>::Hash {
@@ -325,7 +284,7 @@ impl_runtime_apis! {
         }
     }
 
-    impl offchain_primitives::OffchainWorkerApi<Block> for Runtime {
+    impl sp_offchain::OffchainWorkerApi<Block> for Runtime {
         fn offchain_worker(_header: &<Block as BlockT>::Header) {
             // we do not do anything.
         }
@@ -338,7 +297,7 @@ impl_runtime_apis! {
 
         fn decode_session_keys(
             _encoded: Vec<u8>,
-        ) -> Option<Vec<(Vec<u8>, primitives::crypto::KeyTypeId)>> {
+        ) -> Option<Vec<(Vec<u8>, sp_core::crypto::KeyTypeId)>> {
             None
         }
     }
