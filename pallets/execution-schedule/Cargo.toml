@@ -21,25 +21,25 @@ version = '1.1.0'
 
 [dependencies.frame-support]
 default_features = false
-git = 'https://github.com/paritytech/substrate.git'
-tag = 'v2.0.0-alpha.3'
+
+version = '2.0.0-alpha.5'
 
 [dependencies.frame-system]
 default_features = false
-git = 'https://github.com/paritytech/substrate.git'
-tag = 'v2.0.0-alpha.3'
+
+version = '2.0.0-alpha.5'
 
 [dependencies.sp-runtime]
 default_features = false
-git = 'https://github.com/paritytech/substrate.git'
-tag = 'v2.0.0-alpha.3'
+
+version = '2.0.0-alpha.5'
 
 [dependencies.sp-std]
 default_features = false
-git = 'https://github.com/paritytech/substrate.git'
-tag = 'v2.0.0-alpha.3'
+
+version = '2.0.0-alpha.5'
 
 [dev-dependencies]
 rand = "0.7.2"
-sp-core = { default_features = false, git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
-sp-io = { default_features = false, git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
+sp-core = { default_features = false, version = '2.0.0-alpha.5' }
+sp-io = { default_features = false, version = '2.0.0-alpha.5' }

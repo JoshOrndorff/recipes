@@ -108,7 +108,7 @@ fn manual_impl_works() {
 		// Check for the correct events
 		assert_eq!(System::events(), vec![
 			EventRecord {
-				phase: Phase::ApplyExtrinsic(0),
+				phase: Phase::Initialization,
 				event: TestEvent::fixed_point(Event::ManualUpdated(
 					half,
 					half,
@@ -116,7 +116,7 @@ fn manual_impl_works() {
 				topics: vec![],
 			},
 			EventRecord {
-				phase: Phase::ApplyExtrinsic(0),
+				phase: Phase::Initialization,
 				event: TestEvent::fixed_point(Event::ManualUpdated(
 					half,
 					quarter,
@@ -172,7 +172,7 @@ fn permill_impl_works() {
 		// Check for the correct events
 		assert_eq!(System::events(), vec![
 			EventRecord {
-				phase: Phase::ApplyExtrinsic(0),
+				phase: Phase::Initialization,
 				event: TestEvent::fixed_point(Event::PermillUpdated(
 					half,
 					half,
@@ -180,7 +180,7 @@ fn permill_impl_works() {
 				topics: vec![],
 			},
 			EventRecord {
-				phase: Phase::ApplyExtrinsic(0),
+				phase: Phase::Initialization,
 				event: TestEvent::fixed_point(Event::PermillUpdated(
 					half,
 					quarter,
@@ -218,7 +218,7 @@ fn fixed_impl_works() {
 		// Check for the correct events
 		assert_eq!(System::events(), vec![
 			EventRecord {
-				phase: Phase::ApplyExtrinsic(0),
+				phase: Phase::Initialization,
 				event: TestEvent::fixed_point(Event::FixedUpdated(
 					half,
 					half,
@@ -226,7 +226,7 @@ fn fixed_impl_works() {
 				topics: vec![],
 			},
 			EventRecord {
-				phase: Phase::ApplyExtrinsic(0),
+				phase: Phase::Initialization,
 				event: TestEvent::fixed_point(Event::FixedUpdated(
 					half,
 					quarter,

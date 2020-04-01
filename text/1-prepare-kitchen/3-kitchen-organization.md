@@ -89,8 +89,8 @@ Having seen that the Kitchen Node depends on a runtime, let us now look deeper a
 # -- snip --
 
 # Substrate Pallets
-balances = { package = 'pallet-balances', git = 'https://github.com/paritytech/substrate.git', ... }
-transaction-payment = { package = 'pallet-transaction-payment', git = 'https://github.com/paritytech/substrate.git',... }
+balances = { package = 'pallet-balances', , ... }
+transaction-payment = { package = 'pallet-transaction-payment', ,... }
 # Recipe Pallets
 adding-machine = { path = "../../pallets/adding-machine", default-features = false }
 basic-token = { path = "../../pallets/basic-token", default-features = false }

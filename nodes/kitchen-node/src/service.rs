@@ -3,13 +3,18 @@
 use std::sync::Arc;
 use std::time::Duration;
 use sc_client::LongestChain;
-use runtime::{self, GenesisConfig, opaque::Block, RuntimeApi};
+use sc_client_api::ExecutorProvider;
+use runtime::{self, opaque::Block, RuntimeApi};
 use sc_service::{error::{Error as ServiceError}, AbstractService, Configuration, ServiceBuilder};
 use sp_inherents::InherentDataProviders;
 use sc_executor::native_executor_instance;
 pub use sc_executor::NativeExecutor;
 use sc_consensus_babe;
-use sc_finality_grandpa::{self, FinalityProofProvider as GrandpaFinalityProofProvider};
+use sc_finality_grandpa::{
+	self,
+	FinalityProofProvider as GrandpaFinalityProofProvider,
+	StorageAndProofProvider
+};
 
 // Our native executor instance.
 native_executor_instance!(
@@ -42,7 +47,7 @@ macro_rules! new_full_start {
 					.ok_or_else(|| sc_service::Error::SelectChainRequired)?;
 				let (grandpa_block_import, grandpa_link) =
 					sc_finality_grandpa::block_import(
-						client.clone(), &*client, select_chain
+						client.clone(), &(client.clone() as std::sync::Arc<_>), select_chain
 					)?;
 				let justification_import = grandpa_block_import.clone();
 
@@ -71,7 +76,7 @@ macro_rules! new_full_start {
 }
 
 /// Builds a new service for a full client.
-pub fn new_full(config: Configuration<GenesisConfig>)
+pub fn new_full(config: Configuration)
 	-> Result<impl AbstractService, ServiceError>
 {
 	let is_authority = config.roles.is_authority();
@@ -96,9 +101,10 @@ pub fn new_full(config: Configuration<GenesisConfig>)
 			.expect("Link Half and Block Import are present for Full Services or setup failed before. qed");
 
 	let service = builder
-		.with_finality_proof_provider(|client, backend|
-			Ok(Arc::new(GrandpaFinalityProofProvider::new(backend, client)) as _)
-		)?
+		.with_finality_proof_provider(|client, backend| {
+			let provider = client as Arc<dyn StorageAndProofProvider<_, _>>;
+			Ok(Arc::new(GrandpaFinalityProofProvider::new(backend, provider)) as _)
+		})?
 		.build()?;
 
 	// Initialize seed for signing transaction using off-chain workers
@@ -176,9 +182,9 @@ pub fn new_full(config: Configuration<GenesisConfig>)
 			link: grandpa_link,
 			network: service.network(),
 			inherent_data_providers: inherent_data_providers.clone(),
-			on_exit: service.on_exit(),
 			telemetry_on_connect: Some(service.telemetry_on_connect_stream()),
 			voting_rule: sc_finality_grandpa::VotingRulesBuilder::default().build(),
+			prometheus_registry: service.prometheus_registry(),
 		};
 
 		// the GRANDPA voter task is considered infallible, i.e.
@@ -199,7 +205,7 @@ pub fn new_full(config: Configuration<GenesisConfig>)
 }
 
 /// Builds a new service for a light client.
-pub fn new_light(config: Configuration<GenesisConfig>)
+pub fn new_light(config: Configuration)
 	-> Result<impl AbstractService, ServiceError>
 {
 	let inherent_data_providers = InherentDataProviders::new();
@@ -222,7 +228,7 @@ pub fn new_light(config: Configuration<GenesisConfig>)
 				.map(|fetcher| fetcher.checker().clone())
 				.ok_or_else(|| "Trying to start light import queue without active fetch checker")?;
 			let grandpa_block_import = sc_finality_grandpa::light_block_import(
-				client.clone(), backend, &*client.clone(), Arc::new(fetch_checker)
+				client.clone(), backend, &(client.clone() as Arc<_>), Arc::new(fetch_checker)
 			)?;
 
 			let finality_proof_import = grandpa_block_import.clone();
@@ -246,8 +252,9 @@ pub fn new_light(config: Configuration<GenesisConfig>)
 
 			Ok((import_queue, finality_proof_request_builder))
 		})?
-		.with_finality_proof_provider(|client, backend|
-			Ok(Arc::new(GrandpaFinalityProofProvider::new(backend, client)) as _)
-		)?
+		.with_finality_proof_provider(|client, backend| {
+			let provider = client as Arc<dyn StorageAndProofProvider<_, _>>;
+			Ok(Arc::new(GrandpaFinalityProofProvider::new(backend, provider)) as _)
+		})?
 		.build()
 }
