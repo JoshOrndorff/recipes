@@ -1,0 +1,50 @@
+[package]
+name = "weights"
+version = "0.1.0"
+authors = ["Anonymous"]
+edition = "2018"
+
+[features]
+default = ['std']
+std = [
+    'parity-scale-codec/std',
+    'support/std',
+    'system/std',
+    'balances/std',
+    'runtime-primitives/std',
+]
+
+[dependencies.parity-scale-codec]
+default-features = false
+features = ['derive']
+version = '1.0.6'
+
+[dependencies.support]
+default-features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'frame-support'
+tag = 'v2.0.0-alpha.3'
+
+[dependencies.system]
+default-features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'frame-system'
+tag = 'v2.0.0-alpha.3'
+
+[dependencies.balances]
+default-features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'pallet-balances'
+tag = 'v2.0.0-alpha.3'
+
+[dependencies.runtime-primitives]
+default-features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'sp-runtime'
+tag = 'v2.0.0-alpha.3'
+
+[dev-dependencies.primitives]
+default-features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'sp-core'
+tag = 'v2.0.0-alpha.3'

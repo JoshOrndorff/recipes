@@ -32,20 +32,20 @@ jobs:
     - name: Cache cargo build
       uses: actions/cache@v1
       with:
-        path: kitchen/target
+        path: target
         key: ${{ runner.os }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
 
     - name: Install toolchain
       uses: actions-rs/toolchain@v1
       with:
         profile: minimal
-        toolchain: nightly-2019-11-15
+        toolchain: nightly-2020-02-15
         components: rustfmt
         target: wasm32-unknown-unknown
         default: true
 
     - name: Check Kitchen
-      run: cd kitchen && cargo check --all
+      run: cargo check --all
 
     - name: Test Kitchen
-      run: cd kitchen/pallets && cargo test --all
+      run: cargo test --all

@@ -1,0 +1,31 @@
+[package]
+name = "hello-substrate"
+version = "0.1.0"
+authors = ["shawntabrizi"]
+edition = "2018"
+
+[features]
+default = ['std']
+std = [
+    'parity-scale-codec/std',
+    'frame-support/std',
+    'frame-system/std',
+    'sp-runtime/std',
+]
+
+[dependencies]
+parity-scale-codec = { version = '1.0.6', features = ['derive'], default-features = false}
+frame-support = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3', default-features = false }
+frame-system = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3', default-features = false }
+sp-runtime = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3', default-features = false }
+
+
+[dev-dependencies.sp-core]
+default_features = false
+git = 'https://github.com/paritytech/substrate.git'
+tag = 'v2.0.0-alpha.3'
+
+[dev-dependencies.sp-io]
+default_features = false
+git = 'https://github.com/paritytech/substrate.git'
+tag = 'v2.0.0-alpha.3'

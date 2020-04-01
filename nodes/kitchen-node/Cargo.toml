@@ -1,0 +1,69 @@
+[package]
+name = "kitchen-node"
+version = "2.0.0"
+authors = ["Anonymous"]
+build = "build.rs"
+edition = "2018"
+
+[[bin]]
+name = "kitchen-node"
+path = "src/main.rs"
+
+[dependencies]
+derive_more = "0.15.0"
+futures = "0.3.1"
+structopt = "0.3.8"
+futures01 = { package = "futures", version = "0.1.29" }
+ctrlc = { version = "3.1.3", features = ["termination"] }
+log = "0.4.8"
+tokio = "0.1.22"
+exit-future = "0.2.0"
+parking_lot = "0.9.0"
+codec = { package = "parity-scale-codec", version = "1.0.0" }
+trie-root = "0.15.2"
+sp-io = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
+sc-cli = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
+sp-core = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
+sp-runtime = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
+sc-executor = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
+sc-service = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
+sp-inherents = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
+sc-transaction-pool = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
+sp-transaction-pool = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
+sc-network = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
+sc-consensus-babe = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
+sp-consensus-babe = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
+sc-finality-grandpa = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
+sp-finality-grandpa = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
+sc-client = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
+sc-basic-authorship = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
+sp-consensus = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
+
+# Pick one of the runtimes below.
+# Your runtime must have the necessary pallets to support consensus (Babe, Grandpa, etc).
+# ---
+# Common runtime configured with most Recipes pallets.
+runtime = { package = "super-runtime", path = "../../runtimes/super-runtime" }
+
+# Runtime with custom weight and fee calculation.
+# runtime = { package = "weight-fee-runtime", path = "../../runtimes/weight-fee-runtime"}
+
+# Runtime with off-chain worker enabled.
+# To use this runtime, compile kitchen-node with `ocw` feature enabled,
+#   `cargo build --release --features ocw`.
+# runtime = { package = "ocw-runtime", path = "../../runtimes/ocw-runtime" }
+
+# TODO Can't use this until the API runtime implements babe api
+# runtime = { package = "api-runtime", path = "../../runtimes/api-runtime" }
+# ---
+
+[build-dependencies]
+vergen = "3.0.4"
+
+[build-dependencies.build-script-utils]
+git = 'https://github.com/paritytech/substrate.git'
+package = 'substrate-build-script-utils'
+tag = 'v2.0.0-alpha.3'
+
+[features]
+ocw = []

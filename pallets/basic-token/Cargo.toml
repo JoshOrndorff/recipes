@@ -1,0 +1,23 @@
+[package]
+name = "basic-token"
+version = "0.1.0"
+authors = ["4meta5"]
+edition = "2018"
+
+[features]
+default = ['std']
+std = [
+    'parity-scale-codec/std',
+    'frame-support/std',
+    'frame-system/std',
+]
+
+[dependencies]
+parity-scale-codec = { version = "1.1.0", features = ["derive"], default-features = false }
+frame-support = { tag = 'v2.0.0-alpha.3', git = "https://github.com/paritytech/substrate.git", default_features = false }
+frame-system = { tag = 'v2.0.0-alpha.3', git = "https://github.com/paritytech/substrate.git", default_features = false }
+
+[dev-dependencies]
+sp-core = { tag = 'v2.0.0-alpha.3', git = "https://github.com/paritytech/substrate.git", default_features = false }
+sp-io = { tag = 'v2.0.0-alpha.3', git = "https://github.com/paritytech/substrate.git", default_features = false }
+sp-runtime = { tag = 'v2.0.0-alpha.3', git = "https://github.com/paritytech/substrate.git", default_features = false }

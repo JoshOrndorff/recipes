@@ -1,0 +1,23 @@
+[package]
+name = "simple-map"
+version = "0.1.0"
+authors = ["4meta5"]
+edition = "2018"
+
+[features]
+default = ['std']
+std = [
+    'parity-scale-codec/std',
+    'frame-support/std',
+    'frame-system/std',
+]
+
+[dependencies]
+parity-scale-codec = { default-features = false, features = ['derive'], version = '1.1.0' }
+frame-support = { default_features = false, git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
+frame-system = { default_features = false, git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
+
+[dev-dependencies]
+sp-runtime = { default_features = false, git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
+sp-core = { default_features = false, git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
+sp-io = { default_features = false, git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }

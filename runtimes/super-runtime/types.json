@@ -1,0 +1,31 @@
+{
+  "Address": "AccountId",
+  "LookupSource": "AccountId",
+  "ContinuousAccountData": {
+    "principal": "u64",
+    "deposit_date": "BlockNumber"
+  },
+  "GroupIndex": "u32",
+  "TaskId": "Vec<u8>",
+  "PriorityScore": "u32",
+  "RoundIndex": "u32",
+  "Task": {
+    "id": "TaskId",
+    "score": "PriorityScore",
+    "proposed_at": "BlockNumber"
+  },
+  "ValueStruct": {
+    "integer": "i32",
+    "boolean": "bool"
+  },
+  "BufferIndex": "u8",
+  "InnerThing": {
+    "number": "u32",
+    "hash": "Hash",
+    "balance": "Balance"
+  },
+  "SuperThing": {
+    "super_number": "u32",
+    "inner_thing": "InnerThing"
+  }
+}
