@@ -18,24 +18,24 @@ tokio = "0.1.22"
 parking_lot = "0.9.0"
 codec = { package = "parity-scale-codec", version = "1.0.0" }
 trie-root = "0.15.2"
-sp-io = { version = "2.0.0", git = 'https://github.com/paritytech/substrate.git', rev = '3e651110aa06aa835790df63410a29676243fc54' }
-sc-cli = { version = "2.0.0", git = 'https://github.com/paritytech/substrate.git', rev = '3e651110aa06aa835790df63410a29676243fc54' }
-sp-core = { version = "2.0.0", git = 'https://github.com/paritytech/substrate.git', rev = '3e651110aa06aa835790df63410a29676243fc54' }
-sc-executor = { version = "2.0.0", git = 'https://github.com/paritytech/substrate.git', rev = '3e651110aa06aa835790df63410a29676243fc54' }
-sc-service = { version = "2.0.0", git = 'https://github.com/paritytech/substrate.git', rev = '3e651110aa06aa835790df63410a29676243fc54' }
-sp-inherents = { version = "2.0.0", git = 'https://github.com/paritytech/substrate.git', rev = '3e651110aa06aa835790df63410a29676243fc54' }
-sc-transaction-pool = { version = "2.0.0", git = 'https://github.com/paritytech/substrate.git', rev = '3e651110aa06aa835790df63410a29676243fc54' }
-sp-transaction-pool = { version = "2.0.0", git = 'https://github.com/paritytech/substrate.git', rev = '3e651110aa06aa835790df63410a29676243fc54' }
-sc-network = { version = "0.8", git = 'https://github.com/paritytech/substrate.git', rev = '3e651110aa06aa835790df63410a29676243fc54' }
-sc-consensus-aura = { version = "0.8", git = 'https://github.com/paritytech/substrate.git', rev = '3e651110aa06aa835790df63410a29676243fc54' }
-sp-consensus-aura = { version = "0.8", git = 'https://github.com/paritytech/substrate.git', rev = '3e651110aa06aa835790df63410a29676243fc54' }
-sp-consensus = { version = "0.8", git = 'https://github.com/paritytech/substrate.git', rev = '3e651110aa06aa835790df63410a29676243fc54' }
-grandpa = { version = "2.0.0", package = "sc-finality-grandpa", git = 'https://github.com/paritytech/substrate.git', rev = '3e651110aa06aa835790df63410a29676243fc54' }
-grandpa-primitives = { version = "2.0.0", package = "sp-finality-grandpa", git = 'https://github.com/paritytech/substrate.git', rev = '3e651110aa06aa835790df63410a29676243fc54' }
-sc-client = { version = "2.0.0", git = 'https://github.com/paritytech/substrate.git', rev = '3e651110aa06aa835790df63410a29676243fc54' }
-runtime = { package = 'frameless-runtime', version = "2.0.0", path = '../../runtimes/frameless-runtime' }
-sp-runtime = { version = "2.0.0", git = 'https://github.com/paritytech/substrate.git', rev = '3e651110aa06aa835790df63410a29676243fc54' }
-sc-basic-authority = { git = 'https://github.com/paritytech/substrate.git', rev = '3e651110aa06aa835790df63410a29676243fc54' }
+sp-io = { version = '2.0.0-alpha.5' }
+sc-cli = { version = '0.8.0-alpha.5' }
+sp-core = { version = '2.0.0-alpha.5' }
+sc-executor = { version = '0.8.0-alpha.5' }
+sc-service = { version = '0.8.0-alpha.5' }
+sp-inherents = { version = '2.0.0-alpha.5' }
+sc-transaction-pool = { version = '2.0.0-alpha.5' }
+sp-transaction-pool = { version = '2.0.0-alpha.5' }
+sc-network = { version = '0.8.0-alpha.5' }
+sc-consensus-aura = { version = '0.8.0-alpha.5' }
+sp-consensus-aura = { version = '0.8.0-alpha.5' }
+sp-consensus = { version = '0.8.0-alpha.5' }
+grandpa = { version = "0.8.0-alpha.5", package = "sc-finality-grandpa" }
+grandpa-primitives = { version = "2.0.0-alpha.5", package = "sp-finality-grandpa" }
+sc-client = { version = '0.8.0-alpha.5' }
+runtime = { package = 'frameless-runtime', path = '../../runtimes/frameless-runtime' }
+sp-runtime = { version = '2.0.0-alpha.5' }
+sc-basic-authorship = { version = "0.8.0-alpha.5" }
 
 [build-dependencies]
 vergen = "3.0.4"

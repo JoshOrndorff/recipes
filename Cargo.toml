@@ -38,5 +38,5 @@ members = [
 	"nodes/kitchen-node",
 	"nodes/rpc-node",
 	"nodes/basic-pow",
-	# "nodes/frameless-node",
+	"nodes/frameless-node",
 ]

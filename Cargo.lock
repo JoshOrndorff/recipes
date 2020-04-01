@@ -366,7 +366,7 @@ dependencies = [
  "sp-timestamp",
  "sp-transaction-pool",
  "structopt",
- "substrate-build-script-utils",
+ "substrate-build-script-utils 2.0.0-alpha.5",
  "vergen",
 ]
 
@@ -1316,6 +1316,40 @@ dependencies = [
 ]
 
 [[package]]
+name = "frameless-node"
+version = "2.0.0"
+dependencies = [
+ "ctrlc",
+ "frameless-runtime",
+ "futures 0.1.29",
+ "futures 0.3.4",
+ "log",
+ "parity-scale-codec",
+ "parking_lot 0.9.0",
+ "sc-basic-authorship",
+ "sc-cli",
+ "sc-client",
+ "sc-consensus-aura",
+ "sc-executor",
+ "sc-finality-grandpa",
+ "sc-network",
+ "sc-service",
+ "sc-transaction-pool",
+ "sp-consensus",
+ "sp-consensus-aura",
+ "sp-core",
+ "sp-finality-grandpa",
+ "sp-inherents",
+ "sp-io",
+ "sp-runtime",
+ "sp-transaction-pool",
+ "substrate-build-script-utils 2.0.0",
+ "tokio 0.1.22",
+ "trie-root 0.15.2",
+ "vergen",
+]
+
+[[package]]
 name = "frameless-runtime"
 version = "2.0.0"
 dependencies = [
@@ -2188,7 +2222,7 @@ dependencies = [
  "sp-runtime",
  "sp-transaction-pool",
  "structopt",
- "substrate-build-script-utils",
+ "substrate-build-script-utils 2.0.0-alpha.5",
  "super-runtime",
  "tokio 0.1.22",
  "trie-root 0.15.2",
@@ -4244,7 +4278,7 @@ dependencies = [
  "sp-runtime",
  "sp-transaction-pool",
  "structopt",
- "substrate-build-script-utils",
+ "substrate-build-script-utils 2.0.0-alpha.5",
  "sum-storage-rpc",
  "tokio 0.1.22",
  "trie-root 0.15.2",
@@ -6186,6 +6220,11 @@ name = "substrate-build-script-utils"
 version = "2.0.0-alpha.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "efc616006b44902a803b566592ef11d03a22ba3e1e0a6d1115a0859c105620f4"
+
+[[package]]
+name = "substrate-build-script-utils"
+version = "2.0.0"
+source = "git+https://github.com/paritytech/substrate.git?rev=3e651110aa06aa835790df63410a29676243fc54#3e651110aa06aa835790df63410a29676243fc54"
 
 [[package]]
 name = "substrate-fixed"
