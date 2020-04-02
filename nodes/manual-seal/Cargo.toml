@@ -1,9 +1,8 @@
 [build-dependencies]
 vergen = '3.0.4'
 
-[build-dependencies.build-script-utils]
+[build-dependencies.substrate-build-script-utils]
 git = 'https://github.com/paritytech/substrate.git'
-package = 'substrate-build-script-utils'
 branch = 'seun-manual-seal-finalizer'
 
 [package]
