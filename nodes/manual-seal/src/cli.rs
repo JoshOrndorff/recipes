@@ -7,14 +7,9 @@ pub struct Cli {
 	pub subcommand: Option<Subcommand>,
 
 	#[structopt(flatten)]
-	pub run: SuperRunCmd,
-}
-
-#[derive(Debug, StructOpt)]
-pub struct SuperRunCmd {
-	#[structopt(flatten)]
 	pub run: RunCmd,
 
+	/// Custom flag to enable instant-seal mode
 	#[structopt(long)]
 	pub instant_seal: bool,
 }
