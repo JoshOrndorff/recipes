@@ -126,7 +126,7 @@ fn add_emits_correct_event() {
 			System::events(),
 			vec![
 				EventRecord {
-					phase: Phase::ApplyExtrinsic(0),
+					phase: Phase::Initialization,
 					event: TestEvent::added(crate::Event::Added(6, 9, 15)),
 					topics: vec![],
 				},

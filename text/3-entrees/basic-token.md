@@ -15,7 +15,7 @@ The next two storage items set the total supply of the token and keep track of w
 ```rust, ignore
 decl_storage! {
 	trait Store for Module<T: Trait> as Token {
-		pub Balances get(get_balance): map hasher(blake2_256) T::AccountId => u64;
+		pub Balances get(get_balance): map hasher(blake2_128_concat) T::AccountId => u64;
 
 		pub TotalSupply get(total_supply): u64 = 21000000;
 
@@ -23,6 +23,8 @@ decl_storage! {
 	}
 }
 ```
+
+Because users can influence the keys in our storage map, we've chosen the `blake2_128_concat` hasher as described in the recipe on [storage maps](storage-api/storage-maps.md)s.
 
 ## Events and Errors
 

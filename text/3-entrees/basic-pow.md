@@ -128,9 +128,9 @@ Notice that this function takes a parameter for the number of rounds of mining i
 
 ## The Service Builder
 
-The [Substrate Service](https://substrate.dev/rustdocs/v2.0.0-alpha.3/sc_service/trait.AbstractService.html) is the main coordinator of the various parts of a Substrate node, including consensus. The service is large and takes many parameters, so it is built with a [ServiceBuilder](https://substrate.dev/rustdocs/v2.0.0-alpha.3/sc_service/struct.ServiceBuilder.html) following [Rust's builder pattern](https://doc.rust-lang.org/1.0.0/style/ownership/builders.html).
+The [Substrate Service](https://substrate.dev/rustdocs/master/sc_service/trait.AbstractService.html) is the main coordinator of the various parts of a Substrate node, including consensus. The service is large and takes many parameters, so it is built with a [ServiceBuilder](https://substrate.dev/rustdocs/master/sc_service/struct.ServiceBuilder.html) following [Rust's builder pattern](https://doc.rust-lang.org/1.0.0/style/ownership/builders.html).
 
-The particular builder method that is relevant here is [`with_import_queue`](https://substrate.dev/rustdocs/v2.0.0-alpha.3/sc_service/struct.ServiceBuilder.html#method.with_import_queue). Here we construct an instance of the [`PowBlockImport` struct](https://substrate.dev/rustdocs/v2.0.0-alpha.3/sc_consensus_pow/struct.PowBlockImport.html), providing it with references to our client, our Sha3Algorithm, and some other necessary data.
+The particular builder method that is relevant here is [`with_import_queue`](https://substrate.dev/rustdocs/master/sc_service/struct.ServiceBuilder.html#method.with_import_queue). Here we construct an instance of the [`PowBlockImport` struct](https://substrate.dev/rustdocs/master/sc_consensus_pow/struct.PowBlockImport.html), providing it with references to our client, our Sha3Algorithm, and some other necessary data.
 
 ```rust, ignore
 builder

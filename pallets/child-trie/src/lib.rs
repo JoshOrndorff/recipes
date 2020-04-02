@@ -20,7 +20,7 @@ pub struct ExampleObject;
 decl_storage! {
 	trait Store for Module<T: Trait> as ChildTrie {
 		ExampleObjects get(example_objects):
-			map hasher(blake2_256) ObjectCount => Option<ExampleObject>;
+			map hasher(twox_64_concat) ObjectCount => Option<ExampleObject>;
 
 		TheObjectCount get(the_object_count): ObjectCount;
 	}

@@ -20,26 +20,26 @@ version = '1.0.6'
 
 [dependencies.frame-support]
 default_features = false
-git = 'https://github.com/paritytech/substrate.git'
-tag = 'v2.0.0-alpha.3'
+
+version = '2.0.0-alpha.5'
 
 [dependencies.frame-system]
 default_features = false
-git = 'https://github.com/paritytech/substrate.git'
-tag = 'v2.0.0-alpha.3'
+
+version = '2.0.0-alpha.5'
 
 [dependencies.balances]
 default_features = false
-git = 'https://github.com/paritytech/substrate.git'
+
 package = 'pallet-balances'
-tag = 'v2.0.0-alpha.3'
+version = '2.0.0-alpha.5'
 
 [dev-dependencies.sp-core]
 default_features = false
-git = 'https://github.com/paritytech/substrate.git'
-tag = 'v2.0.0-alpha.3'
+
+version = '2.0.0-alpha.5'
 
 [dev-dependencies.sp-io]
 default_features = false
-git = 'https://github.com/paritytech/substrate.git'
-tag = 'v2.0.0-alpha.3'
+
+version = '2.0.0-alpha.5'

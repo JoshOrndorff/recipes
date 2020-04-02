@@ -67,7 +67,7 @@ branch = 'seun-manual-seal-finalizer'
 
 # [dependencies.babe]
 # default-features = false
-# git = 'https://github.com/paritytech/substrate.git'
+#
 # package = 'pallet-babe'
 # branch = 'seun-manual-seal-finalizer'
 #

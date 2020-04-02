@@ -14,11 +14,11 @@ std = [
 
 [dependencies]
 codec = { package = 'parity-scale-codec', default-features = false, features = ['derive'], version = '1.1.0' }
-frame-support = { default_features = false, git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
-frame-system = { default_features = false, git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
-sp-std = { default_features = false, git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
+frame-support = { default_features = false, version = '2.0.0-alpha.5' }
+frame-system = { default_features = false, version = '2.0.0-alpha.5' }
+sp-std = { default_features = false, version = '2.0.0-alpha.5' }
 
 [dev-dependencies]
-sp-runtime = { default_features = false, git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
-sp-core = { default_features = false, git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
-sp-io = { default_features = false, git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
+sp-runtime = { default_features = false, version = '2.0.0-alpha.5' }
+sp-core = { default_features = false, version = '2.0.0-alpha.5' }
+sp-io = { default_features = false, version = '2.0.0-alpha.5' }
