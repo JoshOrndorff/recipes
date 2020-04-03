@@ -35,7 +35,7 @@ members = [
 	"runtimes/pow-runtime",
 	"runtimes/super-runtime",
 	"runtimes/weight-fee-runtime",
+	"nodes/basic-pow",
 	"nodes/kitchen-node",
 	"nodes/rpc-node",
-	"nodes/basic-pow",
 ]
