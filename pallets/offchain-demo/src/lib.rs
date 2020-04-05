@@ -29,7 +29,7 @@ use sp_std::prelude::*;
 /// The keys can be inserted manually via RPC (see `author_insertKey`).
 pub const KEY_TYPE: KeyTypeId = KeyTypeId(*b"demo");
 pub const NUM_VEC_LEN: usize = 10;
-pub const HTTP_REMOTE_REQUEST: Vec<u8> = b"https://api.github.com/orgs/paritytech".to_vec();
+pub const HTTP_REMOTE_REQUEST_BYTES: &[u8] = b"https://api.github.com/orgs/paritytech";
 
 /// Based on the above `KeyTypeId` we need to generate a pallet-specific crypto type wrappers.
 /// We can use from supported crypto kinds (`sr25519`, `ed25519` and `ecdsa`) and augment
@@ -124,14 +124,16 @@ impl<T: Trait> Module<T> {
 	fn append_or_replace_number(who: Option<T::AccountId>, number: u64) -> DispatchResult {
 		Numbers::mutate(|numbers| {
 			// The append or replace logic. The `numbers` vector is at most `NUM_VEC_LEN` long.
-			if numbers.len() < NUM_VEC_LEN {
+			let num_len = numbers.len();
+
+			if num_len < NUM_VEC_LEN {
 				numbers.push(number);
 			} else {
-				numbers[numbers.len() % NUM_VEC_LEN] = number;
+				numbers[num_len % NUM_VEC_LEN] = number;
 			}
 
 			// displaying the average
-			let average = numbers.iter().fold(0, {|acc, num| acc + num}) / (numbers.len() as u64);
+			let average = numbers.iter().fold(0, {|acc, num| acc + num}) / (num_len as u64);
 			debug::info!("Current average of numbers is: {}", average);
 		});
 
@@ -141,7 +143,7 @@ impl<T: Trait> Module<T> {
 	}
 
 	fn choose_tx_type(block_number: T::BlockNumber) -> TransactionType {
-		match block_number as u64 % 4 {
+		match block_number.try_into().ok().unwrap() % 4 {
 			0 => TransactionType::SignedSubmitNumber,
 			1 => TransactionType::UnsignedSubmitNumber,
 			2 => TransactionType::HttpFetching,
@@ -149,10 +151,11 @@ impl<T: Trait> Module<T> {
 		}
 	}
 
-	fn http_fetching(block_number: T::BlockNumber) -> Result<(), Error<T>> {
+	fn http_fetching(_block_number: T::BlockNumber) -> Result<(), Error<T>> {
+		let remote_url = HTTP_REMOTE_REQUEST_BYTES.to_vec();
+
 		let request = rt_offchain::http::Request::get(
-			sp_std::str::from_utf8(&HTTP_REMOTE_REQUEST)
-				.map_err(|_| <Error<T>>::HttpFetchingError)?
+			sp_std::str::from_utf8(&remote_url).map_err(|_| <Error<T>>::HttpFetchingError)?
 		);
 		let timeout = sp_io::offchain::timestamp().add(rt_offchain::Duration::from_millis(2000));
 		let pending = request
