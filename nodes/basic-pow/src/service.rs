@@ -2,7 +2,8 @@
 
 use std::sync::Arc;
 use sc_client::LongestChain;
-use runtime::{self, GenesisConfig, opaque::Block, RuntimeApi};
+use sc_client_api::ExecutorProvider;
+use runtime::{self, opaque::Block, RuntimeApi};
 use sc_service::{error::{Error as ServiceError}, AbstractService, Configuration, ServiceBuilder};
 use sp_inherents::InherentDataProviders;
 use sc_executor::native_executor_instance;
@@ -74,7 +75,7 @@ macro_rules! new_full_start {
 }
 
 /// Builds a new service for a full client.
-pub fn new_full(config: Configuration<GenesisConfig>)
+pub fn new_full(config: Configuration)
 	-> Result<impl AbstractService, ServiceError>
 {
 	let is_authority = config.roles.is_authority();
@@ -111,7 +112,7 @@ pub fn new_full(config: Configuration<GenesisConfig>)
 			.ok_or(ServiceError::SelectChainRequired)?;
 
 		let can_author_with =
-			sp_consensus::CanAuthorWithNativeVersion::new(service.client().executor().clone());
+			sp_consensus::CanAuthorWithNativeVersion::new(client.executor().clone());
 
 		sc_consensus_pow::start_mine(
 			Box::new(block_import),
@@ -134,7 +135,7 @@ pub fn new_full(config: Configuration<GenesisConfig>)
 }
 
 /// Builds a new service for a light client.
-pub fn new_light(config: Configuration<GenesisConfig>)
+pub fn new_light(config: Configuration)
 	-> Result<impl AbstractService, ServiceError>
 {
 	ServiceBuilder::new_light::<Block, RuntimeApi, Executor>(config)?

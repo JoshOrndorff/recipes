@@ -7,143 +7,37 @@ edition = "2018"
 [dependencies]
 serde = { version = "1.0", optional = true, features = ["derive"] }
 safe-mix = { version = "1.0", default-features = false }
-# Substrate Pallets
-balances = { package = 'pallet-balances', git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3', default-features = false }
-transaction-payment = { package = 'pallet-transaction-payment', git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3', default-features = false }
+parity-scale-codec = { version = "1.0.6", features = ["derive"], default-features = false }
+
+# Substrate pallets & dependencies
+frame-executive = { version = '2.0.0-alpha.5', default-features = false }
+frame-support = { version = '2.0.0-alpha.5', default-features = false }
+frame-system = { version = '2.0.0-alpha.5', default-features = false }
+pallet-babe = { version = '2.0.0-alpha.5', default-features = false }
+pallet-balances = { version = '2.0.0-alpha.5', default-features = false }
+pallet-grandpa = { version = '2.0.0-alpha.5', default-features = false }
+pallet-indices = { version = '2.0.0-alpha.5', default-features = false }
+pallet-randomness-collective-flip = { version = '2.0.0-alpha.5', default-features = false }
+pallet-sudo = { version = '2.0.0-alpha.5', default-features = false }
+pallet-timestamp = { version = '2.0.0-alpha.5', default-features = false }
+pallet-transaction-payment = { version = '2.0.0-alpha.5', default-features = false }
+sp-api = { version = '2.0.0-alpha.5', default-features = false }
+sp-block-builder = { version = '2.0.0-alpha.5', default-features = false }
+sp-consensus-babe = { version = '0.8.0-alpha.5', default-features = false }
+sp-core = { version = '2.0.0-alpha.5', default-features = false }
+sp-finality-grandpa = { version = '2.0.0-alpha.5', default-features = false }
+sp-inherents = { version = '2.0.0-alpha.5', default-features = false }
+sp-io = { version = '2.0.0-alpha.5', default-features = false }
+sp-offchain = { version = '2.0.0-alpha.5', default-features = false }
+sp-runtime = { version = '2.0.0-alpha.5', default-features = false }
+sp-session = { version = '2.0.0-alpha.5', default-features = false }
+sp-std = { version = '2.0.0-alpha.5', default-features = false }
+sp-transaction-pool = { version = '2.0.0-alpha.5', default-features = false }
+sp-version = { version = '2.0.0-alpha.5', default-features = false }
+
 # Recipe Pallets
 offchain-demo = { path = "../../pallets/offchain-demo", default-features = false }
 
-[dependencies.parity-scale-codec]
-default-features = false
-features = ['derive']
-version = '1.0.6'
-
-[dependencies.rstd]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = "sp-std"
-tag = 'v2.0.0-alpha.3'
-
-[dependencies.runtime-io]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'sp-io'
-tag = 'v2.0.0-alpha.3'
-
-[dependencies.version]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'sp-version'
-tag = 'v2.0.0-alpha.3'
-
-[dependencies.support]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'frame-support'
-tag = 'v2.0.0-alpha.3'
-
-[dependencies.sp-core]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-tag = 'v2.0.0-alpha.3'
-
-[dependencies.substrate-session]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'sp-session'
-tag = 'v2.0.0-alpha.3'
-
-[dependencies.babe]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'pallet-babe'
-tag = 'v2.0.0-alpha.3'
-
-[dependencies.sp-consensus-babe]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-tag = 'v2.0.0-alpha.3'
-
-[dependencies.sp-finality-grandpa]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-tag = 'v2.0.0-alpha.3'
-
-[dependencies.executive]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'frame-executive'
-tag = 'v2.0.0-alpha.3'
-
-[dependencies.indices]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'pallet-indices'
-tag = 'v2.0.0-alpha.3'
-
-[dependencies.grandpa]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'pallet-grandpa'
-tag = 'v2.0.0-alpha.3'
-
-[dependencies.randomness-collective-flip]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'pallet-randomness-collective-flip'
-tag = 'v2.0.0-alpha.3'
-
-[dependencies.system]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'frame-system'
-tag = 'v2.0.0-alpha.3'
-
-[dependencies.timestamp]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'pallet-timestamp'
-tag = 'v2.0.0-alpha.3'
-
-[dependencies.sudo]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'pallet-sudo'
-tag = 'v2.0.0-alpha.3'
-
-[dependencies.sp-runtime]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'sp-runtime'
-tag = 'v2.0.0-alpha.3'
-
-[dependencies.sp-api]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-tag = 'v2.0.0-alpha.3'
-
-[dependencies.block-builder-api]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'sp-block-builder'
-tag = 'v2.0.0-alpha.3'
-
-[dependencies.sp-transaction-pool]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-tag = 'v2.0.0-alpha.3'
-
-[dependencies.inherents]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'sp-inherents'
-tag = 'v2.0.0-alpha.3'
-
-[dependencies.offchain-primitives]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'sp-offchain'
-tag = 'v2.0.0-alpha.3'
 
 [build-dependencies]
 wasm-builder-runner = { package = "substrate-wasm-builder-runner", version = "1.0.4" }
@@ -152,33 +46,33 @@ wasm-builder-runner = { package = "substrate-wasm-builder-runner", version = "1.
 default = ["std"]
 std = [
 	# Substrate dependencies alphabetically
-	"babe/std",
-	"balances/std",
-	"block-builder-api/std",
-	"executive/std",
-	"grandpa/std",
-	"indices/std",
-	"inherents/std",
-	"offchain-primitives/std",
+	"frame-executive/std",
+	"frame-support/std",
+	"frame-system/std",
+	"pallet-babe/std",
+	"pallet-balances/std",
+	"pallet-grandpa/std",
+	"pallet-indices/std",
+	"pallet-randomness-collective-flip/std",
+	"pallet-sudo/std",
+	"pallet-timestamp/std",
+	"pallet-transaction-payment/std",
 	"parity-scale-codec/std",
-	"sp-consensus-babe/std",
-	"sp-core/std",
-	"sp-finality-grandpa/std",
-	"randomness-collective-flip/std",
-	"rstd/std",
-	"runtime-io/std",
 	"safe-mix/std",
 	"serde",
 	"sp-api/std",
+	"sp-block-builder/std",
+	"sp-consensus-babe/std",
+	"sp-core/std",
+	"sp-finality-grandpa/std",
+	"sp-inherents/std",
+	"sp-io/std",
+	"sp-offchain/std",
 	"sp-runtime/std",
+	"sp-session/std",
+	"sp-std/std",
 	"sp-transaction-pool/std",
-	"substrate-session/std",
-	"sudo/std",
-	"support/std",
-	"system/std",
-	"timestamp/std",
-	"transaction-payment/std",
-	"version/std",
+	"sp-version/std",
 
 	# Recipes pallets
 	"offchain-demo/std",

@@ -1,5 +1,5 @@
 use super::RawEvent;
-use crate::{Module, Trait};
+use crate::{Module, Trait, Error};
 use sp_core::H256;
 use sp_io::TestExternalities;
 use sp_runtime::{
@@ -86,36 +86,52 @@ fn set_works() {
 }
 
 #[test]
-fn get_works() {
+fn get_throws() {
 	ExtBuilder::build().execute_with(|| {
 		assert_err!(
-			SimpleMap::get_single_entry(Origin::signed(1), 2),
-			"an entry does not exist for this user"
+			SimpleMap::get_single_entry(Origin::signed(2), 3),
+			Error::<TestRuntime>::NoValueStored
 		);
+	})
+}
+
+#[test]
+fn get_works() {
+	ExtBuilder::build().execute_with(|| {
 
 		assert_ok!(SimpleMap::set_single_entry(Origin::signed(2), 19));
 		assert_ok!(SimpleMap::get_single_entry(Origin::signed(1), 2));
 
 		let expected_event = TestEvent::simple_map(RawEvent::EntryGot(1, 19));
-
 		assert!(System::events().iter().any(|a| a.event == expected_event));
+
+		// Ensure storage is still set
+		assert_eq!(SimpleMap::simple_map(2), 19);
+	})
+}
+
+#[test]
+fn take_throws() {
+	ExtBuilder::build().execute_with(|| {
+		assert_err!(
+			SimpleMap::take_single_entry(Origin::signed(2)),
+			Error::<TestRuntime>::NoValueStored
+		);
 	})
 }
 
 #[test]
 fn take_works() {
 	ExtBuilder::build().execute_with(|| {
-		assert_err!(
-			SimpleMap::take_single_entry(Origin::signed(2)),
-			"an entry does not exist for this user"
-		);
 
 		assert_ok!(SimpleMap::set_single_entry(Origin::signed(2), 19));
 		assert_ok!(SimpleMap::take_single_entry(Origin::signed(2)));
 
-		let expected_event = TestEvent::simple_map(RawEvent::EntryTook(2, 19));
-
+		let expected_event = TestEvent::simple_map(RawEvent::EntryTaken(2, 19));
 		assert!(System::events().iter().any(|a| a.event == expected_event));
+
+		// Assert storage has returned to default value (zero)
+		assert_eq!(SimpleMap::simple_map(2), 0);
 	})
 }
 
@@ -125,25 +141,7 @@ fn increase_works() {
 		assert_ok!(SimpleMap::set_single_entry(Origin::signed(2), 19));
 		assert_ok!(SimpleMap::increase_single_entry(Origin::signed(2), 2));
 
-		let expected_event = TestEvent::simple_map(RawEvent::IncreaseEntry(19, 21));
-
-		assert!(System::events().iter().any(|a| a.event == expected_event));
-	})
-}
-
-#[test]
-fn cas_works() {
-	ExtBuilder::build().execute_with(|| {
-		assert_ok!(SimpleMap::set_single_entry(Origin::signed(2), 19));
-
-		assert_err!(
-			SimpleMap::compare_and_swap_single_entry(Origin::signed(2), 18, 32),
-			"cas failed bc old_entry inputted by user != existing_entry"
-		);
-
-		assert_ok!(SimpleMap::compare_and_swap_single_entry(Origin::signed(2), 19, 32));
-
-		let expected_event = TestEvent::simple_map(RawEvent::CAS(19, 32));
+		let expected_event = TestEvent::simple_map(RawEvent::EntryIncreased(2, 19, 21));
 
 		assert!(System::events().iter().any(|a| a.event == expected_event));
 	})

@@ -37,9 +37,9 @@ pub struct SuperThing<Hash, Balance> {
 decl_storage! {
 	trait Store for Module<T: Trait> as NestedStructs {
 		InnerThingsByNumbers get(fn inner_things_by_numbers):
-			map hasher(blake2_256) u32 => InnerThingOf<T>;
+			map hasher(blake2_128_concat) u32 => InnerThingOf<T>;
 		SuperThingsBySuperNumbers get(fn super_things_by_super_numbers):
-			map hasher(blake2_256) u32 => SuperThing<T::Hash, T::Balance>;
+			map hasher(blake2_128_concat) u32 => SuperThing<T::Hash, T::Balance>;
 	}
 }
 

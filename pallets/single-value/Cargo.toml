@@ -15,10 +15,10 @@ std = [
 
 [dependencies]
 parity-scale-codec = { default-features = false, features = ['derive'], version = '1.0.6' }
-frame-support = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3',  default_features = false }
-frame-system  = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3',  default_features = false }
-sp-runtime = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3',  default_features = false }
+frame-support = { version = '2.0.0-alpha.5',  default_features = false }
+frame-system  = { version = '2.0.0-alpha.5',  default_features = false }
+sp-runtime = { version = '2.0.0-alpha.5',  default_features = false }
 
 [dev-dependencies]
-sp-core = { tag = 'v2.0.0-alpha.3', git = "https://github.com/paritytech/substrate.git", default_features = false }
-sp-io = { tag = 'v2.0.0-alpha.3', git = "https://github.com/paritytech/substrate.git", default_features = false }
+sp-core = { version = '2.0.0-alpha.5', default_features = false }
+sp-io = { version = '2.0.0-alpha.5', default_features = false }

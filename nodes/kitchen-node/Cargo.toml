@@ -1,9 +1,10 @@
 [package]
 name = "kitchen-node"
 version = "2.0.0"
-authors = ["Anonymous"]
-build = "build.rs"
 edition = "2018"
+authors = ['Joshy Orndorff', '4meta5', 'Jimmy Chu']
+homepage = 'https://substrate.dev/recipes'
+repository = 'https://github.com/substrate-developer-hub/recipes'
 
 [[bin]]
 name = "kitchen-node"
@@ -19,25 +20,25 @@ log = "0.4.8"
 tokio = "0.1.22"
 exit-future = "0.2.0"
 parking_lot = "0.9.0"
-codec = { package = "parity-scale-codec", version = "1.0.0" }
 trie-root = "0.15.2"
-sp-io = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
-sc-cli = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
-sp-core = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
-sp-runtime = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
-sc-executor = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
-sc-service = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
-sp-inherents = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
-sc-transaction-pool = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
-sp-transaction-pool = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
-sc-network = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
-sc-consensus-babe = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
-sp-consensus-babe = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
-sc-finality-grandpa = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
-sp-finality-grandpa = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
-sc-client = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
-sc-basic-authorship = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
-sp-consensus = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
+sp-io = '2.0.0-alpha.5'
+sc-cli = '0.8.0-alpha.5'
+sc-client-api = '2.0.0-alpha.5'
+sp-core = '2.0.0-alpha.5'
+sp-runtime = '2.0.0-alpha.5'
+sc-executor = '0.8.0-alpha.5'
+sc-service = '0.8.0-alpha.5'
+sp-inherents = '2.0.0-alpha.5'
+sc-transaction-pool = '2.0.0-alpha.5'
+sp-transaction-pool = '2.0.0-alpha.5'
+sc-network = '0.8.0-alpha.5'
+sc-consensus-babe = '0.8.0-alpha.5'
+sp-consensus-babe = '0.8.0-alpha.5'
+sc-finality-grandpa = '0.8.0-alpha.5'
+sp-finality-grandpa = '2.0.0-alpha.5'
+sc-client = '0.8.0-alpha.5'
+sc-basic-authorship = '0.8.0-alpha.5'
+sp-consensus = '0.8.0-alpha.5'
 
 # Pick one of the runtimes below.
 # Your runtime must have the necessary pallets to support consensus (Babe, Grandpa, etc).
@@ -59,11 +60,7 @@ runtime = { package = "super-runtime", path = "../../runtimes/super-runtime" }
 
 [build-dependencies]
 vergen = "3.0.4"
-
-[build-dependencies.build-script-utils]
-git = 'https://github.com/paritytech/substrate.git'
-package = 'substrate-build-script-utils'
-tag = 'v2.0.0-alpha.3'
+substrate-build-script-utils = '2.0.0-alpha.5'
 
 [features]
 ocw = []

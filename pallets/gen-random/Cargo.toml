@@ -1,5 +1,5 @@
 [package]
-name = "reservable-currency"
+name = "generating-randomness"
 version = "0.1.0"
 authors = ["4meta5"]
 edition = "2018"
@@ -11,6 +11,7 @@ std = [
     'support/std',
     'system/std',
     'balances/std',
+    'primitives/std',
     'runtime-primitives/std',
 ]
 
