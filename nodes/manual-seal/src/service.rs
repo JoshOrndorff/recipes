@@ -1,5 +1,8 @@
 //! Service and ServiceFactory implementation. Specialized wrapper over substrate service.
 
+use std::sync::Arc;
+use sc_client::LongestChain;
+use runtime::{self, opaque::Block, RuntimeApi};
 use sc_service::{
 	error::{Error as ServiceError}, AbstractService, Configuration,
 };
@@ -8,6 +11,8 @@ use sc_executor::native_executor_instance;
 pub use sc_executor::NativeExecutor;
 use sc_consensus_manual_seal::{rpc, self as manual_seal};
 use futures::future::Either;
+use sc_network::{config::DummyFinalityProofRequestBuilder};
+use sp_consensus::import_queue::BoxBlockImport;
 
 // Our native executor instance.
 native_executor_instance!(
@@ -113,5 +118,31 @@ pub fn new_full(config: Configuration, instant_seal: bool) -> Result<impl Abstra
 /// Builds a new service for a light client.
 pub fn new_light(config: Configuration) -> Result<impl AbstractService, ServiceError>
 {
-	new_full(config, true)
+	sc_service::ServiceBuilder::new_light::<Block, RuntimeApi, Executor>(config)?
+		.with_select_chain(|_config, backend| {
+			Ok(LongestChain::new(backend.clone()))
+		})?
+		.with_transaction_pool(|config, client, fetcher| {
+			let fetcher = fetcher
+				.ok_or_else(|| "Trying to start light transaction pool without active fetcher")?;
+
+			let pool_api = sc_transaction_pool::LightChainApi::new(client.clone(), fetcher.clone());
+			let pool = sc_transaction_pool::BasicPool::with_revalidation_type(
+				config, Arc::new(pool_api), sc_transaction_pool::RevalidationType::Light,
+			);
+			Ok(pool)
+		})?
+		.with_import_queue_and_fprb(|_config, client, _backend, _fetcher, select_chain, _tx_pool| {
+			let finality_proof_request_builder =
+				Box::new(DummyFinalityProofRequestBuilder::default()) as Box<_>;
+
+			let box_client: BoxBlockImport<Block, _> = Box::new(client.clone());
+			let import_queue = sc_consensus_manual_seal::import_queue::<Block, sc_client_db::Backend<Block>>(box_client);
+
+			Ok((import_queue, finality_proof_request_builder))
+		})?
+		.with_finality_proof_provider(|_client, _backend|
+			Ok(Arc::new(()) as _)
+		)?
+		.build()
 }
