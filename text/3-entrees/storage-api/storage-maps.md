@@ -31,7 +31,7 @@ This is a cryptographically secure hash function, and is always safe to use. If 
 
 ### `twox_64_concat`
 
-This hasher is _not_ cryptographically secure, but is even more efficient than blake2. Thus it represents trading security for performance. You should _not_ use this hasher if chain users can affect the storage keys. However, it is perfectly safe to use this hasher to gain performance in scenarios where the users do not control the keys. For example, if the keys in your map are sequentially increasing indices and users cannot cause the indices to rapidly increase, then this is a perfectly reasonable choice.
+This hasher is _not_ cryptographically secure, but is more efficient than blake2. Thus it represents trading security for performance. You should _not_ use this hasher if chain users can affect the storage keys. However, it is perfectly safe to use this hasher to gain performance in scenarios where the users do not control the keys. For example, if the keys in your map are sequentially increasing indices and users cannot cause the indices to rapidly increase, then this is a perfectly reasonable choice.
 
 ### `identity`
 
