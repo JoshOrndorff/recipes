@@ -16,7 +16,7 @@ decl_storage! {
 ```
 
 Much of this should look familiar to you from storage values. Reading the line from left to right we have:
-* `StorageMap` - the name of the storage map
+* `SimpleMap` - the name of the storage map
 * `get(fn simple_map)` - the name of a getter function that will return values from the map.
 * `: map hasher(blake2_128_concat)` - beginning of the type declaration. This is a map and it will use the [`blake2_128_concat`](https://substrate.dev/rustdocs/master/frame_support/trait.Hashable.html#tymethod.blake2_128_concat) hasher. More on this below.
 * `T::AccountId => u32` - The specific key and value tyes of the map. This is a map from `AccountId`s to `u32`s.
