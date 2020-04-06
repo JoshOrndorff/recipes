@@ -27,7 +27,7 @@ Although the syntax above is complex, most of it should be straightforward if yo
 
 ### `blake2_128_concat`
 
-This is a cryptographically secure hash function, and is always safe to use. If is reasonably efficient, and will keep your storage tree balanced. You _must_ choose this hasher if users of your chain have the ability to affect the storage keys. In this pallet, the keys are `AccountId`s. At first it may _seem_ that the user doesn't affect the `AccountId`, but in reality a malicious user can generate thousands of accounts and use the one that will affect the chain's storage tree in the way the attacker likes. For this reason, we have chosen to use the `blake2_128_concat` hasher.
+This is a cryptographically secure hash function, and is always safe to use. It is reasonably efficient, and will keep your storage tree balanced. You _must_ choose this hasher if users of your chain have the ability to affect the storage keys. In this pallet, the keys are `AccountId`s. At first it may _seem_ that the user doesn't affect the `AccountId`, but in reality a malicious user can generate thousands of accounts and use the one that will affect the chain's storage tree in the way the attacker likes. For this reason, we have chosen to use the `blake2_128_concat` hasher.
 
 ### `twox_64_concat`
 
