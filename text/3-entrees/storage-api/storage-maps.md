@@ -23,7 +23,7 @@ Much of this should look familiar to you from storage values. Reading the line f
 
 ## Choosing a Hasher
 
-Although the syntax above is complex, most of it should be straightforward if you've understood the recipe on storage values. The last unfamiliar piece of writing a storage map is choosing which hasher to use. In general you should choose one of the three following hashers. The coice of hasher will affect the performance and security of your chain. If you don't want to think much about this, just choose `blake2_128_concat` and skip to the next section.
+Although the syntax above is complex, most of it should be straightforward if you've understood the recipe on storage values. The last unfamiliar piece of writing a storage map is choosing which hasher to use. In general you should choose one of the three following hashers. The choice of hasher will affect the performance and security of your chain. If you don't want to think much about this, just choose `blake2_128_concat` and skip to the next section.
 
 ### `blake2_128_concat`
 
