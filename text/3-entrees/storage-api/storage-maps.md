@@ -55,4 +55,4 @@ let entry = <SimpleMap<T>>::take(&user);
 <SimpleMap<T>>::contains_key(&user)
 ```
 
-The rest of the API is documented in the rustdocs on the [`StorageMap` trait](https://substrate.dev/rustdocs/master/frame_support/storage/trait.StorageMap.html). You do not need to explicitly `use` this trait because the `decl_storage!` macro will do it for you in you use a storage map.
+The rest of the API is documented in the rustdocs on the [`StorageMap` trait](https://substrate.dev/rustdocs/master/frame_support/storage/trait.StorageMap.html). You do not need to explicitly `use` this trait because the `decl_storage!` macro will do it for you if you use a storage map.
