@@ -181,7 +181,7 @@ pub struct InnerThing&lt;Hash, Balance&gt; {
 <pre><code class="language-rust ignore">decl_storage! {
 	trait Store for Module&lt;T: Trait&gt; as NestedStructs {
 		InnerThingsByNumbers get(fn inner_things_by_numbers):
-			map hasher(blake2_256) u32 =&gt; InnerThingOf&lt;T&gt;;
+			map hasher(blake2_128_concat) u32 =&gt; InnerThingOf&lt;T&gt;;
 		SuperThingsBySuperNumbers get(fn super_things_by_super_numbers):
 			map hasher(blake2_256) u32 =&gt; SuperThing&lt;T::Hash, T::Balance&gt;;
 	}

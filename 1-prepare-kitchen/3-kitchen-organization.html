@@ -226,8 +226,8 @@ runtime = { package = &quot;super-runtime&quot;, path = &quot;../../runtimes/sup
 <pre><code class="language-TOML"># -- snip --
 
 # Substrate Pallets
-balances = { package = 'pallet-balances', git = 'https://github.com/paritytech/substrate.git', ... }
-transaction-payment = { package = 'pallet-transaction-payment', git = 'https://github.com/paritytech/substrate.git',... }
+balances = { package = 'pallet-balances', , ... }
+transaction-payment = { package = 'pallet-transaction-payment', ,... }
 # Recipe Pallets
 adding-machine = { path = &quot;../../pallets/adding-machine&quot;, default-features = false }
 basic-token = { path = &quot;../../pallets/basic-token&quot;, default-features = false }

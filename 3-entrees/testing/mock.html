@@ -283,8 +283,8 @@ fn add_emits_correct_event() {
 <p>In the <code>Cargo.toml</code>, this only needs to be imported under <code>dev-dependencies</code> since it is only used in the <code>tests</code> module. It also doesn't need to be feature gated in the <code>std</code> feature.</p>
 <pre><code>[dev-dependencies.sp-io]
 default_features = false
-git = 'https://github.com/paritytech/substrate.git'
-tag = 'v2.0.0-alpha.3'
+
+version = '2.0.0-alpha.5'
 </code></pre>
 <p>There is more than one pattern for building a mock runtime environment for testing pallet logic. Two patterns are presented below. The latter is generally favored for reasons discussed in <a href="./externalities.html">custom test environment</a></p>
 <ul>

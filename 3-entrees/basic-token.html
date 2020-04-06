@@ -158,7 +158,7 @@
 <p>The next two storage items set the total supply of the token and keep track of whether the token has been initialized yet.</p>
 <pre><code class="language-rust ignore">decl_storage! {
 	trait Store for Module&lt;T: Trait&gt; as Token {
-		pub Balances get(get_balance): map hasher(blake2_256) T::AccountId =&gt; u64;
+		pub Balances get(get_balance): map hasher(blake2_128_concat) T::AccountId =&gt; u64;
 
 		pub TotalSupply get(total_supply): u64 = 21000000;
 
@@ -166,6 +166,7 @@
 	}
 }
 </code></pre>
+<p>Because users can influence the keys in our storage map, we've chosen the <code>blake2_128_concat</code> hasher as described in the recipe on <a href="storage-api/storage-maps.html">storage maps</a>s.</p>
 <h2><a class="header" href="#events-and-errors" id="events-and-errors">Events and Errors</a></h2>
 <p>The pallet defines events and errors for common lifecycle events such as successful and failed transfers, and successful and failed initialization.</p>
 <pre><code class="language-rust ignore">decl_event!(

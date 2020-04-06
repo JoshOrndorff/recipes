@@ -319,8 +319,8 @@ runtime = { package = &quot;super-runtime&quot;, path = &quot;../../runtimes/sup
 <pre><code class="language-TOML"># -- snip --
 
 # Substrate Pallets
-balances = { package = 'pallet-balances', git = 'https://github.com/paritytech/substrate.git', ... }
-transaction-payment = { package = 'pallet-transaction-payment', git = 'https://github.com/paritytech/substrate.git',... }
+balances = { package = 'pallet-balances', , ... }
+transaction-payment = { package = 'pallet-transaction-payment', ,... }
 # Recipe Pallets
 adding-machine = { path = &quot;../../pallets/adding-machine&quot;, default-features = false }
 basic-token = { path = &quot;../../pallets/basic-token&quot;, default-features = false }
@@ -979,7 +979,7 @@ pub struct InnerThing&lt;Hash, Balance&gt; {
 <pre><code class="language-rust ignore">decl_storage! {
 	trait Store for Module&lt;T: Trait&gt; as NestedStructs {
 		InnerThingsByNumbers get(fn inner_things_by_numbers):
-			map hasher(blake2_256) u32 =&gt; InnerThingOf&lt;T&gt;;
+			map hasher(blake2_128_concat) u32 =&gt; InnerThingOf&lt;T&gt;;
 		SuperThingsBySuperNumbers get(fn super_things_by_super_numbers):
 			map hasher(blake2_256) u32 =&gt; SuperThing&lt;T::Hash, T::Balance&gt;;
 	}
@@ -1195,7 +1195,7 @@ See the Rust book's section on <a href="https://doc.rust-lang.org/book/ch17-02-t
 <p>The next two storage items set the total supply of the token and keep track of whether the token has been initialized yet.</p>
 <pre><code class="language-rust ignore">decl_storage! {
 	trait Store for Module&lt;T: Trait&gt; as Token {
-		pub Balances get(get_balance): map hasher(blake2_256) T::AccountId =&gt; u64;
+		pub Balances get(get_balance): map hasher(blake2_128_concat) T::AccountId =&gt; u64;
 
 		pub TotalSupply get(total_supply): u64 = 21000000;
 
@@ -1203,6 +1203,7 @@ See the Rust book's section on <a href="https://doc.rust-lang.org/book/ch17-02-t
 	}
 }
 </code></pre>
+<p>Because users can influence the keys in our storage map, we've chosen the <code>blake2_128_concat</code> hasher as described in the recipe on <a href="3-entrees/storage-api/storage-maps.html">storage maps</a>s.</p>
 <h2><a class="header" href="#events-and-errors" id="events-and-errors">Events and Errors</a></h2>
 <p>The pallet defines events and errors for common lifecycle events such as successful and failed transfers, and successful and failed initialization.</p>
 <pre><code class="language-rust ignore">decl_event!(
@@ -1944,7 +1945,7 @@ pub mod crypto {
 <span class="boring">}
 </span></code></pre></pre>
 <p>This associated type needs to be specified by the runtime when the runtime is to include this pallet (implement this pallet trait).</p>
-<p>Looking at the <a href="https://substrate.dev/rustdocs/v2.0.0-alpha.3/frame_system/offchain/trait.SubmitSignedTransaction.html">rustdoc of <code>SubmitSignedTransaction</code></a>, it says that we should use the <code>TransactionSubmitter</code> implementation type. Let's do that in our runtime.</p>
+<p>Looking at the <a href="https://substrate.dev/rustdocs/master/frame_system/offchain/trait.SubmitSignedTransaction.html">rustdoc of <code>SubmitSignedTransaction</code></a>, it says that we should use the <code>TransactionSubmitter</code> implementation type. Let's do that in our runtime.</p>
 <p>src: <a href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/super-runtime/src/lib.rs"><code>runtimes/super-runtime/src/lib.rs</code></a></p>
 <pre><pre class="playpen"><code class="language-rust">
 <span class="boring">#![allow(unused_variables)]
@@ -1963,7 +1964,7 @@ impl offchain_demo::Trait for Runtime {
 }
 <span class="boring">}
 </span></code></pre></pre>
-<p>Now if we build the <code>kitchen-node</code>, we will see the compiler complain that the trait bound for <code>Runtime: frame_system::offchain::CreateTransaction</code> is not satisfied. We learn that when using <code>SubmitSignedTransaction</code>, we also need to have our runtime implement the <a href="https://substrate.dev/rustdocs/v2.0.0-alpha.3/frame_system/offchain/trait.CreateTransaction.html"><code>CreateTransaction</code> trait</a>. So let's implement this in our runtime.</p>
+<p>Now if we build the <code>kitchen-node</code>, we will see the compiler complain that the trait bound for <code>Runtime: frame_system::offchain::CreateTransaction</code> is not satisfied. We learn that when using <code>SubmitSignedTransaction</code>, we also need to have our runtime implement the <a href="https://substrate.dev/rustdocs/master/frame_system/offchain/trait.CreateTransaction.html"><code>CreateTransaction</code> trait</a>. So let's implement this in our runtime.</p>
 <p>src: <a href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/super-runtime/src/lib.rs"><code>runtimes/super-runtime/src/lib.rs</code></a></p>
 <pre><pre class="playpen"><code class="language-rust">
 <span class="boring">#![allow(unused_variables)]
@@ -2325,7 +2326,7 @@ impl SillyRpc for Silly {
 <pre><code class="language-toml">jsonrpc-core = &quot;14.0.3&quot;
 jsonrpc-core-client = &quot;14.0.3&quot;
 jsonrpc-derive = &quot;14.0.3&quot;
-sc-rpc = { git = 'https://github.com/paritytech/substrate.git', tag = 'v2.0.0-alpha.3' }
+sc-rpc = { version = '2.0.0-alpha.5' }
 </code></pre>
 <p>Next, in our <code>rpc-node</code>'s <code>service.rs</code> file, we extend the service with our RPC. We've chosen to install this RPC for full nodes, so we've included the code in the <code>new_full_start!</code> macro. You could also install the RPC on a light client by making the corresponding changes to <code>new_light</code>.</p>
 <p>The first change to this macro is a simple type definition</p>
@@ -2581,8 +2582,8 @@ pub struct Sha3Algorithm;
 </code></pre>
 <p>Notice that this function takes a parameter for the number of rounds of mining it should attempt. If no block has been successfully mined in this time, the method will return. This gives the service a chance to check whether any new blocks have been received from other authors since the mining started. If a valid block has been received, then we will start mining on it. If no such block has been received, we will go in for another try at mining on the same block as before.</p>
 <h2><a class="header" href="#the-service-builder" id="the-service-builder">The Service Builder</a></h2>
-<p>The <a href="https://substrate.dev/rustdocs/v2.0.0-alpha.3/sc_service/trait.AbstractService.html">Substrate Service</a> is the main coordinator of the various parts of a Substrate node, including consensus. The service is large and takes many parameters, so it is built with a <a href="https://substrate.dev/rustdocs/v2.0.0-alpha.3/sc_service/struct.ServiceBuilder.html">ServiceBuilder</a> following <a href="https://doc.rust-lang.org/1.0.0/style/ownership/builders.html">Rust's builder pattern</a>.</p>
-<p>The particular builder method that is relevant here is <a href="https://substrate.dev/rustdocs/v2.0.0-alpha.3/sc_service/struct.ServiceBuilder.html#method.with_import_queue"><code>with_import_queue</code></a>. Here we construct an instance of the <a href="https://substrate.dev/rustdocs/v2.0.0-alpha.3/sc_consensus_pow/struct.PowBlockImport.html"><code>PowBlockImport</code> struct</a>, providing it with references to our client, our Sha3Algorithm, and some other necessary data.</p>
+<p>The <a href="https://substrate.dev/rustdocs/master/sc_service/trait.AbstractService.html">Substrate Service</a> is the main coordinator of the various parts of a Substrate node, including consensus. The service is large and takes many parameters, so it is built with a <a href="https://substrate.dev/rustdocs/master/sc_service/struct.ServiceBuilder.html">ServiceBuilder</a> following <a href="https://doc.rust-lang.org/1.0.0/style/ownership/builders.html">Rust's builder pattern</a>.</p>
+<p>The particular builder method that is relevant here is <a href="https://substrate.dev/rustdocs/master/sc_service/struct.ServiceBuilder.html#method.with_import_queue"><code>with_import_queue</code></a>. Here we construct an instance of the <a href="https://substrate.dev/rustdocs/master/sc_consensus_pow/struct.PowBlockImport.html"><code>PowBlockImport</code> struct</a>, providing it with references to our client, our Sha3Algorithm, and some other necessary data.</p>
 <pre><code class="language-rust ignore">builder
 	.with_import_queue(|_config, client, select_chain, _transaction_pool| {
 
@@ -3205,8 +3206,8 @@ fn add_emits_correct_event() {
 <p>In the <code>Cargo.toml</code>, this only needs to be imported under <code>dev-dependencies</code> since it is only used in the <code>tests</code> module. It also doesn't need to be feature gated in the <code>std</code> feature.</p>
 <pre><code>[dev-dependencies.sp-io]
 default_features = false
-git = 'https://github.com/paritytech/substrate.git'
-tag = 'v2.0.0-alpha.3'
+
+version = '2.0.0-alpha.5'
 </code></pre>
 <p>There is more than one pattern for building a mock runtime environment for testing pallet logic. Two patterns are presented below. The latter is generally favored for reasons discussed in <a href="3-entrees/testing/./externalities.html">custom test environment</a></p>
 <ul>
@@ -3413,7 +3414,7 @@ fn add_emits_correct_event() {
 			System::events(),
 			vec![
 				EventRecord {
-					phase: Phase::ApplyExtrinsic(0),
+					phase: Phase::Initialization,
 					event: TestEvent::added(crate::Event::Added(6, 9, 15)),
 					topics: vec![],
 				},

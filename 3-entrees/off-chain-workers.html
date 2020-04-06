@@ -198,7 +198,7 @@ pub mod crypto {
 <span class="boring">}
 </span></code></pre></pre>
 <p>This associated type needs to be specified by the runtime when the runtime is to include this pallet (implement this pallet trait).</p>
-<p>Looking at the <a href="https://substrate.dev/rustdocs/v2.0.0-alpha.3/frame_system/offchain/trait.SubmitSignedTransaction.html">rustdoc of <code>SubmitSignedTransaction</code></a>, it says that we should use the <code>TransactionSubmitter</code> implementation type. Let's do that in our runtime.</p>
+<p>Looking at the <a href="https://substrate.dev/rustdocs/master/frame_system/offchain/trait.SubmitSignedTransaction.html">rustdoc of <code>SubmitSignedTransaction</code></a>, it says that we should use the <code>TransactionSubmitter</code> implementation type. Let's do that in our runtime.</p>
 <p>src: <a href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/super-runtime/src/lib.rs"><code>runtimes/super-runtime/src/lib.rs</code></a></p>
 <pre><pre class="playpen"><code class="language-rust">
 <span class="boring">#![allow(unused_variables)]
@@ -217,7 +217,7 @@ impl offchain_demo::Trait for Runtime {
 }
 <span class="boring">}
 </span></code></pre></pre>
-<p>Now if we build the <code>kitchen-node</code>, we will see the compiler complain that the trait bound for <code>Runtime: frame_system::offchain::CreateTransaction</code> is not satisfied. We learn that when using <code>SubmitSignedTransaction</code>, we also need to have our runtime implement the <a href="https://substrate.dev/rustdocs/v2.0.0-alpha.3/frame_system/offchain/trait.CreateTransaction.html"><code>CreateTransaction</code> trait</a>. So let's implement this in our runtime.</p>
+<p>Now if we build the <code>kitchen-node</code>, we will see the compiler complain that the trait bound for <code>Runtime: frame_system::offchain::CreateTransaction</code> is not satisfied. We learn that when using <code>SubmitSignedTransaction</code>, we also need to have our runtime implement the <a href="https://substrate.dev/rustdocs/master/frame_system/offchain/trait.CreateTransaction.html"><code>CreateTransaction</code> trait</a>. So let's implement this in our runtime.</p>
 <p>src: <a href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/super-runtime/src/lib.rs"><code>runtimes/super-runtime/src/lib.rs</code></a></p>
 <pre><pre class="playpen"><code class="language-rust">
 <span class="boring">#![allow(unused_variables)]
