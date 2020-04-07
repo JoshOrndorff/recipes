@@ -48,7 +48,7 @@ In addition to finalizing blocks while creating them, they can be finalized late
 $ curl http://localhost:9933 -H "Content-Type:application/json;charset=utf-8" -d   '{
      "jsonrpc":"2.0",
       "id":1,
-      "method":"engine_createBlock",
+      "method":"engine_finalizeBlock",
       "params": ["0x0e0626477621754200486f323e3858cd5f28fcbe52c69b2581aecb622e384764", null]
     }'
 ```
