@@ -40,6 +40,7 @@ pub fn run(version: VersionInfo) -> sc_cli::Result<()> {
 			opt.run.update_config(&mut config, chain_spec::load_spec, &version)?;
 			opt.run.run(
 				config,
+				// The light client is not implemented. Calling it will panic.
 				service::new_light,
 				move |config: _| service::new_full(config, instant_seal),
 				&version,
