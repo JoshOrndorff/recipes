@@ -55,7 +55,7 @@ decl_module! {
 
             let now = <system::Module<T>>::block_number();
 
-            Self::deposit_event(RawEvent::LockFunds(unlocker, amount, now));
+            Self::deposit_event(RawEvent::UnlockFunds(unlocker, amount, now));
             Ok(())
         }
 
