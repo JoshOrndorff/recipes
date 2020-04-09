@@ -12,6 +12,7 @@
 	- [Events Verify Execution](./2-appetizers/4-events.md)
 - [Entrees](./3-entrees/index.md)
 	- [Runtime Storage API](./3-entrees/storage-api/index.md)
+		- [Storage Maps](./3-entrees/storage-api/storage-maps.md)
 		- [Cache Locally > Storage Calls](./3-entrees/storage-api/cache.md)
 		- [Sets, Vectors, Iteration](./3-entrees/storage-api/sets-vecs-iteration.md)
 		- [Subgroup Removal by Subkey: Double Maps](./3-entrees/storage-api/double.md)
