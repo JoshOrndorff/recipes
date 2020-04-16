@@ -6,7 +6,6 @@ mod tests;
 use frame_support::{
 	debug,
 	dispatch::DispatchResult, decl_module, decl_storage, decl_event, decl_error,
-	traits::Get,
 	weights::SimpleDispatchInfo,
 };
 
@@ -19,6 +18,7 @@ use sp_runtime::{
 	transaction_validity::{InvalidTransaction, ValidTransaction, TransactionValidity},
 };
 use sp_std::prelude::*;
+use sp_std::str as str;
 
 /// Defines application identifier for crypto keys of this module.
 ///
@@ -29,7 +29,8 @@ use sp_std::prelude::*;
 /// The keys can be inserted manually via RPC (see `author_insertKey`).
 pub const KEY_TYPE: KeyTypeId = KeyTypeId(*b"demo");
 pub const NUM_VEC_LEN: usize = 10;
-pub const HTTP_REMOTE_REQUEST_BYTES: &[u8] = b"https://api.github.com/orgs/paritytech";
+pub const HTTP_REMOTE_REQUEST_BYTES: &[u8] = b"https://api.github.com/orgs/substrate-developer-hub";
+pub const HTTP_HEADER_USER_AGENT: &[u8] = b"jimmychu0807";
 
 /// Based on the above `KeyTypeId` we need to generate a pallet-specific crypto type wrappers.
 /// We can use from supported crypto kinds (`sr25519`, `ed25519` and `ecdsa`) and augment
@@ -110,7 +111,7 @@ decl_module! {
 			let result = match Self::choose_tx_type(block_number) {
 				TransactionType::SignedSubmitNumber => Self::signed_submit_number(block_number),
 				TransactionType::UnsignedSubmitNumber => Self::unsigned_submit_number(block_number),
-				TransactionType::HttpFetching => Self::http_fetching(block_number),
+				TransactionType::HttpFetching => Self::fetch_n_parse(block_number),
 				TransactionType::None => Ok(())
 			};
 
@@ -133,7 +134,11 @@ impl<T: Trait> Module<T> {
 			}
 
 			// displaying the average
-			let average = numbers.iter().fold(0, {|acc, num| acc + num}) / (num_len as u64);
+			let average = match num_len {
+				0 => 0,
+				_ => numbers.iter().fold(0, {|acc, num| acc + num}) / (num_len as u64),
+			};
+
 			debug::info!("Current average of numbers is: {}", average);
 		});
 
@@ -143,7 +148,7 @@ impl<T: Trait> Module<T> {
 	}
 
 	fn choose_tx_type(block_number: T::BlockNumber) -> TransactionType {
-		match block_number.try_into().ok().unwrap() % 4 {
+		match block_number.try_into().ok().unwrap() % 3 {
 			0 => TransactionType::SignedSubmitNumber,
 			1 => TransactionType::UnsignedSubmitNumber,
 			2 => TransactionType::HttpFetching,
@@ -151,14 +156,36 @@ impl<T: Trait> Module<T> {
 		}
 	}
 
-	fn http_fetching(_block_number: T::BlockNumber) -> Result<(), Error<T>> {
-		let remote_url = HTTP_REMOTE_REQUEST_BYTES.to_vec();
+	fn fetch_n_parse(_block_number: T::BlockNumber) -> Result<(), Error<T>> {
+		let resp_bytes = Self::fetch_from_remote()
+			.map_err(|e| {
+				debug::error!("fetch_from_remote error: {:?}", e);
+				<Error<T>>::HttpFetchingError
+			})?;
 
-		let request = rt_offchain::http::Request::get(
-			sp_std::str::from_utf8(&remote_url).map_err(|_| <Error<T>>::HttpFetchingError)?
-		);
-		let timeout = sp_io::offchain::timestamp().add(rt_offchain::Duration::from_millis(2000));
+		let resp_str = str::from_utf8(&resp_bytes)
+			.map_err(|_| <Error<T>>::HttpFetchingError)?;
+
+		debug::info!("{:?}", resp_str);
+
+		Ok(())
+	}
+
+	fn fetch_from_remote() -> Result<Vec<u8>, Error<T>> {
+		let remote_url_bytes = HTTP_REMOTE_REQUEST_BYTES.to_vec();
+		let user_agent = HTTP_HEADER_USER_AGENT.to_vec();
+		let remote_url = str::from_utf8(&remote_url_bytes)
+			.map_err(|_| <Error<T>>::HttpFetchingError)?;
+
+		debug::info!("sending request to: {}", remote_url);
+
+		let request = rt_offchain::http::Request::get(remote_url);
+		let timeout = sp_io::offchain::timestamp().add(rt_offchain::Duration::from_millis(3000));
+		// For github API request, we also need to specify user-agent
+		//   See: https://developer.github.com/v3/#user-agent-required
 		let pending = request
+			.add_header("User-Agent", str::from_utf8(&user_agent)
+				.map_err(|_| <Error<T>>::HttpFetchingError)?)
 			.deadline(timeout)
 			.send()
 			.map_err(|_| <Error<T>>::HttpFetchingError)?;
@@ -172,12 +199,7 @@ impl<T: Trait> Module<T> {
 			return Err(<Error<T>>::HttpFetchingError);
 		}
 
-		let resp_data = response.body().collect::<Vec<u8>>();
-
-		// NEXT: display the string here, a break. compile
-		debug::info!("{:?}", resp_data);
-
-		Ok(())
+		Ok(response.body().collect::<Vec<u8>>())
 	}
 
 	fn signed_submit_number(block_number: T::BlockNumber) -> Result<(), Error<T>> {
