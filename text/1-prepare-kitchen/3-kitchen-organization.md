@@ -10,15 +10,7 @@ To understand how the code in this repository is organized, let's first take a l
 
 Much, but not all, of the Recipes focuses on writing runtimes with FRAME, Parity's Framework for composing runtimes from individual building blocks called Pallets. Runtimes built with FRAME typically contain several such pallets. The kitchen node you built previously follows this paradigm.
 
-* Blockchain Node
-	* P2P Messaging
-	* Consensus
-	* Runtime
-		* Pallet 1
-		* Pallet 2
-		* Pallet 3
-	* Transaction Queue
-	* RPC
+![Substrate Architecture Diagram](../img/substrate-architecture.png)
 
 ## The Directories in our Kitchen
 
