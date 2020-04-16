@@ -76,7 +76,6 @@ To transfer tokens, a user who owns some tokens calls the `transfer` method spec
 We again check for error conditions before mutating storage. In this case it is _not_ necessary to check whether the token has been initialized. If it has not, nobody has any funds and the transfer will simply fail with `InsufficientFunds`.
 
 ```rust, ignore
-/// Transfer tokens from one account to another
 fn transfer(_origin, to: T::AccountId, value: u64) -> DispatchResult {
 	let sender = ensure_signed(_origin)?;
 	let sender_balance = Self::get_balance(&sender);
