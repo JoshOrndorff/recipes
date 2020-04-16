@@ -13,7 +13,7 @@ The `Currency` trait provides an abstraction over a fungible assets system. To u
 
 ```rust, ignore
 pub trait Trait: system::Trait {
-    type Currency: Currency<Self::AccountId>;
+	type Currency: Currency<Self::AccountId>;
 }
 ```
 
@@ -40,34 +40,37 @@ Substrate's [Treasury pallet](https://substrate.dev/rustdocs/master/pallet_treas
 use frame_support::traits::{Currency, ReservableCurrency};
 
 pub trait Trait: system::Trait {
-    type Currency: Currency<Self::AccountId> + ReservableCurrency<Self::AccountId>;
+	type Currency: Currency<Self::AccountId> + ReservableCurrency<Self::AccountId>;
 }
 ```
 
 To lock or unlock some quantity of funds, it is sufficient to invoke `reserve` and `unreserve` respectively
 
 ```rust, ignore
-pub fn lock_funds(origin, amount: BalanceOf<T>) -> Result {
-    let locker = ensure_signed(origin)?;
+pub fn reserve_funds(origin, amount: BalanceOf<T>) -> DispatchResult {
+	let locker = ensure_signed(origin)?;
 
-    T::Currency::reserve(&locker, amount)
-            .map_err(|_| "locker can't afford to lock the amount requested")?;
+	T::Currency::reserve(&locker, amount)
+			.map_err(|_| "locker can't afford to lock the amount requested")?;
 
-    let now = <system::Module<T>>::block_number();
+	let now = <system::Module<T>>::block_number();
 
-    Self::deposit_event(RawEvent::LockFunds(locker, amount, now));
-    Ok(())
+	Self::deposit_event(RawEvent::LockFunds(locker, amount, now));
+	Ok(())
 }
+```
 
-pub fn unlock_funds(origin, amount: BalanceOf<T>) -> Result {
-    let unlocker = ensure_signed(origin)?;
+```rust, ignore
+pub fn unreserve_funds(origin, amount: BalanceOf<T>) -> DispatchResult {
+	let unlocker = ensure_signed(origin)?;
 
-    T::Currency::unreserve(&unlocker, amount);
+	T::Currency::unreserve(&unlocker, amount);
+	// ReservableCurrency::unreserve does not fail (it will lock up as much as amount)
 
-    let now = <system::Module<T>>::block_number();
+	let now = <system::Module<T>>::block_number();
 
-    Self::deposit_event(RawEvent::LockFunds(unlocker, amount, now));
-    Ok(())
+	Self::deposit_event(RawEvent::UnlockFunds(unlocker, amount, now));
+	Ok(())
 }
 ```
 
@@ -88,18 +91,18 @@ const EXAMPLE_ID: LockIdentifier = *b"example ";
 By using this `EXAMPLE_ID`, it is straightforward to define logic within the runtime to schedule locking, unlocking, and extending existing locks.
 
 ```rust, ignore
-fn lock_capital(origin, amount: BalanceOf<T>) -> Result {
-    let user = ensure_signed(origin)?;
+fn lock_capital(origin, amount: BalanceOf<T>) -> DispatchResult {
+	let user = ensure_signed(origin)?;
 
-    T::Currency::set_lock(
-        EXAMPLE_ID,
-        user.clone(),
-        amount,
-        WithdrawReasons::except(WithdrawReason::TransactionPayment),
-    );
+	T::Currency::set_lock(
+		EXAMPLE_ID,
+		&user,
+		amount,
+		WithdrawReasons::except(WithdrawReason::TransactionPayment),
+	);
 
-    Self::deposit_event(RawEvent::Locked(user, amount));
-    Ok(())
+	Self::deposit_event(RawEvent::Locked(user, amount));
+	Ok(())
 }
 ```
 
@@ -110,18 +113,17 @@ Functions that alter balances return an object of the [`Imbalance`](https://subs
 To manage this supply adjustment, the [`OnUnbalanced`](https://substrate.dev/rustdocs/master/frame_support/traits/trait.OnUnbalanced.html) handler is often used. An example might look something like
 
 ```rust, ignore
-// runtime method (ie decl_module block)
 pub fn reward_funds(origin, to_reward: T::AccountId, reward: BalanceOf<T>) {
-    let _ = ensure_signed(origin)?;
+	let _ = ensure_signed(origin)?;
 
-    let mut total_imbalance = <PositiveImbalanceOf<T>>::zero();
+	let mut total_imbalance = <PositiveImbalanceOf<T>>::zero();
 
-    let r = T::Currency::deposit_into_existing(&to_reward, reward).ok();
-    total_imbalance.maybe_subsume(r);
-    T::Reward::on_unbalanced(total_imbalance);
+	let r = T::Currency::deposit_into_existing(&to_reward, reward).ok();
+	total_imbalance.maybe_subsume(r);
+	T::Reward::on_unbalanced(total_imbalance);
 
-    let now = <system::Module<T>>::block_number();
-    Self::deposit_event(RawEvent::RewardFunds(to_reward, reward, now));
+	let now = <system::Module<T>>::block_number();
+	Self::deposit_event(RawEvent::RewardFunds(to_reward, reward, now));
 }
 ```
 
