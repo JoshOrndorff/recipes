@@ -8,7 +8,7 @@ edition = "2018"
 default = ['std']
 std = [
     'parity-scale-codec/std',
-    'support/std',
+    'frame-support/std',
     'system/std',
     'runtime-primitives/std',
 ]
@@ -19,10 +19,8 @@ default-features = false
 features = ['derive']
 version = '1.0.6'
 
-[dependencies.support]
+[dependencies.frame-support]
 default_features = false
-
-package = 'frame-support'
 version = '2.0.0-alpha.5'
 
 [dependencies.system]
