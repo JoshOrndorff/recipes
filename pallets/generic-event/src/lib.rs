@@ -1,4 +1,4 @@
-//! Demonstration of Event variants that uses type from the pallet's configuration trait
+//! Demonstration of Event variants that use type(s) from the pallet's configuration trait
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
