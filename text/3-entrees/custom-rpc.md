@@ -11,11 +11,11 @@ called "silly rpc" which just returns constant integers. A Hello world of sorts.
 ```rust
 #[rpc]
 pub trait SillyRpc {
-    #[rpc(name = "silly_seven")]
-    fn silly_7(&self) -> Result<u64>;
+	#[rpc(name = "silly_seven")]
+	fn silly_7(&self) -> Result<u64>;
 
-    #[rpc(name = "silly_double")]
-    fn silly_double(&self, val: u64) -> Result<u64>;
+	#[rpc(name = "silly_double")]
+	fn silly_double(&self, val: u64) -> Result<u64>;
 }
 ```
 
@@ -25,17 +25,17 @@ This definition defines two RPC methods called `hello_five` and `hello_seven`. E
 pub struct Silly;
 
 impl SillyRpc for Silly {
-    fn silly_7(&self) -> Result<u64> {
-        Ok(7)
-    }
+	fn silly_7(&self) -> Result<u64> {
+		Ok(7)
+	}
 
-    fn silly_double(&self, val: u64) -> Result<u64> {
-        Ok(2 * val)
-    }
+	fn silly_double(&self, val: u64) -> Result<u64> {
+		Ok(2 * val)
+	}
 }
 ```
 
-Finally, to make the contents of this new files visible, we need to add a line in our `main.rs`.
+Finally, to make the contents of this new file usable, we need to add a line in our `main.rs`.
 ```rust
 mod silly_rpc;
 ```
@@ -60,13 +60,16 @@ type RpcExtension = jsonrpc_core::IoHandler<sc_rpc::Metadata>;
 Then, once you've called the service builder, you can extend it with an RPC by using its `with_rpc_extensions` method as follows.
 
 ```rust
-.with_rpc_extensions(|client, _pool, _backend, _fetcher, _remote_blockchain| -> Result<RpcExtension, _> {
-  let mut io = jsonrpc_core::IoHandler::default();
+.with_rpc_extensions(|builder| -> Result<RpcExtension, _> {
+	// Make an io handler to be extended with individual RPCs
+	let mut io = jsonrpc_core::IoHandler::default();
 
-  // Use the fully qualified name starting from `crate` because we're in macro_rules!
-  io.extend_with(crate::silly_rpc::SillyRpc::to_delegate(crate::silly_rpc::Silly{}));
+	// Use the fully qualified name starting from `crate` because we're in macro_rules!
+	io.extend_with(crate::silly_rpc::SillyRpc::to_delegate(crate::silly_rpc::Silly{}));
 
-  Ok(io)
+	// --snip--
+
+	Ok(io)
 })
 ```
 
@@ -172,16 +175,19 @@ where
 
 Finally, to install this RPC on in our service, we expand the existing `with_rpc_extensions` call to
 ```rust
-.with_rpc_extensions(|client, _pool, _backend, _fetcher, _remote_blockchain| -> Result<RpcExtension, _> {
-  let mut io = jsonrpc_core::IoHandler::default();
+.with_rpc_extensions(|builder| -> Result<RpcExtension, _> {
+	// Make an io handler to be extended with individual RPCs
+	let mut io = jsonrpc_core::IoHandler::default();
 
-  // Use the fully qualified name starting from `crate` because we're in macro_rules!
-  io.extend_with(crate::silly_rpc::SillyRpc::to_delegate(crate::silly_rpc::Silly{}));
+	// Add the first rpc extension
+	io.extend_with(crate::silly_rpc::SillyRpc::to_delegate(crate::silly_rpc::Silly{}));
 
-  io.extend_with(sum_storage_rpc::SumStorageApi::to_delegate(sum_storage_rpc::SumStorage::new(client)));
+	// Add the second RPC extension
+	// Because this one calls a Runtime API it needs a reference to the client.
+	io.extend_with(sum_storage_rpc::SumStorageApi::to_delegate(sum_storage_rpc::SumStorage::new(builder.client().clone())));
 
-  Ok(io)
-})?
+	Ok(io)
+})?;
 ```
 
 ## Optional RPC Parameters
