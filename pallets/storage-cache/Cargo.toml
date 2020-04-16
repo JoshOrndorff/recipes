@@ -9,8 +9,8 @@ edition = "2018"
 parity-scale-codec = { default-features = false, features = ['derive'], version = '1.1.0' }
 
 # Substrate pallet/frame dependencies
-support = { package = 'frame-support', version = '2.0.0-alpha.5', default_features = false }
-system = { package = 'frame-system', version = '2.0.0-alpha.5', default_features = false }
+frame-support = { package = 'frame-support', version = '2.0.0-alpha.5', default_features = false }
+frame-system = { package = 'frame-system', version = '2.0.0-alpha.5', default_features = false }
 sp-runtime = { version = '2.0.0-alpha.5', default_features = false }
 sp-std = { version = '2.0.0-alpha.5', default_features = false }
 
@@ -22,7 +22,7 @@ sp-io = { version = '2.0.0-alpha.5', default_features = false }
 default = ['std']
 std = [
 	'parity-scale-codec/std',
-	'support/std',
-	'system/std',
+	'frame-support/std',
+	'frame-system/std',
 	'sp-runtime/std',
 ]

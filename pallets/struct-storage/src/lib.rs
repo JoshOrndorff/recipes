@@ -8,7 +8,7 @@ use frame_support::{
 	codec::{Decode, Encode},
 	decl_event, decl_module, decl_storage,
 	dispatch::DispatchResult,
-	StorageMap,
+	weights::SimpleDispatchInfo,
 };
 use frame_system::{self as system, ensure_signed};
 
@@ -62,6 +62,8 @@ decl_module! {
 	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
 		fn deposit_event() = default;
 
+		/// Stores an `InnerThing` struct in the storage map
+		#[weight = SimpleDispatchInfo::default()]
 		fn insert_inner_thing(origin, number: u32, hash: T::Hash, balance: T::Balance) -> DispatchResult {
 			let _ = ensure_signed(origin)?;
 			let thing = InnerThing {
@@ -74,6 +76,9 @@ decl_module! {
 			Ok(())
 		}
 
+		/// Stores a `SuperThing` struct in the storage map using an `InnerThing` that was already
+		/// stored
+		#[weight = SimpleDispatchInfo::default()]
 		fn insert_super_thing_with_existing_inner(origin, inner_number: u32, super_number: u32) -> DispatchResult {
 			let _ = ensure_signed(origin)?;
 			let inner_thing = Self::inner_things_by_numbers(inner_number);
@@ -86,6 +91,8 @@ decl_module! {
 			Ok(())
 		}
 
+		/// Stores a `SuperThing` struct in the storage map using a new `InnerThing`
+		#[weight = SimpleDispatchInfo::default()]
 		fn insert_super_thing_with_new_inner(origin, inner_number: u32, hash: T::Hash, balance: T::Balance, super_number: u32) -> DispatchResult {
 			let _ = ensure_signed(origin)?;
 			// construct and insert `inner_thing` first
