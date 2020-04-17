@@ -16,14 +16,21 @@ pub mod genesis;
 use rstd::prelude::*;
 use sp_core::{OpaqueMetadata, H256};
 use sp_runtime::{
-	AnySignature,
+	MultiSignature,
 	ApplyExtrinsicResult,
 	create_runtime_str,
 	generic,
 	impl_opaque_keys,
 	transaction_validity::{TransactionValidity, TransactionSource},
 };
-use sp_runtime::traits::{BlakeTwo256, Block as BlockT, IdentityLookup, Verify, Convert};
+use sp_runtime::traits::{
+	BlakeTwo256,
+	Block as BlockT,
+	Convert,
+	IdentifyAccount,
+	IdentityLookup,
+	Verify,
+};
 use support::traits::Get;
 use support::weights::Weight;
 use babe::SameAuthoritiesForever;
@@ -52,11 +59,11 @@ pub use support::{StorageValue, construct_runtime, parameter_types, traits::Rand
 pub type BlockNumber = u32;
 
 /// Alias to 512-bit hash when used in the context of a transaction signature on the chain.
-pub type Signature = AnySignature;
+pub type Signature = MultiSignature;
 
 /// Some way of identifying an account on the chain. We intentionally make it equivalent
 /// to the public key of our transaction signing scheme.
-pub type AccountId = <Signature as Verify>::Signer;
+pub type AccountId = <<Signature as Verify>::Signer as IdentifyAccount>::AccountId;
 
 /// The type for looking up accounts. We don't expect more than 4 billion of them, but you
 /// never know...
