@@ -7146,7 +7146,7 @@ dependencies = [
 
 [[package]]
 name = "weight-fee-runtime"
-version = "2.0.0"
+version = "2.0.0-alpha.6"
 dependencies = [
  "frame-executive",
  "frame-support",
@@ -7161,7 +7161,6 @@ dependencies = [
  "pallet-timestamp",
  "pallet-transaction-payment",
  "parity-scale-codec",
- "safe-mix",
  "serde",
  "sp-api",
  "sp-block-builder",
