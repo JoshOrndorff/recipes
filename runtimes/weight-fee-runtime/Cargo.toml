@@ -51,11 +51,6 @@ default-features = false
 package = 'pallet-grandpa'
 version = '2.0.0-alpha.6'
 
-[dependencies.indices]
-default-features = false
-package = 'pallet-indices'
-version = '2.0.0-alpha.6'
-
 [dependencies.randomness-collective-flip]
 default-features = false
 package = 'pallet-randomness-collective-flip'
@@ -83,7 +78,6 @@ std = [
 	"frame-executive/std",
 	"generic-asset/std",
 	"grandpa/std",
-	"indices/std",
 	"sp-inherents/std",
 	"sp-offchain/std",
 	"parity-scale-codec/std",

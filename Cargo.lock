@@ -2130,10 +2130,10 @@ dependencies = [
  "sp-transaction-pool",
  "structopt",
  "substrate-build-script-utils",
+ "super-runtime",
  "tokio 0.1.22",
  "trie-root 0.15.2",
  "vergen",
- "weight-fee-runtime",
 ]
 
 [[package]]
@@ -7155,7 +7155,6 @@ dependencies = [
  "pallet-balances",
  "pallet-generic-asset",
  "pallet-grandpa",
- "pallet-indices",
  "pallet-randomness-collective-flip",
  "pallet-sudo",
  "pallet-timestamp",
