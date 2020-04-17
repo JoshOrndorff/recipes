@@ -626,7 +626,7 @@ let my_val = Self::stored_value();
 <p>We've already encountered the <a href="https://substrate.dev/rustdocs/master/frame_support/macro.decl_storage.html"><code>decl_storage!</code> macro</a> in the appetizer on <a href="3-entrees/storage-api/../../2-appetizers/2-storage-values.html">storage items</a>. There is a rich storage API in Substrate which we will explore in this section.</p>
 <p>For crypto<em>currencies</em>, storage might consist of a mapping between account keys and corresponding balances.</p>
 <p>More generally, blockchains provide an interface to store and interact with data in a verifiable and globally irreversible way. In this context, data is stored in a series of snapshots, each of which may be accessed at a later point in time, but, once created, snapshots are considered irreversible.</p>
-<p>Arbitrary data may be stored, as long as its data type is serializable in Substrate i.e. implements <a href="https://docs.rs/parity-scale-codec/1.0.6/parity_scale_codec/#encode"><code>Encode</code></a> and <a href="https://docs.rs/parity-scale-codec/1.0.6/parity_scale_codec/#decode"><code>Decode</code></a> traits.</p>
+<p>Arbitrary data may be stored, as long as its data type is serializable in Substrate i.e. implements <a href="https://docs.rs/parity-scale-codec/1.3.0/parity_scale_codec/#encode"><code>Encode</code></a> and <a href="https://docs.rs/parity-scale-codec/1.3.0/parity_scale_codec/#decode"><code>Decode</code></a> traits.</p>
 <p>The previous <em><a href="3-entrees/storage-api/../../2-appetizers/2-storage-values.html">single-value storage recipe</a></em> showed how a single value can be stored in runtime storage. In this section, we cover</p>
 <ul>
 <li><a href="3-entrees/storage-api/./cache.html">caching values rather than calling to storage multiple times</a></li>
@@ -1068,7 +1068,7 @@ where
 }
 </code></pre>
 <p>The bounds <code>B</code> will be a <code>StorageValue</code> storing a tuple of indices <code>(Index, Index)</code>. The item storage will be a <code>StorageMap</code> mapping from our <code>Index</code> type to the <code>Item</code> type. We specify the associated <code>Query</code> type for both of them to help with type inference (because the value returned can be different from the stored representation).</p>
-<p>The <a href="https://docs.rs/parity-scale-codec/1.2.0/parity_scale_codec/trait.Codec.html"><code>Codec</code></a> and <a href="https://docs.rs/parity-scale-codec/1.2.0/parity_scale_codec/trait.EncodeLike.html"><code>EncodeLike</code></a> type constraints make sure that both items and indices can be stored in storage.</p>
+<p>The <a href="https://docs.rs/parity-scale-codec/1.3.0/parity_scale_codec/trait.Codec.html"><code>Codec</code></a> and <a href="https://docs.rs/parity-scale-codec/1.3.0/parity_scale_codec/trait.EncodeLike.html"><code>EncodeLike</code></a> type constraints make sure that both items and indices can be stored in storage.</p>
 <p>We need the <a href="https://doc.rust-lang.org/std/marker/struct.PhantomData.html"><code>PhantomData</code></a> in order to &quot;hold on to&quot; the types during the lifetime of the transient object.</p>
 <h3><a class="header" href="#the-complete-type" id="the-complete-type">The Complete Type</a></h3>
 <p>There are two more alterations we will make to our struct to make it work well:</p>
