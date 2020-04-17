@@ -14,7 +14,7 @@ path = 'src/main.rs'
 futures = '0.3.1'
 log = '0.4.8'
 structopt = '0.3.8'
-parity-scale-codec = '1.0.0'
+parity-scale-codec = '1.3.0'
 sha3 = "0.8"
 rand = { version = "0.7", features = ["small_rng"] }
 sc-consensus-pow = { version = '0.8.0-alpha.5' }

@@ -14,7 +14,7 @@ std = [
 ]
 
 [dependencies]
-parity-scale-codec = { version = '1.0.6', features = ['derive'], default-features = false}
+parity-scale-codec = { version = '1.3.0', features = ['derive'], default-features = false}
 frame-support = { version = '2.0.0-alpha.5', default-features = false }
 frame-system = { version = '2.0.0-alpha.5', default-features = false }
 sp-runtime = { version = '2.0.0-alpha.5', default-features = false }
