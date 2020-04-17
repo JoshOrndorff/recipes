@@ -1,11 +1,10 @@
-#![cfg_attr(not(feature = "std"), no_std)]
+//! Double Map Example with remove_prefix
+//! `double_map` maps two keys to a single value.
+//! the first key might be a group identifier
+//! the second key might be a unique identifier
+//! `remove_prefix` enables clean removal of all values with the group identifier
 
-// Double Map Example w/ remove_prefix
-// https://substrate.dev/rustdocs/master/frame_support/storage/trait.StorageDoubleMap.html
-// `double_map` maps two keys to a single value.
-// the first key might be a group identifier
-// the second key might be a unique identifier
-// `remove_prefix` enables clean removal of all values with the group identifier
+#![cfg_attr(not(feature = "std"), no_std)]
 
 #[cfg(test)]
 mod tests;
@@ -16,6 +15,7 @@ use frame_support::{
 	dispatch::DispatchResult,
 	ensure,
 	storage::{StorageDoubleMap, StorageMap, StorageValue},
+	weights::SimpleDispatchInfo,
 };
 use frame_system::{self as system, ensure_signed};
 
@@ -58,6 +58,7 @@ decl_module! {
 		fn deposit_event() = default;
 
 		/// Join the `AllMembers` vec before joining a group
+		#[weight = SimpleDispatchInfo::default()]
 		fn join_all_members(origin) -> DispatchResult {
 			let new_member = ensure_signed(origin)?;
 			ensure!(!Self::is_member(&new_member), "already a member, can't join");
@@ -68,6 +69,7 @@ decl_module! {
 		}
 
 		/// Put MemberScore (for testing purposes)
+		#[weight = SimpleDispatchInfo::default()]
 		fn join_a_group(origin, index: GroupIndex, score: u32) -> DispatchResult {
 			let member = ensure_signed(origin)?;
 			ensure!(Self::is_member(&member), "not a member, can't remove");
@@ -78,6 +80,8 @@ decl_module! {
 			Ok(())
 		}
 
+		/// Remove a member
+		#[weight = SimpleDispatchInfo::default()]
 		fn remove_member(origin) -> DispatchResult {
 			let member_to_remove = ensure_signed(origin)?;
 			ensure!(Self::is_member(&member_to_remove), "not a member, can't remove");
@@ -88,6 +92,8 @@ decl_module! {
 			Ok(())
 		}
 
+		/// Remove group score
+		#[weight = SimpleDispatchInfo::default()]
 		fn remove_group_score(origin, group: GroupIndex) -> DispatchResult {
 			let member = ensure_signed(origin)?;
 

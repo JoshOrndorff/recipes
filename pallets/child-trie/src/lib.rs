@@ -3,7 +3,7 @@
 //! - see smpl-crowdfund for examples of using this API with objects in the pallet
 use primitives::{Blake2Hasher, Hasher};
 use primitives::storage::well_known_keys::CHILD_STORAGE_KEY_PREFIX;
-use support::{decl_module, decl_storage, storage::child};
+use frame_support::{decl_module, decl_storage, storage::child};
 
 use parity_scale_codec::{Decode, Encode};
 use rstd::prelude::*;

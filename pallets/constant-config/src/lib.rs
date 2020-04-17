@@ -16,6 +16,7 @@ use frame_support::{
 	dispatch::{DispatchResult, DispatchError},
 	ensure,
 	traits::Get,
+	weights::SimpleDispatchInfo,
 };
 use frame_system::{self as system, ensure_signed};
 
@@ -57,6 +58,7 @@ decl_module! {
 		const ClearFrequency: T::BlockNumber = T::ClearFrequency::get();
 
 		/// Add to the stored value. The `val_to_add` parameter cannot exceed the specified manimum.
+		#[weight = SimpleDispatchInfo::default()]
 		fn add_value(origin, val_to_add: u32) -> DispatchResult {
 			let _ = ensure_signed(origin)?;
 			ensure!(val_to_add <= T::MaxAddend::get(), "value must be <= maximum add amount constant");
@@ -74,19 +76,21 @@ decl_module! {
 			Ok(())
 		}
 
+		/// For testing purposes
+		/// Sets the stored value to a given value
+		#[weight = SimpleDispatchInfo::default()]
+		fn set_value(origin, value: u32) -> DispatchResult {
+			let _ = ensure_signed(origin)?;
+			<SingleValue>::put(value);
+			Ok(())
+		}
+
 		fn on_finalize(n: T::BlockNumber) {
 			if (n % T::ClearFrequency::get()).is_zero() {
 				let c_val = <SingleValue>::get();
 				<SingleValue>::put(0u32);
 				Self::deposit_event(Event::Cleared(c_val));
 			}
-		}
-
-		// for testing purposes
-		fn set_value(origin, value: u32) -> DispatchResult {
-			let _ = ensure_signed(origin)?;
-			<SingleValue>::put(value);
-			Ok(())
 		}
 	}
 }

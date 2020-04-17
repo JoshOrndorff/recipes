@@ -2,7 +2,12 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 use sp_core::H256;
-use frame_support::{decl_event, decl_module, decl_storage, dispatch::DispatchResult, traits::Randomness};
+use frame_support::{
+	decl_event, decl_module, decl_storage,
+	dispatch::DispatchResult,
+	traits::Randomness,
+	weights::SimpleDispatchInfo,
+};
 use frame_system::{self as system, ensure_signed};
 use parity_scale_codec::Encode;
 use sp_std::vec::Vec;
@@ -40,6 +45,7 @@ decl_module! {
 		fn deposit_event() = default;
 
 		/// Grab a random seed and random value from the randomness collective flip pallet
+		#[weight = SimpleDispatchInfo::default()]
 		fn call_collective_flip(origin) -> DispatchResult {
 			let _ = ensure_signed(origin)?;
 
@@ -55,6 +61,7 @@ decl_module! {
 		}
 
 		/// Grab a random seed and random value from the babe pallet
+		#[weight = SimpleDispatchInfo::default()]
 		fn call_babe_vrf(origin) -> DispatchResult {
 			let _ = ensure_signed(origin)?;
 

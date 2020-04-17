@@ -1,7 +1,12 @@
+//! An example instantiable pallet (with default instance)
+
 #![cfg_attr(not(feature = "std"), no_std)]
 
-/// An example instantiable pallet (with default instance)
-use frame_support::{decl_event, decl_module, decl_storage, dispatch::DispatchResult, StorageValue};
+use frame_support::{
+	decl_event, decl_module, decl_storage,
+	dispatch::DispatchResult,
+	weights::SimpleDispatchInfo,
+};
 use frame_system::{self as system, ensure_signed};
 
 // The pallet's configuration trait takes an instance as a type parameter. The instance type is
@@ -40,8 +45,9 @@ decl_module! {
 	pub struct Module<T: Trait<I>, I: Instance = DefaultInstance> for enum Call where origin: T::Origin {
 		fn deposit_event() = default;
 
-		// The only dispatchable call, updates the single storage item,
-		// and emits an event.
+		/// The only dispatchable call, updates the single storage item,
+		/// and emits an event.
+		#[weight = SimpleDispatchInfo::default()]
 		fn call(origin) -> DispatchResult {
 			let caller = ensure_signed(origin)?;
 

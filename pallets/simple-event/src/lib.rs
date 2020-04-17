@@ -1,7 +1,13 @@
+//! Demonstration of Event variants that use only primative types
+//! These events do not use types from the pallet's configuration trait
+
 #![cfg_attr(not(feature = "std"), no_std)]
 
-/// Simple Event (not generic over types)
-use frame_support::{decl_event, decl_module, dispatch::DispatchResult};
+use frame_support::{
+	decl_event, decl_module,
+	dispatch::DispatchResult,
+	weights::SimpleDispatchInfo,
+};
 use system::ensure_signed;
 
 #[cfg(test)]
@@ -15,6 +21,8 @@ decl_module! {
 	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
 		fn deposit_event() = default;
 
+		/// A simple call that does little more than emit an event
+		#[weight = SimpleDispatchInfo::default()]
 		fn do_something(origin, input: u32) -> DispatchResult {
 			let _ = ensure_signed(origin)?;
 
