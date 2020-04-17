@@ -154,23 +154,7 @@
 <p>It is useful to recognize that <a href="https://youtu.be/05H4YsyPA-U?t=1789">coding is all about abstraction</a>.</p>
 <p>To understand how the code in this repository is organized, let's first take a look at how a Substrate node is constructed. Each node has many components that manage things like queueing transaction, communicating over a P2P network, reaching consensus on the state of the blockchain, and the chain's actual runtime logic. Each aspect of the node is interesting in its own right, and the runtime is particularly interesting because it contains the business logic (aka &quot;state transition function&quot;) that codifies the chain's functionality.</p>
 <p>Much, but not all, of the Recipes focuses on writing runtimes with FRAME, Parity's Framework for composing runtimes from individual building blocks called Pallets. Runtimes built with FRAME typically contain several such pallets. The kitchen node you built previously follows this paradigm.</p>
-<ul>
-<li>Blockchain Node
-<ul>
-<li>P2P Messaging</li>
-<li>Consensus</li>
-<li>Runtime
-<ul>
-<li>Pallet 1</li>
-<li>Pallet 2</li>
-<li>Pallet 3</li>
-</ul>
-</li>
-<li>Transaction Queue</li>
-<li>RPC</li>
-</ul>
-</li>
-</ul>
+<p><img src="../img/substrate-architecture.png" alt="Substrate Architecture Diagram" /></p>
 <h2><a class="header" href="#the-directories-in-our-kitchen" id="the-directories-in-our-kitchen">The Directories in our Kitchen</a></h2>
 <p>There are four primary directories in this repository:</p>
 <ul>

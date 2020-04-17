@@ -163,15 +163,15 @@
 <pre><code class="language-rust ignore">const PALLET_ID: ModuleId = ModuleId(*b&quot;Charity!&quot;);
 
 impl&lt;T: Trait&gt; Module&lt;T&gt; {
-    /// The account ID that holds the Charity's funds
-    pub fn account_id() -&gt; T::AccountId {
-        PALLET_ID.into_account()
-    }
+	/// The account ID that holds the Charity's funds
+	pub fn account_id() -&gt; T::AccountId {
+		PALLET_ID.into_account()
+	}
 
-    /// The Charity's balance
-    fn pot() -&gt; BalanceOf&lt;T&gt; {
-        T::Currency::free_balance(&amp;Self::account_id())
-    }
+	/// The Charity's balance
+	fn pot() -&gt; BalanceOf&lt;T&gt; {
+		T::Currency::free_balance(&amp;Self::account_id())
+	}
 }
 </code></pre>
 <h1><a class="header" href="#receiving-funds" id="receiving-funds">Receiving Funds</a></h1>

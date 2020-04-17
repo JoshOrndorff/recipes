@@ -163,17 +163,17 @@
 <p>Each of the parameters described above is set in the <code>transaction_payment</code> pallet's configuration trait. For example, the <code>super-runtime</code> sets these parameters as follows.</p>
 <p>src: <a href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/super-runtime/src/lib.rs"><code>runtimes/super-runtime/src/lib.rs</code></a></p>
 <pre><code class="language-rust ignore">parameter_types! {
-    pub const TransactionBaseFee: u128 = 0;
-    pub const TransactionByteFee: u128 = 1;
+	pub const TransactionBaseFee: u128 = 0;
+	pub const TransactionByteFee: u128 = 1;
 }
 
 impl transaction_payment::Trait for Runtime {
-    type Currency = balances::Module&lt;Runtime&gt;;
-    type OnTransactionPayment = ();
-    type TransactionBaseFee = TransactionBaseFee;
-    type TransactionByteFee = TransactionByteFee;
-    type WeightToFee = ConvertInto;
-    type FeeMultiplierUpdate = ();
+	type Currency = balances::Module&lt;Runtime&gt;;
+	type OnTransactionPayment = ();
+	type TransactionBaseFee = TransactionBaseFee;
+	type TransactionByteFee = TransactionByteFee;
+	type WeightToFee = ConvertInto;
+	type FeeMultiplierUpdate = ();
 }
 </code></pre>
 <h2><a class="header" href="#converting-weight-to-fees" id="converting-weight-to-fees">Converting Weight To Fees</a></h2>

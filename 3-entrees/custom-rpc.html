@@ -160,11 +160,11 @@ called &quot;silly rpc&quot; which just returns constant integers. A Hello world
 </span><span class="boring">fn main() {
 </span>#[rpc]
 pub trait SillyRpc {
-    #[rpc(name = &quot;silly_seven&quot;)]
-    fn silly_7(&amp;self) -&gt; Result&lt;u64&gt;;
+	#[rpc(name = &quot;silly_seven&quot;)]
+	fn silly_7(&amp;self) -&gt; Result&lt;u64&gt;;
 
-    #[rpc(name = &quot;silly_double&quot;)]
-    fn silly_double(&amp;self, val: u64) -&gt; Result&lt;u64&gt;;
+	#[rpc(name = &quot;silly_double&quot;)]
+	fn silly_double(&amp;self, val: u64) -&gt; Result&lt;u64&gt;;
 }
 <span class="boring">}
 </span></code></pre></pre>
@@ -175,17 +175,17 @@ pub trait SillyRpc {
 </span>pub struct Silly;
 
 impl SillyRpc for Silly {
-    fn silly_7(&amp;self) -&gt; Result&lt;u64&gt; {
-        Ok(7)
-    }
+	fn silly_7(&amp;self) -&gt; Result&lt;u64&gt; {
+		Ok(7)
+	}
 
-    fn silly_double(&amp;self, val: u64) -&gt; Result&lt;u64&gt; {
-        Ok(2 * val)
-    }
+	fn silly_double(&amp;self, val: u64) -&gt; Result&lt;u64&gt; {
+		Ok(2 * val)
+	}
 }
 <span class="boring">}
 </span></code></pre></pre>
-<p>Finally, to make the contents of this new files visible, we need to add a line in our <code>main.rs</code>.</p>
+<p>Finally, to make the contents of this new file usable, we need to add a line in our <code>main.rs</code>.</p>
 <pre><pre class="playpen"><code class="language-rust">
 <span class="boring">#![allow(unused_variables)]
 </span><span class="boring">fn main() {
@@ -211,13 +211,16 @@ sc-rpc = { version = '2.0.0-alpha.5' }
 <pre><pre class="playpen"><code class="language-rust">
 <span class="boring">#![allow(unused_variables)]
 </span><span class="boring">fn main() {
-</span>.with_rpc_extensions(|client, _pool, _backend, _fetcher, _remote_blockchain| -&gt; Result&lt;RpcExtension, _&gt; {
-  let mut io = jsonrpc_core::IoHandler::default();
+</span>.with_rpc_extensions(|builder| -&gt; Result&lt;RpcExtension, _&gt; {
+	// Make an io handler to be extended with individual RPCs
+	let mut io = jsonrpc_core::IoHandler::default();
 
-  // Use the fully qualified name starting from `crate` because we're in macro_rules!
-  io.extend_with(crate::silly_rpc::SillyRpc::to_delegate(crate::silly_rpc::Silly{}));
+	// Use the fully qualified name starting from `crate` because we're in macro_rules!
+	io.extend_with(crate::silly_rpc::SillyRpc::to_delegate(crate::silly_rpc::Silly{}));
 
-  Ok(io)
+	// --snip--
+
+	Ok(io)
 })
 <span class="boring">}
 </span></code></pre></pre>
@@ -314,16 +317,19 @@ where
 <pre><pre class="playpen"><code class="language-rust">
 <span class="boring">#![allow(unused_variables)]
 </span><span class="boring">fn main() {
-</span>.with_rpc_extensions(|client, _pool, _backend, _fetcher, _remote_blockchain| -&gt; Result&lt;RpcExtension, _&gt; {
-  let mut io = jsonrpc_core::IoHandler::default();
+</span>.with_rpc_extensions(|builder| -&gt; Result&lt;RpcExtension, _&gt; {
+	// Make an io handler to be extended with individual RPCs
+	let mut io = jsonrpc_core::IoHandler::default();
 
-  // Use the fully qualified name starting from `crate` because we're in macro_rules!
-  io.extend_with(crate::silly_rpc::SillyRpc::to_delegate(crate::silly_rpc::Silly{}));
+	// Add the first rpc extension
+	io.extend_with(crate::silly_rpc::SillyRpc::to_delegate(crate::silly_rpc::Silly{}));
 
-  io.extend_with(sum_storage_rpc::SumStorageApi::to_delegate(sum_storage_rpc::SumStorage::new(client)));
+	// Add the second RPC extension
+	// Because this one calls a Runtime API it needs a reference to the client.
+	io.extend_with(sum_storage_rpc::SumStorageApi::to_delegate(sum_storage_rpc::SumStorage::new(builder.client().clone())));
 
-  Ok(io)
-})?
+	Ok(io)
+})?;
 <span class="boring">}
 </span></code></pre></pre>
 <h2><a class="header" href="#optional-rpc-parameters" id="optional-rpc-parameters">Optional RPC Parameters</a></h2>

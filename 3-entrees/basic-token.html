@@ -206,8 +206,7 @@ decl_error! {
 <h2><a class="header" href="#transferring-tokens" id="transferring-tokens">Transferring Tokens</a></h2>
 <p>To transfer tokens, a user who owns some tokens calls the <code>transfer</code> method specifying the recipient and the amount of tokens to transfer as parameters.</p>
 <p>We again check for error conditions before mutating storage. In this case it is <em>not</em> necessary to check whether the token has been initialized. If it has not, nobody has any funds and the transfer will simply fail with <code>InsufficientFunds</code>.</p>
-<pre><code class="language-rust ignore">/// Transfer tokens from one account to another
-fn transfer(_origin, to: T::AccountId, value: u64) -&gt; DispatchResult {
+<pre><code class="language-rust ignore">fn transfer(_origin, to: T::AccountId, value: u64) -&gt; DispatchResult {
 	let sender = ensure_signed(_origin)?;
 	let sender_balance = Self::get_balance(&amp;sender);
 	let receiver_balance = Self::get_balance(&amp;to);

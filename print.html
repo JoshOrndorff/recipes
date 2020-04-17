@@ -247,23 +247,7 @@ cargo build --release -p kitchen-node
 <p>It is useful to recognize that <a href="https://youtu.be/05H4YsyPA-U?t=1789">coding is all about abstraction</a>.</p>
 <p>To understand how the code in this repository is organized, let's first take a look at how a Substrate node is constructed. Each node has many components that manage things like queueing transaction, communicating over a P2P network, reaching consensus on the state of the blockchain, and the chain's actual runtime logic. Each aspect of the node is interesting in its own right, and the runtime is particularly interesting because it contains the business logic (aka &quot;state transition function&quot;) that codifies the chain's functionality.</p>
 <p>Much, but not all, of the Recipes focuses on writing runtimes with FRAME, Parity's Framework for composing runtimes from individual building blocks called Pallets. Runtimes built with FRAME typically contain several such pallets. The kitchen node you built previously follows this paradigm.</p>
-<ul>
-<li>Blockchain Node
-<ul>
-<li>P2P Messaging</li>
-<li>Consensus</li>
-<li>Runtime
-<ul>
-<li>Pallet 1</li>
-<li>Pallet 2</li>
-<li>Pallet 3</li>
-</ul>
-</li>
-<li>Transaction Queue</li>
-<li>RPC</li>
-</ul>
-</li>
-</ul>
+<p><img src="1-prepare-kitchen/../img/substrate-architecture.png" alt="Substrate Architecture Diagram" /></p>
 <h2><a class="header" href="#the-directories-in-our-kitchen" id="the-directories-in-our-kitchen">The Directories in our Kitchen</a></h2>
 <p>There are four primary directories in this repository:</p>
 <ul>
@@ -371,6 +355,8 @@ use sp_runtime::print;
 <pre><code class="language-rust ignore">decl_module! {
 	pub struct Module&lt;T: Trait&gt; for enum Call where origin: T::Origin {
 
+		/// A function that says hello to the user by printing messages to the node log
+		#[weight = SimpleDispatchInfo::default()]
 		pub fn say_hello(origin) -&gt; DispatchResult {
 			// --snip--
 		}
@@ -379,7 +365,9 @@ use sp_runtime::print;
 	}
 }
 </code></pre>
-<p>As you can see, our <code>hello-substrate</code> pallet has one dipatchable call that takes a single argument, called <code>origin</code> which we'll investigate shortly. The call returns a <a href="https://substrate.dev/rustdocs/master/frame_support/dispatch/type.DispatchResult.html"><code>DispatchResult</code></a> which can be either <code>Ok(())</code> indicating that the call succeeded, or an <code>Err</code> which we'll investigate in the <a href="2-appetizers/./3-errors.html">appetizer about errors</a>.</p>
+<p>As you can see, our <code>hello-substrate</code> pallet has a dispatchable call that takes a single argument, called <code>origin</code> which we'll investigate shortly. The call returns a <a href="https://substrate.dev/rustdocs/master/frame_support/dispatch/type.DispatchResult.html"><code>DispatchResult</code></a> which can be either <code>Ok(())</code> indicating that the call succeeded, or an <code>Err</code> which we'll investigate in the <a href="2-appetizers/./3-errors.html">appetizer about errors</a>.</p>
+<h3><a class="header" href="#weight-annotations" id="weight-annotations">Weight Annotations</a></h3>
+<p>Right before the <code>hello-substrate</code> function, we see the line <code>#[weight = SimpleDispatchInfo::default()]</code>. This line attaches a default weight to the call. Ultimately weights affect the fees a user will have to pay to call the function. Weights are a very interesting aspect of developing with Substrate, but they too shall be covered later in the section on <a href="2-appetizers/../3-entrees/weights.html">Weights</a>. For now, and for may of the recipes pallets, we will simply use the default weight as we have done here.</p>
 <h2><a class="header" href="#inside-a-dispatchable-call" id="inside-a-dispatchable-call">Inside a Dispatchable Call</a></h2>
 <p>Let's take a closer look at our dispatchable call.</p>
 <pre><code class="language-rust ignore">pub fn say_hello(origin) -&gt; DispatchResult {
@@ -399,10 +387,10 @@ use sp_runtime::print;
 <p>Second, it prints a message and logs the caller. Notice that we aren't using Rust's normal <code>println!</code> macro, but rather a special <a href="https://substrate.dev/rustdocs/master/sp_runtime/fn.print.html"><code>print</code> function</a> and <a href="https://substrate.dev/rustdocs/master/frame_support/debug/macro.info.html"><code>debug::info!</code> macro</a>. The reason for this is explained in the next section.</p>
 <p>Finally, the call returns <code>Ok(())</code> to indicate that the call has succeeded. At a glance it seems that there is no way for this call to fail, but this is not quite true. The <code>ensure_signed</code> function, used at the beginning, can return an error if the call was not from a signed origin. This is the first time we're seeing the important paradigm &quot;<strong>Verify first, write last</strong>&quot;. In Substrate development, it is important that you always ensure preconditions are met and return errors at the beginning. After these checks have completed, then you may begin the functions computation.</p>
 <h2><a class="header" href="#printing-from-the-runtime" id="printing-from-the-runtime">Printing from the Runtime</a></h2>
-<p>Printing to the terminal from a rust program is typically very simple using the <code>println!</code> macro. However, Substrate runtimes are compiled to Web Assembly as well as a regular native binary, and do not have access to rust's standard library. That means we cannot use the regular <code>println!</code>. I encourage you to modify the code to try using <code>println!</code> and confirm that it will not compile. Nonetheless, printing a message from the runtime is useful both for logging information, and also for debugging.</p>
+<p>Printing to the terminal from a Rust program is typically very simple using the <code>println!</code> macro. However, Substrate runtimes are compiled to Web Assembly as well as a regular native binary, and do not have access to rust's standard library. That means we cannot use the regular <code>println!</code>. I encourage you to modify the code to try using <code>println!</code> and confirm that it will not compile. Nonetheless, printing a message from the runtime is useful both for logging information, and also for debugging.</p>
 <p><img src="2-appetizers/../img/substrate-architecture.png" alt="Substrate Architecture Diagram" /></p>
 <p>At the top of our pallet, we imported <code>sp_runtime</code>'s <a href="https://substrate.dev/rustdocs/master/sp_runtime/fn.print.html"><code>print</code> function</a>. This special function allows the runtime to pass a message for printing to the outer part of the node which is not built to Wasm. This function is only able to print items that implement the <a href="https://substrate.dev/rustdocs/master/sp_runtime/traits/trait.Printable.html"><code>Printable</code> trait</a>. Luckily all the primitive types already implement this trait, and you can implement the trait for your own datatypes too.</p>
-<p><strong>Print function note:</strong> We also need to include the flag <code>-lruntime=debug</code> when running the kitchen node.</p>
+<p><strong>Print function note:</strong> To actually see the printed messages, we need to use the flag <code>-lruntime=debug</code> when running the kitchen node. So, for the kitchen node, the command would become <code>./target/release/kitchen-node --dev -lruntime=debug</code>.</p>
 <p>The next line demonstrates using <code>debug::info!</code> macro to log to the screen and also inspecting the variable's content. The syntax inside the macro is very similar to what regular rust macro <code>println!</code> takes.</p>
 <p><strong>Runtime logger note:</strong> When we execute the runtime in native, <code>debug::info!</code> messages are printed. However, if we execute the runtime in Wasm, then an additional step to initialise <a href="https://substrate.dev/rustdocs/master/frame_support/debug/struct.RuntimeLogger.html">RuntimeLogger</a> is required.</p>
 <h2><a class="header" href="#installing-the-pallet-in-a-runtime" id="installing-the-pallet-in-a-runtime">Installing the Pallet in a Runtime</a></h2>
@@ -425,7 +413,7 @@ std = [
 <p>Next we must implement the pallet's configuration trait. This happens in the runtime's main <code>lib.rs</code> file. In the case of the super-runtime, this file is at <code>runtimes/super-runtime/src/lib.rs</code>. Because this pallet's configuration trait is trivial, so is implementing it.</p>
 <pre><code class="language-rustignore">impl hello_substrate::Trait for Runtime {}
 </code></pre>
-<p>You can see the corresponding trait implementations in the surrounding lines. Most of them are more complex.</p>
+<p>You can see the other pallets' trait implementations in the surrounding lines. Most of them are more complex.</p>
 <h3><a class="header" href="#add-it-to-construct_runtime" id="add-it-to-construct_runtime">Add it to <code>construct_runtime!</code></a></h3>
 <p>Finally, we add our pallet to the <a href="https://substrate.dev/rustdocs/master/frame_support/macro.construct_runtime.html"><code>construct_runtime!</code> macro</a>.</p>
 <pre><code class="language-rust ignore">construct_runtime!(
@@ -440,9 +428,9 @@ std = [
 );
 </code></pre>
 <p>This macro does the heavy lifting of composing each individual pallet into a single usable runtime. Let's explain the syntax for each line. Each Pallet listed in the macro needs several pieces of information.</p>
-<p>First is a convenient name to give to this pallet. We've chosen <code>HelloSubstrate</code>. It is common to choose the same name as the pallet itself except when there is <a href="2-appetizers/../3-entrees/instantiable.html">more than one instance</a>. Next is the name of the crate that the pallet lives in. And finally there is a list of features the pallet provides. All pallet require <code>Module</code>. Our pallet also provides dispatchable calls, so it requires <code>Call</code>.</p>
+<p>First is a convenient name to give to this pallet. We've chosen <code>HelloSubstrate</code>. It is common to choose the same name as the pallet itself except when there is <a href="2-appetizers/../3-entrees/instantiable.html">more than one instance</a>. Next is the name of the crate that the pallet lives in. And finally there is a list of features the pallet provides. All pallets require <code>Module</code>. Our pallet also provides dispatchable calls, so it requires <code>Call</code>.</p>
 <h2><a class="header" href="#try-it-out" id="try-it-out">Try it Out</a></h2>
-<p>If you haven't already, try interacting with the pallet using the Apps UI. You should see your message printed to the log of your node. Remember to run the kitchen node with the correct flags: <code>./kitchen-node --dev -lruntime=debug</code></p>
+<p>If you haven't already, try interacting with the pallet using the Apps UI. You should see your message printed to the log of your node. Remember to run the kitchen node with the correct flags: <code>./target/release/kitchen-node --dev -lruntime=debug</code></p>
 <p>You're now well on your way to becoming a blockchain chef. Let's continue to build our skills with another appetizer.</p>
 <h1><a class="header" href="#single-value" id="single-value">Single Value</a></h1>
 <p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/single-value"><code>pallets/single-value</code></a></em></p>
@@ -696,77 +684,70 @@ let entry = &lt;SimpleMap&lt;T&gt;&gt;::take(&amp;user);
 <p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/storage-cache"><code>pallets/storage-cache</code></a></em></p>
 <p>Calls to runtime storage have an associated cost. With this in mind, multiple calls to storage values should be avoided when possible.</p>
 <pre><code class="language-rust ignore">decl_storage! {
-    trait Store for Module&lt;T: Trait&gt; as StorageCache {
-        // copy type
-        SomeCopyValue get(fn some_copy_value): u32;
+	trait Store for Module&lt;T: Trait&gt; as StorageCache {
+		// copy type
+		SomeCopyValue get(fn some_copy_value): u32;
 
-        // clone type
-        KingMember get(fn king_member): T::AccountId;
-        GroupMembers get(fn group_members): Vec&lt;T::AccountId&gt;;
-    }
+		// clone type
+		KingMember get(fn king_member): T::AccountId;
+		GroupMembers get(fn group_members): Vec&lt;T::AccountId&gt;;
+	}
 }
 </code></pre>
+<h2><a class="header" href="#copy-types" id="copy-types">Copy Types</a></h2>
 <p>For <a href="https://doc.rust-lang.org/std/marker/trait.Copy.html"><code>Copy</code></a> types, it is easy to reuse previous storage calls by simply reusing the value (which is automatically cloned upon reuse). With this in mind, the second call in the following code is unnecessary:</p>
-<pre><code class="language-rust ignore">fn swap_value_no_cache(origin, some_val: u32) -&gt; Result {
-    let _ = ensure_signed(origin)?;
-    let original_call = &lt;SomeCopyValue&gt;::get();
-    let some_calculation = original_call + some_val;
-    // this next storage call is unnecessary and is wasteful
-    let unnecessary_call = &lt;SomeCopyValue&gt;::get();
-    // should've just used first_call here because u32 is copy
-    let another_calculation = some_calculation + unnecessary_call;
-    &lt;SomeCopyValue&gt;::put(another_calculation);
-    let now = &lt;system::Module&lt;T&gt;&gt;::block_number();
-    Self::deposit_event(RawEvent::InefficientValueChange(another_calculation, now));
-    Ok(())
+<pre><code class="language-rust ignore">fn increase_value_no_cache(origin, some_val: u32) -&gt; DispatchResult {
+	let _ = ensure_signed(origin)?;
+	let original_call = &lt;SomeCopyValue&gt;::get();
+	let some_calculation = original_call.checked_add(some_val).ok_or(&quot;addition overflowed1&quot;)?;
+	// this next storage call is unnecessary and is wasteful
+	let unnecessary_call = &lt;SomeCopyValue&gt;::get();
+	// should've just used `original_call` here because u32 is copy
+	let another_calculation = some_calculation.checked_add(unnecessary_call).ok_or(&quot;addition overflowed2&quot;)?;
+	&lt;SomeCopyValue&gt;::put(another_calculation);
+	let now = &lt;system::Module&lt;T&gt;&gt;::block_number();
+	Self::deposit_event(RawEvent::InefficientValueChange(another_calculation, now));
+	Ok(())
 }
 </code></pre>
 <p>Instead, the initial call value should be reused. In this example, the <code>SomeCopyValue</code> value is <a href="https://doc.rust-lang.org/std/marker/trait.Copy.html"><code>Copy</code></a> so we should prefer the following code without the unnecessary second call to storage:</p>
-<pre><code class="language-rust ignore">fn swap_value_w_copy(origin, some_val: u32) -&gt; Result {
-    let _ = ensure_signed(origin)?;
-    let original_call = &lt;SomeCopyValue&gt;::get();
-    let some_calculation = original_call + some_val;
-    // uses the original_call because u32 is copy
-    let another_calculation = some_calculation + original_call;
-    &lt;SomeCopyValue&gt;::put(another_calculation);
-    let now = &lt;system::Module&lt;T&gt;&gt;::block_number();
-    Self::deposit_event(RawEvent::InefficientValueChange(another_calculation, now));
-    Ok(())
+<pre><code class="language-rust ignore">fn increase_value_w_copy(origin, some_val: u32) -&gt; DispatchResult {
+	let _ = ensure_signed(origin)?;
+	let original_call = &lt;SomeCopyValue&gt;::get();
+	let some_calculation = original_call.checked_add(some_val).ok_or(&quot;addition overflowed1&quot;)?;
+	// uses the original_call because u32 is copy
+	let another_calculation = some_calculation.checked_add(original_call).ok_or(&quot;addition overflowed2&quot;)?;
+	&lt;SomeCopyValue&gt;::put(another_calculation);
+	let now = &lt;system::Module&lt;T&gt;&gt;::block_number();
+	Self::deposit_event(RawEvent::BetterValueChange(another_calculation, now));
+	Ok(())
 }
 </code></pre>
+<h2><a class="header" href="#clone-types" id="clone-types">Clone Types</a></h2>
 <p>If the type was not <code>Copy</code>, but was <a href="https://doc.rust-lang.org/std/clone/trait.Clone.html"><code>Clone</code></a>, then it is still preferred to clone the value in the method than to make another call to runtime storage.</p>
-<pre><code class="language-rust ignore">decl_storage! {
-    trait Store for Module&lt;T: Trait&gt; as StorageCache {
-        // ...&lt;copy type here&gt;...
-        // clone type
-        KingMember get(fn king_member): T::AccountId;
-        GroupMembers get(fn group_members): Vec&lt;T::AccountId&gt;;
-    }
-}
-</code></pre>
 <p>The runtime methods enable the calling account to swap the <code>T::AccountId</code> value in storage if</p>
 <ol>
 <li>the existing storage value is not in <code>GroupMembers</code> AND</li>
-<li>the calling account is in `Group Members</li>
+<li>the calling account is in <code>GroupMembers</code></li>
 </ol>
 <p>The first implementation makes a second unnecessary call to runtime storage instead of cloning the call for <code>existing_key</code>:</p>
-<pre><code class="language-rust ignore">fn swap_king_no_cache(origin) -&gt; Result {
-    let new_king = ensure_signed(origin)?;
-    let existing_king = &lt;KingMember&lt;T&gt;&gt;::get();
+<pre><code class="language-rust ignore">fn swap_king_no_cache(origin) -&gt; DispatchResult {
+	let new_king = ensure_signed(origin)?;
+	let existing_king = &lt;KingMember&lt;T&gt;&gt;::get();
 
-    // only places a new account if
-    // (1) the existing account is not a member &amp;&amp;
-    // (2) the new account is a member
-    ensure!(!Self::is_member(existing_king), &quot;is a member so maintains priority&quot;);
-    ensure!(Self::is_member(new_king.clone()), &quot;not a member so doesn't get priority&quot;);
+	// only places a new account if
+	// (1) the existing account is not a member &amp;&amp;
+	// (2) the new account is a member
+	ensure!(!Self::is_member(&amp;existing_king), &quot;current king is a member so maintains priority&quot;);
+	ensure!(Self::is_member(&amp;new_king), &quot;new king is not a member so doesn't get priority&quot;);
 
-    // BAD (unnecessary) storage call
-    let old_king = &lt;KingMember&lt;T&gt;&gt;::get();
-    // place new king
-    &lt;KingMember&lt;T&gt;&gt;::put(new_king.clone());
+	// BAD (unnecessary) storage call
+	let old_king = &lt;KingMember&lt;T&gt;&gt;::get();
+	// place new king
+	&lt;KingMember&lt;T&gt;&gt;::put(new_king.clone());
 
-    Self::deposit_event(RawEvent::InefficientKingSwap(old_king, new_king));
-    Ok(())
+	Self::deposit_event(RawEvent::InefficientKingSwap(old_king, new_king));
+	Ok(())
 }
 </code></pre>
 <p>If the <code>existing_key</code> is used without a <code>clone</code> in the event emission instead of <code>old_king</code>, then the compiler returns the following error</p>
@@ -789,24 +770,25 @@ error: Could not compile `storage-cache`.
 
 To learn more, run the command again with --verbose.
 </code></pre>
-<p>Fixing this only requires cloning the original call to storage before it is moved:</p>
-<pre><code class="language-rust ignore">fn swap_king_with_cache(origin) -&gt; Result {
-    let new_king = ensure_signed(origin)?;
-    let existing_king = &lt;KingMember&lt;T&gt;&gt;::get();
-    // clone before existing_king is moved
-    let old_king = existing_king.clone();
+<p>Fixing this only requires cloning the original value before it is moved:</p>
+<pre><code class="language-rust ignore">fn swap_king_with_cache(origin) -&gt; DispatchResult {
+	let new_king = ensure_signed(origin)?;
+	let existing_king = &lt;KingMember&lt;T&gt;&gt;::get();
+	// prefer to clone previous call rather than repeat call unnecessarily
+	let old_king = existing_king.clone();
 
-    // existing king is moved next
-    ensure!(!Self::is_member(existing_king), &quot;is a member so maintains priority&quot;);
-    ensure!(Self::is_member(new_king.clone()), &quot;not a member so doesn't get priority&quot;);
+	// only places a new account if
+	// (1) the existing account is not a member &amp;&amp;
+	// (2) the new account is a member
+	ensure!(!Self::is_member(&amp;existing_king), &quot;current king is a member so maintains priority&quot;);
+	ensure!(Self::is_member(&amp;new_king), &quot;new king is not a member so doesn't get priority&quot;);
 
-    // &lt;no (unnecessary) storage call here&gt;
-    // place new king
-    &lt;KingMember&lt;T&gt;&gt;::put(new_king.clone());
+	// &lt;no (unnecessary) storage call here&gt;
+	// place new king
+	&lt;KingMember&lt;T&gt;&gt;::put(new_king.clone());
 
-    // use cached old_king value here
-    Self::deposit_event(RawEvent::BetterKingSwap(old_king, new_king));
-    Ok(())
+	Self::deposit_event(RawEvent::BetterKingSwap(old_king, new_king));
+	Ok(())
 }
 </code></pre>
 <p>Not all types implement <a href="https://doc.rust-lang.org/std/marker/trait.Copy.html"><code>Copy</code></a> or <a href="https://doc.rust-lang.org/std/clone/trait.Clone.html"><code>Clone</code></a>, so it is important to discern other patterns that minimize and alleviate the cost of calls to storage.</p>
@@ -888,30 +870,29 @@ decl_storage! {
 	trait Store for Module&lt;T: Trait&gt; as Dmap {
 		/// Member score (double map)
 		MemberScore get(fn member_score):
-			double_map hasher(blake2_256) GroupIndex, hasher(blake2_256) T::AccountId =&gt; u32;
+			double_map hasher(blake2_128_concat) GroupIndex, hasher(blake2_128_concat) T::AccountId =&gt; u32;
 		/// Get group ID for member
-		GroupMembership get(fn group_membership): map hasher(blake2_256) T::AccountId =&gt; GroupIndex;
+		GroupMembership get(fn group_membership): map hasher(blake2_128_concat) T::AccountId =&gt; GroupIndex;
 		/// For fast membership checks, see check-membership recipe for more details
 		AllMembers get(fn all_members): Vec&lt;T::AccountId&gt;;
 	}
 }
 </code></pre>
-<p>For the purposes of this example,  store the scores of each members in a map that associates this <code>u32</code> value with two keys: (1) the hash of the member's <code>AccountId</code> and (2) a <code>GroupIndex</code> identifier. This allows for efficient removal of all values associated with a specific <code>GroupIndex</code> identifier.</p>
-<pre><code class="language-rust ignore">fn remove_group_score(origin, group: GroupIndex) -&gt; Result {
-    let member = ensure_signed(origin)?;
+<p>For the purposes of this example, store the scores of each members in a map that associates this <code>u32</code> value with two keys: (1) a <code>GroupIndex</code> identifier, and (2) the member's <code>AccountId</code>. This allows for efficient removal of all values associated with a specific <code>GroupIndex</code> identifier.</p>
+<pre><code class="language-rust ignore">fn remove_group_score(origin, group: GroupIndex) -&gt; DispatchResult {
+	let member = ensure_signed(origin)?;
 
-    let group_id = &lt;GroupMembership&lt;T&gt;&gt;::get(member);
-    // check that the member is in the group (could be improved by requiring n-of-m member support)
-    ensure!(group_id == group, &quot;member isn't in the group, can't remove it&quot;);
+	let group_id = &lt;GroupMembership&lt;T&gt;&gt;::get(member);
+	// check that the member is in the group
+	ensure!(group_id == group, &quot;member isn't in the group, can't remove it&quot;);
 
-    // allows us to remove all group members from MemberScore at once
-    &lt;MemberScore&lt;T&gt;&gt;::remove_prefix(&amp;group_id);
+	// remove all group members from MemberScore at once
+	&lt;MemberScore&lt;T&gt;&gt;::remove_prefix(&amp;group_id);
 
-    Self::deposit_event(RawEvent::RemoveGroup(group_id));
-    Ok(())
+	Self::deposit_event(RawEvent::RemoveGroup(group_id));
+	Ok(())
 }
 </code></pre>
-<p><strong>Note</strong>: It is necessary for one of the two keys to be hashed; <em><a href="https://github.com/substrate-developer-hub/recipes/issues/46">TODO</a></em></p>
 <h1><a class="header" href="#child-tries" id="child-tries">Child Tries</a></h1>
 <p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/child-trie"><code>pallets/child-trie</code></a></em>, <em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-crowdfund"><code>pallets/simple-crowdfund</code></a></em></p>
 <ul>
@@ -923,14 +904,12 @@ decl_storage! {
 <p>Every change in the leaves percolates up to the root, thereby providing a complete, succinct history of all changes to the underlying data structure in the form of the trie root hash.</p>
 <h2><a class="header" href="#runtime-child-storage-a-name--storja" id="runtime-child-storage-a-name--storja">Runtime Child Storage <a name = "storj"></a></a></h2>
 <p>To interact with child tries, there are methods exposed in <a href="https://substrate.dev/rustdocs/master/frame_support/storage/child/index.html">runtime child storage</a>. Of the methods listed in the documentation, it is worth emphasizing the method associated with batch deletion.</p>
-<pre><code class="language-rust ignore">/// Remove all `storage_key` key/values
-pub fn kill_storage(storage_key: &amp;[u8]) {
-	runtime_io::kill_child_storage(storage_key)
-}
-
-/// Remove value associated with `key` in trie with `storage_key`
-pub fn kill(storage_key: &amp;[u8], key: &amp;[u8]) {
-	runtime_io::clear_child_storage(storage_key, key);
+<pre><code class="language-rust ignore">pub fn kill_trie(index: ObjectCount) {
+	let id = Self::id_from_index(index);
+	child::kill_storage(
+		id.as_ref(),
+		trie_unique_id(id.as_ref()),
+	);
 }
 </code></pre>
 <p><a href="https://substrate.dev/rustdocs/master/frame_support/storage/child/fn.kill_storage.html"><code>kill_storage</code></a> deletes all  <code>(key, value)</code> pairs associated with the <code>storage_key</code>. The basic API for interacting with a given child trie follows this format:</p>
@@ -938,40 +917,31 @@ pub fn kill(storage_key: &amp;[u8], key: &amp;[u8]) {
 child::do(trie_id, key, value);
 </code></pre>
 <p>To put an object in a child trie, the code would look something like</p>
-<pre><code class="language-rust ignore">fn kv_put(index: ObjectCount, who: &amp;T::AccountId, value_type: &amp;ValueType) {
-    let mut buf = Vec::new();
-		buf.extend_from_slice(b&quot;exchildtr&quot;);
-		buf.extend_from_slice(&amp;index.to_le_bytes()[..]);
-
-	let id = CHILD_STORAGE_KEY_PREFIX.into_iter()
-        .chain(b&quot;default:&quot;)
-        .chain(T::Hashing::hash(&amp;buf[..]).as_ref().into_iter())
-        .cloned()
-        .collect();
-
-	who.using_encoded(|b| child::put(id.as_ref(), b, value_type));
+<pre><code class="language-rust ignore">pub fn kv_put(index: ObjectCount, who: &amp;T::AccountId, value_to_put: ValAppended) {
+	let id = Self::id_from_index(index);
+	who.using_encoded(|b| child::put(
+			id.as_ref(),
+			trie_unique_id(id.as_ref()),
+			b,
+			&amp;value_to_put
+	));
 }
 </code></pre>
 <p>The code in <a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/child-trie"><code>pallets/child-trie</code></a> demonstrates a minimal way of organizing the basic child-trie api methods (as done in <a href="https://github.com/paritytech/polkadot/blob/c003d73c65cdcc0367340db09522c91d1d3851fc/runtime/common/src/crowdfund.rs"><code>polkadot/runtime/crowdfund</code></a>). It separates out the generation of the child trie id from the index with a runtime method <code>id_from_index</code>.</p>
 <pre><code class="language-rust ignore">pub fn id_from_index(index: ObjectCount) -&gt; Vec&lt;u8&gt; {
-    let mut buf = Vec::new();
-    buf.extend_from_slice(b&quot;exchildtr&quot;);
-    buf.extend_from_slice(&amp;index.to_le_bytes()[..]);
+	let mut buf = Vec::new();
+	buf.extend_from_slice(b&quot;exchildtr&quot;);
+	buf.extend_from_slice(&amp;index.to_le_bytes()[..]);
 
-    CHILD_STORAGE_KEY_PREFIX
-        .into_iter()
-        .chain(b&quot;default:&quot;)
-        .chain(Blake2Hasher::hash(&amp;buf[..]).as_ref().into_iter())
-        .cloned()
-        .collect()
+	CHILD_STORAGE_KEY_PREFIX
+		.into_iter()
+		.chain(b&quot;default:&quot;)
+		.chain(Blake2Hasher::hash(&amp;buf[..]).as_ref().into_iter())
+		.cloned()
+		.collect()
 }
 </code></pre>
-<p>This results in less code for each method:</p>
-<pre><code class="language-rust ignore">pub fn kv_put(index: ObjectCount, who: &amp;T::AccountId, value_type: ValueType) {
-    let id = Self::id_from_index(index);
-    who.using_encoded(|b| child::put(id.as_ref(), b, &amp;value_type));
-}
-</code></pre>
+<p>This results in less code for each method.</p>
 <h2><a class="header" href="#smpl-crowdfund-a-name--smplcrwda" id="smpl-crowdfund-a-name--smplcrwda">smpl-crowdfund <a name = "smplcrwd"></a></a></h2>
 <p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-crowdfund"><code>pallets/simple-crowdfund</code></a></em></p>
 <p>Child tries are useful for batch deletion of <code>(key, value)</code> pairs associated with a specific <code>trie_id</code>. This is relevant to the <a href="https://github.com/paritytech/polkadot/blob/master/runtime/common/src/crowdfund.rs">polkadot/crowdfund</a> pallet, which tracks <code>(AccountId, BalanceOf&lt;T&gt;)</code> associated with a specific crowdfund. <code>BalanceOf&lt;T&gt;</code> represents the contributions of an <code>AccountId</code>. The identifier for each crowdfund is defined</p>
@@ -1284,8 +1254,7 @@ decl_error! {
 <h2><a class="header" href="#transferring-tokens" id="transferring-tokens">Transferring Tokens</a></h2>
 <p>To transfer tokens, a user who owns some tokens calls the <code>transfer</code> method specifying the recipient and the amount of tokens to transfer as parameters.</p>
 <p>We again check for error conditions before mutating storage. In this case it is <em>not</em> necessary to check whether the token has been initialized. If it has not, nobody has any funds and the transfer will simply fail with <code>InsufficientFunds</code>.</p>
-<pre><code class="language-rust ignore">/// Transfer tokens from one account to another
-fn transfer(_origin, to: T::AccountId, value: u64) -&gt; DispatchResult {
+<pre><code class="language-rust ignore">fn transfer(_origin, to: T::AccountId, value: u64) -&gt; DispatchResult {
 	let sender = ensure_signed(_origin)?;
 	let sender_balance = Self::get_balance(&amp;sender);
 	let receiver_balance = Self::get_balance(&amp;to);
@@ -1460,21 +1429,21 @@ TechnicalCommittee: collective::&lt;Instance2&gt;::{Module, Call, Storage, Origi
 <pre><code class="language-rust ignore">pub trait Trait&lt;I=DefaultInstance&gt;: system::Trait {
 </code></pre>
 <pre><code class="language-rust ignore">decl_storage! {
-  trait Store for Module&lt;T: Trait&lt;I&gt;, I: Instance=DefaultInstance&gt; as TemplateModule {
-    ...
-  }
+	trait Store for Module&lt;T: Trait&lt;I&gt;, I: Instance=DefaultInstance&gt; as TemplateModule {
+		...
+	}
 }
 </code></pre>
 <pre><code class="language-rust ignore">decl_module! {
-    pub struct Module&lt;T: Trait&lt;I&gt;, I: Instance = DefaultInstance&gt; for enum Call where origin: T::Origin {
-        ...
-    }
+	pub struct Module&lt;T: Trait&lt;I&gt;, I: Instance = DefaultInstance&gt; for enum Call where origin: T::Origin {
+		...
+	}
 }
 </code></pre>
 <pre><code class="language-rust ignore">decl_event!(
 	pub enum Event&lt;T, I=DefaultInstance&gt; where ... {
-    ...
-  }
+		...
+	}
 }
 </code></pre>
 <p>Having made these changes, a developer who uses your pallet doesn't need to know or care that your pallet is instantable. They can deploy it just as they would any other pallet.</p>
@@ -1573,17 +1542,17 @@ insecure chain.</p>
 <p>Each of the parameters described above is set in the <code>transaction_payment</code> pallet's configuration trait. For example, the <code>super-runtime</code> sets these parameters as follows.</p>
 <p>src: <a href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/super-runtime/src/lib.rs"><code>runtimes/super-runtime/src/lib.rs</code></a></p>
 <pre><code class="language-rust ignore">parameter_types! {
-    pub const TransactionBaseFee: u128 = 0;
-    pub const TransactionByteFee: u128 = 1;
+	pub const TransactionBaseFee: u128 = 0;
+	pub const TransactionByteFee: u128 = 1;
 }
 
 impl transaction_payment::Trait for Runtime {
-    type Currency = balances::Module&lt;Runtime&gt;;
-    type OnTransactionPayment = ();
-    type TransactionBaseFee = TransactionBaseFee;
-    type TransactionByteFee = TransactionByteFee;
-    type WeightToFee = ConvertInto;
-    type FeeMultiplierUpdate = ();
+	type Currency = balances::Module&lt;Runtime&gt;;
+	type OnTransactionPayment = ();
+	type TransactionBaseFee = TransactionBaseFee;
+	type TransactionByteFee = TransactionByteFee;
+	type WeightToFee = ConvertInto;
+	type FeeMultiplierUpdate = ();
 }
 </code></pre>
 <h2><a class="header" href="#converting-weight-to-fees" id="converting-weight-to-fees">Converting Weight To Fees</a></h2>
@@ -1632,15 +1601,15 @@ impl&lt;C0, C1, C2&gt; Convert&lt;Weight, Balance&gt; for QuadraticWeightToFee&l
 <pre><code class="language-rust ignore">const PALLET_ID: ModuleId = ModuleId(*b&quot;Charity!&quot;);
 
 impl&lt;T: Trait&gt; Module&lt;T&gt; {
-    /// The account ID that holds the Charity's funds
-    pub fn account_id() -&gt; T::AccountId {
-        PALLET_ID.into_account()
-    }
+	/// The account ID that holds the Charity's funds
+	pub fn account_id() -&gt; T::AccountId {
+		PALLET_ID.into_account()
+	}
 
-    /// The Charity's balance
-    fn pot() -&gt; BalanceOf&lt;T&gt; {
-        T::Currency::free_balance(&amp;Self::account_id())
-    }
+	/// The Charity's balance
+	fn pot() -&gt; BalanceOf&lt;T&gt; {
+		T::Currency::free_balance(&amp;Self::account_id())
+	}
 }
 </code></pre>
 <h1><a class="header" href="#receiving-funds" id="receiving-funds">Receiving Funds</a></h1>
@@ -2330,11 +2299,11 @@ called &quot;silly rpc&quot; which just returns constant integers. A Hello world
 </span><span class="boring">fn main() {
 </span>#[rpc]
 pub trait SillyRpc {
-    #[rpc(name = &quot;silly_seven&quot;)]
-    fn silly_7(&amp;self) -&gt; Result&lt;u64&gt;;
+	#[rpc(name = &quot;silly_seven&quot;)]
+	fn silly_7(&amp;self) -&gt; Result&lt;u64&gt;;
 
-    #[rpc(name = &quot;silly_double&quot;)]
-    fn silly_double(&amp;self, val: u64) -&gt; Result&lt;u64&gt;;
+	#[rpc(name = &quot;silly_double&quot;)]
+	fn silly_double(&amp;self, val: u64) -&gt; Result&lt;u64&gt;;
 }
 <span class="boring">}
 </span></code></pre></pre>
@@ -2345,17 +2314,17 @@ pub trait SillyRpc {
 </span>pub struct Silly;
 
 impl SillyRpc for Silly {
-    fn silly_7(&amp;self) -&gt; Result&lt;u64&gt; {
-        Ok(7)
-    }
+	fn silly_7(&amp;self) -&gt; Result&lt;u64&gt; {
+		Ok(7)
+	}
 
-    fn silly_double(&amp;self, val: u64) -&gt; Result&lt;u64&gt; {
-        Ok(2 * val)
-    }
+	fn silly_double(&amp;self, val: u64) -&gt; Result&lt;u64&gt; {
+		Ok(2 * val)
+	}
 }
 <span class="boring">}
 </span></code></pre></pre>
-<p>Finally, to make the contents of this new files visible, we need to add a line in our <code>main.rs</code>.</p>
+<p>Finally, to make the contents of this new file usable, we need to add a line in our <code>main.rs</code>.</p>
 <pre><pre class="playpen"><code class="language-rust">
 <span class="boring">#![allow(unused_variables)]
 </span><span class="boring">fn main() {
@@ -2381,13 +2350,16 @@ sc-rpc = { version = '2.0.0-alpha.5' }
 <pre><pre class="playpen"><code class="language-rust">
 <span class="boring">#![allow(unused_variables)]
 </span><span class="boring">fn main() {
-</span>.with_rpc_extensions(|client, _pool, _backend, _fetcher, _remote_blockchain| -&gt; Result&lt;RpcExtension, _&gt; {
-  let mut io = jsonrpc_core::IoHandler::default();
+</span>.with_rpc_extensions(|builder| -&gt; Result&lt;RpcExtension, _&gt; {
+	// Make an io handler to be extended with individual RPCs
+	let mut io = jsonrpc_core::IoHandler::default();
 
-  // Use the fully qualified name starting from `crate` because we're in macro_rules!
-  io.extend_with(crate::silly_rpc::SillyRpc::to_delegate(crate::silly_rpc::Silly{}));
+	// Use the fully qualified name starting from `crate` because we're in macro_rules!
+	io.extend_with(crate::silly_rpc::SillyRpc::to_delegate(crate::silly_rpc::Silly{}));
 
-  Ok(io)
+	// --snip--
+
+	Ok(io)
 })
 <span class="boring">}
 </span></code></pre></pre>
@@ -2484,16 +2456,19 @@ where
 <pre><pre class="playpen"><code class="language-rust">
 <span class="boring">#![allow(unused_variables)]
 </span><span class="boring">fn main() {
-</span>.with_rpc_extensions(|client, _pool, _backend, _fetcher, _remote_blockchain| -&gt; Result&lt;RpcExtension, _&gt; {
-  let mut io = jsonrpc_core::IoHandler::default();
+</span>.with_rpc_extensions(|builder| -&gt; Result&lt;RpcExtension, _&gt; {
+	// Make an io handler to be extended with individual RPCs
+	let mut io = jsonrpc_core::IoHandler::default();
 
-  // Use the fully qualified name starting from `crate` because we're in macro_rules!
-  io.extend_with(crate::silly_rpc::SillyRpc::to_delegate(crate::silly_rpc::Silly{}));
+	// Add the first rpc extension
+	io.extend_with(crate::silly_rpc::SillyRpc::to_delegate(crate::silly_rpc::Silly{}));
 
-  io.extend_with(sum_storage_rpc::SumStorageApi::to_delegate(sum_storage_rpc::SumStorage::new(client)));
+	// Add the second RPC extension
+	// Because this one calls a Runtime API it needs a reference to the client.
+	io.extend_with(sum_storage_rpc::SumStorageApi::to_delegate(sum_storage_rpc::SumStorage::new(builder.client().clone())));
 
-  Ok(io)
-})?
+	Ok(io)
+})?;
 <span class="boring">}
 </span></code></pre></pre>
 <h2><a class="header" href="#optional-rpc-parameters" id="optional-rpc-parameters">Optional RPC Parameters</a></h2>
@@ -2721,7 +2696,7 @@ pub struct Sha3Algorithm;
 </code></pre>
 <p>The <code>Currency</code> trait provides an abstraction over a fungible assets system. To use such a fuingible asset from your pallet, include an associated type with the <code>Currency</code> trait bound in your pallet's configuration trait.</p>
 <pre><code class="language-rust ignore">pub trait Trait: system::Trait {
-    type Currency: Currency&lt;Self::AccountId&gt;;
+	type Currency: Currency&lt;Self::AccountId&gt;;
 }
 </code></pre>
 <p>Defining an associated type with this trait bound allows this pallet to access the provided methods of <a href="https://substrate.dev/rustdocs/master/frame_support/traits/trait.Currency.html"><code>Currency</code></a>. For example, it is straightforward to check the total issuance of the system:</p>
@@ -2737,31 +2712,32 @@ T::Currency::total_issuance();
 <pre><code class="language-rust ignore">use frame_support::traits::{Currency, ReservableCurrency};
 
 pub trait Trait: system::Trait {
-    type Currency: Currency&lt;Self::AccountId&gt; + ReservableCurrency&lt;Self::AccountId&gt;;
+	type Currency: Currency&lt;Self::AccountId&gt; + ReservableCurrency&lt;Self::AccountId&gt;;
 }
 </code></pre>
 <p>To lock or unlock some quantity of funds, it is sufficient to invoke <code>reserve</code> and <code>unreserve</code> respectively</p>
-<pre><code class="language-rust ignore">pub fn lock_funds(origin, amount: BalanceOf&lt;T&gt;) -&gt; Result {
-    let locker = ensure_signed(origin)?;
+<pre><code class="language-rust ignore">pub fn reserve_funds(origin, amount: BalanceOf&lt;T&gt;) -&gt; DispatchResult {
+	let locker = ensure_signed(origin)?;
 
-    T::Currency::reserve(&amp;locker, amount)
-            .map_err(|_| &quot;locker can't afford to lock the amount requested&quot;)?;
+	T::Currency::reserve(&amp;locker, amount)
+			.map_err(|_| &quot;locker can't afford to lock the amount requested&quot;)?;
 
-    let now = &lt;system::Module&lt;T&gt;&gt;::block_number();
+	let now = &lt;system::Module&lt;T&gt;&gt;::block_number();
 
-    Self::deposit_event(RawEvent::LockFunds(locker, amount, now));
-    Ok(())
+	Self::deposit_event(RawEvent::LockFunds(locker, amount, now));
+	Ok(())
 }
+</code></pre>
+<pre><code class="language-rust ignore">pub fn unreserve_funds(origin, amount: BalanceOf&lt;T&gt;) -&gt; DispatchResult {
+	let unlocker = ensure_signed(origin)?;
 
-pub fn unlock_funds(origin, amount: BalanceOf&lt;T&gt;) -&gt; Result {
-    let unlocker = ensure_signed(origin)?;
+	T::Currency::unreserve(&amp;unlocker, amount);
+	// ReservableCurrency::unreserve does not fail (it will lock up as much as amount)
 
-    T::Currency::unreserve(&amp;unlocker, amount);
+	let now = &lt;system::Module&lt;T&gt;&gt;::block_number();
 
-    let now = &lt;system::Module&lt;T&gt;&gt;::block_number();
-
-    Self::deposit_event(RawEvent::LockFunds(unlocker, amount, now));
-    Ok(())
+	Self::deposit_event(RawEvent::UnlockFunds(unlocker, amount, now));
+	Ok(())
 }
 </code></pre>
 <h2><a class="header" href="#lockable-currency" id="lockable-currency">Lockable Currency</a></h2>
@@ -2772,35 +2748,34 @@ pub fn unlock_funds(origin, amount: BalanceOf&lt;T&gt;) -&gt; Result {
 <pre><code class="language-rust ignore">const EXAMPLE_ID: LockIdentifier = *b&quot;example &quot;;
 </code></pre>
 <p>By using this <code>EXAMPLE_ID</code>, it is straightforward to define logic within the runtime to schedule locking, unlocking, and extending existing locks.</p>
-<pre><code class="language-rust ignore">fn lock_capital(origin, amount: BalanceOf&lt;T&gt;) -&gt; Result {
-    let user = ensure_signed(origin)?;
+<pre><code class="language-rust ignore">fn lock_capital(origin, amount: BalanceOf&lt;T&gt;) -&gt; DispatchResult {
+	let user = ensure_signed(origin)?;
 
-    T::Currency::set_lock(
-        EXAMPLE_ID,
-        user.clone(),
-        amount,
-        WithdrawReasons::except(WithdrawReason::TransactionPayment),
-    );
+	T::Currency::set_lock(
+		EXAMPLE_ID,
+		&amp;user,
+		amount,
+		WithdrawReasons::except(WithdrawReason::TransactionPayment),
+	);
 
-    Self::deposit_event(RawEvent::Locked(user, amount));
-    Ok(())
+	Self::deposit_event(RawEvent::Locked(user, amount));
+	Ok(())
 }
 </code></pre>
 <h2><a class="header" href="#imbalances-1" id="imbalances-1">Imbalances</a></h2>
 <p>Functions that alter balances return an object of the <a href="https://substrate.dev/rustdocs/master/frame_support/traits/trait.Imbalance.html"><code>Imbalance</code></a> type to express how much account balances have been altered in aggregate. This is useful in the context of state transitions that adjust the total supply of the <code>Currency</code> type in question.</p>
 <p>To manage this supply adjustment, the <a href="https://substrate.dev/rustdocs/master/frame_support/traits/trait.OnUnbalanced.html"><code>OnUnbalanced</code></a> handler is often used. An example might look something like</p>
-<pre><code class="language-rust ignore">// runtime method (ie decl_module block)
-pub fn reward_funds(origin, to_reward: T::AccountId, reward: BalanceOf&lt;T&gt;) {
-    let _ = ensure_signed(origin)?;
+<pre><code class="language-rust ignore">pub fn reward_funds(origin, to_reward: T::AccountId, reward: BalanceOf&lt;T&gt;) {
+	let _ = ensure_signed(origin)?;
 
-    let mut total_imbalance = &lt;PositiveImbalanceOf&lt;T&gt;&gt;::zero();
+	let mut total_imbalance = &lt;PositiveImbalanceOf&lt;T&gt;&gt;::zero();
 
-    let r = T::Currency::deposit_into_existing(&amp;to_reward, reward).ok();
-    total_imbalance.maybe_subsume(r);
-    T::Reward::on_unbalanced(total_imbalance);
+	let r = T::Currency::deposit_into_existing(&amp;to_reward, reward).ok();
+	total_imbalance.maybe_subsume(r);
+	T::Reward::on_unbalanced(total_imbalance);
 
-    let now = &lt;system::Module&lt;T&gt;&gt;::block_number();
-    Self::deposit_event(RawEvent::RewardFunds(to_reward, reward, now));
+	let now = &lt;system::Module&lt;T&gt;&gt;::block_number();
+	Self::deposit_event(RawEvent::RewardFunds(to_reward, reward, now));
 }
 </code></pre>
 <h2><a class="header" href="#takeaway" id="takeaway">takeaway</a></h2>

@@ -156,7 +156,7 @@
 </code></pre>
 <p>The <code>Currency</code> trait provides an abstraction over a fungible assets system. To use such a fuingible asset from your pallet, include an associated type with the <code>Currency</code> trait bound in your pallet's configuration trait.</p>
 <pre><code class="language-rust ignore">pub trait Trait: system::Trait {
-    type Currency: Currency&lt;Self::AccountId&gt;;
+	type Currency: Currency&lt;Self::AccountId&gt;;
 }
 </code></pre>
 <p>Defining an associated type with this trait bound allows this pallet to access the provided methods of <a href="https://substrate.dev/rustdocs/master/frame_support/traits/trait.Currency.html"><code>Currency</code></a>. For example, it is straightforward to check the total issuance of the system:</p>
@@ -172,31 +172,32 @@ T::Currency::total_issuance();
 <pre><code class="language-rust ignore">use frame_support::traits::{Currency, ReservableCurrency};
 
 pub trait Trait: system::Trait {
-    type Currency: Currency&lt;Self::AccountId&gt; + ReservableCurrency&lt;Self::AccountId&gt;;
+	type Currency: Currency&lt;Self::AccountId&gt; + ReservableCurrency&lt;Self::AccountId&gt;;
 }
 </code></pre>
 <p>To lock or unlock some quantity of funds, it is sufficient to invoke <code>reserve</code> and <code>unreserve</code> respectively</p>
-<pre><code class="language-rust ignore">pub fn lock_funds(origin, amount: BalanceOf&lt;T&gt;) -&gt; Result {
-    let locker = ensure_signed(origin)?;
+<pre><code class="language-rust ignore">pub fn reserve_funds(origin, amount: BalanceOf&lt;T&gt;) -&gt; DispatchResult {
+	let locker = ensure_signed(origin)?;
 
-    T::Currency::reserve(&amp;locker, amount)
-            .map_err(|_| &quot;locker can't afford to lock the amount requested&quot;)?;
+	T::Currency::reserve(&amp;locker, amount)
+			.map_err(|_| &quot;locker can't afford to lock the amount requested&quot;)?;
 
-    let now = &lt;system::Module&lt;T&gt;&gt;::block_number();
+	let now = &lt;system::Module&lt;T&gt;&gt;::block_number();
 
-    Self::deposit_event(RawEvent::LockFunds(locker, amount, now));
-    Ok(())
+	Self::deposit_event(RawEvent::LockFunds(locker, amount, now));
+	Ok(())
 }
+</code></pre>
+<pre><code class="language-rust ignore">pub fn unreserve_funds(origin, amount: BalanceOf&lt;T&gt;) -&gt; DispatchResult {
+	let unlocker = ensure_signed(origin)?;
 
-pub fn unlock_funds(origin, amount: BalanceOf&lt;T&gt;) -&gt; Result {
-    let unlocker = ensure_signed(origin)?;
+	T::Currency::unreserve(&amp;unlocker, amount);
+	// ReservableCurrency::unreserve does not fail (it will lock up as much as amount)
 
-    T::Currency::unreserve(&amp;unlocker, amount);
+	let now = &lt;system::Module&lt;T&gt;&gt;::block_number();
 
-    let now = &lt;system::Module&lt;T&gt;&gt;::block_number();
-
-    Self::deposit_event(RawEvent::LockFunds(unlocker, amount, now));
-    Ok(())
+	Self::deposit_event(RawEvent::UnlockFunds(unlocker, amount, now));
+	Ok(())
 }
 </code></pre>
 <h2><a class="header" href="#lockable-currency" id="lockable-currency">Lockable Currency</a></h2>
@@ -207,35 +208,34 @@ pub fn unlock_funds(origin, amount: BalanceOf&lt;T&gt;) -&gt; Result {
 <pre><code class="language-rust ignore">const EXAMPLE_ID: LockIdentifier = *b&quot;example &quot;;
 </code></pre>
 <p>By using this <code>EXAMPLE_ID</code>, it is straightforward to define logic within the runtime to schedule locking, unlocking, and extending existing locks.</p>
-<pre><code class="language-rust ignore">fn lock_capital(origin, amount: BalanceOf&lt;T&gt;) -&gt; Result {
-    let user = ensure_signed(origin)?;
+<pre><code class="language-rust ignore">fn lock_capital(origin, amount: BalanceOf&lt;T&gt;) -&gt; DispatchResult {
+	let user = ensure_signed(origin)?;
 
-    T::Currency::set_lock(
-        EXAMPLE_ID,
-        user.clone(),
-        amount,
-        WithdrawReasons::except(WithdrawReason::TransactionPayment),
-    );
+	T::Currency::set_lock(
+		EXAMPLE_ID,
+		&amp;user,
+		amount,
+		WithdrawReasons::except(WithdrawReason::TransactionPayment),
+	);
 
-    Self::deposit_event(RawEvent::Locked(user, amount));
-    Ok(())
+	Self::deposit_event(RawEvent::Locked(user, amount));
+	Ok(())
 }
 </code></pre>
 <h2><a class="header" href="#imbalances" id="imbalances">Imbalances</a></h2>
 <p>Functions that alter balances return an object of the <a href="https://substrate.dev/rustdocs/master/frame_support/traits/trait.Imbalance.html"><code>Imbalance</code></a> type to express how much account balances have been altered in aggregate. This is useful in the context of state transitions that adjust the total supply of the <code>Currency</code> type in question.</p>
 <p>To manage this supply adjustment, the <a href="https://substrate.dev/rustdocs/master/frame_support/traits/trait.OnUnbalanced.html"><code>OnUnbalanced</code></a> handler is often used. An example might look something like</p>
-<pre><code class="language-rust ignore">// runtime method (ie decl_module block)
-pub fn reward_funds(origin, to_reward: T::AccountId, reward: BalanceOf&lt;T&gt;) {
-    let _ = ensure_signed(origin)?;
+<pre><code class="language-rust ignore">pub fn reward_funds(origin, to_reward: T::AccountId, reward: BalanceOf&lt;T&gt;) {
+	let _ = ensure_signed(origin)?;
 
-    let mut total_imbalance = &lt;PositiveImbalanceOf&lt;T&gt;&gt;::zero();
+	let mut total_imbalance = &lt;PositiveImbalanceOf&lt;T&gt;&gt;::zero();
 
-    let r = T::Currency::deposit_into_existing(&amp;to_reward, reward).ok();
-    total_imbalance.maybe_subsume(r);
-    T::Reward::on_unbalanced(total_imbalance);
+	let r = T::Currency::deposit_into_existing(&amp;to_reward, reward).ok();
+	total_imbalance.maybe_subsume(r);
+	T::Reward::on_unbalanced(total_imbalance);
 
-    let now = &lt;system::Module&lt;T&gt;&gt;::block_number();
-    Self::deposit_event(RawEvent::RewardFunds(to_reward, reward, now));
+	let now = &lt;system::Module&lt;T&gt;&gt;::block_number();
+	Self::deposit_event(RawEvent::RewardFunds(to_reward, reward, now));
 }
 </code></pre>
 <h2><a class="header" href="#takeaway" id="takeaway">takeaway</a></h2>

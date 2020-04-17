@@ -157,30 +157,29 @@ decl_storage! {
 	trait Store for Module&lt;T: Trait&gt; as Dmap {
 		/// Member score (double map)
 		MemberScore get(fn member_score):
-			double_map hasher(blake2_256) GroupIndex, hasher(blake2_256) T::AccountId =&gt; u32;
+			double_map hasher(blake2_128_concat) GroupIndex, hasher(blake2_128_concat) T::AccountId =&gt; u32;
 		/// Get group ID for member
-		GroupMembership get(fn group_membership): map hasher(blake2_256) T::AccountId =&gt; GroupIndex;
+		GroupMembership get(fn group_membership): map hasher(blake2_128_concat) T::AccountId =&gt; GroupIndex;
 		/// For fast membership checks, see check-membership recipe for more details
 		AllMembers get(fn all_members): Vec&lt;T::AccountId&gt;;
 	}
 }
 </code></pre>
-<p>For the purposes of this example,  store the scores of each members in a map that associates this <code>u32</code> value with two keys: (1) the hash of the member's <code>AccountId</code> and (2) a <code>GroupIndex</code> identifier. This allows for efficient removal of all values associated with a specific <code>GroupIndex</code> identifier.</p>
-<pre><code class="language-rust ignore">fn remove_group_score(origin, group: GroupIndex) -&gt; Result {
-    let member = ensure_signed(origin)?;
+<p>For the purposes of this example, store the scores of each members in a map that associates this <code>u32</code> value with two keys: (1) a <code>GroupIndex</code> identifier, and (2) the member's <code>AccountId</code>. This allows for efficient removal of all values associated with a specific <code>GroupIndex</code> identifier.</p>
+<pre><code class="language-rust ignore">fn remove_group_score(origin, group: GroupIndex) -&gt; DispatchResult {
+	let member = ensure_signed(origin)?;
 
-    let group_id = &lt;GroupMembership&lt;T&gt;&gt;::get(member);
-    // check that the member is in the group (could be improved by requiring n-of-m member support)
-    ensure!(group_id == group, &quot;member isn't in the group, can't remove it&quot;);
+	let group_id = &lt;GroupMembership&lt;T&gt;&gt;::get(member);
+	// check that the member is in the group
+	ensure!(group_id == group, &quot;member isn't in the group, can't remove it&quot;);
 
-    // allows us to remove all group members from MemberScore at once
-    &lt;MemberScore&lt;T&gt;&gt;::remove_prefix(&amp;group_id);
+	// remove all group members from MemberScore at once
+	&lt;MemberScore&lt;T&gt;&gt;::remove_prefix(&amp;group_id);
 
-    Self::deposit_event(RawEvent::RemoveGroup(group_id));
-    Ok(())
+	Self::deposit_event(RawEvent::RemoveGroup(group_id));
+	Ok(())
 }
 </code></pre>
-<p><strong>Note</strong>: It is necessary for one of the two keys to be hashed; <em><a href="https://github.com/substrate-developer-hub/recipes/issues/46">TODO</a></em></p>
 
                     </main>
 
