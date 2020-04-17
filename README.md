@@ -22,4 +22,4 @@ The book is built with [mdbook](https://rust-lang-nursery.github.io/mdBook/) and
 
 ## Using Recipes in External Projects
 
-The pallets and runtimes provided here are tested and ready to be used in other Substrate-based blockchains. The big caveat is that you must use the same upstream Substrate version throughout the project. The recipes currently use Substrate@`v2.0.0-alpha.5`.
+The pallets and runtimes provided here are tested and ready to be used in other Substrate-based blockchains. The big caveat is that you must use the same upstream Substrate version throughout the project. The recipes currently use Substrate@`v2.0.0-alpha.6`.

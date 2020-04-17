@@ -1,6 +1,6 @@
 [package]
 name = "adding-machine"
-version = "2.0.0-alpha.3"
+version = "2.0.0-alpha.6"
 authors = ["4meta5, Joshy Orndorff"]
 edition = "2018"
 
@@ -15,10 +15,10 @@ std = [
 
 [dependencies]
 parity-scale-codec = { version = "1.3.0", features = ["derive"], default-features = false }
-frame-support = { package = "frame-support", version = '2.0.0-alpha.5', default_features = false }
-system = { package = "frame-system", version = '2.0.0-alpha.5', default_features = false }
-sp-runtime = { version = '2.0.0-alpha.5', default_features = false }
+frame-support = { package = "frame-support", version = '2.0.0-alpha.6', default_features = false }
+system = { package = "frame-system", version = '2.0.0-alpha.6', default_features = false }
+sp-runtime = { version = '2.0.0-alpha.6', default_features = false }
 
 [dev-dependencies]
-sp-core = { version = '2.0.0-alpha.5', default_features = false }
-sp-io = { version = '2.0.0-alpha.5', default_features = false }
+sp-core = { version = '2.0.0-alpha.6', default_features = false }
+sp-io = { version = '2.0.0-alpha.6', default_features = false }
