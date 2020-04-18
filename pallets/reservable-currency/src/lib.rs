@@ -9,6 +9,9 @@ use system::ensure_signed;
 // balance type using reservable currency type
 type BalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::Balance;
 
+#[cfg(test)]
+mod tests;
+
 pub trait Trait: system::Trait + Sized {
     // overarching event type
     type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
