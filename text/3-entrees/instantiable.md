@@ -104,23 +104,23 @@ pub trait Trait<I=DefaultInstance>: system::Trait {
 
 ```rust, ignore
 decl_storage! {
-  trait Store for Module<T: Trait<I>, I: Instance=DefaultInstance> as TemplateModule {
-    ...
-  }
+	trait Store for Module<T: Trait<I>, I: Instance=DefaultInstance> as TemplateModule {
+		...
+	}
 }
 ```
 ```rust, ignore
 decl_module! {
-    pub struct Module<T: Trait<I>, I: Instance = DefaultInstance> for enum Call where origin: T::Origin {
-        ...
-    }
+	pub struct Module<T: Trait<I>, I: Instance = DefaultInstance> for enum Call where origin: T::Origin {
+		...
+	}
 }
 ```
 ```rust, ignore
 decl_event!(
 	pub enum Event<T, I=DefaultInstance> where ... {
-    ...
-  }
+		...
+	}
 }
 ```
 

@@ -1,14 +1,15 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
-// Transaction Weight Examples
-// https://substrate.dev/rustdocs/master/sp_runtime/weights/index.html
-use support::{
+//! Transaction Weight Examples
+
+use frame_support::{
 	ensure,
 	decl_module,
 	decl_storage,
 	dispatch::{DispatchResult, WeighData, PaysFee},
 	weights::{ DispatchClass, Weight, ClassifyDispatch, SimpleDispatchInfo},
 };
+use frame_system as system;
 
 pub trait Trait: system::Trait {}
 

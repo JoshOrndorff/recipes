@@ -1,9 +1,13 @@
+//! A pallet that demonstrates the Transient Storage Adapter pattern through
+//! the concrete example of a ringbuffer queue
+
 #![cfg_attr(not(feature = "std"), no_std)]
 
-// Ringbuffer
 use codec::{Decode, Encode};
 use frame_support::{
-	decl_event, decl_module, decl_storage, dispatch::DispatchResult,
+	decl_event, decl_module, decl_storage,
+	dispatch::DispatchResult,
+	weights::SimpleDispatchInfo,
 };
 use frame_system::{self as system, ensure_signed};
 use sp_std::prelude::*;
@@ -49,6 +53,8 @@ decl_module! {
 	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
 		fn deposit_event() = default;
 
+		/// Add an item to the queue
+		#[weight = SimpleDispatchInfo::default()]
 		pub fn add_to_queue(origin, integer: i32, boolean: bool) -> DispatchResult {
 			// only a user can push into the queue
 			let _user = ensure_signed(origin)?;
@@ -59,6 +65,8 @@ decl_module! {
 			Ok(())
 		}
 
+		/// Add several items to the queue
+		#[weight = SimpleDispatchInfo::default()]
 		pub fn add_multiple(origin, integers: Vec<i32>, boolean: bool) -> DispatchResult {
 			// only a user can push into the queue
 			let _user = ensure_signed(origin)?;
@@ -71,6 +79,8 @@ decl_module! {
 			Ok(())
 		}
 
+		/// Remove and return an item from the queue
+		#[weight = SimpleDispatchInfo::default()]
 		pub fn pop_from_queue(origin) -> DispatchResult {
 			// only a user can pop from the queue
 			let _user = ensure_signed(origin)?;
@@ -87,7 +97,7 @@ decl_module! {
 
 impl<T: Trait> Module<T> {
 	/// Constructor function so we don't have to specify the types every time.
-	/// 
+	///
 	/// Constructs a ringbuffer transient and returns it as a boxed trait object.
 	/// See [this part of the Rust book](https://doc.rust-lang.org/book/ch17-02-trait-objects.html#trait-objects-perform-dynamic-dispatch)
 	fn queue_transient() -> Box<dyn RingBufferTrait<ValueStruct>> {

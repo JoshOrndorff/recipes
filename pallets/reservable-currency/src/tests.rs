@@ -1,14 +1,15 @@
 use crate::*;
+use sp_core::H256;
+use sp_io;
 use balances;
-use primitives::H256;
-use runtime_io::{self as sp_io};
-use support::sp_runtime::{
+use sp_runtime::{
     testing::Header,
     traits::{BlakeTwo256, IdentityLookup},
     Perbill,
 };
-use support::{assert_err, assert_ok, impl_outer_event, impl_outer_origin, parameter_types};
-use system::{self as system, RawOrigin};
+use frame_support::{assert_err, assert_ok, impl_outer_event, impl_outer_origin, parameter_types};
+use frame_system::{self as system};
+
 impl_outer_origin! {
     pub enum Origin for TestRuntime {}
 }
@@ -100,10 +101,10 @@ fn new_test_ext_behaves() {
 }
 
 #[test]
-fn new_test_ext_lock_funds() {
+fn new_test_ext_reserve_funds() {
     new_test_ext().execute_with(|| {
         // Lock half of 1's balance : (1, 10000) -> (1, 5000)
-        assert_ok!(ReservableCurrency::lock_funds(Origin::signed(1), 5000));
+        assert_ok!(ReservableCurrency::reserve_funds(Origin::signed(1), 5000));
         // Test and see if we received a LockFunds event
         let expected_event = TestEvent::reservable_currency(RawEvent::LockFunds(1, 5000, 1));
         assert!(System::events().iter().any(|a| a.event == expected_event));
@@ -115,16 +116,16 @@ fn new_test_ext_lock_funds() {
 }
 
 #[test]
-fn new_test_ext_unlock_funds() {
+fn new_test_ext_unreserve_funds() {
     new_test_ext().execute_with(|| {
         // Lock balance, test lock event, test free balance
-        assert_ok!(ReservableCurrency::lock_funds(Origin::signed(1), 5000));
+        assert_ok!(ReservableCurrency::reserve_funds(Origin::signed(1), 5000));
         let lock_event = TestEvent::reservable_currency(RawEvent::LockFunds(1, 5000, 1));
         assert!(System::events().iter().any(|a| a.event == lock_event));
         assert_eq!(Balances::free_balance(&1), 5000);
 
         // Unlock balance, test event, test free balance
-        assert_ok!(ReservableCurrency::unlock_funds(Origin::signed(1), 5000));
+        assert_ok!(ReservableCurrency::unreserve_funds(Origin::signed(1), 5000));
         let unlock_event = TestEvent::reservable_currency(RawEvent::UnlockFunds(1, 5000, 1));
         assert!(System::events().iter().any(|a| a.event == unlock_event));
         assert_eq!(Balances::free_balance(&1), 10000);
@@ -151,7 +152,7 @@ fn new_test_ext_transfer_funds() {
 fn new_test_ext_unreserve_and_transfer() {
     new_test_ext().execute_with(|| {
         // Reserve 4000 -> check for (1, 6000) -> check for reserved::(1, 4000)
-        assert_ok!(ReservableCurrency::lock_funds(Origin::signed(1), 4000));
+        assert_ok!(ReservableCurrency::reserve_funds(Origin::signed(1), 4000));
         assert_eq!(Balances::free_balance(&1), 6000);
         assert_eq!(Balances::reserved_balance(&1), 4000);
         let reserve_event = TestEvent::reservable_currency(RawEvent::LockFunds(1, 4000, 1));

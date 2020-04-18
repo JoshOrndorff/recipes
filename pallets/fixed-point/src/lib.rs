@@ -21,6 +21,7 @@ use frame_support::{
 	decl_module,
 	decl_storage,
 	dispatch::DispatchResult,
+	weights::SimpleDispatchInfo,
 };
 use frame_system::{self as system, ensure_signed};
 use substrate_fixed::types::U16F16;
@@ -73,6 +74,7 @@ decl_module! {
 
 		/// Update the Permill accumulator implementation's value by multiplying it
 		/// by the new factor given in the extrinsic
+		#[weight = SimpleDispatchInfo::default()]
 		fn update_permill(origin, new_factor: Permill) -> DispatchResult {
 			ensure_signed(origin)?;
 
@@ -92,6 +94,7 @@ decl_module! {
 
 		/// Update the Substrate-fixed accumulator implementation's value by multiplying it
 		/// by the new factor given in the extrinsic
+		#[weight = SimpleDispatchInfo::default()]
 		fn update_fixed(origin, new_factor: U16F16) -> DispatchResult {
 			ensure_signed(origin)?;
 
@@ -111,6 +114,7 @@ decl_module! {
 
 		/// Update the manually-implemented accumulator's value by multiplying it
 		/// by the new factor given in the extrinsic
+		#[weight = SimpleDispatchInfo::default()]
 		fn update_manual(origin, new_factor: u32) -> DispatchResult {
 			ensure_signed(origin)?;
 
