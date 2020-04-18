@@ -62,7 +62,7 @@ where
 
 The bounds `B` will be a `StorageValue` storing a tuple of indices `(Index, Index)`. The item storage will be a `StorageMap` mapping from our `Index` type to the `Item` type. We specify the associated `Query` type for both of them to help with type inference (because the value returned can be different from the stored representation).
 
-The [`Codec`](https://docs.rs/parity-scale-codec/1.2.0/parity_scale_codec/trait.Codec.html) and [`EncodeLike`](https://docs.rs/parity-scale-codec/1.2.0/parity_scale_codec/trait.EncodeLike.html) type constraints make sure that both items and indices can be stored in storage.
+The [`Codec`](https://docs.rs/parity-scale-codec/1.3.0/parity_scale_codec/trait.Codec.html) and [`EncodeLike`](https://docs.rs/parity-scale-codec/1.3.0/parity_scale_codec/trait.EncodeLike.html) type constraints make sure that both items and indices can be stored in storage.
 
 We need the [`PhantomData`](https://doc.rust-lang.org/std/marker/struct.PhantomData.html) in order to "hold on to" the types during the lifetime of the transient object.
 

@@ -41,6 +41,8 @@ A Dispatchable call is a function that a blockchain user can call as part of an 
 decl_module! {
 	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
 
+		/// A function that says hello to the user by printing messages to the node log
+		#[weight = SimpleDispatchInfo::default()]
 		pub fn say_hello(origin) -> DispatchResult {
 			// --snip--
 		}
@@ -50,7 +52,10 @@ decl_module! {
 }
 ```
 
-As you can see, our `hello-substrate` pallet has one dipatchable call that takes a single argument, called `origin` which we'll investigate shortly. The call returns a [`DispatchResult`](https://substrate.dev/rustdocs/master/frame_support/dispatch/type.DispatchResult.html) which can be either `Ok(())` indicating that the call succeeded, or an `Err` which we'll investigate in the [appetizer about errors](./3-errors.md).
+As you can see, our `hello-substrate` pallet has a dispatchable call that takes a single argument, called `origin` which we'll investigate shortly. The call returns a [`DispatchResult`](https://substrate.dev/rustdocs/master/frame_support/dispatch/type.DispatchResult.html) which can be either `Ok(())` indicating that the call succeeded, or an `Err` which we'll investigate in the [appetizer about errors](./3-errors.md).
+
+### Weight Annotations
+Right before the `hello-substrate` function, we see the line `#[weight = SimpleDispatchInfo::default()]`. This line attaches a default weight to the call. Ultimately weights affect the fees a user will have to pay to call the function. Weights are a very interesting aspect of developing with Substrate, but they too shall be covered later in the section on [Weights](../3-entrees/weights.md). For now, and for may of the recipes pallets, we will simply use the default weight as we have done here.
 
 ## Inside a Dispatchable Call
 
@@ -79,13 +84,13 @@ Finally, the call returns `Ok(())` to indicate that the call has succeeded. At a
 
 ## Printing from the Runtime
 
-Printing to the terminal from a rust program is typically very simple using the `println!` macro. However, Substrate runtimes are compiled to Web Assembly as well as a regular native binary, and do not have access to rust's standard library. That means we cannot use the regular `println!`. I encourage you to modify the code to try using `println!` and confirm that it will not compile. Nonetheless, printing a message from the runtime is useful both for logging information, and also for debugging.
+Printing to the terminal from a Rust program is typically very simple using the `println!` macro. However, Substrate runtimes are compiled to Web Assembly as well as a regular native binary, and do not have access to rust's standard library. That means we cannot use the regular `println!`. I encourage you to modify the code to try using `println!` and confirm that it will not compile. Nonetheless, printing a message from the runtime is useful both for logging information, and also for debugging.
 
 ![Substrate Architecture Diagram](../img/substrate-architecture.png)
 
 At the top of our pallet, we imported `sp_runtime`'s [`print` function](https://substrate.dev/rustdocs/master/sp_runtime/fn.print.html). This special function allows the runtime to pass a message for printing to the outer part of the node which is not built to Wasm. This function is only able to print items that implement the [`Printable` trait](https://substrate.dev/rustdocs/master/sp_runtime/traits/trait.Printable.html). Luckily all the primitive types already implement this trait, and you can implement the trait for your own datatypes too.
 
-**Print function note:** We also need to include the flag `-lruntime=debug` when running the kitchen node.
+**Print function note:** To actually see the printed messages, we need to use the flag `-lruntime=debug` when running the kitchen node. So, for the kitchen node, the command would become `./target/release/kitchen-node --dev -lruntime=debug`.
 
 The next line demonstrates using `debug::info!` macro to log to the screen and also inspecting the variable's content. The syntax inside the macro is very similar to what regular rust macro `println!` takes.
 
@@ -123,7 +128,7 @@ Next we must implement the pallet's configuration trait. This happens in the run
 ```rust ignore
 impl hello_substrate::Trait for Runtime {}
 ```
-You can see the corresponding trait implementations in the surrounding lines. Most of them are more complex.
+You can see the other pallets' trait implementations in the surrounding lines. Most of them are more complex.
 
 ### Add it to `construct_runtime!`
 
@@ -144,10 +149,10 @@ construct_runtime!(
 
 This macro does the heavy lifting of composing each individual pallet into a single usable runtime. Let's explain the syntax for each line. Each Pallet listed in the macro needs several pieces of information.
 
-First is a convenient name to give to this pallet. We've chosen `HelloSubstrate`. It is common to choose the same name as the pallet itself except when there is [more than one instance](../3-entrees/instantiable.md). Next is the name of the crate that the pallet lives in. And finally there is a list of features the pallet provides. All pallet require `Module`. Our pallet also provides dispatchable calls, so it requires `Call`.
+First is a convenient name to give to this pallet. We've chosen `HelloSubstrate`. It is common to choose the same name as the pallet itself except when there is [more than one instance](../3-entrees/instantiable.md). Next is the name of the crate that the pallet lives in. And finally there is a list of features the pallet provides. All pallets require `Module`. Our pallet also provides dispatchable calls, so it requires `Call`.
 
 ## Try it Out
 
-If you haven't already, try interacting with the pallet using the Apps UI. You should see your message printed to the log of your node. Remember to run the kitchen node with the correct flags: `./kitchen-node --dev -lruntime=debug`
+If you haven't already, try interacting with the pallet using the Apps UI. You should see your message printed to the log of your node. Remember to run the kitchen node with the correct flags: `./target/release/kitchen-node --dev -lruntime=debug`
 
 You're now well on your way to becoming a blockchain chef. Let's continue to build our skills with another appetizer.

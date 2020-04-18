@@ -80,8 +80,6 @@ macro_rules! new_full_start {
 
 				// Add the second RPC extension
 				// Because this one calls a Runtime API it needs a reference to the client.
-				// In this case we give ownership to the existing client, but in general, you
-				// may need to use client.clone()
 				io.extend_with(sum_storage_rpc::SumStorageApi::to_delegate(sum_storage_rpc::SumStorage::new(builder.client().clone())));
 
 				Ok(io)

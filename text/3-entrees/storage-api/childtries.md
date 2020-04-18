@@ -15,14 +15,12 @@ Every change in the leaves percolates up to the root, thereby providing a comple
 To interact with child tries, there are methods exposed in [runtime child storage](https://substrate.dev/rustdocs/master/frame_support/storage/child/index.html). Of the methods listed in the documentation, it is worth emphasizing the method associated with batch deletion.
 
 ```rust, ignore
-/// Remove all `storage_key` key/values
-pub fn kill_storage(storage_key: &[u8]) {
-	runtime_io::kill_child_storage(storage_key)
-}
-
-/// Remove value associated with `key` in trie with `storage_key`
-pub fn kill(storage_key: &[u8], key: &[u8]) {
-	runtime_io::clear_child_storage(storage_key, key);
+pub fn kill_trie(index: ObjectCount) {
+	let id = Self::id_from_index(index);
+	child::kill_storage(
+		id.as_ref(),
+		trie_unique_id(id.as_ref()),
+	);
 }
 ```
 
@@ -36,18 +34,14 @@ child::do(trie_id, key, value);
 To put an object in a child trie, the code would look something like
 
 ```rust, ignore
-fn kv_put(index: ObjectCount, who: &T::AccountId, value_type: &ValueType) {
-    let mut buf = Vec::new();
-		buf.extend_from_slice(b"exchildtr");
-		buf.extend_from_slice(&index.to_le_bytes()[..]);
-
-	let id = CHILD_STORAGE_KEY_PREFIX.into_iter()
-        .chain(b"default:")
-        .chain(T::Hashing::hash(&buf[..]).as_ref().into_iter())
-        .cloned()
-        .collect();
-
-	who.using_encoded(|b| child::put(id.as_ref(), b, value_type));
+pub fn kv_put(index: ObjectCount, who: &T::AccountId, value_to_put: ValAppended) {
+	let id = Self::id_from_index(index);
+	who.using_encoded(|b| child::put(
+			id.as_ref(),
+			trie_unique_id(id.as_ref()),
+			b,
+			&value_to_put
+	));
 }
 ```
 
@@ -55,27 +49,20 @@ The code in [`pallets/child-trie`](https://github.com/substrate-developer-hub/re
 
 ```rust, ignore
 pub fn id_from_index(index: ObjectCount) -> Vec<u8> {
-    let mut buf = Vec::new();
-    buf.extend_from_slice(b"exchildtr");
-    buf.extend_from_slice(&index.to_le_bytes()[..]);
+	let mut buf = Vec::new();
+	buf.extend_from_slice(b"exchildtr");
+	buf.extend_from_slice(&index.to_le_bytes()[..]);
 
-    CHILD_STORAGE_KEY_PREFIX
-        .into_iter()
-        .chain(b"default:")
-        .chain(Blake2Hasher::hash(&buf[..]).as_ref().into_iter())
-        .cloned()
-        .collect()
+	CHILD_STORAGE_KEY_PREFIX
+		.into_iter()
+		.chain(b"default:")
+		.chain(Blake2Hasher::hash(&buf[..]).as_ref().into_iter())
+		.cloned()
+		.collect()
 }
 ```
 
-This results in less code for each method:
-
-```rust, ignore
-pub fn kv_put(index: ObjectCount, who: &T::AccountId, value_type: ValueType) {
-    let id = Self::id_from_index(index);
-    who.using_encoded(|b| child::put(id.as_ref(), b, &value_type));
-}
-```
+This results in less code for each method.
 
 ## smpl-crowdfund <a name = "smplcrwd"></a>
 *[`pallets/simple-crowdfund`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-crowdfund)*

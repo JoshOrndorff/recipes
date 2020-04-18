@@ -19,15 +19,15 @@ With these imports, a `PALLET_ID` constant can be generated as an identifier for
 const PALLET_ID: ModuleId = ModuleId(*b"Charity!");
 
 impl<T: Trait> Module<T> {
-    /// The account ID that holds the Charity's funds
-    pub fn account_id() -> T::AccountId {
-        PALLET_ID.into_account()
-    }
+	/// The account ID that holds the Charity's funds
+	pub fn account_id() -> T::AccountId {
+		PALLET_ID.into_account()
+	}
 
-    /// The Charity's balance
-    fn pot() -> BalanceOf<T> {
-        T::Currency::free_balance(&Self::account_id())
-    }
+	/// The Charity's balance
+	fn pot() -> BalanceOf<T> {
+		T::Currency::free_balance(&Self::account_id())
+	}
 }
 ```
 

@@ -1,6 +1,14 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
-//! A pallet that demonstrates Fixed Point arithmetic
+//! A pallet that demonstrates Fixed Point arithmetic in the context of two simple bank accounts
+//! that accrue compounding interest.
+//!
+//! The discrete account accrues interest every ten blocks and is implemented using
+//! Substrate's `Percent` implementation of fixed point.
+//!
+//! The continuous account accrues interest continuously and is implemented using
+//! Substrate-fixed's `I32F32` implementation of fixed point.
+
 use parity_scale_codec::{Encode, Decode};
 use sp_runtime::traits::Zero;
 use sp_arithmetic::Percent;
@@ -9,6 +17,7 @@ use frame_support::{
 	decl_module,
 	decl_storage,
 	dispatch::DispatchResult,
+	weights::SimpleDispatchInfo,
 };
 use frame_system::{self as system, ensure_signed};
 use substrate_fixed::{
@@ -63,6 +72,7 @@ decl_module! {
 		fn deposit_event() = default;
 
 		/// Deposit some funds into the compounding interest account
+		#[weight = SimpleDispatchInfo::default()]
 		fn deposit_continuous(origin, val_to_add: u64) -> DispatchResult {
 			ensure_signed(origin)?;
 
@@ -83,6 +93,7 @@ decl_module! {
 		}
 
 		/// Withdraw some funds from the compounding interest account
+		#[weight = SimpleDispatchInfo::default()]
 		fn withdraw_continuous(origin, val_to_take: u64) -> DispatchResult {
 			ensure_signed(origin)?;
 
@@ -103,6 +114,7 @@ decl_module! {
 		}
 
 		/// Deposit some funds into the discrete interest account
+		#[weight = SimpleDispatchInfo::default()]
 		fn deposit_discrete(origin, val_to_add: u64) -> DispatchResult {
 			ensure_signed(origin)?;
 
@@ -117,6 +129,7 @@ decl_module! {
 		}
 
 		/// Withdraw some funds from the discrete interest account
+		#[weight = SimpleDispatchInfo::default()]
 		fn withdraw_discrete(origin, val_to_take: u64) -> DispatchResult {
 			ensure_signed(origin)?;
 

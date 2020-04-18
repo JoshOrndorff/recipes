@@ -1,11 +1,13 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
-/// Simple Token Transfer
-/// 1. set total supply
-/// 2. establish ownership upon configuration of circulating tokens
-/// 3. coordinate token transfers with the runtime functions
+//! Simple Token Transfer
+//! 1. set total supply
+//! 2. establish ownership upon configuration of circulating tokens
+//! 3. coordinate token transfers with the runtime functions
 use frame_support::{
-	decl_event, decl_module, decl_error, decl_storage, dispatch::DispatchResult, ensure, StorageMap, StorageValue,
+	decl_event, decl_module, decl_error, decl_storage, ensure,
+	dispatch::DispatchResult,
+	weights::SimpleDispatchInfo,
 };
 use frame_system::{self as system, ensure_signed};
 
@@ -53,6 +55,7 @@ decl_module! {
 
 		/// Initialize the token
 		/// transfers the total_supply amout to the caller
+		#[weight = SimpleDispatchInfo::default()]
 		fn init(origin) -> DispatchResult {
 			let sender = ensure_signed(origin)?;
 			ensure!(Self::is_init() == false, <Error<T>>::AlreadyInitialized);
@@ -64,6 +67,7 @@ decl_module! {
 		}
 
 		/// Transfer tokens from one account to another
+		#[weight = SimpleDispatchInfo::default()]
 		fn transfer(_origin, to: T::AccountId, value: u64) -> DispatchResult {
 			let sender = ensure_signed(_origin)?;
 			let sender_balance = Self::get_balance(&sender);
