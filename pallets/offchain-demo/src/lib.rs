@@ -84,6 +84,7 @@ decl_error! {
 		// Error returned when making unsigned transactions in off-chain worker
 		UnsignedSubmitNumberError,
 		HttpFetchingError,
+		JsonParsingError,
 	}
 }
 
@@ -166,7 +167,21 @@ impl<T: Trait> Module<T> {
 		let resp_str = str::from_utf8(&resp_bytes)
 			.map_err(|_| <Error<T>>::HttpFetchingError)?;
 
-		debug::info!("{:?}", resp_str);
+		// The json shape is as follow.
+		// {
+		//   "login":"substrate-developer-hub",
+		//   "blog":"https://substrate.dev",
+		//   ...
+		// }
+		debug::info!("{}", resp_str);
+
+		let login_bytes = Self::parse_for_value(&resp_str, "login")?;
+		let blog_bytes = Self::parse_for_value(&resp_str, "blog")?;
+
+		debug::info!("login: {}", str::from_utf8(&login_bytes)
+			.map_err(|_| <Error<T>>::JsonParsingError)?);
+		debug::info!("blog: {}", str::from_utf8(&blog_bytes)
+			.map_err(|_| <Error<T>>::JsonParsingError)?);
 
 		Ok(())
 	}
@@ -179,17 +194,25 @@ impl<T: Trait> Module<T> {
 
 		debug::info!("sending request to: {}", remote_url);
 
+		// Initiate an external HTTP GET request. This is using high-level wrappers from `sp_runtime`.
 		let request = rt_offchain::http::Request::get(remote_url);
+
+		// Keeping the offchain worker execution time reasonable, so limiting the call to be within 3s.
 		let timeout = sp_io::offchain::timestamp().add(rt_offchain::Duration::from_millis(3000));
-		// For github API request, we also need to specify user-agent
+
+		// For github API request, we also need to specify `user-agent` in http request header.
 		//   See: https://developer.github.com/v3/#user-agent-required
 		let pending = request
 			.add_header("User-Agent", str::from_utf8(&user_agent)
 				.map_err(|_| <Error<T>>::HttpFetchingError)?)
-			.deadline(timeout)
-			.send()
+			.deadline(timeout) // Setting the timeout time
+			.send() // Sending the request out by the host
 			.map_err(|_| <Error<T>>::HttpFetchingError)?;
 
+		// By default, the http request is async from the runtime perspective. So we are asking the
+		//   runtime to wait here.
+		// The returning value here is a `Result` of `Result`, so we are unwrapping it twice by two `?`
+		//   ref: https://substrate.dev/rustdocs/master/sp_runtime/offchain/http/struct.PendingRequest.html#method.try_wait
 		let response = pending.try_wait(timeout)
 			.map_err(|_| <Error<T>>::HttpFetchingError)?
 			.map_err(|_| <Error<T>>::HttpFetchingError)?;
@@ -199,7 +222,35 @@ impl<T: Trait> Module<T> {
 			return Err(<Error<T>>::HttpFetchingError);
 		}
 
+		// Next we fully read the response body and collect it to a vector of bytes.
 		Ok(response.body().collect::<Vec<u8>>())
+	}
+
+	fn parse_for_value(json_str: &str, key: &str) -> Result<Vec<u8>, Error<T>> {
+		// Because we are parsing json in a `no_std` env, we cannot use `serde_json` library.
+		//   `simple_json2` is a small tool written by our community member to handle json parsing in
+		//   no_std env.
+		use simple_json2::{ json::{ JsonObject, JsonValue }, parse_json };
+
+		// Parse the whole string into a Json object
+		let json: JsonValue = parse_json(&json_str)
+			.map_err(|_| <Error<T>>::JsonParsingError)?;
+		let json_obj: &JsonObject = json.get_object()
+			.map_err(|_| <Error<T>>::JsonParsingError)?;
+
+		// We iterate through the key and retrieve the (key, value) pair that match the `key`
+		//   parameter.
+		// `key_val.0` contains the key and `key_val.1` contains the value.
+		let key_val = json_obj
+			.iter()
+			.find(|(k, _)| *k == key.chars().collect::<Vec<char>>())
+			.ok_or(<Error<T>>::JsonParsingError)?;
+
+		// We assume the value is a string, so we use `get_bytes()` to collect them back.
+		//   In a real app, you may need to catch the error and further process it if the value is not
+		//   a string.
+		key_val.1.get_bytes()
+			.map_err(|_| <Error<T>>::JsonParsingError)
 	}
 
 	fn signed_submit_number(block_number: T::BlockNumber) -> Result<(), Error<T>> {
