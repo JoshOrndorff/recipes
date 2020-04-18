@@ -10,6 +10,9 @@ use frame_support::{
 };
 use frame_system::{self as system, ensure_signed};
 
+#[cfg(test)]
+mod tests;
+
 // balance type using reservable currency type
 type BalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::Balance;
 
