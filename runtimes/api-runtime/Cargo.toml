@@ -22,7 +22,7 @@ safe-mix = { version = "1.0.0", default-features = false }
 serde = { version = "1.0.101", optional = true, features = ["derive"] }
 sp-api = { version = '2.0.0-alpha.6', default_features = false}
 sp-block-builder = { version = '2.0.0-alpha.6', default_features = false}
-sp-consensus-aura = { version = '0.8.0-alpha.5', default_features = false}
+sp-consensus-aura = { version = '0.8.0-alpha.6', default_features = false}
 sp-core = { version = '2.0.0-alpha.6', default_features = false}
 sp-finality-grandpa = { version = '2.0.0-alpha.6', default_features = false}
 sp-inherents = { version = '2.0.0-alpha.6', default_features = false}
