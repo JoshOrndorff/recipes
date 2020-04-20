@@ -14,12 +14,12 @@ dependencies = [
 name = "adding-machine"
 version = "2.0.0-alpha.6"
 dependencies = [
- "frame-support 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "frame-system 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-io 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
 ]
 
 [[package]]
@@ -85,33 +85,33 @@ checksum = "d9a60d744a80c30fcb657dfe2c1b22bcb3e814c1a1e3674f32bf5820b570fbff"
 name = "api-runtime"
 version = "2.0.0-alpha.6"
 dependencies = [
- "frame-executive 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "frame-support 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "frame-system 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-executive",
+ "frame-support",
+ "frame-system",
  "pallet-aura",
- "pallet-balances 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "pallet-balances",
  "pallet-grandpa",
- "pallet-indices 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "pallet-randomness-collective-flip 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "pallet-sudo 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "pallet-timestamp 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "pallet-transaction-payment 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "pallet-indices",
+ "pallet-randomness-collective-flip",
+ "pallet-sudo",
+ "pallet-timestamp",
+ "pallet-transaction-payment",
  "parity-scale-codec",
  "safe-mix",
  "serde",
- "sp-api 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-block-builder 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-api",
+ "sp-block-builder",
  "sp-consensus-aura",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core",
  "sp-finality-grandpa",
- "sp-inherents 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-io 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-offchain 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-session 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-transaction-pool 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-version 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-inherents",
+ "sp-io",
+ "sp-offchain",
+ "sp-runtime",
+ "sp-session",
+ "sp-std",
+ "sp-transaction-pool",
+ "sp-version",
  "substrate-wasm-builder-runner",
  "sum-storage",
  "sum-storage-rpc-runtime-api",
@@ -233,7 +233,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "95fd83426b89b034bf4e9ceb9c533c2f2386b813fd3dcae0a425ec6f1837d78a"
 dependencies = [
  "futures 0.3.4",
- "rustls 0.16.0",
+ "rustls",
  "webpki",
  "webpki-roots 0.19.0",
 ]
@@ -275,9 +275,9 @@ dependencies = [
 
 [[package]]
 name = "backtrace-sys"
-version = "0.1.35"
+version = "0.1.36"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7de8aba10a69c8e8d7622c5710229485ec32e9d55fdad160ea559c086fdcd118"
+checksum = "78848718ee1255a2485d1309ad9cdecfc2e7d0362dd11c6829364c6b35ae1bc7"
 dependencies = [
  "cc",
  "libc",
@@ -304,26 +304,26 @@ dependencies = [
  "parity-scale-codec",
  "pow-runtime",
  "rand 0.7.3",
- "sc-basic-authorship 0.8.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sc-cli 0.8.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sc-client 0.8.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sc-client-api 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sc-basic-authorship",
+ "sc-cli",
+ "sc-client",
+ "sc-client-api",
  "sc-consensus-pow",
- "sc-executor 0.8.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sc-network 0.8.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sc-service 0.8.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sc-transaction-pool 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sc-executor",
+ "sc-network",
+ "sc-service",
+ "sc-transaction-pool",
  "sha3",
- "sp-blockchain 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-consensus 0.8.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-blockchain",
+ "sp-consensus",
  "sp-consensus-pow",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-inherents 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-timestamp 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-transaction-pool 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core",
+ "sp-inherents",
+ "sp-runtime",
+ "sp-timestamp",
+ "sp-transaction-pool",
  "structopt",
- "substrate-build-script-utils 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "substrate-build-script-utils",
  "vergen",
 ]
 
@@ -331,12 +331,12 @@ dependencies = [
 name = "basic-token"
 version = "2.0.0-alpha.6"
 dependencies = [
- "frame-support 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "frame-system 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-io 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
 ]
 
 [[package]]
@@ -466,9 +466,9 @@ dependencies = [
 
 [[package]]
 name = "bs58"
-version = "0.3.0"
+version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b170cd256a3f9fa6b9edae3e44a7dfdfc77e8124dbc3e2612d75f9c3e2396dae"
+checksum = "476e9cd489f9e121e02ffa6014a8ef220ecb15c05ed23fc34cca13925dc283fb"
 
 [[package]]
 name = "bstr"
@@ -563,39 +563,39 @@ dependencies = [
 name = "charity"
 version = "2.0.0-alpha.6"
 dependencies = [
- "frame-support 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "frame-system 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "pallet-balances 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support",
+ "frame-system",
+ "pallet-balances",
  "parity-scale-codec",
  "serde",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-io 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
 ]
 
 [[package]]
 name = "check-membership"
 version = "2.0.0-alpha.6"
 dependencies = [
- "frame-support 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "frame-system 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core",
+ "sp-runtime",
+ "sp-std",
 ]
 
 [[package]]
 name = "child-trie"
 version = "2.0.0-alpha.6"
 dependencies = [
- "frame-support 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "frame-system 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core",
+ "sp-runtime",
+ "sp-std",
 ]
 
 [[package]]
@@ -657,14 +657,14 @@ dependencies = [
 name = "compounding-interest"
 version = "2.0.0-alpha.6"
 dependencies = [
- "frame-support 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "frame-system 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
- "sp-arithmetic 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-io 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-arithmetic",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
  "substrate-fixed",
 ]
 
@@ -692,12 +692,12 @@ dependencies = [
 name = "constant-config"
 version = "2.0.0-alpha.6"
 dependencies = [
- "frame-support 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "frame-system 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-io 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
 ]
 
 [[package]]
@@ -858,12 +858,12 @@ checksum = "11c0346158a19b3627234e15596f5e465c360fcdb97d817bcb255e0510f5a788"
 name = "default-instance"
 version = "2.0.0-alpha.6"
 dependencies = [
- "frame-support 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "frame-system 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-io 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
 ]
 
 [[package]]
@@ -920,13 +920,13 @@ checksum = "fea41bba32d969b513997752735605054bc0dfa92b4c56bf1189f2e174be7a10"
 name = "double-map"
 version = "2.0.0-alpha.6"
 dependencies = [
- "frame-support 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "frame-system 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-io 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
 ]
 
 [[package]]
@@ -1017,14 +1017,14 @@ dependencies = [
 name = "execution-schedule"
 version = "2.0.0-alpha.6"
 dependencies = [
- "frame-support 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "frame-system 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
  "rand 0.7.3",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-io 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
 ]
 
 [[package]]
@@ -1103,14 +1103,14 @@ dependencies = [
 name = "fixed-point"
 version = "2.0.0-alpha.6"
 dependencies = [
- "frame-support 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "frame-system 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
- "sp-arithmetic 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-io 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-arithmetic",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
  "substrate-fixed",
 ]
 
@@ -1172,6 +1172,8 @@ version = "2.0.0-alpha.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2941cd59682f596645d54b0e84c02e98f9be53a346841c720ead60cdbadb3463"
 dependencies = [
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
  "serde",
  "sp-runtime",
@@ -1186,8 +1188,8 @@ checksum = "8e5eaf1cd17755f099188d76995520a3179fedf0cb631264b8759dea0cd2e981"
 dependencies = [
  "parity-scale-codec",
  "serde",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core",
+ "sp-std",
 ]
 
 [[package]]
@@ -1197,21 +1199,21 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a4058dce75ae1d45b469a8cbbe0c9dc3083e5546936b60e4647e73584e0f7ba7"
 dependencies = [
  "bitmask",
- "frame-metadata 11.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "frame-support-procedural 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-metadata",
+ "frame-support-procedural",
  "impl-trait-for-tuples",
  "log",
  "once_cell",
  "parity-scale-codec",
  "paste",
  "serde",
- "sp-arithmetic 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-inherents 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-io 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-state-machine 0.8.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-arithmetic",
+ "sp-core",
+ "sp-inherents",
+ "sp-io",
+ "sp-runtime",
+ "sp-state-machine",
+ "sp-std",
  "tracing",
 ]
 
@@ -1233,7 +1235,7 @@ version = "2.0.0-alpha.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0d0fce760be3b164dd44ba5826f6a504c485020f6813604d4c73b42b50797d71"
 dependencies = [
- "frame-support-procedural-tools-derive 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support-procedural-tools-derive",
  "proc-macro-crate",
  "proc-macro2 1.0.10",
  "quote 1.0.3",
@@ -1257,15 +1259,15 @@ version = "2.0.0-alpha.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f9c97e7168ca4cd7b2358ca30da4c5aba4a2b9b5eef45df67ca85b3dd59069a5"
 dependencies = [
- "frame-support 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support",
  "impl-trait-for-tuples",
  "parity-scale-codec",
  "serde",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-io 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-version 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
+ "sp-version",
 ]
 
 [[package]]
@@ -1497,12 +1499,12 @@ dependencies = [
 name = "generic-event"
 version = "2.0.0-alpha.6"
 dependencies = [
- "frame-support 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "frame-system 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-io 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
 ]
 
 [[package]]
@@ -1632,12 +1634,12 @@ dependencies = [
 name = "hello-substrate"
 version = "2.0.0-alpha.6"
 dependencies = [
- "frame-support 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "frame-system 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-io 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
 ]
 
 [[package]]
@@ -1786,9 +1788,9 @@ dependencies = [
 
 [[package]]
 name = "hyper"
-version = "0.13.4"
+version = "0.13.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ed6081100e960d9d74734659ffc9cc91daf1c0fc7aceb8eaa94ee1a3f5046f2e"
+checksum = "96816e1d921eca64d208a85aab4f7798455a8e34229ee5a88c935bdee1b78b14"
 dependencies = [
  "bytes 0.5.4",
  "futures-channel",
@@ -1817,7 +1819,7 @@ dependencies = [
  "bytes 0.5.4",
  "ct-logs",
  "futures-util",
- "hyper 0.13.4",
+ "hyper 0.13.5",
  "log",
  "rustls",
  "rustls-native-certs",
@@ -2113,21 +2115,21 @@ dependencies = [
  "sc-client",
  "sc-client-api",
  "sc-consensus-babe",
- "sc-executor 0.8.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sc-executor",
  "sc-finality-grandpa",
- "sc-network 0.8.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sc-service 0.8.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sc-transaction-pool 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-consensus 0.8.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-consensus-babe 0.8.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sc-network",
+ "sc-service",
+ "sc-transaction-pool",
+ "sp-consensus",
+ "sp-consensus-babe",
+ "sp-core",
  "sp-finality-grandpa",
- "sp-inherents 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-io 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-transaction-pool 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-inherents",
+ "sp-io",
+ "sp-runtime",
+ "sp-transaction-pool",
  "structopt",
- "substrate-build-script-utils 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "substrate-build-script-utils",
  "super-runtime",
  "tokio 0.1.22",
  "trie-root 0.15.2",
@@ -2187,12 +2189,12 @@ dependencies = [
 name = "last-caller"
 version = "2.0.0-alpha.6"
 dependencies = [
- "frame-support 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "frame-system 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-io 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
 ]
 
 [[package]]
@@ -2501,7 +2503,7 @@ dependencies = [
  "libp2p-core",
  "log",
  "quicksink",
- "rustls 0.16.0",
+ "rustls",
  "rw-stream-sink",
  "soketto",
  "url 2.1.1",
@@ -2601,12 +2603,12 @@ dependencies = [
 name = "lockable-currency"
 version = "2.0.0-alpha.6"
 dependencies = [
- "frame-support 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "frame-system 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "pallet-balances 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support",
+ "frame-system",
+ "pallet-balances",
  "parity-scale-codec",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-io 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core",
+ "sp-io",
 ]
 
 [[package]]
@@ -2629,7 +2631,7 @@ dependencies = [
 
 [[package]]
 name = "manual-seal"
-version = "2.0.0"
+version = "2.0.0-alpha.6"
 dependencies = [
  "futures 0.3.4",
  "jsonrpc-core",
@@ -2637,27 +2639,27 @@ dependencies = [
  "parity-scale-codec",
  "pow-runtime",
  "rand 0.7.3",
- "sc-basic-authorship 0.8.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sc-cli 0.8.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sc-client 0.8.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sc-client-api 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sc-client-db 0.8.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
+ "sc-basic-authorship",
+ "sc-cli",
+ "sc-client",
+ "sc-client-api",
+ "sc-client-db",
  "sc-consensus-manual-seal",
- "sc-executor 0.8.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sc-network 0.8.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sc-rpc 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sc-service 0.8.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sc-transaction-pool 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
+ "sc-executor",
+ "sc-network",
+ "sc-rpc",
+ "sc-service",
+ "sc-transaction-pool",
  "sha3",
- "sp-blockchain 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sp-consensus 0.8.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sp-core 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sp-inherents 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sp-runtime 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sp-timestamp 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sp-transaction-pool 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
+ "sp-blockchain",
+ "sp-consensus",
+ "sp-core",
+ "sp-inherents",
+ "sp-runtime",
+ "sp-timestamp",
+ "sp-transaction-pool",
  "structopt",
- "substrate-build-script-utils 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
+ "substrate-build-script-utils",
  "vergen",
 ]
 
@@ -2942,16 +2944,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "num-complex"
-version = "0.2.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b6b19411a9719e753aff12e5187b74d60d3dc449ec3f4dc21e3989c3f554bc95"
-dependencies = [
- "autocfg 1.0.0",
- "num-traits",
-]
-
-[[package]]
 name = "num-integer"
 version = "0.1.42"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3041,16 +3033,16 @@ dependencies = [
 name = "offchain-demo"
 version = "2.0.0-alpha.6"
 dependencies = [
- "frame-support 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "frame-system 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
  "parking_lot 0.10.2",
  "serde",
  "serde_json",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-io 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
 ]
 
 [[package]]
@@ -3099,20 +3091,20 @@ version = "2.0.0-alpha.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9757d44df3ff0372ea313703736e69ba361b158a58b7c9677b54be11a777da81"
 dependencies = [
- "frame-support 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "frame-system 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support",
+ "frame-system",
  "pallet-session",
- "pallet-timestamp 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "pallet-timestamp",
  "parity-scale-codec",
  "serde",
- "sp-application-crypto 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-application-crypto",
  "sp-consensus-aura",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-inherents 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-io 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-timestamp 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core",
+ "sp-inherents",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
+ "sp-timestamp",
 ]
 
 [[package]]
@@ -3124,7 +3116,7 @@ dependencies = [
  "frame-support",
  "frame-system",
  "pallet-session",
- "pallet-timestamp 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "pallet-timestamp",
  "parity-scale-codec",
  "serde",
  "sp-consensus-babe",
@@ -3133,8 +3125,8 @@ dependencies = [
  "sp-io",
  "sp-runtime",
  "sp-staking",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-timestamp 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std",
+ "sp-timestamp",
 ]
 
 [[package]]
@@ -3143,14 +3135,14 @@ version = "2.0.0-alpha.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b9ef08001886d3747220630337f7afbb8f1d7cbfacaa3a8a13317e1cb3e8e366"
 dependencies = [
- "frame-benchmarking 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "frame-support 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "frame-system 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-benchmarking",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
  "serde",
- "sp-io 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
 ]
 
 [[package]]
@@ -3159,15 +3151,15 @@ version = "2.0.0-alpha.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "09d89d58fe723cc05bdfc5f237a51e275bf58dcafb493ad68211c27ecd8f1afd"
 dependencies = [
- "frame-support 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "frame-system 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support",
+ "frame-system",
  "impl-trait-for-tuples",
  "parity-scale-codec",
  "serde",
  "sp-finality-tracker",
- "sp-inherents 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-inherents",
+ "sp-runtime",
+ "sp-std",
 ]
 
 [[package]]
@@ -3176,12 +3168,12 @@ version = "2.0.0-alpha.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e704f7b13a66b3ba76f260d1e1a4c7aefaf02c1e817eb7cf7a59f99ae1c62f96"
 dependencies = [
- "frame-support 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "frame-system 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
  "serde",
- "sp-runtime 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sp-std 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
+ "sp-runtime",
+ "sp-std",
 ]
 
 [[package]]
@@ -3190,31 +3182,17 @@ version = "2.0.0-alpha.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6ed9f0fe5149552a1f1f26f4ed8999d692e0e209c54314c4f28a9bd8a1a1161d"
 dependencies = [
- "frame-support 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "frame-system 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "parity-scale-codec",
- "serde",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
-name = "pallet-grandpa"
-version = "2.0.0-alpha.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b2ede4c610644a485d9f78dfb4853a2b20efb752fe5ab0e75c78e239313304cb"
-dependencies = [
- "frame-support 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "frame-system 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support",
+ "frame-system",
  "pallet-finality-tracker",
  "pallet-session",
  "parity-scale-codec",
  "serde",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core",
  "sp-finality-grandpa",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime",
  "sp-staking",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std",
 ]
 
 [[package]]
@@ -3223,15 +3201,15 @@ version = "2.0.0-alpha.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5d153675f7ac1d8490e2e7db46b376edee52936edfa082f4d29831e6a19470b2"
 dependencies = [
- "frame-support 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "frame-system 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
  "serde",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-io 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-keyring 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core",
+ "sp-io",
+ "sp-keyring",
+ "sp-runtime",
+ "sp-std",
 ]
 
 [[package]]
@@ -3240,12 +3218,12 @@ version = "2.0.0-alpha.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1139a9bf489b947a677574ee8ade27c7b710ce25a07f1630b80c20af8f682f91"
 dependencies = [
- "frame-support 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "frame-system 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
  "safe-mix",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime",
+ "sp-std",
 ]
 
 [[package]]
@@ -3254,17 +3232,17 @@ version = "2.0.0-alpha.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4fdeb41738a79d3247b2a7fd9ce8ae5a7d9e92ca2de198e006f891240c8dcacc"
 dependencies = [
- "frame-support 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "frame-system 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support",
+ "frame-system",
  "impl-trait-for-tuples",
- "pallet-timestamp 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "pallet-timestamp",
  "parity-scale-codec",
  "serde",
- "sp-io 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io",
+ "sp-runtime",
  "sp-staking",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-trie 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std",
+ "sp-trie",
 ]
 
 [[package]]
@@ -3273,13 +3251,13 @@ version = "2.0.0-alpha.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "70b15e01796c9d2791cbd9ae2d7c9b59c8eccc3682afbb1189f6ebe7b07f4d71"
 dependencies = [
- "frame-support 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "frame-system 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
  "serde",
- "sp-io 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
 ]
 
 [[package]]
@@ -3288,9 +3266,9 @@ version = "2.0.0-alpha.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4d9de9af5f5ed3377a6108eed436791bfe18bc3e4e2e416854d0074d31b1be00"
 dependencies = [
- "frame-benchmarking 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "frame-support 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "frame-system 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
+ "frame-benchmarking",
+ "frame-support",
+ "frame-system",
  "impl-trait-for-tuples",
  "parity-scale-codec",
  "serde",
@@ -3306,16 +3284,12 @@ version = "2.0.0-alpha.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "54768f5959e0bef53218b91f289d6807c0786d93fb90a3c7e39ab7ff9f018f23"
 dependencies = [
- "frame-benchmarking 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "frame-support 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "frame-system 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "impl-trait-for-tuples",
+ "frame-support",
+ "frame-system",
+ "pallet-transaction-payment-rpc-runtime-api",
  "parity-scale-codec",
- "serde",
- "sp-inherents 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-timestamp 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime",
+ "sp-std",
 ]
 
 [[package]]
@@ -3324,12 +3298,12 @@ version = "2.0.0-alpha.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7323ef565470b51bb79fc65d3c3a1bff0ecb317485acc66a64406309c25f1b77"
 dependencies = [
- "frame-support 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "frame-system 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "pallet-transaction-payment-rpc-runtime-api 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
+ "frame-support",
  "parity-scale-codec",
- "sp-runtime 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sp-std 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
+ "serde",
+ "sp-api",
+ "sp-runtime",
+ "sp-std",
 ]
 
 [[package]]
@@ -3613,30 +3587,30 @@ checksum = "feb3b2b1033b8a60b4da6ee470325f887758c95d5320f52f9ce0df055a55940e"
 name = "pow-runtime"
 version = "2.0.0-alpha.6"
 dependencies = [
- "frame-executive 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "frame-support 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "frame-system 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "pallet-balances 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "pallet-generic-asset 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "pallet-indices 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "pallet-randomness-collective-flip 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "pallet-sudo 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "pallet-timestamp 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "pallet-transaction-payment 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
+ "frame-executive",
+ "frame-support",
+ "frame-system",
+ "pallet-balances",
+ "pallet-generic-asset",
+ "pallet-indices",
+ "pallet-randomness-collective-flip",
+ "pallet-sudo",
+ "pallet-timestamp",
+ "pallet-transaction-payment",
  "parity-scale-codec",
  "safe-mix",
  "serde",
- "sp-api 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sp-block-builder 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sp-core 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sp-inherents 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sp-io 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sp-offchain 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sp-runtime 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sp-session 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sp-std 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sp-transaction-pool 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sp-version 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
+ "sp-api",
+ "sp-block-builder",
+ "sp-core",
+ "sp-inherents",
+ "sp-io",
+ "sp-offchain",
+ "sp-runtime",
+ "sp-session",
+ "sp-std",
+ "sp-transaction-pool",
+ "sp-version",
  "substrate-wasm-builder-runner",
  "weights",
 ]
@@ -4055,16 +4029,16 @@ dependencies = [
 name = "randomness"
 version = "2.0.0-alpha.6"
 dependencies = [
- "frame-support 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "frame-system 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support",
+ "frame-system",
  "pallet-babe",
- "pallet-randomness-collective-flip 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "pallet-timestamp 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "pallet-randomness-collective-flip",
+ "pallet-timestamp",
  "parity-scale-codec",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-io 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
 ]
 
 [[package]]
@@ -4114,9 +4088,9 @@ checksum = "2439c63f3f6139d1b57529d16bc3b8bb855230c8efcc5d3a896c8bea7c3b1e84"
 
 [[package]]
 name = "regex"
-version = "1.3.6"
+version = "1.3.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7f6946991529684867e47d86474e3a6d0c0ab9b82d5821e314b1ede31fa3a4b3"
+checksum = "a6020f034922e3194c711b82a627453881bc4682166cabb07134a10c26ba7692"
 dependencies = [
  "aho-corasick",
  "memchr",
@@ -4146,9 +4120,9 @@ dependencies = [
  "frame-support",
  "frame-system",
  "parity-scale-codec",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-io 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
 ]
 
 [[package]]
@@ -4170,22 +4144,13 @@ dependencies = [
 name = "ringbuffer-queue"
 version = "2.0.0-alpha.6"
 dependencies = [
- "frame-support 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "frame-system 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-io 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
-name = "rlp"
-version = "0.4.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4a7d3f9bed94764eac15b8f14af59fac420c236adaff743b7bcc88e265cb4345"
-dependencies = [
- "rustc-hex",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
 ]
 
 [[package]]
@@ -4241,22 +4206,22 @@ dependencies = [
  "sc-client",
  "sc-client-api",
  "sc-consensus-aura",
- "sc-executor 0.8.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sc-executor",
  "sc-finality-grandpa",
- "sc-network 0.8.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sc-rpc 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sc-service 0.8.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sc-transaction-pool 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-consensus 0.8.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sc-network",
+ "sc-rpc",
+ "sc-service",
+ "sc-transaction-pool",
+ "sp-consensus",
  "sp-consensus-aura",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core",
  "sp-finality-grandpa",
- "sp-inherents 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-io 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-transaction-pool 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-inherents",
+ "sp-io",
+ "sp-runtime",
+ "sp-transaction-pool",
  "structopt",
- "substrate-build-script-utils 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "substrate-build-script-utils",
  "sum-storage-rpc",
  "tokio 0.1.22",
  "trie-root 0.15.2",
@@ -4304,26 +4269,13 @@ dependencies = [
 ]
 
 [[package]]
-name = "rustls"
-version = "0.17.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c0d4a31f5d68413404705d6982529b0e11a9aacd4839d1d6222ee3b8cb4015e1"
-dependencies = [
- "base64 0.11.0",
- "log",
- "ring",
- "sct",
- "webpki",
-]
-
-[[package]]
 name = "rustls-native-certs"
 version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a75ffeb84a6bd9d014713119542ce415db3a3e4748f0bfce1e1416cd224a23a5"
 dependencies = [
  "openssl-probe",
- "rustls 0.17.0",
+ "rustls",
  "schannel",
  "security-framework",
 ]
@@ -4364,16 +4316,16 @@ dependencies = [
  "futures-timer 3.0.2",
  "log",
  "parity-scale-codec",
- "sc-block-builder 0.8.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sc-client-api 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sc-telemetry 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-api 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-blockchain 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-consensus 0.8.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-inherents 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-transaction-pool 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sc-block-builder",
+ "sc-client-api",
+ "sc-telemetry",
+ "sp-api",
+ "sp-blockchain",
+ "sp-consensus",
+ "sp-core",
+ "sp-inherents",
+ "sp-runtime",
+ "sp-transaction-pool",
  "tokio-executor 0.2.0-alpha.6",
 ]
 
@@ -4384,14 +4336,14 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bd7b45adef0526ef295a9b7da4af933322df7119385a78c2e96c99b5d54fcc35"
 dependencies = [
  "parity-scale-codec",
- "sc-client-api 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-api 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-block-builder 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-blockchain 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-consensus 0.8.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-state-machine 0.8.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sc-client-api",
+ "sp-api",
+ "sp-block-builder",
+ "sp-blockchain",
+ "sp-consensus",
+ "sp-core",
+ "sp-runtime",
+ "sp-state-machine",
 ]
 
 [[package]]
@@ -4401,9 +4353,9 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7d37957c58cb0cf1fa9fe1187447d16e4708a7a0541ee2c1226b2536f4241742"
 dependencies = [
  "impl-trait-for-tuples",
- "sc-chain-spec-derive 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sc-network 0.8.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sc-telemetry 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sc-chain-spec-derive",
+ "sc-network",
+ "sc-telemetry",
  "serde",
  "serde_json",
  "sp-chain-spec",
@@ -4445,12 +4397,12 @@ dependencies = [
  "parity-util-mem",
  "regex",
  "rpassword",
- "sc-client-api 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sc-informant 0.8.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sc-network 0.8.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sc-service 0.8.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sc-telemetry 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sc-tracing 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sc-client-api",
+ "sc-informant",
+ "sc-network",
+ "sc-service",
+ "sc-telemetry",
+ "sc-tracing",
  "serde_json",
  "sp-blockchain",
  "sp-core",
@@ -4461,7 +4413,7 @@ dependencies = [
  "sp-utils",
  "sp-version",
  "structopt",
- "substrate-prometheus-endpoint 0.8.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "substrate-prometheus-endpoint",
  "time",
  "tokio 0.2.18",
 ]
@@ -4581,20 +4533,20 @@ dependencies = [
  "sc-client",
  "sc-client-api",
  "sc-consensus-slots",
- "sc-keystore 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sc-telemetry 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-api 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-application-crypto 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-block-builder 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-blockchain 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-consensus 0.8.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sc-keystore",
+ "sc-telemetry",
+ "sp-api",
+ "sp-application-crypto",
+ "sp-block-builder",
+ "sp-blockchain",
+ "sp-consensus",
  "sp-consensus-aura",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-inherents 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-io 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-timestamp 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-version 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core",
+ "sp-inherents",
+ "sp-io",
+ "sp-runtime",
+ "sp-timestamp",
+ "sp-version",
 ]
 
 [[package]]
@@ -4616,13 +4568,13 @@ dependencies = [
  "parking_lot 0.10.2",
  "pdqselect",
  "rand 0.7.3",
- "sc-client 0.8.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sc-client-api 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sc-client",
+ "sc-client-api",
  "sc-consensus-epochs",
  "sc-consensus-slots",
  "sc-consensus-uncles",
- "sc-keystore 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sc-telemetry 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sc-keystore",
+ "sc-telemetry",
  "schnorrkel",
  "serde",
  "sp-api",
@@ -4646,12 +4598,37 @@ version = "0.8.0-alpha.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "97ba501b3709df95d511377ad6e91d490678a7bcea73a359a3d2f72630793f4c"
 dependencies = [
- "fork-tree 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "fork-tree",
  "parity-scale-codec",
  "parking_lot 0.10.2",
  "sc-client-api",
  "sp-blockchain",
  "sp-runtime",
+]
+
+[[package]]
+name = "sc-consensus-manual-seal"
+version = "0.8.0-alpha.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "972c170186ea1fcc1b18c285487636755d6b1ed9e04f490fc4a694b901b61d0d"
+dependencies = [
+ "assert_matches",
+ "derive_more 0.99.5",
+ "futures 0.3.4",
+ "jsonrpc-core",
+ "jsonrpc-core-client",
+ "jsonrpc-derive",
+ "log",
+ "parking_lot 0.10.2",
+ "sc-client",
+ "sc-client-api",
+ "sc-transaction-pool",
+ "serde",
+ "sp-blockchain",
+ "sp-consensus",
+ "sp-inherents",
+ "sp-runtime",
+ "sp-transaction-pool",
 ]
 
 [[package]]
@@ -4662,42 +4639,18 @@ checksum = "2d8b0f98a158006147808adfa3d5822dd41a33a6d561b130b9e42a4d3afa7f5c"
 dependencies = [
  "derive_more 0.99.5",
  "futures 0.3.4",
- "jsonrpc-core",
- "jsonrpc-core-client",
- "jsonrpc-derive",
- "log",
- "parking_lot 0.10.0",
- "sc-client 0.8.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sc-client-api 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sc-transaction-pool 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "serde",
- "sp-blockchain 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sp-consensus 0.8.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sp-inherents 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sp-runtime 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sp-transaction-pool 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
-]
-
-[[package]]
-name = "sc-consensus-pow"
-version = "0.8.0-alpha.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bcc89066cf19325ccfefea8f0e1b63688b618e3f9e501d893f1667e751339ccc"
-dependencies = [
- "derive_more 0.99.5",
- "futures 0.3.4",
  "log",
  "parity-scale-codec",
- "sc-client-api 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-api 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-block-builder 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-blockchain 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-consensus 0.8.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sc-client-api",
+ "sp-api",
+ "sp-block-builder",
+ "sp-blockchain",
+ "sp-consensus",
  "sp-consensus-pow",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-inherents 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-timestamp 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core",
+ "sp-inherents",
+ "sp-runtime",
+ "sp-timestamp",
 ]
 
 [[package]]
@@ -4729,12 +4682,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "54cd8315b774db6c11b8efb43686a68243e9a100b8f48d2f1b537a8d42925399"
 dependencies = [
  "log",
- "sc-client-api 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sc-client-api",
  "sp-authorship",
- "sp-consensus 0.8.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-inherents 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-consensus",
+ "sp-core",
+ "sp-inherents",
+ "sp-runtime",
 ]
 
 [[package]]
@@ -4806,7 +4759,7 @@ checksum = "8bcf9e6787b6b421c2152e3d876105dec0c4cfa9fdac6bca54bec404d79a8593"
 dependencies = [
  "assert_matches",
  "finality-grandpa",
- "fork-tree 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "fork-tree",
  "futures 0.3.4",
  "futures-timer 3.0.2",
  "log",
@@ -4814,19 +4767,19 @@ dependencies = [
  "parking_lot 0.10.2",
  "pin-project",
  "rand 0.7.3",
- "sc-block-builder 0.8.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sc-client 0.8.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sc-client-api 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sc-keystore 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sc-network 0.8.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sc-block-builder",
+ "sc-client",
+ "sc-client-api",
+ "sc-keystore",
+ "sc-network",
  "sc-network-gossip",
- "sc-telemetry 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sc-telemetry",
  "serde_json",
- "sp-api 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-arithmetic 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-blockchain 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-consensus 0.8.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-api",
+ "sp-arithmetic",
+ "sp-blockchain",
+ "sp-consensus",
+ "sp-core",
  "sp-finality-grandpa",
  "sp-finality-tracker",
  "sp-inherents",
@@ -4845,11 +4798,11 @@ dependencies = [
  "futures 0.3.4",
  "log",
  "parity-util-mem",
- "sc-client-api 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sc-network 0.8.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sc-service 0.8.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-blockchain 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sc-client-api",
+ "sc-network",
+ "sc-service",
+ "sp-blockchain",
+ "sp-runtime",
  "wasm-timer",
 ]
 
@@ -4864,8 +4817,8 @@ dependencies = [
  "parking_lot 0.10.2",
  "rand 0.7.3",
  "serde_json",
- "sp-application-crypto 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-application-crypto",
+ "sp-core",
  "subtle 2.2.2",
 ]
 
@@ -4881,59 +4834,7 @@ dependencies = [
  "either",
  "erased-serde",
  "fnv",
- "fork-tree 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "futures 0.3.4",
- "futures-timer 3.0.2",
- "futures_codec",
- "hex",
- "libp2p",
- "linked-hash-map",
- "linked_hash_set",
- "log",
- "lru",
- "nohash-hasher",
- "parity-scale-codec",
- "parking_lot 0.10.0",
- "pin-project",
- "prost",
- "prost-build",
- "rand 0.7.3",
- "sc-block-builder 0.8.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sc-client 0.8.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sc-client-api 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sc-peerset 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "serde",
- "serde_json",
- "slog",
- "slog_derive",
- "smallvec 0.6.13",
- "sp-arithmetic 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sp-blockchain 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sp-consensus 0.8.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sp-consensus-babe 0.8.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sp-core 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sp-runtime 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "substrate-prometheus-endpoint 0.8.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "thiserror",
- "unsigned-varint",
- "void",
- "wasm-timer",
- "zeroize",
-]
-
-[[package]]
-name = "sc-network"
-version = "0.8.0-alpha.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0df01faa65b22aca751910a417f5a6ea28cefd9d3349c17fbc2ad8b7f190d390"
-dependencies = [
- "bitflags",
- "bytes 0.5.4",
- "derive_more 0.99.5",
- "either",
- "erased-serde",
- "fnv",
- "fork-tree 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "fork-tree",
  "futures 0.3.4",
  "futures-timer 3.0.2",
  "futures_codec",
@@ -5001,7 +4902,7 @@ dependencies = [
  "fnv",
  "futures 0.3.4",
  "futures-timer 3.0.2",
- "hyper 0.13.4",
+ "hyper 0.13.5",
  "hyper-rustls",
  "log",
  "num_cpus",
@@ -5105,7 +5006,7 @@ dependencies = [
  "log",
  "serde",
  "serde_json",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime",
 ]
 
 [[package]]
@@ -5452,36 +5353,36 @@ dependencies = [
 name = "simple-event"
 version = "2.0.0-alpha.6"
 dependencies = [
- "frame-support 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "frame-system 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-io 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
 ]
 
 [[package]]
 name = "simple-map"
 version = "2.0.0-alpha.6"
 dependencies = [
- "frame-support 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "frame-system 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-io 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
 ]
 
 [[package]]
 name = "single-value"
 version = "2.0.0-alpha.6"
 dependencies = [
- "frame-support 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "frame-system 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-io 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
 ]
 
 [[package]]
@@ -5595,22 +5496,9 @@ checksum = "6532c396c2d6727d9b0d3eee3edbcaf939e78a6ce944fa34c2b98d6a02a2485e"
 dependencies = [
  "derive_more 0.99.5",
  "log",
- "sp-core 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sp-std 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sp-wasm-interface 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
-]
-
-[[package]]
-name = "sp-allocator"
-version = "2.0.0-alpha.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6bb6b190d2b48dcfc0641760ed0164df8ac8807a50afcb7c1da7641c8c13591b"
-dependencies = [
- "derive_more 0.99.5",
- "log",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-wasm-interface 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core",
+ "sp-std",
+ "sp-wasm-interface",
 ]
 
 [[package]]
@@ -5621,12 +5509,12 @@ checksum = "f6a4df52a0c56d742fc75f4da486627c1b050be2ac87cc042c2c0246756f22d2"
 dependencies = [
  "hash-db",
  "parity-scale-codec",
- "sp-api-proc-macro 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-state-machine 0.8.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-version 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-api-proc-macro",
+ "sp-core",
+ "sp-runtime",
+ "sp-state-machine",
+ "sp-std",
+ "sp-version",
 ]
 
 [[package]]
@@ -5650,22 +5538,9 @@ checksum = "3e5dec618ed8ea85fd767358185a412440c02a0adce569c2aa92ee355550d678"
 dependencies = [
  "parity-scale-codec",
  "serde",
- "sp-core 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sp-io 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sp-std 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
-]
-
-[[package]]
-name = "sp-application-crypto"
-version = "2.0.0-alpha.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ed68f0c283a01b5a8c768965b160fb4aa0a637a7e1b5e0d1168cba2f2310b348"
-dependencies = [
- "parity-scale-codec",
- "serde",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-io 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core",
+ "sp-io",
+ "sp-std",
 ]
 
 [[package]]
@@ -5679,8 +5554,8 @@ dependencies = [
  "parity-scale-codec",
  "primitive-types",
  "serde",
- "sp-debug-derive 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-debug-derive",
+ "sp-std",
 ]
 
 [[package]]
@@ -5690,9 +5565,9 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8d686e832e745c3aa2d55e303d46ccd41d64c02916bb40c64cfbb7456840664d"
 dependencies = [
  "parity-scale-codec",
- "sp-inherents 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-inherents",
+ "sp-runtime",
+ "sp-std",
 ]
 
 [[package]]
@@ -5702,10 +5577,10 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "70049c389c66c4c9207149e2579ce6d752788dee8c596fbda76059f2ddde968f"
 dependencies = [
  "parity-scale-codec",
- "sp-api 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-inherents 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-api",
+ "sp-inherents",
+ "sp-runtime",
+ "sp-std",
 ]
 
 [[package]]
@@ -5766,12 +5641,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0a5ffbc4aca29fe7a0f0c419445e34758210dba6418eeb101d60c1e15b27797a"
 dependencies = [
  "parity-scale-codec",
- "sp-api 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-application-crypto 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-inherents 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-timestamp 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-api",
+ "sp-application-crypto",
+ "sp-inherents",
+ "sp-runtime",
+ "sp-std",
+ "sp-timestamp",
 ]
 
 [[package]]
@@ -5798,35 +5673,10 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a867278824cd9f90b606231e2ca2acee18e7093d4bcf95cd7ffe2e15bb164fae"
 dependencies = [
  "parity-scale-codec",
- "sp-api 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
-name = "sp-consensus-vrf"
-version = "0.8.0-alpha.5"
-source = "git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer#120e1dce9dbc296962ed11586e76d42e63bcc2d5"
-dependencies = [
- "parity-scale-codec",
- "schnorrkel",
- "sp-core 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sp-runtime 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sp-std 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
-]
-
-[[package]]
-name = "sp-consensus-vrf"
-version = "0.8.0-alpha.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7749e59ef895203554a9fca6a5d24e49f079f44f2dddc9306fe50faae783f5a0"
-dependencies = [
- "parity-scale-codec",
- "schnorrkel",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-api",
+ "sp-core",
+ "sp-runtime",
+ "sp-std",
 ]
 
 [[package]]
@@ -5870,11 +5720,11 @@ dependencies = [
  "schnorrkel",
  "serde",
  "sha2",
- "sp-debug-derive 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-externalities 0.8.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime-interface 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-storage 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-debug-derive",
+ "sp-externalities",
+ "sp-runtime-interface",
+ "sp-std",
+ "sp-storage",
  "substrate-bip39",
  "tiny-bip39",
  "tiny-keccak",
@@ -5901,8 +5751,8 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b06b8ac80a03205205426ae9ef3200133a8ffab4f4f0eeecd3b858034f9e5b02"
 dependencies = [
  "environmental",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-storage 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std",
+ "sp-storage",
 ]
 
 [[package]]
@@ -5913,10 +5763,10 @@ checksum = "9e7107d11f07fb400a0d71838225865e2bf27f79241751ef9ff1501980dd63b3"
 dependencies = [
  "parity-scale-codec",
  "serde",
- "sp-api 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-application-crypto 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-api",
+ "sp-application-crypto",
+ "sp-runtime",
+ "sp-std",
 ]
 
 [[package]]
@@ -5926,8 +5776,8 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a5f718fb1e75fd137b01b539a200cf5e3cd1e0f1d21dc55a03341d7e25c81624"
 dependencies = [
  "parity-scale-codec",
- "sp-inherents 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-inherents",
+ "sp-std",
 ]
 
 [[package]]
@@ -5953,32 +5803,13 @@ dependencies = [
  "libsecp256k1",
  "log",
  "parity-scale-codec",
- "sp-core 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sp-externalities 0.8.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sp-runtime-interface 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sp-state-machine 0.8.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sp-std 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sp-trie 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sp-wasm-interface 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
-]
-
-[[package]]
-name = "sp-io"
-version = "2.0.0-alpha.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "91ed12cd1b0eddf5250703fff43da9e76be6cce32c492b2e2a71b4f6d9a12f49"
-dependencies = [
- "hash-db",
- "libsecp256k1",
- "log",
- "parity-scale-codec",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-externalities 0.8.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime-interface 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-state-machine 0.8.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-trie 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-wasm-interface 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core",
+ "sp-externalities",
+ "sp-runtime-interface",
+ "sp-state-machine",
+ "sp-std",
+ "sp-trie",
+ "sp-wasm-interface",
 ]
 
 [[package]]
@@ -5988,8 +5819,8 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9f71e65eb13d8a4d320d3785558ac8fc12f8b2bdbfc5268c0e8a5a143d68686e"
 dependencies = [
  "lazy_static",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core",
+ "sp-runtime",
  "strum",
 ]
 
@@ -5999,8 +5830,8 @@ version = "2.0.0-alpha.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6dfc02ea51f7abe7e8999658a8a41693426f14e66cff6cc5af989888289ad0fc"
 dependencies = [
- "sp-api 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-api",
+ "sp-runtime",
 ]
 
 [[package]]
@@ -6020,7 +5851,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9d29a58ef51317f96eec408b40c604ccfe8c7c3b9ecc2636e2a9c84a79fae53a"
 dependencies = [
  "serde",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core",
 ]
 
 [[package]]
@@ -6037,12 +5868,12 @@ dependencies = [
  "paste",
  "rand 0.7.3",
  "serde",
- "sp-application-crypto 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-arithmetic 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-inherents 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-io 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-application-crypto",
+ "sp-arithmetic",
+ "sp-core",
+ "sp-inherents",
+ "sp-io",
+ "sp-std",
 ]
 
 [[package]]
@@ -6053,10 +5884,10 @@ checksum = "289491386162a8d867d219f4f4dd3a7c11181c8ee9957e41b8747b555a9f4433"
 dependencies = [
  "parity-scale-codec",
  "primitive-types",
- "sp-externalities 0.8.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime-interface-proc-macro 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-wasm-interface 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-externalities",
+ "sp-runtime-interface-proc-macro",
+ "sp-std",
+ "sp-wasm-interface",
  "static_assertions",
 ]
 
@@ -6089,10 +5920,10 @@ version = "2.0.0-alpha.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6fca3ff8ddd14c5928536483d4b393bb795d55dcb5b576b1dceb3f5829216c76"
 dependencies = [
- "sp-api 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-api",
+ "sp-core",
+ "sp-runtime",
+ "sp-std",
 ]
 
 [[package]]
@@ -6101,18 +5932,9 @@ version = "2.0.0-alpha.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "61d7105e78848b8a8f6af3539a0cf7d9627b78a8776f61f43769da6406937ea9"
 dependencies = [
- "hash-db",
- "log",
- "num-traits",
  "parity-scale-codec",
- "parking_lot 0.10.0",
- "rand 0.7.3",
- "sp-core 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sp-externalities 0.8.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sp-panic-handler 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sp-trie 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "trie-db",
- "trie-root 0.16.0",
+ "sp-runtime",
+ "sp-std",
 ]
 
 [[package]]
@@ -6127,10 +5949,10 @@ dependencies = [
  "parity-scale-codec",
  "parking_lot 0.10.2",
  "rand 0.7.3",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-externalities 0.8.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-panic-handler 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-trie 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core",
+ "sp-externalities",
+ "sp-panic-handler",
+ "sp-trie",
  "trie-db",
  "trie-root 0.16.0",
 ]
@@ -6149,8 +5971,8 @@ checksum = "e2cb515df8b37fbdbb6769d2e992748b6134d592ec3b795b8e672621d754f94b"
 dependencies = [
  "impl-serde 0.2.3",
  "serde",
- "sp-debug-derive 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-debug-derive",
+ "sp-std",
 ]
 
 [[package]]
@@ -6161,10 +5983,10 @@ checksum = "bd289fc7dbbae54cfe4db93a204df6371d6f3b5b8d5819fa7287e7d44a83eb86"
 dependencies = [
  "impl-trait-for-tuples",
  "parity-scale-codec",
- "sp-api 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-inherents 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-api",
+ "sp-inherents",
+ "sp-runtime",
+ "sp-std",
  "wasm-timer",
 ]
 
@@ -6193,8 +6015,8 @@ dependencies = [
  "hash-db",
  "memory-db",
  "parity-scale-codec",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core",
+ "sp-std",
  "trie-db",
  "trie-root 0.16.0",
 ]
@@ -6220,21 +6042,8 @@ dependencies = [
  "impl-serde 0.2.3",
  "parity-scale-codec",
  "serde",
- "sp-runtime 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
- "sp-std 2.0.0-alpha.5 (git+https://github.com/paritytech/substrate.git?branch=seun-manual-seal-finalizer)",
-]
-
-[[package]]
-name = "sp-version"
-version = "2.0.0-alpha.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "62f7ded62b3fd6346dc7e96dcfc55f8137653809e09cfa3f0da8052efd35c875"
-dependencies = [
- "impl-serde 0.2.3",
- "parity-scale-codec",
- "serde",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime",
+ "sp-std",
 ]
 
 [[package]]
@@ -6245,7 +6054,7 @@ checksum = "7584168f2785f6676727545a31a3cd97159d7023d968540b4881a98d73991900"
 dependencies = [
  "impl-trait-for-tuples",
  "parity-scale-codec",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-std",
  "wasmi",
 ]
 
@@ -6280,13 +6089,13 @@ dependencies = [
 name = "storage-cache"
 version = "2.0.0-alpha.6"
 dependencies = [
- "frame-support 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "frame-system 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-io 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
 ]
 
 [[package]]
@@ -6308,13 +6117,13 @@ checksum = "8ea5119cdb4c55b55d432abb513a0429384878c15dde60cc77b1c99de1a95a6a"
 name = "struct-storage"
 version = "2.0.0-alpha.6"
 dependencies = [
- "frame-support 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "frame-system 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "pallet-balances 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support",
+ "frame-system",
+ "pallet-balances",
  "parity-scale-codec",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-io 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
 ]
 
 [[package]]
@@ -6401,7 +6210,7 @@ dependencies = [
  "async-std",
  "derive_more 0.99.5",
  "futures-util",
- "hyper 0.13.4",
+ "hyper 0.13.5",
  "log",
  "prometheus",
  "tokio 0.2.18",
@@ -6429,13 +6238,13 @@ checksum = "7c65d530b10ccaeac294f349038a597e435b18fb456aadd0840a623f83b9e941"
 name = "sum-storage"
 version = "2.0.0-alpha.6"
 dependencies = [
- "frame-support 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "frame-system 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-io 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
 ]
 
 [[package]]
@@ -6447,10 +6256,10 @@ dependencies = [
  "jsonrpc-derive",
  "parity-scale-codec",
  "serde",
- "sp-api 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-blockchain 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-rpc 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-api",
+ "sp-blockchain",
+ "sp-rpc",
+ "sp-runtime",
  "sum-storage-rpc-runtime-api",
 ]
 
@@ -6459,7 +6268,7 @@ name = "sum-storage-rpc-runtime-api"
 version = "2.0.0"
 dependencies = [
  "serde_json",
- "sp-api 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-api",
 ]
 
 [[package]]
@@ -6476,14 +6285,14 @@ dependencies = [
  "double-map",
  "execution-schedule",
  "fixed-point",
- "frame-executive 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "frame-support 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "frame-system 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-executive",
+ "frame-support",
+ "frame-system",
  "generic-event",
  "hello-substrate",
  "last-caller",
  "pallet-babe",
- "pallet-balances 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "pallet-balances",
  "pallet-grandpa",
  "pallet-randomness-collective-flip",
  "pallet-sudo",
@@ -6497,19 +6306,19 @@ dependencies = [
  "simple-event",
  "simple-map",
  "single-value",
- "sp-api 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-block-builder 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-consensus-babe 0.8.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-api",
+ "sp-block-builder",
+ "sp-consensus-babe",
+ "sp-core",
  "sp-finality-grandpa",
- "sp-inherents 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-io 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-offchain 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-session 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-transaction-pool 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-version 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-inherents",
+ "sp-io",
+ "sp-offchain",
+ "sp-runtime",
+ "sp-session",
+ "sp-std",
+ "sp-transaction-pool",
+ "sp-version",
  "storage-cache",
  "struct-storage",
  "substrate-wasm-builder-runner",
@@ -6674,12 +6483,11 @@ dependencies = [
 
 [[package]]
 name = "time"
-version = "0.1.42"
+version = "0.1.43"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "db8dcfca086c1143c9270ac42a2bbd8a7ee477b78ac8e45b19abfb0cbede4b6f"
+checksum = "ca8a50ef2360fbd1eeb0ecd46795a87a19024eb4b53c5dc916ca1fd95fe62438"
 dependencies = [
  "libc",
- "redox_syscall",
  "winapi 0.3.8",
 ]
 
@@ -7187,13 +6995,13 @@ checksum = "3fc439f2794e98976c88a2a2dafce96b930fe8010b0a256b3c2199a773933168"
 name = "vec-set"
 version = "2.0.0-alpha.6"
 dependencies = [
- "frame-support 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "frame-system 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-io 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
 ]
 
 [[package]]
@@ -7398,12 +7206,12 @@ dependencies = [
 name = "weight-fee-runtime"
 version = "2.0.0-alpha.6"
 dependencies = [
- "frame-executive 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "frame-support 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "frame-system 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "frame-executive",
+ "frame-support",
+ "frame-system",
  "pallet-babe",
- "pallet-balances 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "pallet-generic-asset 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "pallet-balances",
+ "pallet-generic-asset",
  "pallet-grandpa",
  "pallet-randomness-collective-flip",
  "pallet-sudo",
@@ -7411,19 +7219,19 @@ dependencies = [
  "pallet-transaction-payment",
  "parity-scale-codec",
  "serde",
- "sp-api 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-block-builder 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-consensus-babe 0.8.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-api",
+ "sp-block-builder",
+ "sp-consensus-babe",
+ "sp-core",
  "sp-finality-grandpa",
- "sp-inherents 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-io 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-offchain 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-session 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-std 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-transaction-pool 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-version 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-inherents",
+ "sp-io",
+ "sp-offchain",
+ "sp-runtime",
+ "sp-session",
+ "sp-std",
+ "sp-transaction-pool",
+ "sp-version",
  "substrate-wasm-builder-runner",
  "weights",
 ]
@@ -7435,8 +7243,8 @@ dependencies = [
  "frame-support",
  "frame-system",
  "parity-scale-codec",
- "sp-core 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "sp-runtime 2.0.0-alpha.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core",
+ "sp-runtime",
 ]
 
 [[package]]
@@ -7478,9 +7286,9 @@ checksum = "ac3b87c63620426dd9b991e5ce0329eff545bccbbb34f3be09ff6fb6ab51b7b6"
 
 [[package]]
 name = "winapi-util"
-version = "0.1.4"
+version = "0.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fa515c5163a99cc82bab70fd3bfdd36d827be85de63737b40fcef2ce084a436e"
+checksum = "70ec6ce85bb158151cae5e5c87f95a8e97d2c0c4b001223f33a334e3ce5de178"
 dependencies = [
  "winapi 0.3.8",
 ]
