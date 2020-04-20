@@ -158,18 +158,19 @@ fn new_test_ext_unreserve_and_transfer() {
         let reserve_event = TestEvent::reservable_currency(RawEvent::LockFunds(1, 4000, 1));
         assert!(System::events().iter().any(|a| a.event == reserve_event));
 
-        // Punish one, pass 6000 collateral. One pays 2000 since 4000 goes unreserved.
+        // Punish one, for a value of 6000 collateral. Because one only has 4000 collateral reserved
+        // al of it is unreserved and transferred
         assert_ok!(ReservableCurrency::unreserve_and_transfer(
             Origin::signed(1),
             1,
             2,
             6000
         ));
-        let transfer_event = TestEvent::reservable_currency(RawEvent::TransferFunds(1, 2, 2000, 1));
+        let transfer_event = TestEvent::reservable_currency(RawEvent::TransferFunds(1, 2, 4000, 1));
         assert!(System::events().iter().any(|a| a.event == transfer_event));
         //Test if reserved::(1, 0) -> test if (1, 8000) -> test if (2, 13000)
         assert_eq!(Balances::reserved_balance(&1), 0);
-        assert_eq!(Balances::free_balance(&1), 8000);
-        assert_eq!(Balances::free_balance(&2), 13000);
+        assert_eq!(Balances::free_balance(&1), 6000);
+        assert_eq!(Balances::free_balance(&2), 15000);
     })
 }
