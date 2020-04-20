@@ -78,12 +78,7 @@ macro_rules! new_full_start {
 pub fn new_full(config: Configuration)
 	-> Result<impl AbstractService, ServiceError>
 {
-	let is_authority = config.roles.is_authority();
-
-	// sentry nodes announce themselves as authorities to the network
-	// and should run the same protocols authorities do, but it should
-	// never actively participate in any consensus process.
-	let participates_in_consensus = is_authority && !config.sentry_mode;
+	let role = config.role.clone();
 
 	let (builder, mut import_setup, inherent_data_providers) = new_full_start!(config);
 	let block_import = import_setup.take()
@@ -98,7 +93,7 @@ pub fn new_full(config: Configuration)
 		// )?
 		.build()?;
 
-	if participates_in_consensus {
+	if role.is_authority() {
 		let proposer = sc_basic_authorship::ProposerFactory::new(
 			service.client(),
 			service.transaction_pool()

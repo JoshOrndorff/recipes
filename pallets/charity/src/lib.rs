@@ -14,12 +14,13 @@ use sp_runtime::{
 	ModuleId,
 };
 
-use frame_support::traits::{Currency, ExistenceRequirement::AllowDeath, OnUnbalanced, Imbalance};
 use frame_support::{
 	decl_event,
 	decl_module,
 	decl_storage,
 	dispatch::{DispatchResult, DispatchError},
+	traits::{Currency, ExistenceRequirement::AllowDeath, OnUnbalanced, Imbalance},
+	weights::SimpleDispatchInfo,
 };
 use frame_system::{self as system, ensure_signed, ensure_root};
 
@@ -77,6 +78,7 @@ decl_module! {
 		fn deposit_event() = default;
 
 		/// Donate some funds to the charity
+		#[weight = SimpleDispatchInfo::default()]
 		fn donate(
 			origin,
 			amount: BalanceOf<T>
@@ -94,6 +96,7 @@ decl_module! {
 		///
 		/// Take funds from the Charity's pot and send them somewhere. This call requires root origin,
 		/// which means it must come from a governance mechanism such as Substrate's Democracy pallet.
+		#[weight = SimpleDispatchInfo::default()]
 		fn allocate(
 			origin,
 			dest: T::AccountId,

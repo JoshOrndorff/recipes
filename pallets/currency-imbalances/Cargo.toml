@@ -1,6 +1,6 @@
 [package]
 name = "currency-imbalances"
-version = "0.1.0"
+version = "2.0.0-alpha.6"
 authors = ["4meta5"]
 edition = "2018"
 
@@ -8,49 +8,32 @@ edition = "2018"
 default = ['std']
 std = [
     'parity-scale-codec/std',
-    'support/std',
-    'system/std',
-    'balances/std',
-    'runtime-primitives/std',
+    'frame-support/std',
+    'frame-system/std',
+    'sp-runtime/std',
 ]
 
 [dependencies.parity-scale-codec]
 default-features = false
 features = ['derive']
-version = '1.0.6'
+version = '1.3.0'
 
-[dependencies.support]
+[dependencies.frame-support]
 default_features = false
+version = '2.0.0-alpha.6'
 
-package = 'frame-support'
-version = '2.0.0-alpha.5'
-
-[dependencies.system]
+[dependencies.frame-system]
 default_features = false
+version = '2.0.0-alpha.6'
 
-package = 'frame-system'
-version = '2.0.0-alpha.5'
-
-[dependencies.balances]
+[dependencies.sp-runtime]
 default_features = false
+version = '2.0.0-alpha.6'
 
-package = 'pallet-balances'
-version = '2.0.0-alpha.5'
-
-[dependencies.runtime-primitives]
+[dev-dependencies.sp-core]
 default_features = false
+version = '2.0.0-alpha.6'
 
-package = 'sp-runtime'
-version = '2.0.0-alpha.5'
-
-[dev-dependencies.primitives]
+[dev-dependencies.sp-io]
 default_features = false
-
-package = 'sp-core'
-version = '2.0.0-alpha.5'
-
-[dev-dependencies.runtime-io]
-default_features = false
-
-package = 'sp-io'
-version = '2.0.0-alpha.5'
+version = '2.0.0-alpha.6'

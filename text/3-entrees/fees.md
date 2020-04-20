@@ -20,17 +20,17 @@ src: [`runtimes/super-runtime/src/lib.rs`](https://github.com/substrate-develope
 
 ```rust,ignore
 parameter_types! {
-    pub const TransactionBaseFee: u128 = 0;
-    pub const TransactionByteFee: u128 = 1;
+	pub const TransactionBaseFee: u128 = 0;
+	pub const TransactionByteFee: u128 = 1;
 }
 
 impl transaction_payment::Trait for Runtime {
-    type Currency = balances::Module<Runtime>;
-    type OnTransactionPayment = ();
-    type TransactionBaseFee = TransactionBaseFee;
-    type TransactionByteFee = TransactionByteFee;
-    type WeightToFee = ConvertInto;
-    type FeeMultiplierUpdate = ();
+	type Currency = balances::Module<Runtime>;
+	type OnTransactionPayment = ();
+	type TransactionBaseFee = TransactionBaseFee;
+	type TransactionByteFee = TransactionByteFee;
+	type WeightToFee = ConvertInto;
+	type FeeMultiplierUpdate = ();
 }
 ```
 

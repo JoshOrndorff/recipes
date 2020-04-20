@@ -1,3 +1,5 @@
+//! A demonstration of an offchain worker that submits onchain callbacks
+
 #![cfg_attr(not(feature = "std"), no_std)]
 
 #[cfg(test)]
@@ -15,7 +17,9 @@ use core::convert::{TryInto};
 use frame_system::{self as system, ensure_signed, ensure_none, offchain};
 use sp_core::crypto::KeyTypeId;
 use sp_runtime::{
-	transaction_validity::{InvalidTransaction, ValidTransaction, TransactionValidity},
+	transaction_validity::{
+		InvalidTransaction, ValidTransaction, TransactionValidity, TransactionSource
+	},
 };
 use sp_std::prelude::*;
 
@@ -92,14 +96,14 @@ decl_module! {
 	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
 		fn deposit_event() = default;
 
-		#[weight = SimpleDispatchInfo::FixedNormal(1000)]
+		#[weight = SimpleDispatchInfo::default()]
 		pub fn submit_number_signed(origin, number: u64) -> DispatchResult {
 			debug::info!("submit_number_signed: {:?}", number);
 			let who = ensure_signed(origin)?;
 			Self::append_or_replace_number(Some(who), number)
 		}
 
-		#[weight = SimpleDispatchInfo::FixedNormal(1000)]
+		#[weight = SimpleDispatchInfo::default()]
 		pub fn submit_number_unsigned(origin, _block: T::BlockNumber, number: u64) -> DispatchResult {
 			debug::info!("submit_number_unsigned: {:?}", number);
 			let _ = ensure_none(origin)?;
@@ -209,7 +213,10 @@ impl<T: Trait> Module<T> {
 impl<T: Trait> frame_support::unsigned::ValidateUnsigned for Module<T> {
 	type Call = Call<T>;
 
-	fn validate_unsigned(call: &Self::Call) -> TransactionValidity {
+	fn validate_unsigned(
+		_source: TransactionSource,
+		call: &Self::Call
+	) -> TransactionValidity {
 		if let Call::submit_number_unsigned(block_num, number) = call {
 			debug::native::info!("off-chain send_unsigned: block_num: {}| number: {}", block_num, number);
 

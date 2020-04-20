@@ -1,10 +1,14 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
-// demonstrates how to use append instead of mutate
-// https://substrate.dev/rustdocs/master/frame_support/storage/trait.StorageValue.html#tymethod.append
-use rstd::prelude::*;
-use support::{decl_event, decl_module, decl_storage, dispatch::DispatchResult, ensure, StorageValue};
-use system::ensure_signed;
+//! A pallet that demonstrates how to use append instead of mutate
+use sp_std::prelude::*;
+use frame_support::{
+	decl_event, decl_module, decl_storage,
+	dispatch::DispatchResult,
+	ensure,
+	weights::SimpleDispatchInfo,
+};
+use frame_system::{self as system, ensure_signed};
 
 #[cfg(test)]
 mod tests;
@@ -41,8 +45,10 @@ decl_module! {
 	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
 		fn deposit_event() = default;
 
-		// don't do this
-		// (unless appending new entries AND mutating existing entries)
+		/// Appends an item to the vec using the `mutate` method
+		/// Don't do this because it is slow
+		/// (unless appending new entries AND mutating existing entries)
+		#[weight = SimpleDispatchInfo::default()]
 		fn mutate_to_append(origin) -> DispatchResult {
 			let user = ensure_signed(origin)?;
 
@@ -52,7 +58,9 @@ decl_module! {
 			Ok(())
 		}
 
-		// do this instead
+		/// Appends an item to the vec using the `append` method
+		/// This method is faster, and therefore preferred, whenever possible
+		#[weight = SimpleDispatchInfo::default()]
 		fn append_new_entries(origin) -> DispatchResult {
 			let user = ensure_signed(origin)?;
 
@@ -62,6 +70,7 @@ decl_module! {
 			Ok(())
 		}
 
+		#[weight = SimpleDispatchInfo::default()]
 		fn add_member(origin) -> DispatchResult {
 			let new_member = ensure_signed(origin)?;
 			ensure!(!Self::is_member(&new_member), "must not be a member to be added");
@@ -70,6 +79,7 @@ decl_module! {
 			Ok(())
 		}
 
+		#[weight = SimpleDispatchInfo::default()]
 		fn remove_member(origin) -> DispatchResult {
 			let old_member = ensure_signed(origin)?;
 			ensure!(Self::is_member(&old_member), "must be a member in order to leave");
