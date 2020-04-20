@@ -4,7 +4,8 @@ edition = '2018'
 homepage = 'https://substrate.dev/recipes'
 name = 'basic-pow'
 repository = 'https://github.com/substrate-developer-hub/recipes'
-version = "2.0.0"
+version = "2.0.0-alpha.6"
+description = 'A Substrate node that demonstrates minimal proof of work consensus'
 
 [[bin]]
 name = 'basic-pow'
