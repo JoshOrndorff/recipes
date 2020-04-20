@@ -1,6 +1,6 @@
 [package]
 name = "check-membership"
-version = "0.1.0"
+version = "2.0.0-alpha.6"
 authors = ["4meta5"]
 edition = "2018"
 

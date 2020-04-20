@@ -1,6 +1,6 @@
 [package]
 name = "fixed-point"
-version = "0.1.0"
+version = "2.0.0-alpha.6"
 authors = ["Joshy Orndorff"]
 edition = "2018"
 
