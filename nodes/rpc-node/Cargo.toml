@@ -3,7 +3,10 @@ authors = ['Anonymous']
 build = 'build.rs'
 edition = '2018'
 name = 'rpc-node'
-version = '2.0.0'
+version = '2.0.0-alpha.6'
+homepage = 'https://substrate.dev/recipes'
+repository = 'https://github.com/substrate-developer-hub/recipes'
+description = 'A Substrate node that demonstrates a custom RPC endpoint'
 
 [[bin]]
 name = 'rpc-node'

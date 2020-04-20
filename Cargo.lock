@@ -2101,7 +2101,7 @@ dependencies = [
 
 [[package]]
 name = "kitchen-node"
-version = "2.0.0"
+version = "2.0.0-alpha.6"
 dependencies = [
  "ctrlc",
  "derive_more 0.15.0",
@@ -4156,7 +4156,7 @@ dependencies = [
 
 [[package]]
 name = "rpc-node"
-version = "2.0.0"
+version = "2.0.0-alpha.6"
 dependencies = [
  "api-runtime",
  "ctrlc",
