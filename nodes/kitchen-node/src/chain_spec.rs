@@ -4,7 +4,6 @@ use sp_finality_grandpa::{AuthorityId as GrandpaId};
 use sc_service;
 use sp_runtime::traits::{Verify, IdentifyAccount};
 use runtime::{AccountId, GenesisConfig, Signature, genesis::testnet_genesis};
-// use runtime_genesis::testnet_genesis;
 
 // Note this is the URL for the telemetry server
 //const STAGING_TELEMETRY_URL: &str = "wss://telemetry.polkadot.io/submit/";
@@ -94,10 +93,3 @@ pub fn local_testnet_config() -> ChainSpec {
 		None
 	)
 }
-
-// pub fn load_spec(id: &str) -> Result<Box<dyn sc_service::ChainSpec>, String> {
-// 	Ok(match Alternative::from(id) {
-// 		Some(spec) => Box::new(spec.load()?),
-// 		None => Box::new(ChainSpec::from_json_file(std::path::PathBuf::from(id))?),
-// 	})
-// }
