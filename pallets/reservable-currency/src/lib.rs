@@ -94,15 +94,13 @@ decl_module! {
 		) -> DispatchResult {
 			let _ = ensure_signed(origin)?; // dangerous because can be called with any signature (so dont do this in practice ever!)
 
-                        // Unreserved contains our overdraft, if collateral is bigger than
-                        // to_punish's reserved balance, what's left is put in unreserved.
-			let unreserved = T::Currency::unreserve(&to_punish, collateral);
-                        // Perhaps add an aditional check to see if we can susbtract unreserved
-                        // from free_balance and add it into the transfer below.
-			T::Currency::transfer(&to_punish, &dest, collateral - unreserved, AllowDeath)?;
+                        // If collateral is bigger than to_punish's reserved_balance, store what's left in overdraft.
+			let overdraft = T::Currency::unreserve(&to_punish, collateral);
+
+			T::Currency::transfer(&to_punish, &dest, collateral - overdraft, AllowDeath)?;
 
 			let now = <system::Module<T>>::block_number();
-			Self::deposit_event(RawEvent::TransferFunds(to_punish, dest, collateral - unreserved, now));
+			Self::deposit_event(RawEvent::TransferFunds(to_punish, dest, collateral - overdraft, now));
 
 			Ok(())
 		}
