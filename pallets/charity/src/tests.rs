@@ -142,6 +142,13 @@ fn imbalances_work() {
 
 		// Check that the correct event is emitted
 		let expected_event = TestEvent::charity(RawEvent::ImbalanceAbsorbed(5, 5));
+
+
+		println!("Event count: {}", System::events().iter().count());
+		System::events().iter().for_each(|a| {
+			println!("ev: {:?}", a.event);
+		});
+
 		assert!(System::events().iter().any(|a| a.event == expected_event));
 	})
 }
