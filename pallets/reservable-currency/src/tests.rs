@@ -1,6 +1,6 @@
 use crate::*;
 use balances;
-use frame_support::{assert_err, assert_ok, impl_outer_event, impl_outer_origin, parameter_types};
+use frame_support::{assert_ok, impl_outer_event, impl_outer_origin, parameter_types};
 use frame_system::{self as system};
 use sp_core::H256;
 use sp_io;
@@ -159,7 +159,7 @@ fn new_test_ext_unreserve_and_transfer() {
         assert!(System::events().iter().any(|a| a.event == reserve_event));
 
         // Punish one, for a value of 6000 collateral. Because one only has 4000 collateral reserved
-        // al of it is unreserved and transferred
+        // all of it is unreserved and transferred
         assert_ok!(ReservableCurrency::unreserve_and_transfer(
             Origin::signed(1),
             1,
