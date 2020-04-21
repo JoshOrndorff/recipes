@@ -3,13 +3,19 @@ use sp_core::H256;
 use sp_io::TestExternalities;
 use sp_runtime::{
 	testing::Header,
-	traits::{BlakeTwo256, IdentityLookup, OnFinalize, OnInitialize, AtLeast32Bit},
+	traits::{BlakeTwo256, IdentityLookup, AtLeast32Bit},
 	Perbill,
 };
 // it's ok, just for the testing suit, thread local variables
 use rand::{rngs::OsRng, thread_rng, Rng, RngCore};
 use std::cell::RefCell;
-use frame_support::{assert_ok, impl_outer_event, impl_outer_origin, parameter_types, traits::Get};
+use frame_support::{
+	assert_ok,
+	impl_outer_event,
+	impl_outer_origin,
+	parameter_types,
+	traits::{Get, OnInitialize, OnFinalize},
+};
 use frame_system as system;
 
 // to compare expected storage items with storage items after method calls
