@@ -128,7 +128,7 @@ impl ExtBuilder {
 		t.register_extension(OffchainExt::new(offchain));
 		t.register_extension(TransactionPoolExt::new(pool));
 		t.register_extension(KeystoreExt(keystore));
-
+		t.execute_with(|| System::set_block_number(1));
 		(t, pool_state, offchain_state)
 	}
 }

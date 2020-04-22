@@ -1,6 +1,6 @@
 [package]
 name = "storage-cache"
-version = "0.1.0"
+version = "2.0.0-alpha.6"
 authors = ["4meta5"]
 edition = "2018"
 
@@ -9,14 +9,14 @@ edition = "2018"
 parity-scale-codec = { default-features = false, features = ['derive'], version = '1.3.0' }
 
 # Substrate pallet/frame dependencies
-frame-support = { package = 'frame-support', version = '2.0.0-alpha.5', default_features = false }
-frame-system = { package = 'frame-system', version = '2.0.0-alpha.5', default_features = false }
-sp-runtime = { version = '2.0.0-alpha.5', default_features = false }
-sp-std = { version = '2.0.0-alpha.5', default_features = false }
+frame-support = { package = 'frame-support', version = '2.0.0-alpha.6', default_features = false }
+frame-system = { package = 'frame-system', version = '2.0.0-alpha.6', default_features = false }
+sp-runtime = { version = '2.0.0-alpha.6', default_features = false }
+sp-std = { version = '2.0.0-alpha.6', default_features = false }
 
 [dev-dependencies]
-sp-core = { version = '2.0.0-alpha.5', default_features = false }
-sp-io = { version = '2.0.0-alpha.5', default_features = false }
+sp-core = { version = '2.0.0-alpha.6', default_features = false }
+sp-io = { version = '2.0.0-alpha.6', default_features = false }
 
 [features]
 default = ['std']

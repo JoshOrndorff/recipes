@@ -1,6 +1,6 @@
 [package]
 name = "offchain-demo"
-version = "0.1.0"
+version = "2.0.0-alpha.6"
 authors = ["Parity Technologies <admin@parity.io>"]
 edition = "2018"
 homepage = "https://substrate.dev/recipes/"
@@ -14,12 +14,12 @@ serde = { version = "1.0.101", optional = true }
 serde_json = { version = "1.0.46", default-features = false, features = ["alloc"] }
 
 # Substrate dependencies
-frame-support = { package = "frame-support", default-features = false, version = '2.0.0-alpha.5' }
-frame-system = { package = "frame-system", default-features = false, version = '2.0.0-alpha.5' }
-sp-core = { default-features = false, version = '2.0.0-alpha.5' }
-sp-io = { default-features = false, version = '2.0.0-alpha.5' }
-sp-runtime = { default-features = false, version = '2.0.0-alpha.5' }
-sp-std = { default-features = false, version = '2.0.0-alpha.5' }
+frame-support = { package = "frame-support", default-features = false, version = '2.0.0-alpha.6' }
+frame-system = { package = "frame-system", default-features = false, version = '2.0.0-alpha.6' }
+sp-core = { default-features = false, version = '2.0.0-alpha.6' }
+sp-io = { default-features = false, version = '2.0.0-alpha.6' }
+sp-runtime = { default-features = false, version = '2.0.0-alpha.6' }
+sp-std = { default-features = false, version = '2.0.0-alpha.6' }
 
 [features]
 default = ['std']

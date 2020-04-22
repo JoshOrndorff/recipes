@@ -171,7 +171,7 @@ In the `Cargo.toml`, this only needs to be imported under `dev-dependencies` sin
 [dev-dependencies.sp-io]
 default_features = false
 
-version = '2.0.0-alpha.5'
+version = '2.0.0-alpha.6'
 ```
 
 There is more than one pattern for building a mock runtime environment for testing pallet logic. Two patterns are presented below. The latter is generally favored for reasons discussed in [custom test environment](./externalities.md)
@@ -301,7 +301,7 @@ fn last_value_updates() {
 
 Run these tests with `cargo test`, an optional parameter is the test's name to only run that test and not all tests.
 
-NOTE: the input to `Origin::signed` is the `system::Trait`'s `AccountId` type which was set to `u64` for the `TestRuntime` implementation. In theory, this could be set to some other type as long as it conforms to the [trait bound](https://substrate.dev/rustdocs/master/frame_system/trait.Trait.html#associatedtype.AccountId),
+Note that the input to `Origin::signed` is the `system::Trait`'s `AccountId` type which was set to `u64` for the `TestRuntime` implementation. In theory, this could be set to some other type as long as it conforms to the [trait bound](https://substrate.dev/rustdocs/master/frame_system/trait.Trait.html#associatedtype.AccountId),
 
 ```rust, ignore
 pub trait Trait: 'static + Eq + Clone {
@@ -310,4 +310,23 @@ pub trait Trait: 'static + Eq + Clone {
 	//...
 }
 ```
+
+### Setting for Testing Event Emittances
+
+Starting from
+Substrate [`v2.0.0-alpha.6`](https://github.com/paritytech/substrate/tree/v2.0.0-alpha.6),
+events are not emitted on block 0. So when testing for whether events are emitted, we manually
+set the block number in the test environment from 0 to 1 as the following:
+
+```rust
+impl ExtBuilder {
+	pub fn build() -> TestExternalities {
+		let storage = system::GenesisConfig::default().build_storage::<TestRuntime>().unwrap();
+		let mut ext = TestExternalities::from(storage);
+		ext.execute_with(|| System::set_block_number(1));
+		ext
+	}
+}
+```
+
 <!-- add link to testing in devhub docs after it is added -->

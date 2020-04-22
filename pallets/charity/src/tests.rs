@@ -93,9 +93,11 @@ pub fn new_test_ext() -> sp_io::TestExternalities {
 			(5, 19),
 		],
 	}
-	.assimilate_storage(&mut t)
-	.unwrap();
-	t.into()
+		.assimilate_storage(&mut t)
+		.unwrap();
+	let mut ext: sp_io::TestExternalities = t.into();
+	ext.execute_with(|| System::set_block_number(1));
+	ext
 }
 
 /// Verifying correct behavior of boilerplate
@@ -142,6 +144,7 @@ fn imbalances_work() {
 
 		// Check that the correct event is emitted
 		let expected_event = TestEvent::charity(RawEvent::ImbalanceAbsorbed(5, 5));
+
 		assert!(System::events().iter().any(|a| a.event == expected_event));
 	})
 }

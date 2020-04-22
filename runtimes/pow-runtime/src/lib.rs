@@ -17,9 +17,11 @@ use rstd::prelude::*;
 use sp_core::{OpaqueMetadata, H256};
 use sp_runtime::{
 	ApplyExtrinsicResult,
-	transaction_validity::TransactionValidity, generic, create_runtime_str,
+	create_runtime_str,
+	generic,
 	impl_opaque_keys,
-	MultiSignature
+	MultiSignature,
+	transaction_validity::{TransactionValidity, TransactionSource},
 };
 use sp_runtime::traits::{
 	BlakeTwo256,
@@ -299,8 +301,11 @@ impl_runtime_apis! {
 	}
 
 	impl sp_transaction_pool::runtime_api::TaggedTransactionQueue<Block> for Runtime {
-		fn validate_transaction(tx: <Block as BlockT>::Extrinsic) -> TransactionValidity {
-			Executive::validate_transaction(tx)
+		fn validate_transaction(
+			source: TransactionSource,
+			tx: <Block as BlockT>::Extrinsic
+		) -> TransactionValidity {
+			Executive::validate_transaction(source, tx)
 		}
 	}
 

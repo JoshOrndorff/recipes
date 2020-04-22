@@ -4,10 +4,16 @@ use sp_core::H256;
 use sp_io::TestExternalities;
 use sp_runtime::{
 	testing::Header,
-	traits::{BlakeTwo256, IdentityLookup, OnFinalize},
+	traits::{BlakeTwo256, IdentityLookup},
 	Perbill,
 };
-use frame_support::{assert_ok, impl_outer_event, impl_outer_origin, parameter_types};
+use frame_support::{
+	assert_ok,
+	impl_outer_event,
+	impl_outer_origin,
+	parameter_types,
+	traits::OnFinalize,
+};
 use frame_system::{self as system, EventRecord, Phase};
 
 impl_outer_origin! {
@@ -70,7 +76,9 @@ impl ExtBuilder {
 		let storage = system::GenesisConfig::default()
 			.build_storage::<TestRuntime>()
 			.unwrap();
-		TestExternalities::from(storage)
+		let mut ext = TestExternalities::from(storage);
+		ext.execute_with(|| System::set_block_number(1));
+		ext
 	}
 }
 

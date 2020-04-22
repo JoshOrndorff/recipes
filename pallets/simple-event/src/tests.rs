@@ -71,7 +71,9 @@ impl ExtBuilder {
 		let storage = system::GenesisConfig::default()
 			.build_storage::<TestRuntime>()
 			.unwrap();
-		TestExternalities::from(storage)
+		let mut ext = TestExternalities::from(storage);
+		ext.execute_with(|| System::set_block_number(1));
+		ext
 	}
 }
 

@@ -13,22 +13,35 @@ include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 #[cfg(feature = "std")]
 pub mod genesis;
 
-use rstd::prelude::*;
+use sp_std::prelude::*;
 use sp_core::{OpaqueMetadata, H256};
 use sp_runtime::{
-    ApplyExtrinsicResult,
-	transaction_validity::TransactionValidity, generic, create_runtime_str,
-	impl_opaque_keys, AnySignature
+	MultiSignature,
+	ApplyExtrinsicResult,
+	create_runtime_str,
+	generic,
+	impl_opaque_keys,
+	transaction_validity::{TransactionValidity, TransactionSource},
 };
-use sp_runtime::traits::{BlakeTwo256, Block as BlockT, IdentityLookup, Verify, Convert};
-use support::traits::Get;
-use support::weights::Weight;
+use sp_runtime::traits::{
+	BlakeTwo256,
+	Block as BlockT,
+	Convert,
+	IdentifyAccount,
+	IdentityLookup,
+	Verify,
+};
+use frame_support::{
+	traits::Get,
+	weights::Weight,
+};
 use babe::SameAuthoritiesForever;
 use grandpa::{AuthorityId as GrandpaId, AuthorityWeight as GrandpaWeight};
 use sp_api::impl_runtime_apis;
-use version::RuntimeVersion;
+use sp_version::RuntimeVersion;
 #[cfg(feature = "std")]
-use version::NativeVersion;
+use sp_version::NativeVersion;
+use frame_system as system;
 
 // These structs are used in one of the commented-by-default implementations of
 // transaction_payment::Trait. Don't warn when they are unused.
@@ -43,17 +56,17 @@ pub use sp_runtime::BuildStorage;
 pub use timestamp::Call as TimestampCall;
 pub use balances::Call as BalancesCall;
 pub use sp_runtime::{Permill, Perbill};
-pub use support::{StorageValue, construct_runtime, parameter_types, traits::Randomness};
+pub use frame_support::{StorageValue, construct_runtime, parameter_types, traits::Randomness};
 
 /// An index to a block.
 pub type BlockNumber = u32;
 
 /// Alias to 512-bit hash when used in the context of a transaction signature on the chain.
-pub type Signature = AnySignature;
+pub type Signature = MultiSignature;
 
 /// Some way of identifying an account on the chain. We intentionally make it equivalent
 /// to the public key of our transaction signing scheme.
-pub type AccountId = <Signature as Verify>::Signer;
+pub type AccountId = <<Signature as Verify>::Signer as IdentifyAccount>::AccountId;
 
 /// The type for looking up accounts. We don't expect more than 4 billion of them, but you
 /// never know...
@@ -243,7 +256,7 @@ impl weights::Trait for Runtime {}
 
 /// Convert from weight to balance via a simple coefficient multiplication. The associated type C
 /// encapsulates a constant in units of balance per weight.
-pub struct LinearWeightToFee<C>(rstd::marker::PhantomData<C>);
+pub struct LinearWeightToFee<C>(sp_std::marker::PhantomData<C>);
 
 impl<C> Convert<Weight, Balance> for LinearWeightToFee<C>
 	where C: Get<Balance> {
@@ -383,7 +396,7 @@ pub type UncheckedExtrinsic = generic::UncheckedExtrinsic<Address, Call, Signatu
 /// Extrinsic type that has already been checked.
 pub type CheckedExtrinsic = generic::CheckedExtrinsic<AccountId, Call, SignedExtra>;
 /// Executive: handles dispatch to the various pallets.
-pub type Executive = executive::Executive<Runtime, Block, system::ChainContext<Runtime>, Runtime, AllModules>;
+pub type Executive = frame_executive::Executive<Runtime, Block, system::ChainContext<Runtime>, Runtime, AllModules>;
 
 impl_runtime_apis! {
 	impl sp_api::Core<Block> for Runtime {
@@ -406,7 +419,7 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl block_builder_api::BlockBuilder<Block> for Runtime {
+	impl sp_block_builder::BlockBuilder<Block> for Runtime {
 		fn apply_extrinsic(extrinsic: <Block as BlockT>::Extrinsic) -> ApplyExtrinsicResult {
 			Executive::apply_extrinsic(extrinsic)
 		}
@@ -415,14 +428,14 @@ impl_runtime_apis! {
 			Executive::finalize_block()
 		}
 
-		fn inherent_extrinsics(data: inherents::InherentData) -> Vec<<Block as BlockT>::Extrinsic> {
+		fn inherent_extrinsics(data: sp_inherents::InherentData) -> Vec<<Block as BlockT>::Extrinsic> {
 			data.create_extrinsics()
 		}
 
 		fn check_inherents(
 			block: Block,
-			data: inherents::InherentData
-		) -> inherents::CheckInherentsResult {
+			data: sp_inherents::InherentData
+		) -> sp_inherents::CheckInherentsResult {
 			data.check_extrinsics(&block)
 		}
 
@@ -432,12 +445,15 @@ impl_runtime_apis! {
 	}
 
 	impl sp_transaction_pool::runtime_api::TaggedTransactionQueue<Block> for Runtime {
-		fn validate_transaction(tx: <Block as BlockT>::Extrinsic) -> TransactionValidity {
-			Executive::validate_transaction(tx)
+		fn validate_transaction(
+			source: TransactionSource,
+			tx: <Block as BlockT>::Extrinsic
+		) -> TransactionValidity {
+			Executive::validate_transaction(source, tx)
 		}
 	}
 
-	impl offchain_primitives::OffchainWorkerApi<Block> for Runtime {
+	impl sp_offchain::OffchainWorkerApi<Block> for Runtime {
 		fn offchain_worker(header: &<Block as BlockT>::Header) {
 			Executive::offchain_worker(header)
 		}
@@ -471,7 +487,7 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl substrate_session::SessionKeys<Block> for Runtime {
+	impl sp_session::SessionKeys<Block> for Runtime {
 		fn generate_session_keys(seed: Option<Vec<u8>>) -> Vec<u8> {
 			opaque::SessionKeys::generate(seed)
 		}
