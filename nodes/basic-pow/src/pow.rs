@@ -56,7 +56,7 @@ impl Compute {
 impl<B: BlockT<Hash=H256>> PowAlgorithm<B> for Sha3Algorithm {
 	type Difficulty = U256;
 
-	fn difficulty(&self, _parent: &BlockId<B>) -> Result<Self::Difficulty, Error<B>> {
+	fn difficulty(&self, _parent: B::Hash) -> Result<Self::Difficulty, Error<B>> {
 		// This basic PoW uses a fixed difficulty.
 		// Raising this difficulty will make the block time slower.
 		Ok(U256::from(1000_000))

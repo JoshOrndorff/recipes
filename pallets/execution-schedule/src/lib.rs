@@ -10,7 +10,7 @@ use frame_support::{
 	dispatch::{DispatchResult, DispatchError},
 	ensure,
 	traits::Get,
-	weights::SimpleDispatchInfo,
+	weights::{SimpleDispatchInfo, Weight},
 };
 use frame_system::{self as system, ensure_signed};
 
@@ -98,7 +98,7 @@ decl_module! {
 		/// After the last block's on_finalize, the logic expressed in this method
 		/// is executed before the logic in the next block.
 		/// - This allows us to start from 0 for all tasks
-		fn on_initialize(n: T::BlockNumber) {
+		fn on_initialize(n: T::BlockNumber) -> Weight {
 			let batch_frequency = T::ExecutionFrequency::get();
 			if ((n - 1.into()) % batch_frequency).is_zero() {
 				let last_era = Era::get();
@@ -117,6 +117,8 @@ decl_module! {
 				});
 				Self::deposit_event(RawEvent::SignalRefreshed(n));
 			}
+
+			Weight::default()
 		}
 
 		/// Schedule Task for Batch Execution

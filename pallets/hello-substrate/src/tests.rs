@@ -43,6 +43,7 @@ impl system::Trait for TestRuntime {
 
 impl Trait for TestRuntime {}
 
+pub type System = system::Module<TestRuntime>;
 pub type HelloSubstrate = Module<TestRuntime>;
 
 pub struct ExtBuilder;
@@ -50,7 +51,9 @@ pub struct ExtBuilder;
 impl ExtBuilder {
 	pub fn build() -> TestExternalities {
 		let storage = system::GenesisConfig::default().build_storage::<TestRuntime>().unwrap();
-		TestExternalities::from(storage)
+		let mut ext = TestExternalities::from(storage);
+		ext.execute_with(|| System::set_block_number(1));
+		ext
 	}
 }
 
