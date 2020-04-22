@@ -22,6 +22,11 @@ use sp_runtime::{
 use sp_std::prelude::*;
 use sp_std::str as str;
 
+// Because we are parsing json in a `no_std` env, we cannot use `serde_json` library.
+//   `simple_json2` is a small tool written by our community member to handle json parsing in
+//   no_std env.
+use simple_json2::{ json::{ JsonObject, JsonValue }, parse_json };
+
 /// Defines application identifier for crypto keys of this module.
 ///
 /// Every module that deals with signatures needs to declare its unique identifier for
@@ -31,6 +36,8 @@ use sp_std::str as str;
 /// The keys can be inserted manually via RPC (see `author_insertKey`).
 pub const KEY_TYPE: KeyTypeId = KeyTypeId(*b"demo");
 pub const NUM_VEC_LEN: usize = 10;
+
+// We are fetching information from github public API about organisation `substrate-developer-hub`.
 pub const HTTP_REMOTE_REQUEST_BYTES: &[u8] = b"https://api.github.com/orgs/substrate-developer-hub";
 pub const HTTP_HEADER_USER_AGENT: &[u8] = b"jimmychu0807";
 
@@ -151,6 +158,9 @@ impl<T: Trait> Module<T> {
 	}
 
 	fn choose_tx_type(block_number: T::BlockNumber) -> TransactionType {
+		// Decide what type of transaction to submit based on block number.
+		// Each block the offchain worker will submit one type of transaction back to the chain.
+		// First a signed transaction, then an unsigned transaction, then an http fetch and json parsing.
 		match block_number.try_into().ok().unwrap() % 3 {
 			0 => TransactionType::SignedSubmitNumber,
 			1 => TransactionType::UnsignedSubmitNumber,
@@ -229,11 +239,6 @@ impl<T: Trait> Module<T> {
 	}
 
 	fn parse_for_value(json_str: &str, key: &str) -> Result<Vec<u8>, Error<T>> {
-		// Because we are parsing json in a `no_std` env, we cannot use `serde_json` library.
-		//   `simple_json2` is a small tool written by our community member to handle json parsing in
-		//   no_std env.
-		use simple_json2::{ json::{ JsonObject, JsonValue }, parse_json };
-
 		// Parse the whole string into a Json object
 		let json: JsonValue = parse_json(&json_str)
 			.map_err(|_| <Error<T>>::JsonParsingError)?;
