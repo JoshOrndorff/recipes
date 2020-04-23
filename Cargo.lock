@@ -5341,11 +5341,9 @@ version = "2.0.0-alpha.6"
 dependencies = [
  "parity-scale-codec",
  "rand 0.7.3",
- "sc-client-api",
  "sc-consensus-pow",
  "sha3",
  "sp-api",
- "sp-blockchain",
  "sp-consensus-pow",
  "sp-core",
  "sp-runtime",

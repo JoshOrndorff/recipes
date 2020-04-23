@@ -7,8 +7,6 @@ use sp_consensus_pow::{Seal as RawSeal, DifficultyApi};
 use sha3::{Sha3_256, Digest};
 use rand::{thread_rng, SeedableRng, rngs::SmallRng};
 use std::sync::Arc;
-use sp_blockchain::HeaderBackend;
-use sc_client_api::backend::AuxStore;
 use sp_api::ProvideRuntimeApi;
 
 /// Determine whether the given hash satisfies the given difficulty.
@@ -158,7 +156,7 @@ impl<C> Clone for Sha3Algorithm<C> {
 
 // Here we implement the general PowAlgorithm trait for our concrete Sha3Algorithm
 impl<B: BlockT<Hash=H256>, C> PowAlgorithm<B> for Sha3Algorithm<C> where
-	C: HeaderBackend<B> + AuxStore + ProvideRuntimeApi<B>,
+	C: ProvideRuntimeApi<B>,
 	C::Api: DifficultyApi<B, U256>,
 {
 	type Difficulty = U256;
