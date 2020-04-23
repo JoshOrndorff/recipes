@@ -49,9 +49,10 @@ pub fn new_full(config: Configuration, instant_seal: bool) -> Result<impl Abstra
 		.map_err(Into::into)
 		.map_err(sp_consensus::error::Error::InherentData)?;
 
-	// channel for the rpc handler to communicate with the authorship task.
-	let (command_sink, commands_stream) = futures::channel::mpsc::channel(1000);
 	let builder = new_full_start!(config);
+
+	// Channel for the rpc handler to communicate with the authorship task.
+	let (command_sink, commands_stream) = futures::channel::mpsc::channel(1000);
 
 	let service = if instant_seal {
 		builder.build()?
