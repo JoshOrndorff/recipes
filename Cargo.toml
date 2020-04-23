@@ -30,6 +30,7 @@ members = [
 	"pallets/vec-set",
 	"pallets/weights",
 	"runtimes/api-runtime",
+	"runtimes/minimal-grandpa-runtime",
 	"runtimes/ocw-runtime",
 	"runtimes/pow-runtime",
 	"runtimes/super-runtime",

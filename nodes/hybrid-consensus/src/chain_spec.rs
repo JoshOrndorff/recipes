@@ -1,5 +1,4 @@
 use sp_core::{Pair, Public, sr25519};
-use sp_consensus_babe::{AuthorityId as BabeId};
 use sp_finality_grandpa::{AuthorityId as GrandpaId};
 use sc_service;
 use sp_runtime::traits::{Verify, IdentifyAccount};
@@ -28,11 +27,8 @@ pub fn get_account_id_from_seed<TPublic: Public>(seed: &str) -> AccountId where
 }
 
 /// Helper function to generate session key from seed
-pub fn get_authority_keys_from_seed(seed: &str) -> (BabeId, GrandpaId) {
-	(
-		get_from_seed::<BabeId>(seed),
-		get_from_seed::<GrandpaId>(seed),
-	)
+pub fn get_authority_keys_from_seed(seed: &str) -> GrandpaId {
+	get_from_seed::<GrandpaId>(seed)
 }
 
 /// Build a Development ChainSpec

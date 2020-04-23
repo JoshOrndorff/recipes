@@ -34,7 +34,6 @@ sp-timestamp = '2.0.0-alpha.6'
 sc-transaction-pool = '2.0.0-alpha.6'
 sp-transaction-pool = '2.0.0-alpha.6'
 sc-network = '0.8.0-alpha.6'
-sp-consensus-babe = '0.8.0-alpha.6'
 sc-finality-grandpa = '0.8.0-alpha.6'
 sp-finality-grandpa = '2.0.0-alpha.6'
 sc-client = '0.8.0-alpha.6'
@@ -44,9 +43,7 @@ sc-consensus-pow = { version = '0.8.0-alpha.6' }
 sp-consensus-pow = { version = '0.8.0-alpha.6' }
 sha3pow = { path = '../../consensus/sha3pow' }
 
-# Use the weight-fee runtime because it is simple, and has the grandpa api we will need.
-# It also has the babe api which we will not need.
-runtime = { package = "weight-fee-runtime", path = "../../runtimes/weight-fee-runtime"}
+runtime = { package = "minimal-grandpa-runtime", path = "../../runtimes/minimal-grandpa-runtime"}
 
 
 [build-dependencies]

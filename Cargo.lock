@@ -1766,6 +1766,7 @@ dependencies = [
  "futures 0.1.29",
  "futures 0.3.4",
  "log",
+ "minimal-grandpa-runtime",
  "parking_lot 0.9.0",
  "sc-basic-authorship",
  "sc-cli",
@@ -1779,7 +1780,6 @@ dependencies = [
  "sc-transaction-pool",
  "sha3pow",
  "sp-consensus",
- "sp-consensus-babe",
  "sp-consensus-pow",
  "sp-core",
  "sp-finality-grandpa",
@@ -1793,7 +1793,6 @@ dependencies = [
  "tokio 0.1.22",
  "trie-root 0.15.2",
  "vergen",
- "weight-fee-runtime",
 ]
 
 [[package]]
@@ -2733,6 +2732,38 @@ dependencies = [
  "keccak",
  "rand_core 0.5.1",
  "zeroize",
+]
+
+[[package]]
+name = "minimal-grandpa-runtime"
+version = "2.0.0-alpha.6"
+dependencies = [
+ "frame-executive",
+ "frame-support",
+ "frame-system",
+ "pallet-balances",
+ "pallet-generic-asset",
+ "pallet-grandpa",
+ "pallet-randomness-collective-flip",
+ "pallet-sudo",
+ "pallet-timestamp",
+ "pallet-transaction-payment",
+ "parity-scale-codec",
+ "serde",
+ "sp-api",
+ "sp-block-builder",
+ "sp-core",
+ "sp-finality-grandpa",
+ "sp-inherents",
+ "sp-io",
+ "sp-offchain",
+ "sp-runtime",
+ "sp-session",
+ "sp-std",
+ "sp-transaction-pool",
+ "sp-version",
+ "substrate-wasm-builder-runner",
+ "weights",
 ]
 
 [[package]]
