@@ -9,7 +9,7 @@ use sc_service::{error::{Error as ServiceError}, AbstractService, Configuration,
 use sp_inherents::InherentDataProviders;
 use sc_executor::native_executor_instance;
 pub use sc_executor::NativeExecutor;
-use sc_consensus_babe;
+use sha3pow::Sha3Algorithm;
 use sc_finality_grandpa::{
 	self,
 	FinalityProofProvider as GrandpaFinalityProofProvider,
@@ -23,6 +23,17 @@ native_executor_instance!(
 	runtime::native_version,
 );
 
+pub fn build_inherent_data_providers() -> Result<InherentDataProviders, ServiceError> {
+	let providers = InherentDataProviders::new();
+
+	providers
+		.register_provider(sp_timestamp::InherentDataProvider)
+		.map_err(Into::into)
+		.map_err(sp_consensus::error::Error::InherentData)?;
+
+	Ok(providers)
+}
+
 /// Starts a `ServiceBuilder` for a full service.
 ///
 /// Use this macro if you don't actually need the full service, but just the builder in order to
@@ -30,7 +41,8 @@ native_executor_instance!(
 macro_rules! new_full_start {
 	($config:expr) => {{
 		let mut import_setup = None;
-		let inherent_data_providers = sp_inherents::InherentDataProviders::new();
+		let inherent_data_providers = crate::service::build_inherent_data_providers()
+			.expect("Inherent data providers are present.");
 
 		let builder = sc_service::ServiceBuilder::new_full::<
 			runtime::opaque::Block, runtime::RuntimeApi, crate::service::Executor
@@ -47,26 +59,42 @@ macro_rules! new_full_start {
 					.ok_or_else(|| sc_service::Error::SelectChainRequired)?;
 				let (grandpa_block_import, grandpa_link) =
 					sc_finality_grandpa::block_import(
-						client.clone(), &(client.clone() as std::sync::Arc<_>), select_chain
+						client.clone(), &(client.clone() as std::sync::Arc<_>), select_chain.clone()
 					)?;
-				let justification_import = grandpa_block_import.clone();
 
-				let (babe_block_import, babe_link) = sc_consensus_babe::block_import(
-					sc_consensus_babe::Config::get_or_compute(&*client)?,
+				//TODO do I need this justification import?
+				// let justification_import = grandpa_block_import.clone();
+
+				// let (babe_block_import, babe_link) = sc_consensus_babe::block_import(
+				// 	sc_consensus_babe::Config::get_or_compute(&*client)?,
+				// 	grandpa_block_import,
+				// 	client.clone(),
+				// )?;
+				let pow_block_import = sc_consensus_pow::PowBlockImport::new(
 					grandpa_block_import,
 					client.clone(),
-				)?;
+					sha3pow::Sha3Algorithm,
+					0, // check inherents starting at block 0
+					Some(select_chain),
+					inherent_data_providers.clone(),
+				);
 
-				let import_queue = sc_consensus_babe::import_queue(
-					babe_link.clone(),
-					babe_block_import.clone(),
-					Some(Box::new(justification_import)),
-					None,
-					client,
+				// let import_queue = sc_consensus_babe::import_queue(
+				// 	babe_link.clone(),
+				// 	babe_block_import.clone(),
+				// 	Some(Box::new(justification_import)),
+				// 	None,
+				// 	client,
+				// 	inherent_data_providers.clone(),
+				// )?;
+
+				let import_queue = sc_consensus_pow::import_queue(
+					Box::new(pow_block_import.clone()),
+					sha3pow::Sha3Algorithm,
 					inherent_data_providers.clone(),
 				)?;
 
-				import_setup = Some((babe_block_import, grandpa_link, babe_link));
+				import_setup = Some((pow_block_import, grandpa_link));
 
 				Ok(import_queue)
 			})?;
@@ -80,13 +108,13 @@ pub fn new_full(config: Configuration)
 	-> Result<impl AbstractService, ServiceError>
 {
 	let role = config.role.clone();
-	let force_authoring = config.force_authoring;
+	// let force_authoring = config.force_authoring;
 	let name = config.network.node_name.clone();
 	let disable_grandpa = config.disable_grandpa;
 
 	let (builder, mut import_setup, inherent_data_providers) = new_full_start!(config);
 
-	let (block_import, grandpa_link, babe_link) =
+	let (block_import, grandpa_link) =
 		import_setup.take()
 			.expect("Link Half and Block Import are present for Full Services or setup failed before. qed");
 
@@ -110,21 +138,35 @@ pub fn new_full(config: Configuration)
 		let can_author_with =
 				sp_consensus::CanAuthorWithNativeVersion::new(client.executor().clone());
 
-		let babe_config = sc_consensus_babe::BabeParams {
-			keystore: service.keystore(),
-			client,
-			select_chain,
-			env: proposer,
-			block_import,
-			sync_oracle: service.network(),
-			inherent_data_providers: inherent_data_providers.clone(),
-			force_authoring,
-			babe_link,
-			can_author_with,
-		};
+		// let babe_config = sc_consensus_babe::BabeParams {
+		// 	keystore: service.keystore(),
+		// 	client,
+		// 	select_chain,
+		// 	env: proposer,
+		// 	block_import,
+		// 	sync_oracle: service.network(),
+		// 	inherent_data_providers: inherent_data_providers.clone(),
+		// 	force_authoring,
+		// 	babe_link,
+		// 	can_author_with,
+		// };
+		//
+		// let babe = sc_consensus_babe::start_babe(babe_config)?;
+		// service.spawn_essential_task("babe", babe);
 
-		let babe = sc_consensus_babe::start_babe(babe_config)?;
-		service.spawn_essential_task("babe", babe);
+		sc_consensus_pow::start_mine(
+			Box::new(block_import),
+			client,
+			Sha3Algorithm,
+			proposer,
+			None, // TODO Do I need some grandpa preruntime digests?
+			500, // Rounds
+			service.network(),
+			std::time::Duration::new(2, 0),
+			Some(select_chain),
+			inherent_data_providers.clone(),
+			can_author_with,
+		);
 	}
 
 	// if the node isn't actively participating in consensus then it doesn't
@@ -198,7 +240,7 @@ pub fn new_light(config: Configuration)
 			);
 			Ok(pool)
 		})?
-		.with_import_queue_and_fprb(|_config, client, backend, fetcher, _select_chain, _tx_pool| {
+		.with_import_queue_and_fprb(|_config, client, backend, fetcher, select_chain, _tx_pool| {
 			let fetch_checker = fetcher
 				.map(|fetcher| fetcher.checker().clone())
 				.ok_or_else(|| "Trying to start light import queue without active fetch checker")?;
@@ -210,18 +252,33 @@ pub fn new_light(config: Configuration)
 			let finality_proof_request_builder =
 				finality_proof_import.create_finality_proof_request_builder();
 
-			let (babe_block_import, babe_link) = sc_consensus_babe::block_import(
-				sc_consensus_babe::Config::get_or_compute(&*client)?,
+			// let (babe_block_import, babe_link) = sc_consensus_babe::block_import(
+			// 	sc_consensus_babe::Config::get_or_compute(&*client)?,
+			// 	grandpa_block_import,
+			// 	client.clone(),
+			// )?;
+			//
+			// let import_queue = sc_consensus_babe::import_queue(
+			// 	babe_link,
+			// 	babe_block_import,
+			// 	None,
+			// 	Some(Box::new(finality_proof_import)),
+			// 	client.clone(),
+			// 	inherent_data_providers.clone(),
+			// )?;
+
+			let pow_block_import = sc_consensus_pow::PowBlockImport::new(
 				grandpa_block_import,
 				client.clone(),
-			)?;
+				sha3pow::Sha3Algorithm,
+				0, // check inherents starting at block 0
+				select_chain,
+				inherent_data_providers.clone(),
+			);
 
-			let import_queue = sc_consensus_babe::import_queue(
-				babe_link,
-				babe_block_import,
-				None,
-				Some(Box::new(finality_proof_import)),
-				client.clone(),
+			let import_queue = sc_consensus_pow::import_queue(
+				Box::new(pow_block_import.clone()),
+				sha3pow::Sha3Algorithm,
 				inherent_data_providers.clone(),
 			)?;
 
