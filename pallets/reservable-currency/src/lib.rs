@@ -10,6 +10,9 @@ use frame_support::{
 };
 use frame_system::{self as system, ensure_signed};
 
+#[cfg(test)]
+mod tests;
+
 // balance type using reservable currency type
 type BalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::Balance;
 
@@ -91,11 +94,13 @@ decl_module! {
 		) -> DispatchResult {
 			let _ = ensure_signed(origin)?; // dangerous because can be called with any signature (so dont do this in practice ever!)
 
-			let unreserved = T::Currency::unreserve(&to_punish, collateral);
-			T::Currency::transfer(&to_punish, &dest, unreserved, AllowDeath)?;
+                        // If collateral is bigger than to_punish's reserved_balance, store what's left in overdraft.
+			let overdraft = T::Currency::unreserve(&to_punish, collateral);
+
+			T::Currency::transfer(&to_punish, &dest, collateral - overdraft, AllowDeath)?;
 
 			let now = <system::Module<T>>::block_number();
-			Self::deposit_event(RawEvent::TransferFunds(to_punish, dest, unreserved, now));
+			Self::deposit_event(RawEvent::TransferFunds(to_punish, dest, collateral - overdraft, now));
 
 			Ok(())
 		}
