@@ -3005,6 +3005,7 @@ dependencies = [
  "parking_lot 0.10.2",
  "serde",
  "serde_json",
+ "simple-json2",
  "sp-core",
  "sp-io",
  "sp-runtime",
@@ -5301,6 +5302,16 @@ dependencies = [
  "sp-core",
  "sp-io",
  "sp-runtime",
+]
+
+[[package]]
+name = "simple-json2"
+version = "0.1.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3a14b62d0ef4ae32d5c0ee1e5ff8068ac5f93a1717a50936721542c53a6a334d"
+dependencies = [
+ "num-traits 0.2.11",
+ "paste",
 ]
 
 [[package]]

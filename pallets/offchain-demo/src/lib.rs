@@ -8,7 +8,6 @@ mod tests;
 use frame_support::{
 	debug,
 	dispatch::DispatchResult, decl_module, decl_storage, decl_event, decl_error,
-	traits::Get,
 	weights::SimpleDispatchInfo,
 };
 
