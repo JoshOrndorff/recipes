@@ -8,7 +8,7 @@ use sc_service::{error::{Error as ServiceError}, AbstractService, Configuration,
 use sp_inherents::InherentDataProviders;
 use sc_executor::native_executor_instance;
 pub use sc_executor::NativeExecutor;
-use crate::pow::Sha3Algorithm;
+use sha3pow::Sha3Algorithm;
 use sc_network::{config::DummyFinalityProofRequestBuilder};
 
 // Our native executor instance.
@@ -53,7 +53,7 @@ macro_rules! new_full_start {
 				let pow_block_import = sc_consensus_pow::PowBlockImport::new(
 					client.clone(),
 					client.clone(),
-					crate::pow::Sha3Algorithm,
+					sha3pow::Sha3Algorithm,
 					0, // check inherents starting at block 0
 					select_chain,
 					inherent_data_providers.clone(),
@@ -61,7 +61,7 @@ macro_rules! new_full_start {
 
 				let import_queue = sc_consensus_pow::import_queue(
 					Box::new(pow_block_import.clone()),
-					crate::pow::Sha3Algorithm,
+					sha3pow::Sha3Algorithm,
 					inherent_data_providers.clone(),
 				)?;
 
@@ -154,7 +154,7 @@ pub fn new_light(config: Configuration)
 			let pow_block_import = sc_consensus_pow::PowBlockImport::new(
 				client.clone(),
 				client,
-				crate::pow::Sha3Algorithm,
+				sha3pow::Sha3Algorithm,
 				0, // check_inherents_after,
 				select_chain,
 				build_inherent_data_providers()?,
