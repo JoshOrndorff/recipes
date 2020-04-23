@@ -16,6 +16,7 @@ theme = "src/theme"
 
 [output.linkcheck]
 follow-web-links = true
+warning-policy = "warn"
 exclude = [
 	# A few one-off sites that load fine in browser but trip up the link checker with 404
 	"https://crates.io/",
