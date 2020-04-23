@@ -38,4 +38,5 @@ members = [
 	"nodes/hybrid-consensus",
 	"nodes/kitchen-node",
 	"nodes/rpc-node",
+	"consensus/sha3pow",
 ]
