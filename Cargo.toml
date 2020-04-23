@@ -35,6 +35,7 @@ members = [
 	"runtimes/super-runtime",
 	"runtimes/weight-fee-runtime",
 	"nodes/basic-pow",
+	"nodes/hybrid-consensus",
 	"nodes/kitchen-node",
 	"nodes/rpc-node",
 ]
