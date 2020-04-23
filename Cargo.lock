@@ -5344,6 +5344,7 @@ dependencies = [
  "sc-client-api",
  "sc-consensus-pow",
  "sha3",
+ "sp-api",
  "sp-blockchain",
  "sp-consensus-pow",
  "sp-core",

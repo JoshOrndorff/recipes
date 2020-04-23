@@ -9,7 +9,7 @@ use sc_service::{error::{Error as ServiceError}, AbstractService, Configuration,
 use sp_inherents::InherentDataProviders;
 use sc_executor::native_executor_instance;
 pub use sc_executor::NativeExecutor;
-use sha3pow::Sha3Algorithm;
+use sha3pow::MinimalSha3Algorithm;
 use sc_finality_grandpa::{
 	self,
 	FinalityProofProvider as GrandpaFinalityProofProvider,
@@ -68,7 +68,7 @@ macro_rules! new_full_start {
 				let pow_block_import = sc_consensus_pow::PowBlockImport::new(
 					grandpa_block_import,
 					client.clone(),
-					sha3pow::Sha3Algorithm,
+					sha3pow::MinimalSha3Algorithm,
 					0, // check inherents starting at block 0
 					Some(select_chain),
 					inherent_data_providers.clone(),
@@ -76,7 +76,7 @@ macro_rules! new_full_start {
 
 				let import_queue = sc_consensus_pow::import_queue(
 					Box::new(pow_block_import.clone()),
-					sha3pow::Sha3Algorithm,
+					sha3pow::MinimalSha3Algorithm,
 					inherent_data_providers.clone(),
 				)?;
 
@@ -127,7 +127,7 @@ pub fn new_full(config: Configuration)
 		sc_consensus_pow::start_mine(
 			Box::new(block_import),
 			client,
-			Sha3Algorithm,
+			MinimalSha3Algorithm,
 			proposer,
 			None, // TODO Do I need some grandpa preruntime digests?
 			500, // Rounds
@@ -225,7 +225,7 @@ pub fn new_light(config: Configuration)
 			let pow_block_import = sc_consensus_pow::PowBlockImport::new(
 				grandpa_block_import,
 				client.clone(),
-				sha3pow::Sha3Algorithm,
+				MinimalSha3Algorithm,
 				0, // check inherents starting at block 0
 				select_chain,
 				inherent_data_providers.clone(),
@@ -233,7 +233,7 @@ pub fn new_light(config: Configuration)
 
 			let import_queue = sc_consensus_pow::import_queue(
 				Box::new(pow_block_import.clone()),
-				sha3pow::Sha3Algorithm,
+				MinimalSha3Algorithm,
 				inherent_data_providers.clone(),
 			)?;
 
