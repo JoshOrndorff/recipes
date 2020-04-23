@@ -62,14 +62,9 @@ macro_rules! new_full_start {
 						client.clone(), &(client.clone() as std::sync::Arc<_>), select_chain.clone()
 					)?;
 
-				//TODO do I need this justification import?
+				//TODO do I need this justification import? Seems to work without it.
 				// let justification_import = grandpa_block_import.clone();
 
-				// let (babe_block_import, babe_link) = sc_consensus_babe::block_import(
-				// 	sc_consensus_babe::Config::get_or_compute(&*client)?,
-				// 	grandpa_block_import,
-				// 	client.clone(),
-				// )?;
 				let pow_block_import = sc_consensus_pow::PowBlockImport::new(
 					grandpa_block_import,
 					client.clone(),
@@ -78,15 +73,6 @@ macro_rules! new_full_start {
 					Some(select_chain),
 					inherent_data_providers.clone(),
 				);
-
-				// let import_queue = sc_consensus_babe::import_queue(
-				// 	babe_link.clone(),
-				// 	babe_block_import.clone(),
-				// 	Some(Box::new(justification_import)),
-				// 	None,
-				// 	client,
-				// 	inherent_data_providers.clone(),
-				// )?;
 
 				let import_queue = sc_consensus_pow::import_queue(
 					Box::new(pow_block_import.clone()),
@@ -137,22 +123,6 @@ pub fn new_full(config: Configuration)
 
 		let can_author_with =
 				sp_consensus::CanAuthorWithNativeVersion::new(client.executor().clone());
-
-		// let babe_config = sc_consensus_babe::BabeParams {
-		// 	keystore: service.keystore(),
-		// 	client,
-		// 	select_chain,
-		// 	env: proposer,
-		// 	block_import,
-		// 	sync_oracle: service.network(),
-		// 	inherent_data_providers: inherent_data_providers.clone(),
-		// 	force_authoring,
-		// 	babe_link,
-		// 	can_author_with,
-		// };
-		//
-		// let babe = sc_consensus_babe::start_babe(babe_config)?;
-		// service.spawn_essential_task("babe", babe);
 
 		sc_consensus_pow::start_mine(
 			Box::new(block_import),
@@ -251,21 +221,6 @@ pub fn new_light(config: Configuration)
 			let finality_proof_import = grandpa_block_import.clone();
 			let finality_proof_request_builder =
 				finality_proof_import.create_finality_proof_request_builder();
-
-			// let (babe_block_import, babe_link) = sc_consensus_babe::block_import(
-			// 	sc_consensus_babe::Config::get_or_compute(&*client)?,
-			// 	grandpa_block_import,
-			// 	client.clone(),
-			// )?;
-			//
-			// let import_queue = sc_consensus_babe::import_queue(
-			// 	babe_link,
-			// 	babe_block_import,
-			// 	None,
-			// 	Some(Box::new(finality_proof_import)),
-			// 	client.clone(),
-			// 	inherent_data_providers.clone(),
-			// )?;
 
 			let pow_block_import = sc_consensus_pow::PowBlockImport::new(
 				grandpa_block_import,
