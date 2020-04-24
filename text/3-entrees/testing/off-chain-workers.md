@@ -1,6 +1,6 @@
 # Off-chain Worker Test Environment
 
-Learn more about how to set up and use offchain-workers in the [offchain-demo entree](../off-chain-workers.md).
+Learn more about how to set up and use offchain-workers in the [offchain-demo entree](/3-entrees/off-chain-workers/index.md).
 
 ## Mock Runtime Setup
 

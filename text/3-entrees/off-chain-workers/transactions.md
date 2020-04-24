@@ -1,7 +1,20 @@
-# Off-chain Workers
+# Transactions in Off-chain Workers
+
 *[`pallets/offchain-demo`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo)*
 
-Before learning how to build your own off-chain worker in Substrate, you may want to learn about what off-chain workers are, why you want to use them, and what kinds of problems they solve best. These topics are covered in [our guide](https://substrate.dev/docs/en/conceptual/core/off-chain-workers). Here, we will focus on implementing an off-chain worker in Substrate.
+## Compiling Kitchen Node with Off-chain Worker Feature
+
+You can compile the `kitchen-node` with `ocw` feature on to see off-chain workers in work.
+
+First, set in `<recipes-dir>/nodes/kitchen-node/Cargo.toml` to use `ocw-runtime` instead of the default `super-runtime`.
+
+Second, compile kitchen-node with `ocw` feature on.
+
+```bash
+cd <recipes-dir>/nodes/kitchen-node
+cargo build --release --features ocw
+```
+
 
 ## Life-cycle of Off-chain Worker
 
@@ -321,7 +334,7 @@ As in signed transactions, we prepare a function reference with its parameters a
 
 ## Testing
 
-For writing test cases for off-chain worker, refer to our [testing section](./testing/off-chain-workers.md).
+For writing test cases for off-chain worker, refer to our [testing section](/3-entrees/testing/off-chain-workers.md).
 
 ## Compiling this Pallet
 
