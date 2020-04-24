@@ -108,7 +108,6 @@ pub fn new_full(config: Configuration, instant_seal: bool) -> Result<impl Abstra
 		future
 	);
 
-
 	Ok(service)
 }
 

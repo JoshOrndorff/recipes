@@ -84,7 +84,7 @@ As prep work, we make a type alias,
 type RpcExtension = jsonrpc_core::IoHandler<sc_rpc::Metadata>;
 ```
 
-Then we being the wiring. The very first task is to check whether we're running in instant seal mode or manual seal mode. If it is instant seal mode, then no RPC extensions are necessary.
+Then we implement the wiring. The very first task is to check whether we're running in instant seal mode or manual seal mode. If it is instant seal mode, then no RPC extensions are necessary.
 
 ```rust, ignore
 // channel for the rpc handler to communicate with the authorship task.
@@ -112,7 +112,7 @@ The command stream created at the beginning is the means by which the RPC handle
 
 ### The Authorship Task
 
-As with every authoring engine, manual and instant seal need to be run as async authoring tasks. Again we being by checking whether this is manual or instant seal mode and create the correct kind of future. Creating the two authorship tasks is nearly identical. The only difference is that the manual seal task requires the command stream we created earlier.
+As with every authoring engine, manual and instant seal need to be run as async authoring tasks. Again we check whether this is in manual or instant seal mode and create the correct kind of future. Creating the two authorship tasks is nearly identical. The only difference is that the manual seal task requires the command stream we created earlier.
 
 ```rust, ignore
 // Background authorship future.
