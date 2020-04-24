@@ -8,7 +8,6 @@ mod tests;
 use frame_support::{
 	debug,
 	dispatch::DispatchResult, decl_module, decl_storage, decl_event, decl_error,
-	traits::Get,
 	weights::SimpleDispatchInfo,
 };
 
@@ -17,11 +16,18 @@ use core::convert::{TryInto};
 use frame_system::{self as system, ensure_signed, ensure_none, offchain};
 use sp_core::crypto::KeyTypeId;
 use sp_runtime::{
+	offchain as rt_offchain,
 	transaction_validity::{
 		InvalidTransaction, ValidTransaction, TransactionValidity, TransactionSource
 	},
 };
 use sp_std::prelude::*;
+use sp_std::str as str;
+
+// Because we are parsing json in a `no_std` env, we cannot use `serde_json` library.
+//   `simple_json2` is a small tool written by our community member to handle json parsing in
+//   no_std env.
+use simple_json2::{ json::{ JsonObject, JsonValue }, parse_json };
 
 /// Defines application identifier for crypto keys of this module.
 ///
@@ -32,6 +38,10 @@ use sp_std::prelude::*;
 /// The keys can be inserted manually via RPC (see `author_insertKey`).
 pub const KEY_TYPE: KeyTypeId = KeyTypeId(*b"demo");
 pub const NUM_VEC_LEN: usize = 10;
+
+// We are fetching information from github public API about organisation `substrate-developer-hub`.
+pub const HTTP_REMOTE_REQUEST_BYTES: &[u8] = b"https://api.github.com/orgs/substrate-developer-hub";
+pub const HTTP_HEADER_USER_AGENT: &[u8] = b"jimmychu0807";
 
 /// Based on the above `KeyTypeId` we need to generate a pallet-specific crypto type wrappers.
 /// We can use from supported crypto kinds (`sr25519`, `ed25519` and `ecdsa`) and augment
@@ -52,15 +62,14 @@ pub trait Trait: system::Trait {
 	type SubmitSignedTransaction: offchain::SubmitSignedTransaction<Self, <Self as Trait>::Call>;
 	/// The type to submit unsigned transactions.
 	type SubmitUnsignedTransaction: offchain::SubmitUnsignedTransaction<Self, <Self as Trait>::Call>;
-	/// The period (specified in block time) during which new numbers will not be submitted
-	type GracePeriod: Get<Self::BlockNumber>;
 }
 
 // Custom data type
 #[derive(Debug)]
 enum TransactionType {
-	Signed,
-	Unsigned,
+	SignedSubmitNumber,
+	UnsignedSubmitNumber,
+	HttpFetching,
 	None,
 }
 
@@ -68,10 +77,6 @@ decl_storage! {
 	trait Store for Module<T: Trait> as Example {
 		/// A vector of recently submitted numbers. Should be bounded
 		Numbers get(fn numbers): Vec<u64>;
-		/// Defines the block when next off-chain transaction will be accepted.
-		NextTx get(fn next_tx): T::BlockNumber;
-		/// How many transactions have been submitted by the offchain worker so far.
-		AddSeq get(fn add_seq): u32;
 	}
 }
 
@@ -86,9 +91,11 @@ decl_event!(
 decl_error! {
 	pub enum Error for Module<T: Trait> {
 		// Error returned when making signed transactions in off-chain worker
-		SendSignedError,
+		SignedSubmitNumberError,
 		// Error returned when making unsigned transactions in off-chain worker
-		SendUnsignedError,
+		UnsignedSubmitNumberError,
+		HttpFetchingError,
+		JsonParsingError,
 	}
 }
 
@@ -113,13 +120,14 @@ decl_module! {
 		fn offchain_worker(block_number: T::BlockNumber) {
 			debug::info!("Entering off-chain workers");
 
-			let res = match Self::choose_tx_type(block_number) {
-				TransactionType::Signed => Self::send_signed(block_number),
-				TransactionType::Unsigned => Self::send_unsigned(block_number),
+			let result = match Self::choose_tx_type(block_number) {
+				TransactionType::SignedSubmitNumber => Self::signed_submit_number(block_number),
+				TransactionType::UnsignedSubmitNumber => Self::unsigned_submit_number(block_number),
+				TransactionType::HttpFetching => Self::fetch_n_parse(block_number),
 				TransactionType::None => Ok(())
 			};
 
-			if let Err(e) = res { debug::error!("Error: {:?}", e); }
+			if let Err(e) = result { debug::error!("Error: {:?}", e); }
 		}
 	}
 }
@@ -127,24 +135,24 @@ decl_module! {
 impl<T: Trait> Module<T> {
 	/// Add a new number to the list.
 	fn append_or_replace_number(who: Option<T::AccountId>, number: u64) -> DispatchResult {
-		let current_seq = Self::add_seq();
 		Numbers::mutate(|numbers| {
 			// The append or replace logic. The `numbers` vector is at most `NUM_VEC_LEN` long.
-			if (current_seq as usize) < NUM_VEC_LEN {
+			let num_len = numbers.len();
+
+			if num_len < NUM_VEC_LEN {
 				numbers.push(number);
 			} else {
-				numbers[current_seq as usize % NUM_VEC_LEN] = number;
+				numbers[num_len % NUM_VEC_LEN] = number;
 			}
 
 			// displaying the average
-			let average = numbers.iter().fold(0, {|acc, num| acc + num}) / (numbers.len() as u64);
+			let average = match num_len {
+				0 => 0,
+				_ => numbers.iter().fold(0, {|acc, num| acc + num}) / (num_len as u64),
+			};
+
 			debug::info!("Current average of numbers is: {}", average);
 		});
-
-
-		// Update the storage & seq for next update block
-		<NextTx<T>>::mutate(|block| *block += T::GracePeriod::get());
-		<AddSeq>::mutate(|seq| *seq += 1);
 
 		// Raise the NewNumber event
 		Self::deposit_event(RawEvent::NewNumber(who, number));
@@ -152,22 +160,113 @@ impl<T: Trait> Module<T> {
 	}
 
 	fn choose_tx_type(block_number: T::BlockNumber) -> TransactionType {
-		let next_tx = Self::next_tx();
-		// Do not perform transaction if still within grace period
-		if next_tx > block_number { return TransactionType::None; }
-
-		if Self::add_seq() % 2 == 0 {
-			TransactionType::Signed
-		} else {
-			TransactionType::Unsigned
+		// Decide what type of transaction to submit based on block number.
+		// Each block the offchain worker will submit one type of transaction back to the chain.
+		// First a signed transaction, then an unsigned transaction, then an http fetch and json parsing.
+		match block_number.try_into().ok().unwrap() % 3 {
+			0 => TransactionType::SignedSubmitNumber,
+			1 => TransactionType::UnsignedSubmitNumber,
+			2 => TransactionType::HttpFetching,
+			_ => TransactionType::None,
 		}
 	}
 
-	fn send_signed(block_number: T::BlockNumber) -> Result<(), Error<T>> {
-		use system::offchain::SubmitSignedTransaction;
+	fn fetch_n_parse(_block_number: T::BlockNumber) -> Result<(), Error<T>> {
+		let resp_bytes = Self::fetch_from_remote()
+			.map_err(|e| {
+				debug::error!("fetch_from_remote error: {:?}", e);
+				<Error<T>>::HttpFetchingError
+			})?;
+
+		let resp_str = str::from_utf8(&resp_bytes)
+			.map_err(|_| <Error<T>>::HttpFetchingError)?;
+
+		// The json shape is as follow.
+		// {
+		//   "login":"substrate-developer-hub",
+		//   "blog":"https://substrate.dev",
+		//   ...
+		// }
+		debug::info!("{}", resp_str);
+
+		let login_bytes = Self::parse_for_value(&resp_str, "login")?;
+		let blog_bytes = Self::parse_for_value(&resp_str, "blog")?;
+
+		debug::info!("login: {}", str::from_utf8(&login_bytes)
+			.map_err(|_| <Error<T>>::JsonParsingError)?);
+		debug::info!("blog: {}", str::from_utf8(&blog_bytes)
+			.map_err(|_| <Error<T>>::JsonParsingError)?);
+
+		Ok(())
+	}
+
+	fn fetch_from_remote() -> Result<Vec<u8>, Error<T>> {
+		let remote_url_bytes = HTTP_REMOTE_REQUEST_BYTES.to_vec();
+		let user_agent = HTTP_HEADER_USER_AGENT.to_vec();
+		let remote_url = str::from_utf8(&remote_url_bytes)
+			.map_err(|_| <Error<T>>::HttpFetchingError)?;
+
+		debug::info!("sending request to: {}", remote_url);
+
+		// Initiate an external HTTP GET request. This is using high-level wrappers from `sp_runtime`.
+		let request = rt_offchain::http::Request::get(remote_url);
+
+		// Keeping the offchain worker execution time reasonable, so limiting the call to be within 3s.
+		let timeout = sp_io::offchain::timestamp().add(rt_offchain::Duration::from_millis(3000));
+
+		// For github API request, we also need to specify `user-agent` in http request header.
+		//   See: https://developer.github.com/v3/#user-agent-required
+		let pending = request
+			.add_header("User-Agent", str::from_utf8(&user_agent)
+				.map_err(|_| <Error<T>>::HttpFetchingError)?)
+			.deadline(timeout) // Setting the timeout time
+			.send() // Sending the request out by the host
+			.map_err(|_| <Error<T>>::HttpFetchingError)?;
+
+		// By default, the http request is async from the runtime perspective. So we are asking the
+		//   runtime to wait here.
+		// The returning value here is a `Result` of `Result`, so we are unwrapping it twice by two `?`
+		//   ref: https://substrate.dev/rustdocs/master/sp_runtime/offchain/http/struct.PendingRequest.html#method.try_wait
+		let response = pending.try_wait(timeout)
+			.map_err(|_| <Error<T>>::HttpFetchingError)?
+			.map_err(|_| <Error<T>>::HttpFetchingError)?;
+
+		if response.code != 200 {
+			debug::error!("Unexpected http request status code: {}", response.code);
+			return Err(<Error<T>>::HttpFetchingError);
+		}
+
+		// Next we fully read the response body and collect it to a vector of bytes.
+		Ok(response.body().collect::<Vec<u8>>())
+	}
+
+	fn parse_for_value(json_str: &str, key: &str) -> Result<Vec<u8>, Error<T>> {
+		// Parse the whole string into a Json object
+		let json: JsonValue = parse_json(&json_str)
+			.map_err(|_| <Error<T>>::JsonParsingError)?;
+		let json_obj: &JsonObject = json.get_object()
+			.map_err(|_| <Error<T>>::JsonParsingError)?;
+
+		// We iterate through the key and retrieve the (key, value) pair that match the `key`
+		//   parameter.
+		// `key_val.0` contains the key and `key_val.1` contains the value.
+		let key_val = json_obj
+			.iter()
+			.find(|(k, _)| *k == key.chars().collect::<Vec<char>>())
+			.ok_or(<Error<T>>::JsonParsingError)?;
+
+		// We assume the value is a string, so we use `get_bytes()` to collect them back.
+		//   In a real app, you may need to catch the error and further process it if the value is not
+		//   a string.
+		key_val.1.get_bytes()
+			.map_err(|_| <Error<T>>::JsonParsingError)
+	}
+
+	fn signed_submit_number(block_number: T::BlockNumber) -> Result<(), Error<T>> {
+		use offchain::SubmitSignedTransaction;
 		if !T::SubmitSignedTransaction::can_sign() {
 			debug::error!("No local account available");
-			return Err(<Error<T>>::SendSignedError);
+			return Err(<Error<T>>::SignedSubmitNumberError);
 		}
 
 		// We are just submitting the current block number back on-chain
@@ -183,16 +282,16 @@ impl<T: Trait> Module<T> {
 			match res {
 				Ok(()) => { debug::native::info!("off-chain send_signed: acc: {}| number: {}", _acc, submission); },
 				Err(e) => {
-					debug::error!("[{:?}] Failed to submit signed tx: {:?}", _acc, e);
-					return Err(<Error<T>>::SendSignedError);
+					debug::error!("[{:?}] Failed in signed_submit_number: {:?}", _acc, e);
+					return Err(<Error<T>>::SignedSubmitNumberError);
 				}
 			};
 		}
 		Ok(())
 	}
 
-	fn send_unsigned(block_number: T::BlockNumber) -> Result<(), Error<T>> {
-		use system::offchain::SubmitUnsignedTransaction;
+	fn unsigned_submit_number(block_number: T::BlockNumber) -> Result<(), Error<T>> {
+		use offchain::SubmitUnsignedTransaction;
 
 		let submission: u64 = block_number.try_into().ok().unwrap() as u64;
 		// Submitting the current block number back on-chain.
@@ -204,8 +303,8 @@ impl<T: Trait> Module<T> {
 		let call = Call::submit_number_unsigned(block_number, submission);
 
 		T::SubmitUnsignedTransaction::submit_unsigned(call).map_err(|e| {
-			debug::error!("Failed to submit unsigned tx: {:?}", e);
-			<Error<T>>::SendUnsignedError
+			debug::error!("Failed in unsigned_submit_number: {:?}", e);
+			<Error<T>>::UnsignedSubmitNumberError
 		})
 	}
 }

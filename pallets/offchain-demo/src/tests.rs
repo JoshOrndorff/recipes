@@ -77,14 +77,9 @@ type SubmitTransaction = system::offchain::TransactionSubmitter<
 	TestExtrinsic
 >;
 
-parameter_types! {
-	pub const GracePeriod: u64 = 2;
-}
-
 impl Trait for TestRuntime {
 	type Call = Call<TestRuntime>;
 	type Event = TestEvent;
-	type GracePeriod = GracePeriod;
 	type SubmitSignedTransaction = SubmitTransaction;
 	type SubmitUnsignedTransaction = SubmitTransaction;
 }
@@ -143,10 +138,6 @@ fn submit_number_signed_works() {
 		assert_ok!(OffchainDemo::submit_number_signed(Origin::signed(acct), num));
 		// A number is inserted to <Numbers> vec
 		assert_eq!(<Numbers>::get(), vec![num]);
-		// storage <NextTx> is incremented
-		assert_eq!(<NextTx<TestRuntime>>::get(), <TestRuntime as Trait>::GracePeriod::get());
-		// AddSeq is incremented
-		assert_eq!(<AddSeq>::get(), 1);
 		// An event is emitted
 		assert!(System::events().iter().any(|er| er.event ==
 			TestEvent::offchain_demo(RawEvent::NewNumber(Some(acct), num))));
@@ -156,10 +147,6 @@ fn submit_number_signed_works() {
 		assert_ok!(OffchainDemo::submit_number_signed(Origin::signed(acct), num2));
 		// A number is inserted to <Numbers> vec
 		assert_eq!(<Numbers>::get(), vec![num, num2]);
-		// storage <NextTx> is incremented
-		assert_eq!(<NextTx<TestRuntime>>::get(), <TestRuntime as Trait>::GracePeriod::get() * 2);
-		// AddSeq is incremented
-		assert_eq!(<AddSeq>::get(), 2);
 	});
 }
 
@@ -170,7 +157,7 @@ fn offchain_send_signed_tx() {
 	t.execute_with(|| {
 		// when
 		let num = 32;
-		OffchainDemo::send_signed(num).unwrap();
+		OffchainDemo::signed_submit_number(num).unwrap();
 		// then
 		let tx = pool_state.write().transactions.pop().unwrap();
 		assert!(pool_state.read().transactions.is_empty());
@@ -187,7 +174,7 @@ fn offchain_send_unsigned_tx() {
 	t.execute_with(|| {
 		// when
 		let num = 32;
-		OffchainDemo::send_unsigned(num).unwrap();
+		OffchainDemo::unsigned_submit_number(num).unwrap();
 		// then
 		let tx = pool_state.write().transactions.pop().unwrap();
 		assert!(pool_state.read().transactions.is_empty());

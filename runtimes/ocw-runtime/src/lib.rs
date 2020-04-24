@@ -248,11 +248,6 @@ impl pallet_sudo::Trait for Runtime {
 // ---------------------- Recipe Pallet Configurations ----------------------
 
 // For `offchain-demo` pallet
-
-parameter_types! {
-	pub const GracePeriod: BlockNumber = 2;
-}
-
 type SubmitTransaction = frame_system::offchain::TransactionSubmitter<
 	offchain_demo::crypto::Public,
 	Runtime,
@@ -268,7 +263,6 @@ impl offchain_demo::Trait for Runtime {
 	type Event = Event;
 	type SubmitSignedTransaction = SubmitTransaction;
 	type SubmitUnsignedTransaction = SubmitTransaction;
-	type GracePeriod = GracePeriod;
 }
 
 impl frame_system::offchain::CreateTransaction<Runtime, UncheckedExtrinsic> for Runtime {
