@@ -1,0 +1,356 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>HTTP Fetching &amp; JSON Parsing - Substrate Recipes</title>
+        
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="A Hands-On Cookbook for Aspiring Blockchain Chefs">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "light" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div id="sidebar-scrollbox" class="sidebar-scrollbox">
+                <ol class="chapter"><li class="expanded affix "><a href="../../introduction.html">Introduction</a></li><li class="expanded "><a href="../../1-prepare-kitchen/index.html"><strong aria-hidden="true">1.</strong> Preparing Your Kitchen</a></li><li><ol class="section"><li class="expanded "><a href="../../1-prepare-kitchen/1-build-node.html"><strong aria-hidden="true">1.1.</strong> Building A Node</a></li><li class="expanded "><a href="../../1-prepare-kitchen/2-interact-node.html"><strong aria-hidden="true">1.2.</strong> Interacting with a Node</a></li><li class="expanded "><a href="../../1-prepare-kitchen/3-kitchen-organization.html"><strong aria-hidden="true">1.3.</strong> Kitchen Organization</a></li></ol></li><li class="expanded "><a href="../../2-appetizers/index.html"><strong aria-hidden="true">2.</strong> Appetizers</a></li><li><ol class="section"><li class="expanded "><a href="../../2-appetizers/1-hello-substrate.html"><strong aria-hidden="true">2.1.</strong> Hello Substrate</a></li><li class="expanded "><a href="../../2-appetizers/2-storage-values.html"><strong aria-hidden="true">2.2.</strong> Single Value Storage</a></li><li class="expanded "><a href="../../2-appetizers/3-errors.html"><strong aria-hidden="true">2.3.</strong> Handling Errors</a></li><li class="expanded "><a href="../../2-appetizers/4-events.html"><strong aria-hidden="true">2.4.</strong> Events Verify Execution</a></li></ol></li><li class="expanded "><a href="../../3-entrees/index.html"><strong aria-hidden="true">3.</strong> Entrees</a></li><li><ol class="section"><li class="expanded "><a href="../../3-entrees/storage-api/index.html"><strong aria-hidden="true">3.1.</strong> Runtime Storage API</a></li><li><ol class="section"><li class="expanded "><a href="../../3-entrees/storage-api/storage-maps.html"><strong aria-hidden="true">3.1.1.</strong> Storage Maps</a></li><li class="expanded "><a href="../../3-entrees/storage-api/cache.html"><strong aria-hidden="true">3.1.2.</strong> Cache Locally &gt; Storage Calls</a></li><li class="expanded "><a href="../../3-entrees/storage-api/sets-vecs-iteration.html"><strong aria-hidden="true">3.1.3.</strong> Sets, Vectors, Iteration</a></li><li class="expanded "><a href="../../3-entrees/storage-api/double.html"><strong aria-hidden="true">3.1.4.</strong> Subgroup Removal by Subkey: Double Maps</a></li><li class="expanded "><a href="../../3-entrees/storage-api/childtries.html"><strong aria-hidden="true">3.1.5.</strong> Efficient Subgroup Removal by Subkey: Child Tries</a></li><li class="expanded "><a href="../../3-entrees/storage-api/structs.html"><strong aria-hidden="true">3.1.6.</strong> Storing custom structs</a></li><li class="expanded "><a href="../../3-entrees/storage-api/ringbuffer.html"><strong aria-hidden="true">3.1.7.</strong> Ringbuffer Queue</a></li></ol></li><li class="expanded "><a href="../../3-entrees/basic-token.html"><strong aria-hidden="true">3.2.</strong> Basic Token</a></li><li class="expanded "><a href="../../3-entrees/constants.html"><strong aria-hidden="true">3.3.</strong> Configurable Constants</a></li><li class="expanded "><a href="../../3-entrees/instantiable.html"><strong aria-hidden="true">3.4.</strong> Instantiable Pallets</a></li><li class="expanded "><a href="../../3-entrees/weights.html"><strong aria-hidden="true">3.5.</strong> Weights for Resource Accounting</a></li><li class="expanded "><a href="../../3-entrees/fees.html"><strong aria-hidden="true">3.6.</strong> Transaction Fees for Economic Security</a></li><li class="expanded "><a href="../../3-entrees/charity.html"><strong aria-hidden="true">3.7.</strong> Charity and Imbalances</a></li><li class="expanded "><a href="../../3-entrees/fixed-point.html"><strong aria-hidden="true">3.8.</strong> Fixed Point Arithmetic</a></li><li class="expanded "><a href="../../3-entrees/off-chain-workers/index.html"><strong aria-hidden="true">3.9.</strong> Off-chain Workers</a></li><li><ol class="section"><li class="expanded "><a href="../../3-entrees/off-chain-workers/transactions.html"><strong aria-hidden="true">3.9.1.</strong> Transactions</a></li><li class="expanded "><a href="../../3-entrees/off-chain-workers/http-json.html" class="active"><strong aria-hidden="true">3.9.2.</strong> HTTP Fetching &amp; JSON Parsing</a></li></ol></li><li class="expanded "><a href="../../3-entrees/runtime-api.html"><strong aria-hidden="true">3.10.</strong> Runtime APIs</a></li><li class="expanded "><a href="../../3-entrees/custom-rpc.html"><strong aria-hidden="true">3.11.</strong> Custom RPCs</a></li><li class="expanded "><a href="../../3-entrees/basic-pow.html"><strong aria-hidden="true">3.12.</strong> Basic Proof of Work</a></li><li class="expanded "><a href="../../3-entrees/currency.html"><strong aria-hidden="true">3.13.</strong> Currency Types</a></li><li class="expanded "><a href="../../3-entrees/randomness.html"><strong aria-hidden="true">3.14.</strong> Generating Randomness</a></li><li class="expanded "><a href="../../3-entrees/execution-schedule.html"><strong aria-hidden="true">3.15.</strong> Execution Schedule</a></li><li class="expanded "><a href="../../3-entrees/permissioned-methods.html"><strong aria-hidden="true">3.16.</strong> Permissioned Methods</a></li><li class="expanded "><a href="../../3-entrees/testing/index.html"><strong aria-hidden="true">3.17.</strong> Testing</a></li><li><ol class="section"><li class="expanded "><a href="../../3-entrees/testing/mock.html"><strong aria-hidden="true">3.17.1.</strong> Basic Test Environments</a></li><li class="expanded "><a href="../../3-entrees/testing/common.html"><strong aria-hidden="true">3.17.2.</strong> Common Tests</a></li><li class="expanded "><a href="../../3-entrees/testing/off-chain-workers.html"><strong aria-hidden="true">3.17.3.</strong> Off-chain Worker Test Environment</a></li><li class="expanded "><a href="../../3-entrees/testing/externalities.html"><strong aria-hidden="true">3.17.4.</strong> Custom Test Environment</a></li></ol></li><li class="expanded "><a href="../../3-entrees/safemath.html"><strong aria-hidden="true">3.18.</strong> Safe Math</a></li><li class="spacer"></li></ol></li><li class="expanded "><a href="../../more-resources.html">More Resources</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div id="menu-bar-sticky-container">
+                        <div class="left-buttons">
+                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                                <i class="fa fa-paint-brush"></i>
+                            </button>
+                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                                <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            </ul>
+                            
+                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            
+                        </div>
+
+                        <h1 class="menu-title">Substrate Recipes</h1>
+
+                        <div class="right-buttons">
+                            <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                                <i id="print-button" class="fa fa-print"></i>
+                            </a>
+                            
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#http-fetching-and-json-parsing-in-off-chain-workers" id="http-fetching-and-json-parsing-in-off-chain-workers">HTTP Fetching and JSON Parsing in Off-chain Workers</a></h1>
+<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo"><code>pallets/offchain-demo</code></a></em></p>
+<h2><a class="header" href="#http-fetching" id="http-fetching">HTTP Fetching</a></h2>
+<p>In traditional web app, it is often necessary to communicate with third-party APIs to fetch data that the app itself does not contains. But this becomes tricky in blockchain decentralized apps because HTTP requests are indeterministic. There are uncertainty in terms of whether the HTTP request will come back, how long it takes, and if the result stays the same when the result is being validated by another node at a future point.</p>
+<p>In Substrate, we solve this problem by using off-chain workers to issue HTTP requests and get the result back.</p>
+<p>In <code>pallets/offchain-demo/src/lib.rs</code>, we have an example of fetching information of github organization <code>substrate-developer-hub</code> via <a href="https://api.github.com/orgs/substrate-developer-hub">its public API</a>. Then we extract the <code>login</code> and <code>blog</code> value out.</p>
+<p>First, include the tools implemented in <code>sp_runtime::offchain</code> at the top.</p>
+<pre><pre class="playpen"><code class="language-rust">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span>use sp_runtime::{
+	offchain as rt_offchain
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>We then issue http requests inside the <code>fetch_from_remote()</code> function.</p>
+<pre><pre class="playpen"><code class="language-rust">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span>// Initiate an external HTTP GET request. This is using high-level wrappers from `sp_runtime`.
+let remote_url = str::from_utf8(&amp;remote_url_bytes)
+	.map_err(|_| &lt;Error&lt;T&gt;&gt;::HttpFetchingError)?;
+
+let request = rt_offchain::http::Request::get(remote_url);
+<span class="boring">}
+</span></code></pre></pre>
+<p>We should also set a timeout period so the http request does not hold indefinitely. For github API usage, we also need to add extra HTTP header information to it. This is how we do it.</p>
+<pre><pre class="playpen"><code class="language-rust">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span>// Keeping the offchain worker execution time reasonable, so limiting the call to be within 3s.
+//   `sp_io` pallet offers a timestamp() to get the current timestamp from off-chain perspective.
+let timeout = sp_io::offchain::timestamp().add(rt_offchain::Duration::from_millis(3000));
+
+// For github API request, we also need to specify `user-agent` in http request header.
+//   See: https://developer.github.com/v3/#user-agent-required
+let pending = request
+	.add_header(&quot;User-Agent&quot;, str::from_utf8(&amp;user_agent)
+		.map_err(|_| &lt;Error&lt;T&gt;&gt;::HttpFetchingError)?)
+	.deadline(timeout) // Setting the timeout time
+	.send() // Sending the request out by the host
+	.map_err(|_| &lt;Error&lt;T&gt;&gt;::HttpFetchingError)?; // Here we capture and return any http error.
+<span class="boring">}
+</span></code></pre></pre>
+<p>HTTP requests from off-chain worker are fetched asynchronously. Here we use <code>try_wait()</code> to wait for the result to come back, and terminate and return if any errors occured.</p>
+<p>Then, We check for the response status code to ensure it is okay with HTTP status code equals to 200. Any status code that is non-200 is regarded as error and return.</p>
+<pre><pre class="playpen"><code class="language-rust">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span>let response = pending.try_wait(timeout)
+	.map_err(|_| &lt;Error&lt;T&gt;&gt;::HttpFetchingError)?
+	.map_err(|_| &lt;Error&lt;T&gt;&gt;::HttpFetchingError)?;
+
+if response.code != 200 {
+	debug::error!(&quot;Unexpected http request status code: {}&quot;, response.code);
+	return Err(&lt;Error&lt;T&gt;&gt;::HttpFetchingError);
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Finally, get the response back with <code>response.body()</code> iterator. Since we are in a <code>no_std</code> environment, we collect them back as a vector of bytes instead of a string and return.</p>
+<pre><pre class="playpen"><code class="language-rust">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span>Ok(response.body().collect::&lt;Vec&lt;u8&gt;&gt;())
+<span class="boring">}
+</span></code></pre></pre>
+<h2><a class="header" href="#json-parsing" id="json-parsing">JSON Parsing</a></h2>
+<p>We usually get JSON objects back when doing HTTP API requests. The next task is to parse the JSON object and fetch the required (key, value) pair out. This is demonstrated in the <code>parse_for_value</code> function.</p>
+<p>In Rust, <code>serde</code> and <code>serde-json</code> are the popular combo-package used for JSON parsing. But they only work in <code>std</code> environment, so we need to use something else. We have a neat community-written tool to parse JSON in a <code>no-std</code> environment, <a href="https://github.com/jimmychu0807/simple-json2"><code>simple_json2</code></a>.</p>
+<p>First, include the library at the top</p>
+<pre><pre class="playpen"><code class="language-rust">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span>use simple_json2::{ json::{ JsonObject, JsonValue }, parse_json };
+<span class="boring">}
+</span></code></pre></pre>
+<p>Then pass the whole JSON string to get a <code>JsonValue</code> out for further parsing.</p>
+<pre><pre class="playpen"><code class="language-rust">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span>let json: JsonValue = parse_json(&amp;json_str)
+<span class="boring">}
+</span></code></pre></pre>
+<p><code>JsonValue</code> is actually an enum object consists of the following:</p>
+<pre><pre class="playpen"><code class="language-rust">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span>#[derive(Debug, Clone, PartialEq)]
+pub enum JsonValue {
+	Object(JsonObject),
+	Array(Vec&lt;JsonValue&gt;),
+	String(Vec&lt;char&gt;),
+	Number(NumberValue),
+	Boolean(bool),
+	Null,
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>There are a few convenient methods to extract these inner values out from the enum, namely <code>get_object()</code>, <code>get_array()</code>, <code>get_string()</code>, etc. Details can be seen <a href="https://github.com/jimmychu0807/simple-json2/blob/master/src/json.rs#L214-L280">in the code</a>.</p>
+<p>To extract out the value of a particular key in the JSON, we first get the <code>JsonObject</code> out from <code>JsonValue</code>.</p>
+<pre><pre class="playpen"><code class="language-rust">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span>let json_obj: &amp;JsonObject = json.get_object()
+	.map_err(|_| &lt;Error&lt;T&gt;&gt;::JsonParsingError)?;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Then we look for the (<code>key</code>, <code>value</code>) pair that has the key matched with the one we are looking for.</p>
+<pre><pre class="playpen"><code class="language-rust">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span>// We iterate through the key and retrieve the (key, value) pair that match the `key`
+//   parameter.
+// `key_val.0` contains the key and `key_val.1` contains the value.
+let key_val = json_obj
+	.iter()
+	.find(|(k, _)| *k == key.chars().collect::&lt;Vec&lt;char&gt;&gt;())
+	.ok_or(&lt;Error&lt;T&gt;&gt;::JsonParsingError)?;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Finally, we return the second item in the tuple, which is the value we want, in bytes form.</p>
+<pre><pre class="playpen"><code class="language-rust">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span>// We assume the value is a string, so we use `get_bytes()` to collect them back.
+//   In a real app, you may need to catch the error and further process it if the value is not
+//   a string.
+key_val.1.get_bytes()
+	.map_err(|_| &lt;Error&lt;T&gt;&gt;::JsonParsingError)
+<span class="boring">}
+</span></code></pre></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="../../3-entrees/off-chain-workers/transactions.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="../../3-entrees/runtime-api.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a href="../../3-entrees/off-chain-workers/transactions.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="../../3-entrees/runtime-api.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+        
+        
+        <script type="text/javascript">
+            window.playpen_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="../../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="../../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+        <script type="text/javascript" src="../../.analytics/load.js"></script>
+        
+        <script type="text/javascript" src="../../.analytics/config.js"></script>
+        
+        <script type="text/javascript" src="../../.analytics/klaro.min.js"></script>
+        
+
+        
+
+    </body>
+</html>
