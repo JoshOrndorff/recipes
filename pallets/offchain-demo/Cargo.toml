@@ -12,6 +12,7 @@ codec = { package = "parity-scale-codec", version = "1.3.0", default-features = 
 parking_lot = "0.10.0"
 serde = { version = "1.0.101", optional = true }
 serde_json = { version = "1.0.46", default-features = false, features = ["alloc"] }
+simple-json2 = { version = "0.1.2", default-features = false }
 
 # Substrate dependencies
 frame-support = { package = "frame-support", default-features = false, version = '2.0.0-alpha.6' }
@@ -30,5 +31,6 @@ std = [
 	'frame-system/std',
 	'sp-io/std',
 	'sp-runtime/std',
-	'sp-std/std'
+	'sp-std/std',
+	'simple-json2/std',
 ]
