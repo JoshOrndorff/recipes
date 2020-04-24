@@ -1,0 +1,46 @@
+[package]
+authors = ['Seun LanLege', 'Joshy Orndorff']
+build = 'build.rs'
+edition = '2018'
+homepage = 'https://substrate.dev'
+name = 'manual-seal'
+repository = 'https://github.com/paritytech/substrate/'
+version = '2.0.0-alpha.6'
+description = 'A Substrate-based node that uses the instant-seal and manual-seal consensus engines'
+
+[[bin]]
+name = 'manual-seal'
+path = 'src/main.rs'
+
+[dependencies]
+futures = '0.3.1'
+log = '0.4.8'
+structopt = '0.3.8'
+parity-scale-codec = '1.3.0'
+sha3 = "0.8"
+rand = { version = "0.7", features = ["small_rng"] }
+jsonrpc-core = "14.0.5"
+
+sc-client-db = '0.8.0-alpha.6'
+sc-consensus-manual-seal = '0.8.0-alpha.6'
+sc-rpc = '2.0.0-alpha.6'
+sc-client-api = '2.0.0-alpha.6'
+sp-blockchain =  '2.0.0-alpha.6'
+runtime = { package = "pow-runtime", path = "../../runtimes/pow-runtime" }
+sp-timestamp = '2.0.0-alpha.6'
+sc-basic-authorship = '0.8.0-alpha.6'
+sc-cli = '0.8.0-alpha.6'
+sc-client = '0.8.0-alpha.6'
+sc-executor = '0.8.0-alpha.6'
+sc-network = '0.8.0-alpha.6'
+sc-service = '0.8.0-alpha.6'
+sc-transaction-pool = '2.0.0-alpha.6'
+sp-consensus = '0.8.0-alpha.6'
+sp-core = '2.0.0-alpha.6'
+sp-inherents = '2.0.0-alpha.6'
+sp-runtime = '2.0.0-alpha.6'
+sp-transaction-pool = '2.0.0-alpha.6'
+
+[build-dependencies]
+vergen = '3.0.4'
+substrate-build-script-utils = '2.0.0-alpha.6'

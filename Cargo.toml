@@ -36,5 +36,6 @@ members = [
 	"runtimes/weight-fee-runtime",
 	"nodes/basic-pow",
 	"nodes/kitchen-node",
+	"nodes/manual-seal",
 	"nodes/rpc-node",
 ]
