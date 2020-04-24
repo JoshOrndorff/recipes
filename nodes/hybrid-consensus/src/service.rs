@@ -50,9 +50,9 @@ macro_rules! new_full_start {
 			.with_select_chain(|_config, backend| {
 				Ok(sc_client::LongestChain::new(backend.clone()))
 			})?
-			.with_transaction_pool(|config, client, _fetcher| {
+			.with_transaction_pool(|config, client, _fetcher, prometheus_registry| {
 				let pool_api = sc_transaction_pool::FullChainApi::new(client.clone());
-				Ok(sc_transaction_pool::BasicPool::new(config, std::sync::Arc::new(pool_api)))
+				Ok(sc_transaction_pool::BasicPool::new(config, std::sync::Arc::new(pool_api), prometheus_registry))
 			})?
 			.with_import_queue(|_config, client, mut select_chain, _transaction_pool| {
 				let select_chain = select_chain.take()
@@ -63,7 +63,7 @@ macro_rules! new_full_start {
 					)?;
 
 				//TODO do I need this justification import? Seems to work without it.
-				// let justification_import = grandpa_block_import.clone();
+				let justification_import = grandpa_block_import.clone();
 
 				let pow_block_import = sc_consensus_pow::PowBlockImport::new(
 					grandpa_block_import,
@@ -76,6 +76,8 @@ macro_rules! new_full_start {
 
 				let import_queue = sc_consensus_pow::import_queue(
 					Box::new(pow_block_import.clone()),
+					Some(Box::new(justification_import)),
+					None, // TODO Okay, so do I need a finality proof import? What's the difference
 					sha3pow::MinimalSha3Algorithm,
 					inherent_data_providers.clone(),
 				)?;
@@ -201,12 +203,12 @@ pub fn new_light(config: Configuration)
 		.with_select_chain(|_config, backend| {
 			Ok(LongestChain::new(backend.clone()))
 		})?
-		.with_transaction_pool(|config, client, fetcher| {
+		.with_transaction_pool(|config, client, fetcher, prometheus_registry| {
 			let fetcher = fetcher
 				.ok_or_else(|| "Trying to start light transaction pool without active fetcher")?;
 			let pool_api = sc_transaction_pool::LightChainApi::new(client.clone(), fetcher.clone());
 			let pool = sc_transaction_pool::BasicPool::with_revalidation_type(
-				config, Arc::new(pool_api), sc_transaction_pool::RevalidationType::Light,
+				config, Arc::new(pool_api), prometheus_registry, sc_transaction_pool::RevalidationType::Light,
 			);
 			Ok(pool)
 		})?
@@ -233,6 +235,8 @@ pub fn new_light(config: Configuration)
 
 			let import_queue = sc_consensus_pow::import_queue(
 				Box::new(pow_block_import.clone()),
+				None, //TODO Should I do the justification import here like I did in new_full?
+				None, //TODO same question about finality proof import as in new_full
 				MinimalSha3Algorithm,
 				inherent_data_providers.clone(),
 			)?;

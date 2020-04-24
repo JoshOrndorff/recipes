@@ -11,8 +11,8 @@ description = 'Sha3-based Proof of Work algorithms for Substrate'
 parity-scale-codec = '1.3.0'
 sha3 = "0.8"
 rand = { version = "0.7", features = ["small_rng"] }
-sc-consensus-pow = '0.8.0-alpha.6'
-sp-api = '2.0.0-alpha.6'
-sp-consensus-pow = '0.8.0-alpha.6'
-sp-core = '2.0.0-alpha.6'
-sp-runtime = '2.0.0-alpha.6'
+sc-consensus-pow = { git = 'https://github.com/paritytech/substrate', branch = 'joshy-pow-import-justification' }
+sp-api = { git = 'https://github.com/paritytech/substrate', branch = 'joshy-pow-import-justification' }
+sp-consensus-pow = { git = 'https://github.com/paritytech/substrate', branch = 'joshy-pow-import-justification' }
+sp-core = { git = 'https://github.com/paritytech/substrate', branch = 'joshy-pow-import-justification' }
+sp-runtime = { git = 'https://github.com/paritytech/substrate', branch = 'joshy-pow-import-justification' }

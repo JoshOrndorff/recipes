@@ -22,25 +22,25 @@ tokio = "0.1.22"
 exit-future = "0.2.0"
 parking_lot = "0.9.0"
 trie-root = "0.15.2"
-sp-io = '2.0.0-alpha.6'
-sc-cli = '0.8.0-alpha.6'
-sc-client-api = '2.0.0-alpha.6'
-sp-core = '2.0.0-alpha.6'
-sp-runtime = '2.0.0-alpha.6'
-sc-executor = '0.8.0-alpha.6'
-sc-service = '0.8.0-alpha.6'
-sp-inherents = '2.0.0-alpha.6'
-sp-timestamp = '2.0.0-alpha.6'
-sc-transaction-pool = '2.0.0-alpha.6'
-sp-transaction-pool = '2.0.0-alpha.6'
-sc-network = '0.8.0-alpha.6'
-sc-finality-grandpa = '0.8.0-alpha.6'
-sp-finality-grandpa = '2.0.0-alpha.6'
-sc-client = '0.8.0-alpha.6'
-sc-basic-authorship = '0.8.0-alpha.6'
-sp-consensus = '0.8.0-alpha.6'
-sc-consensus-pow = { version = '0.8.0-alpha.6' }
-sp-consensus-pow = { version = '0.8.0-alpha.6' }
+sp-io = { git = 'https://github.com/paritytech/substrate', branch = 'joshy-pow-import-justification' }
+sc-cli = { git = 'https://github.com/paritytech/substrate', branch = 'joshy-pow-import-justification' }
+sc-client-api = { git = 'https://github.com/paritytech/substrate', branch = 'joshy-pow-import-justification' }
+sp-core = { git = 'https://github.com/paritytech/substrate', branch = 'joshy-pow-import-justification' }
+sp-runtime = { git = 'https://github.com/paritytech/substrate', branch = 'joshy-pow-import-justification' }
+sc-executor = { git = 'https://github.com/paritytech/substrate', branch = 'joshy-pow-import-justification' }
+sc-service = { git = 'https://github.com/paritytech/substrate', branch = 'joshy-pow-import-justification' }
+sp-inherents = { git = 'https://github.com/paritytech/substrate', branch = 'joshy-pow-import-justification' }
+sp-timestamp = { git = 'https://github.com/paritytech/substrate', branch = 'joshy-pow-import-justification' }
+sc-transaction-pool = { git = 'https://github.com/paritytech/substrate', branch = 'joshy-pow-import-justification' }
+sp-transaction-pool = { git = 'https://github.com/paritytech/substrate', branch = 'joshy-pow-import-justification' }
+sc-network = { git = 'https://github.com/paritytech/substrate', branch = 'joshy-pow-import-justification' }
+sc-finality-grandpa = { git = 'https://github.com/paritytech/substrate', branch = 'joshy-pow-import-justification' }
+sp-finality-grandpa = { git = 'https://github.com/paritytech/substrate', branch = 'joshy-pow-import-justification' }
+sc-client = { git = 'https://github.com/paritytech/substrate', branch = 'joshy-pow-import-justification' }
+sc-basic-authorship = { git = 'https://github.com/paritytech/substrate', branch = 'joshy-pow-import-justification' }
+sp-consensus = { git = 'https://github.com/paritytech/substrate', branch = 'joshy-pow-import-justification' }
+sc-consensus-pow = { git = 'https://github.com/paritytech/substrate', branch = 'joshy-pow-import-justification' }
+sp-consensus-pow = { git = 'https://github.com/paritytech/substrate', branch = 'joshy-pow-import-justification' }
 sha3pow = { path = '../../consensus/sha3pow' }
 
 runtime = { package = "minimal-grandpa-runtime", path = "../../runtimes/minimal-grandpa-runtime"}
@@ -48,4 +48,4 @@ runtime = { package = "minimal-grandpa-runtime", path = "../../runtimes/minimal-
 
 [build-dependencies]
 vergen = "3.0.4"
-substrate-build-script-utils = '2.0.0-alpha.6'
+substrate-build-script-utils = { git = 'https://github.com/paritytech/substrate', branch = 'joshy-pow-import-justification' }

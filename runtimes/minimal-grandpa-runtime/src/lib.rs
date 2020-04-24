@@ -33,7 +33,7 @@ use sp_runtime::traits::{
 };
 use frame_support::{
 	traits::Get,
-	weights::Weight,
+	weights::{Weight, RuntimeDbWeight},
 };
 use grandpa::{AuthorityId as GrandpaId, AuthorityWeight as GrandpaWeight};
 use sp_api::impl_runtime_apis;
@@ -46,8 +46,6 @@ use frame_system as system;
 // transaction_payment::Trait. Don't warn when they are unused.
 #[allow(unused_imports)]
 use sp_runtime::traits::ConvertInto;
-#[allow(unused_imports)]
-use generic_asset::{SpendingAssetCurrency, AssetCurrency, AssetIdProvider};
 
 // A few exports that help ease life for downstream crates.
 #[cfg(any(feature = "std", test))]
@@ -116,6 +114,7 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
 	spec_version: 1,
 	impl_version: 1,
 	apis: RUNTIME_API_VERSIONS,
+	transaction_version: 1,
 };
 
 /// The version infromation used to identify this runtime when compiled natively.
@@ -133,6 +132,10 @@ parameter_types! {
 	pub const AvailableBlockRatio: Perbill = Perbill::from_percent(75);
 	pub const MaximumBlockLength: u32 = 5 * 1024 * 1024;
 	pub const Version: RuntimeVersion = VERSION;
+	pub const DbWeight: RuntimeDbWeight = RuntimeDbWeight {
+		read: 60_000_000, // ~0.06 ms = ~60 µs
+		write: 200_000_000, // ~0.2 ms = 200 µs
+	};
 }
 
 impl system::Trait for Runtime {
@@ -160,6 +163,7 @@ impl system::Trait for Runtime {
 	type BlockHashCount = BlockHashCount;
 	/// Maximum weight of each block. With a default weight system of 1byte == 1weight, 4mb is ok.
 	type MaximumBlockWeight = MaximumBlockWeight;
+	type DbWeight = DbWeight;
 	/// Maximum size of all encoded transactions (in bytes) that are allowed in one block.
 	type MaximumBlockLength = MaximumBlockLength;
 	/// Portion of the block weight that is available to all normal transactions.
@@ -209,19 +213,10 @@ impl balances::Trait for Runtime {
 	type AccountStore = System;
 }
 
-impl generic_asset::Trait for Runtime {
-    /// The type for recording an account's balance.
-    type Balance = Balance;
-    type AssetId = u32;
-    type Event = Event;
-}
-
 impl sudo::Trait for Runtime {
 	type Event = Event;
 	type Call = Call;
 }
-
-impl weights::Trait for Runtime {}
 
 
 // --------------------- Multiple Options for WeightToFee -----------------------
@@ -264,17 +259,6 @@ impl<C0, C1, C2> Convert<Weight, Balance> for QuadraticWeightToFee<C0, C1, C2>
 	}
 }
 
-// --------------------- An Option to Currency to Collect Fees -----------------------
-#[allow(dead_code)]
-type FixedGenericAsset<T> = AssetCurrency<T, FixedAssetId>;
-
-pub struct FixedAssetId;
-impl AssetIdProvider for FixedAssetId {
-	type AssetId = u32;
-	fn asset_id() -> Self::AssetId {
-		13
-	}
-}
 
 parameter_types! {
 	// Used with LinearWeightToFee conversion. Leaving this constant in tact when using other
@@ -334,12 +318,9 @@ construct_runtime!(
 		Timestamp: timestamp::{Module, Call, Storage, Inherent},
 		Grandpa: grandpa::{Module, Call, Storage, Config, Event},
 		Balances: balances::{Module, Call, Storage, Config<T>, Event<T>},
-		GenericAsset: generic_asset::{Module, Call, Storage, Config<T>, Event<T>},
 		RandomnessCollectiveFlip: randomness_collective_flip::{Module, Call, Storage},
 		Sudo: sudo::{Module, Call, Config<T>, Storage, Event<T>},
 		TransactionPayment: transaction_payment::{Module, Storage},
-		// The Recipe Pallets
-		Weights: weights::{Module, Call, Storage},
 	}
 );
 
