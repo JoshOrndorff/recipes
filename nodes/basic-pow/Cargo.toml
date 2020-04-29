@@ -6,6 +6,7 @@ name = 'basic-pow'
 repository = 'https://github.com/substrate-developer-hub/recipes'
 version = "2.0.0-alpha.6"
 description = 'A Substrate node that demonstrates minimal proof of work consensus'
+license = "GPL-3.0-or-later"
 
 [[bin]]
 name = 'basic-pow'
