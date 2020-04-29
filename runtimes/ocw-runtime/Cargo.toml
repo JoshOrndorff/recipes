@@ -3,6 +3,7 @@ name = "ocw-runtime"
 version = "2.0.0-alpha.6"
 authors = ["Anonymous"]
 edition = "2018"
+license = "GPL-3.0-or-later"
 
 [dependencies]
 serde = { version = "1.0", optional = true, features = ["derive"] }
