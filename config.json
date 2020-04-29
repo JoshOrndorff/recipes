@@ -1,0 +1,13 @@
+{
+	"slug": "config",
+	"lang": "en",
+	"catchphrase": "A Hands-On Cookbook for Aspiring Blockchain Chefs",
+	"preparing-your-kitchen": [
+		{ "title": "Introduction", "slug": "index" },
+		{ "title": "Prepare to build a dApp", "slug": "prepare" },
+		{ "title": "Building a Custom Pallet", "slug": "pallet" },
+		{ "title": "Building a Custom Front End", "slug": "front-end" }
+	],
+	"appetizers": [],
+	"entrees": [],
+}
