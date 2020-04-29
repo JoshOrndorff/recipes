@@ -3,6 +3,7 @@ name = "adding-machine"
 version = "2.0.0-alpha.6"
 authors = ["4meta5, Joshy Orndorff"]
 edition = "2018"
+license = "GPL-3.0-or-later"
 
 [features]
 default = ['std']
