@@ -6314,6 +6314,7 @@ dependencies = [
  "randomness",
  "ringbuffer-queue",
  "safe-mix",
+ "sc-service",
  "serde",
  "simple-event",
  "simple-map",

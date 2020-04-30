@@ -35,31 +35,6 @@ pub fn get_authority_keys_from_seed(seed: &str) -> (BabeId, GrandpaId) {
 	)
 }
 
-/// Build a Development ChainSpec
-pub fn dev_config() -> ChainSpec {
-	ChainSpec::from_genesis(
-		"Development",
-		"dev",
-		sc_service::ChainType::Development,
-		|| testnet_genesis(vec![
-			get_authority_keys_from_seed("Alice"),
-		],
-		get_account_id_from_seed::<sr25519::Public>("Alice"),
-		vec![
-			get_account_id_from_seed::<sr25519::Public>("Alice"),
-			get_account_id_from_seed::<sr25519::Public>("Bob"),
-			get_account_id_from_seed::<sr25519::Public>("Alice//stash"),
-			get_account_id_from_seed::<sr25519::Public>("Bob//stash"),
-		],
-		true),
-		vec![],
-		None,
-		None,
-		None,
-		None
-	)
-}
-
 /// Build a Local Chainspec
 pub fn local_testnet_config() -> ChainSpec {
 	ChainSpec::from_genesis(
