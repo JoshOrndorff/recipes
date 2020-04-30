@@ -16,7 +16,7 @@ The very first line of code tells the rust compiler that this crate should not u
 Next, you'll find imports that come from various parts of the Substrate framework. All pallets will import from a few common crates including [`frame-support`](https://substrate.dev/rustdocs/master/frame_support/index.html), and [`frame-system`](https://substrate.dev/rustdocs/master/frame_system/index.html).  Complex pallets will have many imports as we'll see later. The `hello-substrate` pallet uses these imports.
 
 ```rust, ignore
-use frame_support::{ decl_module, dispatch::DispatchResult };
+use frame_support::{ decl_module, dispatch::DispatchResult, debug };
 use frame_system::{ self as system, ensure_signed };
 use sp_runtime::print;
 ```
