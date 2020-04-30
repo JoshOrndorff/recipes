@@ -340,7 +340,7 @@ basic-token = { path = &quot;../../pallets/basic-token&quot;, default-features =
 </code></pre>
 <h2><a class="header" href="#imports" id="imports">Imports</a></h2>
 <p>Next, you'll find imports that come from various parts of the Substrate framework. All pallets will import from a few common crates including <a href="https://substrate.dev/rustdocs/master/frame_support/index.html"><code>frame-support</code></a>, and <a href="https://substrate.dev/rustdocs/master/frame_system/index.html"><code>frame-system</code></a>.  Complex pallets will have many imports as we'll see later. The <code>hello-substrate</code> pallet uses these imports.</p>
-<pre><code class="language-rust ignore">use frame_support::{ decl_module, dispatch::DispatchResult };
+<pre><code class="language-rust ignore">use frame_support::{ decl_module, dispatch::DispatchResult, debug };
 use frame_system::{ self as system, ensure_signed };
 use sp_runtime::print;
 </code></pre>
