@@ -2,11 +2,12 @@
 
 use super::{
 	AccountId, BabeConfig, BalancesConfig, GenesisConfig, GrandpaConfig,
-	SudoConfig, SystemConfig, WASM_BINARY,
+	SudoConfig, SystemConfig, WASM_BINARY, Signature,
 };
-
+use sp_core::{Pair, Public, sr25519};
 use sp_consensus_babe::{AuthorityId as BabeId};
 use sp_finality_grandpa::{AuthorityId as GrandpaId};
+use sp_runtime::traits::{Verify, IdentifyAccount};
 
 /// Specialized `ChainSpec`. This is a specialization of the general Substrate ChainSpec type.
 pub type ChainSpec = sc_service::GenericChainSpec<GenesisConfig>;
@@ -27,11 +28,11 @@ pub fn get_account_id_from_seed<TPublic: Public>(seed: &str) -> AccountId where
 	AccountPublic::from(get_from_seed::<TPublic>(seed)).into_account()
 }
 
-/// Helper function to generate an authority key for Aura
-pub fn authority_keys_from_seed(s: &str) -> (AuraId, GrandpaId) {
+/// Helper function to generate session key from seed
+pub fn get_authority_keys_from_seed(seed: &str) -> (BabeId, GrandpaId) {
 	(
-		get_from_seed::<AuraId>(s),
-		get_from_seed::<GrandpaId>(s),
+		get_from_seed::<BabeId>(seed),
+		get_from_seed::<GrandpaId>(seed),
 	)
 }
 
