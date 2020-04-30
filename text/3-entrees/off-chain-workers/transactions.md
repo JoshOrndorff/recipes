@@ -2,19 +2,23 @@
 
 *[`pallets/offchain-demo`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo)*
 
-## Compiling Kitchen Node with Off-chain Worker Feature
+## Compiling this Pallet
 
-You can compile the `kitchen-node` with `ocw` feature on to see off-chain workers in work.
+This `offchain-demo` pallet is included in the [ocw-runtime](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime). That runtime can be used in the kitchen node.
 
-First, set in `<recipes-dir>/nodes/kitchen-node/Cargo.toml` to use `ocw-runtime` instead of the default `super-runtime`.
+In order to use the Offchain worker, the node must inject some keys into its keystore, and that is enabled with a feature flag.
 
-Second, compile kitchen-node with `ocw` feature on.
+First, edit `nodes/kitchen-node/Cargo.toml` to enable the `ocw-runtime`.
+
+Then, build the kitchen node with these commands.
 
 ```bash
-cd <recipes-dir>/nodes/kitchen-node
+# Switch to kitchen-node directory
+cd nodes/kitchen-node
+
+# Compile with OCW feature
 cargo build --release --features ocw
 ```
-
 
 ## Life-cycle of Off-chain Worker
 
@@ -335,15 +339,3 @@ As in signed transactions, we prepare a function reference with its parameters a
 ## Testing
 
 For writing test cases for off-chain worker, refer to our [testing section](/3-entrees/testing/off-chain-workers.md).
-
-## Compiling this Pallet
-
-This `offchain-demo` pallet is included in the [ocw-runtime](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime). That runtime can be used in the kitchen node. Edit `nodes/kitchen-node/Cargo.toml` to enable the `ocw-runtime`. In order to use the Offchain worker, the node must inject some keys into its keystore, and that is enabled with a feature flag. To build the kitchen node with this feature use these commands.
-
-```bash
-# Switch to kitchen-node directory
-cd nodes/kitchen-node
-
-# Compile with OCW feature
-cargo build --release --features ocw
-```
