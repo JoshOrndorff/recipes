@@ -1925,11 +1925,15 @@ pub struct ContinuousAccountData&lt;BlockNumber&gt; {
 </ul>
 <h1><a class="header" href="#transactions-in-off-chain-workers" id="transactions-in-off-chain-workers">Transactions in Off-chain Workers</a></h1>
 <p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo"><code>pallets/offchain-demo</code></a></em></p>
-<h2><a class="header" href="#compiling-kitchen-node-with-off-chain-worker-feature" id="compiling-kitchen-node-with-off-chain-worker-feature">Compiling Kitchen Node with Off-chain Worker Feature</a></h2>
-<p>You can compile the <code>kitchen-node</code> with <code>ocw</code> feature on to see off-chain workers in work.</p>
-<p>First, set in <code>&lt;recipes-dir&gt;/nodes/kitchen-node/Cargo.toml</code> to use <code>ocw-runtime</code> instead of the default <code>super-runtime</code>.</p>
-<p>Second, compile kitchen-node with <code>ocw</code> feature on.</p>
-<pre><code class="language-bash">cd &lt;recipes-dir&gt;/nodes/kitchen-node
+<h2><a class="header" href="#compiling-this-pallet" id="compiling-this-pallet">Compiling this Pallet</a></h2>
+<p>This <code>offchain-demo</code> pallet is included in the <a href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime">ocw-runtime</a>. That runtime can be used in the kitchen node.</p>
+<p>In order to use the Offchain worker, the node must inject some keys into its keystore, and that is enabled with a feature flag.</p>
+<p>First, edit <code>nodes/kitchen-node/Cargo.toml</code> to enable the <code>ocw-runtime</code>.</p>
+<p>Then, build the kitchen node with these commands.</p>
+<pre><code class="language-bash"># Switch to kitchen-node directory
+cd nodes/kitchen-node
+
+# Compile with OCW feature
 cargo build --release --features ocw
 </code></pre>
 <h2><a class="header" href="#life-cycle-of-off-chain-worker" id="life-cycle-of-off-chain-worker">Life-cycle of Off-chain Worker</a></h2>
@@ -2231,14 +2235,6 @@ impl offchain_demo::Trait for Runtime {
 <p>As in signed transactions, we prepare a function reference with its parameters and then call <code>T::SubmitUnsignedTransaction::submit_unsigned</code>.</p>
 <h2><a class="header" href="#testing" id="testing">Testing</a></h2>
 <p>For writing test cases for off-chain worker, refer to our <a href="3-entrees/off-chain-workers//3-entrees/testing/off-chain-workers.html">testing section</a>.</p>
-<h2><a class="header" href="#compiling-this-pallet" id="compiling-this-pallet">Compiling this Pallet</a></h2>
-<p>This <code>offchain-demo</code> pallet is included in the <a href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime">ocw-runtime</a>. That runtime can be used in the kitchen node. Edit <code>nodes/kitchen-node/Cargo.toml</code> to enable the <code>ocw-runtime</code>. In order to use the Offchain worker, the node must inject some keys into its keystore, and that is enabled with a feature flag. To build the kitchen node with this feature use these commands.</p>
-<pre><code class="language-bash"># Switch to kitchen-node directory
-cd nodes/kitchen-node
-
-# Compile with OCW feature
-cargo build --release --features ocw
-</code></pre>
 <h1><a class="header" href="#http-fetching-and-json-parsing-in-off-chain-workers" id="http-fetching-and-json-parsing-in-off-chain-workers">HTTP Fetching and JSON Parsing in Off-chain Workers</a></h1>
 <p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo"><code>pallets/offchain-demo</code></a></em></p>
 <h2><a class="header" href="#http-fetching" id="http-fetching">HTTP Fetching</a></h2>
