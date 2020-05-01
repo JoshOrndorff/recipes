@@ -1,0 +1,52 @@
+[package]
+name = "simple-poa"
+version = "2.0.0-alpha.6"
+authors = ["Joshy Orndorff"]
+description = "Simple Proof of Authority algorithm with no runtime integration for Substrate"
+edition = "2018"
+license = "GPL-3.0-or-later"
+homepage = 'https://substrate.dev/recipes'
+repository = 'https://github.com/substrate-developer-hub/recipes'
+
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+
+[dependencies]
+sp-application-crypto = "2.0.0-alpha.6"
+sp-consensus-aura = "0.8.0-alpha.6"
+sp-block-builder = "2.0.0-alpha.6"
+sc-block-builder = "0.8.0-alpha.6"
+sc-client = "0.8.0-alpha.6"
+sc-client-api = "2.0.0-alpha.6"
+codec = { package = "parity-scale-codec", version = "1.3.0" }
+sp-consensus = "0.8.0-alpha.6"
+derive_more = "0.99.2"
+futures = "0.3.4"
+futures-timer = "3.0.1"
+sp-inherents = "2.0.0-alpha.6"
+sc-keystore = "2.0.0-alpha.6"
+log = "0.4.8"
+parking_lot = "0.10.0"
+sp-core = "2.0.0-alpha.6"
+sp-blockchain = "2.0.0-alpha.6"
+sp-io = "2.0.0-alpha.6"
+sp-version = "2.0.0-alpha.6"
+sc-consensus-slots = "0.8.0-alpha.6"
+sp-api = "2.0.0-alpha.6"
+sp-runtime = "2.0.0-alpha.6"
+sp-timestamp = "2.0.0-alpha.6"
+sc-telemetry = "2.0.0-alpha.6"
+
+# TODO commented items are not published on crates.io I have the following options
+# * Path dependency
+# * Duplicate them in recipes
+# * Not test
+[dev-dependencies]
+sp-keyring = "2.0.0-alpha.6"
+sc-executor = "0.8.0-alpha.6"
+sc-network = "0.8.0-alpha.6"
+# sc-network-test = "0.8.0-dev"
+sc-service = "0.8.0-alpha.6"
+# substrate-test-runtime-client = "2.0.0-dev"
+env_logger = "0.7.0"
+tempfile = "3.1.0"

@@ -38,4 +38,5 @@ members = [
 	"nodes/kitchen-node",
 	"nodes/manual-seal",
 	"nodes/rpc-node",
+	"consensus/simple-poa",
 ]
