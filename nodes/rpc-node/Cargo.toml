@@ -7,6 +7,7 @@ version = '2.0.0-alpha.6'
 homepage = 'https://substrate.dev/recipes'
 repository = 'https://github.com/substrate-developer-hub/recipes'
 description = 'A Substrate node that demonstrates a custom RPC endpoint'
+license = "GPL-3.0-or-later"
 
 [[bin]]
 name = 'rpc-node'

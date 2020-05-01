@@ -18,7 +18,7 @@ There are four primary directories in this repository:
 The book is built with [mdbook](https://rust-lang-nursery.github.io/mdBook/) and deployed via [github pages](https://pages.github.com/).
 
 ## License
-<a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>. It is open source and [open for contributions](./CONTRIBUTING.md).
+The Substrate Recipes are [GPL 3.0 Licensed](LICENSE) It is open source and [open for contributions](./CONTRIBUTING.md).
 
 ## Using Recipes in External Projects
 
