@@ -1,21 +1,6 @@
-// Copyright 2018-2020 Parity Technologies (UK) Ltd.
-// This file is part of Substrate.
-
-// Substrate is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-
-// Substrate is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-
-// You should have received a copy of the GNU General Public License
-// along with Substrate.  If not, see <http://www.gnu.org/licenses/>.
-
-//! Aura (Authority-round) consensus in substrate.
+//! Simple Proof of Authority consensus for Substrate
 //!
+//! TODO update these docs as necessary
 //! Aura works by having a list of authorities A who are expected to roughly
 //! agree on the current time. Time is divided up into discrete slots of t
 //! seconds each. For each slot s, the author of that slot is A[s % |A|].
@@ -27,6 +12,7 @@
 //! far in the future they are.
 //!
 //! NOTE: Aura itself is designed to be generic over the crypto used.
+
 #![forbid(missing_docs, unsafe_code)]
 use std::{
 	sync::Arc, time::Duration, thread, marker::PhantomData, hash::Hash, fmt::Debug, pin::Pin,
@@ -71,32 +57,34 @@ use sc_consensus_slots::{
 use sc_keystore::KeyStorePtr;
 use sp_api::ApiExt;
 
-pub use sp_consensus_aura::{
-	ConsensusLog, AuraApi, AURA_ENGINE_ID,
-	inherents::{
-		InherentType as AuraInherent,
-		AuraInherentData, INHERENT_IDENTIFIER, InherentDataProvider,
-	},
-};
+// We won't be using any inherents
+// pub use sp_consensus_aura::{
+// 	ConsensusLog, AuraApi, AURA_ENGINE_ID,
+// 	inherents::{
+// 		InherentType as AuraInherent,
+// 		AuraInherentData, INHERENT_IDENTIFIER, InherentDataProvider,
+// 	},
+// };
 pub use sp_consensus::SyncOracle;
 pub use digests::CompatibleDigestItem;
-
 mod digests;
 
+// Use a public key as the unique identifier for a consensus authority
 type AuthorityId<P> = <P as Pair>::Public;
 
-/// Slot duration type for Aura.
-pub type SlotDuration = sc_consensus_slots::SlotDuration<u64>;
+/// Slot duration type
+// pub type SlotDuration = sc_consensus_slots::SlotDuration<u64>;
+// Observation: SlotData is implemented for u64 already. Probably use that.
 
-/// Get type of `SlotDuration` for Aura.
-pub fn slot_duration<A, B, C>(client: &C) -> CResult<SlotDuration> where
-	A: Codec,
-	B: BlockT,
-	C: AuxStore + ProvideRuntimeApi<B>,
-	C::Api: AuraApi<B, A, Error = sp_blockchain::Error>,
-{
-	SlotDuration::get_or_compute(client, |a, b| a.slot_duration(b))
-}
+/// Get type of `SlotDuration`
+// pub fn slot_duration<A, B, C>(client: &C) -> CResult<SlotDuration> where
+// 	A: Codec,
+// 	B: BlockT,
+// 	C: AuxStore + ProvideRuntimeApi<B>,
+// 	// C::Api: AuraApi<B, A, Error = sp_blockchain::Error>,
+// {
+// 	SlotDuration::get_or_compute(client, |a, b| a.slot_duration(b))
+// }
 
 /// Get slot author for given block along with authorities.
 fn slot_author<P: Pair>(slot_num: u64, authorities: &[AuthorityId<P>]) -> Option<&AuthorityId<P>> {
@@ -122,18 +110,18 @@ impl SlotCompatible for AuraSlotCompatible {
 	fn extract_timestamp_and_slot(
 		&self,
 		data: &InherentData
-	) -> Result<(TimestampInherent, AuraInherent, std::time::Duration), sp_consensus::Error> {
+	) -> Result<(TimestampInherent, std::time::Duration), sp_consensus::Error> {
 		data.timestamp_inherent_data()
-			.and_then(|t| data.aura_inherent_data().map(|a| (t, a)))
+			// .and_then(|t| data.aura_inherent_data().map(|a| (t, a)))
 			.map_err(Into::into)
 			.map_err(sp_consensus::Error::InherentData)
-			.map(|(x, y)| (x, y, Default::default()))
+			.map(|t| (t, Default::default()))
 	}
 }
 
 /// Start the aura worker. The returned future should be run in a futures executor.
 pub fn start_aura<B, C, SC, E, I, P, SO, CAW, Error>(
-	slot_duration: SlotDuration,
+	slot_duration: u64,
 	client: Arc<C>,
 	select_chain: SC,
 	block_import: I,
@@ -146,7 +134,7 @@ pub fn start_aura<B, C, SC, E, I, P, SO, CAW, Error>(
 ) -> Result<impl Future<Output = ()>, sp_consensus::Error> where
 	B: BlockT,
 	C: ProvideRuntimeApi<B> + BlockOf + ProvideCache<B> + AuxStore + Send + Sync,
-	C::Api: AuraApi<B, AuthorityId<P>>,
+	// C::Api: AuraApi<B, AuthorityId<P>>,
 	SC: SelectChain<B>,
 	E: Environment<B, Error = Error> + Send + Sync + 'static,
 	E::Proposer: Proposer<B, Error = Error, Transaction = sp_api::TransactionFor<C, B>>,
@@ -167,10 +155,10 @@ pub fn start_aura<B, C, SC, E, I, P, SO, CAW, Error>(
 		force_authoring,
 		_key_type: PhantomData::<P>,
 	};
-	register_aura_inherent_data_provider(
-		&inherent_data_providers,
-		slot_duration.slot_duration()
-	)?;
+	// register_aura_inherent_data_provider(
+	// 	&inherent_data_providers,
+	// 	slot_duration.slot_duration()
+	// )?;
 	Ok(sc_consensus_slots::start_slot_worker::<_, _, _, _, _, AuraSlotCompatible, _>(
 		slot_duration,
 		select_chain,
@@ -194,8 +182,8 @@ struct AuraWorker<C, E, I, P, SO> {
 
 impl<B, C, E, I, P, Error, SO> sc_consensus_slots::SimpleSlotWorker<B> for AuraWorker<C, E, I, P, SO> where
 	B: BlockT,
-	C: ProvideRuntimeApi<B> + BlockOf + ProvideCache<B> + Sync,
-	C::Api: AuraApi<B, AuthorityId<P>>,
+	C: ProvideRuntimeApi<B> + BlockOf + /*ProvideCache<B> +*/ Sync,
+	// C::Api: AuraApi<B, AuthorityId<P>>,
 	E: Environment<B, Error = Error>,
 	E::Proposer: Proposer<B, Error = Error, Transaction = sp_api::TransactionFor<C, B>>,
 	I: BlockImport<B, Transaction = sp_api::TransactionFor<C, B>> + Send + Sync + 'static,
@@ -296,37 +284,38 @@ impl<B, C, E, I, P, Error, SO> sc_consensus_slots::SimpleSlotWorker<B> for AuraW
 		}))
 	}
 
-	fn proposing_remaining_duration(
-		&self,
-		head: &B::Header,
-		slot_info: &SlotInfo
-	) -> Option<std::time::Duration> {
-		// never give more than 20 times more lenience.
-		const BACKOFF_CAP: u64 = 20;
-
-		let slot_remaining = self.slot_remaining_duration(slot_info);
-		let parent_slot = match find_pre_digest::<B, P>(head) {
-			Err(_) => return Some(slot_remaining),
-			Ok(d) => d,
-		};
-
-		// we allow a lenience of the number of slots since the head of the
-		// chain was produced, minus 1 (since there is always a difference of at least 1)
-		//
-		// linear back-off.
-		// in normal cases we only attempt to issue blocks up to the end of the slot.
-		// when the chain has been stalled for a few slots, we give more lenience.
-		let slot_lenience = slot_info.number.saturating_sub(parent_slot + 1);
-		let slot_lenience = std::cmp::min(slot_lenience, BACKOFF_CAP);
-		let slot_lenience = Duration::from_secs(slot_lenience * slot_info.duration);
-		Some(slot_lenience + slot_remaining)
-	}
+	// Thought. This is a provided method. Let's just use the provided implementation.
+	// fn proposing_remaining_duration(
+	// 	&self,
+	// 	head: &B::Header,
+	// 	slot_info: &SlotInfo
+	// ) -> Option<std::time::Duration> {
+	// 	// never give more than 20 times more lenience.
+	// 	const BACKOFF_CAP: u64 = 20;
+	//
+	// 	let slot_remaining = self.slot_remaining_duration(slot_info);
+	// 	let parent_slot = match find_pre_digest::<B, P>(head) {
+	// 		Err(_) => return Some(slot_remaining),
+	// 		Ok(d) => d,
+	// 	};
+	//
+	// 	// we allow a lenience of the number of slots since the head of the
+	// 	// chain was produced, minus 1 (since there is always a difference of at least 1)
+	// 	//
+	// 	// linear back-off.
+	// 	// in normal cases we only attempt to issue blocks up to the end of the slot.
+	// 	// when the chain has been stalled for a few slots, we give more lenience.
+	// 	let slot_lenience = slot_info.number.saturating_sub(parent_slot + 1);
+	// 	let slot_lenience = std::cmp::min(slot_lenience, BACKOFF_CAP);
+	// 	let slot_lenience = Duration::from_secs(slot_lenience * slot_info.duration);
+	// 	Some(slot_lenience + slot_remaining)
+	// }
 }
 
 impl<B: BlockT, C, E, I, P, Error, SO> SlotWorker<B> for AuraWorker<C, E, I, P, SO> where
 	B: BlockT,
 	C: ProvideRuntimeApi<B> + BlockOf + ProvideCache<B> + Sync + Send,
-	C::Api: AuraApi<B, AuthorityId<P>>,
+	// C::Api: AuraApi<B, AuthorityId<P>>,
 	E: Environment<B, Error = Error> + Send + Sync,
 	E::Proposer: Proposer<B, Error = Error, Transaction = sp_api::TransactionFor<C, B>>,
 	I: BlockImport<B, Transaction = sp_api::TransactionFor<C, B>> + Send + Sync + 'static,
@@ -379,6 +368,8 @@ impl<B: BlockT> std::convert::From<Error<B>> for String {
 	}
 }
 
+/// Look through all digests, ensure there is a single aura pre-digest containing the slot number
+/// and extract and return the slot number.
 fn find_pre_digest<B: BlockT, P: Pair>(header: &B::Header) -> Result<u64, Error<B>>
 	where DigestItemFor<B>: CompatibleDigestItem<P>,
 		P::Signature: Decode,
@@ -471,6 +462,8 @@ pub struct AuraVerifier<C, P> {
 	inherent_data_providers: sp_inherents::InherentDataProviders,
 }
 
+// Thought. Although we aren't providing any of our own consesus-related inherents, we probably
+// still need to verify the ones that are there. Like timestamp for example.
 impl<C, P> AuraVerifier<C, P>
 	where P: Send + Sync + 'static
 {
@@ -531,9 +524,9 @@ impl<B: BlockT, C, P> Verifier<B> for AuraVerifier<C, P> where
 		Send +
 		Sync +
 		sc_client_api::backend::AuxStore +
-		ProvideCache<B> +
+		// ProvideCache<B> +
 		BlockOf,
-	C::Api: BlockBuilderApi<B> + AuraApi<B, AuthorityId<P>> + ApiExt<B, Error = sp_blockchain::Error>,
+	C::Api: BlockBuilderApi<B> /*+ AuraApi<B, AuthorityId<P>>*/ + ApiExt<B, Error = sp_blockchain::Error>,
 	DigestItemFor<B>: CompatibleDigestItem<P>,
 	P: Pair + Send + Sync + 'static,
 	P::Public: Send + Sync + Hash + Eq + Clone + Decode + Encode + Debug + 'static,
@@ -600,18 +593,18 @@ impl<B: BlockT, C, P> Verifier<B> for AuraVerifier<C, P> where
 				telemetry!(CONSENSUS_TRACE; "aura.checked_and_importing"; "pre_header" => ?pre_header);
 
 				// Look for an authorities-change log.
-				let maybe_keys = pre_header.digest()
-					.logs()
-					.iter()
-					.filter_map(|l| l.try_to::<ConsensusLog<AuthorityId<P>>>(
-						OpaqueDigestItemId::Consensus(&AURA_ENGINE_ID)
-					))
-					.find_map(|l| match l {
-						ConsensusLog::AuthoritiesChange(a) => Some(
-							vec![(well_known_cache_keys::AUTHORITIES, a.encode())]
-						),
-						_ => None,
-					});
+				// let maybe_keys = pre_header.digest()
+				// 	.logs()
+				// 	.iter()
+				// 	.filter_map(|l| l.try_to::<ConsensusLog<AuthorityId<P>>>(
+				// 		OpaqueDigestItemId::Consensus(&AURA_ENGINE_ID)
+				// 	))
+				// 	.find_map(|l| match l {
+				// 		ConsensusLog::AuthoritiesChange(a) => Some(
+				// 			vec![(well_known_cache_keys::AUTHORITIES, a.encode())]
+				// 		),
+				// 		_ => None,
+				// 	});
 
 				let mut import_block = BlockImportParams::new(origin, pre_header);
 				import_block.post_digests.push(seal);
@@ -620,7 +613,9 @@ impl<B: BlockT, C, P> Verifier<B> for AuraVerifier<C, P> where
 				import_block.fork_choice = Some(ForkChoiceStrategy::LongestChain);
 				import_block.post_hash = Some(hash);
 
-				Ok((import_block, maybe_keys))
+				// None means no new authorities to import
+				// There will never be rotating authorities in simple PoA
+				Ok((import_block, None))
 			}
 			CheckedHeader::Deferred(a, b) => {
 				debug!(target: "aura", "Checking {:?} failed; {:?}, {:?}.", hash, a, b);
@@ -633,76 +628,80 @@ impl<B: BlockT, C, P> Verifier<B> for AuraVerifier<C, P> where
 	}
 }
 
-fn initialize_authorities_cache<A, B, C>(client: &C) -> Result<(), ConsensusError> where
-	A: Codec,
-	B: BlockT,
-	C: ProvideRuntimeApi<B> + BlockOf + ProvideCache<B>,
-	C::Api: AuraApi<B, A>,
-{
-	// no cache => no initialization
-	let cache = match client.cache() {
-		Some(cache) => cache,
-		None => return Ok(()),
-	};
-
-	// check if we already have initialized the cache
-	let map_err = |error| sp_consensus::Error::from(sp_consensus::Error::ClientImport(
-		format!(
-			"Error initializing authorities cache: {}",
-			error,
-		)));
-
-	let genesis_id = BlockId::Number(Zero::zero());
-	let genesis_authorities: Option<Vec<A>> = cache
-		.get_at(&well_known_cache_keys::AUTHORITIES, &genesis_id)
-		.unwrap_or(None)
-		.and_then(|(_, _, v)| Decode::decode(&mut &v[..]).ok());
-	if genesis_authorities.is_some() {
-		return Ok(());
-	}
-
-	let genesis_authorities = authorities(client, &genesis_id)?;
-	cache.initialize(&well_known_cache_keys::AUTHORITIES, genesis_authorities.encode())
-		.map_err(map_err)?;
-
-	Ok(())
-}
+// No need to ever cache authorities. They will be fixed forever in the simple poa
+// fn initialize_authorities_cache<A, B, C>(client: &C) -> Result<(), ConsensusError> where
+// 	A: Codec,
+// 	B: BlockT,
+// 	C: ProvideRuntimeApi<B> + BlockOf + ProvideCache<B>,
+// 	C::Api: AuraApi<B, A>,
+// {
+// 	// no cache => no initialization
+// 	let cache = match client.cache() {
+// 		Some(cache) => cache,
+// 		None => return Ok(()),
+// 	};
+//
+// 	// check if we already have initialized the cache
+// 	let map_err = |error| sp_consensus::Error::from(sp_consensus::Error::ClientImport(
+// 		format!(
+// 			"Error initializing authorities cache: {}",
+// 			error,
+// 		)));
+//
+// 	let genesis_id = BlockId::Number(Zero::zero());
+// 	let genesis_authorities: Option<Vec<A>> = cache
+// 		.get_at(&well_known_cache_keys::AUTHORITIES, &genesis_id)
+// 		.unwrap_or(None)
+// 		.and_then(|(_, _, v)| Decode::decode(&mut &v[..]).ok());
+// 	if genesis_authorities.is_some() {
+// 		return Ok(());
+// 	}
+//
+// 	let genesis_authorities = authorities(client, &genesis_id)?;
+// 	cache.initialize(&well_known_cache_keys::AUTHORITIES, genesis_authorities.encode())
+// 		.map_err(map_err)?;
+//
+// 	Ok(())
+// }
 
 #[allow(deprecated)]
 fn authorities<A, B, C>(client: &C, at: &BlockId<B>) -> Result<Vec<A>, ConsensusError> where
 	A: Codec,
 	B: BlockT,
-	C: ProvideRuntimeApi<B> + BlockOf + ProvideCache<B>,
-	C::Api: AuraApi<B, A>,
+	C: /*ProvideRuntimeApi<B> +*/ BlockOf /*+ ProvideCache<B>*/,
+	// C::Api: AuraApi<B, A>,
 {
-	client
-		.cache()
-		.and_then(|cache| cache
-			.get_at(&well_known_cache_keys::AUTHORITIES, at)
-			.unwrap_or(None)
-			.and_then(|(_, _, v)| Decode::decode(&mut &v[..]).ok())
-		)
-		.or_else(|| AuraApi::authorities(&*client.runtime_api(), at).ok())
-		.ok_or_else(|| sp_consensus::Error::InvalidAuthoritiesSet.into())
+	// TODO is this where I would hardcode the authorities or grab them from the chain spec?
+	Ok(vec![]) //TODO actually include some authorities
+	// client
+	// 	.cache()
+	// 	.and_then(|cache| cache
+	// 		.get_at(&well_known_cache_keys::AUTHORITIES, at)
+	// 		.unwrap_or(None)
+	// 		.and_then(|(_, _, v)| Decode::decode(&mut &v[..]).ok())
+	// 	)
+	// 	.or_else(|| AuraApi::authorities(&*client.runtime_api(), at).ok())
+	// 	.ok_or_else(|| sp_consensus::Error::InvalidAuthoritiesSet.into())
 }
 
+//Question: Why do we need a type alias for this instead of just using basic queue?
 /// The Aura import queue type.
 pub type AuraImportQueue<B, Transaction> = BasicQueue<B, Transaction>;
 
 /// Register the aura inherent data provider, if not registered already.
-fn register_aura_inherent_data_provider(
-	inherent_data_providers: &InherentDataProviders,
-	slot_duration: u64,
-) -> Result<(), sp_consensus::Error> {
-	if !inherent_data_providers.has_provider(&INHERENT_IDENTIFIER) {
-		inherent_data_providers
-			.register_provider(InherentDataProvider::new(slot_duration))
-			.map_err(Into::into)
-			.map_err(sp_consensus::Error::InherentData)
-	} else {
-		Ok(())
-	}
-}
+// fn register_aura_inherent_data_provider(
+// 	inherent_data_providers: &InherentDataProviders,
+// 	slot_duration: u64,
+// ) -> Result<(), sp_consensus::Error> {
+// 	if !inherent_data_providers.has_provider(&INHERENT_IDENTIFIER) {
+// 		inherent_data_providers
+// 			.register_provider(InherentDataProvider::new(slot_duration))
+// 			.map_err(Into::into)
+// 			.map_err(sp_consensus::Error::InherentData)
+// 	} else {
+// 		Ok(())
+// 	}
+// }
 
 /// A block-import handler for Aura.
 pub struct AuraBlockImport<Block: BlockT, C, I: BlockImport<Block>, P> {
@@ -722,7 +721,7 @@ impl<Block: BlockT, C, I: Clone + BlockImport<Block>, P> Clone for AuraBlockImpo
 }
 
 impl<Block: BlockT, C, I: BlockImport<Block>, P> AuraBlockImport<Block, C, I, P> {
-	/// New aura block import.
+	/// New poa block import.
 	pub fn new(
 		inner: I,
 		client: Arc<C>,
@@ -787,9 +786,9 @@ impl<Block: BlockT, C, I, P> BlockImport<Block> for AuraBlockImport<Block, C, I,
 	}
 }
 
-/// Start an import queue for the Aura consensus algorithm.
+/// Start an import queue for the SimplePoA consensus algorithm.
 pub fn import_queue<B, I, C, P>(
-	slot_duration: SlotDuration,
+	slot_duration: u64,
 	block_import: I,
 	justification_import: Option<BoxJustificationImport<B>>,
 	finality_proof_import: Option<BoxFinalityProofImport<B>>,
@@ -797,7 +796,7 @@ pub fn import_queue<B, I, C, P>(
 	inherent_data_providers: InherentDataProviders,
 ) -> Result<AuraImportQueue<B, sp_api::TransactionFor<C, B>>, sp_consensus::Error> where
 	B: BlockT,
-	C::Api: BlockBuilderApi<B> + AuraApi<B, AuthorityId<P>> + ApiExt<B, Error = sp_blockchain::Error>,
+	C::Api: BlockBuilderApi<B> /*+ AuraApi<B, AuthorityId<P>>*/ + ApiExt<B, Error = sp_blockchain::Error>,
 	C: 'static + ProvideRuntimeApi<B> + BlockOf + ProvideCache<B> + Send + Sync + AuxStore + HeaderBackend<B>,
 	I: BlockImport<B, Error=ConsensusError, Transaction = sp_api::TransactionFor<C, B>> + Send + Sync + 'static,
 	DigestItemFor<B>: CompatibleDigestItem<P>,
@@ -805,8 +804,8 @@ pub fn import_queue<B, I, C, P>(
 	P::Public: Clone + Eq + Send + Sync + Hash + Debug + Encode + Decode,
 	P::Signature: Encode + Decode,
 {
-	register_aura_inherent_data_provider(&inherent_data_providers, slot_duration.get())?;
-	initialize_authorities_cache(&*client)?;
+	// register_aura_inherent_data_provider(&inherent_data_providers, slot_duration.get())?;
+	// initialize_authorities_cache(&*client)?;
 
 	let verifier = AuraVerifier {
 		client: client.clone(),
