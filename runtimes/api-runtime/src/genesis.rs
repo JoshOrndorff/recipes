@@ -2,17 +2,61 @@
 
 use super::{
 	AccountId, AuraConfig, BalancesConfig, GenesisConfig, GrandpaConfig,
-	SudoConfig, SystemConfig, WASM_BINARY,
+	SudoConfig, SystemConfig, WASM_BINARY, Signature,
 };
-
+use sp_core::{Pair, Public, sr25519};
 use sp_consensus_aura::sr25519::{AuthorityId as AuraId};
 use sp_finality_grandpa::{AuthorityId as GrandpaId};
+use sp_runtime::traits::{Verify, IdentifyAccount};
+
+/// Helper function to generate a crypto pair from seed
+fn get_from_seed<TPublic: Public>(seed: &str) -> <TPublic::Pair as Pair>::Public {
+	TPublic::Pair::from_string(&format!("//{}", seed), None)
+		.expect("static values are valid; qed")
+		.public()
+}
+
+type AccountPublic = <Signature as Verify>::Signer;
+
+/// Helper function to generate an account ID from seed
+pub fn account_id_from_seed<TPublic: Public>(seed: &str) -> AccountId where
+	AccountPublic: From<<TPublic::Pair as Pair>::Public>
+{
+	AccountPublic::from(get_from_seed::<TPublic>(seed)).into_account()
+}
+
+/// Helper function to generate session key from seed
+pub fn authority_keys_from_seed(seed: &str) -> (AuraId, GrandpaId) {
+	(
+		get_from_seed::<AuraId>(seed),
+		get_from_seed::<GrandpaId>(seed),
+	)
+}
+
+pub fn dev_genesis() -> GenesisConfig {
+	testnet_genesis(
+		// Initial Authorities
+		vec![
+			authority_keys_from_seed("Alice"),
+		],
+		// Root Key
+		account_id_from_seed::<sr25519::Public>("Alice"),
+		// Endowed Accounts
+		vec![
+			account_id_from_seed::<sr25519::Public>("Alice"),
+			account_id_from_seed::<sr25519::Public>("Bob"),
+			account_id_from_seed::<sr25519::Public>("Alice//stash"),
+			account_id_from_seed::<sr25519::Public>("Bob//stash"),
+		],
+	)
+}
 
 /// Helper function to build a genesis configuration
-pub fn testnet_genesis(initial_authorities: Vec<(AuraId, GrandpaId)>,
+pub fn testnet_genesis(
+	initial_authorities: Vec<(AuraId, GrandpaId)>,
 	root_key: AccountId,
 	endowed_accounts: Vec<AccountId>,
-	_enable_println: bool) -> GenesisConfig {
+) -> GenesisConfig {
 	GenesisConfig {
 		system: Some(SystemConfig {
 			code: WASM_BINARY.to_vec(),
