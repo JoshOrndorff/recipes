@@ -59,8 +59,6 @@ sp-std = { version = '2.0.0-alpha.6', default-features = false }
 sp-transaction-pool = { version = '2.0.0-alpha.6', default-features = false }
 sp-version = { version = '2.0.0-alpha.6', default-features = false }
 
-sc-service = { version = '0.8.0-alpha.6', default-features = false, optional = true }
-
 
 [build-dependencies]
 wasm-builder-runner = { package = "substrate-wasm-builder-runner", version = "1.0.4" }
@@ -77,7 +75,6 @@ std = [
 	"frame-executive/std",
 	"frame-support/std",
 	"frame-system/std",
-	"sc-service",
 	"sp-api/std",
 	"sp-block-builder/std",
 	"sp-consensus-babe/std",
