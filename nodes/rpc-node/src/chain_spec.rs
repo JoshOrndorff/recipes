@@ -1,6 +1,5 @@
-use sp_core::{Pair, Public, sr25519};
+use sp_core::sr25519;
 use sc_service;
-use sp_runtime::traits::{Verify, IdentifyAccount};
 use runtime::{
 	GenesisConfig,
 	genesis::{
