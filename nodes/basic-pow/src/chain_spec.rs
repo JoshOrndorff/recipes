@@ -5,6 +5,7 @@ use runtime::{
 	genesis::{
 		account_id_from_seed,
 		testnet_genesis,
+		dev_genesis,
 	}
 };
 
@@ -19,7 +20,7 @@ pub fn dev_config() -> ChainSpec{
 		"Development",
 		"dev",
 		sc_service::ChainType::Development,
-		runtime::genesis::dev_genesis,
+		dev_genesis,
 		vec![],
 		None,
 		None,
