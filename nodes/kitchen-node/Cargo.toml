@@ -6,6 +6,7 @@ authors = ['Joshy Orndorff', '4meta5', 'Jimmy Chu']
 homepage = 'https://substrate.dev/recipes'
 repository = 'https://github.com/substrate-developer-hub/recipes'
 description = 'A Substrate node that houses many recipe pallets'
+license = "GPL-3.0-or-later"
 
 [[bin]]
 name = "kitchen-node"

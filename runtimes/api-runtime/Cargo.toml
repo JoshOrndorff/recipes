@@ -3,6 +3,7 @@ name = "api-runtime"
 version = "2.0.0-alpha.6"
 authors = ["Joshy Orndorff"]
 edition = "2018"
+license = "GPL-3.0-or-later"
 
 [dependencies]
 aura = { package = "pallet-aura", version = '2.0.0-alpha.6', default_features = false}

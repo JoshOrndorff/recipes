@@ -5,6 +5,7 @@ authors = ["Parity Technologies <admin@parity.io>"]
 edition = "2018"
 homepage = "https://substrate.dev/recipes/"
 repository = "https://github.com/substrate-developer-hub/recipes/"
+license = "GPL-3.0-or-later"
 
 [dependencies]
 # external dependencies
