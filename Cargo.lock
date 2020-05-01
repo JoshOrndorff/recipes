@@ -3308,6 +3308,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "pallet-utility"
+version = "2.0.0-alpha.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "14cdce8dc8374a35628488aae9aad6a72a84b09c247760b3a1b23afd923e6f04"
+dependencies = [
+ "frame-support",
+ "frame-system",
+ "parity-scale-codec",
+ "serde",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
+]
+
+[[package]]
 name = "parity-multiaddr"
 version = "0.7.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -6310,6 +6326,7 @@ dependencies = [
  "pallet-sudo",
  "pallet-timestamp",
  "pallet-transaction-payment",
+ "pallet-utility",
  "parity-scale-codec",
  "randomness",
  "ringbuffer-queue",

@@ -121,6 +121,9 @@ pub const DAYS: BlockNumber = HOURS * 24;
 pub const PRIMARY_PROBABILITY: (u64, u64) = (1, 4);
 pub const EPOCH_DURATION_IN_BLOCKS: u32 = 10 * MINUTES;
 
+pub const MILLICENTS: Balance = 1_000_000_000;
+pub const CENTS: Balance = 1_000 * MILLICENTS;
+
 /// The version infromation used to identify this runtime when compiled natively.
 #[cfg(feature = "std")]
 pub fn native_version() -> NativeVersion {
@@ -235,6 +238,23 @@ impl transaction_payment::Trait for Runtime {
 	type TransactionByteFee = TransactionByteFee;
 	type WeightToFee = ConvertInto;
 	type FeeMultiplierUpdate = ();
+}
+
+parameter_types! {
+	// One storage item; value is size 4+4+16+32 bytes = 56 bytes.
+	pub const MultisigDepositBase: Balance = 30 * CENTS;
+	// Additional storage item size of 32 bytes.
+	pub const MultisigDepositFactor: Balance = 5 * CENTS;
+	pub const MaxSignatories: u16 = 100;
+}
+
+impl utility::Trait for Runtime {
+	type Event = Event;
+	type Call = Call;
+	type Currency = Balances;
+	type MultisigDepositBase = MultisigDepositBase;
+	type MultisigDepositFactor = MultisigDepositFactor;
+	type MaxSignatories = MaxSignatories;
 }
 
 impl sudo::Trait for Runtime {
@@ -369,6 +389,7 @@ construct_runtime!(
 		RandomnessCollectiveFlip: randomness_collective_flip::{Module, Call, Storage},
 		Sudo: sudo::{Module, Call, Config<T>, Storage, Event<T>},
 		TransactionPayment: transaction_payment::{Module, Storage},
+		Utility: utility::{Module, Call, Storage, Event<T>},
 		// The Recipe Pallets
 		AddingMachine: adding_machine::{Module, Call, Storage},
 		BasicToken: basic_token::{Module, Call, Storage, Event<T>},

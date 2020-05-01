@@ -17,6 +17,7 @@ randomness-collective-flip = { package = 'pallet-randomness-collective-flip', ve
 sudo = { package = 'pallet-sudo', version = '2.0.0-alpha.6', default-features = false }
 transaction-payment = { package = 'pallet-transaction-payment', version = '2.0.0-alpha.6', default-features = false }
 timestamp = { package = 'pallet-timestamp', version = '2.0.0-alpha.6', default-features = false }
+utility = { package = 'pallet-utility', version = '2.0.0-alpha.6', default-features = false }
 
 # Recipe Pallets
 adding-machine = { path = "../../pallets/adding-machine", default-features = false }
@@ -97,6 +98,7 @@ std = [
 	"sudo/std",
 	"timestamp/std",
 	"transaction-payment/std",
+	"utility/std",
 
 	# Recipes pallets
 	"adding-machine/std",
