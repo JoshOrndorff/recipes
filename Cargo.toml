@@ -32,7 +32,6 @@ members = [
 	"runtimes/api-runtime",
 	"runtimes/babe-grandpa-runtime",
 	"runtimes/ocw-runtime",
-	"runtimes/pow-runtime",
 	"runtimes/super-runtime",
 	"runtimes/weight-fee-runtime",
 	"nodes/babe-grandpa-node",
