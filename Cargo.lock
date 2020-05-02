@@ -2637,7 +2637,6 @@ dependencies = [
  "jsonrpc-core",
  "log",
  "parity-scale-codec",
- "pow-runtime",
  "rand 0.7.3",
  "sc-basic-authorship",
  "sc-cli",
@@ -2660,6 +2659,7 @@ dependencies = [
  "sp-transaction-pool",
  "structopt",
  "substrate-build-script-utils",
+ "super-runtime",
  "vergen",
 ]
 

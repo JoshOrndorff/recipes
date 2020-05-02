@@ -42,8 +42,7 @@ sc-client = '0.8.0-alpha.6'
 sc-basic-authorship = '0.8.0-alpha.6'
 sp-consensus = '0.8.0-alpha.6'
 
-# Pick one of the runtimes below.
-# Your runtime must have the necessary pallets to support consensus (Babe, Grandpa, etc).
+# This node is compatible with any of the runtimes below
 # ---
 # Common runtime configured with most Recipes pallets.
 runtime = { package = "super-runtime", path = "../../runtimes/super-runtime" }
@@ -56,7 +55,7 @@ runtime = { package = "super-runtime", path = "../../runtimes/super-runtime" }
 #   `cargo build --release --features ocw`.
 # runtime = { package = "ocw-runtime", path = "../../runtimes/ocw-runtime" }
 
-# TODO Can't use this until the API runtime implements babe api
+# Runtime with custom runtime-api (custom API only used in rpc-node)
 # runtime = { package = "api-runtime", path = "../../runtimes/api-runtime" }
 # ---
 
