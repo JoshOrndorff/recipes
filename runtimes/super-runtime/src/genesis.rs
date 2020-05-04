@@ -23,14 +23,6 @@ pub fn account_id_from_seed<TPair: Pair>(seed: &str) -> AccountId where
 	AccountPublic::from(get_from_seed::<TPair>(seed)).into_account()
 }
 
-/// Helper function to generate session key from seed
-// pub fn authority_keys_from_seed(seed: &str) -> (BabeId, GrandpaId) {
-// 	(
-// 		get_from_seed::<BabeId>(seed),
-// 		get_from_seed::<GrandpaId>(seed),
-// 	)
-// }
-
 pub fn dev_genesis() -> GenesisConfig {
 	testnet_genesis(
 		// Root Key
