@@ -88,9 +88,7 @@ dependencies = [
  "frame-executive",
  "frame-support",
  "frame-system",
- "pallet-aura",
  "pallet-balances",
- "pallet-grandpa",
  "pallet-indices",
  "pallet-randomness-collective-flip",
  "pallet-sudo",
@@ -101,9 +99,7 @@ dependencies = [
  "serde",
  "sp-api",
  "sp-block-builder",
- "sp-consensus-aura",
  "sp-core",
- "sp-finality-grandpa",
  "sp-inherents",
  "sp-io",
  "sp-offchain",
@@ -2173,6 +2169,7 @@ dependencies = [
 name = "kitchen-node"
 version = "2.0.0-alpha.6"
 dependencies = [
+ "api-runtime",
  "ctrlc",
  "derive_more 0.15.0",
  "exit-future",
@@ -2199,7 +2196,6 @@ dependencies = [
  "sp-transaction-pool",
  "structopt",
  "substrate-build-script-utils",
- "super-runtime",
  "tokio 0.1.22",
  "trie-root 0.15.2",
  "vergen",
@@ -3149,28 +3145,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6ff55baddef9e4ad00f88b6c743a2a8062d4c6ade126c2a528644b8e444d52ce"
 dependencies = [
  "stable_deref_trait",
-]
-
-[[package]]
-name = "pallet-aura"
-version = "2.0.0-alpha.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9757d44df3ff0372ea313703736e69ba361b158a58b7c9677b54be11a777da81"
-dependencies = [
- "frame-support",
- "frame-system",
- "pallet-session",
- "pallet-timestamp",
- "parity-scale-codec",
- "serde",
- "sp-application-crypto",
- "sp-consensus-aura",
- "sp-core",
- "sp-inherents",
- "sp-io",
- "sp-runtime",
- "sp-std",
- "sp-timestamp",
 ]
 
 [[package]]
