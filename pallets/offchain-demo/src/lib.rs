@@ -52,6 +52,15 @@ pub mod crypto {
 	app_crypto!(sr25519, KEY_TYPE);
 }
 
+use serde::{Serialize, Deserialize};
+
+#[derive(Serialize, Deserialize)]
+#[cfg_attr(feature = "std", derive(Debug))]
+struct GithubInfo {
+	login: Vec<u8>,
+	blog: Vec<u8>,
+}
+
 /// This is the pallet's configuration trait
 pub trait Trait: system::Trait {
 	/// The overarching dispatch call type.
@@ -188,6 +197,16 @@ impl<T: Trait> Module<T> {
 		//   ...
 		// }
 		debug::info!("{}", resp_str);
+
+		// Trial of deserializing with serde_json
+
+		let gh_info: GithubInfo = serde_json::from_str(&resp_str).unwrap();
+		debug::info!("login: {}", str::from_utf8(&gh_info.login)
+			.map_err(|_| <Error<T>>::JsonParsingError)?);
+		debug::info!("blog: {}", str::from_utf8(&gh_info.blog)
+			.map_err(|_| <Error<T>>::JsonParsingError)?);
+
+		// -- Finish trial --
 
 		let login_bytes = Self::parse_for_value(&resp_str, "login")?;
 		let blog_bytes = Self::parse_for_value(&resp_str, "blog")?;
