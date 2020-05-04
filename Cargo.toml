@@ -29,7 +29,6 @@ members = [
 	"pallets/sum-storage",
 	"pallets/vec-set",
 	"pallets/weights",
-	"runtimes/api-runtime",
 	"runtimes/babe-grandpa-runtime",
 	"runtimes/ocw-runtime",
 	"runtimes/super-runtime",

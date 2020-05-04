@@ -320,6 +320,10 @@ impl struct_storage::Trait for Runtime {
 	type Event = Event;
 }
 
+impl sum_storage::Trait for Runtime {
+	type Event = Event;
+}
+
 impl vec_set::Trait for Runtime {
 	type Event = Event;
 }
@@ -361,6 +365,7 @@ construct_runtime!(
 		SingleValue: single_value::{Module, Call, Storage},
 		StorageCache: storage_cache::{Module, Call, Storage, Event<T>},
 		StructStorage: struct_storage::{Module, Call, Storage, Event<T>},
+		SumStorage: sum_storage::{Module, Call, Storage, Event},
 		VecSet: vec_set::{Module, Call, Storage, Event<T>},
 	}
 );
@@ -461,6 +466,19 @@ impl_runtime_apis! {
 			encoded: Vec<u8>,
 		) -> Option<Vec<(Vec<u8>, sp_core::crypto::KeyTypeId)>> {
 			opaque::SessionKeys::decode_into_raw_public_keys(&encoded)
+		}
+	}
+
+
+
+	// Here we implement our custom runtime API.
+	impl sum_storage_rpc_runtime_api::SumStorageApi<Block> for Runtime {
+		fn get_sum() -> u32 {
+			// This Runtime API calls into a specific pallet. Calling a pallet is a common
+			// design pattern. You can see most other APIs in this file do the same.
+			// It is also possible to write your logic right here in the runtime
+			// amalgamator file
+			SumStorage::get_sum()
 		}
 	}
 }

@@ -82,42 +82,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d9a60d744a80c30fcb657dfe2c1b22bcb3e814c1a1e3674f32bf5820b570fbff"
 
 [[package]]
-name = "api-runtime"
-version = "2.0.0-alpha.6"
-dependencies = [
- "frame-executive",
- "frame-support",
- "frame-system",
- "pallet-aura",
- "pallet-balances",
- "pallet-grandpa",
- "pallet-indices",
- "pallet-randomness-collective-flip",
- "pallet-sudo",
- "pallet-timestamp",
- "pallet-transaction-payment",
- "parity-scale-codec",
- "safe-mix",
- "serde",
- "sp-api",
- "sp-block-builder",
- "sp-consensus-aura",
- "sp-core",
- "sp-finality-grandpa",
- "sp-inherents",
- "sp-io",
- "sp-offchain",
- "sp-runtime",
- "sp-session",
- "sp-std",
- "sp-transaction-pool",
- "sp-version",
- "substrate-wasm-builder-runner",
- "sum-storage",
- "sum-storage-rpc-runtime-api",
-]
-
-[[package]]
 name = "app_dirs"
 version = "1.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3157,28 +3121,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "pallet-aura"
-version = "2.0.0-alpha.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9757d44df3ff0372ea313703736e69ba361b158a58b7c9677b54be11a777da81"
-dependencies = [
- "frame-support",
- "frame-system",
- "pallet-session",
- "pallet-timestamp",
- "parity-scale-codec",
- "serde",
- "sp-application-crypto",
- "sp-consensus-aura",
- "sp-core",
- "sp-inherents",
- "sp-io",
- "sp-runtime",
- "sp-std",
- "sp-timestamp",
-]
-
-[[package]]
 name = "pallet-babe"
 version = "2.0.0-alpha.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4232,7 +4174,6 @@ dependencies = [
 name = "rpc-node"
 version = "2.0.0-alpha.6"
 dependencies = [
- "api-runtime",
  "ctrlc",
  "futures 0.1.29",
  "futures 0.3.4",
@@ -4263,6 +4204,7 @@ dependencies = [
  "structopt",
  "substrate-build-script-utils",
  "sum-storage-rpc",
+ "super-runtime",
  "tokio 0.1.22",
  "trie-root 0.15.2",
  "vergen",
@@ -6372,6 +6314,8 @@ dependencies = [
  "storage-cache",
  "struct-storage",
  "substrate-wasm-builder-runner",
+ "sum-storage",
+ "sum-storage-rpc-runtime-api",
  "vec-set",
 ]
 
