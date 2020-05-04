@@ -4185,20 +4185,19 @@ dependencies = [
  "sc-cli",
  "sc-client",
  "sc-client-api",
- "sc-consensus-aura",
+ "sc-client-db",
+ "sc-consensus-manual-seal",
  "sc-executor",
- "sc-finality-grandpa",
  "sc-network",
  "sc-rpc",
  "sc-service",
  "sc-transaction-pool",
  "sp-consensus",
- "sp-consensus-aura",
  "sp-core",
- "sp-finality-grandpa",
  "sp-inherents",
  "sp-io",
  "sp-runtime",
+ "sp-timestamp",
  "sp-transaction-pool",
  "structopt",
  "substrate-build-script-utils",
@@ -4496,38 +4495,6 @@ dependencies = [
  "sp-state-machine",
  "sp-trie",
  "substrate-prometheus-endpoint",
-]
-
-[[package]]
-name = "sc-consensus-aura"
-version = "0.8.0-alpha.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a476e0650893a4e8c086c14f1ea5fde4a3de9f654a75c706f2c362406ee4d588"
-dependencies = [
- "derive_more 0.99.5",
- "futures 0.3.4",
- "futures-timer 3.0.2",
- "log",
- "parity-scale-codec",
- "parking_lot 0.10.2",
- "sc-block-builder",
- "sc-client",
- "sc-client-api",
- "sc-consensus-slots",
- "sc-keystore",
- "sc-telemetry",
- "sp-api",
- "sp-application-crypto",
- "sp-block-builder",
- "sp-blockchain",
- "sp-consensus",
- "sp-consensus-aura",
- "sp-core",
- "sp-inherents",
- "sp-io",
- "sp-runtime",
- "sp-timestamp",
- "sp-version",
 ]
 
 [[package]]
@@ -5623,21 +5590,6 @@ dependencies = [
  "sp-std",
  "sp-utils",
  "sp-version",
-]
-
-[[package]]
-name = "sp-consensus-aura"
-version = "0.8.0-alpha.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0a5ffbc4aca29fe7a0f0c419445e34758210dba6418eeb101d60c1e15b27797a"
-dependencies = [
- "parity-scale-codec",
- "sp-api",
- "sp-application-crypto",
- "sp-inherents",
- "sp-runtime",
- "sp-std",
- "sp-timestamp",
 ]
 
 [[package]]
