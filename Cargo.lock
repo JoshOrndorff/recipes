@@ -110,7 +110,7 @@ dependencies = [
  "sp-version",
  "substrate-wasm-builder-runner",
  "sum-storage",
- "sum-storage-rpc-runtime-api",
+ "sum-storage-runtime-api",
 ]
 
 [[package]]
@@ -6231,11 +6231,11 @@ dependencies = [
  "sp-blockchain",
  "sp-rpc",
  "sp-runtime",
- "sum-storage-rpc-runtime-api",
+ "sum-storage-runtime-api",
 ]
 
 [[package]]
-name = "sum-storage-rpc-runtime-api"
+name = "sum-storage-runtime-api"
 version = "2.0.0"
 dependencies = [
  "serde_json",

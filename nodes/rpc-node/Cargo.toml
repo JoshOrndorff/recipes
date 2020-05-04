@@ -20,7 +20,6 @@ parking_lot = '0.9.0'
 tokio = '0.1.22'
 trie-root = '0.15.2'
 structopt = "0.3.8"
-runtime = { package = "api-runtime", path = "../../runtimes/api-runtime" }
 jsonrpc-core = "14.0.3"
 jsonrpc-core-client = "14.0.3"
 jsonrpc-derive = "14.0.3"
@@ -45,6 +44,10 @@ sp-io = '2.0.0-alpha.6'
 sp-runtime = '2.0.0-alpha.6'
 sp-timestamp = '2.0.0-alpha.6'
 sp-transaction-pool = '2.0.0-alpha.6'
+
+# RPC Node only works with Runtime's that provide the sum-storage-runtime-api
+# That means it only works with the api-runtime
+runtime = { package = "api-runtime", path = "../../runtimes/api-runtime" }
 
 [build-dependencies]
 vergen = '3.0.4'

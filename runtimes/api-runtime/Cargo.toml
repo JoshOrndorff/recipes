@@ -31,7 +31,7 @@ sp-std = { version = '2.0.0-alpha.6', default_features = false}
 sp-transaction-pool = { version = '2.0.0-alpha.6', default_features = false}
 sp-version = { version = '2.0.0-alpha.6', default_features = false}
 sum-storage = { default-features = false, path = "../../pallets/sum-storage" }
-sum-storage-rpc-runtime-api = { default-features = false, path = "../../pallets/sum-storage/rpc/runtime-api" }
+sum-storage-runtime-api = { default-features = false, path = "../../pallets/sum-storage/runtime-api" }
 
 [build-dependencies]
 wasm-builder-runner = { version = "1.0.4", package = "substrate-wasm-builder-runner" }
@@ -61,7 +61,7 @@ std = [
 	"sp-version/std",
 	"sudo/std",
 	"sum-storage/std",
-	"sum-storage-rpc-runtime-api/std",
+	"sum-storage-runtime-api/std",
 	"timestamp/std",
 	"transaction-payment/std",
 ]

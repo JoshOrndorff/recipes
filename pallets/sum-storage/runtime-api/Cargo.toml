@@ -1,5 +1,5 @@
 [package]
-name = "sum-storage-rpc-runtime-api"
+name = "sum-storage-runtime-api"
 version = "2.0.0"
 authors = ["Joshy Orndorff"]
 edition = "2018"
