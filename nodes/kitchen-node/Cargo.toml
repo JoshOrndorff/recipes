@@ -53,6 +53,9 @@ runtime = { package = "super-runtime", path = "../../runtimes/super-runtime" }
 # To use this runtime, compile the node with `ocw` feature enabled,
 #   `cargo build --release --features ocw`.
 # runtime = { package = "ocw-runtime", path = "../../runtimes/ocw-runtime" }
+
+# Runtime with custom runtime-api (custom API only used in rpc-node)
+# runtime = { package = "api-runtime", path = "../../runtimes/api-runtime" }
 # ---
 
 [build-dependencies]

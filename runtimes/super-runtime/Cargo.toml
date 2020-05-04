@@ -39,8 +39,6 @@ simple-map = { path = "../../pallets/simple-map", default-features = false }
 single-value = { path = "../../pallets/single-value", default-features = false }
 storage-cache = { path = "../../pallets/storage-cache", default-features = false }
 struct-storage = { path = "../../pallets/struct-storage", default-features = false }
-sum-storage = { default-features = false, path = "../../pallets/sum-storage" }
-sum-storage-rpc-runtime-api = { default-features = false, path = "../../pallets/sum-storage/rpc/runtime-api" }
 vec-set = { path = "../../pallets/vec-set", default-features = false }
 
 # Other Substrate dependencies
@@ -121,7 +119,5 @@ std = [
 	"single-value/std",
 	"storage-cache/std",
 	"struct-storage/std",
-	"sum-storage/std",
-	"sum-storage-rpc-runtime-api/std",
 	"vec-set/std",
 ]
