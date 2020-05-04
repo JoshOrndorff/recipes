@@ -86,7 +86,7 @@ pub fn new_full(config: Configuration, instant_seal: bool) -> Result<impl Abstra
 			proposer,
 			service.client().clone(),
 			service.transaction_pool().pool().clone(),
-			service.select_chain().unwrap(),
+			service.select_chain().ok_or(ServiceError::SelectChainRequired)?,
 			inherent_data_providers
 		))
 	} else {
