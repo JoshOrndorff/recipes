@@ -8,5 +8,5 @@
       "super_number": "u32",
       "inner_thing": "InnerThing"
   },
-  "InnerThing": "InnerThingOf"
+  "InnerThingOf": "InnerThing"
 }
