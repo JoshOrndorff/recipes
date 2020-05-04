@@ -29,7 +29,7 @@ const pallets = [
   "single-value",
   "storage-cache",
   "struct-storage",
-  "sum_storage",
+  "sum-storage",
   "vec-set",
 ]
 
