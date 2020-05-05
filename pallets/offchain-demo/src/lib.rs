@@ -11,7 +11,7 @@ use frame_support::{
 	weights::SimpleDispatchInfo,
 };
 
-use core::convert::{TryInto};
+use core::{fmt, convert::TryInto};
 
 use frame_system::{self as system, ensure_signed, ensure_none, offchain};
 use sp_core::crypto::KeyTypeId;
@@ -23,6 +23,7 @@ use sp_runtime::{
 };
 use sp_std::prelude::*;
 use sp_std::str as str;
+use alt_serde::{Deserialize, Deserializer};
 
 /// Defines application identifier for crypto keys of this module.
 ///
@@ -47,8 +48,6 @@ pub mod crypto {
 	app_crypto!(sr25519, KEY_TYPE);
 }
 
-
-use alt_serde::{ Deserialize, Deserializer };
 #[derive(Deserialize)]
 #[serde(crate = "alt_serde")]
 struct GithubInfo {
@@ -56,12 +55,23 @@ struct GithubInfo {
 	login: Vec<u8>,
 	#[serde(deserialize_with = "de_string_to_bytes")]
 	blog: Vec<u8>,
+	public_repos: u32,
 }
 
 pub fn de_string_to_bytes<'de, D>(de: D) -> Result<Vec<u8>, D::Error>
 	where D: Deserializer<'de> {
 	let s: &str = Deserialize::deserialize(de)?;
 	Ok(s.as_bytes().to_vec())
+}
+
+impl fmt::Debug for GithubInfo {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+		write!(f, "{ login: {}, blog: {}, public_repos: {} }",
+			str::from_utf8(&self.login).unwrap(),
+			str::from_utf8(&self.blog).unwrap(),
+			&self.public_repos
+    	)
+    }
 }
 
 /// This is the pallet's configuration trait
@@ -192,20 +202,11 @@ impl<T: Trait> Module<T> {
 
 		let resp_str = str::from_utf8(&resp_bytes)
 			.map_err(|_| <Error<T>>::HttpFetchingError)?;
-
-		// The json shape is as follow.
-		// {
-		//   "login":"substrate-developer-hub",
-		//   "blog":"https://substrate.dev",
-		//   ...
-		// }
 		debug::info!("{}", resp_str);
 
+		// Deserializing to struct
 		let gh_info: GithubInfo = serde_json::from_str(&resp_str).unwrap();
-		debug::info!("login: {}", str::from_utf8(&gh_info.login)
-			.map_err(|_| <Error<T>>::JsonParsingError)?);
-		debug::info!("blog: {}", str::from_utf8(&gh_info.blog)
-			.map_err(|_| <Error<T>>::JsonParsingError)?);
+		debug::info!("gh_info: {:?}", gh_info);
 		Ok(())
 	}
 
