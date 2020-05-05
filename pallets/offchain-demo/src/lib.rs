@@ -24,11 +24,6 @@ use sp_runtime::{
 use sp_std::prelude::*;
 use sp_std::str as str;
 
-// Because we are parsing json in a `no_std` env, we cannot use `serde_json` library.
-//   `simple_json2` is a small tool written by our community member to handle json parsing in
-//   no_std env.
-use simple_json2::{ json::{ JsonObject, JsonValue }, parse_json };
-
 /// Defines application identifier for crypto keys of this module.
 ///
 /// Every module that deals with signatures needs to declare its unique identifier for
@@ -52,13 +47,21 @@ pub mod crypto {
 	app_crypto!(sr25519, KEY_TYPE);
 }
 
-use serde::{Serialize, Deserialize};
 
-#[derive(Serialize, Deserialize)]
-#[cfg_attr(feature = "std", derive(Debug))]
+use alt_serde::{ Deserialize, Deserializer };
+#[derive(Deserialize)]
+#[serde(crate = "alt_serde")]
 struct GithubInfo {
+	#[serde(deserialize_with = "de_string_to_bytes")]
 	login: Vec<u8>,
+	#[serde(deserialize_with = "de_string_to_bytes")]
 	blog: Vec<u8>,
+}
+
+pub fn de_string_to_bytes<'de, D>(de: D) -> Result<Vec<u8>, D::Error>
+	where D: Deserializer<'de> {
+	let s: &str = Deserialize::deserialize(de)?;
+	Ok(s.as_bytes().to_vec())
 }
 
 /// This is the pallet's configuration trait
@@ -198,24 +201,11 @@ impl<T: Trait> Module<T> {
 		// }
 		debug::info!("{}", resp_str);
 
-		// Trial of deserializing with serde_json
-
 		let gh_info: GithubInfo = serde_json::from_str(&resp_str).unwrap();
 		debug::info!("login: {}", str::from_utf8(&gh_info.login)
 			.map_err(|_| <Error<T>>::JsonParsingError)?);
 		debug::info!("blog: {}", str::from_utf8(&gh_info.blog)
 			.map_err(|_| <Error<T>>::JsonParsingError)?);
-
-		// -- Finish trial --
-
-		let login_bytes = Self::parse_for_value(&resp_str, "login")?;
-		let blog_bytes = Self::parse_for_value(&resp_str, "blog")?;
-
-		debug::info!("login: {}", str::from_utf8(&login_bytes)
-			.map_err(|_| <Error<T>>::JsonParsingError)?);
-		debug::info!("blog: {}", str::from_utf8(&blog_bytes)
-			.map_err(|_| <Error<T>>::JsonParsingError)?);
-
 		Ok(())
 	}
 
@@ -257,28 +247,6 @@ impl<T: Trait> Module<T> {
 
 		// Next we fully read the response body and collect it to a vector of bytes.
 		Ok(response.body().collect::<Vec<u8>>())
-	}
-
-	fn parse_for_value(json_str: &str, key: &str) -> Result<Vec<u8>, Error<T>> {
-		// Parse the whole string into a Json object
-		let json: JsonValue = parse_json(&json_str)
-			.map_err(|_| <Error<T>>::JsonParsingError)?;
-		let json_obj: &JsonObject = json.get_object()
-			.map_err(|_| <Error<T>>::JsonParsingError)?;
-
-		// We iterate through the key and retrieve the (key, value) pair that match the `key`
-		//   parameter.
-		// `key_val.0` contains the key and `key_val.1` contains the value.
-		let key_val = json_obj
-			.iter()
-			.find(|(k, _)| *k == key.chars().collect::<Vec<char>>())
-			.ok_or(<Error<T>>::JsonParsingError)?;
-
-		// We assume the value is a string, so we use `get_bytes()` to collect them back.
-		//   In a real app, you may need to catch the error and further process it if the value is not
-		//   a string.
-		key_val.1.get_bytes()
-			.map_err(|_| <Error<T>>::JsonParsingError)
 	}
 
 	fn signed_submit_number(block_number: T::BlockNumber) -> Result<(), Error<T>> {

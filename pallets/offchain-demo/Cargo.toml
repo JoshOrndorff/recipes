@@ -11,9 +11,9 @@ license = "GPL-3.0-or-later"
 # external dependencies
 codec = { package = "parity-scale-codec", version = "1.3.0", default-features = false }
 parking_lot = "0.10.0"
-simple-json2 = { version = "0.1.2", default-features = false }
-serde = { version = "1.0.106", default-features = false, features = ["alloc", "derive"] }
-serde_json = { version = "1.0.52", default-features = false, features = ["alloc"] }
+
+alt_serde = { version = "1", default-features = false, features = ["derive"] }
+serde_json = { version = "1", default-features = false, git = "https://github.com/Xanewok/json", branch = "no-std", features = ["alloc"] }
 
 # Substrate dependencies
 frame-support = { package = "frame-support", default-features = false, version = '2.0.0-alpha.6' }
@@ -32,7 +32,4 @@ std = [
 	'sp-io/std',
 	'sp-runtime/std',
 	'sp-std/std',
-	'simple-json2/std',
-	'serde/std',
-	'serde_json/std',
 ]
