@@ -10,13 +10,14 @@ use frame_support::{
 	dispatch::DispatchResult, decl_module, decl_storage, decl_event, decl_error,
 	weights::SimpleDispatchInfo,
 };
-
+use parity_scale_codec::{Encode, Decode};
 use core::{fmt, convert::TryInto};
 
 use frame_system::{self as system, ensure_signed, ensure_none, offchain};
 use sp_core::crypto::KeyTypeId;
 use sp_runtime::{
 	offchain as rt_offchain,
+	offchain::{storage::StorageValueRef},
 	transaction_validity::{
 		InvalidTransaction, ValidTransaction, TransactionValidity, TransactionSource
 	},
@@ -48,8 +49,8 @@ pub mod crypto {
 	app_crypto!(sr25519, KEY_TYPE);
 }
 
-#[derive(Deserialize)]
 #[serde(crate = "alt_serde")]
+#[derive(Deserialize, Encode, Decode, Default)]
 struct GithubInfo {
 	#[serde(deserialize_with = "de_string_to_bytes")]
 	login: Vec<u8>,
@@ -66,7 +67,7 @@ pub fn de_string_to_bytes<'de, D>(de: D) -> Result<Vec<u8>, D::Error>
 
 impl fmt::Debug for GithubInfo {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-		write!(f, "{ login: {}, blog: {}, public_repos: {} }",
+		write!(f, "{{ login: {}, blog: {}, public_repos: {} }}",
 			str::from_utf8(&self.login).unwrap(),
 			str::from_utf8(&self.blog).unwrap(),
 			&self.public_repos
@@ -145,7 +146,7 @@ decl_module! {
 			let result = match Self::choose_tx_type(block_number) {
 				TransactionType::SignedSubmitNumber => Self::signed_submit_number(block_number),
 				TransactionType::UnsignedSubmitNumber => Self::unsigned_submit_number(block_number),
-				TransactionType::HttpFetching => Self::fetch_n_parse(block_number),
+				TransactionType::HttpFetching => Self::fetch_if_needed(),
 				TransactionType::None => Ok(())
 			};
 
@@ -193,7 +194,29 @@ impl<T: Trait> Module<T> {
 		}
 	}
 
-	fn fetch_n_parse(_block_number: T::BlockNumber) -> Result<(), Error<T>> {
+	fn fetch_if_needed() -> Result<(), Error<T>> {
+		// Check if we have fetched github info before
+		let storage = StorageValueRef::persistent(b"offchain-demo::gh-info");
+		let res = storage.mutate(|store: Option<Option<GithubInfo>>| {
+			match store {
+				Some(Some(info)) => {
+					debug::info!("Using cached gh-info.");
+					Ok(info)
+				},
+				_ => Self::fetch_n_parse(),
+			}
+		});
+
+		match res {
+			Ok(Ok(gh_info)) => {
+				debug::info!("gh-info: {:?}", gh_info);
+				Ok(())
+			},
+			_ => Err(<Error<T>>::HttpFetchingError)
+		}
+	}
+
+	fn fetch_n_parse() -> Result<GithubInfo, Error<T>> {
 		let resp_bytes = Self::fetch_from_remote()
 			.map_err(|e| {
 				debug::error!("fetch_from_remote error: {:?}", e);
@@ -206,8 +229,7 @@ impl<T: Trait> Module<T> {
 
 		// Deserializing to struct
 		let gh_info: GithubInfo = serde_json::from_str(&resp_str).unwrap();
-		debug::info!("gh_info: {:?}", gh_info);
-		Ok(())
+		Ok(gh_info)
 	}
 
 	fn fetch_from_remote() -> Result<Vec<u8>, Error<T>> {
@@ -310,7 +332,7 @@ impl<T: Trait> frame_support::unsigned::ValidateUnsigned for Module<T> {
 			Ok(ValidTransaction {
 				priority: 1 << 20,
 				requires: vec![],
-				provides: vec![codec::Encode::encode(&(KEY_TYPE.0, block_num))],
+				provides: vec![Encode::encode(&(KEY_TYPE.0, block_num))],
 				longevity: 3,
 				propagate: false,
 			})
