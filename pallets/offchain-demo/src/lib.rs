@@ -24,6 +24,9 @@ use sp_runtime::{
 };
 use sp_std::prelude::*;
 use sp_std::str as str;
+
+// We use `alt_serde`, and Xanewok-modified `serde_json` so that we can compile the program
+//   with serde(features `std`) and alt_serde(features `no_std`).
 use alt_serde::{Deserialize, Deserializer};
 
 /// Defines application identifier for crypto keys of this module.
@@ -49,9 +52,12 @@ pub mod crypto {
 	app_crypto!(sr25519, KEY_TYPE);
 }
 
+// Specifying serde path as `alt_serde`
+// ref: https://serde.rs/container-attrs.html#crate
 #[serde(crate = "alt_serde")]
 #[derive(Deserialize, Encode, Decode, Default)]
 struct GithubInfo {
+	// Specify our own deserializing function to convert JSON string to vector of bytes
 	#[serde(deserialize_with = "de_string_to_bytes")]
 	login: Vec<u8>,
 	#[serde(deserialize_with = "de_string_to_bytes")]
@@ -60,12 +66,14 @@ struct GithubInfo {
 }
 
 pub fn de_string_to_bytes<'de, D>(de: D) -> Result<Vec<u8>, D::Error>
-	where D: Deserializer<'de> {
+where D: Deserializer<'de> {
 	let s: &str = Deserialize::deserialize(de)?;
 	Ok(s.as_bytes().to_vec())
 }
 
 impl fmt::Debug for GithubInfo {
+	// `fmt` converts the vector of bytes inside the struct back to string for
+	//   more friendly display.
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
 		write!(f, "{{ login: {}, blog: {}, public_repos: {} }}",
 			str::from_utf8(&self.login).unwrap(),
@@ -117,8 +125,8 @@ decl_error! {
 		SignedSubmitNumberError,
 		// Error returned when making unsigned transactions in off-chain worker
 		UnsignedSubmitNumberError,
+		// Error returned when making remote http fetching
 		HttpFetchingError,
-		JsonParsingError,
 	}
 }
 
@@ -194,21 +202,45 @@ impl<T: Trait> Module<T> {
 		}
 	}
 
+	/// Check if we have fetched github info before. If yes, we use the cached version that is
+	///   stored in off-chain worker storage `storage`. If no, we fetch the remote info and then
+	///   write the info into the storage for future retrieval.
 	fn fetch_if_needed() -> Result<(), Error<T>> {
-		// Check if we have fetched github info before
+
+		// Start off by creating a reference to Local Storage value.
+		// Since the local storage is common for all offchain workers, it's a good practice
+		// to prepend our entry with the pallet name.
 		let storage = StorageValueRef::persistent(b"offchain-demo::gh-info");
+
+		// The local storage is persisted and shared between runs of the offchain workers,
+		// and offchain workers may run concurrently. We can use the `mutate` function, to
+		// write a storage entry in an atomic fashion.
+		//
+		// It has a similar API as `StorageValue` that offer `get`, `set`, `mutate`.
+		// If we are using a get-check-set access pattern, we likely want to use `mutate` to access
+		// the storage in one go.
+		//
+		// Ref: https://substrate.dev/rustdocs/v2.0.0-alpha.6/sp_runtime/offchain/storage/struct.StorageValueRef.html
 		let res = storage.mutate(|store: Option<Option<GithubInfo>>| {
 			match store {
+				// info existed, returning the value
 				Some(Some(info)) => {
 					debug::info!("Using cached gh-info.");
 					Ok(info)
 				},
+				// info not existed, so we remote fetch (and parse the JSON)
 				_ => Self::fetch_n_parse(),
 			}
 		});
 
+		// The value of `res` is a bit funny. Its type is `Result<Result<T, E>, E>`. The above
+		// `mutate` function returns:function
+		// `Ok(Ok(T))` - in case the value has been successfully set.
+		// `Ok(Err(T))` - in case the value was returned, but could not been set in the storage.
+		// `Err(_)` - in case the closure function returns an error.
 		match res {
 			Ok(Ok(gh_info)) => {
+				// Print out our github info, whether it is newly-fetched or cached.
 				debug::info!("gh-info: {:?}", gh_info);
 				Ok(())
 			},
@@ -216,6 +248,7 @@ impl<T: Trait> Module<T> {
 		}
 	}
 
+	/// Fetch from remote and deserialize the JSON to a struct
 	fn fetch_n_parse() -> Result<GithubInfo, Error<T>> {
 		let resp_bytes = Self::fetch_from_remote()
 			.map_err(|e| {
@@ -223,15 +256,18 @@ impl<T: Trait> Module<T> {
 				<Error<T>>::HttpFetchingError
 			})?;
 
+		// Print out our fetched JSON string
 		let resp_str = str::from_utf8(&resp_bytes)
 			.map_err(|_| <Error<T>>::HttpFetchingError)?;
 		debug::info!("{}", resp_str);
 
-		// Deserializing to struct
+		// Deserializing JSON to struct, thanks to `serde` and `serde_derive`
 		let gh_info: GithubInfo = serde_json::from_str(&resp_str).unwrap();
 		Ok(gh_info)
 	}
 
+	/// This function uses the `offchain::http` API to query the remote github information,
+	///   and returns the JSON response as vector of bytes.
 	fn fetch_from_remote() -> Result<Vec<u8>, Error<T>> {
 		let remote_url_bytes = HTTP_REMOTE_REQUEST_BYTES.to_vec();
 		let user_agent = HTTP_HEADER_USER_AGENT.to_vec();
