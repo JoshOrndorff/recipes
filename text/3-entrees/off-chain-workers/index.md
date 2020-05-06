@@ -10,4 +10,4 @@ We will deep-dive into each of the topics below.
 
 - [Signed and Unsigned Transactions](./transactions.md)
 - [HTTP fetching and JSON parsing](./http-json.md)
-- Storage in Off-chain Workers (wip)
+- [Local storage in Off-chain Workers](./storage.md)
