@@ -2,5 +2,6 @@
 	"ContinuousAccountData": {
 		"principal": "u64",
 		"deposit_date": "BlockNumber"
-	}
+	},
+	"U16F16": "[u8; 4]"
 }
