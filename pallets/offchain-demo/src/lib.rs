@@ -233,7 +233,7 @@ impl<T: Trait> Module<T> {
 			}
 		});
 
-		// The value of `res` is a bit funny. Its type is `Result<Result<T, E>, E>`. The above
+		// The value of `res` looks funny. Its type is `Result<Result<T, E>, E>`. The above
 		// `mutate` function returns:function
 		// `Ok(Ok(T))` - in case the value has been successfully set.
 		// `Ok(Err(T))` - in case the value was returned, but could not been set in the storage.
