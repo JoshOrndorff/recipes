@@ -245,13 +245,20 @@ impl<T: Trait> Module<T> {
 		//   Ok(Err(true)) - Another ocw is writing to the storage while we set it, so we also skip `fetch_n_parse` in this case.
 		//   Ok(Ok(true)) - we get the lock, so we run `fetch_n_parse`
 		if let Ok(Ok(true)) = res {
-			// Release the lock here in case `fetch_n_parse` fail and return early.
-			s_lock.set(&false);
-			let gh_info = Self::fetch_n_parse()?;
-			s_info.set(&gh_info);
-			debug::info!("fetched gh-info: {:?}", gh_info);
-		}
+			match Self::fetch_n_parse() {
+				Ok(gh_info) => {
+					// set gh-info into the storage and release the lock
+					s_info.set(&gh_info);
+					s_lock.set(&false);
 
+					debug::info!("fetched gh-info: {:?}", gh_info);
+				},
+				Err(err) => {
+					s_lock.set(&false);
+					return Err(err);
+				}
+			}
+		}
 		Ok(())
 
 		// let res = storage.mutate(|store: Option<Option<GithubInfo>>| {
