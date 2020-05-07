@@ -44,7 +44,7 @@ sp-consensus = '0.8.0-alpha.6'
 
 # This node only works with runtimes that can provide babe and grandpa authorities.
 # No other runtimes that come with the recipes provide these APIs, but the substrate demonstration
-# runtime doed.
+# runtime does.
 runtime = { package = "babe-grandpa-runtime", path = "../../runtimes/babe-grandpa-runtime" }
 
 #TODO Test this
