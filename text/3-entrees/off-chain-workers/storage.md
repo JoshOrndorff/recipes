@@ -90,7 +90,7 @@ fn fetch_if_needed() -> Result<(), Error<T>> {
 }
 ```
 
-`res` has a type of `Result<Result<T, E>, E>`, to indicate one of the following cases:
+`res` has a type of `Result<Result<T, T>, E>`, to indicate one of the following cases:
 
 * `Ok(Ok(T))` - the value has been successfully set in the `mutate` closure and saved to the storage.
 * `Ok(Err(T))` - the value has been successfully set in the `mutate` closure, but failed to save to the storage.

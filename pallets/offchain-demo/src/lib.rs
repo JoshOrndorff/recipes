@@ -127,6 +127,8 @@ decl_error! {
 		UnsignedSubmitNumberError,
 		// Error returned when making remote http fetching
 		HttpFetchingError,
+		// Error returned when gh-info has already been fetched
+		AlreadyFetched,
 	}
 }
 
@@ -210,7 +212,8 @@ impl<T: Trait> Module<T> {
 		// Start off by creating a reference to Local Storage value.
 		// Since the local storage is common for all offchain workers, it's a good practice
 		// to prepend our entry with the pallet name.
-		let storage = StorageValueRef::persistent(b"offchain-demo::gh-info");
+		let s_info = StorageValueRef::persistent(b"offchain-demo::gh-info");
+		let s_lock = StorageValueRef::persistent(b"offchain-demo::lock");
 
 		// The local storage is persisted and shared between runs of the offchain workers,
 		// and offchain workers may run concurrently. We can use the `mutate` function, to
@@ -221,30 +224,61 @@ impl<T: Trait> Module<T> {
 		// the storage in one go.
 		//
 		// Ref: https://substrate.dev/rustdocs/v2.0.0-alpha.6/sp_runtime/offchain/storage/struct.StorageValueRef.html
-		let res = storage.mutate(|store: Option<Option<GithubInfo>>| {
-			match store {
-				// info existed, returning the value
-				Some(Some(info)) => {
-					debug::info!("Using cached gh-info.");
-					Ok(info)
-				},
-				// info not existed, so we remote fetch (and parse the JSON)
-				_ => Self::fetch_n_parse(),
+		if let Some(Some(gh_info)) = s_info.get::<GithubInfo>() {
+			// gh-info has already been fetched. Return early.
+			debug::info!("cached gh-info: {:?}", gh_info);
+			return Ok(());
+		}
+
+		// Lock acquisition
+		let res: Result<Result<bool, bool>, Error<T>> = s_lock.mutate(|s: Option<Option<bool>>| {
+			match s {
+				// if the lock has never been set or is free (false), return true to execute `fetch_n_parse`
+				None | Some(Some(false)) => Ok(true),
+				// otherwise, someone already hold the lock (true), we want to skip `fetch_n_parse`.
+				_ => Err(<Error<T>>::AlreadyFetched),
 			}
 		});
+
+		// `res` cases:
+		//   Err() - someone hold the lock already, so we want to skip
+		//   Ok(Err(true)) - Another ocw is writing to the storage while we set it, so we also skip `fetch_n_parse` in this case.
+		//   Ok(Ok(true)) - we get the lock, so we run `fetch_n_parse`
+		if let Ok(Ok(true)) = res {
+			// Release the lock here in case `fetch_n_parse` fail and return early.
+			s_lock.set(&false);
+			let gh_info = Self::fetch_n_parse()?;
+			s_info.set(&gh_info);
+			debug::info!("fetched gh-info: {:?}", gh_info);
+		}
+
+		Ok(())
+
+		// let res = storage.mutate(|store: Option<Option<GithubInfo>>| {
+		// 	match store {
+		// 		// info existed, returning the value
+		// 		Some(Some(info)) => {
+		// 			debug::info!("Using cached gh-info.");
+		// 			Ok(info)
+		// 		},
+		// 		// info not existed, so we remote fetch (and parse the JSON)
+		// 		_ => Self::fetch_n_parse(),
+		// 	}
+		// });
 
 		// `res` has a type of `Result<Result<T, E>, E>`. This is to cover the following three cases:
 		// `Ok(Ok(T))` - in case the value has been successfully set and saved in the storage.
 		// `Ok(Err(T))` - in case the value is set, but could not be saved in the storage.
 		// `Err(_)` - in case the closure function returns an error.
-		match res {
-			Ok(Ok(gh_info)) => {
-				// Print out our github info, whether it is newly-fetched or cached.
-				debug::info!("gh-info: {:?}", gh_info);
-				Ok(())
-			},
-			_ => Err(<Error<T>>::HttpFetchingError)
-		}
+
+		// match res {
+		// 	Ok(Ok(gh_info)) => {
+		// 		// Print out our github info, whether it is newly-fetched or cached.
+		// 		debug::info!("gh-info: {:?}", gh_info);
+		// 		Ok(())
+		// 	},
+		// 	_ => Err(<Error<T>>::HttpFetchingError)
+		// }
 	}
 
 	/// Fetch from remote and deserialize the JSON to a struct
