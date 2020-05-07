@@ -2,11 +2,11 @@
 
 *[`pallets/offchain-demo`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo)*
 
-Remember we mentioned that off-chain workers cannot write directly to the on-chain storage, that is why they have to submit transactions back on-chain to modify the state.
+Remember we mentioned that off-chain workers cannot write directly to the on-chain storage, that is why they have to submit transactions back on-chain to write to online storage.
 
 Fortunately, there is also a local storage that persist across runs in off-chain workers. It has a similar API usage as [`StorageValue`](/2-appetizers/2-storage-values.html) with `get`, `set`, and `mutate`.
 
-Storage of off-chain workers is persisted across runs of off-chain workers and blockchain re-organizations.
+Storage of off-chain workers is persisted across runs of off-chain workers and across nodes with off-chain wokers enabled.
 
 In this recipe, we will add a simple cache over our previous [http fetching example](./http-json.html). If the cached value existed, we will return using the cached value. Otherwise we fetch from github public API and save it to the cache.
 
@@ -43,7 +43,7 @@ Looking at the [API doc](https://substrate.dev/rustdocs/v2.0.0-alpha.6/sp_runtim
 
 Once we have the storage reference, we can access the storage via `get`, `set`, and `mutate`. Let's demonstrate the `mutate` function as the usage of the remaining two functions are pretty self-explanatory.
 
-As with general on-chain storage, if we have a storage access pattern of **get-check-set**, it is a good indicator we should use `mutate`. This makes our storage access atomically in one go rather than two. This is good as storage access is expensive.
+As with general on-chain storage, if we have a storage access pattern of **get-check-set**, it is a good indicator we should use `mutate`. This makes sure that multiple off-chain workers running concurrently does not modify the same storage entry. The `mutate` is using [Compare-and-Set pattern](https://en.wikipedia.org/wiki/Compare-and-swap), so if multiple concurrent off-chain workers read a value and want to write it back, only one of them will succeed.
 
 ```rust
 fn fetch_if_needed() -> Result<(), Error<T>> {
@@ -90,11 +90,11 @@ fn fetch_if_needed() -> Result<(), Error<T>> {
 }
 ```
 
-`res` looks a bit funny, a type of `Result<Result<T, E>, E>`, to indicate the following cases:
+`res` has a type of `Result<Result<T, E>, E>`, to indicate one of the following cases:
 
-* `Ok(Ok(T))` - the value has been successfully set in the previous `mutate` closure, and has been saved to the storage successfully.
-* `Ok(Err(T))` - the value has been successfully set in the previous `mutate` closure, but cannot be saved to the storage successfully.
-* `Err(_)` - the value has **NOT** been set successfully in the previous `mutate` closure.
+* `Ok(Ok(T))` - the value has been successfully set in the `mutate` closure and saved to the storage.
+* `Ok(Err(T))` - the value has been successfully set in the `mutate` closure, but failed to save to the storage.
+* `Err(_)` - the value has **NOT** been set successfully in the `mutate` closure.
 
 ## Reference
 

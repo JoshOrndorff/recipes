@@ -72,9 +72,9 @@ We usually get JSON objects back when requesting from HTTP APIs. The next task i
 
 ### Setup
 
-In Rust, `serde` and `serde-json` are the popular combo-package used for JSON parsing. But due to the project setup and cargo feature unification limitation that we have to compile our Substrate node with `serde` feature `std` on, we cannot simultaneously have `serde` feature `std` off (`no_std` on) when compiling the runtime, so we are going to use a renamed `serde` crate, `alt_serde`, in our offchain-demo pallet to remedy this situation.
+In Rust, `serde` and `serde-json` are the popular combo-package used for JSON parsing. Due to the project setup of compiling Substrate node with `serde` feature `std` on and cargo feature unification limitation, we cannot simultaneously have `serde` feature `std` off (`no_std` on) when compiling the runtime ([details described in this issue](https://github.com/rust-lang/cargo/issues/4463)). So we are going to use a renamed `serde` crate, `alt_serde`, in our offchain-demo pallet to remedy this situation.
 
-In our project [`Cargo.toml`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/Cargo.toml)
+src: `pallets/offchain-demo/Cargo.toml`
 
 ```toml
 [package]
@@ -85,6 +85,7 @@ In our project [`Cargo.toml`](https://github.com/substrate-developer-hub/recipes
 # ...
 
 alt_serde = { version = "1", default-features = false, features = ["derive"] }
+# updated to `alt_serde_json` when latest version supporting feature `alloc` is released
 serde_json = { version = "1", default-features = false, git = "https://github.com/Xanewok/json", branch = "no-std", features = ["alloc"] }
 
 # ...
@@ -98,7 +99,7 @@ We also use a modified version of `serde_json` that has the latest `alloc` featu
 
 Then we use the usual `serde-derive` approach on deserializing. First we define the struct with fields we are interested to extract out.
 
-src: `offchain-demo/src/lib.rs`
+src: `pallets/offchain-demo/src/lib.rs`
 
 ```rust
 // We use `alt_serde`, and Xanewok-modified `serde_json` so that we can compile the program
