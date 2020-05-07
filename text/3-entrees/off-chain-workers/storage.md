@@ -2,7 +2,7 @@
 
 *[`pallets/offchain-demo`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo)*
 
-Remember we mentioned that off-chain workers cannot write directly to the on-chain storage, that is why they have to submit transactions back on-chain to write to online storage.
+Remember we mentioned that off-chain workers cannot write directly to the on-chain storage, that is why they have to submit transactions back on-chain to modify the state.
 
 Fortunately, there is also a local storage that persist across runs in off-chain workers. It has a similar API usage as [`StorageValue`](/2-appetizers/2-storage-values.html) with `get`, `set`, and `mutate`.
 
