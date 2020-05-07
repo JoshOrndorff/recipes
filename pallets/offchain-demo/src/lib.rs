@@ -76,8 +76,8 @@ impl fmt::Debug for GithubInfo {
 	//   more friendly display.
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
 		write!(f, "{{ login: {}, blog: {}, public_repos: {} }}",
-			str::from_utf8(&self.login).unwrap(),
-			str::from_utf8(&self.blog).unwrap(),
+			str::from_utf8(&self.login).map_err(|_| fmt::Error)?,
+			str::from_utf8(&self.blog).map_err(|_| fmt::Error)?,
 			&self.public_repos
     	)
     }
@@ -179,7 +179,7 @@ impl<T: Trait> Module<T> {
 			// displaying the average
 			let average = match num_len {
 				0 => 0,
-				_ => numbers.iter().fold(0, {|acc, num| acc + num}) / (num_len as u64),
+				_ => numbers.iter().fold(0, |acc, num| acc + num) / (num_len as u64),
 			};
 
 			debug::info!("Current average of numbers is: {}", average);
@@ -233,10 +233,9 @@ impl<T: Trait> Module<T> {
 			}
 		});
 
-		// The value of `res` looks funny. Its type is `Result<Result<T, E>, E>`. The above
-		// `mutate` function returns:function
-		// `Ok(Ok(T))` - in case the value has been successfully set.
-		// `Ok(Err(T))` - in case the value was returned, but could not been set in the storage.
+		// `res` has a type of `Result<Result<T, E>, E>`. This is to cover the following three cases:
+		// `Ok(Ok(T))` - in case the value has been successfully set and saved in the storage.
+		// `Ok(Err(T))` - in case the value is set, but could not be saved in the storage.
 		// `Err(_)` - in case the closure function returns an error.
 		match res {
 			Ok(Ok(gh_info)) => {
@@ -256,13 +255,14 @@ impl<T: Trait> Module<T> {
 				<Error<T>>::HttpFetchingError
 			})?;
 
-		// Print out our fetched JSON string
 		let resp_str = str::from_utf8(&resp_bytes)
 			.map_err(|_| <Error<T>>::HttpFetchingError)?;
+		// Print out our fetched JSON string
 		debug::info!("{}", resp_str);
 
 		// Deserializing JSON to struct, thanks to `serde` and `serde_derive`
-		let gh_info: GithubInfo = serde_json::from_str(&resp_str).unwrap();
+		let gh_info: GithubInfo = serde_json::from_str(&resp_str)
+			.map_err(|_| <Error<T>>::HttpFetchingError)?;
 		Ok(gh_info)
 	}
 

@@ -13,6 +13,7 @@ parity-scale-codec = { default-features = false, features = ['derive'], version 
 parking_lot = "0.10.0"
 
 alt_serde = { version = "1", default-features = false, features = ["derive"] }
+# updated to `alt_serde_json` when latest version supporting feature `alloc` is released
 serde_json = { version = "1", default-features = false, git = "https://github.com/Xanewok/json", branch = "no-std", features = ["alloc"] }
 
 # Substrate dependencies
