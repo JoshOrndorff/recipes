@@ -1,7 +1,11 @@
 //! Service and ServiceFactory implementation. Specialized wrapper over substrate service.
 
 // use std::sync::Arc;
+<<<<<<< HEAD
 // use sc_consensus::LongestChain;
+=======
+// use sc_client::LongestChain;
+>>>>>>> master
 // use sc_client_api::ExecutorProvider;
 use sc_service::{error::{Error as ServiceError}, AbstractService, Configuration};
 use sp_inherents::InherentDataProviders;

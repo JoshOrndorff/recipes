@@ -8,7 +8,7 @@ In traditional web app, it is often necessary to communicate with third-party AP
 
 In Substrate, we solve this problem by using off-chain workers to issue HTTP requests and get the result back.
 
-In `pallets/offchain-demo/src/lib.rs`, we have an example of fetching information of github organization `substrate-developer-hub` via [its public API](https://api.github.com/orgs/substrate-developer-hub). Then we extract the `login` and `blog` value out.
+In `pallets/offchain-demo/src/lib.rs`, we have an example of fetching information of github organization `substrate-developer-hub` via its public API. Then we extract the `login`, `blog`, and `public_repos` values out.
 
 First, include the tools implemented in `sp_runtime::offchain` at the top.
 
@@ -68,63 +68,84 @@ Ok(response.body().collect::<Vec<u8>>())
 
 ## JSON Parsing
 
-We usually get JSON objects back when doing HTTP API requests. The next task is to parse the JSON object and fetch the required (key, value) pair out. This is demonstrated in the `parse_for_value` function.
+We usually get JSON objects back when requesting from HTTP APIs. The next task is to parse the JSON object and fetch the required (key, value) pair out. This is demonstrated in the `fetch_n_parse` function.
 
-In Rust, `serde` and `serde-json` are the popular combo-package used for JSON parsing. But they only work in `std` environment, so we need to use something else. We have a neat community-written tool to parse JSON in a `no-std` environment, [`simple_json2`](https://github.com/jimmychu0807/simple-json2).
+### Setup
 
-First, include the library at the top
+In Rust, `serde` and `serde-json` are the popular combo-package used for JSON parsing. Due to the project setup of compiling Substrate node with `serde` feature `std` on and cargo feature unification limitation, we cannot simultaneously have `serde` feature `std` off (`no_std` on) when compiling the runtime ([details described in this issue](https://github.com/rust-lang/cargo/issues/4463)). So we are going to use a renamed `serde` crate, `alt_serde`, in our offchain-demo pallet to remedy this situation.
 
-```rust
-use simple_json2::{ json::{ JsonObject, JsonValue }, parse_json };
+src: `pallets/offchain-demo/Cargo.toml`
+
+```toml
+[package]
+# ...
+
+[dependencies]
+# external dependencies
+# ...
+
+alt_serde = { version = "1", default-features = false, features = ["derive"] }
+# updated to `alt_serde_json` when latest version supporting feature `alloc` is released
+serde_json = { version = "1", default-features = false, git = "https://github.com/Xanewok/json", branch = "no-std", features = ["alloc"] }
+
+# ...
 ```
 
-Then pass the whole JSON string to get a `JsonValue` out for further parsing.
+We also use a modified version of `serde_json` that has the latest `alloc` feature and again depends on only `alt_serde`.
+
+> Another way of compiling `serde` with `no_std` in runtime is to use a cargo nightly feature, [additional feature resolver](https://github.com/rust-lang/cargo/pull/7820) ([relevant doc](https://doc.rust-lang.org/nightly/cargo/reference/unstable.html#resolver)).
+
+### Deserializing JSON string to struct
+
+Then we use the usual `serde-derive` approach on deserializing. First we define the struct with fields we are interested to extract out.
+
+src: `pallets/offchain-demo/src/lib.rs`
 
 ```rust
-let json: JsonValue = parse_json(&json_str)
-```
+// We use `alt_serde`, and Xanewok-modified `serde_json` so that we can compile the program
+//   with serde(features `std`) and alt_serde(features `no_std`).
+use alt_serde::{Deserialize, Deserializer};
 
-`JsonValue` is actually an enum object consists of the following:
-
-```rust
-#[derive(Debug, Clone, PartialEq)]
-pub enum JsonValue {
-	Object(JsonObject),
-	Array(Vec<JsonValue>),
-	String(Vec<char>),
-	Number(NumberValue),
-	Boolean(bool),
-	Null,
+// Specifying serde path as `alt_serde`
+// ref: https://serde.rs/container-attrs.html#crate
+#[serde(crate = "alt_serde")]
+#[derive(Deserialize, Encode, Decode, Default)]
+struct GithubInfo {
+	// Specify our own deserializing function to convert JSON string to vector of bytes
+	#[serde(deserialize_with = "de_string_to_bytes")]
+	login: Vec<u8>,
+	#[serde(deserialize_with = "de_string_to_bytes")]
+	blog: Vec<u8>,
+	public_repos: u32,
 }
 ```
 
-There are a few convenient methods to extract these inner values out from the enum, namely `get_object()`, `get_array()`, `get_string()`, etc. Details can be seen [in the code](https://github.com/jimmychu0807/simple-json2/blob/master/src/json.rs#L214-L280).
-
-To extract out the value of a particular key in the JSON, we first get the `JsonObject` out from `JsonValue`.
+By default, `serde` deserialize JSON string to the datatype `String`. We want to write our own deserializer to convert it to vector of bytes.
 
 ```rust
-let json_obj: &JsonObject = json.get_object()
-	.map_err(|_| <Error<T>>::JsonParsingError)?;
+pub fn de_string_to_bytes<'de, D>(de: D) -> Result<Vec<u8>, D::Error>
+where D: Deserializer<'de> {
+	let s: &str = Deserialize::deserialize(de)?;
+	Ok(s.as_bytes().to_vec())
+}
 ```
 
-Then we look for the (`key`, `value`) pair that has the key matched with the one we are looking for.
+Now the actual deserialization takes place in the `Self::fetch_n_parse` function.
 
 ```rust
-// We iterate through the key and retrieve the (key, value) pair that match the `key`
-//   parameter.
-// `key_val.0` contains the key and `key_val.1` contains the value.
-let key_val = json_obj
-	.iter()
-	.find(|(k, _)| *k == key.chars().collect::<Vec<char>>())
-	.ok_or(<Error<T>>::JsonParsingError)?;
-```
+/// Fetch from remote and deserialize the JSON to a struct
+fn fetch_n_parse() -> Result<GithubInfo, Error<T>> {
+	let resp_bytes = Self::fetch_from_remote()
+		.map_err(|e| {
+			debug::error!("fetch_from_remote error: {:?}", e);
+			<Error<T>>::HttpFetchingError
+		})?;
 
-Finally, we return the second item in the tuple, which is the value we want, in bytes form.
+	let resp_str = str::from_utf8(&resp_bytes)
+		.map_err(|_| <Error<T>>::HttpFetchingError)?;
 
-```rust
-// We assume the value is a string, so we use `get_bytes()` to collect them back.
-//   In a real app, you may need to catch the error and further process it if the value is not
-//   a string.
-key_val.1.get_bytes()
-	.map_err(|_| <Error<T>>::JsonParsingError)
+	// Deserializing JSON to struct, thanks to `serde` and `serde_derive`
+	let gh_info: GithubInfo = serde_json::from_str(&resp_str).unwrap();
+	Ok(gh_info)
+}
 ```

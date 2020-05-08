@@ -1,6 +1,6 @@
 use crate::*;
 use parking_lot::{RwLock};
-use codec::{
+use parity_scale_codec::{
 	Decode,
 	alloc::sync::{Arc}
 };

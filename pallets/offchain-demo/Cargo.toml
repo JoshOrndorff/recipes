@@ -9,15 +9,16 @@ license = "GPL-3.0-or-later"
 
 [dependencies]
 # external dependencies
-codec = { package = "parity-scale-codec", version = "1.3.0", default-features = false }
+parity-scale-codec = { default-features = false, features = ['derive'], version = '1.3.0' }
 parking_lot = "0.10.0"
-serde = { version = "1.0.101", optional = true }
-serde_json = { version = "1.0.46", default-features = false, features = ["alloc"] }
-simple-json2 = { version = "0.1.2", default-features = false }
+
+alt_serde = { version = "1", default-features = false, features = ["derive"] }
+# updated to `alt_serde_json` when latest version supporting feature `alloc` is released
+serde_json = { version = "1", default-features = false, git = "https://github.com/Xanewok/json", branch = "no-std", features = ["alloc"] }
 
 # Substrate dependencies
-frame-support = { package = "frame-support", default-features = false, version = '2.0.0-alpha.6' }
-frame-system = { package = "frame-system", default-features = false, version = '2.0.0-alpha.6' }
+frame-support = { default-features = false, version = '2.0.0-alpha.6' }
+frame-system = { default-features = false, version = '2.0.0-alpha.6' }
 sp-core = { default-features = false, version = '2.0.0-alpha.6' }
 sp-io = { default-features = false, version = '2.0.0-alpha.6' }
 sp-runtime = { default-features = false, version = '2.0.0-alpha.6' }
@@ -26,12 +27,10 @@ sp-std = { default-features = false, version = '2.0.0-alpha.6' }
 [features]
 default = ['std']
 std = [
-	'codec/std',
-	'serde/std',
+	'parity-scale-codec/std',
 	'frame-support/std',
 	'frame-system/std',
 	'sp-io/std',
 	'sp-runtime/std',
 	'sp-std/std',
-	'simple-json2/std',
 ]
