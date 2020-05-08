@@ -19,11 +19,11 @@ pub trait Trait: system::Trait {
 
 decl_storage! {
 	trait Store for Module<T: Trait> as Token {
-		pub Balances get(get_balance): map hasher(blake2_128_concat) T::AccountId => u64;
+		pub Balances get(fn get_balance): map hasher(blake2_128_concat) T::AccountId => u64;
 
-		pub TotalSupply get(total_supply): u64 = 21000000;
+		pub TotalSupply get(fn total_supply): u64 = 21000000;
 
-		Init get(is_init): bool;
+		Init get(fn is_init): bool;
 	}
 }
 
