@@ -8,8 +8,4 @@ pub struct Cli {
 
 	#[structopt(flatten)]
 	pub run: RunCmd,
-
-	/// Custom flag to enable instant-seal mode
-	#[structopt(long)]
-	pub instant_seal: bool,
 }

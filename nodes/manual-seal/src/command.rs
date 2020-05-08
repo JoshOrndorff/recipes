@@ -54,13 +54,12 @@ pub fn run() -> sc_cli::Result<()> {
 			runner.run_subcommand(subcommand, |config| Ok(new_full_start!(config)))
 		}
 		None => {
-			let instant_seal = cli.instant_seal;
 			let runner = cli.create_runner(&cli.run)?;
 
 			runner.run_node(
 				// The light client is not implemented. Calling it will panic.
 				service::new_light,
-				move |config: _| service::new_full(config, instant_seal),
+				move |config: _| service::new_full(config),
 				runtime::VERSION
 			)
 		}

@@ -2169,7 +2169,6 @@ dependencies = [
 name = "kitchen-node"
 version = "2.0.0-alpha.6"
 dependencies = [
- "api-runtime",
  "ctrlc",
  "derive_more 0.15.0",
  "exit-future",
@@ -2180,7 +2179,6 @@ dependencies = [
  "sc-basic-authorship",
  "sc-cli",
  "sc-client",
- "sc-client-api",
  "sc-client-db",
  "sc-consensus-manual-seal",
  "sc-executor",
@@ -2196,6 +2194,7 @@ dependencies = [
  "sp-transaction-pool",
  "structopt",
  "substrate-build-script-utils",
+ "super-runtime",
  "tokio 0.1.22",
  "trie-root 0.15.2",
  "vergen",
