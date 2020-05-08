@@ -79,7 +79,7 @@ This associated type needs to be specified by the runtime when the runtime is to
 
 Looking at the [rustdoc of `SubmitSignedTransaction`](https://substrate.dev/rustdocs/master/frame_system/offchain/trait.SubmitSignedTransaction.html), it says that we should use the `TransactionSubmitter` implementation type. Let's do that in our runtime.
 
-src: [`runtimes/super-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/super-runtime/src/lib.rs)
+src: [`runtimes/ocw-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime/src/lib.rs)
 
 ```rust
 type SubmitTransaction = system::offchain::TransactionSubmitter<
@@ -98,7 +98,7 @@ impl offchain_demo::Trait for Runtime {
 
 Now if we build the `kitchen-node`, we will see the compiler complain that the trait bound for `Runtime: frame_system::offchain::CreateTransaction` is not satisfied. We learn that when using `SubmitSignedTransaction`, we also need to have our runtime implement the [`CreateTransaction` trait](https://substrate.dev/rustdocs/master/frame_system/offchain/trait.CreateTransaction.html). So let's implement this in our runtime.
 
-src: [`runtimes/super-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/super-runtime/src/lib.rs)
+src: [`runtimes/ocw-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime/src/lib.rs)
 
 ```rust
 impl system::offchain::CreateTransaction<Runtime, UncheckedExtrinsic> for Runtime {
@@ -145,7 +145,7 @@ There is a lot happening in the code. But basically we are:
 
 We also define `SignedExtra` data type later in the runtime.
 
-src: [`runtimes/super-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/super-runtime/src/lib.rs)
+src: [`runtimes/ocw-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime/src/lib.rs)
 
 ```rust
 /// The SignedExtension to the basic transaction logic.
@@ -281,7 +281,7 @@ The `ValidTransaction` object has some fields that touch on concepts that we hav
 
 Third, we define the associated type of `SubmitUnsignedTransaction` in our runtime.
 
-src: [`runtimes/super-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/super-runtime/src/lib.rs)
+src: [`runtimes/ocw-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime/src/lib.rs)
 
 ```rust
 type SubmitTransaction = system::offchain::TransactionSubmitter<
@@ -298,7 +298,7 @@ impl offchain_demo::Trait for Runtime {
 
 Finally, to tell the runtime that we have our own `ValidateUnsigned` logic, we also need to pass this as a parameter when constructing the runtime.
 
-src: [`runtimes/super-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/super-runtime/src/lib.rs)
+src: [`runtimes/ocw-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime/src/lib.rs)
 
 ```rust
 construct_runtime!(
