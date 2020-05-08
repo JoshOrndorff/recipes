@@ -1,4 +1,4 @@
-//! A demonstration of an offchain worker that submits onchain callbacks
+//! A demonstration of an offchain worker that sends onchain callbacks
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
@@ -57,10 +57,10 @@ pub trait Trait: system::Trait {
 	type Call: From<Call<Self>>;
 	/// The overarching event type.
 	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
-	/// The type to sign and submit transactions.
-	type SubmitSignedTransaction: offchain::SubmitSignedTransaction<Self, <Self as Trait>::Call>;
-	/// The type to submit unsigned transactions.
-	type SubmitUnsignedTransaction: offchain::SubmitUnsignedTransaction<Self, <Self as Trait>::Call>;
+	/// The type to sign and send transactions.
+	type SendSignedTransaction: offchain::SendSignedTransaction<Self, <Self as Trait>::Call>;
+	/// The type to send unsigned transactions.
+	type SendUnsignedTransaction: offchain::SendUnsignedTransaction<Self, <Self as Trait>::Call>;
 }
 
 // Custom data type
@@ -159,8 +159,8 @@ impl<T: Trait> Module<T> {
 	}
 
 	fn choose_tx_type(block_number: T::BlockNumber) -> TransactionType {
-		// Decide what type of transaction to submit based on block number.
-		// Each block the offchain worker will submit one type of transaction back to the chain.
+		// Decide what type of transaction to send based on block number.
+		// Each block the offchain worker will send one type of transaction back to the chain.
 		// First a signed transaction, then an unsigned transaction, then an http fetch and json parsing.
 		match block_number.try_into().ok().unwrap() % 3 {
 			0 => TransactionType::SignedSubmitNumber,
@@ -262,8 +262,8 @@ impl<T: Trait> Module<T> {
 	}
 
 	fn signed_submit_number(block_number: T::BlockNumber) -> Result<(), Error<T>> {
-		use offchain::SubmitSignedTransaction;
-		if !T::SubmitSignedTransaction::can_sign() {
+		use offchain::SendSignedTransaction;
+		if !T::SendSignedTransaction::can_sign() {
 			debug::error!("No local account available");
 			return Err(<Error<T>>::SignedSubmitNumberError);
 		}
@@ -276,7 +276,7 @@ impl<T: Trait> Module<T> {
 		// representing the call, we've just created.
 		// Submit signed will return a vector of results for all accounts that were found in the
 		// local keystore with expected `KEY_TYPE`.
-		let results = T::SubmitSignedTransaction::submit_signed(call);
+		let results = T::SendSignedTransaction::submit_signed(call);
 		for (_acc, res) in &results {
 			match res {
 				Ok(()) => { debug::native::info!("off-chain send_signed: acc: {}| number: {}", _acc, submission); },
@@ -290,7 +290,7 @@ impl<T: Trait> Module<T> {
 	}
 
 	fn unsigned_submit_number(block_number: T::BlockNumber) -> Result<(), Error<T>> {
-		use offchain::SubmitUnsignedTransaction;
+		use offchain::SendUnsignedTransaction;
 
 		let submission: u64 = block_number.try_into().ok().unwrap() as u64;
 		// Submitting the current block number back on-chain.
