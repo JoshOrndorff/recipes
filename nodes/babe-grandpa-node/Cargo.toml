@@ -5,7 +5,7 @@ edition = "2018"
 authors = ['Joshy Orndorff', '4meta5', 'Jimmy Chu']
 homepage = 'https://substrate.dev/recipes'
 repository = 'https://github.com/substrate-developer-hub/recipes'
-description = 'A Substrate node with Babe and Grandpa authorities taken from the runtime.'
+description = 'A Substrate node where consensus authorities are determined by the runtime and passed to the consensus engine via a runtime API.'
 license = "GPL-3.0-or-later"
 
 [[bin]]
@@ -44,7 +44,7 @@ sp-consensus = '0.8.0-alpha.6'
 
 # This node only works with runtimes that can provide babe and grandpa authorities.
 # No other runtimes that come with the recipes provide these APIs, but the substrate demonstration
-# runtime doed.
+# runtime does.
 runtime = { package = "babe-grandpa-runtime", path = "../../runtimes/babe-grandpa-runtime" }
 
 #TODO Test this
