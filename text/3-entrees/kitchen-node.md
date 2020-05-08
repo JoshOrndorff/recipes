@@ -63,7 +63,7 @@ The instant seal consensus engine, and its cousin the manual seal consensus engi
 Installing the instant seal engine has several dependencies whereas the runtime had only one.
 
 ```toml
-sc-client-db = '0.8.0-alpha.6' # This because necessary when converting to instant seal
+sc-client-db = '0.8.0-alpha.6' # This became necessary when converting to instant seal
 sp-consensus = '0.8.0-alpha.6'
 sc-consensus-manual-seal = '0.8.0-alpha.6'
 ```
