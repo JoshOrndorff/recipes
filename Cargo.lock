@@ -392,6 +392,7 @@ dependencies = [
  "sc-basic-authorship",
  "sc-cli",
  "sc-client-api",
+ "sc-consensus",
  "sc-consensus-pow",
  "sc-executor",
  "sc-network",
@@ -408,8 +409,8 @@ dependencies = [
  "sp-transaction-pool",
  "structopt",
  "substrate-build-script-utils",
- "super-runtime",
  "vergen",
+ "weight-fee-runtime",
 ]
 
 [[package]]
