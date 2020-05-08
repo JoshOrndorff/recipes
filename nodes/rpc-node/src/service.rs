@@ -95,40 +95,9 @@ pub fn new_full(config: Configuration)
 pub fn new_light(_config: Configuration)
 	-> Result<impl AbstractService, ServiceError>
 {
-	//TODO How can I get the light client working?
-	// I had the same problem with the manual seal node.
+	// FIXME The light client can work after an upstream change in Substrate
+	// see: https://github.com/substrate-developer-hub/recipes/pull/238
 	unimplemented!("No light client for manual seal");
 	#[allow(unreachable_code)]
 	new_full(_config)
-
-	// let inherent_data_providers = InherentDataProviders::new();
-	//
-	// ServiceBuilder::new_light::<Block, RuntimeApi, Executor>(config)?
-	// 	.with_select_chain(|_config, backend| {
-	// 		Ok(LongestChain::new(backend.clone()))
-	// 	})?
-	// 	.with_transaction_pool(|config, client, fetcher| {
-	// 		let fetcher = fetcher
-	// 			.ok_or_else(|| "Trying to start light transaction pool without active fetcher")?;
-	//
-	// 		let pool_api = sc_transaction_pool::LightChainApi::new(client.clone(), fetcher.clone());
-	// 		let pool = sc_transaction_pool::BasicPool::with_revalidation_type(
-	// 			config, Arc::new(pool_api), sc_transaction_pool::RevalidationType::Light,
-	// 		);
-	// 		Ok(pool)
-	// 	})?
-	// 	.with_import_queue_and_fprb(|_config, client, _backend, _fetcher, select_chain, _tx_pool| {
-	// 		let finality_proof_request_builder =
-	// 			Box::new(DummyFinalityProofRequestBuilder::default()) as Box<_>;
-	//
-	// 		let import_queue = sc_consensus_manual_seal::import_queue::<_, sc_client_db::Backend<_>>(
-	// 			Box::new(client)
-	// 		);
-	//
-	// 		Ok((import_queue, finality_proof_request_builder))
-	// 	})?
-	// 	.with_finality_proof_provider(|client, backend| {
-	// 		Ok(Arc::new(()) as _)
-	// 	})?
-	// 	.build()
 }

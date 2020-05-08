@@ -114,6 +114,8 @@ pub fn new_full(config: Configuration, instant_seal: bool) -> Result<impl Abstra
 /// Builds a new service for a light client.
 pub fn new_light(_config: Configuration) -> Result<impl AbstractService, ServiceError>
 {
+	// FIXME The light client can work after an upstream change in Substrate
+	// see: https://github.com/substrate-developer-hub/recipes/pull/238
 	unimplemented!("No light client for manual seal");
 
 	// This needs to be here or it won't compile.
