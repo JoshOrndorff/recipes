@@ -5,7 +5,6 @@
 use frame_support::{
 	decl_event, decl_module, decl_storage,
 	dispatch::DispatchResult,
-	weights::SimpleDispatchInfo,
 };
 use frame_system::{self as system, ensure_signed};
 
@@ -47,7 +46,7 @@ decl_module! {
 
 		/// The only dispatchable call, updates the single storage item,
 		/// and emits an event.
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		fn call(origin) -> DispatchResult {
 			let caller = ensure_signed(origin)?;
 

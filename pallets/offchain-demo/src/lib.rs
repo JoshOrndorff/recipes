@@ -8,7 +8,6 @@ mod tests;
 use frame_support::{
 	debug,
 	dispatch::DispatchResult, decl_module, decl_storage, decl_event, decl_error,
-	weights::SimpleDispatchInfo,
 };
 
 use core::convert::{TryInto};
@@ -103,14 +102,14 @@ decl_module! {
 	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
 		fn deposit_event() = default;
 
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		pub fn submit_number_signed(origin, number: u64) -> DispatchResult {
 			debug::info!("submit_number_signed: {:?}", number);
 			let who = ensure_signed(origin)?;
 			Self::append_or_replace_number(Some(who), number)
 		}
 
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		pub fn submit_number_unsigned(origin, _block: T::BlockNumber, number: u64) -> DispatchResult {
 			debug::info!("submit_number_unsigned: {:?}", number);
 			let _ = ensure_none(origin)?;

@@ -17,7 +17,6 @@ use frame_support::{
 	decl_module,
 	decl_storage,
 	dispatch::DispatchResult,
-	weights::SimpleDispatchInfo,
 };
 use frame_system::{self as system, ensure_signed};
 use substrate_fixed::{
@@ -72,7 +71,7 @@ decl_module! {
 		fn deposit_event() = default;
 
 		/// Deposit some funds into the compounding interest account
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		fn deposit_continuous(origin, val_to_add: u64) -> DispatchResult {
 			ensure_signed(origin)?;
 
@@ -93,7 +92,7 @@ decl_module! {
 		}
 
 		/// Withdraw some funds from the compounding interest account
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		fn withdraw_continuous(origin, val_to_take: u64) -> DispatchResult {
 			ensure_signed(origin)?;
 
@@ -114,7 +113,7 @@ decl_module! {
 		}
 
 		/// Deposit some funds into the discrete interest account
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		fn deposit_discrete(origin, val_to_add: u64) -> DispatchResult {
 			ensure_signed(origin)?;
 
@@ -129,7 +128,7 @@ decl_module! {
 		}
 
 		/// Withdraw some funds from the discrete interest account
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		fn withdraw_discrete(origin, val_to_take: u64) -> DispatchResult {
 			ensure_signed(origin)?;
 

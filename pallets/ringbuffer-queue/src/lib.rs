@@ -7,7 +7,6 @@ use codec::{Decode, Encode};
 use frame_support::{
 	decl_event, decl_module, decl_storage,
 	dispatch::DispatchResult,
-	weights::SimpleDispatchInfo,
 };
 use frame_system::{self as system, ensure_signed};
 use sp_std::prelude::*;
@@ -54,7 +53,7 @@ decl_module! {
 		fn deposit_event() = default;
 
 		/// Add an item to the queue
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		pub fn add_to_queue(origin, integer: i32, boolean: bool) -> DispatchResult {
 			// only a user can push into the queue
 			let _user = ensure_signed(origin)?;
@@ -66,7 +65,7 @@ decl_module! {
 		}
 
 		/// Add several items to the queue
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		pub fn add_multiple(origin, integers: Vec<i32>, boolean: bool) -> DispatchResult {
 			// only a user can push into the queue
 			let _user = ensure_signed(origin)?;
@@ -80,7 +79,7 @@ decl_module! {
 		}
 
 		/// Remove and return an item from the queue
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		pub fn pop_from_queue(origin) -> DispatchResult {
 			// only a user can pop from the queue
 			let _user = ensure_signed(origin)?;

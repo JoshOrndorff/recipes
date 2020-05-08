@@ -15,7 +15,6 @@ use frame_support::{
 	dispatch::DispatchResult,
 	ensure,
 	storage::{StorageDoubleMap, StorageMap, StorageValue},
-	weights::SimpleDispatchInfo,
 };
 use frame_system::{self as system, ensure_signed};
 
@@ -58,7 +57,7 @@ decl_module! {
 		fn deposit_event() = default;
 
 		/// Join the `AllMembers` vec before joining a group
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		fn join_all_members(origin) -> DispatchResult {
 			let new_member = ensure_signed(origin)?;
 			ensure!(!Self::is_member(&new_member), "already a member, can't join");
@@ -69,7 +68,7 @@ decl_module! {
 		}
 
 		/// Put MemberScore (for testing purposes)
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		fn join_a_group(origin, index: GroupIndex, score: u32) -> DispatchResult {
 			let member = ensure_signed(origin)?;
 			ensure!(Self::is_member(&member), "not a member, can't remove");
@@ -81,7 +80,7 @@ decl_module! {
 		}
 
 		/// Remove a member
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		fn remove_member(origin) -> DispatchResult {
 			let member_to_remove = ensure_signed(origin)?;
 			ensure!(Self::is_member(&member_to_remove), "not a member, can't remove");
@@ -93,7 +92,7 @@ decl_module! {
 		}
 
 		/// Remove group score
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		fn remove_group_score(origin, group: GroupIndex) -> DispatchResult {
 			let member = ensure_signed(origin)?;
 

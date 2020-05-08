@@ -1,7 +1,7 @@
 //! Service and ServiceFactory implementation. Specialized wrapper over substrate service.
 
 // use std::sync::Arc;
-// use sc_client::LongestChain;
+// use sc_consensus::LongestChain;
 // use sc_client_api::ExecutorProvider;
 use sc_service::{error::{Error as ServiceError}, AbstractService, Configuration};
 use sp_inherents::InherentDataProviders;
@@ -26,7 +26,7 @@ macro_rules! new_full_start {
 			runtime::opaque::Block, runtime::RuntimeApi, crate::service::Executor
 		>($config)?
 			.with_select_chain(|_config, backend| {
-				Ok(sc_client::LongestChain::new(backend.clone()))
+				Ok(sc_consensus::LongestChain::new(backend.clone()))
 			})?
 			.with_transaction_pool(|config, client, _fetcher| {
 				let pool_api = sc_transaction_pool::FullChainApi::new(client.clone());

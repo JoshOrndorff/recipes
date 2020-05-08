@@ -6,7 +6,6 @@
 use frame_support::{
 	decl_event, decl_module, decl_storage, ensure,
 	dispatch::DispatchResult,
-	weights::SimpleDispatchInfo,
 };
 use frame_system::{self as system, ensure_signed};
 use sp_std::vec::Vec;
@@ -39,7 +38,7 @@ decl_module! {
 		fn deposit_event() = default;
 
 		/// Adds the caller to the membership set unless the caller is already present
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		fn add_member(origin) -> DispatchResult {
 			let new_member = ensure_signed(origin)?;
 
@@ -52,7 +51,7 @@ decl_module! {
 		}
 
 		/// Removes the caller from the membership set
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		fn remove_member(origin) -> DispatchResult {
 			let old_member = ensure_signed(origin)?;
 			ensure!(Self::is_member(&old_member), "not a member so can't be taken out of the set");
