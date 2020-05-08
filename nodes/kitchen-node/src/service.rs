@@ -49,7 +49,7 @@ pub fn new_full(config: Configuration)
 	#[allow(unused_variables)]
 	let dev_seed = config.dev_key_seed.clone();
 
-	//TODO This isn't great. It includes the timestamp inherent in all blocks
+	// This isn't great. It includes the timestamp inherent in all blocks
 	// regardless of runtime.
 	let inherent_data_providers = InherentDataProviders::new();
 	inherent_data_providers
@@ -60,7 +60,6 @@ pub fn new_full(config: Configuration)
 	let builder = new_full_start!(config);
 	let service = builder.build()?;
 
-	//TODO make sure this still works with the ocw runtime
 	// Initialize seed for signing transaction using off-chain workers
 	#[cfg(feature = "ocw")]
 	{
