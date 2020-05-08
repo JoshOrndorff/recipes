@@ -1,6 +1,6 @@
 [package]
 name = "simple-crowdfund"
-version = "2.0.0-alpha.6"
+version = "2.0.0-alpha.7"
 authors = ["4meta5"]
 edition = "2018"
 license = "GPL-3.0-or-later"
@@ -27,37 +27,37 @@ version = '1.3.0'
 default_features = false
 
 package = 'frame-support'
-version = '2.0.0-alpha.6'
+version = '2.0.0-alpha.7'
 
 [dependencies.system]
 default_features = false
 
 package = 'frame-system'
-version = '2.0.0-alpha.6'
+version = '2.0.0-alpha.7'
 
 [dependencies.sp-storage]
 default_features = false
 
-version = '2.0.0-alpha.6'
+version = '2.0.0-alpha.7'
 
 [dependencies.balances]
 default_features = false
 
 package = 'pallet-balances'
-version = '2.0.0-alpha.6'
+version = '2.0.0-alpha.7'
 
 [dependencies.sp-runtime]
 default_features = false
 
-version = '2.0.0-alpha.6'
+version = '2.0.0-alpha.7'
 
 [dependencies.rstd]
 default_features = false
 
 package = 'sp-std'
-version = '2.0.0-alpha.6'
+version = '2.0.0-alpha.7'
 
 [dependencies.sp-core]
 default_features = false
 
-version = '2.0.0-alpha.6'
+version = '2.0.0-alpha.7'

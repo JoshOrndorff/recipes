@@ -64,9 +64,7 @@ This example also demonstrates how the `where` clause can be used to specify typ
 
 Events are emitted from dispatchable calls using the `deposit_event` method.
 
-> Starting from
-> [Substrate `v2.0.0-alpha.6`](https://github.com/paritytech/substrate/tree/v2.0.0-alpha.6),
-> events are not emitted on block 0. So any dispatchable calls made during genesis block formation
+> Events are not emitted on block 0. So any dispatchable calls made during genesis block formation
 > will have no events emitted.
 
 ### Simple Events

@@ -221,7 +221,7 @@ impl<T: Trait> Module<T> {
 		// If we are using a get-check-set access pattern, we likely want to use `mutate` to access
 		// the storage in one go.
 		//
-		// Ref: https://substrate.dev/rustdocs/v2.0.0-alpha.6/sp_runtime/offchain/storage/struct.StorageValueRef.html
+		// Ref: https://substrate.dev/rustdocs/v2.0.0-alpha.7/sp_runtime/offchain/storage/struct.StorageValueRef.html
 		if let Some(Some(gh_info)) = s_info.get::<GithubInfo>() {
 			// gh-info has already been fetched. Return early.
 			debug::info!("cached gh-info: {:?}", gh_info);
