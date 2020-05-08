@@ -35,6 +35,7 @@
 	- [Basic Proof of Work](./3-entrees/basic-pow.md)
 	- [Manual Seal Consensus](./3-entrees/manual-seal.md)
 	- [Kitchen Node - An reusable instant seal node](./3-entrees/kitchen-node.md)
+	- [Babe and Grandpa Node](./3-entrees/babe-grandpa-node.md)
 	- [Currency Types](./3-entrees/currency.md)
 	- [Generating Randomness](./3-entrees/randomness.md)
 	- [Execution Schedule](./3-entrees/execution-schedule.md)
