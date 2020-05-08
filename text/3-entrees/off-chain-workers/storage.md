@@ -2,13 +2,17 @@
 
 *[`pallets/offchain-demo`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo)*
 
-Remember we mentioned that off-chain workers cannot write directly to the on-chain storage, that is why they have to submit transactions back on-chain to modify the state.
+Remember we mentioned that off-chain workers (short for **ocw** below) cannot write directly to the on-chain storage, that is why they have to submit transactions back on-chain to modify the state.
 
-Fortunately, there is also a local storage that persist across runs in off-chain workers. It has a similar API usage as [`StorageValue`](/2-appetizers/2-storage-values.html) with `get`, `set`, and `mutate`.
+Fortunately, there is also a local storage that persist across runs in off-chain workers. Storage is local within off-chain workers and not passed within network. Storage of off-chain workers is persisted across runs of off-chain workers and blockchain re-organizations.
 
-Storage of off-chain workers is persisted across runs of off-chain workers and blockchain re-organizations.
+Off-chain workers are asynchronously run during block import. Since ocws are not limited how long they run, at any single instance there could be multiple ocws running, being initiated by the previous block imports. See diagram below.
 
-In this recipe, we will add a simple cache over our previous [http fetching example](./http-json.html). If the cached value existed, we will return using the cached value. Otherwise we fetch from github public API and save it to the cache.
+[!TK: insert image of multiple ocw from previous block imports].
+
+The storage has a similar API usage as on-chain [`StorageValue`](/2-appetizers/2-storage-values.html) with `get`, `set`, and `mutate`. `mutate` is using a [`compare-and-set`](https://en.wikipedia.org/wiki/Compare-and-swap) pattern. It compares the contents of a memory location with a given value and, only if they are the same, modifies the contents of that memory location to a new given value. This is done as a single atomic operation. The atomicity guarantees that the new value is calculated based on up-to-date information; if the value had been updated by another thread in the meantime, the write would fail.
+
+In this recipe, we will add a cache and lock over our previous [http fetching example](./http-json.html). If the cached value existed, we will return using the cached value. Otherwise we acquire the lock and then fetch from github public API and save it to the cache.
 
 ## Setup
 
@@ -33,6 +37,7 @@ fn fetch_if_needed() -> Result<(), Error<T>> {
 	// Since the local storage is common for all offchain workers, it's a good practice
 	// to prepend our entry with the pallet name.
 	let storage = StorageValueRef::persistent(b"offchain-demo::gh-info");
+	let s_lock = StorageValueRef::persistent(b"offchain-demo::lock");
 	// ...
 }
 ```
@@ -43,58 +48,87 @@ Looking at the [API doc](https://substrate.dev/rustdocs/v2.0.0-alpha.6/sp_runtim
 
 Once we have the storage reference, we can access the storage via `get`, `set`, and `mutate`. Let's demonstrate the `mutate` function as the usage of the remaining two functions are pretty self-explanatory.
 
-As with general on-chain storage, if we have a storage access pattern of **get-check-set**, it is a good indicator we should use `mutate`. This makes sure that multiple off-chain workers running concurrently does not modify the same storage entry. The `mutate` is using [Compare-and-Set pattern](https://en.wikipedia.org/wiki/Compare-and-swap), so if multiple concurrent off-chain workers read a value and want to write it back, only one of them will succeed.
+First we fetch to see if github info has been fetched and cached. If yes, we return early.
 
 ```rust
 fn fetch_if_needed() -> Result<(), Error<T>> {
 	// ...
+	if let Some(Some(gh_info)) = s_info.get::<GithubInfo>() {
+		// gh-info has already been fetched. Return early.
+		debug::info!("cached gh-info: {:?}", gh_info);
+		return Ok(());
+	}
+	// ...
+}
+```
 
-	// The local storage is persisted and shared between runs of the offchain workers,
-	// and offchain workers may run concurrently. We can use the `mutate` function, to
-	// write a storage entry in an atomic fashion.
-	//
-	// It has a similar API as `StorageValue` that offer `get`, `set`, `mutate`.
-	// If we are using a get-check-set access pattern, we likely want to use `mutate` to access
-	// the storage in one go.
-	//
-	// Ref: https://substrate.dev/rustdocs/v2.0.0-alpha.6/sp_runtime/offchain/storage/struct.StorageValueRef.html
-	let res = storage.mutate(|store: Option<Option<GithubInfo>>| {
-		match store {
-			// info existed, returning the value
-			Some(Some(info)) => {
-				debug::info!("Using cached gh-info.");
-				Ok(info)
-			},
-			// info not existed, so we remote fetch (and parse the JSON)
-			_ => Self::fetch_n_parse(),
+As with general on-chain storage, if we have a storage access pattern of **get-check-set**, it is a good indicator we should use `mutate`. This makes sure that multiple off-chain workers running concurrently does not modify the same storage entry.
+
+We then try to acquire the lock in order to fetch github info.
+
+```rust
+fn fetch_if_needed() -> Result<(), Error<T>> {
+	//...
+	// We are implementing a mutex lock here with `s_lock`
+	let res: Result<Result<bool, bool>, Error<T>> = s_lock.mutate(|s: Option<Option<bool>>| {
+		match s {
+			// `s` can be one of the following:
+			//   `None`: the lock has never been set. Treated as the lock is free
+			//   `Some(None)`: unexpected case, treated it as AlreadyFetch
+			//   `Some(Some(false))`: the lock is free
+			//   `Some(Some(true))`: the lock is held
+
+			// If the lock has never been set or is free (false), return true to execute `fetch_n_parse`
+			None | Some(Some(false)) => Ok(true),
+
+			// Otherwise, someone already hold the lock (true), we want to skip `fetch_n_parse`.
+			// Covering cases: `Some(None)` and `Some(Some(true))`
+			_ => Err(<Error<T>>::AlreadyFetched),
 		}
 	});
+	//...
 }
 ```
 
-Here inside the closure function, we are expecting the store to be in type of `Option<Option<GithubInfo>>`. If the value existed, we return the value. If not, we call `fetch_n_parse()` function which do the heavy-lifting of sending http request and parse the returned JSON response.
+We use the `mutate` function to get and set the lock value, taking advantages of its compare-and-set access pattern. If the lock is being held by another ocw (with `s` equals value of `Some(Some(true))`), we return an error indicating the fetching is done by another ocw.
 
-Finally we get the returned value, print it out and return if we get the value successfully. Otherwise we return a custom error back.
-
-```rust
-fn fetch_if_needed() -> Result<(), Error<T>> {
-	// ...
-	match res {
-		Ok(Ok(gh_info)) => {
-			// Print out our github info, whether it is newly-fetched or cached.
-			debug::info!("gh-info: {:?}", gh_info);
-			Ok(())
-		},
-		_ => Err(<Error<T>>::HttpFetchingError)
-	}
-}
-```
-
-`res` has a type of `Result<Result<T, T>, E>`, to indicate one of the following cases:
+The return value of the `mutate` has a type of `Result<Result<T, T>, E>`, to indicate one of the following cases:
 
 * `Ok(Ok(T))` - the value has been successfully set in the `mutate` closure and saved to the storage.
 * `Ok(Err(T))` - the value has been successfully set in the `mutate` closure, but failed to save to the storage.
 * `Err(_)` - the value has **NOT** been set successfully in the `mutate` closure.
+
+Now we check the returned value of the `mutate` function. If fetching is done by another ocw (returning `Err(<Error<T>>)`), or cannot acquire the lock (returning `Ok(Err(true))`), we skip the fetching.
+
+```rust
+fn fetch_if_needed() -> Result<(), Error<T>> {
+	// ...
+	// Cases of `res` returned result:
+	//   `Err(<Error<T>>)` - lock is held, so we want to skip `fetch_n_parse` function.
+	//   `Ok(Err(true))` - Another ocw is writing to the storage while we set it,
+	//                     we also skip `fetch_n_parse` in this case.
+	//   `Ok(Ok(true))` - successfully acquire the lock, so we run `fetch_n_parse`
+	if let Ok(Ok(true)) = res {
+		match Self::fetch_n_parse() {
+			Ok(gh_info) => {
+				// set gh-info into the storage and release the lock
+				s_info.set(&gh_info);
+				s_lock.set(&false);
+
+				debug::info!("fetched gh-info: {:?}", gh_info);
+			},
+			Err(err) => {
+				// release the lock
+				s_lock.set(&false);
+				return Err(err);
+			}
+		}
+	}
+	Ok(())
+}
+```
+
+Finally, whether the `fetch_n_parse()` function success or not, we release the lock by setting it to `false`.
 
 ## Reference
 

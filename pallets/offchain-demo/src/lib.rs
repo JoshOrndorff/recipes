@@ -208,7 +208,6 @@ impl<T: Trait> Module<T> {
 	///   stored in off-chain worker storage `storage`. If no, we fetch the remote info and then
 	///   write the info into the storage for future retrieval.
 	fn fetch_if_needed() -> Result<(), Error<T>> {
-
 		// Start off by creating a reference to Local Storage value.
 		// Since the local storage is common for all offchain workers, it's a good practice
 		// to prepend our entry with the pallet name.
@@ -230,20 +229,29 @@ impl<T: Trait> Module<T> {
 			return Ok(());
 		}
 
-		// Lock acquisition
+		// We are implementing a mutex lock here with `s_lock`
 		let res: Result<Result<bool, bool>, Error<T>> = s_lock.mutate(|s: Option<Option<bool>>| {
 			match s {
-				// if the lock has never been set or is free (false), return true to execute `fetch_n_parse`
+				// `s` can be one of the following:
+				//   `None`: the lock has never been set. Treated as the lock is free
+				//   `Some(None)`: unexpected case, treated it as AlreadyFetch
+				//   `Some(Some(false))`: the lock is free
+				//   `Some(Some(true))`: the lock is held
+
+				// If the lock has never been set or is free (false), return true to execute `fetch_n_parse`
 				None | Some(Some(false)) => Ok(true),
-				// otherwise, someone already hold the lock (true), we want to skip `fetch_n_parse`.
+
+				// Otherwise, someone already hold the lock (true), we want to skip `fetch_n_parse`.
+				// Covering cases: `Some(None)` and `Some(Some(true))`
 				_ => Err(<Error<T>>::AlreadyFetched),
 			}
 		});
 
-		// `res` cases:
-		//   Err() - someone hold the lock already, so we want to skip
-		//   Ok(Err(true)) - Another ocw is writing to the storage while we set it, so we also skip `fetch_n_parse` in this case.
-		//   Ok(Ok(true)) - we get the lock, so we run `fetch_n_parse`
+		// Cases of `res` returned result:
+		//   `Err(<Error<T>>)` - lock is held, so we want to skip `fetch_n_parse` function.
+		//   `Ok(Err(true))` - Another ocw is writing to the storage while we set it,
+		//                     we also skip `fetch_n_parse` in this case.
+		//   `Ok(Ok(true))` - successfully acquire the lock, so we run `fetch_n_parse`
 		if let Ok(Ok(true)) = res {
 			match Self::fetch_n_parse() {
 				Ok(gh_info) => {
@@ -254,38 +262,13 @@ impl<T: Trait> Module<T> {
 					debug::info!("fetched gh-info: {:?}", gh_info);
 				},
 				Err(err) => {
+					// release the lock
 					s_lock.set(&false);
 					return Err(err);
 				}
 			}
 		}
 		Ok(())
-
-		// let res = storage.mutate(|store: Option<Option<GithubInfo>>| {
-		// 	match store {
-		// 		// info existed, returning the value
-		// 		Some(Some(info)) => {
-		// 			debug::info!("Using cached gh-info.");
-		// 			Ok(info)
-		// 		},
-		// 		// info not existed, so we remote fetch (and parse the JSON)
-		// 		_ => Self::fetch_n_parse(),
-		// 	}
-		// });
-
-		// `res` has a type of `Result<Result<T, E>, E>`. This is to cover the following three cases:
-		// `Ok(Ok(T))` - in case the value has been successfully set and saved in the storage.
-		// `Ok(Err(T))` - in case the value is set, but could not be saved in the storage.
-		// `Err(_)` - in case the closure function returns an error.
-
-		// match res {
-		// 	Ok(Ok(gh_info)) => {
-		// 		// Print out our github info, whether it is newly-fetched or cached.
-		// 		debug::info!("gh-info: {:?}", gh_info);
-		// 		Ok(())
-		// 	},
-		// 	_ => Err(<Error<T>>::HttpFetchingError)
-		// }
 	}
 
 	/// Fetch from remote and deserialize the JSON to a struct
