@@ -47,9 +47,10 @@ sp-consensus = '0.8.0-alpha.6'
 # runtime does.
 runtime = { package = "babe-grandpa-runtime", path = "../../runtimes/babe-grandpa-runtime" }
 
-#TODO Test this
-# This runtime is not published on crates.io so a git dependency is necessary
-# runtime = { package = "node-runtime", git = "https://github.com/paritytech/substrate/" tag = "v2.0.0-alpha.6" }
+# In theory the main Substrate node's runtime should work, but it is not published on crates.io
+# so a git dependency is necessary which leads to:
+# `perhaps two different versions of crate `sp_runtime` are being used?`
+# runtime = { package = "node-runtime", git = "https://github.com/paritytech/substrate/", tag = "v2.0.0-alpha.6" }
 
 
 [build-dependencies]
