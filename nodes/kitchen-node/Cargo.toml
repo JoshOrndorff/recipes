@@ -5,7 +5,7 @@ edition = "2018"
 authors = ['Joshy Orndorff', '4meta5', 'Jimmy Chu']
 homepage = 'https://substrate.dev/recipes'
 repository = 'https://github.com/substrate-developer-hub/recipes'
-description = 'A Substrate node that houses many recipe pallets'
+description = 'An instant-sealing Substrate node. Can be used with most recipe runtimes.'
 license = "GPL-3.0-or-later"
 
 [[bin]]
@@ -23,27 +23,24 @@ tokio = "0.1.22"
 exit-future = "0.2.0"
 parking_lot = "0.9.0"
 trie-root = "0.15.2"
-sp-io = '2.0.0-alpha.6'
-sc-cli = '0.8.0-alpha.6'
-sc-client-api = '2.0.0-alpha.6'
-sp-core = '2.0.0-alpha.6'
-sp-runtime = '2.0.0-alpha.6'
-sc-executor = '0.8.0-alpha.6'
-sc-service = '0.8.0-alpha.6'
-sp-inherents = '2.0.0-alpha.6'
-sc-transaction-pool = '2.0.0-alpha.6'
-sp-transaction-pool = '2.0.0-alpha.6'
-sc-network = '0.8.0-alpha.6'
-sc-consensus-babe = '0.8.0-alpha.6'
-sp-consensus-babe = '0.8.0-alpha.6'
-sc-finality-grandpa = '0.8.0-alpha.6'
-sp-finality-grandpa = '2.0.0-alpha.6'
-sc-client = '0.8.0-alpha.6'
 sc-basic-authorship = '0.8.0-alpha.6'
+sc-cli = '0.8.0-alpha.6'
+sc-client = '0.8.0-alpha.6'
+sc-client-db = '0.8.0-alpha.6' # This became necessary when converting to instant seal
 sp-consensus = '0.8.0-alpha.6'
+sc-consensus-manual-seal = '0.8.0-alpha.6'
+sc-executor = '0.8.0-alpha.6'
+sc-network = '0.8.0-alpha.6'
+sc-service = '0.8.0-alpha.6'
+sc-transaction-pool = '2.0.0-alpha.6'
+sp-core = '2.0.0-alpha.6'
+sp-inherents = '2.0.0-alpha.6'
+sp-io = '2.0.0-alpha.6'
+sp-runtime = '2.0.0-alpha.6'
+sp-timestamp = '2.0.0-alpha.6'
+sp-transaction-pool = '2.0.0-alpha.6'
 
-# Pick one of the runtimes below.
-# Your runtime must have the necessary pallets to support consensus (Babe, Grandpa, etc).
+# This node is compatible with any of the runtimes below
 # ---
 # Common runtime configured with most Recipes pallets.
 runtime = { package = "super-runtime", path = "../../runtimes/super-runtime" }
@@ -52,12 +49,12 @@ runtime = { package = "super-runtime", path = "../../runtimes/super-runtime" }
 # runtime = { package = "weight-fee-runtime", path = "../../runtimes/weight-fee-runtime"}
 
 # Runtime with off-chain worker enabled.
-# To use this runtime, compile kitchen-node with `ocw` feature enabled,
+# To use this runtime, compile the node with `ocw` feature enabled,
 #   `cargo build --release --features ocw`.
 # runtime = { package = "ocw-runtime", path = "../../runtimes/ocw-runtime" }
 
-# TODO Can't use this until the API runtime implements babe api
-# runtime = { package = "api-runtime", path = "../../runtimes/api-runtime" }
+# Runtime with custom runtime-api (custom API only used in rpc-node)
+#runtime = { package = "api-runtime", path = "../../runtimes/api-runtime" }
 # ---
 
 [build-dependencies]

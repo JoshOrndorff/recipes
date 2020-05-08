@@ -108,9 +108,7 @@ dependencies = [
  "frame-executive",
  "frame-support",
  "frame-system",
- "pallet-aura",
  "pallet-balances",
- "pallet-grandpa",
  "pallet-indices",
  "pallet-randomness-collective-flip",
  "pallet-sudo",
@@ -121,9 +119,7 @@ dependencies = [
  "serde",
  "sp-api",
  "sp-block-builder",
- "sp-consensus-aura",
  "sp-core",
- "sp-finality-grandpa",
  "sp-inherents",
  "sp-io",
  "sp-offchain",
@@ -134,7 +130,7 @@ dependencies = [
  "sp-version",
  "substrate-wasm-builder-runner",
  "sum-storage",
- "sum-storage-rpc-runtime-api",
+ "sum-storage-runtime-api",
 ]
 
 [[package]]
@@ -282,6 +278,76 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f8aac770f1885fd7e387acedd76065302551364496e46b3dd00860b2f8359b9d"
 
 [[package]]
+name = "babe-grandpa-node"
+version = "2.0.0-alpha.6"
+dependencies = [
+ "babe-grandpa-runtime",
+ "ctrlc",
+ "derive_more 0.15.0",
+ "exit-future",
+ "futures 0.1.29",
+ "futures 0.3.4",
+ "log",
+ "parking_lot 0.9.0",
+ "sc-basic-authorship",
+ "sc-cli",
+ "sc-client",
+ "sc-client-api",
+ "sc-consensus-babe",
+ "sc-executor",
+ "sc-finality-grandpa",
+ "sc-network",
+ "sc-service",
+ "sc-transaction-pool",
+ "sp-consensus",
+ "sp-consensus-babe",
+ "sp-core",
+ "sp-finality-grandpa",
+ "sp-inherents",
+ "sp-io",
+ "sp-runtime",
+ "sp-transaction-pool",
+ "structopt",
+ "substrate-build-script-utils",
+ "tokio 0.1.22",
+ "trie-root 0.15.2",
+ "vergen",
+]
+
+[[package]]
+name = "babe-grandpa-runtime"
+version = "2.0.0-alpha.6"
+dependencies = [
+ "frame-executive",
+ "frame-support",
+ "frame-system",
+ "pallet-babe",
+ "pallet-balances",
+ "pallet-grandpa",
+ "pallet-randomness-collective-flip",
+ "pallet-sudo",
+ "pallet-timestamp",
+ "pallet-transaction-payment",
+ "parity-scale-codec",
+ "safe-mix",
+ "serde",
+ "sp-api",
+ "sp-block-builder",
+ "sp-consensus-babe",
+ "sp-core",
+ "sp-finality-grandpa",
+ "sp-inherents",
+ "sp-io",
+ "sp-offchain",
+ "sp-runtime",
+ "sp-session",
+ "sp-std",
+ "sp-transaction-pool",
+ "sp-version",
+ "substrate-wasm-builder-runner",
+]
+
+[[package]]
 name = "backtrace"
 version = "0.3.46"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -322,7 +388,6 @@ dependencies = [
  "futures 0.3.4",
  "log",
  "parity-scale-codec",
- "pow-runtime",
  "rand 0.7.3",
  "sc-basic-authorship",
  "sc-cli",
@@ -344,6 +409,7 @@ dependencies = [
  "sp-transaction-pool",
  "structopt",
  "substrate-build-script-utils",
+ "super-runtime",
  "vergen",
 ]
 
@@ -2129,28 +2195,26 @@ dependencies = [
  "futures 0.1.29",
  "futures 0.3.4",
  "log",
- "ocw-runtime",
  "parking_lot 0.9.0",
  "sc-basic-authorship",
  "sc-cli",
  "sc-client",
- "sc-client-api",
- "sc-consensus-babe",
+ "sc-client-db",
+ "sc-consensus-manual-seal",
  "sc-executor",
- "sc-finality-grandpa",
  "sc-network",
  "sc-service",
  "sc-transaction-pool",
  "sp-consensus",
- "sp-consensus-babe",
  "sp-core",
- "sp-finality-grandpa",
  "sp-inherents",
  "sp-io",
  "sp-runtime",
+ "sp-timestamp",
  "sp-transaction-pool",
  "structopt",
  "substrate-build-script-utils",
+ "super-runtime",
  "tokio 0.1.22",
  "trie-root 0.15.2",
  "vergen",
@@ -2657,7 +2721,6 @@ dependencies = [
  "jsonrpc-core",
  "log",
  "parity-scale-codec",
- "pow-runtime",
  "rand 0.7.3",
  "sc-basic-authorship",
  "sc-cli",
@@ -2680,6 +2743,7 @@ dependencies = [
  "sp-transaction-pool",
  "structopt",
  "substrate-build-script-utils",
+ "super-runtime",
  "vergen",
 ]
 
@@ -3022,9 +3086,7 @@ dependencies = [
  "frame-support",
  "frame-system",
  "offchain-demo",
- "pallet-babe",
  "pallet-balances",
- "pallet-grandpa",
  "pallet-indices",
  "pallet-randomness-collective-flip",
  "pallet-sudo",
@@ -3035,9 +3097,7 @@ dependencies = [
  "serde",
  "sp-api",
  "sp-block-builder",
- "sp-consensus-babe",
  "sp-core",
- "sp-finality-grandpa",
  "sp-inherents",
  "sp-io",
  "sp-offchain",
@@ -3103,28 +3163,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6ff55baddef9e4ad00f88b6c743a2a8062d4c6ade126c2a528644b8e444d52ce"
 dependencies = [
  "stable_deref_trait",
-]
-
-[[package]]
-name = "pallet-aura"
-version = "2.0.0-alpha.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9757d44df3ff0372ea313703736e69ba361b158a58b7c9677b54be11a777da81"
-dependencies = [
- "frame-support",
- "frame-system",
- "pallet-session",
- "pallet-timestamp",
- "parity-scale-codec",
- "serde",
- "sp-application-crypto",
- "sp-consensus-aura",
- "sp-core",
- "sp-inherents",
- "sp-io",
- "sp-runtime",
- "sp-std",
- "sp-timestamp",
 ]
 
 [[package]]
@@ -3602,38 +3640,6 @@ name = "platforms"
 version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "feb3b2b1033b8a60b4da6ee470325f887758c95d5320f52f9ce0df055a55940e"
-
-[[package]]
-name = "pow-runtime"
-version = "2.0.0-alpha.6"
-dependencies = [
- "frame-executive",
- "frame-support",
- "frame-system",
- "pallet-balances",
- "pallet-generic-asset",
- "pallet-indices",
- "pallet-randomness-collective-flip",
- "pallet-sudo",
- "pallet-timestamp",
- "pallet-transaction-payment",
- "parity-scale-codec",
- "safe-mix",
- "serde",
- "sp-api",
- "sp-block-builder",
- "sp-core",
- "sp-inherents",
- "sp-io",
- "sp-offchain",
- "sp-runtime",
- "sp-session",
- "sp-std",
- "sp-transaction-pool",
- "sp-version",
- "substrate-wasm-builder-runner",
- "weights",
-]
 
 [[package]]
 name = "ppv-lite86"
@@ -4226,20 +4232,19 @@ dependencies = [
  "sc-cli",
  "sc-client",
  "sc-client-api",
- "sc-consensus-aura",
+ "sc-client-db",
+ "sc-consensus-manual-seal",
  "sc-executor",
- "sc-finality-grandpa",
  "sc-network",
  "sc-rpc",
  "sc-service",
  "sc-transaction-pool",
  "sp-consensus",
- "sp-consensus-aura",
  "sp-core",
- "sp-finality-grandpa",
  "sp-inherents",
  "sp-io",
  "sp-runtime",
+ "sp-timestamp",
  "sp-transaction-pool",
  "structopt",
  "substrate-build-script-utils",
@@ -4536,38 +4541,6 @@ dependencies = [
  "sp-state-machine",
  "sp-trie",
  "substrate-prometheus-endpoint",
-]
-
-[[package]]
-name = "sc-consensus-aura"
-version = "0.8.0-alpha.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a476e0650893a4e8c086c14f1ea5fde4a3de9f654a75c706f2c362406ee4d588"
-dependencies = [
- "derive_more 0.99.5",
- "futures 0.3.4",
- "futures-timer 3.0.2",
- "log",
- "parity-scale-codec",
- "parking_lot 0.10.2",
- "sc-block-builder",
- "sc-client",
- "sc-client-api",
- "sc-consensus-slots",
- "sc-keystore",
- "sc-telemetry",
- "sp-api",
- "sp-application-crypto",
- "sp-block-builder",
- "sp-blockchain",
- "sp-consensus",
- "sp-consensus-aura",
- "sp-core",
- "sp-inherents",
- "sp-io",
- "sp-runtime",
- "sp-timestamp",
- "sp-version",
 ]
 
 [[package]]
@@ -5666,21 +5639,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "sp-consensus-aura"
-version = "0.8.0-alpha.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0a5ffbc4aca29fe7a0f0c419445e34758210dba6418eeb101d60c1e15b27797a"
-dependencies = [
- "parity-scale-codec",
- "sp-api",
- "sp-application-crypto",
- "sp-inherents",
- "sp-runtime",
- "sp-std",
- "sp-timestamp",
-]
-
-[[package]]
 name = "sp-consensus-babe"
 version = "0.8.0-alpha.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -6291,11 +6249,11 @@ dependencies = [
  "sp-blockchain",
  "sp-rpc",
  "sp-runtime",
- "sum-storage-rpc-runtime-api",
+ "sum-storage-runtime-api",
 ]
 
 [[package]]
-name = "sum-storage-rpc-runtime-api"
+name = "sum-storage-runtime-api"
 version = "2.0.0"
 dependencies = [
  "serde_json 1.0.52",

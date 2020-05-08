@@ -8,7 +8,6 @@ use sp_inherents::InherentDataProviders;
 use sc_executor::native_executor_instance;
 pub use sc_executor::NativeExecutor;
 use sc_consensus_manual_seal::{rpc, self as manual_seal};
-use futures::future::Either;
 
 // Our native executor instance.
 native_executor_instance!(
@@ -40,9 +39,11 @@ macro_rules! new_full_start {
 		builder
 	}}
 }
+
 type RpcExtension = jsonrpc_core::IoHandler<sc_rpc::Metadata>;
+
 /// Builds a new service for a full client.
-pub fn new_full(config: Configuration, instant_seal: bool) -> Result<impl AbstractService, ServiceError> {
+pub fn new_full(config: Configuration) -> Result<impl AbstractService, ServiceError> {
 	let inherent_data_providers = InherentDataProviders::new();
 	inherent_data_providers
 		.register_provider(sp_timestamp::InherentDataProvider)
@@ -54,22 +55,18 @@ pub fn new_full(config: Configuration, instant_seal: bool) -> Result<impl Abstra
 	// Channel for the rpc handler to communicate with the authorship task.
 	let (command_sink, commands_stream) = futures::channel::mpsc::channel(1000);
 
-	let service = if instant_seal {
-		builder.build()?
-	} else {
-		builder
-			// manual-seal relies on receiving sealing requests aka EngineCommands over rpc.
-			.with_rpc_extensions(|_| -> Result<RpcExtension, _> {
-				let mut io = jsonrpc_core::IoHandler::default();
-				io.extend_with(
-					// We provide the rpc handler with the sending end of the channel to allow the rpc
-					// send EngineCommands to the background block authorship task.
-					rpc::ManualSealApi::to_delegate(rpc::ManualSeal::new(command_sink)),
-				);
-				Ok(io)
-			})?
-			.build()?
-	};
+	let service = builder
+		// manual-seal relies on receiving sealing requests aka EngineCommands over rpc.
+		.with_rpc_extensions(|_| -> Result<RpcExtension, _> {
+			let mut io = jsonrpc_core::IoHandler::default();
+			io.extend_with(
+				// We provide the rpc handler with the sending end of the channel to allow the rpc
+				// send EngineCommands to the background block authorship task.
+				rpc::ManualSealApi::to_delegate(rpc::ManualSeal::new(command_sink)),
+			);
+			Ok(io)
+		})?
+		.build()?;
 
 
 	// Proposer object for block authorship.
@@ -79,19 +76,7 @@ pub fn new_full(config: Configuration, instant_seal: bool) -> Result<impl Abstra
 	);
 
 	// Background authorship future.
-	let future = if instant_seal {
-		log::info!("Running Instant Sealing Engine");
-		Either::Right(manual_seal::run_instant_seal(
-			Box::new(service.client()),
-			proposer,
-			service.client().clone(),
-			service.transaction_pool().pool().clone(),
-			service.select_chain().unwrap(),
-			inherent_data_providers
-		))
-	} else {
-		log::info!("Running Manual Sealing Engine");
-		Either::Left(manual_seal::run_manual_seal(
+	let authorship_future = manual_seal::run_manual_seal(
 			Box::new(service.client()),
 			proposer,
 			service.client().clone(),
@@ -99,14 +84,10 @@ pub fn new_full(config: Configuration, instant_seal: bool) -> Result<impl Abstra
 			commands_stream,
 			service.select_chain().unwrap(),
 			inherent_data_providers
-		))
-	};
+		);
 
 	// we spawn the future on a background thread managed by service.
-	service.spawn_essential_task(
-		if instant_seal { "instant-seal" } else { "manual-seal" },
-		future
-	);
+	service.spawn_essential_task("manual-seal", authorship_future);
 
 	Ok(service)
 }
@@ -114,9 +95,11 @@ pub fn new_full(config: Configuration, instant_seal: bool) -> Result<impl Abstra
 /// Builds a new service for a light client.
 pub fn new_light(_config: Configuration) -> Result<impl AbstractService, ServiceError>
 {
+	// FIXME The light client can work after an upstream change in Substrate
+	// see: https://github.com/substrate-developer-hub/recipes/pull/238
 	unimplemented!("No light client for manual seal");
 
 	// This needs to be here or it won't compile.
 	#[allow(unreachable_code)]
-	new_full(_config, false)
+	new_full(_config)
 }

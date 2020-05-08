@@ -9,7 +9,7 @@ use sp_runtime::{
 	traits::{Block as BlockT},
 };
 use sp_api::ProvideRuntimeApi;
-use sum_storage_rpc_runtime_api::SumStorageApi as SumStorageRuntimeApi;
+use sum_storage_runtime_api::SumStorageApi as SumStorageRuntimeApi;
 
 #[rpc]
 pub trait SumStorageApi<BlockHash> {

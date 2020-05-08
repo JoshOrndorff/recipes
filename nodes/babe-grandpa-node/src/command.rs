@@ -51,7 +51,7 @@ pub fn run() -> sc_cli::Result<()> {
 	match &cli.subcommand {
 		Some(subcommand) => {
 			let runner = cli.create_runner(subcommand)?;
-			runner.run_subcommand(subcommand, |config| Ok(new_full_start!(config)))
+			runner.run_subcommand(subcommand, |config| Ok(new_full_start!(config).0))
 		}
 		None => {
 			let runner = cli.create_runner(&cli.run)?;

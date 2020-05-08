@@ -17,7 +17,7 @@ sp-runtime = { version = '2.0.0-alpha.6', default_features = false}
 sp-blockchain = { version = '2.0.0-alpha.6', default_features = false}
 sp-api = { version = '2.0.0-alpha.6', default_features = false }
 
-sum-storage-rpc-runtime-api = { version = "2.0.0", path = "./runtime-api", default_features = false }
+sum-storage-runtime-api = { version = "2.0.0", path = "../runtime-api", default_features = false }
 
 [features]
 default = ["std"]
@@ -25,5 +25,5 @@ std = [
   "serde",
   "sp-runtime/std",
   "sp-api/std",
-  "sum-storage-rpc-runtime-api/std"
+  "sum-storage-runtime-api/std"
 ]

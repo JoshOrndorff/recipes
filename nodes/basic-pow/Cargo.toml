@@ -23,7 +23,6 @@ sc-consensus-pow = { version = '0.8.0-alpha.6' }
 sp-consensus-pow = { version = '0.8.0-alpha.6' }
 sc-client-api = { version = '2.0.0-alpha.6' }
 sp-blockchain = { version = '2.0.0-alpha.6' }
-runtime = { package = "pow-runtime", path = "../../runtimes/pow-runtime" }
 sp-timestamp = '2.0.0-alpha.6'
 sc-basic-authorship = '0.8.0-alpha.6'
 sc-cli = '0.8.0-alpha.6'
@@ -37,6 +36,18 @@ sp-core = '2.0.0-alpha.6'
 sp-inherents = '2.0.0-alpha.6'
 sp-runtime = '2.0.0-alpha.6'
 sp-transaction-pool = '2.0.0-alpha.6'
+
+# This node is compatible with any of the runtimes below
+# ---
+# Common runtime configured with most Recipes pallets.
+runtime = { package = "super-runtime", path = "../../runtimes/super-runtime" }
+
+# Runtime with custom weight and fee calculation.
+# runtime = { package = "weight-fee-runtime", path = "../../runtimes/weight-fee-runtime"}
+
+# Runtime with custom runtime-api (custom API only used in rpc-node)
+# runtime = { package = "api-runtime", path = "../../runtimes/api-runtime" }
+# ---
 
 [build-dependencies]
 vergen = '3.0.4'
