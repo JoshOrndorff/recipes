@@ -61,7 +61,7 @@ decl_module! {
 		fn join_all_members(origin) -> DispatchResult {
 			let new_member = ensure_signed(origin)?;
 			ensure!(!Self::is_member(&new_member), "already a member, can't join");
-			<AllMembers<T>>::append(vec!(new_member.clone())).map_err(|_e| "appending new member error")?;
+			<AllMembers<T>>::append(&new_member.clone());
 
 			Self::deposit_event(RawEvent::NewMember(new_member));
 			Ok(())

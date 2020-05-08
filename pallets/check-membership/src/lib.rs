@@ -45,7 +45,7 @@ decl_module! {
 			// Ensure that the caller is not already a member
 			ensure!(!Self::is_member(&new_member), "already a member");
 
-			<Members<T>>::append(&[new_member.clone()])?;
+			<Members<T>>::append(&new_member);
 			Self::deposit_event(RawEvent::AddMember(new_member));
 			Ok(())
 		}

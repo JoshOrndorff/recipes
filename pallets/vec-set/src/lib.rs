@@ -64,7 +64,9 @@ decl_module! {
 			let user = ensure_signed(origin)?;
 
 			// this encodes the new values and appends them to the already encoded existing evc
-			<CurrentValues>::append(Self::new_values())?;
+			Self::new_values()
+				.iter()
+				.for_each(CurrentValues::append);
 			Self::deposit_event(RawEvent::AppendVec(user));
 			Ok(())
 		}
@@ -73,7 +75,7 @@ decl_module! {
 		fn add_member(origin) -> DispatchResult {
 			let new_member = ensure_signed(origin)?;
 			ensure!(!Self::is_member(&new_member), "must not be a member to be added");
-			<Members<T>>::append(vec![new_member.clone()])?;
+			<Members<T>>::append(new_member.clone());
 			Self::deposit_event(RawEvent::MemberAdded(new_member));
 			Ok(())
 		}

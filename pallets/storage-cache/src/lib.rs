@@ -152,7 +152,7 @@ decl_module! {
 		fn mock_add_member(origin) -> DispatchResult {
 			let added = ensure_signed(origin)?;
 			ensure!(!Self::is_member(&added), "member already in group");
-			<GroupMembers<T>>::append(vec![added])?;
+			<GroupMembers<T>>::append(added);
 			Ok(())
 		}
 	}
