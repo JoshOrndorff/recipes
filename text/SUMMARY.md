@@ -29,6 +29,7 @@
 	- [Off-chain Workers](./3-entrees/off-chain-workers/index.md)
 		- [Transactions](./3-entrees/off-chain-workers/transactions.md)
 		- [HTTP Fetching & JSON Parsing](./3-entrees/off-chain-workers/http-json.md)
+		- [Local Storage](./3-entrees/off-chain-workers/storage.md)
 	- [Runtime APIs](./3-entrees/runtime-api.md)
 	- [Custom RPCs](./3-entrees/custom-rpc.md)
 	- [Basic Proof of Work](./3-entrees/basic-pow.md)

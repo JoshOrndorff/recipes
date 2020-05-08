@@ -10,13 +10,14 @@ use frame_support::{
 	dispatch::DispatchResult, decl_module, decl_storage, decl_event, decl_error,
 	weights::SimpleDispatchInfo,
 };
-
-use core::convert::{TryInto};
+use parity_scale_codec::{Encode, Decode};
+use core::{fmt, convert::TryInto};
 
 use frame_system::{self as system, ensure_signed, ensure_none, offchain};
 use sp_core::crypto::KeyTypeId;
 use sp_runtime::{
 	offchain as rt_offchain,
+	offchain::{storage::StorageValueRef},
 	transaction_validity::{
 		InvalidTransaction, ValidTransaction, TransactionValidity, TransactionSource
 	},
@@ -24,10 +25,9 @@ use sp_runtime::{
 use sp_std::prelude::*;
 use sp_std::str as str;
 
-// Because we are parsing json in a `no_std` env, we cannot use `serde_json` library.
-//   `simple_json2` is a small tool written by our community member to handle json parsing in
-//   no_std env.
-use simple_json2::{ json::{ JsonObject, JsonValue }, parse_json };
+// We use `alt_serde`, and Xanewok-modified `serde_json` so that we can compile the program
+//   with serde(features `std`) and alt_serde(features `no_std`).
+use alt_serde::{Deserialize, Deserializer};
 
 /// Defines application identifier for crypto keys of this module.
 ///
@@ -50,6 +50,37 @@ pub mod crypto {
 	use crate::KEY_TYPE;
 	use sp_runtime::app_crypto::{app_crypto, sr25519};
 	app_crypto!(sr25519, KEY_TYPE);
+}
+
+// Specifying serde path as `alt_serde`
+// ref: https://serde.rs/container-attrs.html#crate
+#[serde(crate = "alt_serde")]
+#[derive(Deserialize, Encode, Decode, Default)]
+struct GithubInfo {
+	// Specify our own deserializing function to convert JSON string to vector of bytes
+	#[serde(deserialize_with = "de_string_to_bytes")]
+	login: Vec<u8>,
+	#[serde(deserialize_with = "de_string_to_bytes")]
+	blog: Vec<u8>,
+	public_repos: u32,
+}
+
+pub fn de_string_to_bytes<'de, D>(de: D) -> Result<Vec<u8>, D::Error>
+where D: Deserializer<'de> {
+	let s: &str = Deserialize::deserialize(de)?;
+	Ok(s.as_bytes().to_vec())
+}
+
+impl fmt::Debug for GithubInfo {
+	// `fmt` converts the vector of bytes inside the struct back to string for
+	//   more friendly display.
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+		write!(f, "{{ login: {}, blog: {}, public_repos: {} }}",
+			str::from_utf8(&self.login).map_err(|_| fmt::Error)?,
+			str::from_utf8(&self.blog).map_err(|_| fmt::Error)?,
+			&self.public_repos
+    	)
+    }
 }
 
 /// This is the pallet's configuration trait
@@ -94,8 +125,10 @@ decl_error! {
 		SignedSubmitNumberError,
 		// Error returned when making unsigned transactions in off-chain worker
 		UnsignedSubmitNumberError,
+		// Error returned when making remote http fetching
 		HttpFetchingError,
-		JsonParsingError,
+		// Error returned when gh-info has already been fetched
+		AlreadyFetched,
 	}
 }
 
@@ -123,7 +156,7 @@ decl_module! {
 			let result = match Self::choose_tx_type(block_number) {
 				TransactionType::SignedSubmitNumber => Self::signed_submit_number(block_number),
 				TransactionType::UnsignedSubmitNumber => Self::unsigned_submit_number(block_number),
-				TransactionType::HttpFetching => Self::fetch_n_parse(block_number),
+				TransactionType::HttpFetching => Self::fetch_if_needed(),
 				TransactionType::None => Ok(())
 			};
 
@@ -148,7 +181,7 @@ impl<T: Trait> Module<T> {
 			// displaying the average
 			let average = match num_len {
 				0 => 0,
-				_ => numbers.iter().fold(0, {|acc, num| acc + num}) / (num_len as u64),
+				_ => numbers.iter().fold(0, |acc, num| acc + num) / (num_len as u64),
 			};
 
 			debug::info!("Current average of numbers is: {}", average);
@@ -171,7 +204,75 @@ impl<T: Trait> Module<T> {
 		}
 	}
 
-	fn fetch_n_parse(_block_number: T::BlockNumber) -> Result<(), Error<T>> {
+	/// Check if we have fetched github info before. If yes, we use the cached version that is
+	///   stored in off-chain worker storage `storage`. If no, we fetch the remote info and then
+	///   write the info into the storage for future retrieval.
+	fn fetch_if_needed() -> Result<(), Error<T>> {
+		// Start off by creating a reference to Local Storage value.
+		// Since the local storage is common for all offchain workers, it's a good practice
+		// to prepend our entry with the pallet name.
+		let s_info = StorageValueRef::persistent(b"offchain-demo::gh-info");
+		let s_lock = StorageValueRef::persistent(b"offchain-demo::lock");
+
+		// The local storage is persisted and shared between runs of the offchain workers,
+		// and offchain workers may run concurrently. We can use the `mutate` function, to
+		// write a storage entry in an atomic fashion.
+		//
+		// It has a similar API as `StorageValue` that offer `get`, `set`, `mutate`.
+		// If we are using a get-check-set access pattern, we likely want to use `mutate` to access
+		// the storage in one go.
+		//
+		// Ref: https://substrate.dev/rustdocs/v2.0.0-alpha.6/sp_runtime/offchain/storage/struct.StorageValueRef.html
+		if let Some(Some(gh_info)) = s_info.get::<GithubInfo>() {
+			// gh-info has already been fetched. Return early.
+			debug::info!("cached gh-info: {:?}", gh_info);
+			return Ok(());
+		}
+
+		// We are implementing a mutex lock here with `s_lock`
+		let res: Result<Result<bool, bool>, Error<T>> = s_lock.mutate(|s: Option<Option<bool>>| {
+			match s {
+				// `s` can be one of the following:
+				//   `None`: the lock has never been set. Treated as the lock is free
+				//   `Some(None)`: unexpected case, treated it as AlreadyFetch
+				//   `Some(Some(false))`: the lock is free
+				//   `Some(Some(true))`: the lock is held
+
+				// If the lock has never been set or is free (false), return true to execute `fetch_n_parse`
+				None | Some(Some(false)) => Ok(true),
+
+				// Otherwise, someone already hold the lock (true), we want to skip `fetch_n_parse`.
+				// Covering cases: `Some(None)` and `Some(Some(true))`
+				_ => Err(<Error<T>>::AlreadyFetched),
+			}
+		});
+
+		// Cases of `res` returned result:
+		//   `Err(<Error<T>>)` - lock is held, so we want to skip `fetch_n_parse` function.
+		//   `Ok(Err(true))` - Another ocw is writing to the storage while we set it,
+		//                     we also skip `fetch_n_parse` in this case.
+		//   `Ok(Ok(true))` - successfully acquire the lock, so we run `fetch_n_parse`
+		if let Ok(Ok(true)) = res {
+			match Self::fetch_n_parse() {
+				Ok(gh_info) => {
+					// set gh-info into the storage and release the lock
+					s_info.set(&gh_info);
+					s_lock.set(&false);
+
+					debug::info!("fetched gh-info: {:?}", gh_info);
+				},
+				Err(err) => {
+					// release the lock
+					s_lock.set(&false);
+					return Err(err);
+				}
+			}
+		}
+		Ok(())
+	}
+
+	/// Fetch from remote and deserialize the JSON to a struct
+	fn fetch_n_parse() -> Result<GithubInfo, Error<T>> {
 		let resp_bytes = Self::fetch_from_remote()
 			.map_err(|e| {
 				debug::error!("fetch_from_remote error: {:?}", e);
@@ -180,26 +281,17 @@ impl<T: Trait> Module<T> {
 
 		let resp_str = str::from_utf8(&resp_bytes)
 			.map_err(|_| <Error<T>>::HttpFetchingError)?;
-
-		// The json shape is as follow.
-		// {
-		//   "login":"substrate-developer-hub",
-		//   "blog":"https://substrate.dev",
-		//   ...
-		// }
+		// Print out our fetched JSON string
 		debug::info!("{}", resp_str);
 
-		let login_bytes = Self::parse_for_value(&resp_str, "login")?;
-		let blog_bytes = Self::parse_for_value(&resp_str, "blog")?;
-
-		debug::info!("login: {}", str::from_utf8(&login_bytes)
-			.map_err(|_| <Error<T>>::JsonParsingError)?);
-		debug::info!("blog: {}", str::from_utf8(&blog_bytes)
-			.map_err(|_| <Error<T>>::JsonParsingError)?);
-
-		Ok(())
+		// Deserializing JSON to struct, thanks to `serde` and `serde_derive`
+		let gh_info: GithubInfo = serde_json::from_str(&resp_str)
+			.map_err(|_| <Error<T>>::HttpFetchingError)?;
+		Ok(gh_info)
 	}
 
+	/// This function uses the `offchain::http` API to query the remote github information,
+	///   and returns the JSON response as vector of bytes.
 	fn fetch_from_remote() -> Result<Vec<u8>, Error<T>> {
 		let remote_url_bytes = HTTP_REMOTE_REQUEST_BYTES.to_vec();
 		let user_agent = HTTP_HEADER_USER_AGENT.to_vec();
@@ -238,28 +330,6 @@ impl<T: Trait> Module<T> {
 
 		// Next we fully read the response body and collect it to a vector of bytes.
 		Ok(response.body().collect::<Vec<u8>>())
-	}
-
-	fn parse_for_value(json_str: &str, key: &str) -> Result<Vec<u8>, Error<T>> {
-		// Parse the whole string into a Json object
-		let json: JsonValue = parse_json(&json_str)
-			.map_err(|_| <Error<T>>::JsonParsingError)?;
-		let json_obj: &JsonObject = json.get_object()
-			.map_err(|_| <Error<T>>::JsonParsingError)?;
-
-		// We iterate through the key and retrieve the (key, value) pair that match the `key`
-		//   parameter.
-		// `key_val.0` contains the key and `key_val.1` contains the value.
-		let key_val = json_obj
-			.iter()
-			.find(|(k, _)| *k == key.chars().collect::<Vec<char>>())
-			.ok_or(<Error<T>>::JsonParsingError)?;
-
-		// We assume the value is a string, so we use `get_bytes()` to collect them back.
-		//   In a real app, you may need to catch the error and further process it if the value is not
-		//   a string.
-		key_val.1.get_bytes()
-			.map_err(|_| <Error<T>>::JsonParsingError)
 	}
 
 	fn signed_submit_number(block_number: T::BlockNumber) -> Result<(), Error<T>> {
@@ -322,7 +392,7 @@ impl<T: Trait> frame_support::unsigned::ValidateUnsigned for Module<T> {
 			Ok(ValidTransaction {
 				priority: 1 << 20,
 				requires: vec![],
-				provides: vec![codec::Encode::encode(&(KEY_TYPE.0, block_num))],
+				provides: vec![Encode::encode(&(KEY_TYPE.0, block_num))],
 				longevity: 3,
 				propagate: false,
 			})
