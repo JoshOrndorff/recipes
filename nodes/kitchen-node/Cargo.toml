@@ -27,6 +27,7 @@ sc-basic-authorship = '0.8.0-alpha.7'
 sc-cli = '0.8.0-alpha.7'
 sc-client-db = '0.8.0-alpha.7' # This became necessary when converting to instant seal
 sp-consensus = '0.8.0-alpha.7'
+sc-consensus = '0.8.0-alpha.7'
 sc-consensus-manual-seal = '0.8.0-alpha.7'
 sc-executor = '0.8.0-alpha.7'
 sc-network = '0.8.0-alpha.7'

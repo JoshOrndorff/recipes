@@ -28,12 +28,16 @@ macro_rules! new_full_start {
 			.with_select_chain(|_config, backend| {
 				Ok(sc_consensus::LongestChain::new(backend.clone()))
 			})?
-			.with_transaction_pool(|config, client, _fetcher| {
+			.with_transaction_pool(|config, client, _fetcher, prometheus_registry| {
 				let pool_api = sc_transaction_pool::FullChainApi::new(client.clone());
-				Ok(sc_transaction_pool::BasicPool::new(config, std::sync::Arc::new(pool_api)))
+				Ok(sc_transaction_pool::BasicPool::new(config, std::sync::Arc::new(pool_api), prometheus_registry))
 			})?
-			.with_import_queue(|_config, client, _select_chain, _transaction_pool| {
-				Ok(sc_consensus_manual_seal::import_queue::<_, sc_client_db::Backend<_>>(Box::new(client)))
+			.with_import_queue(|_config, client, _select_chain, _transaction_pool, spawn_task_handle| {
+				let import_queue = sc_consensus_manual_seal::import_queue::<_, sc_client_db::Backend<_>>(
+					Box::new(client),
+					spawn_task_handle
+				);
+				Ok(import_queue)
 			})?;
 
 		builder
