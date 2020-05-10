@@ -14,7 +14,7 @@ include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 pub mod genesis;
 
 use sp_std::prelude::*;
-use sp_core::{OpaqueMetadata, H256};
+use sp_core::{OpaqueMetadata, H256, Encode};
 use sp_runtime::{
 	ApplyExtrinsicResult,
 	create_runtime_str,
