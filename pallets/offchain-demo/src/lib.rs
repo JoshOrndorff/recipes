@@ -7,18 +7,26 @@ mod tests;
 
 use frame_support::{
 	debug,
-	dispatch::DispatchResult, decl_module, decl_storage, decl_event, decl_error,
+	decl_module, decl_storage, decl_event, decl_error,
+	traits::Get,
+	dispatch::DispatchResult,
 };
 use parity_scale_codec::{Encode, Decode};
 use core::{fmt, convert::TryInto};
 
-use frame_system::{self as system, ensure_signed, ensure_none, offchain};
+use frame_system::{
+	self as system, ensure_signed, ensure_none,
+	offchain::{
+		AppCrypto, Signer, SubmitTransaction, CreateSignedTransaction, SendSignedTransaction
+	},
+};
 use sp_core::crypto::KeyTypeId;
 use sp_runtime::{
 	offchain as rt_offchain,
 	offchain::{storage::StorageValueRef},
 	transaction_validity::{
-		InvalidTransaction, ValidTransaction, TransactionValidity, TransactionSource
+		InvalidTransaction, ValidTransaction, TransactionValidity, TransactionSource,
+		TransactionPriority,
 	},
 };
 use sp_std::prelude::*;
@@ -47,8 +55,21 @@ pub const HTTP_HEADER_USER_AGENT: &[u8] = b"jimmychu0807";
 /// the types with this pallet-specific identifier.
 pub mod crypto {
 	use crate::KEY_TYPE;
-	use sp_runtime::app_crypto::{app_crypto, sr25519};
+	use sp_runtime::{
+		app_crypto::{app_crypto, sr25519},
+		traits::Verify,
+	};
+	use sp_core::sr25519::Signature as Sr25519Signature;
+
 	app_crypto!(sr25519, KEY_TYPE);
+
+	pub struct TestAuthId;
+	impl frame_system::offchain::AppCrypto<<Sr25519Signature as Verify>::Signer, Sr25519Signature> for TestAuthId
+	{
+		type RuntimeAppPublic = Public;
+		type GenericSignature = sp_core::sr25519::Signature;
+		type GenericPublic = sp_core::sr25519::Public;
+	}
 }
 
 // Specifying serde path as `alt_serde`
@@ -83,15 +104,15 @@ impl fmt::Debug for GithubInfo {
 }
 
 /// This is the pallet's configuration trait
-pub trait Trait: system::Trait {
+pub trait Trait: system::Trait + CreateSignedTransaction<Call<Self>> {
+	/// The identifier type for an offchain worker.
+	type AuthorityId: AppCrypto<Self::Public, Self::Signature>;
 	/// The overarching dispatch call type.
 	type Call: From<Call<Self>>;
 	/// The overarching event type.
 	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
 	/// The type to sign and send transactions.
-	type SendSignedTransaction: offchain::SendSignedTransaction<Self, <Self as Trait>::Call>;
-	/// The type to send unsigned transactions.
-	type SendUnsignedTransaction: offchain::SendUnsignedTransaction<Self, <Self as Trait>::Call>;
+	type UnsignedPriority: Get<TransactionPriority>;
 }
 
 // Custom data type
@@ -135,14 +156,14 @@ decl_module! {
 	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
 		fn deposit_event() = default;
 
-		#[weight = 10_000]
+		#[weight = 0]
 		pub fn submit_number_signed(origin, number: u64) -> DispatchResult {
 			debug::info!("submit_number_signed: {:?}", number);
 			let who = ensure_signed(origin)?;
 			Self::append_or_replace_number(Some(who), number)
 		}
 
-		#[weight = 10_000]
+		#[weight = 0]
 		pub fn submit_number_unsigned(origin, _block: T::BlockNumber, number: u64) -> DispatchResult {
 			debug::info!("submit_number_unsigned: {:?}", number);
 			let _ = ensure_none(origin)?;
@@ -332,26 +353,27 @@ impl<T: Trait> Module<T> {
 	}
 
 	fn signed_submit_number(block_number: T::BlockNumber) -> Result<(), Error<T>> {
-		use offchain::SendSignedTransaction;
-		if !T::SendSignedTransaction::can_sign() {
+		let signer = Signer::<T, T::AuthorityId>::all_accounts();
+		if !signer.can_sign() {
 			debug::error!("No local account available");
 			return Err(<Error<T>>::SignedSubmitNumberError);
 		}
-
-		// We are just submitting the current block number back on-chain
-		let submission: u64 = block_number.try_into().ok().unwrap() as u64;
-		let call = Call::submit_number_signed(submission);
 
 		// Using `SubmitSignedTransaction` associated type we create and submit a transaction
 		// representing the call, we've just created.
 		// Submit signed will return a vector of results for all accounts that were found in the
 		// local keystore with expected `KEY_TYPE`.
-		let results = T::SendSignedTransaction::submit_signed(call);
-		for (_acc, res) in &results {
+		let submission: u64 = block_number.try_into().ok().unwrap() as u64;
+		let results = signer.send_signed_transaction(|_acct| {
+			// We are just submitting the current block number back on-chain
+			Call::submit_number_signed(submission)
+		});
+
+		for (acc, res) in &results {
 			match res {
-				Ok(()) => { debug::native::info!("off-chain send_signed: acc: {}| number: {}", _acc, submission); },
+				Ok(()) => { debug::native::info!("off-chain send_signed: acc: {:?}| number: {}", acc.id, submission); },
 				Err(e) => {
-					debug::error!("[{:?}] Failed in signed_submit_number: {:?}", _acc, e);
+					debug::error!("[{:?}] Failed in signed_submit_number: {:?}", acc.id, e);
 					return Err(<Error<T>>::SignedSubmitNumberError);
 				}
 			};
@@ -360,8 +382,6 @@ impl<T: Trait> Module<T> {
 	}
 
 	fn unsigned_submit_number(block_number: T::BlockNumber) -> Result<(), Error<T>> {
-		use offchain::SendUnsignedTransaction;
-
 		let submission: u64 = block_number.try_into().ok().unwrap() as u64;
 		// Submitting the current block number back on-chain.
 		// `blocknumber` and `submission` params are always the same value but in different
@@ -371,10 +391,11 @@ impl<T: Trait> Module<T> {
 		//   each block generation phase.
 		let call = Call::submit_number_unsigned(block_number, submission);
 
-		T::SubmitUnsignedTransaction::submit_unsigned(call).map_err(|e| {
-			debug::error!("Failed in unsigned_submit_number: {:?}", e);
-			<Error<T>>::UnsignedSubmitNumberError
-		})
+		SubmitTransaction::<T, Call<T>>::submit_unsigned_transaction(call.into())
+			.map_err(|e| {
+				debug::error!("Failed in unsigned_submit_number: {:?}", e);
+				<Error<T>>::UnsignedSubmitNumberError
+			})
 	}
 }
 
@@ -388,13 +409,13 @@ impl<T: Trait> frame_support::unsigned::ValidateUnsigned for Module<T> {
 		if let Call::submit_number_unsigned(block_num, number) = call {
 			debug::native::info!("off-chain send_unsigned: block_num: {}| number: {}", block_num, number);
 
-			Ok(ValidTransaction {
-				priority: 1 << 20,
-				requires: vec![],
-				provides: vec![Encode::encode(&(KEY_TYPE.0, block_num))],
-				longevity: 3,
-				propagate: false,
-			})
+			ValidTransaction::with_tag_prefix("offchain-demo")
+				.priority(T::UnsignedPriority::get())
+				.and_requires([number])
+				.and_provides(block_num)
+				.longevity(3)
+				.propagate(false)
+				.build()
 		} else {
 			InvalidTransaction::Call.into()
 		}

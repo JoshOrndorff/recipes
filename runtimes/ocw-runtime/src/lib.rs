@@ -41,8 +41,10 @@ pub use sp_runtime::{Perbill, Permill};
 pub use frame_support::{
 	StorageValue, construct_runtime, parameter_types,
 	traits::Randomness,
-	weights::Weight,
-	constants::{BlockExecutionWeight, ExtrinsicBaseWeight, RocksDbWeight, WEIGHT_PER_SECOND},
+	weights::{
+		Weight,
+		constants::{BlockExecutionWeight, ExtrinsicBaseWeight, RocksDbWeight, WEIGHT_PER_SECOND},
+	},
 	debug,
 };
 
@@ -216,31 +218,27 @@ impl pallet_sudo::Trait for Runtime {
 
 // ---------------------- Recipe Pallet Configurations ----------------------
 
-// For `offchain-demo` pallet
-type SubmitTransaction = frame_system::offchain::TransactionSubmitter<
-	offchain_demo::crypto::Public,
-	Runtime,
-	UncheckedExtrinsic
->;
-
 /// Payload data to be signed when making signed transaction from off-chain workers,
 ///   inside `create_transaction` function.
 pub type SignedPayload = generic::SignedPayload<Call, SignedExtra>;
 
-impl offchain_demo::Trait for Runtime {
-	type Call = Call;
-	type Event = Event;
-	type SubmitSignedTransaction = SubmitTransaction;
-	type SubmitUnsignedTransaction = SubmitTransaction;
+parameter_types! {
+	pub const UnsignedPriority: u64 = 100;
 }
 
-impl frame_system::offchain::CreateTransaction<Runtime, UncheckedExtrinsic> for Runtime {
-	type Public = <Signature as Verify>::Signer;
-	type Signature = Signature;
+impl offchain_demo::Trait for Runtime {
+	type AuthorityId = offchain_demo::crypto::TestAuthId;
+	type Call = Call;
+	type Event = Event;
+	type UnsignedPriority = UnsignedPriority;
+}
 
-	fn create_transaction<TSigner: frame_system::offchain::Signer<Self::Public, Self::Signature>> (
+impl<LocalCall> frame_system::offchain::CreateSignedTransaction<LocalCall> for Runtime where
+	Call: From<LocalCall>
+{
+	fn create_transaction<C: frame_system::offchain::AppCrypto<Self::Public, Self::Signature>> (
 		call: Call,
-		public: Self::Public,
+		public: <Signature as sp_runtime::traits::Verify>::Signer,
 		account: AccountId,
 		index: Index,
 	) -> Option<(Call, <UncheckedExtrinsic as sp_runtime::traits::Extrinsic>::SignaturePayload)> {
@@ -261,11 +259,26 @@ impl frame_system::offchain::CreateTransaction<Runtime, UncheckedExtrinsic> for 
 			debug::native::warn!("SignedPayload error: {:?}", e);
 		}).ok()?;
 
-		let signature = TSigner::sign(public, &raw_payload)?;
+		let signature = raw_payload.using_encoded(|payload| {
+			C::sign(payload, public)
+		})?;
+
 		let address = account;
 		let (call, extra, _) = raw_payload.deconstruct();
 		Some((call, (address, signature, extra)))
 	}
+}
+
+impl frame_system::offchain::SigningTypes for Runtime {
+	type Public = <Signature as sp_runtime::traits::Verify>::Signer;
+	type Signature = Signature;
+}
+
+impl<C> frame_system::offchain::SendTransactionTypes<C> for Runtime where
+	Call: From<C>,
+{
+	type OverarchingCall = Call;
+	type Extrinsic = UncheckedExtrinsic;
 }
 
 // ---------------------- End of Recipe Pallet Configurations ----------------------
