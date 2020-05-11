@@ -653,8 +653,8 @@ dependencies = [
  "pallet-balances",
  "parity-scale-codec",
  "serde",
- "sp-core 2.0.0-alpha.7",
- "sp-io 2.0.0-alpha.7",
+ "sp-core 2.0.0-dev",
+ "sp-io 2.0.0-dev",
  "sp-runtime",
  "sp-std 2.0.0-dev",
 ]
