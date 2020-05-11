@@ -8,7 +8,6 @@
 use frame_support::{
 	decl_module, decl_storage, decl_event,
 	dispatch,
-	weights::SimpleDispatchInfo,
 };
 use frame_system::{self as system, ensure_signed};
 
@@ -35,7 +34,7 @@ decl_module! {
 		fn deposit_event() = default;
 
 		/// Sets the first simple storage value
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		pub fn set_thing_1(origin, val: u32) -> dispatch::DispatchResult {
 			let _ = ensure_signed(origin)?;
 
@@ -46,7 +45,7 @@ decl_module! {
 		}
 
 		/// Sets the second stored value
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		pub fn set_thing_2(origin, val: u32) -> dispatch::DispatchResult {
 			let _ = ensure_signed(origin)?;
 

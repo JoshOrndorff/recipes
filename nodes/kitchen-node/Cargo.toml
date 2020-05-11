@@ -23,23 +23,22 @@ tokio = "0.1.22"
 exit-future = "0.2.0"
 parking_lot = "0.9.0"
 trie-root = "0.15.2"
-sc-basic-authorship = { version = '0.8.0-alpha.6', git = 'https://github.com/paritytech/substrate', branch = 'joshy-manual-seal-import-queue' }
-sc-cli = { version = '0.8.0-alpha.6', git = 'https://github.com/paritytech/substrate', branch = 'joshy-manual-seal-import-queue' }
-sc-client = { version = '0.8.0-alpha.6', git = 'https://github.com/paritytech/substrate', branch = 'joshy-manual-seal-import-queue' }
-sc-client-api = { version = '2.0.0-alpha.6', git = 'https://github.com/paritytech/substrate', branch = 'joshy-manual-seal-import-queue' }
-sc-client-db = { version = '0.8.0-alpha.6', git = 'https://github.com/paritytech/substrate', branch = 'joshy-manual-seal-import-queue' } # This because necessary when converting to instant seal
-sc-consensus-manual-seal = { version = '0.8.0-alpha.6', git = 'https://github.com/paritytech/substrate', branch = 'joshy-manual-seal-import-queue' }
-sc-executor = { version = '0.8.0-alpha.6', git = 'https://github.com/paritytech/substrate', branch = 'joshy-manual-seal-import-queue' }
-sc-network = { version = '0.8.0-alpha.6', git = 'https://github.com/paritytech/substrate', branch = 'joshy-manual-seal-import-queue' }
-sc-service = { version = '0.8.0-alpha.6', git = 'https://github.com/paritytech/substrate', branch = 'joshy-manual-seal-import-queue' }
-sc-transaction-pool = { version = '2.0.0-alpha.6', git = 'https://github.com/paritytech/substrate', branch = 'joshy-manual-seal-import-queue' }
-sp-consensus = { version = '0.8.0-alpha.6', git = 'https://github.com/paritytech/substrate', branch = 'joshy-manual-seal-import-queue' }
-sp-core = { version = '2.0.0-alpha.6', git = 'https://github.com/paritytech/substrate', branch = 'joshy-manual-seal-import-queue' }
-sp-inherents = { version = '2.0.0-alpha.6', git = 'https://github.com/paritytech/substrate', branch = 'joshy-manual-seal-import-queue' }
-sp-io = { version = '2.0.0-alpha.6', git = 'https://github.com/paritytech/substrate', branch = 'joshy-manual-seal-import-queue' }
-sp-runtime = { version = '2.0.0-alpha.6', git = 'https://github.com/paritytech/substrate', branch = 'joshy-manual-seal-import-queue' }
-sp-timestamp = { version = '2.0.0-alpha.6', git = 'https://github.com/paritytech/substrate', branch = 'joshy-manual-seal-import-queue' }
-sp-transaction-pool = { version = '2.0.0-alpha.6', git = 'https://github.com/paritytech/substrate', branch = 'joshy-manual-seal-import-queue' }
+sc-basic-authorship = { version = '0.8.0-alpha.6', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-cli = { version = '0.8.0-alpha.6', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-client-api = { version = '2.0.0-alpha.6', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-client-db = { version = '0.8.0-alpha.6', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' } # This because necessary when converting to instant seal
+sc-consensus-manual-seal = { version = '0.8.0-alpha.6', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-executor = { version = '0.8.0-alpha.6', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-network = { version = '0.8.0-alpha.6', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-service = { version = '0.8.0-alpha.6', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-transaction-pool = { version = '2.0.0-alpha.6', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sp-consensus = { version = '0.8.0-alpha.6', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sp-core = { version = '2.0.0-alpha.6', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sp-inherents = { version = '2.0.0-alpha.6', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sp-io = { version = '2.0.0-alpha.6', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sp-runtime = { version = '2.0.0-alpha.6', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sp-timestamp = { version = '2.0.0-alpha.6', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sp-transaction-pool = { version = '2.0.0-alpha.6', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
 
 # This node is compatible with any of the runtimes below
 # ---
@@ -60,7 +59,7 @@ runtime = { package = "api-runtime", path = "../../runtimes/api-runtime" }
 
 [build-dependencies]
 vergen = "3.0.4"
-substrate-build-script-utils = { version = '2.0.0-alpha.6', git = 'https://github.com/paritytech/substrate', branch = 'joshy-manual-seal-import-queue' }
+substrate-build-script-utils = { version = '2.0.0-alpha.6', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
 
 [features]
 ocw = []
