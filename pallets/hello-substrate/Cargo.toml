@@ -20,13 +20,6 @@ frame-support = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytec
 frame-system = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72', default-features = false }
 sp-runtime = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72', default-features = false }
 
-
-[dev-dependencies.sp-core]
-default_features = false
-
-version = '2.0.0-alpha.7'
-
-[dev-dependencies.sp-io]
-default_features = false
-
-version = '2.0.0-alpha.7'
+[dev-dependencies]
+sp-core = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72', default-features = false }
+sp-io = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72', default-features = false }
