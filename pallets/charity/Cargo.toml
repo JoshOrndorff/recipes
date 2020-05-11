@@ -13,6 +13,7 @@ std = [
     'frame-system/std',
     'balances/std',
     'sp-runtime/std',
+    'sp-std/std',
 ]
 
 [dependencies]
