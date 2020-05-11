@@ -13,7 +13,7 @@ include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 pub mod genesis;
 
 use sp_std::prelude::*;
-use sp_core::{OpaqueMetadata, H256};
+use sp_core::{OpaqueMetadata, H256, crypto::KeyTypeId};
 use sp_runtime::{
 	ApplyExtrinsicResult,
 	create_runtime_str,
@@ -23,12 +23,12 @@ use sp_runtime::{
 	transaction_validity::{TransactionValidity, TransactionSource},
 };
 use sp_runtime::traits::{
-	BlakeTwo256, Block as BlockT, IdentityLookup, ConvertInto, Verify, IdentifyAccount,
+	BlakeTwo256, Block as BlockT, IdentityLookup, ConvertInto, Verify, IdentifyAccount, NumberFor,
 };
 use frame_system as system;
 use sp_api::impl_runtime_apis;
 use babe::SameAuthoritiesForever;
-use grandpa::AuthorityList as GrandpaAuthorityList;
+use grandpa::{AuthorityId as GrandpaId, AuthorityList as GrandpaAuthorityList};
 
 #[cfg(feature = "std")]
 use sp_version::NativeVersion;
@@ -42,7 +42,7 @@ pub use balances::Call as BalancesCall;
 pub use sp_runtime::{Perbill, Permill};
 pub use frame_support::{
 	StorageValue, construct_runtime, parameter_types,
-	traits::Randomness,
+	traits::{KeyOwnerProofSystem, Randomness},
 	weights::{
 		Weight,
 		constants::{BlockExecutionWeight, ExtrinsicBaseWeight, RocksDbWeight, WEIGHT_PER_SECOND},
@@ -206,6 +206,15 @@ impl babe::Trait for Runtime {
 
 impl grandpa::Trait for Runtime {
 	type Event = Event;
+	type Call = Call;
+	type KeyOwnerProofSystem = ();
+	type KeyOwnerProof =
+		<Self::KeyOwnerProofSystem as KeyOwnerProofSystem<(KeyTypeId, GrandpaId)>>::Proof;
+	type KeyOwnerIdentification = <Self::KeyOwnerProofSystem as KeyOwnerProofSystem<(
+		KeyTypeId,
+		GrandpaId,
+	)>>::IdentificationTuple;
+	type HandleEquivocation = ();
 }
 
 parameter_types! {
@@ -361,6 +370,26 @@ impl_runtime_apis! {
 	impl sp_finality_grandpa::GrandpaApi<Block> for Runtime {
 		fn grandpa_authorities() -> GrandpaAuthorityList {
 			Grandpa::grandpa_authorities()
+		}
+
+		fn submit_report_equivocation_extrinsic(
+			_equivocation_proof: sp_finality_grandpa::EquivocationProof<
+				<Block as BlockT>::Hash,
+				NumberFor<Block>,
+			>,
+			_key_owner_proof: sp_finality_grandpa::OpaqueKeyOwnershipProof,
+		) -> Option<()> {
+			None
+		}
+
+		fn generate_key_ownership_proof(
+			_set_id: sp_finality_grandpa::SetId,
+			_authority_id: GrandpaId,
+		) -> Option<sp_finality_grandpa::OpaqueKeyOwnershipProof> {
+			// NOTE: this is the only implementation possible since we've
+			// defined our key owner proof type as a bottom type (i.e. a type
+			// with no values).
+			None
 		}
 	}
 
