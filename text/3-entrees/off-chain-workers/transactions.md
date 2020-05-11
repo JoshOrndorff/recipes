@@ -2,19 +2,23 @@
 
 *[`pallets/offchain-demo`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo)*
 
-## Compiling Kitchen Node with Off-chain Worker Feature
+## Compiling this Pallet
 
-You can compile the `kitchen-node` with `ocw` feature on to see off-chain workers in work.
+This `offchain-demo` pallet is included in the [ocw-runtime](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime). That runtime can be used in the kitchen node.
 
-First, set in `<recipes-dir>/nodes/kitchen-node/Cargo.toml` to use `ocw-runtime` instead of the default `super-runtime`.
+In order to use the Offchain worker, the node must inject some keys into its keystore, and that is enabled with a feature flag.
 
-Second, compile kitchen-node with `ocw` feature on.
+First, edit `nodes/kitchen-node/Cargo.toml` to enable the `ocw-runtime`.
+
+Then, build the kitchen node with these commands.
 
 ```bash
-cd <recipes-dir>/nodes/kitchen-node
+# Switch to kitchen-node directory
+cd nodes/kitchen-node
+
+# Compile with OCW feature
 cargo build --release --features ocw
 ```
-
 
 ## Life-cycle of Off-chain Worker
 
@@ -75,7 +79,7 @@ This associated type needs to be specified by the runtime when the runtime is to
 
 Looking at the [rustdoc of `SubmitSignedTransaction`](https://substrate.dev/rustdocs/master/frame_system/offchain/trait.SubmitSignedTransaction.html), it says that we should use the `TransactionSubmitter` implementation type. Let's do that in our runtime.
 
-src: [`runtimes/super-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/super-runtime/src/lib.rs)
+src: [`runtimes/ocw-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime/src/lib.rs)
 
 ```rust
 type SubmitTransaction = system::offchain::TransactionSubmitter<
@@ -94,7 +98,7 @@ impl offchain_demo::Trait for Runtime {
 
 Now if we build the `kitchen-node`, we will see the compiler complain that the trait bound for `Runtime: frame_system::offchain::CreateTransaction` is not satisfied. We learn that when using `SubmitSignedTransaction`, we also need to have our runtime implement the [`CreateTransaction` trait](https://substrate.dev/rustdocs/master/frame_system/offchain/trait.CreateTransaction.html). So let's implement this in our runtime.
 
-src: [`runtimes/super-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/super-runtime/src/lib.rs)
+src: [`runtimes/ocw-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime/src/lib.rs)
 
 ```rust
 impl system::offchain::CreateTransaction<Runtime, UncheckedExtrinsic> for Runtime {
@@ -141,7 +145,7 @@ There is a lot happening in the code. But basically we are:
 
 We also define `SignedExtra` data type later in the runtime.
 
-src: [`runtimes/super-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/super-runtime/src/lib.rs)
+src: [`runtimes/ocw-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime/src/lib.rs)
 
 ```rust
 /// The SignedExtension to the basic transaction logic.
@@ -277,7 +281,7 @@ The `ValidTransaction` object has some fields that touch on concepts that we hav
 
 Third, we define the associated type of `SubmitUnsignedTransaction` in our runtime.
 
-src: [`runtimes/super-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/super-runtime/src/lib.rs)
+src: [`runtimes/ocw-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime/src/lib.rs)
 
 ```rust
 type SubmitTransaction = system::offchain::TransactionSubmitter<
@@ -294,7 +298,7 @@ impl offchain_demo::Trait for Runtime {
 
 Finally, to tell the runtime that we have our own `ValidateUnsigned` logic, we also need to pass this as a parameter when constructing the runtime.
 
-src: [`runtimes/super-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/super-runtime/src/lib.rs)
+src: [`runtimes/ocw-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime/src/lib.rs)
 
 ```rust
 construct_runtime!(
@@ -335,15 +339,3 @@ As in signed transactions, we prepare a function reference with its parameters a
 ## Testing
 
 For writing test cases for off-chain worker, refer to our [testing section](/3-entrees/testing/off-chain-workers.md).
-
-## Compiling this Pallet
-
-This `offchain-demo` pallet is included in the [ocw-runtime](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime). That runtime can be used in the kitchen node. Edit `nodes/kitchen-node/Cargo.toml` to enable the `ocw-runtime`. In order to use the Offchain worker, the node must inject some keys into its keystore, and that is enabled with a feature flag. To build the kitchen node with this feature use these commands.
-
-```bash
-# Switch to kitchen-node directory
-cd nodes/kitchen-node
-
-# Compile with OCW feature
-cargo build --release --features ocw
-```

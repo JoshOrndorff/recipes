@@ -6,7 +6,6 @@
 use frame_support::{
 	decl_event, decl_module,
 	traits::{Currency, OnUnbalanced, Imbalance, ReservableCurrency},
-	weights::SimpleDispatchInfo,
 };
 use frame_system::{self as system, ensure_signed};
 
@@ -46,7 +45,7 @@ decl_module! {
 		fn deposit_event() = default;
 
 		/// Slashes the specified amount of funds from the specified account
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		pub fn slash_funds(origin, to_punish: T::AccountId, collateral: BalanceOf<T>) {
 			let _ = ensure_signed(origin)?;
 
@@ -58,7 +57,7 @@ decl_module! {
 		}
 
 		/// Awards the specified amount of funds to the specified accoutn
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		pub fn reward_funds(origin, to_reward: T::AccountId, reward: BalanceOf<T>) {
 			let _ = ensure_signed(origin)?;
 

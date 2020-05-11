@@ -6,9 +6,7 @@ const fs = require('fs');
 // A list of all the installed recipe pallets' folder names.
 // Does not include system pallets because Apps already supports them.
 // Redundant with construct_runtime!
-const pallets = [
-  "weights",
-]
+const pallets = []
 
 // Types that are native to the runtime itself (ie come from lib.rs)
 // These specifics are from https://polkadot.js.org/api/start/types.extend.html#impact-on-extrinsics

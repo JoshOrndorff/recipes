@@ -36,7 +36,7 @@ where
 	/// Store all changes made in the underlying storage.
 	///
 	/// Data is not guaranteed to be consistent before this call.
-	/// 
+	///
 	/// Implementation note: Call in `drop` to increase ergonomics.
 	fn commit(&self);
 	/// Push an item onto the end of the queue.
@@ -151,7 +151,7 @@ where
 	}
 
 	/// Pop an item from the start of the queue.
-	/// 
+	///
 	/// Will remove the item, but will not update the bounds in storage.
 	fn pop(&mut self) -> Option<Item> {
 		if self.is_empty() {
@@ -236,6 +236,9 @@ mod tests {
 		type Event = ();
 		type BlockHashCount = BlockHashCount;
 		type MaximumBlockWeight = MaximumBlockWeight;
+		type DbWeight = ();
+		type BlockExecutionWeight = ();
+		type ExtrinsicBaseWeight = ();
 		type MaximumBlockLength = MaximumBlockLength;
 		type AvailableBlockRatio = AvailableBlockRatio;
 		type Version = ();

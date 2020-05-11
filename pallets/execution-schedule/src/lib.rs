@@ -10,7 +10,7 @@ use frame_support::{
 	dispatch::{DispatchResult, DispatchError},
 	ensure,
 	traits::Get,
-	weights::{SimpleDispatchInfo, Weight},
+	weights::Weight,
 };
 use frame_system::{self as system, ensure_signed};
 
@@ -125,7 +125,7 @@ decl_module! {
 		///
 		/// - the task initially has no priority
 		/// - only council members can schedule tasks
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		fn schedule_task(origin, data: Vec<u8>) -> DispatchResult {
 			let proposer = ensure_signed(origin)?;
 			ensure!(Self::is_on_council(&proposer), "only members of the council can schedule tasks");
@@ -154,7 +154,7 @@ decl_module! {
 		///
 		/// - members of the council have limited voting power to increase the priority
 		/// of tasks
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		fn signal_priority(origin, id: TaskId, signal: PriorityScore) -> DispatchResult {
 			let voter = ensure_signed(origin)?;
 			ensure!(Self::is_on_council(&voter), "The voting member must be on the council");

@@ -1,18 +1,47 @@
 //! Helper module to build a genesis configuration for the api-runtime
 
 use super::{
-	AccountId, AuraConfig, BalancesConfig, GenesisConfig, GrandpaConfig,
-	SudoConfig, SystemConfig, WASM_BINARY,
+	AccountId, BalancesConfig, GenesisConfig,
+	SudoConfig, SystemConfig, WASM_BINARY, Signature,
 };
+use sp_core::{Pair, sr25519};
+use sp_runtime::traits::{Verify, IdentifyAccount};
 
-use sp_consensus_aura::sr25519::{AuthorityId as AuraId};
-use sp_finality_grandpa::{AuthorityId as GrandpaId};
+/// Helper function to generate a crypto pair from seed
+fn get_from_seed<TPair: Pair>(seed: &str) -> TPair::Public {
+	TPair::from_string(&format!("//{}", seed), None)
+		.expect("static values are valid; qed")
+		.public()
+}
+
+type AccountPublic = <Signature as Verify>::Signer;
+
+/// Helper function to generate an account ID from seed
+pub fn account_id_from_seed<TPair: Pair>(seed: &str) -> AccountId where
+	AccountPublic: From<TPair::Public>
+{
+	AccountPublic::from(get_from_seed::<TPair>(seed)).into_account()
+}
+
+pub fn dev_genesis() -> GenesisConfig {
+	testnet_genesis(
+		// Root Key
+		account_id_from_seed::<sr25519::Pair>("Alice"),
+		// Endowed Accounts
+		vec![
+			account_id_from_seed::<sr25519::Pair>("Alice"),
+			account_id_from_seed::<sr25519::Pair>("Bob"),
+			account_id_from_seed::<sr25519::Pair>("Alice//stash"),
+			account_id_from_seed::<sr25519::Pair>("Bob//stash"),
+		],
+	)
+}
 
 /// Helper function to build a genesis configuration
-pub fn testnet_genesis(initial_authorities: Vec<(AuraId, GrandpaId)>,
+pub fn testnet_genesis(
 	root_key: AccountId,
 	endowed_accounts: Vec<AccountId>,
-	_enable_println: bool) -> GenesisConfig {
+) -> GenesisConfig {
 	GenesisConfig {
 		system: Some(SystemConfig {
 			code: WASM_BINARY.to_vec(),
@@ -23,12 +52,6 @@ pub fn testnet_genesis(initial_authorities: Vec<(AuraId, GrandpaId)>,
 		}),
 		sudo: Some(SudoConfig {
 			key: root_key,
-		}),
-		aura: Some(AuraConfig {
-			authorities: initial_authorities.iter().map(|x| (x.0.clone())).collect(),
-		}),
-		grandpa: Some(GrandpaConfig {
-			authorities: initial_authorities.iter().map(|x| (x.1.clone(), 1)).collect(),
 		}),
 	}
 }

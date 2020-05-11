@@ -1,11 +1,12 @@
 [package]
 name = "kitchen-node"
-version = "2.0.0-alpha.6"
+version = "2.0.0-alpha.7"
 edition = "2018"
 authors = ['Joshy Orndorff', '4meta5', 'Jimmy Chu']
 homepage = 'https://substrate.dev/recipes'
 repository = 'https://github.com/substrate-developer-hub/recipes'
-description = 'A Substrate node that houses many recipe pallets'
+description = 'An instant-sealing Substrate node. Can be used with most recipe runtimes.'
+license = "GPL-3.0-or-later"
 
 [[bin]]
 name = "kitchen-node"
@@ -22,27 +23,24 @@ tokio = "0.1.22"
 exit-future = "0.2.0"
 parking_lot = "0.9.0"
 trie-root = "0.15.2"
-sp-io = '2.0.0-alpha.6'
-sc-cli = '0.8.0-alpha.6'
-sc-client-api = '2.0.0-alpha.6'
-sp-core = '2.0.0-alpha.6'
-sp-runtime = '2.0.0-alpha.6'
-sc-executor = '0.8.0-alpha.6'
-sc-service = '0.8.0-alpha.6'
-sp-inherents = '2.0.0-alpha.6'
-sc-transaction-pool = '2.0.0-alpha.6'
-sp-transaction-pool = '2.0.0-alpha.6'
-sc-network = '0.8.0-alpha.6'
-sc-consensus-babe = '0.8.0-alpha.6'
-sp-consensus-babe = '0.8.0-alpha.6'
-sc-finality-grandpa = '0.8.0-alpha.6'
-sp-finality-grandpa = '2.0.0-alpha.6'
-sc-client = '0.8.0-alpha.6'
-sc-basic-authorship = '0.8.0-alpha.6'
-sp-consensus = '0.8.0-alpha.6'
+sc-basic-authorship = { version = '0.8.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-cli = { version = '0.8.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-client-api = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-consensus = { version = '0.8.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-consensus-manual-seal = { version = '0.8.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-executor = { version = '0.8.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-network = { version = '0.8.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-service = { version = '0.8.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-transaction-pool = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sp-consensus = { version = '0.8.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sp-core = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sp-inherents = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sp-io = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sp-runtime = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sp-timestamp = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sp-transaction-pool = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
 
-# Pick one of the runtimes below.
-# Your runtime must have the necessary pallets to support consensus (Babe, Grandpa, etc).
+# This node is compatible with any of the runtimes below
 # ---
 # Common runtime configured with most Recipes pallets.
 runtime = { package = "super-runtime", path = "../../runtimes/super-runtime" }
@@ -51,17 +49,17 @@ runtime = { package = "super-runtime", path = "../../runtimes/super-runtime" }
 # runtime = { package = "weight-fee-runtime", path = "../../runtimes/weight-fee-runtime"}
 
 # Runtime with off-chain worker enabled.
-# To use this runtime, compile kitchen-node with `ocw` feature enabled,
+# To use this runtime, compile the node with `ocw` feature enabled,
 #   `cargo build --release --features ocw`.
 # runtime = { package = "ocw-runtime", path = "../../runtimes/ocw-runtime" }
 
-# TODO Can't use this until the API runtime implements babe api
+# Runtime with custom runtime-api (custom API only used in rpc-node)
 # runtime = { package = "api-runtime", path = "../../runtimes/api-runtime" }
 # ---
 
 [build-dependencies]
 vergen = "3.0.4"
-substrate-build-script-utils = '2.0.0-alpha.6'
+substrate-build-script-utils = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
 
 [features]
 ocw = []

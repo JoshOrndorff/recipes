@@ -6,7 +6,6 @@
 use frame_support::{
 	decl_error, decl_module, decl_storage, ensure,
 	dispatch::DispatchResult,
-	weights::SimpleDispatchInfo,
 };
 use system::ensure_signed;
 
@@ -36,7 +35,7 @@ decl_module! {
 		/// Adds the supplies value to the stored value.
 		/// Checks for unlucky number 13.
 		/// Checks for addition overflow using an explicit match
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		fn add(origin, val_to_add: u32) -> DispatchResult {
 			let _ = ensure_signed(origin)?;
 
@@ -58,7 +57,7 @@ decl_module! {
 		/// Adds the supplies value to the stored value.
 		/// Checks for unlucky number 13.
 		/// Checks for addition overflow concisely using `ok_or`
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		fn add_alternate(origin, val_to_add: u32) -> DispatchResult {
 			let _ = ensure_signed(origin)?;
 
@@ -73,7 +72,7 @@ decl_module! {
 		}
 
 		/// Resets the stoage value to zero
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		fn reset(origin) -> DispatchResult {
 			let _ = ensure_signed(origin)?;
 

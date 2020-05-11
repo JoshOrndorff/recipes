@@ -1,0 +1,59 @@
+[package]
+authors = ['Seun LanLege', 'Joshy Orndorff']
+build = 'build.rs'
+edition = '2018'
+homepage = 'https://substrate.dev'
+name = 'manual-seal'
+repository = 'https://github.com/paritytech/substrate/'
+version = '2.0.0-alpha.7'
+description = 'A Substrate-based node that uses the instant-seal and manual-seal consensus engines'
+license = "GPL-3.0-or-later"
+
+[[bin]]
+name = 'manual-seal'
+path = 'src/main.rs'
+
+[dependencies]
+futures = '0.3.1'
+log = '0.4.8'
+structopt = '0.3.8'
+parity-scale-codec = '1.3.0'
+sha3 = "0.8"
+rand = { version = "0.7", features = ["small_rng"] }
+jsonrpc-core = "14.0.5"
+
+sc-consensus = { version = '0.8.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-consensus-manual-seal = { version = '0.8.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-rpc = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-client-api = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sp-blockchain =  { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sp-timestamp = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-basic-authorship = { version = '0.8.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-cli = { version = '0.8.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-executor = { version = '0.8.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-network = { version = '0.8.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-service = { version = '0.8.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-transaction-pool = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sp-consensus = { version = '0.8.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sp-core = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sp-inherents = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sp-runtime = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sp-transaction-pool = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+
+# This node is compatible with any of the runtimes below
+# ---
+# Common runtime configured with most Recipes pallets.
+runtime = { package = "super-runtime", path = "../../runtimes/super-runtime" }
+
+# runtime = { package = "pow-runtime", path = "../../runtimes/pow-runtime" }
+
+# Runtime with custom weight and fee calculation.
+# runtime = { package = "weight-fee-runtime", path = "../../runtimes/weight-fee-runtime"}
+
+# Runtime with custom runtime-api (custom API only used in rpc-node)
+# runtime = { package = "api-runtime", path = "../../runtimes/api-runtime" }
+# ---
+
+[build-dependencies]
+vergen = '3.0.4'
+substrate-build-script-utils = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
