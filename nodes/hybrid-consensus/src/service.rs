@@ -2,7 +2,7 @@
 
 use std::sync::Arc;
 use std::time::Duration;
-use sc_client::LongestChain;
+use sc_consensus::LongestChain;
 use sc_client_api::ExecutorProvider;
 use runtime::{self, opaque::Block, RuntimeApi};
 use sc_service::{error::{Error as ServiceError}, AbstractService, Configuration, ServiceBuilder};
@@ -48,13 +48,13 @@ macro_rules! new_full_start {
 			runtime::opaque::Block, runtime::RuntimeApi, crate::service::Executor
 		>($config)?
 			.with_select_chain(|_config, backend| {
-				Ok(sc_client::LongestChain::new(backend.clone()))
+				Ok(sc_consensus::LongestChain::new(backend.clone()))
 			})?
 			.with_transaction_pool(|config, client, _fetcher, prometheus_registry| {
 				let pool_api = sc_transaction_pool::FullChainApi::new(client.clone());
 				Ok(sc_transaction_pool::BasicPool::new(config, std::sync::Arc::new(pool_api), prometheus_registry))
 			})?
-			.with_import_queue(|_config, client, mut select_chain, _transaction_pool| {
+			.with_import_queue(|_config, client, mut select_chain, _transaction_pool, spawn_task_handle| {
 				let select_chain = select_chain.take()
 					.ok_or_else(|| sc_service::Error::SelectChainRequired)?;
 				let (grandpa_block_import, grandpa_link) =
@@ -80,6 +80,7 @@ macro_rules! new_full_start {
 					None, // TODO Okay, so do I need a finality proof import? What's the difference
 					sha3pow::MinimalSha3Algorithm,
 					inherent_data_providers.clone(),
+					spawn_task_handle,
 				)?;
 
 				import_setup = Some((pow_block_import, grandpa_link));
@@ -174,6 +175,7 @@ pub fn new_full(config: Configuration)
 			telemetry_on_connect: Some(service.telemetry_on_connect_stream()),
 			voting_rule: sc_finality_grandpa::VotingRulesBuilder::default().build(),
 			prometheus_registry: service.prometheus_registry(),
+			shared_voter_state: sc_finality_grandpa::SharedVoterState::empty(),
 		};
 
 		// the GRANDPA voter task is considered infallible, i.e.
@@ -212,7 +214,7 @@ pub fn new_light(config: Configuration)
 			);
 			Ok(pool)
 		})?
-		.with_import_queue_and_fprb(|_config, client, backend, fetcher, select_chain, _tx_pool| {
+		.with_import_queue_and_fprb(|_config, client, backend, fetcher, select_chain, _tx_pool, spawn_task_handle| {
 			let fetch_checker = fetcher
 				.map(|fetcher| fetcher.checker().clone())
 				.ok_or_else(|| "Trying to start light import queue without active fetch checker")?;
@@ -239,6 +241,7 @@ pub fn new_light(config: Configuration)
 				None, //TODO same question about finality proof import as in new_full
 				MinimalSha3Algorithm,
 				inherent_data_providers.clone(),
+				spawn_task_handle,
 			)?;
 
 			Ok((import_queue, finality_proof_request_builder))
