@@ -19,23 +19,23 @@ structopt = '0.3.8'
 parity-scale-codec = '1.3.0'
 sha3 = "0.8"
 rand = { version = "0.7", features = ["small_rng"] }
-sc-consensus = '0.8.0-alpha.7'
-sc-consensus-pow = '0.8.0-alpha.7'
-sp-consensus-pow = '0.8.0-alpha.7'
-sc-client-api = '2.0.0-alpha.7'
-sp-blockchain = '2.0.0-alpha.7'
-sp-timestamp = '2.0.0-alpha.7'
-sc-basic-authorship = '0.8.0-alpha.7'
-sc-cli = '0.8.0-alpha.7'
-sc-executor = '0.8.0-alpha.7'
-sc-network = '0.8.0-alpha.7'
-sc-service = '0.8.0-alpha.7'
-sc-transaction-pool = '2.0.0-alpha.7'
-sp-consensus = '0.8.0-alpha.7'
-sp-core = '2.0.0-alpha.7'
-sp-inherents = '2.0.0-alpha.7'
-sp-runtime = '2.0.0-alpha.7'
-sp-transaction-pool = '2.0.0-alpha.7'
+sc-consensus = { version = '0.8.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-consensus-pow = { version = '0.8.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sp-consensus-pow = { version = '0.8.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-client-api = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sp-blockchain = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sp-timestamp = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-basic-authorship = { version = '0.8.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-cli = { version = '0.8.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-executor = { version = '0.8.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-network = { version = '0.8.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-service = { version = '0.8.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-transaction-pool = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sp-consensus = { version = '0.8.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sp-core = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sp-inherents = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sp-runtime = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sp-transaction-pool = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
 
 # This node is compatible with any of the runtimes below
 # ---
@@ -51,4 +51,4 @@ runtime = { package = "weight-fee-runtime", path = "../../runtimes/weight-fee-ru
 
 [build-dependencies]
 vergen = '3.0.4'
-substrate-build-script-utils = '2.0.0-alpha.7'
+substrate-build-script-utils = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }

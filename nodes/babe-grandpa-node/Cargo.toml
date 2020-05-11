@@ -23,39 +23,41 @@ tokio = "0.1.22"
 exit-future = "0.2.0"
 parking_lot = "0.9.0"
 trie-root = "0.15.2"
-sp-io = '2.0.0-alpha.7'
-sc-cli = '0.8.0-alpha.7'
-sc-client-api = '2.0.0-alpha.7'
-sc-consensus = '0.8.0-alpha.7'
-sp-core = '2.0.0-alpha.7'
-sp-runtime = '2.0.0-alpha.7'
-sc-executor = '0.8.0-alpha.7'
-sc-service = '0.8.0-alpha.7'
-sp-inherents = '2.0.0-alpha.7'
-sc-transaction-pool = '2.0.0-alpha.7'
-sp-transaction-pool = '2.0.0-alpha.7'
-sc-network = '0.8.0-alpha.7'
-sc-consensus-babe = '0.8.0-alpha.7'
-sp-consensus-babe = '0.8.0-alpha.7'
-sc-finality-grandpa = '0.8.0-alpha.7'
-sp-finality-grandpa = '2.0.0-alpha.7'
-sc-basic-authorship = '0.8.0-alpha.7'
-sp-consensus = '0.8.0-alpha.7'
+sp-io = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-cli = { version = '0.8.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-client-api = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-consensus = { version = '0.8.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sp-core = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sp-runtime = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-executor = { version = '0.8.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-service = { version = '0.8.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sp-inherents = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-transaction-pool = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sp-transaction-pool = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-network = { version = '0.8.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-consensus-babe = { version = '0.8.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sp-consensus-babe = { version = '0.8.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-finality-grandpa = { version = '0.8.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sp-finality-grandpa = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-basic-authorship = { version = '0.8.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sp-consensus = { version = '0.8.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
 
 # This node only works with runtimes that can provide babe and grandpa authorities.
 # No other runtimes that come with the recipes provide these APIs, but the substrate demonstration
 # runtime does.
 runtime = { package = "babe-grandpa-runtime", path = "../../runtimes/babe-grandpa-runtime" }
 
-# In theory the main Substrate node's runtime should work, but it is not published on crates.io
-# so a git dependency is necessary which leads to:
-# `perhaps two different versions of crate `sp_runtime` are being used?`
-# runtime = { package = "node-runtime", git = "https://github.com/paritytech/substrate/", tag = "v2.0.0-alpha.7" }
+# In theory the main Substrate node's runtime is compatible, but there are several practical limitations
+# 1. It isn't published on crates.io so a git dependency is needed which leads to
+#    `perhaps two different versions of crate `sp_runtime` are being used?`
+# 2. That runtime doesn't have an `opaque` module
+# 3. That runtime doesn't have a genesis module
+# runtime = { package = "node-runtime", git = "https://github.com/paritytech/substrate/", rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
 
 
 [build-dependencies]
 vergen = "3.0.4"
-substrate-build-script-utils = '2.0.0-alpha.7'
+substrate-build-script-utils = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
 
 [features]
 ocw = []

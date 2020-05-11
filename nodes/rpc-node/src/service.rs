@@ -1,17 +1,12 @@
 //! Service and ServiceFactory implementation. Specialized wrapper over substrate service.
 
-// use std::sync::Arc;
-<<<<<<< HEAD
-// use sc_consensus::LongestChain;
-=======
-// use sc_client::LongestChain;
->>>>>>> master
-// use sc_client_api::ExecutorProvider;
-use sc_service::{error::{Error as ServiceError}, AbstractService, Configuration};
+use std::sync::Arc;
+use sc_consensus::LongestChain;
+use sc_service::{error::{Error as ServiceError}, AbstractService, Configuration, ServiceBuilder};
 use sp_inherents::InherentDataProviders;
 use sc_executor::native_executor_instance;
 pub use sc_executor::NativeExecutor;
-// use sc_network::config::DummyFinalityProofRequestBuilder;
+use sc_network::config::DummyFinalityProofRequestBuilder;
 
 // Our native executor instance.
 native_executor_instance!(
@@ -35,12 +30,15 @@ macro_rules! new_full_start {
 			.with_select_chain(|_config, backend| {
 				Ok(sc_consensus::LongestChain::new(backend.clone()))
 			})?
-			.with_transaction_pool(|config, client, _fetcher| {
+			.with_transaction_pool(|config, client, _fetcher, prometheus_registry| {
 				let pool_api = sc_transaction_pool::FullChainApi::new(client.clone());
-				Ok(sc_transaction_pool::BasicPool::new(config, std::sync::Arc::new(pool_api)))
+				Ok(sc_transaction_pool::BasicPool::new(config, std::sync::Arc::new(pool_api), prometheus_registry))
 			})?
-			.with_import_queue(|_config, client, _select_chain, _transaction_pool| {
-				Ok(sc_consensus_manual_seal::import_queue::<_, sc_client_db::Backend<_>>(Box::new(client)))
+			.with_import_queue(|_config, client, _select_chain, _transaction_pool, spawn_task_handle| {
+				Ok(sc_consensus_manual_seal::import_queue(
+					Box::new(client),
+					spawn_task_handle,
+				))
 			})?
 			.with_rpc_extensions(|builder| -> Result<RpcExtension, _> {
 				// Make an io handler to be extended with individual RPCs
@@ -96,12 +94,35 @@ pub fn new_full(config: Configuration)
 }
 
 /// Builds a new service for a light client.
-pub fn new_light(_config: Configuration)
+pub fn new_light(config: Configuration)
 	-> Result<impl AbstractService, ServiceError>
 {
-	// FIXME The light client can work after an upstream change in Substrate
-	// see: https://github.com/substrate-developer-hub/recipes/pull/238
-	unimplemented!("No light client for manual seal");
-	#[allow(unreachable_code)]
-	new_full(_config)
+	ServiceBuilder::new_light::<runtime::opaque::Block, runtime::RuntimeApi, Executor>(config)?
+		.with_select_chain(|_config, backend| {
+			Ok(LongestChain::new(backend.clone()))
+		})?
+		.with_transaction_pool(|config, client, fetcher, prometheus_registry| {
+			let fetcher = fetcher
+				.ok_or_else(|| "Trying to start light transaction pool without active fetcher")?;
+			let pool_api = sc_transaction_pool::LightChainApi::new(client.clone(), fetcher.clone());
+			let pool = sc_transaction_pool::BasicPool::with_revalidation_type(
+				config, Arc::new(pool_api), prometheus_registry, sc_transaction_pool::RevalidationType::Light,
+			);
+			Ok(pool)
+		})?
+		.with_import_queue_and_fprb(|_config, client, _backend, _fetcher, _select_chain, _tx_pool, spawn_task_handle| {
+			let finality_proof_request_builder =
+				Box::new(DummyFinalityProofRequestBuilder::default()) as Box<_>;
+
+			let import_queue = sc_consensus_manual_seal::import_queue(
+				Box::new(client),
+				spawn_task_handle,
+			);
+
+			Ok((import_queue, finality_proof_request_builder))
+		})?
+		.with_finality_proof_provider(|_client, _backend| {
+			Ok(Arc::new(()) as _)
+		})?
+		.build()
 }
