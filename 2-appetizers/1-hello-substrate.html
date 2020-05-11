@@ -173,7 +173,7 @@ use sp_runtime::print;
 	pub struct Module&lt;T: Trait&gt; for enum Call where origin: T::Origin {
 
 		/// A function that says hello to the user by printing messages to the node log
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		pub fn say_hello(origin) -&gt; DispatchResult {
 			// --snip--
 		}
@@ -184,7 +184,7 @@ use sp_runtime::print;
 </code></pre>
 <p>As you can see, our <code>hello-substrate</code> pallet has a dispatchable call that takes a single argument, called <code>origin</code> which we'll investigate shortly. The call returns a <a href="https://substrate.dev/rustdocs/master/frame_support/dispatch/type.DispatchResult.html"><code>DispatchResult</code></a> which can be either <code>Ok(())</code> indicating that the call succeeded, or an <code>Err</code> which we'll investigate in the <a href="./3-errors.html">appetizer about errors</a>.</p>
 <h3><a class="header" href="#weight-annotations" id="weight-annotations">Weight Annotations</a></h3>
-<p>Right before the <code>hello-substrate</code> function, we see the line <code>#[weight = SimpleDispatchInfo::default()]</code>. This line attaches a default weight to the call. Ultimately weights affect the fees a user will have to pay to call the function. Weights are a very interesting aspect of developing with Substrate, but they too shall be covered later in the section on <a href="../3-entrees/weights.html">Weights</a>. For now, and for may of the recipes pallets, we will simply use the default weight as we have done here.</p>
+<p>Right before the <code>hello-substrate</code> function, we see the line <code>#[weight = 10_000]</code>. This line attaches a default weight to the call. Ultimately weights affect the fees a user will have to pay to call the function. Weights are a very interesting aspect of developing with Substrate, but they too shall be covered later in the section on <a href="../3-entrees/weights.html">Weights</a>. For now, and for may of the recipes pallets, we will simply use the default weight as we have done here.</p>
 <h2><a class="header" href="#inside-a-dispatchable-call" id="inside-a-dispatchable-call">Inside a Dispatchable Call</a></h2>
 <p>Let's take a closer look at our dispatchable call.</p>
 <pre><code class="language-rust ignore">pub fn say_hello(origin) -&gt; DispatchResult {

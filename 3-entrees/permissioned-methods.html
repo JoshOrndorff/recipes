@@ -169,7 +169,7 @@
 	// Ensure that the caller is not already a member
 	ensure!(!Self::is_member(&amp;new_member), &quot;already a member&quot;);
 
-	&lt;Members&lt;T&gt;&gt;::append(&amp;[new_member.clone()])?;
+	&lt;Members&lt;T&gt;&gt;::append(&amp;new_member);
 	Self::deposit_event(RawEvent::AddMember(new_member));
 	Ok(())
 }

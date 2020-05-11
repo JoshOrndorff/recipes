@@ -184,7 +184,7 @@
 }
 <span class="boring">}
 </span></code></pre></pre>
-<p>Looking at the <a href="https://substrate.dev/rustdocs/v2.0.0-alpha.6/sp_runtime/offchain/storage/struct.StorageValueRef.html">API doc</a>, we see there are two type of StorageValueRef, created via <code>::persistent()</code> and <code>::local()</code>. <code>::local()</code> is not fully implemented yet and <code>::persistent()</code> is enough for this use cases. We passed in a key as our storage key. As storage keys are namespaced globally, a good practice would be to prepend our pallet name in front of our storage key.</p>
+<p>Looking at the <a href="https://substrate.dev/rustdocs/master/sp_runtime/offchain/storage/struct.StorageValueRef.html">API doc</a>, we see there are two type of StorageValueRef, created via <code>::persistent()</code> and <code>::local()</code>. <code>::local()</code> is not fully implemented yet and <code>::persistent()</code> is enough for this use cases. We passed in a key as our storage key. As storage keys are namespaced globally, a good practice would be to prepend our pallet name in front of our storage key.</p>
 <h2><a class="header" href="#access" id="access">Access</a></h2>
 <p>Once we have the storage reference, we can access the storage via <code>get</code>, <code>set</code>, and <code>mutate</code>. Let's demonstrate the <code>mutate</code> function as the usage of the remaining two functions are pretty self-explanatory.</p>
 <p>First we fetch to see if github info has been fetched and cached. If yes, we return early.</p>
