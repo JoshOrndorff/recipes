@@ -14,8 +14,8 @@ dependencies = [
 name = "adding-machine"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-dev",
- "frame-system 2.0.0-dev",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
  "sp-core 2.0.0-dev",
  "sp-io 2.0.0-dev",
@@ -105,15 +105,15 @@ checksum = "d9a60d744a80c30fcb657dfe2c1b22bcb3e814c1a1e3674f32bf5820b570fbff"
 name = "api-runtime"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-executive 2.0.0-dev",
- "frame-support 2.0.0-dev",
- "frame-system 2.0.0-dev",
- "pallet-balances 2.0.0-dev",
- "pallet-indices 2.0.0-dev",
- "pallet-randomness-collective-flip 2.0.0-dev",
- "pallet-sudo 2.0.0-dev",
- "pallet-timestamp 2.0.0-dev",
- "pallet-transaction-payment 2.0.0-dev",
+ "frame-executive",
+ "frame-support",
+ "frame-system",
+ "pallet-balances",
+ "pallet-indices",
+ "pallet-randomness-collective-flip",
+ "pallet-sudo",
+ "pallet-timestamp",
+ "pallet-transaction-payment",
  "parity-scale-codec",
  "safe-mix",
  "serde",
@@ -302,7 +302,7 @@ dependencies = [
  "sp-consensus 0.8.0-alpha.7",
  "sp-consensus-babe 0.8.0-alpha.7",
  "sp-core 2.0.0-alpha.7",
- "sp-finality-grandpa",
+ "sp-finality-grandpa 2.0.0-alpha.7",
  "sp-inherents 2.0.0-alpha.7",
  "sp-io 2.0.0-alpha.7",
  "sp-runtime 2.0.0-alpha.7",
@@ -318,32 +318,31 @@ dependencies = [
 name = "babe-grandpa-runtime"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-executive 2.0.0-alpha.7",
- "frame-support 2.0.0-alpha.7",
- "frame-system 2.0.0-alpha.7",
- "pallet-babe 2.0.0-alpha.7",
- "pallet-balances 2.0.0-alpha.7",
+ "frame-executive",
+ "frame-support",
+ "frame-system",
+ "pallet-babe",
+ "pallet-balances",
  "pallet-grandpa",
- "pallet-randomness-collective-flip 2.0.0-alpha.7",
- "pallet-sudo 2.0.0-alpha.7",
- "pallet-timestamp 2.0.0-alpha.7",
- "pallet-transaction-payment 2.0.0-alpha.7",
+ "pallet-randomness-collective-flip",
+ "pallet-sudo",
+ "pallet-timestamp",
+ "pallet-transaction-payment",
  "parity-scale-codec",
- "safe-mix",
  "serde",
- "sp-api 2.0.0-alpha.7",
- "sp-block-builder 2.0.0-alpha.7",
+ "sp-api 2.0.0-dev",
+ "sp-block-builder 2.0.0-dev",
  "sp-consensus-babe 0.8.0-alpha.7",
- "sp-core 2.0.0-alpha.7",
- "sp-finality-grandpa",
- "sp-inherents 2.0.0-alpha.7",
- "sp-io 2.0.0-alpha.7",
- "sp-offchain 2.0.0-alpha.7",
- "sp-runtime 2.0.0-alpha.7",
- "sp-session 2.0.0-alpha.7",
- "sp-std 2.0.0-alpha.7",
- "sp-transaction-pool 2.0.0-alpha.7",
- "sp-version 2.0.0-alpha.7",
+ "sp-core 2.0.0-dev",
+ "sp-finality-grandpa 2.0.0-dev",
+ "sp-inherents 2.0.0-dev",
+ "sp-io 2.0.0-dev",
+ "sp-offchain 2.0.0-dev",
+ "sp-runtime 2.0.0-dev",
+ "sp-session 2.0.0-dev",
+ "sp-std 2.0.0-dev",
+ "sp-transaction-pool 2.0.0-dev",
+ "sp-version 2.0.0-dev",
  "substrate-wasm-builder-runner",
 ]
 
@@ -417,8 +416,8 @@ dependencies = [
 name = "basic-token"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-dev",
- "frame-system 2.0.0-dev",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
  "sp-core 2.0.0-dev",
  "sp-io 2.0.0-dev",
@@ -649,9 +648,9 @@ dependencies = [
 name = "charity"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-dev",
- "frame-system 2.0.0-dev",
- "pallet-balances 2.0.0-dev",
+ "frame-support",
+ "frame-system",
+ "pallet-balances",
  "parity-scale-codec",
  "serde",
  "sp-core 2.0.0-alpha.7",
@@ -664,8 +663,8 @@ dependencies = [
 name = "check-membership"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-dev",
- "frame-system 2.0.0-dev",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
  "sp-core 2.0.0-dev",
  "sp-runtime 2.0.0-dev",
@@ -676,8 +675,8 @@ dependencies = [
 name = "child-trie"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-dev",
- "frame-system 2.0.0-dev",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
  "sp-core 2.0.0-dev",
  "sp-runtime 2.0.0-dev",
@@ -743,8 +742,8 @@ dependencies = [
 name = "compounding-interest"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-dev",
- "frame-system 2.0.0-dev",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
  "sp-arithmetic 2.0.0-dev",
  "sp-core 2.0.0-dev",
@@ -778,8 +777,8 @@ dependencies = [
 name = "constant-config"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-dev",
- "frame-system 2.0.0-dev",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
  "sp-core 2.0.0-dev",
  "sp-io 2.0.0-dev",
@@ -913,8 +912,8 @@ dependencies = [
 name = "currency-imbalances"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-dev",
- "frame-system 2.0.0-dev",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
  "sp-core 2.0.0-dev",
  "sp-io 2.0.0-dev",
@@ -944,8 +943,8 @@ checksum = "11c0346158a19b3627234e15596f5e465c360fcdb97d817bcb255e0510f5a788"
 name = "default-instance"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-dev",
- "frame-system 2.0.0-dev",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
  "sp-core 2.0.0-dev",
  "sp-io 2.0.0-dev",
@@ -1006,8 +1005,8 @@ checksum = "fea41bba32d969b513997752735605054bc0dfa92b4c56bf1189f2e174be7a10"
 name = "double-map"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-dev",
- "frame-system 2.0.0-dev",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
  "sp-core 2.0.0-dev",
  "sp-io 2.0.0-dev",
@@ -1076,8 +1075,8 @@ dependencies = [
 name = "execution-schedule"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-dev",
- "frame-system 2.0.0-dev",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
  "rand 0.7.3",
  "sp-core 2.0.0-dev",
@@ -1163,8 +1162,8 @@ dependencies = [
 name = "fixed-point"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-dev",
- "frame-system 2.0.0-dev",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
  "sp-arithmetic 2.0.0-dev",
  "sp-core 2.0.0-dev",
@@ -1218,29 +1217,11 @@ dependencies = [
 
 [[package]]
 name = "frame-benchmarking"
-version = "2.0.0-alpha.7"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b22054d77cb9377dcb9660f9634e79b2e50fcd4129fae7921e98ca30dc5c12e7"
-dependencies = [
- "frame-support 2.0.0-alpha.7",
- "frame-system 2.0.0-alpha.7",
- "linregress",
- "parity-scale-codec",
- "paste",
- "sp-api 2.0.0-alpha.7",
- "sp-io 2.0.0-alpha.7",
- "sp-runtime 2.0.0-alpha.7",
- "sp-runtime-interface 2.0.0-alpha.7",
- "sp-std 2.0.0-alpha.7",
-]
-
-[[package]]
-name = "frame-benchmarking"
 version = "2.0.0-dev"
 source = "git+https://github.com/paritytech/substrate?rev=7f73312aa0bf4a4107860141f085e9770ec01b72#7f73312aa0bf4a4107860141f085e9770ec01b72"
 dependencies = [
- "frame-support 2.0.0-dev",
- "frame-system 2.0.0-dev",
+ "frame-support",
+ "frame-system",
  "linregress",
  "parity-scale-codec",
  "paste",
@@ -1253,45 +1234,17 @@ dependencies = [
 
 [[package]]
 name = "frame-executive"
-version = "2.0.0-alpha.7"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "76692e90be57adc50ca89c08ff92b6d501a1ec9e0800aedd67f3c9eb9cd26b37"
-dependencies = [
- "frame-support 2.0.0-alpha.7",
- "frame-system 2.0.0-alpha.7",
- "parity-scale-codec",
- "serde",
- "sp-io 2.0.0-alpha.7",
- "sp-runtime 2.0.0-alpha.7",
- "sp-std 2.0.0-alpha.7",
- "sp-tracing 2.0.0-alpha.7",
-]
-
-[[package]]
-name = "frame-executive"
 version = "2.0.0-dev"
 source = "git+https://github.com/paritytech/substrate?rev=7f73312aa0bf4a4107860141f085e9770ec01b72#7f73312aa0bf4a4107860141f085e9770ec01b72"
 dependencies = [
- "frame-support 2.0.0-dev",
- "frame-system 2.0.0-dev",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
  "serde",
  "sp-io 2.0.0-dev",
  "sp-runtime 2.0.0-dev",
  "sp-std 2.0.0-dev",
  "sp-tracing 2.0.0-dev",
-]
-
-[[package]]
-name = "frame-metadata"
-version = "11.0.0-alpha.7"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d4ed1031c3ab5fd338d4922380ecaa1784d96c4670b5e329838c1be9821f1596"
-dependencies = [
- "parity-scale-codec",
- "serde",
- "sp-core 2.0.0-alpha.7",
- "sp-std 2.0.0-alpha.7",
 ]
 
 [[package]]
@@ -1307,37 +1260,12 @@ dependencies = [
 
 [[package]]
 name = "frame-support"
-version = "2.0.0-alpha.7"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bdd5a22a0c3e66a82b4ca1965e21373d3e0d29266313130d04a5045906c81dc4"
-dependencies = [
- "bitmask",
- "frame-metadata 11.0.0-alpha.7",
- "frame-support-procedural 2.0.0-alpha.7",
- "impl-trait-for-tuples",
- "log",
- "once_cell",
- "parity-scale-codec",
- "paste",
- "serde",
- "sp-arithmetic 2.0.0-alpha.7",
- "sp-core 2.0.0-alpha.7",
- "sp-inherents 2.0.0-alpha.7",
- "sp-io 2.0.0-alpha.7",
- "sp-runtime 2.0.0-alpha.7",
- "sp-state-machine 0.8.0-alpha.7",
- "sp-std 2.0.0-alpha.7",
- "sp-tracing 2.0.0-alpha.7",
-]
-
-[[package]]
-name = "frame-support"
 version = "2.0.0-dev"
 source = "git+https://github.com/paritytech/substrate?rev=7f73312aa0bf4a4107860141f085e9770ec01b72#7f73312aa0bf4a4107860141f085e9770ec01b72"
 dependencies = [
  "bitmask",
- "frame-metadata 11.0.0-dev",
- "frame-support-procedural 2.0.0-dev",
+ "frame-metadata",
+ "frame-support-procedural",
  "impl-trait-for-tuples",
  "log",
  "once_cell",
@@ -1356,35 +1284,10 @@ dependencies = [
 
 [[package]]
 name = "frame-support-procedural"
-version = "2.0.0-alpha.7"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1a6b4279196725ff56647d12a285328a79685a7d05be6c507f55a11e00f492c0"
-dependencies = [
- "frame-support-procedural-tools 2.0.0-alpha.7",
- "proc-macro2 1.0.12",
- "quote 1.0.4",
- "syn 1.0.19",
-]
-
-[[package]]
-name = "frame-support-procedural"
 version = "2.0.0-dev"
 source = "git+https://github.com/paritytech/substrate?rev=7f73312aa0bf4a4107860141f085e9770ec01b72#7f73312aa0bf4a4107860141f085e9770ec01b72"
 dependencies = [
- "frame-support-procedural-tools 2.0.0-dev",
- "proc-macro2 1.0.12",
- "quote 1.0.4",
- "syn 1.0.19",
-]
-
-[[package]]
-name = "frame-support-procedural-tools"
-version = "2.0.0-alpha.7"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d9135714a5cd9e01b9839c16433d5f075706ef87f8f2fc412944ff826fc8ccd1"
-dependencies = [
- "frame-support-procedural-tools-derive 2.0.0-alpha.7",
- "proc-macro-crate",
+ "frame-support-procedural-tools",
  "proc-macro2 1.0.12",
  "quote 1.0.4",
  "syn 1.0.19",
@@ -1395,19 +1298,8 @@ name = "frame-support-procedural-tools"
 version = "2.0.0-dev"
 source = "git+https://github.com/paritytech/substrate?rev=7f73312aa0bf4a4107860141f085e9770ec01b72#7f73312aa0bf4a4107860141f085e9770ec01b72"
 dependencies = [
- "frame-support-procedural-tools-derive 2.0.0-dev",
+ "frame-support-procedural-tools-derive",
  "proc-macro-crate",
- "proc-macro2 1.0.12",
- "quote 1.0.4",
- "syn 1.0.19",
-]
-
-[[package]]
-name = "frame-support-procedural-tools-derive"
-version = "2.0.0-alpha.7"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ab73d20fca63196489400b98b71aa96a8709968d83dc26e7c99aa135ba1eaf4f"
-dependencies = [
  "proc-macro2 1.0.12",
  "quote 1.0.4",
  "syn 1.0.19",
@@ -1425,27 +1317,10 @@ dependencies = [
 
 [[package]]
 name = "frame-system"
-version = "2.0.0-alpha.7"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "eb202b187ce580c0414d9c7608478377bd2fe90bb15a5777e8c6b746d4c9519a"
-dependencies = [
- "frame-support 2.0.0-alpha.7",
- "impl-trait-for-tuples",
- "parity-scale-codec",
- "serde",
- "sp-core 2.0.0-alpha.7",
- "sp-io 2.0.0-alpha.7",
- "sp-runtime 2.0.0-alpha.7",
- "sp-std 2.0.0-alpha.7",
- "sp-version 2.0.0-alpha.7",
-]
-
-[[package]]
-name = "frame-system"
 version = "2.0.0-dev"
 source = "git+https://github.com/paritytech/substrate?rev=7f73312aa0bf4a4107860141f085e9770ec01b72#7f73312aa0bf4a4107860141f085e9770ec01b72"
 dependencies = [
- "frame-support 2.0.0-dev",
+ "frame-support",
  "impl-trait-for-tuples",
  "parity-scale-codec",
  "serde",
@@ -1689,8 +1564,8 @@ dependencies = [
 name = "generic-event"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-dev",
- "frame-system 2.0.0-dev",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
  "sp-core 2.0.0-dev",
  "sp-io 2.0.0-dev",
@@ -1824,8 +1699,8 @@ dependencies = [
 name = "hello-substrate"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-dev",
- "frame-system 2.0.0-dev",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
  "sp-core 2.0.0-alpha.7",
  "sp-io 2.0.0-alpha.7",
@@ -2374,8 +2249,8 @@ dependencies = [
 name = "last-caller"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-dev",
- "frame-system 2.0.0-dev",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
  "sp-core 2.0.0-dev",
  "sp-io 2.0.0-dev",
@@ -2788,9 +2663,9 @@ dependencies = [
 name = "lockable-currency"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-dev",
- "frame-system 2.0.0-dev",
- "pallet-balances 2.0.0-dev",
+ "frame-support",
+ "frame-system",
+ "pallet-balances",
  "parity-scale-codec",
  "sp-core 2.0.0-dev",
  "sp-io 2.0.0-dev",
@@ -3192,30 +3067,30 @@ dependencies = [
 name = "ocw-runtime"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-executive 2.0.0-alpha.7",
- "frame-support 2.0.0-alpha.7",
- "frame-system 2.0.0-alpha.7",
+ "frame-executive",
+ "frame-support",
+ "frame-system",
  "offchain-demo",
- "pallet-balances 2.0.0-alpha.7",
- "pallet-indices 2.0.0-alpha.7",
- "pallet-randomness-collective-flip 2.0.0-alpha.7",
- "pallet-sudo 2.0.0-alpha.7",
- "pallet-timestamp 2.0.0-alpha.7",
- "pallet-transaction-payment 2.0.0-alpha.7",
+ "pallet-balances",
+ "pallet-indices",
+ "pallet-randomness-collective-flip",
+ "pallet-sudo",
+ "pallet-timestamp",
+ "pallet-transaction-payment",
  "parity-scale-codec",
  "safe-mix",
  "serde",
- "sp-api 2.0.0-alpha.7",
- "sp-block-builder 2.0.0-alpha.7",
- "sp-core 2.0.0-alpha.7",
- "sp-inherents 2.0.0-alpha.7",
- "sp-io 2.0.0-alpha.7",
- "sp-offchain 2.0.0-alpha.7",
- "sp-runtime 2.0.0-alpha.7",
- "sp-session 2.0.0-alpha.7",
- "sp-std 2.0.0-alpha.7",
- "sp-transaction-pool 2.0.0-alpha.7",
- "sp-version 2.0.0-alpha.7",
+ "sp-api 2.0.0-dev",
+ "sp-block-builder 2.0.0-dev",
+ "sp-core 2.0.0-dev",
+ "sp-inherents 2.0.0-dev",
+ "sp-io 2.0.0-dev",
+ "sp-offchain 2.0.0-dev",
+ "sp-runtime 2.0.0-dev",
+ "sp-session 2.0.0-dev",
+ "sp-std 2.0.0-dev",
+ "sp-transaction-pool 2.0.0-dev",
+ "sp-version 2.0.0-dev",
  "substrate-wasm-builder-runner",
 ]
 
@@ -3224,8 +3099,8 @@ name = "offchain-demo"
 version = "2.0.0-alpha.7"
 dependencies = [
  "alt_serde",
- "frame-support 2.0.0-dev",
- "frame-system 2.0.0-dev",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
  "parking_lot 0.10.2",
  "serde_json 1.0.44",
@@ -3277,36 +3152,13 @@ dependencies = [
 
 [[package]]
 name = "pallet-babe"
-version = "2.0.0-alpha.7"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cd1d74c4e2175fccdf649463e4def9cc2d69a6a55cd192d96ad73774752e8a39"
-dependencies = [
- "frame-support 2.0.0-alpha.7",
- "frame-system 2.0.0-alpha.7",
- "pallet-session 2.0.0-alpha.7",
- "pallet-timestamp 2.0.0-alpha.7",
- "parity-scale-codec",
- "serde",
- "sp-application-crypto 2.0.0-alpha.7",
- "sp-consensus-babe 0.8.0-alpha.7",
- "sp-consensus-vrf 0.8.0-alpha.7",
- "sp-inherents 2.0.0-alpha.7",
- "sp-io 2.0.0-alpha.7",
- "sp-runtime 2.0.0-alpha.7",
- "sp-staking 2.0.0-alpha.7",
- "sp-std 2.0.0-alpha.7",
- "sp-timestamp 2.0.0-alpha.7",
-]
-
-[[package]]
-name = "pallet-babe"
 version = "2.0.0-dev"
 source = "git+https://github.com/paritytech/substrate?rev=7f73312aa0bf4a4107860141f085e9770ec01b72#7f73312aa0bf4a4107860141f085e9770ec01b72"
 dependencies = [
- "frame-support 2.0.0-dev",
- "frame-system 2.0.0-dev",
- "pallet-session 2.0.0-dev",
- "pallet-timestamp 2.0.0-dev",
+ "frame-support",
+ "frame-system",
+ "pallet-session",
+ "pallet-timestamp",
  "parity-scale-codec",
  "sp-application-crypto 2.0.0-dev",
  "sp-consensus-babe 0.8.0-dev",
@@ -3314,25 +3166,9 @@ dependencies = [
  "sp-inherents 2.0.0-dev",
  "sp-io 2.0.0-dev",
  "sp-runtime 2.0.0-dev",
- "sp-staking 2.0.0-dev",
+ "sp-staking",
  "sp-std 2.0.0-dev",
  "sp-timestamp 2.0.0-dev",
-]
-
-[[package]]
-name = "pallet-balances"
-version = "2.0.0-alpha.7"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5933eed290294f48ae9c6ca9b83c48f73c0e50eb2d86532a388d2076806f9d37"
-dependencies = [
- "frame-benchmarking 2.0.0-alpha.7",
- "frame-support 2.0.0-alpha.7",
- "frame-system 2.0.0-alpha.7",
- "parity-scale-codec",
- "serde",
- "sp-io 2.0.0-alpha.7",
- "sp-runtime 2.0.0-alpha.7",
- "sp-std 2.0.0-alpha.7",
 ]
 
 [[package]]
@@ -3340,9 +3176,9 @@ name = "pallet-balances"
 version = "2.0.0-dev"
 source = "git+https://github.com/paritytech/substrate?rev=7f73312aa0bf4a4107860141f085e9770ec01b72#7f73312aa0bf4a4107860141f085e9770ec01b72"
 dependencies = [
- "frame-benchmarking 2.0.0-dev",
- "frame-support 2.0.0-dev",
- "frame-system 2.0.0-dev",
+ "frame-benchmarking",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
  "serde",
  "sp-io 2.0.0-dev",
@@ -3352,69 +3188,50 @@ dependencies = [
 
 [[package]]
 name = "pallet-finality-tracker"
-version = "2.0.0-alpha.7"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "99b6aaf467788f82d9f18c940f57b6773e6114988120c63630ec1a30ef6af73d"
+version = "2.0.0-dev"
+source = "git+https://github.com/paritytech/substrate?rev=7f73312aa0bf4a4107860141f085e9770ec01b72#7f73312aa0bf4a4107860141f085e9770ec01b72"
 dependencies = [
- "frame-support 2.0.0-alpha.7",
- "frame-system 2.0.0-alpha.7",
+ "frame-support",
+ "frame-system",
  "impl-trait-for-tuples",
  "parity-scale-codec",
  "serde",
- "sp-finality-tracker",
- "sp-inherents 2.0.0-alpha.7",
- "sp-runtime 2.0.0-alpha.7",
- "sp-std 2.0.0-alpha.7",
+ "sp-finality-tracker 2.0.0-dev",
+ "sp-inherents 2.0.0-dev",
+ "sp-runtime 2.0.0-dev",
+ "sp-std 2.0.0-dev",
 ]
 
 [[package]]
 name = "pallet-generic-asset"
-version = "2.0.0-alpha.7"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7360a50e10a05e9835c4ee53dc6227221399af150712ab68ae09300b67876087"
+version = "2.0.0-dev"
+source = "git+https://github.com/paritytech/substrate?rev=7f73312aa0bf4a4107860141f085e9770ec01b72#7f73312aa0bf4a4107860141f085e9770ec01b72"
 dependencies = [
- "frame-support 2.0.0-alpha.7",
- "frame-system 2.0.0-alpha.7",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
  "serde",
- "sp-runtime 2.0.0-alpha.7",
- "sp-std 2.0.0-alpha.7",
+ "sp-runtime 2.0.0-dev",
+ "sp-std 2.0.0-dev",
 ]
 
 [[package]]
 name = "pallet-grandpa"
-version = "2.0.0-alpha.7"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0be9854b7b21a8ab2d14bc323d08b18b6d57d1bbdba1657f37169a02ac198162"
+version = "2.0.0-dev"
+source = "git+https://github.com/paritytech/substrate?rev=7f73312aa0bf4a4107860141f085e9770ec01b72#7f73312aa0bf4a4107860141f085e9770ec01b72"
 dependencies = [
- "frame-support 2.0.0-alpha.7",
- "frame-system 2.0.0-alpha.7",
+ "frame-support",
+ "frame-system",
  "pallet-finality-tracker",
- "pallet-session 2.0.0-alpha.7",
+ "pallet-session",
  "parity-scale-codec",
- "serde",
- "sp-core 2.0.0-alpha.7",
- "sp-finality-grandpa",
- "sp-runtime 2.0.0-alpha.7",
- "sp-staking 2.0.0-alpha.7",
- "sp-std 2.0.0-alpha.7",
-]
-
-[[package]]
-name = "pallet-indices"
-version = "2.0.0-alpha.7"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6941e40c29068970666b5737cc274d1a05ba9cabdb5b02059f585c69c4f96b4c"
-dependencies = [
- "frame-support 2.0.0-alpha.7",
- "frame-system 2.0.0-alpha.7",
- "parity-scale-codec",
- "serde",
- "sp-core 2.0.0-alpha.7",
- "sp-io 2.0.0-alpha.7",
- "sp-keyring 2.0.0-alpha.7",
- "sp-runtime 2.0.0-alpha.7",
- "sp-std 2.0.0-alpha.7",
+ "sp-application-crypto 2.0.0-dev",
+ "sp-core 2.0.0-dev",
+ "sp-finality-grandpa 2.0.0-dev",
+ "sp-runtime 2.0.0-dev",
+ "sp-session 2.0.0-dev",
+ "sp-staking",
+ "sp-std 2.0.0-dev",
 ]
 
 [[package]]
@@ -3422,8 +3239,8 @@ name = "pallet-indices"
 version = "2.0.0-dev"
 source = "git+https://github.com/paritytech/substrate?rev=7f73312aa0bf4a4107860141f085e9770ec01b72#7f73312aa0bf4a4107860141f085e9770ec01b72"
 dependencies = [
- "frame-support 2.0.0-dev",
- "frame-system 2.0.0-dev",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
  "serde",
  "sp-core 2.0.0-dev",
@@ -3435,25 +3252,11 @@ dependencies = [
 
 [[package]]
 name = "pallet-randomness-collective-flip"
-version = "2.0.0-alpha.7"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e6f06234e000e7b7554d75d62280e953f902981196d6dcde0d084ad5c7df4809"
-dependencies = [
- "frame-support 2.0.0-alpha.7",
- "frame-system 2.0.0-alpha.7",
- "parity-scale-codec",
- "safe-mix",
- "sp-runtime 2.0.0-alpha.7",
- "sp-std 2.0.0-alpha.7",
-]
-
-[[package]]
-name = "pallet-randomness-collective-flip"
 version = "2.0.0-dev"
 source = "git+https://github.com/paritytech/substrate?rev=7f73312aa0bf4a4107860141f085e9770ec01b72#7f73312aa0bf4a4107860141f085e9770ec01b72"
 dependencies = [
- "frame-support 2.0.0-dev",
- "frame-system 2.0.0-dev",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
  "safe-mix",
  "sp-runtime 2.0.0-dev",
@@ -3462,53 +3265,19 @@ dependencies = [
 
 [[package]]
 name = "pallet-session"
-version = "2.0.0-alpha.7"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6aace05f197abe3905182ec817e6fadc3c985b3c2ec41bfc74bb9918d1585e9e"
-dependencies = [
- "frame-support 2.0.0-alpha.7",
- "frame-system 2.0.0-alpha.7",
- "impl-trait-for-tuples",
- "pallet-timestamp 2.0.0-alpha.7",
- "parity-scale-codec",
- "serde",
- "sp-io 2.0.0-alpha.7",
- "sp-runtime 2.0.0-alpha.7",
- "sp-staking 2.0.0-alpha.7",
- "sp-std 2.0.0-alpha.7",
- "sp-trie 2.0.0-alpha.7",
-]
-
-[[package]]
-name = "pallet-session"
 version = "2.0.0-dev"
 source = "git+https://github.com/paritytech/substrate?rev=7f73312aa0bf4a4107860141f085e9770ec01b72#7f73312aa0bf4a4107860141f085e9770ec01b72"
 dependencies = [
- "frame-support 2.0.0-dev",
- "frame-system 2.0.0-dev",
+ "frame-support",
+ "frame-system",
  "impl-trait-for-tuples",
- "pallet-timestamp 2.0.0-dev",
+ "pallet-timestamp",
  "parity-scale-codec",
  "sp-io 2.0.0-dev",
  "sp-runtime 2.0.0-dev",
  "sp-session 2.0.0-dev",
- "sp-staking 2.0.0-dev",
+ "sp-staking",
  "sp-std 2.0.0-dev",
-]
-
-[[package]]
-name = "pallet-sudo"
-version = "2.0.0-alpha.7"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "246c9c0b5c29baff01d925ebadee6c0c642fa4c56ba8de1957f1ecc1438cc7dc"
-dependencies = [
- "frame-support 2.0.0-alpha.7",
- "frame-system 2.0.0-alpha.7",
- "parity-scale-codec",
- "serde",
- "sp-io 2.0.0-alpha.7",
- "sp-runtime 2.0.0-alpha.7",
- "sp-std 2.0.0-alpha.7",
 ]
 
 [[package]]
@@ -3516,8 +3285,8 @@ name = "pallet-sudo"
 version = "2.0.0-dev"
 source = "git+https://github.com/paritytech/substrate?rev=7f73312aa0bf4a4107860141f085e9770ec01b72#7f73312aa0bf4a4107860141f085e9770ec01b72"
 dependencies = [
- "frame-support 2.0.0-dev",
- "frame-system 2.0.0-dev",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
  "serde",
  "sp-io 2.0.0-dev",
@@ -3527,30 +3296,12 @@ dependencies = [
 
 [[package]]
 name = "pallet-timestamp"
-version = "2.0.0-alpha.7"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4c90b652dfb8796d657a2df5fa6200ada33b9784554b81a32efd73de2fe00575"
-dependencies = [
- "frame-benchmarking 2.0.0-alpha.7",
- "frame-support 2.0.0-alpha.7",
- "frame-system 2.0.0-alpha.7",
- "impl-trait-for-tuples",
- "parity-scale-codec",
- "serde",
- "sp-inherents 2.0.0-alpha.7",
- "sp-runtime 2.0.0-alpha.7",
- "sp-std 2.0.0-alpha.7",
- "sp-timestamp 2.0.0-alpha.7",
-]
-
-[[package]]
-name = "pallet-timestamp"
 version = "2.0.0-dev"
 source = "git+https://github.com/paritytech/substrate?rev=7f73312aa0bf4a4107860141f085e9770ec01b72#7f73312aa0bf4a4107860141f085e9770ec01b72"
 dependencies = [
- "frame-benchmarking 2.0.0-dev",
- "frame-support 2.0.0-dev",
- "frame-system 2.0.0-dev",
+ "frame-benchmarking",
+ "frame-support",
+ "frame-system",
  "impl-trait-for-tuples",
  "parity-scale-codec",
  "serde",
@@ -3562,26 +3313,12 @@ dependencies = [
 
 [[package]]
 name = "pallet-transaction-payment"
-version = "2.0.0-alpha.7"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "52333b8598b2bcb3af5e158c61cb2d30821220a5034e92a74c6a4ef116d82a7f"
-dependencies = [
- "frame-support 2.0.0-alpha.7",
- "frame-system 2.0.0-alpha.7",
- "pallet-transaction-payment-rpc-runtime-api 2.0.0-alpha.7",
- "parity-scale-codec",
- "sp-runtime 2.0.0-alpha.7",
- "sp-std 2.0.0-alpha.7",
-]
-
-[[package]]
-name = "pallet-transaction-payment"
 version = "2.0.0-dev"
 source = "git+https://github.com/paritytech/substrate?rev=7f73312aa0bf4a4107860141f085e9770ec01b72#7f73312aa0bf4a4107860141f085e9770ec01b72"
 dependencies = [
- "frame-support 2.0.0-dev",
- "frame-system 2.0.0-dev",
- "pallet-transaction-payment-rpc-runtime-api 2.0.0-dev",
+ "frame-support",
+ "frame-system",
+ "pallet-transaction-payment-rpc-runtime-api",
  "parity-scale-codec",
  "sp-runtime 2.0.0-dev",
  "sp-std 2.0.0-dev",
@@ -3589,24 +3326,10 @@ dependencies = [
 
 [[package]]
 name = "pallet-transaction-payment-rpc-runtime-api"
-version = "2.0.0-alpha.7"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "40f6cc2ebdaff949b9f38cc03f19e541bd22773ce32e84532ac1d85a481cb112"
-dependencies = [
- "frame-support 2.0.0-alpha.7",
- "parity-scale-codec",
- "serde",
- "sp-api 2.0.0-alpha.7",
- "sp-runtime 2.0.0-alpha.7",
- "sp-std 2.0.0-alpha.7",
-]
-
-[[package]]
-name = "pallet-transaction-payment-rpc-runtime-api"
 version = "2.0.0-dev"
 source = "git+https://github.com/paritytech/substrate?rev=7f73312aa0bf4a4107860141f085e9770ec01b72#7f73312aa0bf4a4107860141f085e9770ec01b72"
 dependencies = [
- "frame-support 2.0.0-dev",
+ "frame-support",
  "parity-scale-codec",
  "serde",
  "sp-api 2.0.0-dev",
@@ -4315,11 +4038,11 @@ dependencies = [
 name = "randomness"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-dev",
- "frame-system 2.0.0-dev",
- "pallet-babe 2.0.0-dev",
- "pallet-randomness-collective-flip 2.0.0-dev",
- "pallet-timestamp 2.0.0-dev",
+ "frame-support",
+ "frame-system",
+ "pallet-babe",
+ "pallet-randomness-collective-flip",
+ "pallet-timestamp",
  "parity-scale-codec",
  "sp-core 2.0.0-dev",
  "sp-io 2.0.0-dev",
@@ -4423,9 +4146,9 @@ dependencies = [
 name = "reservable-currency"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-dev",
- "frame-system 2.0.0-dev",
- "pallet-balances 2.0.0-dev",
+ "frame-support",
+ "frame-system",
+ "pallet-balances",
  "parity-scale-codec",
  "sp-core 2.0.0-dev",
  "sp-io 2.0.0-dev",
@@ -4451,8 +4174,8 @@ dependencies = [
 name = "ringbuffer-queue"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-dev",
- "frame-system 2.0.0-dev",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
  "sp-core 2.0.0-dev",
  "sp-io 2.0.0-dev",
@@ -5291,8 +5014,8 @@ dependencies = [
  "sp-blockchain 2.0.0-alpha.7",
  "sp-consensus 0.8.0-alpha.7",
  "sp-core 2.0.0-alpha.7",
- "sp-finality-grandpa",
- "sp-finality-tracker",
+ "sp-finality-grandpa 2.0.0-alpha.7",
+ "sp-finality-tracker 2.0.0-alpha.7",
  "sp-inherents 2.0.0-alpha.7",
  "sp-runtime 2.0.0-alpha.7",
  "sp-utils 2.0.0-alpha.7",
@@ -6230,8 +5953,8 @@ dependencies = [
 name = "simple-event"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-dev",
- "frame-system 2.0.0-dev",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
  "sp-core 2.0.0-dev",
  "sp-io 2.0.0-dev",
@@ -6242,8 +5965,8 @@ dependencies = [
 name = "simple-map"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-dev",
- "frame-system 2.0.0-dev",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
  "sp-core 2.0.0-dev",
  "sp-io 2.0.0-dev",
@@ -6254,8 +5977,8 @@ dependencies = [
 name = "single-value"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-dev",
- "frame-system 2.0.0-dev",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
  "sp-core 2.0.0-dev",
  "sp-io 2.0.0-dev",
@@ -6867,6 +6590,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "sp-finality-grandpa"
+version = "2.0.0-dev"
+source = "git+https://github.com/paritytech/substrate?rev=7f73312aa0bf4a4107860141f085e9770ec01b72#7f73312aa0bf4a4107860141f085e9770ec01b72"
+dependencies = [
+ "finality-grandpa",
+ "log",
+ "parity-scale-codec",
+ "serde",
+ "sp-api 2.0.0-dev",
+ "sp-application-crypto 2.0.0-dev",
+ "sp-core 2.0.0-dev",
+ "sp-runtime 2.0.0-dev",
+ "sp-std 2.0.0-dev",
+]
+
+[[package]]
 name = "sp-finality-tracker"
 version = "2.0.0-alpha.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -6875,6 +6614,16 @@ dependencies = [
  "parity-scale-codec",
  "sp-inherents 2.0.0-alpha.7",
  "sp-std 2.0.0-alpha.7",
+]
+
+[[package]]
+name = "sp-finality-tracker"
+version = "2.0.0-dev"
+source = "git+https://github.com/paritytech/substrate?rev=7f73312aa0bf4a4107860141f085e9770ec01b72#7f73312aa0bf4a4107860141f085e9770ec01b72"
+dependencies = [
+ "parity-scale-codec",
+ "sp-inherents 2.0.0-dev",
+ "sp-std 2.0.0-dev",
 ]
 
 [[package]]
@@ -7164,19 +6913,8 @@ dependencies = [
  "sp-api 2.0.0-dev",
  "sp-core 2.0.0-dev",
  "sp-runtime 2.0.0-dev",
- "sp-staking 2.0.0-dev",
+ "sp-staking",
  "sp-std 2.0.0-dev",
-]
-
-[[package]]
-name = "sp-staking"
-version = "2.0.0-alpha.7"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d87f659f9742c456a35382af6ed58160cd1f23e0ddb51c38180b2cf80d5ac8a1"
-dependencies = [
- "parity-scale-codec",
- "sp-runtime 2.0.0-alpha.7",
- "sp-std 2.0.0-alpha.7",
 ]
 
 [[package]]
@@ -7472,8 +7210,8 @@ dependencies = [
 name = "storage-cache"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-dev",
- "frame-system 2.0.0-dev",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
  "sp-core 2.0.0-dev",
  "sp-io 2.0.0-dev",
@@ -7500,9 +7238,9 @@ checksum = "8ea5119cdb4c55b55d432abb513a0429384878c15dde60cc77b1c99de1a95a6a"
 name = "struct-storage"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-dev",
- "frame-system 2.0.0-dev",
- "pallet-balances 2.0.0-dev",
+ "frame-support",
+ "frame-system",
+ "pallet-balances",
  "parity-scale-codec",
  "sp-core 2.0.0-dev",
  "sp-io 2.0.0-dev",
@@ -7643,8 +7381,8 @@ checksum = "7c65d530b10ccaeac294f349038a597e435b18fb456aadd0840a623f83b9e941"
 name = "sum-storage"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-dev",
- "frame-system 2.0.0-dev",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
  "sp-core 2.0.0-dev",
  "sp-io 2.0.0-dev",
@@ -7690,19 +7428,17 @@ dependencies = [
  "double-map",
  "execution-schedule",
  "fixed-point",
- "frame-executive 2.0.0-alpha.7",
- "frame-support 2.0.0-alpha.7",
- "frame-system 2.0.0-alpha.7",
+ "frame-executive",
+ "frame-support",
+ "frame-system",
  "generic-event",
  "hello-substrate",
  "last-caller",
- "pallet-babe 2.0.0-alpha.7",
- "pallet-balances 2.0.0-alpha.7",
- "pallet-grandpa",
- "pallet-randomness-collective-flip 2.0.0-alpha.7",
- "pallet-sudo 2.0.0-alpha.7",
- "pallet-timestamp 2.0.0-alpha.7",
- "pallet-transaction-payment 2.0.0-alpha.7",
+ "pallet-balances",
+ "pallet-randomness-collective-flip",
+ "pallet-sudo",
+ "pallet-timestamp",
+ "pallet-transaction-payment",
  "parity-scale-codec",
  "randomness",
  "ringbuffer-queue",
@@ -7711,19 +7447,17 @@ dependencies = [
  "simple-event",
  "simple-map",
  "single-value",
- "sp-api 2.0.0-alpha.7",
- "sp-block-builder 2.0.0-alpha.7",
- "sp-consensus-babe 0.8.0-alpha.7",
- "sp-core 2.0.0-alpha.7",
- "sp-finality-grandpa",
- "sp-inherents 2.0.0-alpha.7",
- "sp-io 2.0.0-alpha.7",
- "sp-offchain 2.0.0-alpha.7",
- "sp-runtime 2.0.0-alpha.7",
- "sp-session 2.0.0-alpha.7",
- "sp-std 2.0.0-alpha.7",
- "sp-transaction-pool 2.0.0-alpha.7",
- "sp-version 2.0.0-alpha.7",
+ "sp-api 2.0.0-dev",
+ "sp-block-builder 2.0.0-dev",
+ "sp-core 2.0.0-dev",
+ "sp-inherents 2.0.0-dev",
+ "sp-io 2.0.0-dev",
+ "sp-offchain 2.0.0-dev",
+ "sp-runtime 2.0.0-dev",
+ "sp-session 2.0.0-dev",
+ "sp-std 2.0.0-dev",
+ "sp-transaction-pool 2.0.0-dev",
+ "sp-version 2.0.0-dev",
  "storage-cache",
  "struct-storage",
  "substrate-wasm-builder-runner",
@@ -8400,8 +8134,8 @@ checksum = "3fc439f2794e98976c88a2a2dafce96b930fe8010b0a256b3c2199a773933168"
 name = "vec-set"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-dev",
- "frame-system 2.0.0-dev",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
  "sp-core 2.0.0-dev",
  "sp-io 2.0.0-dev",
@@ -8611,32 +8345,28 @@ dependencies = [
 name = "weight-fee-runtime"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-executive 2.0.0-alpha.7",
- "frame-support 2.0.0-alpha.7",
- "frame-system 2.0.0-alpha.7",
- "pallet-babe 2.0.0-alpha.7",
- "pallet-balances 2.0.0-alpha.7",
+ "frame-executive",
+ "frame-support",
+ "frame-system",
+ "pallet-balances",
  "pallet-generic-asset",
- "pallet-grandpa",
- "pallet-randomness-collective-flip 2.0.0-alpha.7",
- "pallet-sudo 2.0.0-alpha.7",
- "pallet-timestamp 2.0.0-alpha.7",
- "pallet-transaction-payment 2.0.0-alpha.7",
+ "pallet-randomness-collective-flip",
+ "pallet-sudo",
+ "pallet-timestamp",
+ "pallet-transaction-payment",
  "parity-scale-codec",
  "serde",
- "sp-api 2.0.0-alpha.7",
- "sp-block-builder 2.0.0-alpha.7",
- "sp-consensus-babe 0.8.0-alpha.7",
- "sp-core 2.0.0-alpha.7",
- "sp-finality-grandpa",
- "sp-inherents 2.0.0-alpha.7",
- "sp-io 2.0.0-alpha.7",
- "sp-offchain 2.0.0-alpha.7",
- "sp-runtime 2.0.0-alpha.7",
- "sp-session 2.0.0-alpha.7",
- "sp-std 2.0.0-alpha.7",
- "sp-transaction-pool 2.0.0-alpha.7",
- "sp-version 2.0.0-alpha.7",
+ "sp-api 2.0.0-dev",
+ "sp-block-builder 2.0.0-dev",
+ "sp-core 2.0.0-dev",
+ "sp-inherents 2.0.0-dev",
+ "sp-io 2.0.0-dev",
+ "sp-offchain 2.0.0-dev",
+ "sp-runtime 2.0.0-dev",
+ "sp-session 2.0.0-dev",
+ "sp-std 2.0.0-dev",
+ "sp-transaction-pool 2.0.0-dev",
+ "sp-version 2.0.0-dev",
  "substrate-wasm-builder-runner",
  "weights",
 ]
@@ -8645,8 +8375,8 @@ dependencies = [
 name = "weights"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-dev",
- "frame-system 2.0.0-dev",
+ "frame-support",
+ "frame-system",
  "parity-scale-codec",
  "sp-core 2.0.0-dev",
  "sp-runtime 2.0.0-dev",
