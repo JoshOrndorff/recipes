@@ -43,7 +43,7 @@ sc-consensus-pow = { version = '0.8.0-alpha.7', git = 'https://github.com/parity
 sp-consensus-pow = { version = '0.8.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
 sha3pow = { path = '../../consensus/sha3pow' }
 
-runtime = { package = "optional-grandpa-runtime", path = "../../runtimes/optional-grandpa-runtime"}
+runtime = { package = "minimal-grandpa-runtime", path = "../../runtimes/minimal-grandpa-runtime"}
 
 
 [build-dependencies]
