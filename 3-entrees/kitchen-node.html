@@ -190,9 +190,9 @@ runtime = { package = &quot;super-runtime&quot;, path = &quot;../../runtimes/sup
 <p>The instant seal consensus engine, and its cousin the manual seal consensus engine, are both included in the same <a href="https://substrate.dev/rustdocs/master/sc_consensus_manual_seal/index.html"><code>sc-consensus-manual-seal</code> crate</a>. The recipes has a recipe dedicated to using <a href="./manual-seal.html">manual seal</a>. Instant seal is a very convenient tool for when you are developing or experimenting with a runtime. The consensus engine simply authors a new block whenever a new transaction is available in the queue. This is similar to <a href="https://www.trufflesuite.com/ganache">Truffle Suite's Ganache</a> in the Ethereum ecosystem, but without the UI.</p>
 <h3><a class="header" href="#the-cargo-dependencies" id="the-cargo-dependencies">The Cargo Dependencies</a></h3>
 <p>Installing the instant seal engine has several dependencies whereas the runtime had only one.</p>
-<pre><code class="language-toml">sc-client-db = '0.8.0-alpha.7' # This became necessary when converting to instant seal
-sp-consensus = '0.8.0-alpha.7'
-sc-consensus-manual-seal = '0.8.0-alpha.7'
+<pre><code class="language-toml">sc-client-db = '0.8.0-alpha.6' # This became necessary when converting to instant seal
+sp-consensus = '0.8.0-alpha.6'
+sc-consensus-manual-seal = '0.8.0-alpha.6'
 </code></pre>
 <p>The dependency on <code>sc-client-db</code> will become unnecessary once <a href="https://github.com/substrate-developer-hub/recipes/pull/238">issue #238</a> is merged.</p>
 <h3><a class="header" href="#the-proposer" id="the-proposer">The Proposer</a></h3>

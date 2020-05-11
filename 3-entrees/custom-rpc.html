@@ -197,7 +197,7 @@ impl SillyRpc for Silly {
 <pre><code class="language-toml">jsonrpc-core = &quot;14.0.3&quot;
 jsonrpc-core-client = &quot;14.0.3&quot;
 jsonrpc-derive = &quot;14.0.3&quot;
-sc-rpc = { version = '2.0.0-alpha.7' }
+sc-rpc = { version = '2.0.0-alpha.6' }
 </code></pre>
 <p>Next, in our <code>rpc-node</code>'s <code>service.rs</code> file, we extend the service with our RPC. We've chosen to install this RPC for full nodes, so we've included the code in the <code>new_full_start!</code> macro. You could also install the RPC on a light client by making the corresponding changes to <code>new_light</code>.</p>
 <p>The first change to this macro is a simple type definition</p>

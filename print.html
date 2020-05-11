@@ -356,7 +356,7 @@ use sp_runtime::print;
 	pub struct Module&lt;T: Trait&gt; for enum Call where origin: T::Origin {
 
 		/// A function that says hello to the user by printing messages to the node log
-		#[weight = 10_000]
+		#[weight = SimpleDispatchInfo::default()]
 		pub fn say_hello(origin) -&gt; DispatchResult {
 			// --snip--
 		}
@@ -367,7 +367,7 @@ use sp_runtime::print;
 </code></pre>
 <p>As you can see, our <code>hello-substrate</code> pallet has a dispatchable call that takes a single argument, called <code>origin</code> which we'll investigate shortly. The call returns a <a href="https://substrate.dev/rustdocs/master/frame_support/dispatch/type.DispatchResult.html"><code>DispatchResult</code></a> which can be either <code>Ok(())</code> indicating that the call succeeded, or an <code>Err</code> which we'll investigate in the <a href="2-appetizers/./3-errors.html">appetizer about errors</a>.</p>
 <h3><a class="header" href="#weight-annotations" id="weight-annotations">Weight Annotations</a></h3>
-<p>Right before the <code>hello-substrate</code> function, we see the line <code>#[weight = 10_000]</code>. This line attaches a default weight to the call. Ultimately weights affect the fees a user will have to pay to call the function. Weights are a very interesting aspect of developing with Substrate, but they too shall be covered later in the section on <a href="2-appetizers/../3-entrees/weights.html">Weights</a>. For now, and for may of the recipes pallets, we will simply use the default weight as we have done here.</p>
+<p>Right before the <code>hello-substrate</code> function, we see the line <code>#[weight = SimpleDispatchInfo::default()]</code>. This line attaches a default weight to the call. Ultimately weights affect the fees a user will have to pay to call the function. Weights are a very interesting aspect of developing with Substrate, but they too shall be covered later in the section on <a href="2-appetizers/../3-entrees/weights.html">Weights</a>. For now, and for may of the recipes pallets, we will simply use the default weight as we have done here.</p>
 <h2><a class="header" href="#inside-a-dispatchable-call" id="inside-a-dispatchable-call">Inside a Dispatchable Call</a></h2>
 <p>Let's take a closer look at our dispatchable call.</p>
 <pre><code class="language-rust ignore">pub fn say_hello(origin) -&gt; DispatchResult {
@@ -594,7 +594,9 @@ let my_val = Self::stored_value();
 <h2><a class="header" href="#emitting-events" id="emitting-events">Emitting Events</a></h2>
 <p>Events are emitted from dispatchable calls using the <code>deposit_event</code> method.</p>
 <blockquote>
-<p>Events are not emitted on block 0. So any dispatchable calls made during genesis block formation
+<p>Starting from
+<a href="https://github.com/paritytech/substrate/tree/v2.0.0-alpha.6">Substrate <code>v2.0.0-alpha.6</code></a>,
+events are not emitted on block 0. So any dispatchable calls made during genesis block formation
 will have no events emitted.</p>
 </blockquote>
 <h3><a class="header" href="#simple-events-1" id="simple-events-1">Simple Events</a></h3>
@@ -2413,7 +2415,7 @@ fn fetch_n_parse() -&gt; Result&lt;GithubInfo, Error&lt;T&gt;&gt; {
 }
 <span class="boring">}
 </span></code></pre></pre>
-<p>Looking at the <a href="https://substrate.dev/rustdocs/master/sp_runtime/offchain/storage/struct.StorageValueRef.html">API doc</a>, we see there are two type of StorageValueRef, created via <code>::persistent()</code> and <code>::local()</code>. <code>::local()</code> is not fully implemented yet and <code>::persistent()</code> is enough for this use cases. We passed in a key as our storage key. As storage keys are namespaced globally, a good practice would be to prepend our pallet name in front of our storage key.</p>
+<p>Looking at the <a href="https://substrate.dev/rustdocs/v2.0.0-alpha.6/sp_runtime/offchain/storage/struct.StorageValueRef.html">API doc</a>, we see there are two type of StorageValueRef, created via <code>::persistent()</code> and <code>::local()</code>. <code>::local()</code> is not fully implemented yet and <code>::persistent()</code> is enough for this use cases. We passed in a key as our storage key. As storage keys are namespaced globally, a good practice would be to prepend our pallet name in front of our storage key.</p>
 <h2><a class="header" href="#access" id="access">Access</a></h2>
 <p>Once we have the storage reference, we can access the storage via <code>get</code>, <code>set</code>, and <code>mutate</code>. Let's demonstrate the <code>mutate</code> function as the usage of the remaining two functions are pretty self-explanatory.</p>
 <p>First we fetch to see if github info has been fetched and cached. If yes, we return early.</p>
@@ -2621,7 +2623,7 @@ impl SillyRpc for Silly {
 <pre><code class="language-toml">jsonrpc-core = &quot;14.0.3&quot;
 jsonrpc-core-client = &quot;14.0.3&quot;
 jsonrpc-derive = &quot;14.0.3&quot;
-sc-rpc = { version = '2.0.0-alpha.7' }
+sc-rpc = { version = '2.0.0-alpha.6' }
 </code></pre>
 <p>Next, in our <code>rpc-node</code>'s <code>service.rs</code> file, we extend the service with our RPC. We've chosen to install this RPC for full nodes, so we've included the code in the <code>new_full_start!</code> macro. You could also install the RPC on a light client by making the corresponding changes to <code>new_light</code>.</p>
 <p>The first change to this macro is a simple type definition</p>
@@ -3113,9 +3115,9 @@ runtime = { package = &quot;super-runtime&quot;, path = &quot;../../runtimes/sup
 <p>The instant seal consensus engine, and its cousin the manual seal consensus engine, are both included in the same <a href="https://substrate.dev/rustdocs/master/sc_consensus_manual_seal/index.html"><code>sc-consensus-manual-seal</code> crate</a>. The recipes has a recipe dedicated to using <a href="3-entrees/./manual-seal.html">manual seal</a>. Instant seal is a very convenient tool for when you are developing or experimenting with a runtime. The consensus engine simply authors a new block whenever a new transaction is available in the queue. This is similar to <a href="https://www.trufflesuite.com/ganache">Truffle Suite's Ganache</a> in the Ethereum ecosystem, but without the UI.</p>
 <h3><a class="header" href="#the-cargo-dependencies" id="the-cargo-dependencies">The Cargo Dependencies</a></h3>
 <p>Installing the instant seal engine has several dependencies whereas the runtime had only one.</p>
-<pre><code class="language-toml">sc-client-db = '0.8.0-alpha.7' # This became necessary when converting to instant seal
-sp-consensus = '0.8.0-alpha.7'
-sc-consensus-manual-seal = '0.8.0-alpha.7'
+<pre><code class="language-toml">sc-client-db = '0.8.0-alpha.6' # This became necessary when converting to instant seal
+sp-consensus = '0.8.0-alpha.6'
+sc-consensus-manual-seal = '0.8.0-alpha.6'
 </code></pre>
 <p>The dependency on <code>sc-client-db</code> will become unnecessary once <a href="https://github.com/substrate-developer-hub/recipes/pull/238">issue #238</a> is merged.</p>
 <h3><a class="header" href="#the-proposer" id="the-proposer">The Proposer</a></h3>
@@ -3507,7 +3509,7 @@ if ((n - 1.into()) % T::ExecutionFrequency).is_zero() {
 	// Ensure that the caller is not already a member
 	ensure!(!Self::is_member(&amp;new_member), &quot;already a member&quot;);
 
-	&lt;Members&lt;T&gt;&gt;::append(&amp;new_member);
+	&lt;Members&lt;T&gt;&gt;::append(&amp;[new_member.clone()])?;
 	Self::deposit_event(RawEvent::AddMember(new_member));
 	Ok(())
 }
@@ -3692,7 +3694,7 @@ fn add_emits_correct_event() {
 <pre><code>[dev-dependencies.sp-io]
 default_features = false
 
-version = '2.0.0-alpha.7'
+version = '2.0.0-alpha.6'
 </code></pre>
 <p>There is more than one pattern for building a mock runtime environment for testing pallet logic. Two patterns are presented below. The latter is generally favored for reasons discussed in <a href="3-entrees/testing/./externalities.html">custom test environment</a></p>
 <ul>
@@ -3800,7 +3802,9 @@ fn last_value_updates() {
 }
 </code></pre>
 <h3><a class="header" href="#setting-for-testing-event-emittances" id="setting-for-testing-event-emittances">Setting for Testing Event Emittances</a></h3>
-<p>Events are not emitted on block 0. So when testing for whether events are emitted, we manually
+<p>Starting from
+Substrate <a href="https://github.com/paritytech/substrate/tree/v2.0.0-alpha.6"><code>v2.0.0-alpha.6</code></a>,
+events are not emitted on block 0. So when testing for whether events are emitted, we manually
 set the block number in the test environment from 0 to 1 as the following:</p>
 <pre><pre class="playpen"><code class="language-rust">
 <span class="boring">#![allow(unused_variables)]
