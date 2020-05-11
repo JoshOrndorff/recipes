@@ -74,17 +74,16 @@ impl system::Trait for TestRuntime {
 // --- mocking offchain-demo trait
 
 type TestExtrinsic = TestXt<Call<TestRuntime>, ()>;
-type SubmitTransaction = system::offchain::TransactionSubmitter<
-	crypto::Public,
-	TestRuntime,
-	TestExtrinsic
->;
+
+parameter_types! {
+	pub const UnsignedPriority: u64 = 100;
+}
 
 impl Trait for TestRuntime {
+	type AuthorityId = crypto::TestAuthId;
 	type Call = Call<TestRuntime>;
 	type Event = TestEvent;
-	type SubmitSignedTransaction = SubmitTransaction;
-	type SubmitUnsignedTransaction = SubmitTransaction;
+	type UnsignedPriority = UnsignedPriority;
 }
 
 impl system::offchain::CreateTransaction<TestRuntime, TestExtrinsic> for TestRuntime {
