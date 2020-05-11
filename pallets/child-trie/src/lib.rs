@@ -1,12 +1,13 @@
 //! Child Trie API
 //! - auxiliary runtime methods for using child storage
 //! - see smpl-crowdfund for examples of using this API with objects in the pallet
-use primitives::{Blake2Hasher, Hasher};
-use primitives::storage::well_known_keys::CHILD_STORAGE_KEY_PREFIX;
+use sp_core::{Blake2Hasher, Hasher};
+use sp_core::storage::well_known_keys::CHILD_STORAGE_KEY_PREFIX;
 use frame_support::{decl_module, decl_storage, storage::child};
 
 use parity_scale_codec::{Decode, Encode};
-use rstd::prelude::*;
+use sp_std::prelude::*;
+use frame_system as system;
 
 pub trait Trait: system::Trait {}
 

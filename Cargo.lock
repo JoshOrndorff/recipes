@@ -14,12 +14,12 @@ dependencies = [
 name = "adding-machine"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-alpha.7",
- "frame-system 2.0.0-alpha.7",
+ "frame-support 2.0.0-dev",
+ "frame-system 2.0.0-dev",
  "parity-scale-codec",
- "sp-core 2.0.0-alpha.7",
- "sp-io 2.0.0-alpha.7",
- "sp-runtime 2.0.0-alpha.7",
+ "sp-core 2.0.0-dev",
+ "sp-io 2.0.0-dev",
+ "sp-runtime 2.0.0-dev",
 ]
 
 [[package]]
@@ -300,7 +300,7 @@ dependencies = [
  "sc-service 0.8.0-alpha.7",
  "sc-transaction-pool 2.0.0-alpha.7",
  "sp-consensus 0.8.0-alpha.7",
- "sp-consensus-babe",
+ "sp-consensus-babe 0.8.0-alpha.7",
  "sp-core 2.0.0-alpha.7",
  "sp-finality-grandpa",
  "sp-inherents 2.0.0-alpha.7",
@@ -321,7 +321,7 @@ dependencies = [
  "frame-executive 2.0.0-alpha.7",
  "frame-support 2.0.0-alpha.7",
  "frame-system 2.0.0-alpha.7",
- "pallet-babe",
+ "pallet-babe 2.0.0-alpha.7",
  "pallet-balances 2.0.0-alpha.7",
  "pallet-grandpa",
  "pallet-randomness-collective-flip 2.0.0-alpha.7",
@@ -333,7 +333,7 @@ dependencies = [
  "serde",
  "sp-api 2.0.0-alpha.7",
  "sp-block-builder 2.0.0-alpha.7",
- "sp-consensus-babe",
+ "sp-consensus-babe 0.8.0-alpha.7",
  "sp-core 2.0.0-alpha.7",
  "sp-finality-grandpa",
  "sp-inherents 2.0.0-alpha.7",
@@ -417,12 +417,12 @@ dependencies = [
 name = "basic-token"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-alpha.7",
- "frame-system 2.0.0-alpha.7",
+ "frame-support 2.0.0-dev",
+ "frame-system 2.0.0-dev",
  "parity-scale-codec",
- "sp-core 2.0.0-alpha.7",
- "sp-io 2.0.0-alpha.7",
- "sp-runtime 2.0.0-alpha.7",
+ "sp-core 2.0.0-dev",
+ "sp-io 2.0.0-dev",
+ "sp-runtime 2.0.0-dev",
 ]
 
 [[package]]
@@ -649,39 +649,39 @@ dependencies = [
 name = "charity"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-alpha.7",
- "frame-system 2.0.0-alpha.7",
- "pallet-balances 2.0.0-alpha.7",
+ "frame-support 2.0.0-dev",
+ "frame-system 2.0.0-dev",
+ "pallet-balances 2.0.0-dev",
  "parity-scale-codec",
  "serde",
  "sp-core 2.0.0-alpha.7",
  "sp-io 2.0.0-alpha.7",
- "sp-runtime 2.0.0-alpha.7",
- "sp-std 2.0.0-alpha.7",
+ "sp-runtime 2.0.0-dev",
+ "sp-std 2.0.0-dev",
 ]
 
 [[package]]
 name = "check-membership"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-alpha.7",
- "frame-system 2.0.0-alpha.7",
+ "frame-support 2.0.0-dev",
+ "frame-system 2.0.0-dev",
  "parity-scale-codec",
- "sp-core 2.0.0-alpha.7",
- "sp-runtime 2.0.0-alpha.7",
- "sp-std 2.0.0-alpha.7",
+ "sp-core 2.0.0-dev",
+ "sp-runtime 2.0.0-dev",
+ "sp-std 2.0.0-dev",
 ]
 
 [[package]]
 name = "child-trie"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-alpha.7",
- "frame-system 2.0.0-alpha.7",
+ "frame-support 2.0.0-dev",
+ "frame-system 2.0.0-dev",
  "parity-scale-codec",
- "sp-core 2.0.0-alpha.7",
- "sp-runtime 2.0.0-alpha.7",
- "sp-std 2.0.0-alpha.7",
+ "sp-core 2.0.0-dev",
+ "sp-runtime 2.0.0-dev",
+ "sp-std 2.0.0-dev",
 ]
 
 [[package]]
@@ -743,14 +743,14 @@ dependencies = [
 name = "compounding-interest"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-alpha.7",
- "frame-system 2.0.0-alpha.7",
+ "frame-support 2.0.0-dev",
+ "frame-system 2.0.0-dev",
  "parity-scale-codec",
- "sp-arithmetic 2.0.0-alpha.7",
- "sp-core 2.0.0-alpha.7",
- "sp-io 2.0.0-alpha.7",
- "sp-runtime 2.0.0-alpha.7",
- "sp-std 2.0.0-alpha.7",
+ "sp-arithmetic 2.0.0-dev",
+ "sp-core 2.0.0-dev",
+ "sp-io 2.0.0-dev",
+ "sp-runtime 2.0.0-dev",
+ "sp-std 2.0.0-dev",
  "substrate-fixed",
 ]
 
@@ -778,12 +778,12 @@ dependencies = [
 name = "constant-config"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-alpha.7",
- "frame-system 2.0.0-alpha.7",
+ "frame-support 2.0.0-dev",
+ "frame-system 2.0.0-dev",
  "parity-scale-codec",
- "sp-core 2.0.0-alpha.7",
- "sp-io 2.0.0-alpha.7",
- "sp-runtime 2.0.0-alpha.7",
+ "sp-core 2.0.0-dev",
+ "sp-io 2.0.0-dev",
+ "sp-runtime 2.0.0-dev",
 ]
 
 [[package]]
@@ -913,12 +913,12 @@ dependencies = [
 name = "currency-imbalances"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-alpha.7",
- "frame-system 2.0.0-alpha.7",
+ "frame-support 2.0.0-dev",
+ "frame-system 2.0.0-dev",
  "parity-scale-codec",
- "sp-core 2.0.0-alpha.7",
- "sp-io 2.0.0-alpha.7",
- "sp-runtime 2.0.0-alpha.7",
+ "sp-core 2.0.0-dev",
+ "sp-io 2.0.0-dev",
+ "sp-runtime 2.0.0-dev",
 ]
 
 [[package]]
@@ -944,12 +944,12 @@ checksum = "11c0346158a19b3627234e15596f5e465c360fcdb97d817bcb255e0510f5a788"
 name = "default-instance"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-alpha.7",
- "frame-system 2.0.0-alpha.7",
+ "frame-support 2.0.0-dev",
+ "frame-system 2.0.0-dev",
  "parity-scale-codec",
- "sp-core 2.0.0-alpha.7",
- "sp-io 2.0.0-alpha.7",
- "sp-runtime 2.0.0-alpha.7",
+ "sp-core 2.0.0-dev",
+ "sp-io 2.0.0-dev",
+ "sp-runtime 2.0.0-dev",
 ]
 
 [[package]]
@@ -1006,13 +1006,13 @@ checksum = "fea41bba32d969b513997752735605054bc0dfa92b4c56bf1189f2e174be7a10"
 name = "double-map"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-alpha.7",
- "frame-system 2.0.0-alpha.7",
+ "frame-support 2.0.0-dev",
+ "frame-system 2.0.0-dev",
  "parity-scale-codec",
- "sp-core 2.0.0-alpha.7",
- "sp-io 2.0.0-alpha.7",
- "sp-runtime 2.0.0-alpha.7",
- "sp-std 2.0.0-alpha.7",
+ "sp-core 2.0.0-dev",
+ "sp-io 2.0.0-dev",
+ "sp-runtime 2.0.0-dev",
+ "sp-std 2.0.0-dev",
 ]
 
 [[package]]
@@ -1076,14 +1076,14 @@ dependencies = [
 name = "execution-schedule"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-alpha.7",
- "frame-system 2.0.0-alpha.7",
+ "frame-support 2.0.0-dev",
+ "frame-system 2.0.0-dev",
  "parity-scale-codec",
  "rand 0.7.3",
- "sp-core 2.0.0-alpha.7",
- "sp-io 2.0.0-alpha.7",
- "sp-runtime 2.0.0-alpha.7",
- "sp-std 2.0.0-alpha.7",
+ "sp-core 2.0.0-dev",
+ "sp-io 2.0.0-dev",
+ "sp-runtime 2.0.0-dev",
+ "sp-std 2.0.0-dev",
 ]
 
 [[package]]
@@ -1163,14 +1163,14 @@ dependencies = [
 name = "fixed-point"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-alpha.7",
- "frame-system 2.0.0-alpha.7",
+ "frame-support 2.0.0-dev",
+ "frame-system 2.0.0-dev",
  "parity-scale-codec",
- "sp-arithmetic 2.0.0-alpha.7",
- "sp-core 2.0.0-alpha.7",
- "sp-io 2.0.0-alpha.7",
- "sp-runtime 2.0.0-alpha.7",
- "sp-std 2.0.0-alpha.7",
+ "sp-arithmetic 2.0.0-dev",
+ "sp-core 2.0.0-dev",
+ "sp-io 2.0.0-dev",
+ "sp-runtime 2.0.0-dev",
+ "sp-std 2.0.0-dev",
  "substrate-fixed",
 ]
 
@@ -1689,12 +1689,12 @@ dependencies = [
 name = "generic-event"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-alpha.7",
- "frame-system 2.0.0-alpha.7",
+ "frame-support 2.0.0-dev",
+ "frame-system 2.0.0-dev",
  "parity-scale-codec",
- "sp-core 2.0.0-alpha.7",
- "sp-io 2.0.0-alpha.7",
- "sp-runtime 2.0.0-alpha.7",
+ "sp-core 2.0.0-dev",
+ "sp-io 2.0.0-dev",
+ "sp-runtime 2.0.0-dev",
 ]
 
 [[package]]
@@ -1824,12 +1824,12 @@ dependencies = [
 name = "hello-substrate"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-alpha.7",
- "frame-system 2.0.0-alpha.7",
+ "frame-support 2.0.0-dev",
+ "frame-system 2.0.0-dev",
  "parity-scale-codec",
  "sp-core 2.0.0-alpha.7",
  "sp-io 2.0.0-alpha.7",
- "sp-runtime 2.0.0-alpha.7",
+ "sp-runtime 2.0.0-dev",
 ]
 
 [[package]]
@@ -2374,12 +2374,12 @@ dependencies = [
 name = "last-caller"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-alpha.7",
- "frame-system 2.0.0-alpha.7",
+ "frame-support 2.0.0-dev",
+ "frame-system 2.0.0-dev",
  "parity-scale-codec",
- "sp-core 2.0.0-alpha.7",
- "sp-io 2.0.0-alpha.7",
- "sp-runtime 2.0.0-alpha.7",
+ "sp-core 2.0.0-dev",
+ "sp-io 2.0.0-dev",
+ "sp-runtime 2.0.0-dev",
 ]
 
 [[package]]
@@ -2788,12 +2788,12 @@ dependencies = [
 name = "lockable-currency"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-alpha.7",
- "frame-system 2.0.0-alpha.7",
- "pallet-balances 2.0.0-alpha.7",
+ "frame-support 2.0.0-dev",
+ "frame-system 2.0.0-dev",
+ "pallet-balances 2.0.0-dev",
  "parity-scale-codec",
- "sp-core 2.0.0-alpha.7",
- "sp-io 2.0.0-alpha.7",
+ "sp-core 2.0.0-dev",
+ "sp-io 2.0.0-dev",
 ]
 
 [[package]]
@@ -3224,15 +3224,15 @@ name = "offchain-demo"
 version = "2.0.0-alpha.7"
 dependencies = [
  "alt_serde",
- "frame-support 2.0.0-alpha.7",
- "frame-system 2.0.0-alpha.7",
+ "frame-support 2.0.0-dev",
+ "frame-system 2.0.0-dev",
  "parity-scale-codec",
  "parking_lot 0.10.2",
  "serde_json 1.0.44",
- "sp-core 2.0.0-alpha.7",
- "sp-io 2.0.0-alpha.7",
- "sp-runtime 2.0.0-alpha.7",
- "sp-std 2.0.0-alpha.7",
+ "sp-core 2.0.0-dev",
+ "sp-io 2.0.0-dev",
+ "sp-runtime 2.0.0-dev",
+ "sp-std 2.0.0-dev",
 ]
 
 [[package]]
@@ -3283,19 +3283,40 @@ checksum = "cd1d74c4e2175fccdf649463e4def9cc2d69a6a55cd192d96ad73774752e8a39"
 dependencies = [
  "frame-support 2.0.0-alpha.7",
  "frame-system 2.0.0-alpha.7",
- "pallet-session",
+ "pallet-session 2.0.0-alpha.7",
  "pallet-timestamp 2.0.0-alpha.7",
  "parity-scale-codec",
  "serde",
  "sp-application-crypto 2.0.0-alpha.7",
- "sp-consensus-babe",
- "sp-consensus-vrf",
+ "sp-consensus-babe 0.8.0-alpha.7",
+ "sp-consensus-vrf 0.8.0-alpha.7",
  "sp-inherents 2.0.0-alpha.7",
  "sp-io 2.0.0-alpha.7",
  "sp-runtime 2.0.0-alpha.7",
  "sp-staking 2.0.0-alpha.7",
  "sp-std 2.0.0-alpha.7",
  "sp-timestamp 2.0.0-alpha.7",
+]
+
+[[package]]
+name = "pallet-babe"
+version = "2.0.0-dev"
+source = "git+https://github.com/paritytech/substrate?rev=7f73312aa0bf4a4107860141f085e9770ec01b72#7f73312aa0bf4a4107860141f085e9770ec01b72"
+dependencies = [
+ "frame-support 2.0.0-dev",
+ "frame-system 2.0.0-dev",
+ "pallet-session 2.0.0-dev",
+ "pallet-timestamp 2.0.0-dev",
+ "parity-scale-codec",
+ "sp-application-crypto 2.0.0-dev",
+ "sp-consensus-babe 0.8.0-dev",
+ "sp-consensus-vrf 0.8.0-dev",
+ "sp-inherents 2.0.0-dev",
+ "sp-io 2.0.0-dev",
+ "sp-runtime 2.0.0-dev",
+ "sp-staking 2.0.0-dev",
+ "sp-std 2.0.0-dev",
+ "sp-timestamp 2.0.0-dev",
 ]
 
 [[package]]
@@ -3369,7 +3390,7 @@ dependencies = [
  "frame-support 2.0.0-alpha.7",
  "frame-system 2.0.0-alpha.7",
  "pallet-finality-tracker",
- "pallet-session",
+ "pallet-session 2.0.0-alpha.7",
  "parity-scale-codec",
  "serde",
  "sp-core 2.0.0-alpha.7",
@@ -3456,6 +3477,23 @@ dependencies = [
  "sp-staking 2.0.0-alpha.7",
  "sp-std 2.0.0-alpha.7",
  "sp-trie 2.0.0-alpha.7",
+]
+
+[[package]]
+name = "pallet-session"
+version = "2.0.0-dev"
+source = "git+https://github.com/paritytech/substrate?rev=7f73312aa0bf4a4107860141f085e9770ec01b72#7f73312aa0bf4a4107860141f085e9770ec01b72"
+dependencies = [
+ "frame-support 2.0.0-dev",
+ "frame-system 2.0.0-dev",
+ "impl-trait-for-tuples",
+ "pallet-timestamp 2.0.0-dev",
+ "parity-scale-codec",
+ "sp-io 2.0.0-dev",
+ "sp-runtime 2.0.0-dev",
+ "sp-session 2.0.0-dev",
+ "sp-staking 2.0.0-dev",
+ "sp-std 2.0.0-dev",
 ]
 
 [[package]]
@@ -4277,16 +4315,16 @@ dependencies = [
 name = "randomness"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-alpha.7",
- "frame-system 2.0.0-alpha.7",
- "pallet-babe",
- "pallet-randomness-collective-flip 2.0.0-alpha.7",
- "pallet-timestamp 2.0.0-alpha.7",
+ "frame-support 2.0.0-dev",
+ "frame-system 2.0.0-dev",
+ "pallet-babe 2.0.0-dev",
+ "pallet-randomness-collective-flip 2.0.0-dev",
+ "pallet-timestamp 2.0.0-dev",
  "parity-scale-codec",
- "sp-core 2.0.0-alpha.7",
- "sp-io 2.0.0-alpha.7",
- "sp-runtime 2.0.0-alpha.7",
- "sp-std 2.0.0-alpha.7",
+ "sp-core 2.0.0-dev",
+ "sp-io 2.0.0-dev",
+ "sp-runtime 2.0.0-dev",
+ "sp-std 2.0.0-dev",
 ]
 
 [[package]]
@@ -4385,13 +4423,13 @@ dependencies = [
 name = "reservable-currency"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-alpha.7",
- "frame-system 2.0.0-alpha.7",
- "pallet-balances 2.0.0-alpha.7",
+ "frame-support 2.0.0-dev",
+ "frame-system 2.0.0-dev",
+ "pallet-balances 2.0.0-dev",
  "parity-scale-codec",
- "sp-core 2.0.0-alpha.7",
- "sp-io 2.0.0-alpha.7",
- "sp-runtime 2.0.0-alpha.7",
+ "sp-core 2.0.0-dev",
+ "sp-io 2.0.0-dev",
+ "sp-runtime 2.0.0-dev",
 ]
 
 [[package]]
@@ -4413,13 +4451,13 @@ dependencies = [
 name = "ringbuffer-queue"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-alpha.7",
- "frame-system 2.0.0-alpha.7",
+ "frame-support 2.0.0-dev",
+ "frame-system 2.0.0-dev",
  "parity-scale-codec",
- "sp-core 2.0.0-alpha.7",
- "sp-io 2.0.0-alpha.7",
- "sp-runtime 2.0.0-alpha.7",
- "sp-std 2.0.0-alpha.7",
+ "sp-core 2.0.0-dev",
+ "sp-io 2.0.0-dev",
+ "sp-runtime 2.0.0-dev",
+ "sp-std 2.0.0-dev",
 ]
 
 [[package]]
@@ -4970,8 +5008,8 @@ dependencies = [
  "sp-block-builder 2.0.0-alpha.7",
  "sp-blockchain 2.0.0-alpha.7",
  "sp-consensus 0.8.0-alpha.7",
- "sp-consensus-babe",
- "sp-consensus-vrf",
+ "sp-consensus-babe 0.8.0-alpha.7",
+ "sp-consensus-vrf 0.8.0-alpha.7",
  "sp-core 2.0.0-alpha.7",
  "sp-inherents 2.0.0-alpha.7",
  "sp-io 2.0.0-alpha.7",
@@ -6192,36 +6230,36 @@ dependencies = [
 name = "simple-event"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-alpha.7",
- "frame-system 2.0.0-alpha.7",
+ "frame-support 2.0.0-dev",
+ "frame-system 2.0.0-dev",
  "parity-scale-codec",
- "sp-core 2.0.0-alpha.7",
- "sp-io 2.0.0-alpha.7",
- "sp-runtime 2.0.0-alpha.7",
+ "sp-core 2.0.0-dev",
+ "sp-io 2.0.0-dev",
+ "sp-runtime 2.0.0-dev",
 ]
 
 [[package]]
 name = "simple-map"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-alpha.7",
- "frame-system 2.0.0-alpha.7",
+ "frame-support 2.0.0-dev",
+ "frame-system 2.0.0-dev",
  "parity-scale-codec",
- "sp-core 2.0.0-alpha.7",
- "sp-io 2.0.0-alpha.7",
- "sp-runtime 2.0.0-alpha.7",
+ "sp-core 2.0.0-dev",
+ "sp-io 2.0.0-dev",
+ "sp-runtime 2.0.0-dev",
 ]
 
 [[package]]
 name = "single-value"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-alpha.7",
- "frame-system 2.0.0-alpha.7",
+ "frame-support 2.0.0-dev",
+ "frame-system 2.0.0-dev",
  "parity-scale-codec",
- "sp-core 2.0.0-alpha.7",
- "sp-io 2.0.0-alpha.7",
- "sp-runtime 2.0.0-alpha.7",
+ "sp-core 2.0.0-dev",
+ "sp-io 2.0.0-dev",
+ "sp-runtime 2.0.0-dev",
 ]
 
 [[package]]
@@ -6607,11 +6645,27 @@ dependencies = [
  "sp-api 2.0.0-alpha.7",
  "sp-application-crypto 2.0.0-alpha.7",
  "sp-consensus 0.8.0-alpha.7",
- "sp-consensus-vrf",
+ "sp-consensus-vrf 0.8.0-alpha.7",
  "sp-inherents 2.0.0-alpha.7",
  "sp-runtime 2.0.0-alpha.7",
  "sp-std 2.0.0-alpha.7",
  "sp-timestamp 2.0.0-alpha.7",
+]
+
+[[package]]
+name = "sp-consensus-babe"
+version = "0.8.0-dev"
+source = "git+https://github.com/paritytech/substrate?rev=7f73312aa0bf4a4107860141f085e9770ec01b72#7f73312aa0bf4a4107860141f085e9770ec01b72"
+dependencies = [
+ "merlin",
+ "parity-scale-codec",
+ "sp-api 2.0.0-dev",
+ "sp-application-crypto 2.0.0-dev",
+ "sp-consensus-vrf 0.8.0-dev",
+ "sp-inherents 2.0.0-dev",
+ "sp-runtime 2.0.0-dev",
+ "sp-std 2.0.0-dev",
+ "sp-timestamp 2.0.0-dev",
 ]
 
 [[package]]
@@ -6638,6 +6692,18 @@ dependencies = [
  "sp-core 2.0.0-alpha.7",
  "sp-runtime 2.0.0-alpha.7",
  "sp-std 2.0.0-alpha.7",
+]
+
+[[package]]
+name = "sp-consensus-vrf"
+version = "0.8.0-dev"
+source = "git+https://github.com/paritytech/substrate?rev=7f73312aa0bf4a4107860141f085e9770ec01b72#7f73312aa0bf4a4107860141f085e9770ec01b72"
+dependencies = [
+ "parity-scale-codec",
+ "schnorrkel",
+ "sp-core 2.0.0-dev",
+ "sp-runtime 2.0.0-dev",
+ "sp-std 2.0.0-dev",
 ]
 
 [[package]]
@@ -7406,13 +7472,13 @@ dependencies = [
 name = "storage-cache"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-alpha.7",
- "frame-system 2.0.0-alpha.7",
+ "frame-support 2.0.0-dev",
+ "frame-system 2.0.0-dev",
  "parity-scale-codec",
- "sp-core 2.0.0-alpha.7",
- "sp-io 2.0.0-alpha.7",
- "sp-runtime 2.0.0-alpha.7",
- "sp-std 2.0.0-alpha.7",
+ "sp-core 2.0.0-dev",
+ "sp-io 2.0.0-dev",
+ "sp-runtime 2.0.0-dev",
+ "sp-std 2.0.0-dev",
 ]
 
 [[package]]
@@ -7434,13 +7500,13 @@ checksum = "8ea5119cdb4c55b55d432abb513a0429384878c15dde60cc77b1c99de1a95a6a"
 name = "struct-storage"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-alpha.7",
- "frame-system 2.0.0-alpha.7",
- "pallet-balances 2.0.0-alpha.7",
+ "frame-support 2.0.0-dev",
+ "frame-system 2.0.0-dev",
+ "pallet-balances 2.0.0-dev",
  "parity-scale-codec",
- "sp-core 2.0.0-alpha.7",
- "sp-io 2.0.0-alpha.7",
- "sp-runtime 2.0.0-alpha.7",
+ "sp-core 2.0.0-dev",
+ "sp-io 2.0.0-dev",
+ "sp-runtime 2.0.0-dev",
 ]
 
 [[package]]
@@ -7630,7 +7696,7 @@ dependencies = [
  "generic-event",
  "hello-substrate",
  "last-caller",
- "pallet-babe",
+ "pallet-babe 2.0.0-alpha.7",
  "pallet-balances 2.0.0-alpha.7",
  "pallet-grandpa",
  "pallet-randomness-collective-flip 2.0.0-alpha.7",
@@ -7647,7 +7713,7 @@ dependencies = [
  "single-value",
  "sp-api 2.0.0-alpha.7",
  "sp-block-builder 2.0.0-alpha.7",
- "sp-consensus-babe",
+ "sp-consensus-babe 0.8.0-alpha.7",
  "sp-core 2.0.0-alpha.7",
  "sp-finality-grandpa",
  "sp-inherents 2.0.0-alpha.7",
@@ -8334,13 +8400,13 @@ checksum = "3fc439f2794e98976c88a2a2dafce96b930fe8010b0a256b3c2199a773933168"
 name = "vec-set"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-alpha.7",
- "frame-system 2.0.0-alpha.7",
+ "frame-support 2.0.0-dev",
+ "frame-system 2.0.0-dev",
  "parity-scale-codec",
- "sp-core 2.0.0-alpha.7",
- "sp-io 2.0.0-alpha.7",
- "sp-runtime 2.0.0-alpha.7",
- "sp-std 2.0.0-alpha.7",
+ "sp-core 2.0.0-dev",
+ "sp-io 2.0.0-dev",
+ "sp-runtime 2.0.0-dev",
+ "sp-std 2.0.0-dev",
 ]
 
 [[package]]
@@ -8548,7 +8614,7 @@ dependencies = [
  "frame-executive 2.0.0-alpha.7",
  "frame-support 2.0.0-alpha.7",
  "frame-system 2.0.0-alpha.7",
- "pallet-babe",
+ "pallet-babe 2.0.0-alpha.7",
  "pallet-balances 2.0.0-alpha.7",
  "pallet-generic-asset",
  "pallet-grandpa",
@@ -8560,7 +8626,7 @@ dependencies = [
  "serde",
  "sp-api 2.0.0-alpha.7",
  "sp-block-builder 2.0.0-alpha.7",
- "sp-consensus-babe",
+ "sp-consensus-babe 0.8.0-alpha.7",
  "sp-core 2.0.0-alpha.7",
  "sp-finality-grandpa",
  "sp-inherents 2.0.0-alpha.7",
@@ -8579,11 +8645,11 @@ dependencies = [
 name = "weights"
 version = "2.0.0-alpha.7"
 dependencies = [
- "frame-support 2.0.0-alpha.7",
- "frame-system 2.0.0-alpha.7",
+ "frame-support 2.0.0-dev",
+ "frame-system 2.0.0-dev",
  "parity-scale-codec",
- "sp-core 2.0.0-alpha.7",
- "sp-runtime 2.0.0-alpha.7",
+ "sp-core 2.0.0-dev",
+ "sp-runtime 2.0.0-dev",
 ]
 
 [[package]]

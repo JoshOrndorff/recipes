@@ -16,9 +16,9 @@ std = [
 
 [dependencies]
 parity-scale-codec = { version = '1.3.0', features = ['derive'], default-features = false}
-frame-support = { version = '2.0.0-alpha.7', default-features = false }
-frame-system = { version = '2.0.0-alpha.7', default-features = false }
-sp-runtime = { version = '2.0.0-alpha.7', default-features = false }
+frame-support = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72', default-features = false }
+frame-system = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72', default-features = false }
+sp-runtime = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72', default-features = false }
 
 
 [dev-dependencies.sp-core]
