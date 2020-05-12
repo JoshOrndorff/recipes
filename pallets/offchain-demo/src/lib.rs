@@ -58,12 +58,23 @@ pub mod crypto {
 	use sp_runtime::{
 		app_crypto::{app_crypto, sr25519},
 		MultiSigner, MultiSignature,
+		traits::Verify,
 	};
+	use sp_core::sr25519::Signature as Sr25519Signature;
 
 	app_crypto!(sr25519, KEY_TYPE);
 
 	pub struct TestAuthId;
+	// implemented for ocw-runtime
 	impl frame_system::offchain::AppCrypto<MultiSigner, MultiSignature> for TestAuthId
+	{
+		type RuntimeAppPublic = Public;
+		type GenericSignature = sp_core::sr25519::Signature;
+		type GenericPublic = sp_core::sr25519::Public;
+	}
+
+	// implemented for mock runtime in test
+	impl frame_system::offchain::AppCrypto<<Sr25519Signature as Verify>::Signer, Sr25519Signature> for TestAuthId
 	{
 		type RuntimeAppPublic = Public;
 		type GenericSignature = sp_core::sr25519::Signature;

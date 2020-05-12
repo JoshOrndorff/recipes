@@ -9,7 +9,8 @@ use frame_support::{
 };
 use sp_io::TestExternalities;
 use sp_core::{
-	H256, sr25519,
+	H256,
+	sr25519::{self, Signature},
 	offchain::{OffchainExt, TransactionPoolExt,
 		testing::{self, PoolState, OffchainState},
 	},
@@ -18,7 +19,7 @@ use sp_core::{
 };
 use sp_runtime::{
 	testing::{Header, TestXt},
-	traits::{BlakeTwo256, IdentityLookup},
+	traits::{BlakeTwo256, IdentityLookup, Verify},
 	Perbill,
 };
 
@@ -86,18 +87,29 @@ impl Trait for TestRuntime {
 	type UnsignedPriority = UnsignedPriority;
 }
 
-impl system::offchain::CreateTransaction<TestRuntime, TestExtrinsic> for TestRuntime {
-	type Public = sr25519::Public;
-	type Signature = sr25519::Signature;
-
-	fn create_transaction<TSigner: system::offchain::Signer<Self::Public, Self::Signature>> (
+impl<LocalCall> system::offchain::CreateSignedTransaction<LocalCall> for TestRuntime where
+	Call<TestRuntime>: From<LocalCall>
+{
+	fn create_transaction<C: frame_system::offchain::AppCrypto<Self::Public, Self::Signature>> (
 		call: Call<TestRuntime>,
-		_public: Self::Public,
+		_public: <Signature as Verify>::Signer,
 		_account: <TestRuntime as system::Trait>::AccountId,
 		index: <TestRuntime as system::Trait>::Index,
 	) -> Option<(Call<TestRuntime>, <TestExtrinsic as sp_runtime::traits::Extrinsic>::SignaturePayload)> {
 		Some((call, (index, ())))
 	}
+}
+
+impl frame_system::offchain::SigningTypes for TestRuntime {
+	type Public = <Signature as Verify>::Signer;
+	type Signature = Signature;
+}
+
+impl<C> frame_system::offchain::SendTransactionTypes<C> for TestRuntime where
+	Call<TestRuntime>: From<C>,
+{
+	type OverarchingCall = Call<TestRuntime>;
+	type Extrinsic = TestExtrinsic;
 }
 
 pub type System = system::Module<TestRuntime>;
