@@ -62,7 +62,6 @@ macro_rules! new_full_start {
 						client.clone(), &(client.clone() as std::sync::Arc<_>), select_chain.clone()
 					)?;
 
-				//TODO do I need this justification import? Seems to work without it.
 				let justification_import = grandpa_block_import.clone();
 
 				let pow_block_import = sc_consensus_pow::PowBlockImport::new(
