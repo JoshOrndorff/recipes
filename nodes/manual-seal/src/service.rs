@@ -43,7 +43,11 @@ macro_rules! new_full_start {
 type RpcExtension = jsonrpc_core::IoHandler<sc_rpc::Metadata>;
 
 /// Builds a new service for a full client.
-pub fn new_full(config: Configuration) -> Result<impl AbstractService, ServiceError> {
+pub fn new_full(config: Configuration)
+	-> Result<impl AbstractService, ServiceError>
+{
+	let is_authority = config.role.is_authority();
+	
 	let inherent_data_providers = InherentDataProviders::new();
 	inherent_data_providers
 		.register_provider(sp_timestamp::InherentDataProvider)
@@ -68,26 +72,27 @@ pub fn new_full(config: Configuration) -> Result<impl AbstractService, ServiceEr
 		})?
 		.build()?;
 
-
-	// Proposer object for block authorship.
-	let proposer = sc_basic_authorship::ProposerFactory::new(
-		service.client().clone(),
-		service.transaction_pool(),
-	);
-
-	// Background authorship future.
-	let authorship_future = manual_seal::run_manual_seal(
-			Box::new(service.client()),
-			proposer,
+	if is_authority {
+		// Proposer object for block authorship.
+		let proposer = sc_basic_authorship::ProposerFactory::new(
 			service.client().clone(),
-			service.transaction_pool().pool().clone(),
-			commands_stream,
-			service.select_chain().unwrap(),
-			inherent_data_providers
+			service.transaction_pool(),
 		);
 
-	// we spawn the future on a background thread managed by service.
-	service.spawn_essential_task("manual-seal", authorship_future);
+		// Background authorship future.
+		let authorship_future = manual_seal::run_manual_seal(
+				Box::new(service.client()),
+				proposer,
+				service.client().clone(),
+				service.transaction_pool().pool().clone(),
+				commands_stream,
+				service.select_chain().unwrap(),
+				inherent_data_providers
+			);
+
+		// we spawn the future on a background thread managed by service.
+		service.spawn_essential_task("manual-seal", authorship_future);
+	};
 
 	Ok(service)
 }

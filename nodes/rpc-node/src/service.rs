@@ -61,6 +61,8 @@ macro_rules! new_full_start {
 pub fn new_full(config: Configuration)
 	-> Result<impl AbstractService, ServiceError>
 {
+	let is_authority = config.role.is_authority();
+
 	//TODO This isn't great. It includes the timestamp inherent in all blocks
 	// regardless of runtime.
 	let inherent_data_providers = InherentDataProviders::new();
@@ -72,21 +74,23 @@ pub fn new_full(config: Configuration)
 	let builder = new_full_start!(config);
 	let service = builder.build()?;
 
-	let proposer = sc_basic_authorship::ProposerFactory::new(
-		service.client(),
-		service.transaction_pool(),
-	);
+	if is_authority {
+		let proposer = sc_basic_authorship::ProposerFactory::new(
+			service.client(),
+			service.transaction_pool(),
+		);
 
-	let authorship_future = sc_consensus_manual_seal::run_instant_seal(
-		Box::new(service.client()),
-		proposer,
-		service.client().clone(),
-		service.transaction_pool().pool().clone(),
-		service.select_chain().ok_or(ServiceError::SelectChainRequired)?,
-		inherent_data_providers
-	);
+		let authorship_future = sc_consensus_manual_seal::run_instant_seal(
+			Box::new(service.client()),
+			proposer,
+			service.client().clone(),
+			service.transaction_pool().pool().clone(),
+			service.select_chain().ok_or(ServiceError::SelectChainRequired)?,
+			inherent_data_providers
+		);
 
-	service.spawn_essential_task("instant-seal", authorship_future);
+		service.spawn_essential_task("instant-seal", authorship_future);
+	};
 
 	Ok(service)
 }

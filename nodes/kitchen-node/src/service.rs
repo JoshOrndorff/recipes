@@ -44,6 +44,8 @@ macro_rules! new_full_start {
 pub fn new_full(config: Configuration)
 	-> Result<impl AbstractService, ServiceError>
 {
+	let is_authority = config.role.is_authority();
+	
 	// This variable is only used when ocw feature is enabled.
 	// Suppress the warning when ocw feature is not enabled.
 	#[allow(unused_variables)]
@@ -76,21 +78,23 @@ pub fn new_full(config: Configuration)
 	}
 
 
-	let proposer = sc_basic_authorship::ProposerFactory::new(
-		service.client().clone(),
-		service.transaction_pool(),
-	);
+	if is_authority {
+		let proposer = sc_basic_authorship::ProposerFactory::new(
+			service.client().clone(),
+			service.transaction_pool(),
+		);
 
-	let authorship_future = sc_consensus_manual_seal::run_instant_seal(
-		Box::new(service.client()),
-		proposer,
-		service.client().clone(),
-		service.transaction_pool().pool().clone(),
-		service.select_chain().ok_or(ServiceError::SelectChainRequired)?,
-		inherent_data_providers
-	);
+		let authorship_future = sc_consensus_manual_seal::run_instant_seal(
+			Box::new(service.client()),
+			proposer,
+			service.client().clone(),
+			service.transaction_pool().pool().clone(),
+			service.select_chain().ok_or(ServiceError::SelectChainRequired)?,
+			inherent_data_providers
+		);
 
-	service.spawn_essential_task("instant-seal", authorship_future);
+		service.spawn_essential_task("instant-seal", authorship_future);
+	};
 
 	Ok(service)
 }
