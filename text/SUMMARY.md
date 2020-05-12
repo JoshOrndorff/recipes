@@ -34,7 +34,7 @@
 	- [Custom RPCs](./3-entrees/custom-rpc.md)
 	- [Sha3 Pow Consensus Algorithms](./3-entrees/sha3-pow-consensus.md)
 	- [Basic Proof of Work Node](./3-entrees/basic-pow.md)
-	- [Hybrid PoW/PoS Consensus Node (wip)](./3-entrees/hybrid-consensus.md)
+	- [Hybrid PoW/PoS Consensus Node](./3-entrees/hybrid-consensus.md)
 	- [Manual Seal Consensus](./3-entrees/manual-seal.md)
 	- [Kitchen Node - An reusable instant seal node](./3-entrees/kitchen-node.md)
 	- [Currency Types](./3-entrees/currency.md)
