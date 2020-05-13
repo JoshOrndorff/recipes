@@ -32,6 +32,9 @@ use sp_runtime::{
 		Verify,
 	}
 };
+
+use sp_storage::well_known_keys;
+
 #[cfg(any(feature = "std", test))]
 use sp_runtime::{BuildStorage, Storage};
 
@@ -134,13 +137,16 @@ pub struct GenesisConfig;
 #[cfg(feature = "std")]
 impl BuildStorage for GenesisConfig {
 	fn assimilate_storage(&self, storage: &mut Storage) -> Result<(), String> {
-		// Attempt to initialize genesis storage
-		storage.top.extend(
-			vec![(ONLY_KEY.encode(), false.encode())].into_iter()
-		);
+		// Declare the storage items we need
+		let storage_items = vec![
+			(ONLY_KEY.encode(), false.encode()),
+			(well_known_keys::CODE.into(), WASM_BINARY.to_vec()),
+		];
 
-		//TODO Do I also need to include the runtime code?
-		//storage.top.extend((key??, WASM_BINARY));
+		// Put them into genesis storage
+		storage.top.extend(
+			storage_items.into_iter()
+		);
 
 		Ok(())
 	}

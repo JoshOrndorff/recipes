@@ -18,6 +18,7 @@ sp-offchain = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/
 sp-runtime = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72', default_features = false}
 sp-session = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72', default_features = false}
 sp-std = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72', default_features = false}
+sp-storage = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72', default_features = false}
 sp-transaction-pool = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72', default_features = false}
 sp-version = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72', default_features = false}
 
@@ -43,4 +44,5 @@ std = [
 	"sp-transaction-pool/std",
 	"sp-version/std",
 	"parity-util-mem",
+	"sp-storage/std",
 ]
