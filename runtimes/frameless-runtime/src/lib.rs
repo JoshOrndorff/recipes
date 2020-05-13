@@ -18,6 +18,7 @@ use sp_runtime::{
 	MultiSignature,
 	transaction_validity::{
 		TransactionLongevity,
+		TransactionSource,
 		TransactionValidity,
 		ValidTransaction
 	},
@@ -34,9 +35,7 @@ use sp_runtime::{
 #[cfg(any(feature = "std", test))]
 use sp_runtime::{BuildStorage, Storage};
 
-use sp_core::{crypto::Public, OpaqueMetadata};
-use sp_consensus_aura::sr25519::AuthorityId as AuraId;
-use sp_finality_grandpa::{AuthorityId as GrandpaId, AuthorityList as GrandpaAuthorityList};
+use sp_core::OpaqueMetadata;
 
 #[cfg(feature = "std")]
 use sp_version::NativeVersion;
@@ -106,6 +105,7 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
 	spec_version: 1,
 	impl_version: 1,
 	apis: RUNTIME_API_VERSIONS,
+	transaction_version: 1,
 };
 
 /// The version infromation used to identify this runtime when compiled natively.
@@ -260,7 +260,9 @@ impl_runtime_apis! {
 	}
 
 	impl sp_transaction_pool::runtime_api::TaggedTransactionQueue<Block> for Runtime {
-		fn validate_transaction(_tx: <Block as BlockT>::Extrinsic) -> TransactionValidity {
+		fn validate_transaction(
+			_source: TransactionSource,
+			_tx: <Block as BlockT>::Extrinsic) -> TransactionValidity {
 			// Any transaction of the correct type is valid
 			Ok(ValidTransaction{
 				priority: 1u64,
@@ -269,32 +271,6 @@ impl_runtime_apis! {
 				longevity: TransactionLongevity::max_value(),
 				propagate: true,
 			})
-		}
-	}
-
-	impl sp_consensus_aura::AuraApi<Block, AuraId> for Runtime {
-		fn slot_duration() -> u64 {
-			3000 //milliseconds
-		}
-
-
-		fn authorities() -> Vec<AuraId> {
-			// Do we need 32 bytes?
-			let alice = AuraId::from_slice(&[0]);
-
-			let mut authorities = Vec::new();
-			authorities.push(alice);
-			authorities
-		}
-	}
-
-	impl sp_finality_grandpa::GrandpaApi<Block> for Runtime {
-		fn grandpa_authorities() -> GrandpaAuthorityList {
-			let alice = GrandpaId::from_slice(&[0]);
-
-			let mut authorities = Vec::new();
-			authorities.push((alice, 1));
-			authorities
 		}
 	}
 
