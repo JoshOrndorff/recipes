@@ -207,18 +207,6 @@ impl_runtime_apis! {
 		}
 	}
 
-	// https://substrate.dev/rustdocs/master/sp_api/trait.Metadata.html
-	// "The Metadata api trait that returns metadata for the runtime."
-	// impl sp_api::Metadata<Block> for Runtime {
-	//	 fn metadata() -> OpaqueMetadata {
-	//		 // Runtime::metadata().into()
-	//		 // Maybe this one can be omitted or just return () or something?
-	//		 // Would be really cool to return something that makes polkadot-js api happy,
-	//		 // but that seems unlikely.
-	//		 unimplemented!()
-	//	 }
-	// }
-
 	// https://substrate.dev/rustdocs/master/sc_block_builder/trait.BlockBuilderApi.html
 	impl sp_block_builder::BlockBuilder<Block> for Runtime {
 		fn apply_extrinsic(_extrinsic: <Block as BlockT>::Extrinsic) -> ApplyExtrinsicResult {
