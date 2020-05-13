@@ -133,7 +133,15 @@ pub struct GenesisConfig;
 
 #[cfg(feature = "std")]
 impl BuildStorage for GenesisConfig {
-	fn assimilate_storage(&self, _storage: &mut Storage) -> Result<(), String> {
+	fn assimilate_storage(&self, storage: &mut Storage) -> Result<(), String> {
+		// Attempt to initialize genesis storage
+		storage.top.extend(
+			vec![(ONLY_KEY.encode(), false.encode())].into_iter()
+		);
+
+		//TODO Do I also need to include the runtime code?
+		//storage.top.extend((key??, WASM_BINARY));
+
 		Ok(())
 	}
 }
