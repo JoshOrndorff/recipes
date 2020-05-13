@@ -3,7 +3,10 @@
 //! Permissioned Function with Generic Event
 //! a permissioned funtion which can only be called by the "owner". An event is emitted
 //! when the function is successfully executed.
-use frame_support::{decl_event, decl_module, decl_storage, dispatch::DispatchResult, ensure, StorageValue};
+use frame_support::{
+	decl_event, decl_module, decl_storage, ensure,
+	dispatch::DispatchResult,
+};
 use frame_system::{self as system, ensure_signed};
 use sp_std::vec::Vec;
 
@@ -34,17 +37,21 @@ decl_module! {
 	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
 		fn deposit_event() = default;
 
+		/// Adds the caller to the membership set unless the caller is already present
+		#[weight = 10_000]
 		fn add_member(origin) -> DispatchResult {
 			let new_member = ensure_signed(origin)?;
 
 			// Ensure that the caller is not already a member
 			ensure!(!Self::is_member(&new_member), "already a member");
 
-			<Members<T>>::append(&[new_member.clone()])?;
+			<Members<T>>::append(&new_member);
 			Self::deposit_event(RawEvent::AddMember(new_member));
 			Ok(())
 		}
 
+		/// Removes the caller from the membership set
+		#[weight = 10_000]
 		fn remove_member(origin) -> DispatchResult {
 			let old_member = ensure_signed(origin)?;
 			ensure!(Self::is_member(&old_member), "not a member so can't be taken out of the set");

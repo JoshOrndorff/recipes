@@ -1,10 +1,13 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
-// demonstrates how to use append instead of mutate
-// https://substrate.dev/rustdocs/master/frame_support/storage/trait.StorageValue.html#tymethod.append
-use rstd::prelude::*;
-use support::{decl_event, decl_module, decl_storage, dispatch::DispatchResult, ensure, StorageValue};
-use system::ensure_signed;
+//! A pallet that demonstrates how to use append instead of mutate
+use sp_std::prelude::*;
+use frame_support::{
+	decl_event, decl_module, decl_storage,
+	dispatch::DispatchResult,
+	ensure,
+};
+use frame_system::{self as system, ensure_signed};
 
 #[cfg(test)]
 mod tests;
@@ -41,8 +44,10 @@ decl_module! {
 	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
 		fn deposit_event() = default;
 
-		// don't do this
-		// (unless appending new entries AND mutating existing entries)
+		/// Appends an item to the vec using the `mutate` method
+		/// Don't do this because it is slow
+		/// (unless appending new entries AND mutating existing entries)
+		#[weight = 10_000]
 		fn mutate_to_append(origin) -> DispatchResult {
 			let user = ensure_signed(origin)?;
 
@@ -52,24 +57,30 @@ decl_module! {
 			Ok(())
 		}
 
-		// do this instead
+		/// Appends an item to the vec using the `append` method
+		/// This method is faster, and therefore preferred, whenever possible
+		#[weight = 10_000]
 		fn append_new_entries(origin) -> DispatchResult {
 			let user = ensure_signed(origin)?;
 
 			// this encodes the new values and appends them to the already encoded existing evc
-			<CurrentValues>::append(Self::new_values())?;
+			Self::new_values()
+				.iter()
+				.for_each(CurrentValues::append);
 			Self::deposit_event(RawEvent::AppendVec(user));
 			Ok(())
 		}
 
+		#[weight = 10_000]
 		fn add_member(origin) -> DispatchResult {
 			let new_member = ensure_signed(origin)?;
 			ensure!(!Self::is_member(&new_member), "must not be a member to be added");
-			<Members<T>>::append(vec![new_member.clone()])?;
+			<Members<T>>::append(new_member.clone());
 			Self::deposit_event(RawEvent::MemberAdded(new_member));
 			Ok(())
 		}
 
+		#[weight = 10_000]
 		fn remove_member(origin) -> DispatchResult {
 			let old_member = ensure_signed(origin)?;
 			ensure!(Self::is_member(&old_member), "must be a member in order to leave");

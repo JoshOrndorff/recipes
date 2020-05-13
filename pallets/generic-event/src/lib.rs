@@ -1,7 +1,11 @@
+//! Demonstration of Event variants that use type(s) from the pallet's configuration trait
+
 #![cfg_attr(not(feature = "std"), no_std)]
 
-/// Event uses types from the pallet's configuration trait
-use frame_support::{decl_event, decl_module, dispatch::DispatchResult};
+use frame_support::{
+	decl_event, decl_module,
+	dispatch::DispatchResult,
+};
 use system::ensure_signed;
 
 #[cfg(test)]
@@ -15,6 +19,8 @@ decl_module! {
 	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
 		fn deposit_event() = default;
 
+		/// A simple call that does little more than emit an event
+		#[weight = 10_000]
 		fn do_something(origin, input: u32) -> DispatchResult {
 			let user = ensure_signed(origin)?;
 
@@ -33,6 +39,7 @@ decl_event!(
 	where
 		AccountId = <T as system::Trait>::AccountId,
 	{
+		/// Some input was sent
 		EmitInput(AccountId, u32),
 	}
 );

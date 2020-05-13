@@ -1,10 +1,15 @@
+//! A pallet that demonstrates caching values from storage in memory
+//! Takeaway: minimize calls to runtime storage
+
 #![cfg_attr(not(feature = "std"), no_std)]
 
-// storage cache example
-// takeaway: minimize calls to runtime storage
 use sp_std::prelude::*;
-use support::{decl_event, decl_module, decl_storage, dispatch::DispatchResult, ensure, StorageValue};
-use system::ensure_signed;
+use frame_support::{
+	decl_event, decl_module, decl_storage,
+	dispatch::DispatchResult,
+	ensure,
+};
+use frame_system::{self as system, ensure_signed};
 
 #[cfg(test)]
 mod tests;
@@ -48,6 +53,7 @@ decl_module! {
 		///  (Copy) inefficient way of updating value in storage
 		///
 		/// storage value -> storage_value * 2 + input_val
+		#[weight = 10_000]
 		fn increase_value_no_cache(origin, some_val: u32) -> DispatchResult {
 			let _ = ensure_signed(origin)?;
 			let original_call = <SomeCopyValue>::get();
@@ -65,6 +71,7 @@ decl_module! {
 		/// (Copy) more efficient value change
 		///
 		/// storage value -> storage_value * 2 + input_val
+		#[weight = 10_000]
 		fn increase_value_w_copy(origin, some_val: u32) -> DispatchResult {
 			let _ = ensure_signed(origin)?;
 			let original_call = <SomeCopyValue>::get();
@@ -81,6 +88,7 @@ decl_module! {
 		/// swaps the king account with Origin::signed() if
 		/// (1) other account is member &&
 		/// (2) existing king isn't
+		#[weight = 10_000]
 		fn swap_king_no_cache(origin) -> DispatchResult {
 			let new_king = ensure_signed(origin)?;
 			let existing_king = <KingMember<T>>::get();
@@ -104,6 +112,7 @@ decl_module! {
 		/// swaps the king account with Origin::signed() if
 		/// (1) other account is member &&
 		/// (2) existing king isn't
+		#[weight = 10_000]
 		fn swap_king_with_cache(origin) -> DispatchResult {
 			let new_king = ensure_signed(origin)?;
 			let existing_king = <KingMember<T>>::get();
@@ -125,22 +134,25 @@ decl_module! {
 		}
 
 		// ---- for testing purposes ----
+		#[weight = 10_000]
 		fn set_copy(origin, val: u32) -> DispatchResult {
 			let _ = ensure_signed(origin)?;
 			<SomeCopyValue>::put(val);
 			Ok(())
 		}
 
+		#[weight = 10_000]
 		fn set_king(origin) -> DispatchResult {
 			let user = ensure_signed(origin)?;
 			<KingMember<T>>::put(user);
 			Ok(())
 		}
 
+		#[weight = 10_000]
 		fn mock_add_member(origin) -> DispatchResult {
 			let added = ensure_signed(origin)?;
 			ensure!(!Self::is_member(&added), "member already in group");
-			<GroupMembers<T>>::append(vec![added])?;
+			<GroupMembers<T>>::append(added);
 			Ok(())
 		}
 	}

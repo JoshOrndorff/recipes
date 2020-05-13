@@ -3,7 +3,11 @@ authors = ['Anonymous']
 build = 'build.rs'
 edition = '2018'
 name = 'rpc-node'
-version = '2.0.0'
+version = '2.0.0-alpha.7'
+homepage = 'https://substrate.dev/recipes'
+repository = 'https://github.com/substrate-developer-hub/recipes'
+description = 'A Substrate node that demonstrates a custom RPC endpoint'
+license = "GPL-3.0-or-later"
 
 [[bin]]
 name = 'rpc-node'
@@ -16,33 +20,34 @@ parking_lot = '0.9.0'
 tokio = '0.1.22'
 trie-root = '0.15.2'
 structopt = "0.3.8"
-runtime = { package = "api-runtime", path = "../../runtimes/api-runtime" }
 jsonrpc-core = "14.0.3"
 jsonrpc-core-client = "14.0.3"
 jsonrpc-derive = "14.0.3"
-sc-rpc = { version = '2.0.0-alpha.5' }
-sc-client-api = '2.0.0-alpha.5'
-sum-storage-rpc = { path = "../../pallets/sum-storage/rpc" }
 ctrlc = { features = ['termination'], version = '3.1.3' }
 futures01 = { package = 'futures', version = '0.1.29'}
-sc-finality-grandpa = '0.8.0-alpha.5'
-sp-finality-grandpa = '2.0.0-alpha.5'
-sc-basic-authorship = '0.8.0-alpha.5'
-sc-cli = '0.8.0-alpha.5'
-sc-client = '0.8.0-alpha.5'
-sc-consensus-aura = '0.8.0-alpha.5'
-sc-executor = '0.8.0-alpha.5'
-sc-network = '0.8.0-alpha.5'
-sc-service = '0.8.0-alpha.5'
-sc-transaction-pool = '2.0.0-alpha.5'
-sp-consensus = '0.8.0-alpha.5'
-sp-consensus-aura = '0.8.0-alpha.5'
-sp-core = '2.0.0-alpha.5'
-sp-inherents = '2.0.0-alpha.5'
-sp-io = '2.0.0-alpha.5'
-sp-runtime = '2.0.0-alpha.5'
-sp-transaction-pool = '2.0.0-alpha.5'
+sc-rpc = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-client-api = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sum-storage-rpc = { path = "../../pallets/sum-storage/rpc" }
+sc-basic-authorship = { version = '0.8.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-cli = { version = '0.8.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-consensus = { version = '0.8.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-consensus-manual-seal = { version = '0.8.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-executor = { version = '0.8.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-network = { version = '0.8.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-service = { version = '0.8.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sc-transaction-pool = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sp-consensus = { version = '0.8.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sp-core = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sp-inherents = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sp-io = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sp-runtime = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sp-timestamp = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+sp-transaction-pool = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }
+
+# RPC Node only works with Runtime's that provide the sum-storage-runtime-api
+# That means it only works with the api-runtime
+runtime = { package = "api-runtime", path = "../../runtimes/api-runtime" }
 
 [build-dependencies]
 vergen = '3.0.4'
-substrate-build-script-utils = '2.0.0-alpha.5'
+substrate-build-script-utils = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72' }

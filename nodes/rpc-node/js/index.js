@@ -1,33 +1,36 @@
 // A demonstration of interacting with custom RPCs using Polkadot js API
 
 const { ApiPromise, WsProvider } = require('@polkadot/api');
+const { readFileSync } = require('fs');
 
 // Construct parameters for API instance
 const wsProvider = new WsProvider('ws://localhost:9944');
-const types = {};
+const types = JSON.parse(readFileSync('../../../runtimes/super-runtime/types.json', 'utf8'));
 const rpc = {
-  silly: [
-    {
+  silly: {
+    seven: {
       description: "Always returns 7",
-      name: "seven",
       params: [],
       type: "u32",
     },
-    {
+    double: {
       description: "Doubles the parameter",
-      name: "double",
-      params: ["u32"],
+      params: [
+        {
+          name: "val",
+          type: "u32",
+        }
+      ],
       type: "u32",
     }
-  ],
-  sumStorage: [
-    {
+  },
+  sumStorage: {
+    getSum: {
       description: "Gets the sum of the two storage values in sum-storage pallet via a runtime api.",
-      name: "getSum",
       params: [],
       type: "u32",
     }
-  ]
+  }
 }
 
 async function main() {
@@ -45,8 +48,8 @@ async function main() {
   console.log(`The double of 7 according to silly_double is ${silly14}\n`);
 
   // Query raw storage values, the oldschool way
-  const v1 = ( await api.query.sumStorage.thing1() ).unwrap().toNumber();
-  const v2 = ( await api.query.sumStorage.thing2() ).unwrap().toNumber();
+  const v1 = ( await api.query.sumStorage.thing1() ).toNumber();
+  const v2 = ( await api.query.sumStorage.thing2() ).toNumber();
   console.log(`The individual storage values are ${v1}, and ${v2}.`);
   console.log(`The sum calculated in javascript is ${v1 + v2}\n`);
 

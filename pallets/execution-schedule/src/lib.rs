@@ -1,5 +1,7 @@
+//! Scheduling execution of dispatchable calls at future blocks
+
 #![cfg_attr(not(feature = "std"), no_std)]
-//! Scheduling Execution
+
 use sp_std::prelude::*;
 use sp_runtime::{traits::Zero, RuntimeDebug};
 use frame_support::{
@@ -8,6 +10,7 @@ use frame_support::{
 	dispatch::{DispatchResult, DispatchError},
 	ensure,
 	traits::Get,
+	weights::Weight,
 };
 use frame_system::{self as system, ensure_signed};
 
@@ -95,7 +98,7 @@ decl_module! {
 		/// After the last block's on_finalize, the logic expressed in this method
 		/// is executed before the logic in the next block.
 		/// - This allows us to start from 0 for all tasks
-		fn on_initialize(n: T::BlockNumber) {
+		fn on_initialize(n: T::BlockNumber) -> Weight {
 			let batch_frequency = T::ExecutionFrequency::get();
 			if ((n - 1.into()) % batch_frequency).is_zero() {
 				let last_era = Era::get();
@@ -114,12 +117,15 @@ decl_module! {
 				});
 				Self::deposit_event(RawEvent::SignalRefreshed(n));
 			}
+
+			Weight::default()
 		}
 
 		/// Schedule Task for Batch Execution
 		///
 		/// - the task initially has no priority
 		/// - only council members can schedule tasks
+		#[weight = 10_000]
 		fn schedule_task(origin, data: Vec<u8>) -> DispatchResult {
 			let proposer = ensure_signed(origin)?;
 			ensure!(Self::is_on_council(&proposer), "only members of the council can schedule tasks");
@@ -148,6 +154,7 @@ decl_module! {
 		///
 		/// - members of the council have limited voting power to increase the priority
 		/// of tasks
+		#[weight = 10_000]
 		fn signal_priority(origin, id: TaskId, signal: PriorityScore) -> DispatchResult {
 			let voter = ensure_signed(origin)?;
 			ensure!(Self::is_on_council(&voter), "The voting member must be on the council");

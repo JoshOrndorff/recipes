@@ -16,11 +16,12 @@ theme = "src/theme"
 
 [output.linkcheck]
 follow-web-links = true
+warning-policy = "warn"
 exclude = [
 	# A few one-off sites that load fine in browser but trip up the link checker with 404
 	"https://crates.io/",
 	"www4\\.comp\\.polyu\\.edu\\.hk/~csxluo/",
-
+	"www.cse.huji.ac.il/~nati/",
 	# Links to code in new recipe PRs always fail because the code is not merged yet
 	"github\\.com/substrate-developer-hub/recipes/tree/",
 ]

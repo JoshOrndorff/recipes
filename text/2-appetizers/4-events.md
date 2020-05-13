@@ -64,6 +64,9 @@ This example also demonstrates how the `where` clause can be used to specify typ
 
 Events are emitted from dispatchable calls using the `deposit_event` method.
 
+> Events are not emitted on block 0. So any dispatchable calls made during genesis block formation
+> will have no events emitted.
+
 ### Simple Events
 
 The event is emitted at the bottom of the `do_something` function body.

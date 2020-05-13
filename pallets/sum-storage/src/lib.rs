@@ -5,7 +5,10 @@
 //! This pallet supports a runtime API which will allow querying the runtime for the sum of
 //! the two storage items.
 
-use frame_support::{decl_module, decl_storage, decl_event, dispatch};
+use frame_support::{
+	decl_module, decl_storage, decl_event,
+	dispatch,
+};
 use frame_system::{self as system, ensure_signed};
 
 #[cfg(test)]
@@ -30,6 +33,8 @@ decl_module! {
 	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
 		fn deposit_event() = default;
 
+		/// Sets the first simple storage value
+		#[weight = 10_000]
 		pub fn set_thing_1(origin, val: u32) -> dispatch::DispatchResult {
 			let _ = ensure_signed(origin)?;
 
@@ -39,6 +44,8 @@ decl_module! {
 			Ok(())
 		}
 
+		/// Sets the second stored value
+		#[weight = 10_000]
 		pub fn set_thing_2(origin, val: u32) -> dispatch::DispatchResult {
 			let _ = ensure_signed(origin)?;
 

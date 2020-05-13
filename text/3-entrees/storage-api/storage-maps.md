@@ -16,22 +16,22 @@ decl_storage! {
 ```
 
 Much of this should look familiar to you from storage values. Reading the line from left to right we have:
-* `StorageMap` - the name of the storage map
+* `SimpleMap` - the name of the storage map
 * `get(fn simple_map)` - the name of a getter function that will return values from the map.
 * `: map hasher(blake2_128_concat)` - beginning of the type declaration. This is a map and it will use the [`blake2_128_concat`](https://substrate.dev/rustdocs/master/frame_support/trait.Hashable.html#tymethod.blake2_128_concat) hasher. More on this below.
 * `T::AccountId => u32` - The specific key and value tyes of the map. This is a map from `AccountId`s to `u32`s.
 
 ## Choosing a Hasher
 
-Although the syntax above is complex, most of it should be straightforward if you've understood the recipe on storage values. The last unfamiliar piece of writing a storage map is choosing which hasher to use. In general you should choose one of the three following hashers. The coice of hasher will affect the performance and security of your chain. If you don't want to think much about this, just choose `blake2_128_concat` and skip to the next section.
+Although the syntax above is complex, most of it should be straightforward if you've understood the recipe on storage values. The last unfamiliar piece of writing a storage map is choosing which hasher to use. In general you should choose one of the three following hashers. The choice of hasher will affect the performance and security of your chain. If you don't want to think much about this, just choose `blake2_128_concat` and skip to the next section.
 
 ### `blake2_128_concat`
 
-This is a cryptographically secure hash function, and is always safe to use. If is reasonably efficient, and will keep your storage tree balanced. You _must_ choose this hasher if users of your chain have the ability to affect the storage keys. In this pallet, the keys are `AccountId`s. At first it may _seem_ that the user doesn't affect the `AccountId`, but in reality a malicious user can generate thousands of accounts and use the one that will affect the chain's storage tree in the way the attacker likes. For this reason, we have chosen to use the `blake2_128_concat` hasher.
+This is a cryptographically secure hash function, and is always safe to use. It is reasonably efficient, and will keep your storage tree balanced. You _must_ choose this hasher if users of your chain have the ability to affect the storage keys. In this pallet, the keys are `AccountId`s. At first it may _seem_ that the user doesn't affect the `AccountId`, but in reality a malicious user can generate thousands of accounts and use the one that will affect the chain's storage tree in the way the attacker likes. For this reason, we have chosen to use the `blake2_128_concat` hasher.
 
 ### `twox_64_concat`
 
-This hasher is _not_ cryptographically secure, but is even more efficient than blake2. Thus it represents trading security for performance. You should _not_ use this hasher if chain users can affect the storage keys. However, it is perfectly safe to use this hasher to gain performance in scenarios where the users do not control the keys. For example, if the keys in your map are sequentially increasing indices and users cannot cause the indices to rapidly increase, then this is a perfectly reasonable choice.
+This hasher is _not_ cryptographically secure, but is more efficient than blake2. Thus it represents trading security for performance. You should _not_ use this hasher if chain users can affect the storage keys. However, it is perfectly safe to use this hasher to gain performance in scenarios where the users do not control the keys. For example, if the keys in your map are sequentially increasing indices and users cannot cause the indices to rapidly increase, then this is a perfectly reasonable choice.
 
 ### `identity`
 
@@ -55,4 +55,4 @@ let entry = <SimpleMap<T>>::take(&user);
 <SimpleMap<T>>::contains_key(&user)
 ```
 
-The rest of the API is documented in the rustdocs on the [`StorageMap` trait](https://substrate.dev/rustdocs/master/frame_support/storage/trait.StorageMap.html). You do not need to explicitly `use` this trait because the `decl_storage!` macro will do it for you in you use a storage map.
+The rest of the API is documented in the rustdocs on the [`StorageMap` trait](https://substrate.dev/rustdocs/master/frame_support/storage/trait.StorageMap.html). You do not need to explicitly `use` this trait because the `decl_storage!` macro will do it for you if you use a storage map.

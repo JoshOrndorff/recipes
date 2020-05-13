@@ -1,14 +1,15 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
-// Transaction Weight Examples
-// https://substrate.dev/rustdocs/master/sp_runtime/weights/index.html
-use support::{
+//! Transaction Weight Examples
+
+use frame_support::{
 	ensure,
 	decl_module,
 	decl_storage,
 	dispatch::{DispatchResult, WeighData, PaysFee},
-	weights::{ DispatchClass, Weight, ClassifyDispatch, SimpleDispatchInfo},
+	weights::{ DispatchClass, Weight, ClassifyDispatch, Pays},
 };
+use frame_system as system;
 
 pub trait Trait: system::Trait {}
 
@@ -29,15 +30,15 @@ impl WeighData<(&u32,)> for Linear {
 
 		// Use saturation so that an extremely large parameter value
 		// Does not cause overflow.
-		x.saturating_mul(self.0)
+		x.saturating_mul(self.0).into()
 	}
 }
 
 // The PaysFee trait indicates whether fees should actually be charged from the caller. If not,
 // the weights are still applied toward the block maximums.
 impl<T> PaysFee<T> for Linear {
-	fn pays_fee(&self, _: T) -> bool {
-		true
+	fn pays_fee(&self, _: T) -> Pays {
+		Pays::Yes
 	}
 }
 
@@ -62,7 +63,7 @@ impl WeighData<(&u32, &u32)> for Quadratic {
 		let by = y.saturating_mul(self.1);
 		let c = self.2;
 
-		ax2.saturating_add(by).saturating_add(c)
+		ax2.saturating_add(by).saturating_add(c).into()
 	}
 }
 
@@ -74,8 +75,8 @@ impl<T> ClassifyDispatch<T> for Quadratic {
 }
 
 impl<T> PaysFee<T> for Quadratic {
-	fn pays_fee(&self, _: T) -> bool {
-		true
+	fn pays_fee(&self, _: T) -> Pays {
+		Pays::Yes
 	}
 }
 
@@ -92,13 +93,13 @@ impl WeighData<(&bool, &u32)> for Conditional {
 		}
 		else {
 			self.0
-		}
+		}.into()
 	}
 }
 
 impl<T> PaysFee<T> for Conditional {
-	fn pays_fee(&self, _: T) -> bool {
-		true
+	fn pays_fee(&self, _: T) -> Pays {
+		Pays::Yes
 	}
 }
 
@@ -113,9 +114,9 @@ decl_module! {
 	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
 
 		// Store value does not loop at all so a fixed weight is appropriate. Fixed weights can
-		// be assigned using types available in the Substrate framework. No custom coding is
+		// be assigned using integer constants. No custom coding is
 		// necessary.
-		#[weight = SimpleDispatchInfo::FixedNormal(100)]
+		#[weight = 10_000]
 		fn store_value(_origin, entry: u32) -> DispatchResult {
 
 			StoredValue::put(entry);

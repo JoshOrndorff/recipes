@@ -6,8 +6,8 @@ use sp_runtime::{
 	traits::{BlakeTwo256, IdentityLookup},
 	Perbill,
 };
-use support::{assert_ok, assert_err, impl_outer_event, impl_outer_origin, parameter_types};
-use system as system;
+use frame_support::{assert_ok, assert_err, impl_outer_event, impl_outer_origin, parameter_types};
+use frame_system as system;
 
 impl_outer_origin! {
 	pub enum Origin for TestRuntime {}
@@ -35,6 +35,9 @@ impl system::Trait for TestRuntime {
 	type Event = TestEvent;
 	type BlockHashCount = BlockHashCount;
 	type MaximumBlockWeight = MaximumBlockWeight;
+	type DbWeight = ();
+	type BlockExecutionWeight = ();
+	type ExtrinsicBaseWeight = ();
 	type MaximumBlockLength = MaximumBlockLength;
 	type AvailableBlockRatio = AvailableBlockRatio;
 	type Version = ();
@@ -69,7 +72,9 @@ impl ExtBuilder {
 		let storage = system::GenesisConfig::default()
 			.build_storage::<TestRuntime>()
 			.unwrap();
-		sp_io::TestExternalities::from(storage)
+		let mut ext = sp_io::TestExternalities::from(storage);
+		ext.execute_with(|| System::set_block_number(1));
+		ext
 	}
 }
 

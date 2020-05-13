@@ -3,7 +3,10 @@
 //! Adding Machine
 //! A simple adding machine which checks for overflow and unlucky numbers.
 //! Throws errors accordingly
-use frame_support::{decl_error, decl_module, decl_storage, ensure, dispatch::DispatchResult};
+use frame_support::{
+	decl_error, decl_module, decl_storage, ensure,
+	dispatch::DispatchResult,
+};
 use system::ensure_signed;
 
 #[cfg(test)]
@@ -29,6 +32,10 @@ decl_error! {
 decl_module! {
 	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
 
+		/// Adds the supplies value to the stored value.
+		/// Checks for unlucky number 13.
+		/// Checks for addition overflow using an explicit match
+		#[weight = 10_000]
 		fn add(origin, val_to_add: u32) -> DispatchResult {
 			let _ = ensure_signed(origin)?;
 
@@ -47,7 +54,10 @@ decl_module! {
 			Ok(())
 		}
 
-		// To demonstrate another way of handling error
+		/// Adds the supplies value to the stored value.
+		/// Checks for unlucky number 13.
+		/// Checks for addition overflow concisely using `ok_or`
+		#[weight = 10_000]
 		fn add_alternate(origin, val_to_add: u32) -> DispatchResult {
 			let _ = ensure_signed(origin)?;
 
@@ -61,6 +71,8 @@ decl_module! {
 			Ok(())
 		}
 
+		/// Resets the stoage value to zero
+		#[weight = 10_000]
 		fn reset(origin) -> DispatchResult {
 			let _ = ensure_signed(origin)?;
 

@@ -1,6 +1,6 @@
 use crate::*;
 use parking_lot::{RwLock};
-use codec::{
+use parity_scale_codec::{
 	Decode,
 	alloc::sync::{Arc}
 };
@@ -9,7 +9,8 @@ use frame_support::{
 };
 use sp_io::TestExternalities;
 use sp_core::{
-	H256, sr25519,
+	H256,
+	sr25519::{self, Signature},
 	offchain::{OffchainExt, TransactionPoolExt,
 		testing::{self, PoolState, OffchainState},
 	},
@@ -18,7 +19,7 @@ use sp_core::{
 };
 use sp_runtime::{
 	testing::{Header, TestXt},
-	traits::{BlakeTwo256, IdentityLookup},
+	traits::{BlakeTwo256, IdentityLookup, Verify},
 	Perbill,
 };
 
@@ -59,6 +60,9 @@ impl system::Trait for TestRuntime {
 	type Event = TestEvent;
 	type BlockHashCount = BlockHashCount;
 	type MaximumBlockWeight = MaximumBlockWeight;
+	type DbWeight = ();
+	type BlockExecutionWeight = ();
+	type ExtrinsicBaseWeight = ();
 	type MaximumBlockLength = MaximumBlockLength;
 	type AvailableBlockRatio = AvailableBlockRatio;
 	type Version = ();
@@ -71,36 +75,41 @@ impl system::Trait for TestRuntime {
 // --- mocking offchain-demo trait
 
 type TestExtrinsic = TestXt<Call<TestRuntime>, ()>;
-type SubmitTransaction = system::offchain::TransactionSubmitter<
-	crypto::Public,
-	TestRuntime,
-	TestExtrinsic
->;
 
 parameter_types! {
-	pub const GracePeriod: u64 = 2;
+	pub const UnsignedPriority: u64 = 100;
 }
 
 impl Trait for TestRuntime {
+	type AuthorityId = crypto::TestAuthId;
 	type Call = Call<TestRuntime>;
 	type Event = TestEvent;
-	type GracePeriod = GracePeriod;
-	type SubmitSignedTransaction = SubmitTransaction;
-	type SubmitUnsignedTransaction = SubmitTransaction;
+	type UnsignedPriority = UnsignedPriority;
 }
 
-impl system::offchain::CreateTransaction<TestRuntime, TestExtrinsic> for TestRuntime {
-	type Public = sr25519::Public;
-	type Signature = sr25519::Signature;
-
-	fn create_transaction<TSigner: system::offchain::Signer<Self::Public, Self::Signature>> (
+impl<LocalCall> system::offchain::CreateSignedTransaction<LocalCall> for TestRuntime where
+	Call<TestRuntime>: From<LocalCall>
+{
+	fn create_transaction<C: frame_system::offchain::AppCrypto<Self::Public, Self::Signature>> (
 		call: Call<TestRuntime>,
-		_public: Self::Public,
+		_public: <Signature as Verify>::Signer,
 		_account: <TestRuntime as system::Trait>::AccountId,
 		index: <TestRuntime as system::Trait>::Index,
 	) -> Option<(Call<TestRuntime>, <TestExtrinsic as sp_runtime::traits::Extrinsic>::SignaturePayload)> {
 		Some((call, (index, ())))
 	}
+}
+
+impl frame_system::offchain::SigningTypes for TestRuntime {
+	type Public = <Signature as Verify>::Signer;
+	type Signature = Signature;
+}
+
+impl<C> frame_system::offchain::SendTransactionTypes<C> for TestRuntime where
+	Call<TestRuntime>: From<C>,
+{
+	type OverarchingCall = Call<TestRuntime>;
+	type Extrinsic = TestExtrinsic;
 }
 
 pub type System = system::Module<TestRuntime>;
@@ -128,7 +137,7 @@ impl ExtBuilder {
 		t.register_extension(OffchainExt::new(offchain));
 		t.register_extension(TransactionPoolExt::new(pool));
 		t.register_extension(KeystoreExt(keystore));
-
+		t.execute_with(|| System::set_block_number(1));
 		(t, pool_state, offchain_state)
 	}
 }
@@ -143,10 +152,6 @@ fn submit_number_signed_works() {
 		assert_ok!(OffchainDemo::submit_number_signed(Origin::signed(acct), num));
 		// A number is inserted to <Numbers> vec
 		assert_eq!(<Numbers>::get(), vec![num]);
-		// storage <NextTx> is incremented
-		assert_eq!(<NextTx<TestRuntime>>::get(), <TestRuntime as Trait>::GracePeriod::get());
-		// AddSeq is incremented
-		assert_eq!(<AddSeq>::get(), 1);
 		// An event is emitted
 		assert!(System::events().iter().any(|er| er.event ==
 			TestEvent::offchain_demo(RawEvent::NewNumber(Some(acct), num))));
@@ -156,10 +161,6 @@ fn submit_number_signed_works() {
 		assert_ok!(OffchainDemo::submit_number_signed(Origin::signed(acct), num2));
 		// A number is inserted to <Numbers> vec
 		assert_eq!(<Numbers>::get(), vec![num, num2]);
-		// storage <NextTx> is incremented
-		assert_eq!(<NextTx<TestRuntime>>::get(), <TestRuntime as Trait>::GracePeriod::get() * 2);
-		// AddSeq is incremented
-		assert_eq!(<AddSeq>::get(), 2);
 	});
 }
 
@@ -170,7 +171,7 @@ fn offchain_send_signed_tx() {
 	t.execute_with(|| {
 		// when
 		let num = 32;
-		OffchainDemo::send_signed(num).unwrap();
+		OffchainDemo::signed_submit_number(num).unwrap();
 		// then
 		let tx = pool_state.write().transactions.pop().unwrap();
 		assert!(pool_state.read().transactions.is_empty());
@@ -187,7 +188,7 @@ fn offchain_send_unsigned_tx() {
 	t.execute_with(|| {
 		// when
 		let num = 32;
-		OffchainDemo::send_unsigned(num).unwrap();
+		OffchainDemo::unsigned_submit_number(num).unwrap();
 		// then
 		let tx = pool_state.write().transactions.pop().unwrap();
 		assert!(pool_state.read().transactions.is_empty());

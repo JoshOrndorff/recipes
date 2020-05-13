@@ -34,6 +34,9 @@ impl system::Trait for TestRuntime {
 	type Event = TestEvent;
 	type BlockHashCount = BlockHashCount;
 	type MaximumBlockWeight = MaximumBlockWeight;
+	type DbWeight = ();
+	type BlockExecutionWeight = ();
+	type ExtrinsicBaseWeight = ();
 	type MaximumBlockLength = MaximumBlockLength;
 	type AvailableBlockRatio = AvailableBlockRatio;
 	type Version = ();
@@ -68,7 +71,9 @@ impl ExtBuilder {
 		let storage = system::GenesisConfig::default()
 			.build_storage::<TestRuntime>()
 			.unwrap();
-		TestExternalities::from(storage)
+		let mut ext = TestExternalities::from(storage);
+		ext.execute_with(|| System::set_block_number(1));
+		ext
 	}
 }
 
