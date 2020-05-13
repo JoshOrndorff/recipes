@@ -384,6 +384,7 @@ checksum = "b41b7ea54a0c9d92199de89e20e58d49f02f8e699814ef3fdf266f6f748d15c7"
 name = "basic-pow"
 version = "2.0.0-alpha.7"
 dependencies = [
+ "frameless-runtime",
  "futures 0.3.5",
  "log",
  "parity-scale-codec",
@@ -409,7 +410,6 @@ dependencies = [
  "sp-transaction-pool",
  "structopt",
  "substrate-build-script-utils",
- "super-runtime",
  "vergen",
 ]
 
@@ -2793,6 +2793,7 @@ dependencies = [
 name = "manual-seal"
 version = "2.0.0-alpha.7"
 dependencies = [
+ "frameless-runtime",
  "futures 0.3.5",
  "jsonrpc-core",
  "log",
@@ -2818,7 +2819,6 @@ dependencies = [
  "sp-transaction-pool",
  "structopt",
  "substrate-build-script-utils",
- "super-runtime",
  "vergen",
 ]
 
