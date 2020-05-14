@@ -32,7 +32,8 @@ use sp_runtime::{
 		Verify,
 	}
 };
-
+//TODO this is a weird import. Is this correct?
+use sp_block_builder::runtime_decl_for_BlockBuilder::BlockBuilder;
 use sp_storage::well_known_keys;
 
 #[cfg(any(feature = "std", test))]
@@ -200,6 +201,8 @@ impl_runtime_apis! {
 		}
 
 		fn execute_block(block: Block) {
+			Self::initialize_block(&block.header);
+
 			for transaction in block.extrinsics {
 				let previous_state = sp_io::storage::get(&ONLY_KEY)
 					.map(|bytes| <bool as Decode>::decode(&mut &*bytes).unwrap_or(false))
@@ -213,6 +216,8 @@ impl_runtime_apis! {
 
 				sp_io::storage::set(&ONLY_KEY, &next_state.encode());
 			}
+
+			Self::finalize_block();
 		}
 
 		fn initialize_block(header: &<Block as BlockT>::Header) {
