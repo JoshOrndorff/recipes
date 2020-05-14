@@ -1,15 +1,17 @@
-name: Test
+name: Test Code
 
 on:
   pull_request:
     branches:
     - master
+    - develop
   push:
     branches:
     - master
+    -develop
 
 jobs:
-  build:
+  test-code:
     runs-on: ubuntu-18.04
 
     steps:
