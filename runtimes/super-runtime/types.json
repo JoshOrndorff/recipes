@@ -1,7 +1,6 @@
 {
   "Address": "AccountId",
   "LookupSource": "AccountId",
-  "Weight": "u32",
   "ContinuousAccountData": {
     "principal": "u64",
     "deposit_date": "BlockNumber"

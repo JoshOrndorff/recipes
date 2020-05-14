@@ -13,8 +13,8 @@ const ALICE = '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY';
 const BOB = '5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty';
 
 // The number of transactions to send and the delay between sending them.
-const num_txs = 3;
-const delay = 1000; //milliseconds
+const num_txs = 20;
+const delay = 2; //milliseconds
 
 async function main() {
   // Construct the actual api
@@ -28,12 +28,12 @@ async function main() {
   const alice = keyring.addFromUri('//Alice');
 
 	// Read the initial nonce from chain state
-	let initial_nonce = (await api.query.system.account(ALICE)).nonce;
-	console.log(initial_nonce);
+	let initial_nonce = (await api.query.system.account(ALICE)).nonce.toNumber();
+	let final_nonce = initial_nonce + num_txs;
 
   // Initialize nonce to 0. We will manage nonce manually to ensure transactions are all valid
   // and reduce roundtrips to the node.
-  for (let nonce = initial_nonce; nonce < initial_nonce + num_txs; nonce++) {
+  for (let nonce = initial_nonce; nonce < final_nonce; nonce++) {
 		console.log("Kicking off transaction with nonce " + nonce);
 
     // Transfer 1 token to bob
