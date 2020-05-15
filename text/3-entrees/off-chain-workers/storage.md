@@ -6,9 +6,9 @@ Remember we mentioned that off-chain workers (short for **ocw** below) cannot wr
 
 Fortunately, there is also a local storage that persist across runs in off-chain workers. Storage is local within off-chain workers and not passed within network. Storage of off-chain workers is persisted across runs of off-chain workers and blockchain re-organizations.
 
-Off-chain workers are asynchronously run during block import. Since ocws are not limited how long they run, at any single instance there could be multiple ocws running, being initiated by the previous block imports. See diagram below.
+Off-chain workers are asynchronously run during block import. Since ocws are not limited by how long they run, at any single instance there could be multiple ocws running, being initiated by previous block imports. See diagram below.
 
-[!TK: insert image of multiple ocw from previous block imports].
+![More than one off-chain workers at a single instance](/img/multiple-ocws.png)
 
 The storage has a similar API usage as on-chain [`StorageValue`](/2-appetizers/2-storage-values.html) with `get`, `set`, and `mutate`. `mutate` is using a [`compare-and-set`](https://en.wikipedia.org/wiki/Compare-and-swap) pattern. It compares the contents of a memory location with a given value and, only if they are the same, modifies the contents of that memory location to a new given value. This is done as a single atomic operation. The atomicity guarantees that the new value is calculated based on up-to-date information; if the value had been updated by another thread in the meantime, the write would fail.
 
