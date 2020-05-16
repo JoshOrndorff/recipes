@@ -1,5 +1,6 @@
 //! Generating (insecure) randomness
 #![cfg_attr(not(feature = "std"), no_std)]
+#![allow(clippy::string_lit_as_bytes)]
 
 use sp_core::H256;
 use frame_support::{

@@ -2,6 +2,7 @@
 //! Takeaway: minimize calls to runtime storage
 
 #![cfg_attr(not(feature = "std"), no_std)]
+#![allow(clippy::string_lit_as_bytes)]
 
 use sp_std::prelude::*;
 use frame_support::{
