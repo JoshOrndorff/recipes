@@ -52,7 +52,14 @@ macro_rules! new_full_start {
 					prometheus_registry,
 				))
 			})?
-			.with_import_queue(|_config, client, select_chain, _transaction_pool, spawn_task_handle| {
+			.with_import_queue(|
+				_config,
+				client,
+				select_chain,
+				_transaction_pool,
+				spawn_task_handle,
+				registry
+			| {
 
 				let pow_block_import = sc_consensus_pow::PowBlockImport::new(
 					client.clone(),
@@ -70,6 +77,7 @@ macro_rules! new_full_start {
 					sha3pow::MinimalSha3Algorithm,
 					inherent_data_providers.clone(),
 					spawn_task_handle,
+					registry,
 				)?;
 
 				import_setup = Some(pow_block_import);
@@ -157,7 +165,16 @@ pub fn new_light(config: Configuration)
 			);
 			Ok(pool)
 		})?
-		.with_import_queue_and_fprb(|_config, client, _backend, _fetcher, select_chain, _tx_pool, spawn_task_handle| {
+		.with_import_queue_and_fprb(|
+			_config,
+			client,
+			_backend,
+			_fetcher,
+			select_chain,
+			_tx_pool,
+			spawn_task_handle,
+			registry
+		| {
 			let finality_proof_request_builder =
 				Box::new(DummyFinalityProofRequestBuilder::default()) as Box<_>;
 
@@ -177,6 +194,7 @@ pub fn new_light(config: Configuration)
 				MinimalSha3Algorithm,
 				build_inherent_data_providers()?,
 				spawn_task_handle,
+				registry,
 			)?;
 
 			Ok((import_queue, finality_proof_request_builder))

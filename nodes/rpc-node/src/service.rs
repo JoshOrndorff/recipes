@@ -34,10 +34,18 @@ macro_rules! new_full_start {
 				let pool_api = sc_transaction_pool::FullChainApi::new(client.clone());
 				Ok(sc_transaction_pool::BasicPool::new(config, std::sync::Arc::new(pool_api), prometheus_registry))
 			})?
-			.with_import_queue(|_config, client, _select_chain, _transaction_pool, spawn_task_handle| {
+			.with_import_queue(|
+				_config,
+				client,
+				_select_chain,
+				_transaction_pool,
+				spawn_task_handle,
+				registry
+			| {
 				Ok(sc_consensus_manual_seal::import_queue(
 					Box::new(client),
 					spawn_task_handle,
+					registry,
 				))
 			})?
 			.with_rpc_extensions(|builder| -> Result<RpcExtension, _> {
@@ -114,13 +122,23 @@ pub fn new_light(config: Configuration)
 			);
 			Ok(pool)
 		})?
-		.with_import_queue_and_fprb(|_config, client, _backend, _fetcher, _select_chain, _tx_pool, spawn_task_handle| {
+		.with_import_queue_and_fprb(|
+			_config,
+			client,
+			_backend,
+			_fetcher,
+			_select_chain,
+			_tx_pool,
+			spawn_task_handle,
+			registry
+		| {
 			let finality_proof_request_builder =
 				Box::new(DummyFinalityProofRequestBuilder::default()) as Box<_>;
 
 			let import_queue = sc_consensus_manual_seal::import_queue(
 				Box::new(client),
 				spawn_task_handle,
+				registry,
 			);
 
 			Ok((import_queue, finality_proof_request_builder))
