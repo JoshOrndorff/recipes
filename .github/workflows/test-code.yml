@@ -44,6 +44,7 @@ jobs:
         toolchain: nightly-2020-05-07
         components: rustfmt, clippy
         target: wasm32-unknown-unknown
+        override: true
         default: true
 
     - name: Run clippy
