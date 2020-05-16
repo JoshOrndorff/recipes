@@ -43,7 +43,7 @@ jobs:
         profile: minimal
         toolchain: nightly-2020-05-07
         components: rustfmt, clippy
-        target: wasm32-unknown-unknown, nightly-x86_64-unknown-linux-gnu
+        target: wasm32-unknown-unknown
         default: true
 
     - name: Run clippy
