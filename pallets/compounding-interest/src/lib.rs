@@ -1,4 +1,5 @@
 #![cfg_attr(not(feature = "std"), no_std)]
+#![allow(clippy::string_lit_as_bytes)]
 
 //! A pallet that demonstrates Fixed Point arithmetic in the context of two simple bank accounts
 //! that accrue compounding interest.
@@ -182,7 +183,7 @@ impl<T: Trait> Module<T> {
 			.expect("blockchain will not exceed 2^32 blocks; qed");
 		let elapsed_time_i32f32 = I32F32::from_num(elapsed_time_u32);
 		let exponent : I32F32 = Self::continuous_interest_rate() * elapsed_time_i32f32;
-		let exp_result : I32F32 = exp(exponent).ok()
+		let exp_result : I32F32 = exp(exponent)
 			.expect("Interest will not overflow account (at least not until the learner has learned enough about fixed point :)");
 
 		// Return the result interest = principal * e ^ (rate * time)

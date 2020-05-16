@@ -5,6 +5,7 @@
 //! `remove_prefix` enables clean removal of all values with the group identifier
 
 #![cfg_attr(not(feature = "std"), no_std)]
+#![allow(clippy::string_lit_as_bytes)]
 
 #[cfg(test)]
 mod tests;
@@ -61,7 +62,7 @@ decl_module! {
 		fn join_all_members(origin) -> DispatchResult {
 			let new_member = ensure_signed(origin)?;
 			ensure!(!Self::is_member(&new_member), "already a member, can't join");
-			<AllMembers<T>>::append(&new_member.clone());
+			<AllMembers<T>>::append(&new_member);
 
 			Self::deposit_event(RawEvent::NewMember(new_member));
 			Ok(())

@@ -1,6 +1,7 @@
 //! An example instantiable pallet (with default instance)
 
 #![cfg_attr(not(feature = "std"), no_std)]
+#![allow(clippy::string_lit_as_bytes)]
 
 use frame_support::{
 	decl_event, decl_module, decl_storage,
