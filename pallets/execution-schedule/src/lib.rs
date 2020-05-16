@@ -1,6 +1,7 @@
 //! Scheduling execution of dispatchable calls at future blocks
 
 #![cfg_attr(not(feature = "std"), no_std)]
+#![allow(clippy::string_lit_as_bytes)]
 
 use sp_std::prelude::*;
 use sp_runtime::{traits::Zero, RuntimeDebug};
@@ -105,7 +106,7 @@ decl_module! {
 				// clean up the previous double_map with this last_era group index
 				<SignalBank<T>>::remove_prefix(&last_era);
 				// unlikely to overflow so no checked_add
-				let next_era: RoundIndex = last_era + (1u32 as RoundIndex);
+				let next_era: RoundIndex = last_era + 1;
 				Era::put(next_era);
 
 				// get the SignalQuota for each `ExecutionFrequency` period
@@ -204,7 +205,7 @@ impl<T: Trait> Module<T> {
 	pub fn execute_tasks(n: T::BlockNumber) {
 		// task limit in terms of priority allowed to be executed every period
 		let mut task_allowance = T::TaskLimit::get();
-		let mut execution_q = <ExecutionQueue>::get().clone();
+		let mut execution_q = <ExecutionQueue>::get();
 		execution_q.sort_unstable();
 		execution_q.into_iter().for_each(|task_id| {
 			if let Some(task) = <PendingTasks<T>>::get(&task_id) {
