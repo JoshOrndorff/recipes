@@ -47,7 +47,7 @@ jobs:
         default: true
 
     - name: Run clippy
-      run: cargo clippy -- -D warnings
+      run: cargo +nightly clippy -- -D warnings
 
     - name: Check Kitchen
       run: cargo check --all
