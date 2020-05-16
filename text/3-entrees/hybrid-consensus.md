@@ -1,7 +1,7 @@
 #Hybrid Consensus
 *[`nodes/hybrid-consensus`](https://github.com/substrate-developer-hub/recipes/tree/master/nodes/hybrid-consensus)*
 
-This recipe demonstrates a Substrate-based node that employs hybrid consensus. Specifically, it uses [Sha3 Proof of Work](./sha3-pow-consensus) to dictate block authoring, and the [Grandpa](https://substrate.dev/rustdocs/master/sc_finality_grandpa/index.html) finality gadget to provide [deterministic finality](https://www.substrate.io/kb/advanced/consensus#finality). The minimal proof of work consensus lives entirely outside of the runtime while the grandpa finality obtains its authorities from the runtime via the [GrandpaAPI](https://substrate.dev/rustdocs/master/sp_finality_grandpa/trait.GrandpaApi.html)
+This recipe demonstrates a Substrate-based node that employs hybrid consensus. Specifically, it uses [Sha3 Proof of Work](./sha3-pow-consensus.md) to dictate block authoring, and the [Grandpa](https://substrate.dev/rustdocs/master/sc_finality_grandpa/index.html) finality gadget to provide [deterministic finality](https://www.substrate.io/kb/advanced/consensus#finality). The minimal proof of work consensus lives entirely outside of the runtime while the grandpa finality obtains its authorities from the runtime via the [GrandpaAPI](https://substrate.dev/rustdocs/master/sp_finality_grandpa/trait.GrandpaApi.html)
 
 ## The Block Import Pipeline
 
