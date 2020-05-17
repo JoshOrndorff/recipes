@@ -48,7 +48,7 @@ If you would like to make a change or addition to the recipes, you do not need a
 
 ### What to Contribute
 
-Anything you think will make the Recipes better, is worth proposing. Here are some ideas to get you started.
+Anything you think will make the Recipes better, is worth proposing. Here are some ideas to get you started. All of these ideas and more are listed in our [issue queue](https://github.com/substrate-developer-hub/recipes/issues)
 
 * **Test Coverage** - Not all code is covered, and not all covered code is covered well, but we would like more and better coverage.
 * **New recipes** - If you know how to do something useful in Substrate that is not yet covered in the Recipes, please contribute.
