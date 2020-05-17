@@ -5,8 +5,7 @@
 //! 2. establish ownership upon configuration of circulating tokens
 //! 3. coordinate token transfers with the runtime functions
 use frame_support::{
-	decl_event, decl_module, decl_error, decl_storage, ensure,
-	dispatch::DispatchResult,
+	decl_error, decl_event, decl_module, decl_storage, dispatch::DispatchResult, ensure,
 };
 use frame_system::{self as system, ensure_signed};
 

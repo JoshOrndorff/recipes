@@ -3,10 +3,7 @@
 //! Adding Machine
 //! A simple adding machine which checks for overflow and unlucky numbers.
 //! Throws errors accordingly
-use frame_support::{
-	decl_error, decl_module, decl_storage, ensure,
-	dispatch::DispatchResult,
-};
+use frame_support::{decl_error, decl_module, decl_storage, dispatch::DispatchResult, ensure};
 use system::ensure_signed;
 
 #[cfg(test)]

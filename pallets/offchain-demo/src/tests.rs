@@ -1,22 +1,18 @@
 use crate::*;
-use parking_lot::{RwLock};
-use parity_scale_codec::{
-	Decode,
-	alloc::sync::{Arc}
-};
-use frame_support::{
-	assert_ok, impl_outer_event, impl_outer_origin, parameter_types,
-};
-use sp_io::TestExternalities;
+use frame_support::{assert_ok, impl_outer_event, impl_outer_origin, parameter_types};
+use parity_scale_codec::{alloc::sync::Arc, Decode};
+use parking_lot::RwLock;
 use sp_core::{
-	H256,
-	sr25519::{self, Signature},
-	offchain::{OffchainExt, TransactionPoolExt,
-		testing::{self, PoolState, OffchainState},
+	offchain::{
+		testing::{self, OffchainState, PoolState},
+		OffchainExt, TransactionPoolExt,
 	},
+	sr25519::{self, Signature},
 	testing::KeyStore,
 	traits::KeystoreExt,
+	H256,
 };
+use sp_io::TestExternalities;
 use sp_runtime::{
 	testing::{Header, TestXt},
 	traits::{BlakeTwo256, IdentityLookup, Verify},
@@ -87,15 +83,19 @@ impl Trait for TestRuntime {
 	type UnsignedPriority = UnsignedPriority;
 }
 
-impl<LocalCall> system::offchain::CreateSignedTransaction<LocalCall> for TestRuntime where
-	Call<TestRuntime>: From<LocalCall>
+impl<LocalCall> system::offchain::CreateSignedTransaction<LocalCall> for TestRuntime
+where
+	Call<TestRuntime>: From<LocalCall>,
 {
-	fn create_transaction<C: frame_system::offchain::AppCrypto<Self::Public, Self::Signature>> (
+	fn create_transaction<C: frame_system::offchain::AppCrypto<Self::Public, Self::Signature>>(
 		call: Call<TestRuntime>,
 		_public: <Signature as Verify>::Signer,
 		_account: <TestRuntime as system::Trait>::AccountId,
 		index: <TestRuntime as system::Trait>::Index,
-	) -> Option<(Call<TestRuntime>, <TestExtrinsic as sp_runtime::traits::Extrinsic>::SignaturePayload)> {
+	) -> Option<(
+		Call<TestRuntime>,
+		<TestExtrinsic as sp_runtime::traits::Extrinsic>::SignaturePayload,
+	)> {
 		Some((call, (index, ())))
 	}
 }
@@ -105,7 +105,8 @@ impl frame_system::offchain::SigningTypes for TestRuntime {
 	type Signature = Signature;
 }
 
-impl<C> frame_system::offchain::SendTransactionTypes<C> for TestRuntime where
+impl<C> frame_system::offchain::SendTransactionTypes<C> for TestRuntime
+where
 	Call<TestRuntime>: From<C>,
 {
 	type OverarchingCall = Call<TestRuntime>;
@@ -118,16 +119,21 @@ pub type OffchainDemo = Module<TestRuntime>;
 pub struct ExtBuilder;
 
 impl ExtBuilder {
-	pub fn build() -> (TestExternalities, Arc<RwLock<PoolState>>, Arc<RwLock<OffchainState>>) {
-		const PHRASE: &str = "expire stage crawl shell boss any story swamp skull yellow bamboo copy";
+	pub fn build() -> (
+		TestExternalities,
+		Arc<RwLock<PoolState>>,
+		Arc<RwLock<OffchainState>>,
+	) {
+		const PHRASE: &str =
+			"expire stage crawl shell boss any story swamp skull yellow bamboo copy";
 
 		let (offchain, offchain_state) = testing::TestOffchainExt::new();
 		let (pool, pool_state) = testing::TestTransactionPoolExt::new();
 		let keystore = KeyStore::new();
-		keystore.write().sr25519_generate_new(
-			KEY_TYPE,
-			Some(&format!("{}/hunter1", PHRASE))
-		).unwrap();
+		keystore
+			.write()
+			.sr25519_generate_new(KEY_TYPE, Some(&format!("{}/hunter1", PHRASE)))
+			.unwrap();
 
 		let storage = system::GenesisConfig::default()
 			.build_storage::<TestRuntime>()
@@ -149,16 +155,23 @@ fn submit_number_signed_works() {
 		// call submit_number_signed
 		let num = 32;
 		let acct: <TestRuntime as system::Trait>::AccountId = Default::default();
-		assert_ok!(OffchainDemo::submit_number_signed(Origin::signed(acct), num));
+		assert_ok!(OffchainDemo::submit_number_signed(
+			Origin::signed(acct),
+			num
+		));
 		// A number is inserted to <Numbers> vec
 		assert_eq!(<Numbers>::get(), vec![num]);
 		// An event is emitted
-		assert!(System::events().iter().any(|er| er.event ==
-			TestEvent::offchain_demo(RawEvent::NewNumber(Some(acct), num))));
+		assert!(System::events()
+			.iter()
+			.any(|er| er.event == TestEvent::offchain_demo(RawEvent::NewNumber(Some(acct), num))));
 
 		// Insert another number
 		let num2 = num * 2;
-		assert_ok!(OffchainDemo::submit_number_signed(Origin::signed(acct), num2));
+		assert_ok!(OffchainDemo::submit_number_signed(
+			Origin::signed(acct),
+			num2
+		));
 		// A number is inserted to <Numbers> vec
 		assert_eq!(<Numbers>::get(), vec![num, num2]);
 	});

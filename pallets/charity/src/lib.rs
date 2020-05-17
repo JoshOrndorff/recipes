@@ -8,26 +8,22 @@
 //! Funds can only be allocated by a root call to the `allocate` extrinsic/
 #![cfg_attr(not(feature = "std"), no_std)]
 
+use sp_runtime::{traits::AccountIdConversion, ModuleId};
 use sp_std::prelude::*;
-use sp_runtime::{
-	traits::{AccountIdConversion},
-	ModuleId,
-};
 
 use frame_support::{
-	decl_event,
-	decl_module,
-	decl_storage,
-	dispatch::{DispatchResult, DispatchError},
-	traits::{Currency, ExistenceRequirement::AllowDeath, OnUnbalanced, Imbalance},
+	decl_event, decl_module, decl_storage,
+	dispatch::{DispatchError, DispatchResult},
+	traits::{Currency, ExistenceRequirement::AllowDeath, Imbalance, OnUnbalanced},
 };
-use frame_system::{self as system, ensure_signed, ensure_root};
+use frame_system::{self as system, ensure_root, ensure_signed};
 
 #[cfg(test)]
 mod tests;
 
 type BalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::Balance;
-type NegativeImbalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::NegativeImbalance;
+type NegativeImbalanceOf<T> =
+	<<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::NegativeImbalance;
 
 /// Hardcoded pallet ID; used to create the special Pot Account
 /// Must be exactly 8 characters long

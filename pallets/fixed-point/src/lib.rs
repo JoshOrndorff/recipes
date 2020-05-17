@@ -15,16 +15,10 @@
 //! Here we use an external crate called substrate-fixed which implements more advanced
 //! mathematical operations including transcendental functions.
 
-use frame_support::{
-	decl_event,
-	decl_error,
-	decl_module,
-	decl_storage,
-	dispatch::DispatchResult,
-};
+use frame_support::{decl_error, decl_event, decl_module, decl_storage, dispatch::DispatchResult};
 use frame_system::{self as system, ensure_signed};
+use sp_arithmetic::{traits::Saturating, Permill};
 use substrate_fixed::types::U16F16;
-use sp_arithmetic::{Permill, traits::Saturating};
 
 #[cfg(not(feature = "std"))]
 use sp_arithmetic::PerThing;

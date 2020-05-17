@@ -5,9 +5,8 @@
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
-use frame_support::{decl_event, decl_module, decl_storage, decl_error,
-	dispatch::DispatchResult,
-	ensure,
+use frame_support::{
+	decl_error, decl_event, decl_module, decl_storage, dispatch::DispatchResult, ensure,
 };
 use frame_system::{self as system, ensure_signed};
 
