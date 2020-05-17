@@ -1,5 +1,4 @@
 use sp_core::sr25519;
-use sc_service;
 use runtime::{
 	GenesisConfig,
 	genesis::{

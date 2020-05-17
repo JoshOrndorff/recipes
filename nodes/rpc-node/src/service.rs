@@ -93,7 +93,7 @@ pub fn new_full(config: Configuration)
 		let authorship_future = sc_consensus_manual_seal::run_instant_seal(
 			Box::new(service.client()),
 			proposer,
-			service.client().clone(),
+			service.client(),
 			service.transaction_pool().pool().clone(),
 			service.select_chain().ok_or(ServiceError::SelectChainRequired)?,
 			inherent_data_providers
@@ -116,7 +116,7 @@ pub fn new_light(config: Configuration)
 		.with_transaction_pool(|config, client, fetcher, prometheus_registry| {
 			let fetcher = fetcher
 				.ok_or_else(|| "Trying to start light transaction pool without active fetcher")?;
-			let pool_api = sc_transaction_pool::LightChainApi::new(client.clone(), fetcher.clone());
+			let pool_api = sc_transaction_pool::LightChainApi::new(client, fetcher);
 			let pool = sc_transaction_pool::BasicPool::with_revalidation_type(
 				config, Arc::new(pool_api), prometheus_registry, sc_transaction_pool::RevalidationType::Light,
 			);
