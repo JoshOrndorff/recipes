@@ -27,9 +27,6 @@ use frame_system::{self as system, ensure_signed};
 use substrate_fixed::types::U16F16;
 use sp_arithmetic::{Permill, traits::Saturating};
 
-#[cfg(not(feature = "std"))]
-use sp_arithmetic::PerThing;
-
 #[cfg(test)]
 mod tests;
 
