@@ -38,9 +38,8 @@ It is time  to tag a new release when either, enough new features have been cont
 1. Create a release branch off of `develop`.
 2. Update dependencies to crates.io.
 3. Update version of each Recipes crate.
-4. Update version listed in the main `README.md`.
-5. Make a pull request against `master`.
-6. Tag the new release version in the history of `master` only after the release branch is merged.
+4. Make a pull request against `master`.
+5. Tag the new release version in the history of `master` only after the release branch is merged.
 
 ## Proposing Changes and Additions
 
