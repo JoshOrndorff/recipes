@@ -5,7 +5,7 @@ The Substrate Recipes strive to identify and extract useful patterns and example
 The Recipes are part of the Substrate Developer Hub, so inter-linking between the Recipes and other DevHub facets is common. In particular, the Recipes frequently links to:
 * The [Reference Docs](https://substrate.dev/rustdocs/master/)
 * The [Tutorials](https://substrate.io/tutorials/)
-* The [Knowledge Base](https://substrate.dev/docs)
+* The [Knowledge Base](https://substrate.io/kb/learn-substrate)
 
 ## Reporting Bugs
 
