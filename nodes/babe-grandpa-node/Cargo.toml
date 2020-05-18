@@ -1,6 +1,6 @@
 [package]
 name = "babe-grandpa-node"
-version = "2.0.0-alpha.7"
+version = "2.0.0-alpha.8"
 edition = "2018"
 authors = ['Joshy Orndorff', '4meta5', 'Jimmy Chu']
 homepage = 'https://substrate.dev/recipes'

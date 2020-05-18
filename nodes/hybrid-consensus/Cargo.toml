@@ -1,6 +1,6 @@
 [package]
 name = "hybrid-consensus"
-version = "2.0.0-alpha.6"
+version = "2.0.0-alpha.8"
 edition = "2018"
 authors = ['Joshy Orndorff',]
 homepage = 'https://substrate.dev/recipes'

@@ -12,7 +12,7 @@ dependencies = [
 
 [[package]]
 name = "adding-machine"
-version = "2.0.0-alpha.7"
+version = "2.0.0-alpha.8"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -112,7 +112,7 @@ checksum = "85bb70cc08ec97ca5450e6eba421deeea5f172c0fc61f78b5357b2a8e8be195f"
 
 [[package]]
 name = "api-runtime"
-version = "2.0.0-alpha.7"
+version = "2.0.0-alpha.8"
 dependencies = [
  "frame-executive",
  "frame-support",
@@ -287,7 +287,7 @@ checksum = "f8aac770f1885fd7e387acedd76065302551364496e46b3dd00860b2f8359b9d"
 
 [[package]]
 name = "babe-grandpa-node"
-version = "2.0.0-alpha.7"
+version = "2.0.0-alpha.8"
 dependencies = [
  "babe-grandpa-runtime",
  "ctrlc",
@@ -324,7 +324,7 @@ dependencies = [
 
 [[package]]
 name = "babe-grandpa-runtime"
-version = "2.0.0-alpha.7"
+version = "2.0.0-alpha.8"
 dependencies = [
  "frame-executive",
  "frame-support",
@@ -381,7 +381,7 @@ checksum = "b41b7ea54a0c9d92199de89e20e58d49f02f8e699814ef3fdf266f6f748d15c7"
 
 [[package]]
 name = "basic-pow"
-version = "2.0.0-alpha.7"
+version = "2.0.0-alpha.8"
 dependencies = [
  "futures 0.3.5",
  "log",
@@ -414,7 +414,7 @@ dependencies = [
 
 [[package]]
 name = "basic-token"
-version = "2.0.0-alpha.7"
+version = "2.0.0-alpha.8"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -646,7 +646,7 @@ dependencies = [
 
 [[package]]
 name = "charity"
-version = "2.0.0-alpha.7"
+version = "2.0.0-alpha.8"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -661,7 +661,7 @@ dependencies = [
 
 [[package]]
 name = "check-membership"
-version = "2.0.0-alpha.7"
+version = "2.0.0-alpha.8"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -673,7 +673,7 @@ dependencies = [
 
 [[package]]
 name = "child-trie"
-version = "2.0.0-alpha.7"
+version = "2.0.0-alpha.8"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -740,7 +740,7 @@ dependencies = [
 
 [[package]]
 name = "compounding-interest"
-version = "2.0.0-alpha.7"
+version = "2.0.0-alpha.8"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -775,7 +775,7 @@ dependencies = [
 
 [[package]]
 name = "constant-config"
-version = "2.0.0-alpha.7"
+version = "2.0.0-alpha.8"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -910,7 +910,7 @@ dependencies = [
 
 [[package]]
 name = "currency-imbalances"
-version = "2.0.0-alpha.7"
+version = "2.0.0-alpha.8"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -941,7 +941,7 @@ checksum = "11c0346158a19b3627234e15596f5e465c360fcdb97d817bcb255e0510f5a788"
 
 [[package]]
 name = "default-instance"
-version = "2.0.0-alpha.7"
+version = "2.0.0-alpha.8"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -1003,7 +1003,7 @@ checksum = "fea41bba32d969b513997752735605054bc0dfa92b4c56bf1189f2e174be7a10"
 
 [[package]]
 name = "double-map"
-version = "2.0.0-alpha.7"
+version = "2.0.0-alpha.8"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -1073,7 +1073,7 @@ dependencies = [
 
 [[package]]
 name = "execution-schedule"
-version = "2.0.0-alpha.7"
+version = "2.0.0-alpha.8"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -1160,7 +1160,7 @@ dependencies = [
 
 [[package]]
 name = "fixed-point"
-version = "2.0.0-alpha.7"
+version = "2.0.0-alpha.8"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -1562,7 +1562,7 @@ dependencies = [
 
 [[package]]
 name = "generic-event"
-version = "2.0.0-alpha.7"
+version = "2.0.0-alpha.8"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -1703,7 +1703,7 @@ dependencies = [
 
 [[package]]
 name = "hello-substrate"
-version = "2.0.0-alpha.7"
+version = "2.0.0-alpha.8"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -1829,7 +1829,7 @@ dependencies = [
 
 [[package]]
 name = "hybrid-consensus"
-version = "2.0.0-alpha.6"
+version = "2.0.0-alpha.8"
 dependencies = [
  "ctrlc",
  "derive_more 0.15.0",
@@ -2202,7 +2202,7 @@ dependencies = [
 
 [[package]]
 name = "kitchen-node"
-version = "2.0.0-alpha.7"
+version = "2.0.0-alpha.8"
 dependencies = [
  "ctrlc",
  "derive_more 0.15.0",
@@ -2285,7 +2285,7 @@ dependencies = [
 
 [[package]]
 name = "last-caller"
-version = "2.0.0-alpha.7"
+version = "2.0.0-alpha.8"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -2705,7 +2705,7 @@ dependencies = [
 
 [[package]]
 name = "lockable-currency"
-version = "2.0.0-alpha.7"
+version = "2.0.0-alpha.8"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -2735,7 +2735,7 @@ dependencies = [
 
 [[package]]
 name = "manual-seal"
-version = "2.0.0-alpha.7"
+version = "2.0.0-alpha.8"
 dependencies = [
  "futures 0.3.5",
  "jsonrpc-core",
@@ -2844,7 +2844,7 @@ dependencies = [
 
 [[package]]
 name = "minimal-grandpa-runtime"
-version = "2.0.0-alpha.7"
+version = "2.0.0-alpha.8"
 dependencies = [
  "frame-executive",
  "frame-support",
@@ -3145,7 +3145,7 @@ checksum = "9cbca9424c482ee628fa549d9c812e2cd22f1180b9222c9200fdfa6eb31aecb2"
 
 [[package]]
 name = "ocw-runtime"
-version = "2.0.0-alpha.7"
+version = "2.0.0-alpha.8"
 dependencies = [
  "frame-executive",
  "frame-support",
@@ -3175,7 +3175,7 @@ dependencies = [
 
 [[package]]
 name = "offchain-demo"
-version = "2.0.0-alpha.7"
+version = "2.0.0-alpha.8"
 dependencies = [
  "alt_serde",
  "frame-support",
@@ -4131,7 +4131,7 @@ dependencies = [
 
 [[package]]
 name = "randomness"
-version = "2.0.0-alpha.7"
+version = "2.0.0-alpha.8"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -4239,7 +4239,7 @@ dependencies = [
 
 [[package]]
 name = "reservable-currency"
-version = "2.0.0-alpha.7"
+version = "2.0.0-alpha.8"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -4267,7 +4267,7 @@ dependencies = [
 
 [[package]]
 name = "ringbuffer-queue"
-version = "2.0.0-alpha.7"
+version = "2.0.0-alpha.8"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -4306,7 +4306,7 @@ dependencies = [
 
 [[package]]
 name = "rpc-node"
-version = "2.0.0-alpha.7"
+version = "2.0.0-alpha.8"
 dependencies = [
  "api-runtime",
  "ctrlc",
@@ -5408,7 +5408,7 @@ dependencies = [
 
 [[package]]
 name = "sha3pow"
-version = "2.0.0-alpha.7"
+version = "2.0.0-alpha.8"
 dependencies = [
  "parity-scale-codec",
  "rand 0.7.3",
@@ -5448,7 +5448,7 @@ dependencies = [
 
 [[package]]
 name = "simple-event"
-version = "2.0.0-alpha.7"
+version = "2.0.0-alpha.8"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -5460,7 +5460,7 @@ dependencies = [
 
 [[package]]
 name = "simple-map"
-version = "2.0.0-alpha.7"
+version = "2.0.0-alpha.8"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -5472,7 +5472,7 @@ dependencies = [
 
 [[package]]
 name = "single-value"
-version = "2.0.0-alpha.7"
+version = "2.0.0-alpha.8"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -6202,7 +6202,7 @@ dependencies = [
 
 [[package]]
 name = "storage-cache"
-version = "2.0.0-alpha.7"
+version = "2.0.0-alpha.8"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -6230,7 +6230,7 @@ checksum = "8ea5119cdb4c55b55d432abb513a0429384878c15dde60cc77b1c99de1a95a6a"
 
 [[package]]
 name = "struct-storage"
-version = "2.0.0-alpha.7"
+version = "2.0.0-alpha.8"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -6351,7 +6351,7 @@ checksum = "7c65d530b10ccaeac294f349038a597e435b18fb456aadd0840a623f83b9e941"
 
 [[package]]
 name = "sum-storage"
-version = "2.0.0-alpha.7"
+version = "2.0.0-alpha.8"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -6388,7 +6388,7 @@ dependencies = [
 
 [[package]]
 name = "super-runtime"
-version = "2.0.0-alpha.7"
+version = "2.0.0-alpha.8"
 dependencies = [
  "adding-machine",
  "basic-token",
@@ -7104,7 +7104,7 @@ checksum = "3fc439f2794e98976c88a2a2dafce96b930fe8010b0a256b3c2199a773933168"
 
 [[package]]
 name = "vec-set"
-version = "2.0.0-alpha.7"
+version = "2.0.0-alpha.8"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -7315,7 +7315,7 @@ dependencies = [
 
 [[package]]
 name = "weight-fee-runtime"
-version = "2.0.0-alpha.7"
+version = "2.0.0-alpha.8"
 dependencies = [
  "frame-executive",
  "frame-support",
@@ -7345,7 +7345,7 @@ dependencies = [
 
 [[package]]
 name = "weights"
-version = "2.0.0-alpha.7"
+version = "2.0.0-alpha.8"
 dependencies = [
  "frame-support",
  "frame-system",

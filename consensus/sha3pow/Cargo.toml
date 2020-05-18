@@ -4,7 +4,7 @@ edition = '2018'
 homepage = 'https://substrate.dev/recipes'
 name = 'sha3pow'
 repository = 'https://github.com/substrate-developer-hub/recipes'
-version = "2.0.0-alpha.7"
+version = "2.0.0-alpha.8"
 description = 'Sha3-based Proof of Work algorithms for Substrate'
 
 [dependencies]
