@@ -1,5 +1,4 @@
 #![cfg_attr(not(feature = "std"), no_std)]
-#![allow(clippy::string_lit_as_bytes)]
 
 //! Single Value Storage
 use frame_support::{decl_module, decl_storage, dispatch::DispatchResult};

@@ -1,5 +1,5 @@
 #![cfg_attr(not(feature = "std"), no_std)]
-#![allow(clippy::string_lit_as_bytes)]
+
 //! Struct Storage
 //! This pallet demonstrates how to declare and store `strcuts` that contain types
 //! that come from the pallet's configuration trait.

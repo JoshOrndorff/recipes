@@ -1,5 +1,4 @@
 #![cfg_attr(not(feature = "std"), no_std)]
-#![allow(clippy::string_lit_as_bytes)]
 
 //! A pallet to demonstrate configurable pallet constants.
 //! This pallet has a single storage value that can be added to by calling the

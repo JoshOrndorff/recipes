@@ -1,7 +1,6 @@
 //! Scheduling execution of dispatchable calls at future blocks
 
 #![cfg_attr(not(feature = "std"), no_std)]
-#![allow(clippy::string_lit_as_bytes)]
 
 use frame_support::{
 	codec::{Decode, Encode},
