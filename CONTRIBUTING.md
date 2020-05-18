@@ -69,6 +69,6 @@ Prefer listing dependencies under a single `[dependencies]` header in lieu of us
 No standards for language style are enforced aside from the common English spelling/grammar rules. @4meta5 has a few *preferences*:
 * Avoid using "we", "our", "you" because it often is conducive to unnecessary language
 * Prefer active voice ("you may want to use active voice" `=>` "use active voice")
-* Link as often as possible to outside content and useful resources including other recipes, knowledgebase,
+* Link as often as possible to outside content and useful resources including other recipes, knowledge base,
 tutorials, Wikipedia, and 3rd party content. It is not necessary to re-link the same external resource on subsequent
 mentions in a single document.
