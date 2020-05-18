@@ -23,4 +23,4 @@ The Substrate Recipes are [GPL 3.0 Licensed](LICENSE) It is open source and [ope
 
 ## Using Recipes in External Projects
 
-The pallets and runtimes provided here are tested and ready to be used in other Substrate-based blockchains. The big caveat is that you must use the same upstream Substrate version throughout the project. The recipes currently use Substrate@`7e9a2ae`.
+The pallets and runtimes provided here are tested and ready to be used in other Substrate-based blockchains. The big caveat is that you must use the same upstream Substrate version throughout the project.
