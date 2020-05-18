@@ -14,18 +14,23 @@ Much, but not all, of the Recipes focuses on writing runtimes with FRAME, Parity
 
 ## The Directories in our Kitchen
 
-There are four primary directories in this repository:
+There are five primary directories in this repository:
 
 * **Text**: Source of [the book](https://substrate.dev/recipes) written in markdown. This is what you're reading right now.
+* **Pallets**: Pallets for use in FRAME-based runtimes.
+* **Runtimes**: Runtimes for use in Substrate nodes.
+* **Consensus**: Consensus engines for use in Substrate nodes.
 * **Nodes**: Complete Substrate nodes ready to run.
-* **Runtimes**: Complete runtimes for use in Substrate nodes.
-* **Pallets**: Complete pallets for use in FRAME-based runtimes.
 
 Exploring those directories reveals a tree that looks like this
 ```
 recipes
 |
 +-- text
+|
++-- consensus
+  |
+  +-- shaw3pow
 |
 +-- nodes
 	|
