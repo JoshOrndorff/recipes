@@ -3,17 +3,17 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 #![allow(clippy::string_lit_as_bytes)]
 
-use sp_std::prelude::*;
-use sp_runtime::{traits::Zero, RuntimeDebug};
 use frame_support::{
 	codec::{Decode, Encode},
 	decl_event, decl_module, decl_storage,
-	dispatch::{DispatchResult, DispatchError},
+	dispatch::{DispatchError, DispatchResult},
 	ensure,
 	traits::Get,
 	weights::Weight,
 };
 use frame_system::{self as system, ensure_signed};
+use sp_runtime::{traits::Zero, RuntimeDebug};
+use sp_std::prelude::*;
 
 #[cfg(test)]
 mod tests;

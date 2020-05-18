@@ -4,9 +4,7 @@
 use frame_support::{
 	decl_event, decl_module,
 	dispatch::DispatchResult,
-	traits::{
-		Currency, LockIdentifier, LockableCurrency, WithdrawReason, WithdrawReasons,
-	},
+	traits::{Currency, LockIdentifier, LockableCurrency, WithdrawReason, WithdrawReasons},
 };
 use frame_system::{self as system, ensure_signed};
 

@@ -4,10 +4,7 @@
 //! Permissioned Function with Generic Event
 //! a permissioned funtion which can only be called by the "owner". An event is emitted
 //! when the function is successfully executed.
-use frame_support::{
-	decl_event, decl_module, decl_storage, ensure,
-	dispatch::DispatchResult,
-};
+use frame_support::{decl_event, decl_module, decl_storage, dispatch::DispatchResult, ensure};
 use frame_system::{self as system, ensure_signed};
 use sp_std::vec::Vec;
 

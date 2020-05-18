@@ -10,21 +10,13 @@
 //! The continuous account accrues interest continuously and is implemented using
 //! Substrate-fixed's `I32F32` implementation of fixed point.
 
-use parity_scale_codec::{Encode, Decode};
-use sp_runtime::traits::Zero;
-use sp_arithmetic::Percent;
-use frame_support::{
-	decl_event,
-	decl_module,
-	decl_storage,
-	dispatch::DispatchResult,
-};
+use frame_support::{decl_event, decl_module, decl_storage, dispatch::DispatchResult};
 use frame_system::{self as system, ensure_signed};
-use substrate_fixed::{
-	transcendental::exp,
-	types::I32F32,
-};
+use parity_scale_codec::{Decode, Encode};
+use sp_arithmetic::Percent;
+use sp_runtime::traits::Zero;
 use sp_std::convert::TryInto;
+use substrate_fixed::{transcendental::exp, types::I32F32};
 
 #[cfg(test)]
 mod tests;
@@ -172,17 +164,18 @@ impl<T: Trait> Module<T> {
 	/// account
 	fn value_of_continuous_account(now: &<T as system::Trait>::BlockNumber) -> I32F32 {
 		// Get the old state of the accout
-		let ContinuousAccountData{
+		let ContinuousAccountData {
 			principal,
 			deposit_date,
 		} = ContinuousAccount::<T>::get();
 
 		// Calculate the exponential function (lots of type conversion)
 		let elapsed_time_block_number = *now - deposit_date;
-		let elapsed_time_u32 = TryInto::try_into(elapsed_time_block_number).ok()
+		let elapsed_time_u32 = TryInto::try_into(elapsed_time_block_number)
+			.ok()
 			.expect("blockchain will not exceed 2^32 blocks; qed");
 		let elapsed_time_i32f32 = I32F32::from_num(elapsed_time_u32);
-		let exponent : I32F32 = Self::continuous_interest_rate() * elapsed_time_i32f32;
+		let exponent: I32F32 = Self::continuous_interest_rate() * elapsed_time_i32f32;
 		let exp_result : I32F32 = exp(exponent)
 			.expect("Interest will not overflow account (at least not until the learner has learned enough about fixed point :)");
 

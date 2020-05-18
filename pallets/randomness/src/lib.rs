@@ -2,19 +2,16 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 #![allow(clippy::string_lit_as_bytes)]
 
-use sp_core::H256;
 use frame_support::{
-	decl_event, decl_module, decl_storage,
-	dispatch::DispatchResult,
-	traits::Randomness,
+	decl_event, decl_module, decl_storage, dispatch::DispatchResult, traits::Randomness,
 };
 use frame_system::{self as system, ensure_signed};
 use parity_scale_codec::Encode;
+use sp_core::H256;
 use sp_std::vec::Vec;
 
 #[cfg(test)]
 mod tests;
-
 
 /// The pallet's configuration trait.
 /// This trait includes two randomness sources. In production you will only ever need one. This pallet

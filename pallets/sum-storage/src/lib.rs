@@ -6,10 +6,7 @@
 //! This pallet supports a runtime API which will allow querying the runtime for the sum of
 //! the two storage items.
 
-use frame_support::{
-	decl_module, decl_storage, decl_event,
-	dispatch,
-};
+use frame_support::{decl_event, decl_module, decl_storage, dispatch};
 use frame_system::{self as system, ensure_signed};
 
 #[cfg(test)]

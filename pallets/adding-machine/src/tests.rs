@@ -1,12 +1,12 @@
-use crate::{Module, Trait, Error};
+use crate::{Error, Module, Trait};
+use frame_support::{assert_noop, assert_ok, impl_outer_origin, parameter_types};
+use sp_core::H256;
+use sp_io::TestExternalities;
 use sp_runtime::{
 	testing::Header,
 	traits::{BlakeTwo256, IdentityLookup},
 	Perbill,
 };
-use sp_core::H256;
-use frame_support::{assert_noop, assert_ok, impl_outer_origin, parameter_types};
-use sp_io::TestExternalities;
 
 impl_outer_origin! {
 	pub enum Origin for TestRuntime {}

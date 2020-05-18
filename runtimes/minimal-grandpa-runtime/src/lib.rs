@@ -3,7 +3,7 @@
 
 #![cfg_attr(not(feature = "std"), no_std)]
 // `construct_runtime!` does a lot of recursion and requires us to increase the limit to 256.
-#![recursion_limit="256"]
+#![recursion_limit = "256"]
 #![allow(clippy::large_enum_variant)]
 
 // Make the WASM binary available.
@@ -14,37 +14,29 @@ include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 #[cfg(feature = "std")]
 pub mod genesis;
 
-use sp_std::prelude::*;
-use sp_core::{OpaqueMetadata, H256, crypto::KeyTypeId};
-use sp_runtime::{
-	MultiSignature,
-	ApplyExtrinsicResult,
-	create_runtime_str,
-	generic,
-	impl_opaque_keys,
-	transaction_validity::{TransactionValidity, TransactionSource},
-};
-use sp_runtime::traits::{
-	BlakeTwo256,
-	Block as BlockT,
-	IdentifyAccount,
-	IdentityLookup,
-	NumberFor,
-	Verify,
-};
 use frame_support::{
 	traits::KeyOwnerProofSystem,
 	weights::{
-		Weight,
 		constants::{BlockExecutionWeight, ExtrinsicBaseWeight, RocksDbWeight, WEIGHT_PER_SECOND},
+		Weight,
 	},
 };
+use frame_system as system;
 use grandpa::{AuthorityId as GrandpaId, AuthorityList as GrandpaAuthorityList};
 use sp_api::impl_runtime_apis;
-use sp_version::RuntimeVersion;
+use sp_core::{crypto::KeyTypeId, OpaqueMetadata, H256};
+use sp_runtime::traits::{
+	BlakeTwo256, Block as BlockT, IdentifyAccount, IdentityLookup, NumberFor, Verify,
+};
+use sp_runtime::{
+	create_runtime_str, generic, impl_opaque_keys,
+	transaction_validity::{TransactionSource, TransactionValidity},
+	ApplyExtrinsicResult, MultiSignature,
+};
+use sp_std::prelude::*;
 #[cfg(feature = "std")]
 use sp_version::NativeVersion;
-use frame_system as system;
+use sp_version::RuntimeVersion;
 
 // These structs are used in one of the commented-by-default implementations of
 // transaction_payment::Trait. Don't warn when they are unused.
@@ -52,12 +44,12 @@ use frame_system as system;
 use sp_runtime::traits::ConvertInto;
 
 // A few exports that help ease life for downstream crates.
+pub use balances::Call as BalancesCall;
+pub use frame_support::{construct_runtime, parameter_types, traits::Randomness, StorageValue};
 #[cfg(any(feature = "std", test))]
 pub use sp_runtime::BuildStorage;
+pub use sp_runtime::{Perbill, Permill};
 pub use timestamp::Call as TimestampCall;
-pub use balances::Call as BalancesCall;
-pub use sp_runtime::{Permill, Perbill};
-pub use frame_support::{StorageValue, construct_runtime, parameter_types, traits::Randomness};
 
 /// An index to a block.
 pub type BlockNumber = u32;
@@ -239,7 +231,6 @@ parameter_types! {
 }
 
 impl transaction_payment::Trait for Runtime {
-
 	type Currency = Balances;
 	type OnTransactionPayment = ();
 	type TransactionByteFee = TransactionByteFee;
@@ -280,14 +271,15 @@ pub type SignedExtra = (
 	system::CheckEra<Runtime>,
 	system::CheckNonce<Runtime>,
 	system::CheckWeight<Runtime>,
-	transaction_payment::ChargeTransactionPayment<Runtime>
+	transaction_payment::ChargeTransactionPayment<Runtime>,
 );
 /// Unchecked extrinsic type as expected by this runtime.
 pub type UncheckedExtrinsic = generic::UncheckedExtrinsic<Address, Call, Signature, SignedExtra>;
 /// Extrinsic type that has already been checked.
 pub type CheckedExtrinsic = generic::CheckedExtrinsic<AccountId, Call, SignedExtra>;
 /// Executive: handles dispatch to the various pallets.
-pub type Executive = frame_executive::Executive<Runtime, Block, system::ChainContext<Runtime>, Runtime, AllModules>;
+pub type Executive =
+	frame_executive::Executive<Runtime, Block, system::ChainContext<Runtime>, Runtime, AllModules>;
 
 impl_runtime_apis! {
 	impl sp_api::Core<Block> for Runtime {

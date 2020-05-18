@@ -3,12 +3,12 @@
 //! Child Trie API
 //! - auxiliary runtime methods for using child storage
 //! - see smpl-crowdfund for examples of using this API with objects in the pallet
-use sp_core::Hasher;
 use frame_support::{decl_module, decl_storage, storage::child};
+use sp_core::Hasher;
 
+use frame_system as system;
 use parity_scale_codec::{Decode, Encode};
 use sp_std::prelude::*;
-use frame_system as system;
 
 pub trait Trait: system::Trait {}
 
@@ -52,33 +52,21 @@ impl<T: Trait> Module<T> {
 
 	pub fn kv_put(index: ObjectCount, who: &T::AccountId, value_to_put: ValAppended) {
 		let id = Self::id_from_index(index);
-		who.using_encoded(|b| child::put(
-				&id,
-				b,
-				&value_to_put
-		));
+		who.using_encoded(|b| child::put(&id, b, &value_to_put));
 	}
 
 	pub fn kv_get(index: ObjectCount, who: &T::AccountId) -> ValAppended {
 		let id = Self::id_from_index(index);
-		who.using_encoded(|b| child::get_or_default::<ValAppended>(
-				&id,
-				b
-		))
+		who.using_encoded(|b| child::get_or_default::<ValAppended>(&id, b))
 	}
 
 	pub fn kv_kill(index: ObjectCount, who: &T::AccountId) {
 		let id = Self::id_from_index(index);
-		who.using_encoded(|b| child::kill(
-				&id,
-				b
-		));
+		who.using_encoded(|b| child::kill(&id, b));
 	}
 
 	pub fn kill_trie(index: ObjectCount) {
 		let id = Self::id_from_index(index);
-		child::kill_storage(
-			&id,
-		);
+		child::kill_storage(&id);
 	}
 }

@@ -9,16 +9,14 @@
 //! The stored value is cleared (set to zero) at a regular interval which is specified
 //! as a configuration constant.
 
-use sp_runtime::traits::Zero;
 use frame_support::{
-	decl_event,
-	decl_module,
-	decl_storage,
-	dispatch::{DispatchResult, DispatchError},
+	decl_event, decl_module, decl_storage,
+	dispatch::{DispatchError, DispatchResult},
 	ensure,
 	traits::Get,
 };
 use frame_system::{self as system, ensure_signed};
+use sp_runtime::traits::Zero;
 
 #[cfg(test)]
 mod tests;

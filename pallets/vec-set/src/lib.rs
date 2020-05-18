@@ -2,13 +2,9 @@
 #![allow(clippy::string_lit_as_bytes)]
 
 //! A pallet that demonstrates how to use append instead of mutate
-use sp_std::prelude::*;
-use frame_support::{
-	decl_event, decl_module, decl_storage,
-	dispatch::DispatchResult,
-	ensure,
-};
+use frame_support::{decl_event, decl_module, decl_storage, dispatch::DispatchResult, ensure};
 use frame_system::{self as system, ensure_signed};
+use sp_std::prelude::*;
 
 #[cfg(test)]
 mod tests;

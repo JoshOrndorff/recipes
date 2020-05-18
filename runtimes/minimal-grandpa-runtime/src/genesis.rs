@@ -1,12 +1,12 @@
 //! Helper module to build a genesis configuration for the weight-fee-runtime
 
 use super::{
-	AccountId, BalancesConfig, GrandpaConfig,
-	SudoConfig, SystemConfig, GenesisConfig, WASM_BINARY, Signature,
+	AccountId, BalancesConfig, GenesisConfig, GrandpaConfig, Signature, SudoConfig, SystemConfig,
+	WASM_BINARY,
 };
-use sp_core::{Pair, Public, sr25519};
-use sp_finality_grandpa::{AuthorityId as GrandpaId};
-use sp_runtime::traits::{Verify, IdentifyAccount};
+use sp_core::{sr25519, Pair, Public};
+use sp_finality_grandpa::AuthorityId as GrandpaId;
+use sp_runtime::traits::{IdentifyAccount, Verify};
 
 /// Helper function to generate a crypto pair from seed
 fn get_from_seed<TPublic: Public>(seed: &str) -> <TPublic::Pair as Pair>::Public {
@@ -18,8 +18,9 @@ fn get_from_seed<TPublic: Public>(seed: &str) -> <TPublic::Pair as Pair>::Public
 type AccountPublic = <Signature as Verify>::Signer;
 
 /// Helper function to generate an account ID from seed
-pub fn account_id_from_seed<TPublic: Public>(seed: &str) -> AccountId where
-	AccountPublic: From<<TPublic::Pair as Pair>::Public>
+pub fn account_id_from_seed<TPublic: Public>(seed: &str) -> AccountId
+where
+	AccountPublic: From<<TPublic::Pair as Pair>::Public>,
 {
 	AccountPublic::from(get_from_seed::<TPublic>(seed)).into_account()
 }
@@ -32,9 +33,7 @@ pub fn authority_keys_from_seed(seed: &str) -> GrandpaId {
 pub fn dev_genesis() -> GenesisConfig {
 	testnet_genesis(
 		// Initial Authorities
-		vec![
-			authority_keys_from_seed("Alice"),
-		],
+		vec![authority_keys_from_seed("Alice")],
 		// Root Key
 		account_id_from_seed::<sr25519::Public>("Alice"),
 		// Endowed Accounts
@@ -59,11 +58,13 @@ pub fn testnet_genesis(
 			changes_trie_config: Default::default(),
 		}),
 		balances: Some(BalancesConfig {
-			balances: endowed_accounts.iter().cloned().map(|k|(k, 1 << 60)).collect(),
+			balances: endowed_accounts
+				.iter()
+				.cloned()
+				.map(|k| (k, 1 << 60))
+				.collect(),
 		}),
-		sudo: Some(SudoConfig {
-			key: root_key,
-		}),
+		sudo: Some(SudoConfig { key: root_key }),
 		grandpa: Some(GrandpaConfig {
 			authorities: initial_authorities.iter().map(|x| (x.clone(), 1)).collect(),
 		}),

@@ -10,7 +10,6 @@
 #[cfg(test)]
 mod tests;
 
-use sp_std::prelude::*;
 use frame_support::{
 	decl_event, decl_module, decl_storage,
 	dispatch::DispatchResult,
@@ -18,6 +17,7 @@ use frame_support::{
 	storage::{StorageDoubleMap, StorageMap, StorageValue},
 };
 use frame_system::{self as system, ensure_signed};
+use sp_std::prelude::*;
 
 pub trait Trait: system::Trait {
 	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;

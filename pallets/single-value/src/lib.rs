@@ -2,10 +2,7 @@
 #![allow(clippy::string_lit_as_bytes)]
 
 //! Single Value Storage
-use frame_support::{
-	decl_module, decl_storage,
-	dispatch::DispatchResult,
-};
+use frame_support::{decl_module, decl_storage, dispatch::DispatchResult};
 use frame_system::{self as system, ensure_signed};
 
 #[cfg(test)]
