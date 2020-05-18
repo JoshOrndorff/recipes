@@ -1,4 +1,6 @@
 use crate::{Module, RawEvent, Trait};
+use frame_support::{assert_err, assert_ok, impl_outer_event, impl_outer_origin, parameter_types};
+use frame_system as system;
 use sp_core::H256;
 use sp_io::TestExternalities;
 use sp_runtime::{
@@ -6,8 +8,6 @@ use sp_runtime::{
 	traits::{BlakeTwo256, IdentityLookup},
 	Perbill,
 };
-use frame_support::{assert_ok, assert_err, impl_outer_event, impl_outer_origin, parameter_types};
-use frame_system as system;
 
 impl_outer_origin! {
 	pub enum Origin for TestRuntime {}

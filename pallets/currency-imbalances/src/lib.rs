@@ -5,14 +5,16 @@
 
 use frame_support::{
 	decl_event, decl_module,
-	traits::{Currency, OnUnbalanced, Imbalance, ReservableCurrency},
+	traits::{Currency, Imbalance, OnUnbalanced, ReservableCurrency},
 };
 use frame_system::{self as system, ensure_signed};
 
 // balance type using reservable currency type
 type BalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::Balance;
-type PositiveImbalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::PositiveImbalance;
-type NegativeImbalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::NegativeImbalance;
+type PositiveImbalanceOf<T> =
+	<<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::PositiveImbalance;
+type NegativeImbalanceOf<T> =
+	<<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::NegativeImbalance;
 
 pub trait Trait: system::Trait + Sized {
 	/// The overarching event type

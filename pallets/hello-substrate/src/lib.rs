@@ -3,12 +3,8 @@
 //! A simple Substrate pallet that demonstrates declaring dispatchable functions, and
 //! Printing text to the terminal.
 
-use frame_support::{
-	decl_module,
-	dispatch::DispatchResult,
-	debug,
-};
-use frame_system::{ self as system, ensure_signed };
+use frame_support::{debug, decl_module, dispatch::DispatchResult};
+use frame_system::{self as system, ensure_signed};
 use sp_runtime::print;
 
 #[cfg(test)]

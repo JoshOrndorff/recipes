@@ -1,4 +1,3 @@
-
 #![cfg_attr(not(feature = "std"), no_std)]
 
 // Here we declare the runtime API. It is implemented it the `impl` block in

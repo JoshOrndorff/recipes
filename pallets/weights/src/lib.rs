@@ -3,11 +3,10 @@
 //! Transaction Weight Examples
 
 use frame_support::{
+	decl_module, decl_storage,
+	dispatch::{DispatchResult, PaysFee, WeighData},
 	ensure,
-	decl_module,
-	decl_storage,
-	dispatch::{DispatchResult, WeighData, PaysFee},
-	weights::{ DispatchClass, Weight, ClassifyDispatch, Pays},
+	weights::{ClassifyDispatch, DispatchClass, Pays, Weight},
 };
 use frame_system as system;
 
@@ -27,7 +26,6 @@ pub struct Linear(u32);
 // The actual weight calculation happens in the `impl WeighData` block
 impl WeighData<(&u32,)> for Linear {
 	fn weigh_data(&self, (x,): (&u32,)) -> Weight {
-
 		// Use saturation so that an extremely large parameter value
 		// Does not cause overflow.
 		x.saturating_mul(self.0).into()
@@ -58,7 +56,6 @@ pub struct Quadratic(u32, u32, u32);
 
 impl WeighData<(&u32, &u32)> for Quadratic {
 	fn weigh_data(&self, (x, y): (&u32, &u32)) -> Weight {
-
 		let ax2 = x.saturating_mul(*x).saturating_mul(self.0);
 		let by = y.saturating_mul(self.1);
 		let c = self.2;
@@ -87,13 +84,12 @@ pub struct Conditional(u32);
 
 impl WeighData<(&bool, &u32)> for Conditional {
 	fn weigh_data(&self, (switch, val): (&bool, &u32)) -> Weight {
-
 		if *switch {
 			val.saturating_mul(self.0)
-		}
-		else {
+		} else {
 			self.0
-		}.into()
+		}
+		.into()
 	}
 }
 
