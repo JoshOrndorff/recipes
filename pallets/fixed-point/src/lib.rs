@@ -1,4 +1,5 @@
 #![cfg_attr(not(feature = "std"), no_std)]
+#![allow(clippy::string_lit_as_bytes)]
 
 //! A pallet that demonstrates the fundamentals of Fixed Point arithmetic.
 //! This pallet implements three multiplicative accumulators using fixed point.
@@ -19,9 +20,6 @@ use frame_support::{decl_error, decl_event, decl_module, decl_storage, dispatch:
 use frame_system::{self as system, ensure_signed};
 use sp_arithmetic::{traits::Saturating, Permill};
 use substrate_fixed::types::U16F16;
-
-#[cfg(not(feature = "std"))]
-use sp_arithmetic::PerThing;
 
 #[cfg(test)]
 mod tests;

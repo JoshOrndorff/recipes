@@ -58,7 +58,7 @@ pub fn run() -> sc_cli::Result<()> {
 			runner.run_node(
 				// The light client is not implemented. Calling it will panic.
 				service::new_light,
-				move |config: _| service::new_full(config),
+				service::new_full,
 				runtime::VERSION,
 			)
 		}

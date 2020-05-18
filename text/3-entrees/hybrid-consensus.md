@@ -40,9 +40,9 @@ With the block imports setup, we can proceed to creating the import queue. We ma
 
 ```rust, ignore
 let import_queue = sc_consensus_pow::import_queue(
-	Box::new(pow_block_import.clone()),
+	Box::new(pow_block_import),
 	Some(Box::new(justification_import)),
-	None, // TODO Okay, so do I need a finality proof import? What's the difference
+	None,
 	sha3pow::MinimalSha3Algorithm,
 	inherent_data_providers.clone(),
 	spawn_task_handle,

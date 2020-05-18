@@ -1,6 +1,7 @@
 //! A demonstration of an offchain worker that sends onchain callbacks
 
 #![cfg_attr(not(feature = "std"), no_std)]
+#![allow(clippy::string_lit_as_bytes)]
 
 #[cfg(test)]
 mod tests;
@@ -215,7 +216,7 @@ impl<T: Trait> Module<T> {
 			// displaying the average
 			let average = match num_len {
 				0 => 0,
-				_ => numbers.iter().fold(0, |acc, num| acc + num) / (num_len as u64),
+				_ => numbers.iter().sum::<u64>() / (num_len as u64),
 			};
 
 			debug::info!("Current average of numbers is: {}", average);

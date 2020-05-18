@@ -1,4 +1,5 @@
 #![cfg_attr(not(feature = "std"), no_std)]
+#![allow(clippy::string_lit_as_bytes)]
 
 //! Simple Token Transfer
 //! 1. set total supply
@@ -56,7 +57,7 @@ decl_module! {
 		#[weight = 10_000]
 		fn init(origin) -> DispatchResult {
 			let sender = ensure_signed(origin)?;
-			ensure!(Self::is_init() == false, <Error<T>>::AlreadyInitialized);
+			ensure!(!Self::is_init(), <Error<T>>::AlreadyInitialized);
 
 			<Balances<T>>::insert(sender, Self::total_supply());
 

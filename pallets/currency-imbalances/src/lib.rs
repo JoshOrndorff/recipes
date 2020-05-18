@@ -1,3 +1,6 @@
+#![cfg_attr(not(feature = "std"), no_std)]
+#![allow(clippy::string_lit_as_bytes)]
+
 //! A Pallet to demonstrate using currency imbalances
 //!
 //! WARNING: never use this code in production (for demonstration/teaching purposes only)
@@ -51,7 +54,7 @@ decl_module! {
 		pub fn slash_funds(origin, to_punish: T::AccountId, collateral: BalanceOf<T>) {
 			let _ = ensure_signed(origin)?;
 
-			let imbalance = T::Currency::slash_reserved(&to_punish, collateral.clone()).0;
+			let imbalance = T::Currency::slash_reserved(&to_punish, collateral).0;
 			T::Slash::on_unbalanced(imbalance);
 
 			let now = <system::Module<T>>::block_number();

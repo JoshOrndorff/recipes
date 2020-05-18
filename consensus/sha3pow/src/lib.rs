@@ -45,7 +45,7 @@ impl Compute {
 		Seal {
 			nonce: self.nonce,
 			difficulty: self.difficulty,
-			work: work,
+			work,
 		}
 	}
 }

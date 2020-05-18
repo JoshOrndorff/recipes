@@ -3,7 +3,6 @@
 use runtime::{self, opaque::Block, RuntimeApi};
 use sc_client_api::ExecutorProvider;
 use sc_consensus::LongestChain;
-use sc_consensus_babe;
 use sc_executor::native_executor_instance;
 pub use sc_executor::NativeExecutor;
 use sc_finality_grandpa::{
@@ -161,7 +160,7 @@ pub fn new_full(config: Configuration) -> Result<impl AbstractService, ServiceEr
 			config: grandpa_config,
 			link: grandpa_link,
 			network: service.network(),
-			inherent_data_providers: inherent_data_providers.clone(),
+			inherent_data_providers,
 			telemetry_on_connect: Some(service.telemetry_on_connect_stream()),
 			voting_rule: sc_finality_grandpa::VotingRulesBuilder::default().build(),
 			prometheus_registry: service.prometheus_registry(),
@@ -194,7 +193,7 @@ pub fn new_light(config: Configuration) -> Result<impl AbstractService, ServiceE
 		.with_transaction_pool(|config, client, fetcher, prometheus_registry| {
 			let fetcher = fetcher
 				.ok_or_else(|| "Trying to start light transaction pool without active fetcher")?;
-			let pool_api = sc_transaction_pool::LightChainApi::new(client.clone(), fetcher.clone());
+			let pool_api = sc_transaction_pool::LightChainApi::new(client, fetcher);
 			let pool = sc_transaction_pool::BasicPool::with_revalidation_type(
 				config,
 				Arc::new(pool_api),
@@ -239,7 +238,7 @@ pub fn new_light(config: Configuration) -> Result<impl AbstractService, ServiceE
 					babe_block_import,
 					None,
 					Some(Box::new(finality_proof_import)),
-					client.clone(),
+					client,
 					inherent_data_providers.clone(),
 					spawn_task_handle,
 					registry,

@@ -2,7 +2,6 @@ use runtime::{
 	genesis::{account_id_from_seed, dev_genesis, testnet_genesis},
 	GenesisConfig,
 };
-use sc_service;
 use sp_core::sr25519;
 
 // Note this is the URL for the telemetry server
