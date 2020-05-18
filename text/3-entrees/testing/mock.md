@@ -169,7 +169,7 @@ In the `Cargo.toml`, this only needs to be imported under `dev-dependencies` sin
 
 ```
 [dev-dependencies.sp-io]
-default_features = false
+default-features = false
 
 version = '2.0.0-alpha.7'
 ```
