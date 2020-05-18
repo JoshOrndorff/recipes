@@ -3,7 +3,7 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 use frame_support::{decl_event, decl_module, dispatch::DispatchResult};
-use system::ensure_signed;
+use frame_system::{self as system, ensure_signed};
 
 #[cfg(test)]
 mod tests;
