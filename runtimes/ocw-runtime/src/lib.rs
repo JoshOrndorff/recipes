@@ -255,6 +255,7 @@ impl<LocalCall> frame_system::offchain::CreateSignedTransaction<LocalCall> for R
 			pallet_transaction_payment::ChargeTransactionPayment::<Runtime>::from(tip),
 		);
 
+		#[cfg_attr(not(feature = "std"), allow(unused_variables))]
 		let raw_payload = SignedPayload::new(call, extra).map_err(|e| {
 			debug::native::warn!("SignedPayload error: {:?}", e);
 		}).ok()?;
