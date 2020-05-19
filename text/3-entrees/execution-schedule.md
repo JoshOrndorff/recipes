@@ -156,7 +156,7 @@ This storage value acts as a global counter of the round, which is also used as 
 // in on_initialize
 let last_era = <Era>::get();
 <SignalBank<T>>::remove_prefix(&last_era);
-let next_era: RoundIndex = last_era + (1u32 as RoundIndex);
+let next_era: RoundIndex = last_era + 1;
 <Era>::put(next_era);
 // see next code back
 ```

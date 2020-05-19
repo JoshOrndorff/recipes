@@ -1,12 +1,18 @@
 use crate::*;
-use frame_system::{ self as system, RawOrigin };
-use frame_support::{assert_noop, assert_ok, impl_outer_origin, parameter_types, dispatch::DispatchError};
-use sp_runtime::{Perbill, traits::{IdentityLookup, BlakeTwo256}, testing::Header};
-use sp_io::TestExternalities;
-use sp_core::H256;
 use crate::{Module, Trait};
+use frame_support::{
+	assert_noop, assert_ok, dispatch::DispatchError, impl_outer_origin, parameter_types,
+};
+use frame_system::{self as system, RawOrigin};
+use sp_core::H256;
+use sp_io::TestExternalities;
+use sp_runtime::{
+	testing::Header,
+	traits::{BlakeTwo256, IdentityLookup},
+	Perbill,
+};
 
-impl_outer_origin!{
+impl_outer_origin! {
 	pub enum Origin for TestRuntime {}
 }
 
@@ -32,6 +38,9 @@ impl system::Trait for TestRuntime {
 	type Event = ();
 	type BlockHashCount = BlockHashCount;
 	type MaximumBlockWeight = MaximumBlockWeight;
+	type DbWeight = ();
+	type BlockExecutionWeight = ();
+	type ExtrinsicBaseWeight = ();
 	type MaximumBlockLength = MaximumBlockLength;
 	type AvailableBlockRatio = AvailableBlockRatio;
 	type Version = ();
@@ -49,7 +58,9 @@ pub struct ExtBuilder;
 
 impl ExtBuilder {
 	pub fn build() -> TestExternalities {
-		let storage = system::GenesisConfig::default().build_storage::<TestRuntime>().unwrap();
+		let storage = system::GenesisConfig::default()
+			.build_storage::<TestRuntime>()
+			.unwrap();
 		TestExternalities::from(storage)
 	}
 }
@@ -57,7 +68,6 @@ impl ExtBuilder {
 #[test]
 fn set_value_works() {
 	ExtBuilder::build().execute_with(|| {
-
 		assert_ok!(SingleValue::set_value(Origin::signed(1), 10));
 
 		assert_eq!(SingleValue::stored_value(), 10);
@@ -69,14 +79,16 @@ fn set_value_works() {
 #[test]
 fn set_value_no_root() {
 	ExtBuilder::build().execute_with(|| {
-		assert_noop!(SingleValue::set_value(RawOrigin::Root.into(), 10), DispatchError::BadOrigin);
+		assert_noop!(
+			SingleValue::set_value(RawOrigin::Root.into(), 10),
+			DispatchError::BadOrigin
+		);
 	})
 }
 
 #[test]
 fn set_account_works() {
 	ExtBuilder::build().execute_with(|| {
-
 		assert_ok!(SingleValue::set_account(Origin::signed(1)));
 
 		assert_eq!(SingleValue::stored_account(), 1)
@@ -86,6 +98,9 @@ fn set_account_works() {
 #[test]
 fn set_account_no_root() {
 	ExtBuilder::build().execute_with(|| {
-		assert_noop!(SingleValue::set_account(RawOrigin::Root.into()), DispatchError::BadOrigin);
+		assert_noop!(
+			SingleValue::set_account(RawOrigin::Root.into()),
+			DispatchError::BadOrigin
+		);
 	})
 }

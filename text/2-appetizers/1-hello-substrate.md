@@ -16,7 +16,7 @@ The very first line of code tells the rust compiler that this crate should not u
 Next, you'll find imports that come from various parts of the Substrate framework. All pallets will import from a few common crates including [`frame-support`](https://substrate.dev/rustdocs/master/frame_support/index.html), and [`frame-system`](https://substrate.dev/rustdocs/master/frame_system/index.html).  Complex pallets will have many imports as we'll see later. The `hello-substrate` pallet uses these imports.
 
 ```rust, ignore
-use frame_support::{ decl_module, dispatch::DispatchResult };
+use frame_support::{ decl_module, dispatch::DispatchResult, debug };
 use frame_system::{ self as system, ensure_signed };
 use sp_runtime::print;
 ```
@@ -42,7 +42,7 @@ decl_module! {
 	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
 
 		/// A function that says hello to the user by printing messages to the node log
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		pub fn say_hello(origin) -> DispatchResult {
 			// --snip--
 		}
@@ -55,7 +55,7 @@ decl_module! {
 As you can see, our `hello-substrate` pallet has a dispatchable call that takes a single argument, called `origin` which we'll investigate shortly. The call returns a [`DispatchResult`](https://substrate.dev/rustdocs/master/frame_support/dispatch/type.DispatchResult.html) which can be either `Ok(())` indicating that the call succeeded, or an `Err` which we'll investigate in the [appetizer about errors](./3-errors.md).
 
 ### Weight Annotations
-Right before the `hello-substrate` function, we see the line `#[weight = SimpleDispatchInfo::default()]`. This line attaches a default weight to the call. Ultimately weights affect the fees a user will have to pay to call the function. Weights are a very interesting aspect of developing with Substrate, but they too shall be covered later in the section on [Weights](../3-entrees/weights.md). For now, and for may of the recipes pallets, we will simply use the default weight as we have done here.
+Right before the `hello-substrate` function, we see the line `#[weight = 10_000]`. This line attaches a default weight to the call. Ultimately weights affect the fees a user will have to pay to call the function. Weights are a very interesting aspect of developing with Substrate, but they too shall be covered later in the section on [Weights](../3-entrees/weights.md). For now, and for may of the recipes pallets, we will simply use the default weight as we have done here.
 
 ## Inside a Dispatchable Call
 

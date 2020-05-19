@@ -36,7 +36,7 @@ where
 	/// Store all changes made in the underlying storage.
 	///
 	/// Data is not guaranteed to be consistent before this call.
-	/// 
+	///
 	/// Implementation note: Call in `drop` to increase ergonomics.
 	fn commit(&self);
 	/// Push an item onto the end of the queue.
@@ -50,8 +50,7 @@ where
 }
 
 // There is no equivalent trait in std so we create one.
-pub trait WrappingOps
-{
+pub trait WrappingOps {
 	fn wrapping_add(self, rhs: Self) -> Self;
 	fn wrapping_sub(self, rhs: Self) -> Self;
 }
@@ -151,7 +150,7 @@ where
 	}
 
 	/// Pop an item from the start of the queue.
-	/// 
+	///
 	/// Will remove the item, but will not update the bounds in storage.
 	fn pop(&mut self) -> Option<Item> {
 		if self.is_empty() {
@@ -175,14 +174,16 @@ mod tests {
 	use RingBufferTrait;
 
 	use codec::{Decode, Encode};
-	use frame_support::{decl_module, decl_storage, impl_outer_origin, parameter_types, weights::Weight};
+	use frame_support::{
+		decl_module, decl_storage, impl_outer_origin, parameter_types, weights::Weight,
+	};
+	use frame_system as system;
 	use sp_core::H256;
 	use sp_runtime::{
 		testing::Header,
 		traits::{BlakeTwo256, IdentityLookup},
 		Perbill,
 	};
-	use frame_system as system;
 
 	impl_outer_origin! {
 		pub enum Origin for Test {}
@@ -236,6 +237,9 @@ mod tests {
 		type Event = ();
 		type BlockHashCount = BlockHashCount;
 		type MaximumBlockWeight = MaximumBlockWeight;
+		type DbWeight = ();
+		type BlockExecutionWeight = ();
+		type ExtrinsicBaseWeight = ();
 		type MaximumBlockLength = MaximumBlockLength;
 		type AvailableBlockRatio = AvailableBlockRatio;
 		type Version = ();
@@ -252,7 +256,9 @@ mod tests {
 	// This function basically just builds a genesis storage key/value store according to
 	// our desired mockup.
 	fn new_test_ext() -> sp_io::TestExternalities {
-		let storage = system::GenesisConfig::default().build_storage::<Test>().unwrap();
+		let storage = system::GenesisConfig::default()
+			.build_storage::<Test>()
+			.unwrap();
 		storage.into()
 	}
 
@@ -266,7 +272,7 @@ mod tests {
 		SomeStruct,
 		<TestModule as Store>::TestRange,
 		<TestModule as Store>::TestMap,
-		TestIdx
+		TestIdx,
 	>;
 
 	#[test]

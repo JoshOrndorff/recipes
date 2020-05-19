@@ -1,4 +1,6 @@
 use super::*;
+use frame_support::{assert_noop, assert_ok, impl_outer_event, impl_outer_origin, parameter_types};
+use frame_system as system;
 use sp_core::H256;
 use sp_io::TestExternalities;
 use sp_runtime::{
@@ -6,8 +8,6 @@ use sp_runtime::{
 	traits::{BlakeTwo256, IdentityLookup},
 	Perbill,
 };
-use frame_support::{assert_ok, assert_noop, impl_outer_event, impl_outer_origin, parameter_types};
-use frame_system as system;
 
 impl_outer_origin! {
 	pub enum Origin for TestRuntime {}
@@ -35,6 +35,9 @@ impl system::Trait for TestRuntime {
 	type Event = TestEvent;
 	type BlockHashCount = BlockHashCount;
 	type MaximumBlockWeight = MaximumBlockWeight;
+	type DbWeight = ();
+	type BlockExecutionWeight = ();
+	type ExtrinsicBaseWeight = ();
 	type MaximumBlockLength = MaximumBlockLength;
 	type AvailableBlockRatio = AvailableBlockRatio;
 	type Version = ();
@@ -106,8 +109,7 @@ fn group_join_works() {
 		assert_ok!(DoubleMap::join_a_group(Origin::signed(1), 3, 5));
 
 		// correct event emission
-		let expected_event =
-			TestEvent::double_map(RawEvent::MemberJoinsGroup(1, 3, 5));
+		let expected_event = TestEvent::double_map(RawEvent::MemberJoinsGroup(1, 3, 5));
 		assert!(System::events().iter().any(|a| a.event == expected_event));
 
 		// correct storage changes
@@ -127,8 +129,7 @@ fn remove_member_works() {
 		assert_ok!(DoubleMap::remove_member(Origin::signed(1)));
 
 		// check: correct event emitted
-		let expected_event =
-			TestEvent::double_map(RawEvent::RemoveMember(1));
+		let expected_event = TestEvent::double_map(RawEvent::RemoveMember(1));
 		assert!(System::events().iter().any(|a| a.event == expected_event));
 
 		// check: user 1 should no longer belongs to group 3

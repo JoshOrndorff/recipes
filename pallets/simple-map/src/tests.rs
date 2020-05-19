@@ -1,5 +1,7 @@
 use super::RawEvent;
-use crate::{Module, Trait, Error};
+use crate::{Error, Module, Trait};
+use frame_support::{assert_err, assert_ok, impl_outer_event, impl_outer_origin, parameter_types};
+use frame_system as system;
 use sp_core::H256;
 use sp_io::TestExternalities;
 use sp_runtime::{
@@ -7,8 +9,6 @@ use sp_runtime::{
 	traits::{BlakeTwo256, IdentityLookup},
 	Perbill,
 };
-use frame_support::{assert_ok, assert_err, impl_outer_event, impl_outer_origin, parameter_types};
-use frame_system as system;
 
 impl_outer_origin! {
 	pub enum Origin for TestRuntime {}
@@ -36,6 +36,9 @@ impl system::Trait for TestRuntime {
 	type Event = TestEvent;
 	type BlockHashCount = BlockHashCount;
 	type MaximumBlockWeight = MaximumBlockWeight;
+	type DbWeight = ();
+	type BlockExecutionWeight = ();
+	type ExtrinsicBaseWeight = ();
 	type MaximumBlockLength = MaximumBlockLength;
 	type AvailableBlockRatio = AvailableBlockRatio;
 	type Version = ();
@@ -100,7 +103,6 @@ fn get_throws() {
 #[test]
 fn get_works() {
 	ExtBuilder::build().execute_with(|| {
-
 		assert_ok!(SimpleMap::set_single_entry(Origin::signed(2), 19));
 		assert_ok!(SimpleMap::get_single_entry(Origin::signed(1), 2));
 
@@ -125,7 +127,6 @@ fn take_throws() {
 #[test]
 fn take_works() {
 	ExtBuilder::build().execute_with(|| {
-
 		assert_ok!(SimpleMap::set_single_entry(Origin::signed(2), 19));
 		assert_ok!(SimpleMap::take_single_entry(Origin::signed(2)));
 

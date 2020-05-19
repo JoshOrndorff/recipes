@@ -1,13 +1,13 @@
-use crate::{Module, Trait, Error};
+use crate::{Error, Module, Trait};
+use frame_support::{assert_noop, assert_ok, impl_outer_origin, parameter_types};
+use frame_system as system;
+use sp_core::H256;
+use sp_io::TestExternalities;
 use sp_runtime::{
 	testing::Header,
 	traits::{BlakeTwo256, IdentityLookup},
 	Perbill,
 };
-use sp_core::H256;
-use frame_support::{assert_noop, assert_ok, impl_outer_origin, parameter_types};
-use sp_io::TestExternalities;
-use frame_system as system;
 
 impl_outer_origin! {
 	pub enum Origin for TestRuntime {}
@@ -35,6 +35,9 @@ impl system::Trait for TestRuntime {
 	type Event = ();
 	type BlockHashCount = BlockHashCount;
 	type MaximumBlockWeight = MaximumBlockWeight;
+	type DbWeight = ();
+	type BlockExecutionWeight = ();
+	type ExtrinsicBaseWeight = ();
 	type MaximumBlockLength = MaximumBlockLength;
 	type AvailableBlockRatio = AvailableBlockRatio;
 	type Version = ();
@@ -69,12 +72,14 @@ fn init_works() {
 	})
 }
 
-
 #[test]
 fn cant_double_init() {
 	ExtBuilder::build().execute_with(|| {
 		assert_ok!(BasicToken::init(Origin::signed(1)));
-		assert_noop!(BasicToken::init(Origin::signed(1)), Error::<TestRuntime>::AlreadyInitialized);
+		assert_noop!(
+			BasicToken::init(Origin::signed(1)),
+			Error::<TestRuntime>::AlreadyInitialized
+		);
 	})
 }
 
@@ -95,6 +100,9 @@ fn transfer_works() {
 fn cant_spend_more_than_you_have() {
 	ExtBuilder::build().execute_with(|| {
 		assert_ok!(BasicToken::init(Origin::signed(1)));
-		assert_noop!(BasicToken::transfer(Origin::signed(1), 2, 21000001), Error::<TestRuntime>::InsufficientFunds);
+		assert_noop!(
+			BasicToken::transfer(Origin::signed(1), 2, 21000001),
+			Error::<TestRuntime>::InsufficientFunds
+		);
 	})
 }

@@ -3,20 +3,17 @@ use sp_core::H256;
 use sp_io::TestExternalities;
 use sp_runtime::{
 	testing::Header,
-	traits::{BlakeTwo256, IdentityLookup, AtLeast32Bit},
+	traits::{AtLeast32Bit, BlakeTwo256, IdentityLookup},
 	Perbill,
 };
 // it's ok, just for the testing suit, thread local variables
-use rand::{rngs::OsRng, thread_rng, Rng, RngCore};
-use std::cell::RefCell;
 use frame_support::{
-	assert_ok,
-	impl_outer_event,
-	impl_outer_origin,
-	parameter_types,
-	traits::{Get, OnInitialize, OnFinalize},
+	assert_ok, impl_outer_event, impl_outer_origin, parameter_types,
+	traits::{Get, OnFinalize, OnInitialize},
 };
 use frame_system as system;
+use rand::{rngs::OsRng, thread_rng, Rng, RngCore};
+use std::cell::RefCell;
 
 // to compare expected storage items with storage items after method calls
 impl<BlockNumber: AtLeast32Bit + Copy> PartialEq for Task<BlockNumber> {
@@ -135,6 +132,9 @@ impl system::Trait for TestRuntime {
 	type Event = TestEvent;
 	type BlockHashCount = BlockHashCount;
 	type MaximumBlockWeight = MaximumBlockWeight;
+	type DbWeight = ();
+	type BlockExecutionWeight = ();
+	type ExtrinsicBaseWeight = ();
 	type MaximumBlockLength = MaximumBlockLength;
 	type AvailableBlockRatio = AvailableBlockRatio;
 	type Version = ();
@@ -289,7 +289,10 @@ fn schedule_task_behaves() {
 			assert!(ExecutionSchedule::is_on_council(&1));
 			System::set_block_number(2);
 			let new_task = id_generate();
-			assert_ok!(ExecutionSchedule::schedule_task(Origin::signed(1), new_task.clone()));
+			assert_ok!(ExecutionSchedule::schedule_task(
+				Origin::signed(1),
+				new_task.clone()
+			));
 
 			// check storage changes
 			let expected_task: Task<u64> = Task {
@@ -304,11 +307,8 @@ fn schedule_task_behaves() {
 			assert_eq!(ExecutionSchedule::execution_queue(), vec![new_task.clone()]);
 
 			// check event behavior
-			let expected_event = TestEvent::execution_schedule(RawEvent::TaskScheduled(
-				1,
-				new_task,
-				10,
-			));
+			let expected_event =
+				TestEvent::execution_schedule(RawEvent::TaskScheduled(1, new_task, 10));
 			assert!(System::events().iter().any(|a| a.event == expected_event));
 		})
 }
@@ -329,7 +329,10 @@ fn priority_signalling_behaves() {
 			// refresh signal_quota
 			run_to_block(7u64);
 
-			assert_ok!(ExecutionSchedule::schedule_task(Origin::signed(2), new_task.clone()));
+			assert_ok!(ExecutionSchedule::schedule_task(
+				Origin::signed(2),
+				new_task.clone()
+			));
 
 			assert_ok!(ExecutionSchedule::signal_priority(
 				Origin::signed(1),
@@ -338,10 +341,7 @@ fn priority_signalling_behaves() {
 			));
 
 			// check that banked signal has decreased
-			assert_eq!(
-				ExecutionSchedule::signal_bank(1u32, 1),
-				8u32.into()
-			);
+			assert_eq!(ExecutionSchedule::signal_bank(1u32, 1), 8u32.into());
 
 			// check that task priority has increased
 			assert_eq!(

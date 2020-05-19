@@ -4,9 +4,9 @@
   "description": "Example of using Polkadot-js API to query custom rpc",
   "main": "index.js",
   "author": "Joshy Orndorff",
-  "license": "MIT",
+  "license": "GPL-3.0-or-later",
   "private": false,
   "dependencies": {
-    "@polkadot/api": "^1.0.0-beta.4"
+    "@polkadot/api": "^1.12.1"
   }
 }

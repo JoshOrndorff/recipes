@@ -169,9 +169,9 @@ In the `Cargo.toml`, this only needs to be imported under `dev-dependencies` sin
 
 ```
 [dev-dependencies.sp-io]
-default_features = false
+default-features = false
 
-version = '2.0.0-alpha.6'
+version = '2.0.0-alpha.7'
 ```
 
 There is more than one pattern for building a mock runtime environment for testing pallet logic. Two patterns are presented below. The latter is generally favored for reasons discussed in [custom test environment](./externalities.md)
@@ -313,9 +313,7 @@ pub trait Trait: 'static + Eq + Clone {
 
 ### Setting for Testing Event Emittances
 
-Starting from
-Substrate [`v2.0.0-alpha.6`](https://github.com/paritytech/substrate/tree/v2.0.0-alpha.6),
-events are not emitted on block 0. So when testing for whether events are emitted, we manually
+Events are not emitted on block 0. So when testing for whether events are emitted, we manually
 set the block number in the test environment from 0 to 1 as the following:
 
 ```rust

@@ -1,21 +1,16 @@
 use super::Event;
 use crate::{Module, Trait};
+use frame_support::{
+	assert_err, assert_ok, impl_outer_event, impl_outer_origin, parameter_types, traits::OnFinalize,
+};
+use frame_system as system;
 use sp_core::H256;
 use sp_io::TestExternalities;
 use sp_runtime::{
 	testing::Header,
-	traits::{ BlakeTwo256, IdentityLookup },
+	traits::{BlakeTwo256, IdentityLookup},
 	Perbill,
 };
-use frame_support::{
-	assert_ok,
-	assert_err,
-	impl_outer_event,
-	impl_outer_origin,
-	parameter_types,
-	traits::OnFinalize,
-};
-use frame_system as system;
 
 impl_outer_origin! {
 	pub enum Origin for TestRuntime {}
@@ -43,6 +38,9 @@ impl system::Trait for TestRuntime {
 	type Event = TestEvent;
 	type BlockHashCount = BlockHashCount;
 	type MaximumBlockWeight = MaximumBlockWeight;
+	type DbWeight = ();
+	type BlockExecutionWeight = ();
+	type ExtrinsicBaseWeight = ();
 	type MaximumBlockLength = MaximumBlockLength;
 	type AvailableBlockRatio = AvailableBlockRatio;
 	type Version = ();

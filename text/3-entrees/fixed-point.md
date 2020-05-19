@@ -316,7 +316,7 @@ fn value_of_continuous_account(now: &<T as system::Trait>::BlockNumber) -> I32F3
 		.expect("blockchain will not exceed 2^32 blocks; qed");
 	let elapsed_time_i32f32 = I32F32::from_num(elapsed_time_u32);
 	let exponent : I32F32 = Self::continuous_interest_rate() * elapsed_time_i32f32;
-	let exp_result : I32F32 = exp(exponent).ok()
+	let exp_result : I32F32 = exp(exponent)
 		.expect("Interest will not overflow account (at least not until the learner has learned enough about fixed point :)");
 
 	// Return the result interest = principal * e ^ (rate * time)

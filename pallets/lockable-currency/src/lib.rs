@@ -4,10 +4,7 @@
 use frame_support::{
 	decl_event, decl_module,
 	dispatch::DispatchResult,
-	traits::{
-		Currency, LockIdentifier, LockableCurrency, WithdrawReason, WithdrawReasons,
-	},
-	weights::SimpleDispatchInfo,
+	traits::{Currency, LockIdentifier, LockableCurrency, WithdrawReason, WithdrawReasons},
 };
 use frame_system::{self as system, ensure_signed};
 
@@ -40,7 +37,7 @@ decl_module! {
 		fn deposit_event() = default;
 
 		/// Locks the specified amount of tokens from the caller
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		fn lock_capital(origin, amount: BalanceOf<T>) -> DispatchResult {
 			let user = ensure_signed(origin)?;
 
@@ -56,7 +53,7 @@ decl_module! {
 		}
 
 		/// Extends the lock period
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		fn extend_lock(origin, amount: BalanceOf<T>) -> DispatchResult {
 			let user = ensure_signed(origin)?;
 
@@ -72,7 +69,7 @@ decl_module! {
 		}
 
 		/// Releases all locked tokens
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		fn unlock_all(origin) -> DispatchResult {
 			let user = ensure_signed(origin)?;
 

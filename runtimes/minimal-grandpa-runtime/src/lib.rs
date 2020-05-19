@@ -3,7 +3,8 @@
 
 #![cfg_attr(not(feature = "std"), no_std)]
 // `construct_runtime!` does a lot of recursion and requires us to increase the limit to 256.
-#![recursion_limit="256"]
+#![recursion_limit = "256"]
+#![allow(clippy::large_enum_variant)]
 
 // Make the WASM binary available.
 #[cfg(feature = "std")]
@@ -13,34 +14,29 @@ include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 #[cfg(feature = "std")]
 pub mod genesis;
 
-use sp_std::prelude::*;
-use sp_core::{OpaqueMetadata, H256};
-use sp_runtime::{
-	MultiSignature,
-	ApplyExtrinsicResult,
-	create_runtime_str,
-	generic,
-	impl_opaque_keys,
-	transaction_validity::{TransactionValidity, TransactionSource},
-};
-use sp_runtime::traits::{
-	BlakeTwo256,
-	Block as BlockT,
-	Convert,
-	IdentifyAccount,
-	IdentityLookup,
-	Verify,
-};
 use frame_support::{
-	traits::Get,
-	weights::{Weight, RuntimeDbWeight},
+	traits::KeyOwnerProofSystem,
+	weights::{
+		constants::{BlockExecutionWeight, ExtrinsicBaseWeight, RocksDbWeight, WEIGHT_PER_SECOND},
+		Weight,
+	},
 };
-use grandpa::{AuthorityId as GrandpaId, AuthorityWeight as GrandpaWeight};
+use frame_system as system;
+use grandpa::{AuthorityId as GrandpaId, AuthorityList as GrandpaAuthorityList};
 use sp_api::impl_runtime_apis;
-use sp_version::RuntimeVersion;
+use sp_core::{crypto::KeyTypeId, OpaqueMetadata, H256};
+use sp_runtime::traits::{
+	BlakeTwo256, Block as BlockT, IdentifyAccount, IdentityLookup, NumberFor, Verify,
+};
+use sp_runtime::{
+	create_runtime_str, generic, impl_opaque_keys,
+	transaction_validity::{TransactionSource, TransactionValidity},
+	ApplyExtrinsicResult, MultiSignature,
+};
+use sp_std::prelude::*;
 #[cfg(feature = "std")]
 use sp_version::NativeVersion;
-use frame_system as system;
+use sp_version::RuntimeVersion;
 
 // These structs are used in one of the commented-by-default implementations of
 // transaction_payment::Trait. Don't warn when they are unused.
@@ -48,12 +44,12 @@ use frame_system as system;
 use sp_runtime::traits::ConvertInto;
 
 // A few exports that help ease life for downstream crates.
+pub use balances::Call as BalancesCall;
+pub use frame_support::{construct_runtime, parameter_types, traits::Randomness, StorageValue};
 #[cfg(any(feature = "std", test))]
 pub use sp_runtime::BuildStorage;
+pub use sp_runtime::{Perbill, Permill};
 pub use timestamp::Call as TimestampCall;
-pub use balances::Call as BalancesCall;
-pub use sp_runtime::{Permill, Perbill};
-pub use frame_support::{StorageValue, construct_runtime, parameter_types, traits::Randomness};
 
 /// An index to a block.
 pub type BlockNumber = u32;
@@ -128,14 +124,10 @@ pub fn native_version() -> NativeVersion {
 
 parameter_types! {
 	pub const BlockHashCount: BlockNumber = 250;
-	pub const MaximumBlockWeight: Weight = 1_000_000_000;
+	pub const MaximumBlockWeight: Weight = 2 * WEIGHT_PER_SECOND;
 	pub const AvailableBlockRatio: Perbill = Perbill::from_percent(75);
 	pub const MaximumBlockLength: u32 = 5 * 1024 * 1024;
 	pub const Version: RuntimeVersion = VERSION;
-	pub const DbWeight: RuntimeDbWeight = RuntimeDbWeight {
-		read: 60_000_000, // ~0.06 ms = ~60 µs
-		write: 200_000_000, // ~0.2 ms = 200 µs
-	};
 }
 
 impl system::Trait for Runtime {
@@ -163,7 +155,14 @@ impl system::Trait for Runtime {
 	type BlockHashCount = BlockHashCount;
 	/// Maximum weight of each block. With a default weight system of 1byte == 1weight, 4mb is ok.
 	type MaximumBlockWeight = MaximumBlockWeight;
-	type DbWeight = DbWeight;
+	/// The weight of database operations that the runtime can invoke.
+	type DbWeight = RocksDbWeight;
+	/// The weight of the overhead invoked on the block import process, independent of the
+	/// extrinsics included in that block.
+	type BlockExecutionWeight = BlockExecutionWeight;
+	/// The base weight of any extrinsic processed by the runtime, independent of the
+	/// logic of that extrinsic. (Signature verification, nonce increment, fee, etc...)
+	type ExtrinsicBaseWeight = ExtrinsicBaseWeight;
 	/// Maximum size of all encoded transactions (in bytes) that are allowed in one block.
 	type MaximumBlockLength = MaximumBlockLength;
 	/// Portion of the block weight that is available to all normal transactions.
@@ -184,6 +183,15 @@ impl system::Trait for Runtime {
 
 impl grandpa::Trait for Runtime {
 	type Event = Event;
+	type Call = Call;
+	type KeyOwnerProofSystem = ();
+	type KeyOwnerProof =
+		<Self::KeyOwnerProofSystem as KeyOwnerProofSystem<(KeyTypeId, GrandpaId)>>::Proof;
+	type KeyOwnerIdentification = <Self::KeyOwnerProofSystem as KeyOwnerProofSystem<(
+		KeyTypeId,
+		GrandpaId,
+	)>>::IdentificationTuple;
+	type HandleEquivocation = ();
 }
 
 parameter_types! {
@@ -218,95 +226,17 @@ impl sudo::Trait for Runtime {
 	type Call = Call;
 }
 
-
-// --------------------- Multiple Options for WeightToFee -----------------------
-
-/// Convert from weight to balance via a simple coefficient multiplication. The associated type C
-/// encapsulates a constant in units of balance per weight.
-pub struct LinearWeightToFee<C>(sp_std::marker::PhantomData<C>);
-
-impl<C> Convert<Weight, Balance> for LinearWeightToFee<C>
-	where C: Get<Balance> {
-
-	fn convert(w: Weight) -> Balance {
-		// substrate-node a weight of 10_000 (smallest non-zero weight) to be mapped to 10^7 units of
-		// fees, hence:
-		let coefficient = C::get();
-		Balance::from(w).saturating_mul(coefficient)
-	}
-}
-
-/// Convert from weight to balance via a quadratic curve. The type parameters encapsulate the
-/// coefficients.
-pub struct QuadraticWeightToFee<C0, C1, C2>(C0, C1, C2);
-
-impl<C0, C1, C2> Convert<Weight, Balance> for QuadraticWeightToFee<C0, C1, C2>
-	where C0: Get<Balance>, C1: Get<Balance>, C2: Get<Balance> {
-
-	fn convert(w: Weight) -> Balance {
-		let c0 = C0::get();
-		let c1 = C1::get();
-		let c2 = C2::get();
-		let w = Balance::from(w);
-
-		// All the safe math reduces to
-		// c0 + c1 * w + c2 * w * w
-
-		let c1w = c1.saturating_mul(w);
-		let c2w2 = c2.saturating_mul(w).saturating_mul(w);
-
-		c0.saturating_add(c1w).saturating_add(c2w2)
-	}
-}
-
-
 parameter_types! {
-	// Used with LinearWeightToFee conversion. Leaving this constant in tact when using other
-	// conversion techniques is harmless.
-	pub const FeeWeightRatio: u128 = 1_000;
-
-	// Used with QuadraticWeightToFee conversion. Leaving these constants in tact when using other
-	// conversion techniques is harmless.
-	pub const WeightFeeConstant: u128 = 1_000;
-	pub const WeightFeeLinear: u128 = 100;
-	pub const WeightFeeQuadratic : u128 = 10;
-
-	// Establish the base- and byte-fees. These are used in all configurations.
-	pub const TransactionBaseFee: u128 = 0;
 	pub const TransactionByteFee: u128 = 1;
 }
 
 impl transaction_payment::Trait for Runtime {
-
-	// The asset in which fees will be collected.
-	// Enable exactly one of the following options.
-	type Currency = Balances; // The balances pallet (The most common choice)
-	//type Currency = FixedGenericAsset<Self>; // A generic asset whose ID is hard-coded above.
-	//type Currency = SpendingAssetCurrency<Self>; // A generic asset whose ID is stored in the
-	                                               // generic_asset pallet's runtime storage
-
-	// What to do when fees are paid. () means take no additional actions.
+	type Currency = Balances;
 	type OnTransactionPayment = ();
-
-	// Base fee is a fixed amount applied to every transaction
-	type TransactionBaseFee = TransactionBaseFee;
-
-	// Byte fee is multiplied by the length of the
-	// serialized transaction in bytes
 	type TransactionByteFee = TransactionByteFee;
-
-	// Function to convert dispatch weight to a chargeable fee.
-	// Enable exactly one of the following options.
-	//type WeightToFee = ConvertInto;
-	//type WeightToFee = LinearWeightToFee<FeeWeightRatio>;
-	type WeightToFee = QuadraticWeightToFee<WeightFeeConstant, WeightFeeLinear, WeightFeeQuadratic>;
-
-	//TODO Explore how to change FeeMultiplierUpdate
+	type WeightToFee = ConvertInto;
 	type FeeMultiplierUpdate = ();
 }
-
-// --------------------------------------------
-
 
 construct_runtime!(
 	pub enum Runtime where
@@ -336,19 +266,20 @@ pub type SignedBlock = generic::SignedBlock<Block>;
 pub type BlockId = generic::BlockId<Block>;
 /// The SignedExtension to the basic transaction logic.
 pub type SignedExtra = (
-	system::CheckVersion<Runtime>,
+	system::CheckTxVersion<Runtime>,
 	system::CheckGenesis<Runtime>,
 	system::CheckEra<Runtime>,
 	system::CheckNonce<Runtime>,
 	system::CheckWeight<Runtime>,
-	transaction_payment::ChargeTransactionPayment<Runtime>
+	transaction_payment::ChargeTransactionPayment<Runtime>,
 );
 /// Unchecked extrinsic type as expected by this runtime.
 pub type UncheckedExtrinsic = generic::UncheckedExtrinsic<Address, Call, Signature, SignedExtra>;
 /// Extrinsic type that has already been checked.
 pub type CheckedExtrinsic = generic::CheckedExtrinsic<AccountId, Call, SignedExtra>;
 /// Executive: handles dispatch to the various pallets.
-pub type Executive = frame_executive::Executive<Runtime, Block, system::ChainContext<Runtime>, Runtime, AllModules>;
+pub type Executive =
+	frame_executive::Executive<Runtime, Block, system::ChainContext<Runtime>, Runtime, AllModules>;
 
 impl_runtime_apis! {
 	impl sp_api::Core<Block> for Runtime {
@@ -412,8 +343,28 @@ impl_runtime_apis! {
 	}
 
 	impl sp_finality_grandpa::GrandpaApi<Block> for Runtime {
-		fn grandpa_authorities() -> Vec<(GrandpaId, GrandpaWeight)> {
+		fn grandpa_authorities() -> GrandpaAuthorityList {
 			Grandpa::grandpa_authorities()
+		}
+
+		fn submit_report_equivocation_extrinsic(
+			_equivocation_proof: sp_finality_grandpa::EquivocationProof<
+				<Block as BlockT>::Hash,
+				NumberFor<Block>,
+			>,
+			_key_owner_proof: sp_finality_grandpa::OpaqueKeyOwnershipProof,
+		) -> Option<()> {
+			None
+		}
+
+		fn generate_key_ownership_proof(
+			_set_id: sp_finality_grandpa::SetId,
+			_authority_id: GrandpaId,
+		) -> Option<sp_finality_grandpa::OpaqueKeyOwnershipProof> {
+			// NOTE: this is the only implementation possible since we've
+			// defined our key owner proof type as a bottom type (i.e. a type
+			// with no values).
+			None
 		}
 	}
 
