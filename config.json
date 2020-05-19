@@ -2,81 +2,9 @@
 	"slug": "config",
 	"lang": "en",
 	"description": "A Hands-On Cookbook for Aspiring Blockchain Chefs",
-	"preparing-your-kitchen": [
-		{ "title": "Introduction", "slug": "index" },
-		{ "title": "Prepare to build a dApp", "slug": "prepare" },
-		{ "title": "Building a Custom Pallet", "slug": "pallet" },
-		{ "title": "Building a Custom Front End", "slug": "front-end" }
-	],
-	"appetizers": [],
-	"new-recipes": [],
-	"featured-recipes": [],
-	"all-recipes": [
-		{
-			"title": "Basic Proof of Work",
-			"tags": ["consensus", "pow"],
-		},
-		{
-			"title": "Hybrid Consensus",
-			"tags": ["consensus", "pow", "grandpa"],
-		},
-		{
-			"title": "Kitchen Node",
-			"tags": ["consensus", "kitchen node", "instant seal"],
-		},
-		{
-			"title": "Manual Seal",
-			"tags": ["consensus", "manual seal"],
-		},
-		{
-			"title": "Custom RPC Node",
-			"tags": ["instant-seal", "RPC", "custom rpc", "runtime api"],
-		},
-
-		{
-			"title": "Custom Runtime API",
-			"tags": ["runtime", "frame", "runtime api"],
-		},
-		{
-			"title": "Weight Fee Runtime",
-			"tags": ["runtime", "frame", "weights", "fees", "transaction payment"],
-		},
-
-		{
-			"title": "Charity",
-			"tags": ["pallet", "frame", "currency", "imbalance", "pooled funds"],
-		},
-		{
-			"title": "Basic Token",
-			"tags": ["pallet", "frame", "token", "storage map"],
-		},
-		{
-			"title": "Configuration Constant",
-			"tags": ["pallet", "frame", "constants", "runtime"],
-		},
-		{
-			"title": "Lockable Currency",
-			"tags": ["pallet", "frame", "currency", "lockable currency"],
-		},
-		{
-			"title": "Weights",
-			"tags": ["pallet", "frame", "weight", "economic security"],
-		},
-		{
-			"title": "Randomness",
-			"tags": ["pallet", "frame", "randomness", "random", "entropy"],
-		},
-		{
-			"title": "Execution Schedule",
-			"tags": ["pallet", "frame", "call enum", "delayed calls"],
-		},
-		{
-			"title": "Fixed Point Arithmetic",
-			"tags": ["pallet", "frame", "arithmetic", "fixed point", "floating point", "fixed", "substrate fixed"],
-		},
-		{
-			"title": "Compounding Interest",
-			"tags": ["pallet", "frame", "arithmetic", "fixed point", "floating point", "fixed", "substrate fixed", "interest"],
-		},
-	],
+	"TOC": {
+		"prepare-your-kitchen": [ "index", "build-node", "interact-node", "kitchen-organization" ],
+		"appetizers": [],
+		"featured-recipes": []
+	}
 }

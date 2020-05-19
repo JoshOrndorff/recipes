@@ -1,4 +1,9 @@
-# Transaction Fees
+---
+slug: README
+lang: en
+title: Weight Fee Runtime
+---
+
 *[runtimes/weight-fee-runtime](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/weight-fee-runtime)*
 
 Substrate provides the [`transaction_payment` pallet](https://substrate.dev/rustdocs/master/pallet_transaction_payment/index.html) for calculating and collecting fees for executing transactions. Fees are broken down into several components:
