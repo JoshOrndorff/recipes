@@ -1,4 +1,9 @@
-# Custom RPCs
+---
+slug: rpc-node
+lang: en
+title: Custom RPC Node
+---
+
 *[`nodes/rpc-node`](https://github.com/substrate-developer-hub/recipes/tree/master/nodes/rpc-node)*
 *[`runtime/api-runtime`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/api-runtime)*
 

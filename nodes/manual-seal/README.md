@@ -1,4 +1,9 @@
-# Manual Seal
+---
+slug: manual-seal
+lang: en
+title: Manual Seal
+---
+
 *[`nodes/manual-seal`](https://github.com/substrate-developer-hub/recipes/tree/master/nodes/manual-seal)*
 
 This recipe demonstrates a Substrate node using the [Manual Seal consensus](https://substrate.dev/rustdocs/master/sc_consensus_manual_seal/index.html). Unlike the other consensus engines included with Substrate, manual seal does not create blocks on a regular basis. Rather, it waits for an RPC call telling to create a block.

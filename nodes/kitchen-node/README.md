@@ -1,4 +1,9 @@
-# Manual Seal
+---
+slug: kitchen-node
+lang: en
+title: Kitchen Node
+---
+
 *[`nodes/kitchen-node`](https://github.com/substrate-developer-hub/recipes/tree/master/nodes/kitchen-node)*
 
 This recipe demonstrates a general purpose Substrate node that supports most of the recipes' runtimes, and uses [Instant Seal consensus](https://substrate.dev/rustdocs/master/sc_consensus_manual_seal/index.html).
