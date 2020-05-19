@@ -1,7 +1,7 @@
 {
 	"slug": "config",
 	"lang": "en",
-	"catchphrase": "A Hands-On Cookbook for Aspiring Blockchain Chefs",
+	"description": "A Hands-On Cookbook for Aspiring Blockchain Chefs",
 	"preparing-your-kitchen": [
 		{ "title": "Introduction", "slug": "index" },
 		{ "title": "Prepare to build a dApp", "slug": "prepare" },
@@ -9,5 +9,26 @@
 		{ "title": "Building a Custom Front End", "slug": "front-end" }
 	],
 	"appetizers": [],
-	"entrees": [],
+	"all-recipes": [
+		{
+			"title": "Basic Proof of Work",
+			"tags": ["consensus", "pow"],
+		},
+		{
+			"title": "Hybrid Consensus",
+			"tags": ["consensus", "pow", "grandpa"],
+		},
+		{
+			"title": "Kitchen Node",
+			"tags": ["consensus", "kitchen node", "instant seal"],
+		},
+		{
+			"title": "Manual Seal",
+			"tags": ["consensus", "manual seal"],
+		},
+		{
+			"title": "Custom RPC Node",
+			"tags": ["instant-seal", "RPC", "custom rpc", "runtime api"],
+		},
+	],
 }
