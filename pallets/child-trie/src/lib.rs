@@ -1,5 +1,5 @@
 #![cfg_attr(not(feature = "std"), no_std)]
-#![allow(clippy::string_lit_as_bytes)]
+
 //! Child Trie API
 //! - auxiliary runtime methods for using child storage
 //! - see smpl-crowdfund for examples of using this API with objects in the pallet

@@ -102,8 +102,11 @@ pub fn new_full(config: Configuration) -> Result<impl AbstractService, ServiceEr
 		.build()?;
 
 	if is_authority {
-		let proposer =
-			sc_basic_authorship::ProposerFactory::new(service.client(), service.transaction_pool());
+		let proposer = sc_basic_authorship::ProposerFactory::new(
+			service.client(),
+			service.transaction_pool(),
+			service.prometheus_registry().as_ref(),
+		);
 
 		// The number of rounds of mining to try in a single call
 		let rounds = 500;

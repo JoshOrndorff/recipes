@@ -1,5 +1,4 @@
 #![cfg_attr(not(feature = "std"), no_std)]
-#![allow(clippy::string_lit_as_bytes)]
 
 //! A simple pallet with two storage values. The pallet itself does not teach any new concepts.
 //! Rather we use this pallet as demonstration case as we demonstrate custom runtime APIs.
