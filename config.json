@@ -2,9 +2,14 @@
 	"slug": "config",
 	"lang": "en",
 	"description": "A Hands-On Cookbook for Aspiring Blockchain Chefs",
-	"TOC": {
-		"prepare-your-kitchen": [ "index", "build-node", "interact-node", "kitchen-organization" ],
-		"appetizers": [],
-		"featured-recipes": []
-	}
+	"TOC": [
+		{
+			"title": "Prepare your kitchen",
+			"items": [ "index", "build-node", "interact-node", "kitchen-organization" ]
+		},
+		{
+			"title": "Appetizers",
+			"items": [ "pallets/hello-substrate", "nodes/babe-grandpa-node" ]
+		}
+	]
 }

@@ -2,7 +2,13 @@
 slug: hybrid-consensus
 lang: en
 title: Hybrid Consensus
+public_url: https://github.com/substrate-developer-hub/recipes/tree/master/nodes/hybrid-consensus
 ---
+
+## Build this node
+```
+build command
+```
 
 *[`nodes/hybrid-consensus`](https://github.com/substrate-developer-hub/recipes/tree/master/nodes/hybrid-consensus)*
 
