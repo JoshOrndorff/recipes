@@ -12,12 +12,12 @@ jsonrpc-core-client = "14.0.3"
 jsonrpc-derive = "14.0.3"
 serde = { version = "1.0.101", features = ["derive"], optional = true }
 
-sp-rpc = { version = '2.0.0-alpha.6', default_features = false}
-sp-runtime = { version = '2.0.0-alpha.6', default_features = false}
-sp-blockchain = { version = '2.0.0-alpha.6', default_features = false}
-sp-api = { version = '2.0.0-alpha.6', default_features = false }
+sp-rpc = { version = '2.0.0-alpha.8', default-features = false}
+sp-runtime = { version = '2.0.0-alpha.8', default-features = false}
+sp-blockchain = { version = '2.0.0-alpha.8', default-features = false}
+sp-api = { version = '2.0.0-alpha.8', default-features = false }
 
-sum-storage-runtime-api = { version = "2.0.0", path = "../runtime-api", default_features = false }
+sum-storage-runtime-api = { version = "2.0.0", path = "../runtime-api", default-features = false }
 
 [features]
 default = ["std"]

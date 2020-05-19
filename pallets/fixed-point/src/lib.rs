@@ -1,4 +1,5 @@
 #![cfg_attr(not(feature = "std"), no_std)]
+#![allow(clippy::string_lit_as_bytes)]
 
 //! A pallet that demonstrates the fundamentals of Fixed Point arithmetic.
 //! This pallet implements three multiplicative accumulators using fixed point.
@@ -15,20 +16,10 @@
 //! Here we use an external crate called substrate-fixed which implements more advanced
 //! mathematical operations including transcendental functions.
 
-use frame_support::{
-	decl_event,
-	decl_error,
-	decl_module,
-	decl_storage,
-	dispatch::DispatchResult,
-	weights::SimpleDispatchInfo,
-};
+use frame_support::{decl_error, decl_event, decl_module, decl_storage, dispatch::DispatchResult};
 use frame_system::{self as system, ensure_signed};
+use sp_arithmetic::{traits::Saturating, Permill};
 use substrate_fixed::types::U16F16;
-use sp_arithmetic::{Permill, traits::Saturating};
-
-#[cfg(not(feature = "std"))]
-use sp_arithmetic::PerThing;
 
 #[cfg(test)]
 mod tests;
@@ -74,7 +65,7 @@ decl_module! {
 
 		/// Update the Permill accumulator implementation's value by multiplying it
 		/// by the new factor given in the extrinsic
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		fn update_permill(origin, new_factor: Permill) -> DispatchResult {
 			ensure_signed(origin)?;
 
@@ -94,7 +85,7 @@ decl_module! {
 
 		/// Update the Substrate-fixed accumulator implementation's value by multiplying it
 		/// by the new factor given in the extrinsic
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		fn update_fixed(origin, new_factor: U16F16) -> DispatchResult {
 			ensure_signed(origin)?;
 
@@ -114,7 +105,7 @@ decl_module! {
 
 		/// Update the manually-implemented accumulator's value by multiplying it
 		/// by the new factor given in the extrinsic
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		fn update_manual(origin, new_factor: u32) -> DispatchResult {
 			ensure_signed(origin)?;
 

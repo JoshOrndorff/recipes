@@ -14,18 +14,23 @@ Much, but not all, of the Recipes focuses on writing runtimes with FRAME, Parity
 
 ## The Directories in our Kitchen
 
-There are four primary directories in this repository:
+There are five primary directories in this repository:
 
 * **Text**: Source of [the book](https://substrate.dev/recipes) written in markdown. This is what you're reading right now.
+* **Pallets**: Pallets for use in FRAME-based runtimes.
+* **Runtimes**: Runtimes for use in Substrate nodes.
+* **Consensus**: Consensus engines for use in Substrate nodes.
 * **Nodes**: Complete Substrate nodes ready to run.
-* **Runtimes**: Complete runtimes for use in Substrate nodes.
-* **Pallets**: Complete pallets for use in FRAME-based runtimes.
 
 Exploring those directories reveals a tree that looks like this
 ```
 recipes
 |
 +-- text
+|
++-- consensus
+  |
+  +-- shaw3pow
 |
 +-- nodes
 	|
@@ -58,16 +63,29 @@ recipes
 
 Let us take a deeper look at the [Kitchen Node](https://github.com/substrate-developer-hub/recipes/tree/master/nodes/kitchen-node).
 
+Looking inside the Kitchen Node's `Cargo.toml` file we see that it has many dependencies. Most of them come from Substrate itself. Indeed most parts of this Kitchen Node are not unique or specialized, and Substrate offers robust implementations that we can use. The runtime does not come from Substrate. Rather, we use our super-runtime which is in the `runtimes` folder.
+
 **`nodes/kitchen-node/Cargo.toml`**
 ```TOML
-# -- snip --
+# This node is compatible with any of the runtimes below
+# ---
+# Common runtime configured with most Recipes pallets.
 runtime = { package = "super-runtime", path = "../../runtimes/super-runtime" }
+
+# Runtime with custom weight and fee calculation.
 # runtime = { package = "weight-fee-runtime", path = "../../runtimes/weight-fee-runtime"}
+
+# Runtime with off-chain worker enabled.
+# To use this runtime, compile the node with `ocw` feature enabled,
+#   `cargo build --release --features ocw`.
+# runtime = { package = "ocw-runtime", path = "../../runtimes/ocw-runtime" }
+
+# Runtime with custom runtime-api (custom API only used in rpc-node)
+# runtime = { package = "api-runtime", path = "../../runtimes/api-runtime" }
+# ---
 ```
 
-Looking inside the Kitchen Node's `Cargo.toml` file we see that it has many dependencies. Most of them come from Substrate itself. Indeed most parts of this Kitchen Node are not unique or specialized, and Substrate offers robust implementations that we can use. The lines quoted above show that the runtime does not come from Substrate. Rather, we use our super-runtime which is in the `runtimes` folder.
-
-The commented lines, also quoted above, show that the Super Runtime is not the only runtime we could have chosen. We could also use the Weight-Fee runtime, and I encourage you to try that experiment (remember, instructions to re-compile the node are in the previous section).
+The commented lines, quoted above, show that the Super Runtime is not the only runtime we could have chosen. We could also use the Weight-Fee runtime, and I encourage you to try that experiment (remember, instructions to re-compile the node are in the previous section).
 
 Every node must have a runtime. You may confirm that by looking at the `Cago.toml` files of the other nodes included in our kitchen.
 

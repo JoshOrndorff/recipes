@@ -1,0 +1,18 @@
+[package]
+authors = ['Joshy Orndorff, Wei Tang']
+edition = '2018'
+homepage = 'https://substrate.dev/recipes'
+name = 'sha3pow'
+repository = 'https://github.com/substrate-developer-hub/recipes'
+version = "2.0.0-alpha.8"
+description = 'Sha3-based Proof of Work algorithms for Substrate'
+
+[dependencies]
+parity-scale-codec = '1.3.0'
+sha3 = "0.8"
+rand = { version = "0.7", features = ["small_rng"] }
+sc-consensus-pow = '0.8.0-alpha.8'
+sp-api = '2.0.0-alpha.8'
+sp-consensus-pow = '0.8.0-alpha.8'
+sp-core = '2.0.0-alpha.8'
+sp-runtime = '2.0.0-alpha.8'

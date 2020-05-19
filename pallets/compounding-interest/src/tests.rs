@@ -1,5 +1,9 @@
 use super::Event;
 use crate::{Module, Trait};
+use frame_support::{
+	assert_ok, impl_outer_event, impl_outer_origin, parameter_types, traits::OnFinalize,
+};
+use frame_system::{self as system, EventRecord, Phase};
 use sp_core::H256;
 use sp_io::TestExternalities;
 use sp_runtime::{
@@ -7,14 +11,6 @@ use sp_runtime::{
 	traits::{BlakeTwo256, IdentityLookup},
 	Perbill,
 };
-use frame_support::{
-	assert_ok,
-	impl_outer_event,
-	impl_outer_origin,
-	parameter_types,
-	traits::OnFinalize,
-};
-use frame_system::{self as system, EventRecord, Phase};
 
 impl_outer_origin! {
 	pub enum Origin for TestRuntime {}
@@ -42,6 +38,9 @@ impl system::Trait for TestRuntime {
 	type Event = TestEvent;
 	type BlockHashCount = BlockHashCount;
 	type MaximumBlockWeight = MaximumBlockWeight;
+	type DbWeight = ();
+	type BlockExecutionWeight = ();
+	type ExtrinsicBaseWeight = ();
 	type MaximumBlockLength = MaximumBlockLength;
 	type AvailableBlockRatio = AvailableBlockRatio;
 	type Version = ();
@@ -92,22 +91,21 @@ fn deposit_withdraw_discrete_works() {
 		assert_ok!(FixedPoint::withdraw_discrete(Origin::signed(1), 5));
 
 		// Check for the correct event
-		assert_eq!(System::events(), vec![
-			EventRecord {
-				phase: Phase::Initialization,
-				event: TestEvent::fixed_point(Event::DepositedDiscrete(
-					10,
-				)),
-				topics: vec![],
-			},
-			EventRecord {
-				phase: Phase::Initialization,
-				event: TestEvent::fixed_point(Event::WithdrewDiscrete(
-					5,
-				)),
-				topics: vec![],
-			},
-		]);
+		assert_eq!(
+			System::events(),
+			vec![
+				EventRecord {
+					phase: Phase::Initialization,
+					event: TestEvent::fixed_point(Event::DepositedDiscrete(10,)),
+					topics: vec![],
+				},
+				EventRecord {
+					phase: Phase::Initialization,
+					event: TestEvent::fixed_point(Event::WithdrewDiscrete(5,)),
+					topics: vec![],
+				},
+			]
+		);
 
 		// Check that five tokens are still there
 		assert_eq!(FixedPoint::discrete_account(), 5);
@@ -128,22 +126,21 @@ fn discrete_interest_works() {
 		FixedPoint::on_finalize(10);
 
 		// Check for the correct event
-		assert_eq!(System::events(), vec![
-			EventRecord {
-				phase: Phase::Initialization,
-				event: TestEvent::fixed_point(Event::DepositedDiscrete(
-					100,
-				)),
-				topics: vec![],
-			},
-			EventRecord {
-				phase: Phase::Initialization,
-				event: TestEvent::fixed_point(Event::DiscreteInterestApplied(
-					50,
-				)),
-				topics: vec![],
-			},
-		]);
+		assert_eq!(
+			System::events(),
+			vec![
+				EventRecord {
+					phase: Phase::Initialization,
+					event: TestEvent::fixed_point(Event::DepositedDiscrete(100,)),
+					topics: vec![],
+				},
+				EventRecord {
+					phase: Phase::Initialization,
+					event: TestEvent::fixed_point(Event::DiscreteInterestApplied(50,)),
+					topics: vec![],
+				},
+			]
+		);
 
 		// Check that the balance has updated
 		assert_eq!(FixedPoint::discrete_account(), 150);

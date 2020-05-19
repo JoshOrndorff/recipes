@@ -1,4 +1,5 @@
 #![cfg_attr(not(feature = "std"), no_std)]
+#![allow(clippy::string_lit_as_bytes)]
 
 //! A pallet that demonstrates Fixed Point arithmetic in the context of two simple bank accounts
 //! that accrue compounding interest.
@@ -9,22 +10,13 @@
 //! The continuous account accrues interest continuously and is implemented using
 //! Substrate-fixed's `I32F32` implementation of fixed point.
 
-use parity_scale_codec::{Encode, Decode};
-use sp_runtime::traits::Zero;
-use sp_arithmetic::Percent;
-use frame_support::{
-	decl_event,
-	decl_module,
-	decl_storage,
-	dispatch::DispatchResult,
-	weights::SimpleDispatchInfo,
-};
+use frame_support::{decl_event, decl_module, decl_storage, dispatch::DispatchResult};
 use frame_system::{self as system, ensure_signed};
-use substrate_fixed::{
-	transcendental::exp,
-	types::I32F32,
-};
+use parity_scale_codec::{Decode, Encode};
+use sp_arithmetic::Percent;
+use sp_runtime::traits::Zero;
 use sp_std::convert::TryInto;
+use substrate_fixed::{transcendental::exp, types::I32F32};
 
 #[cfg(test)]
 mod tests;
@@ -72,7 +64,7 @@ decl_module! {
 		fn deposit_event() = default;
 
 		/// Deposit some funds into the compounding interest account
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		fn deposit_continuous(origin, val_to_add: u64) -> DispatchResult {
 			ensure_signed(origin)?;
 
@@ -93,7 +85,7 @@ decl_module! {
 		}
 
 		/// Withdraw some funds from the compounding interest account
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		fn withdraw_continuous(origin, val_to_take: u64) -> DispatchResult {
 			ensure_signed(origin)?;
 
@@ -114,7 +106,7 @@ decl_module! {
 		}
 
 		/// Deposit some funds into the discrete interest account
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		fn deposit_discrete(origin, val_to_add: u64) -> DispatchResult {
 			ensure_signed(origin)?;
 
@@ -129,7 +121,7 @@ decl_module! {
 		}
 
 		/// Withdraw some funds from the discrete interest account
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		fn withdraw_discrete(origin, val_to_take: u64) -> DispatchResult {
 			ensure_signed(origin)?;
 
@@ -172,18 +164,19 @@ impl<T: Trait> Module<T> {
 	/// account
 	fn value_of_continuous_account(now: &<T as system::Trait>::BlockNumber) -> I32F32 {
 		// Get the old state of the accout
-		let ContinuousAccountData{
+		let ContinuousAccountData {
 			principal,
 			deposit_date,
 		} = ContinuousAccount::<T>::get();
 
 		// Calculate the exponential function (lots of type conversion)
 		let elapsed_time_block_number = *now - deposit_date;
-		let elapsed_time_u32 = TryInto::try_into(elapsed_time_block_number).ok()
+		let elapsed_time_u32 = TryInto::try_into(elapsed_time_block_number)
+			.ok()
 			.expect("blockchain will not exceed 2^32 blocks; qed");
 		let elapsed_time_i32f32 = I32F32::from_num(elapsed_time_u32);
-		let exponent : I32F32 = Self::continuous_interest_rate() * elapsed_time_i32f32;
-		let exp_result : I32F32 = exp(exponent).ok()
+		let exponent: I32F32 = Self::continuous_interest_rate() * elapsed_time_i32f32;
+		let exp_result : I32F32 = exp(exponent)
 			.expect("Interest will not overflow account (at least not until the learner has learned enough about fixed point :)");
 
 		// Return the result interest = principal * e ^ (rate * time)

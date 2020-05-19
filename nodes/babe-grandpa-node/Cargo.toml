@@ -1,6 +1,6 @@
 [package]
 name = "babe-grandpa-node"
-version = "2.0.0-alpha.6"
+version = "2.0.0-alpha.8"
 edition = "2018"
 authors = ['Joshy Orndorff', '4meta5', 'Jimmy Chu']
 homepage = 'https://substrate.dev/recipes'
@@ -23,39 +23,41 @@ tokio = "0.1.22"
 exit-future = "0.2.0"
 parking_lot = "0.9.0"
 trie-root = "0.15.2"
-sp-io = '2.0.0-alpha.6'
-sc-cli = '0.8.0-alpha.6'
-sc-client-api = '2.0.0-alpha.6'
-sp-core = '2.0.0-alpha.6'
-sp-runtime = '2.0.0-alpha.6'
-sc-executor = '0.8.0-alpha.6'
-sc-service = '0.8.0-alpha.6'
-sp-inherents = '2.0.0-alpha.6'
-sc-transaction-pool = '2.0.0-alpha.6'
-sp-transaction-pool = '2.0.0-alpha.6'
-sc-network = '0.8.0-alpha.6'
-sc-consensus-babe = '0.8.0-alpha.6'
-sp-consensus-babe = '0.8.0-alpha.6'
-sc-finality-grandpa = '0.8.0-alpha.6'
-sp-finality-grandpa = '2.0.0-alpha.6'
-sc-client = '0.8.0-alpha.6'
-sc-basic-authorship = '0.8.0-alpha.6'
-sp-consensus = '0.8.0-alpha.6'
+sp-io = '2.0.0-alpha.8'
+sc-cli = '0.8.0-alpha.8'
+sc-client-api = '2.0.0-alpha.8'
+sc-consensus = '0.8.0-alpha.8'
+sp-core = '2.0.0-alpha.8'
+sp-runtime = '2.0.0-alpha.8'
+sc-executor = '0.8.0-alpha.8'
+sc-service = '0.8.0-alpha.8'
+sp-inherents = '2.0.0-alpha.8'
+sc-transaction-pool = '2.0.0-alpha.8'
+sp-transaction-pool = '2.0.0-alpha.8'
+sc-network = '0.8.0-alpha.8'
+sc-consensus-babe = '0.8.0-alpha.8'
+sp-consensus-babe = '0.8.0-alpha.8'
+sc-finality-grandpa = '0.8.0-alpha.8'
+sp-finality-grandpa = '2.0.0-alpha.8'
+sc-basic-authorship = '0.8.0-alpha.8'
+sp-consensus = '0.8.0-alpha.8'
 
 # This node only works with runtimes that can provide babe and grandpa authorities.
 # No other runtimes that come with the recipes provide these APIs, but the substrate demonstration
 # runtime does.
 runtime = { package = "babe-grandpa-runtime", path = "../../runtimes/babe-grandpa-runtime" }
 
-# In theory the main Substrate node's runtime should work, but it is not published on crates.io
-# so a git dependency is necessary which leads to:
-# `perhaps two different versions of crate `sp_runtime` are being used?`
-# runtime = { package = "node-runtime", git = "https://github.com/paritytech/substrate/", tag = "v2.0.0-alpha.6" }
+# In theory the main Substrate node's runtime is compatible, but there are several practical limitations
+# 1. It isn't published on crates.io so a git dependency is needed which leads to
+#    `perhaps two different versions of crate `sp_runtime` are being used?`
+# 2. That runtime doesn't have an `opaque` module
+# 3. That runtime doesn't have a genesis module
+# runtime = { package = "node-runtime", git = "https://github.com/paritytech/substrate/", rev = '7e9a2ae78d27cc56e053fbec3b34a1a258b89561' }
 
 
 [build-dependencies]
 vergen = "3.0.4"
-substrate-build-script-utils = '2.0.0-alpha.6'
+substrate-build-script-utils = '2.0.0-alpha.8'
 
 [features]
 ocw = []

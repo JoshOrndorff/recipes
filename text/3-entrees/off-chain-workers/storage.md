@@ -42,7 +42,7 @@ fn fetch_if_needed() -> Result<(), Error<T>> {
 }
 ```
 
-Looking at the [API doc](https://substrate.dev/rustdocs/v2.0.0-alpha.6/sp_runtime/offchain/storage/struct.StorageValueRef.html), we see there are two type of StorageValueRef, created via `::persistent()` and `::local()`. `::local()` is not fully implemented yet and `::persistent()` is enough for this use cases. We passed in a key as our storage key. As storage keys are namespaced globally, a good practice would be to prepend our pallet name in front of our storage key.
+Looking at the [API doc](https://substrate.dev/rustdocs/master/sp_runtime/offchain/storage/struct.StorageValueRef.html), we see there are two type of StorageValueRef, created via `::persistent()` and `::local()`. `::local()` is not fully implemented yet and `::persistent()` is enough for this use cases. We passed in a key as our storage key. As storage keys are namespaced globally, a good practice would be to prepend our pallet name in front of our storage key.
 
 ## Access
 

@@ -1,14 +1,10 @@
 #![cfg_attr(not(feature = "std"), no_std)]
+#![allow(clippy::string_lit_as_bytes)]
 
 //! A pallet that demonstrates how to use append instead of mutate
-use sp_std::prelude::*;
-use frame_support::{
-	decl_event, decl_module, decl_storage,
-	dispatch::DispatchResult,
-	ensure,
-	weights::SimpleDispatchInfo,
-};
+use frame_support::{decl_event, decl_module, decl_storage, dispatch::DispatchResult, ensure};
 use frame_system::{self as system, ensure_signed};
+use sp_std::prelude::*;
 
 #[cfg(test)]
 mod tests;
@@ -48,7 +44,7 @@ decl_module! {
 		/// Appends an item to the vec using the `mutate` method
 		/// Don't do this because it is slow
 		/// (unless appending new entries AND mutating existing entries)
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		fn mutate_to_append(origin) -> DispatchResult {
 			let user = ensure_signed(origin)?;
 
@@ -60,26 +56,28 @@ decl_module! {
 
 		/// Appends an item to the vec using the `append` method
 		/// This method is faster, and therefore preferred, whenever possible
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		fn append_new_entries(origin) -> DispatchResult {
 			let user = ensure_signed(origin)?;
 
 			// this encodes the new values and appends them to the already encoded existing evc
-			<CurrentValues>::append(Self::new_values())?;
+			Self::new_values()
+				.iter()
+				.for_each(CurrentValues::append);
 			Self::deposit_event(RawEvent::AppendVec(user));
 			Ok(())
 		}
 
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		fn add_member(origin) -> DispatchResult {
 			let new_member = ensure_signed(origin)?;
 			ensure!(!Self::is_member(&new_member), "must not be a member to be added");
-			<Members<T>>::append(vec![new_member.clone()])?;
+			<Members<T>>::append(new_member.clone());
 			Self::deposit_event(RawEvent::MemberAdded(new_member));
 			Ok(())
 		}
 
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		fn remove_member(origin) -> DispatchResult {
 			let old_member = ensure_signed(origin)?;
 			ensure!(Self::is_member(&old_member), "must be a member in order to leave");

@@ -1,13 +1,12 @@
 #![cfg_attr(not(feature = "std"), no_std)]
+#![allow(clippy::string_lit_as_bytes)]
 
 //! Simple Token Transfer
 //! 1. set total supply
 //! 2. establish ownership upon configuration of circulating tokens
 //! 3. coordinate token transfers with the runtime functions
 use frame_support::{
-	decl_event, decl_module, decl_error, decl_storage, ensure,
-	dispatch::DispatchResult,
-	weights::SimpleDispatchInfo,
+	decl_error, decl_event, decl_module, decl_storage, dispatch::DispatchResult, ensure,
 };
 use frame_system::{self as system, ensure_signed};
 
@@ -20,11 +19,11 @@ pub trait Trait: system::Trait {
 
 decl_storage! {
 	trait Store for Module<T: Trait> as Token {
-		pub Balances get(get_balance): map hasher(blake2_128_concat) T::AccountId => u64;
+		pub Balances get(fn get_balance): map hasher(blake2_128_concat) T::AccountId => u64;
 
-		pub TotalSupply get(total_supply): u64 = 21000000;
+		pub TotalSupply get(fn total_supply): u64 = 21000000;
 
-		Init get(is_init): bool;
+		Init get(fn is_init): bool;
 	}
 }
 
@@ -55,10 +54,10 @@ decl_module! {
 
 		/// Initialize the token
 		/// transfers the total_supply amout to the caller
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		fn init(origin) -> DispatchResult {
 			let sender = ensure_signed(origin)?;
-			ensure!(Self::is_init() == false, <Error<T>>::AlreadyInitialized);
+			ensure!(!Self::is_init(), <Error<T>>::AlreadyInitialized);
 
 			<Balances<T>>::insert(sender, Self::total_supply());
 
@@ -67,7 +66,7 @@ decl_module! {
 		}
 
 		/// Transfer tokens from one account to another
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		fn transfer(_origin, to: T::AccountId, value: u64) -> DispatchResult {
 			let sender = ensure_signed(_origin)?;
 			let sender_balance = Self::get_balance(&sender);

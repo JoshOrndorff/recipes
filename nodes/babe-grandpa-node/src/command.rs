@@ -1,4 +1,3 @@
-
 use crate::chain_spec;
 use crate::cli::Cli;
 use crate::service;
@@ -55,11 +54,7 @@ pub fn run() -> sc_cli::Result<()> {
 		}
 		None => {
 			let runner = cli.create_runner(&cli.run)?;
-			runner.run_node(
-				service::new_light,
-				service::new_full,
-				runtime::VERSION
-			)
+			runner.run_node(service::new_light, service::new_full, runtime::VERSION)
 		}
 	}
 }

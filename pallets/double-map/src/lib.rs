@@ -5,19 +5,19 @@
 //! `remove_prefix` enables clean removal of all values with the group identifier
 
 #![cfg_attr(not(feature = "std"), no_std)]
+#![allow(clippy::string_lit_as_bytes)]
 
 #[cfg(test)]
 mod tests;
 
-use sp_std::prelude::*;
 use frame_support::{
 	decl_event, decl_module, decl_storage,
 	dispatch::DispatchResult,
 	ensure,
 	storage::{StorageDoubleMap, StorageMap, StorageValue},
-	weights::SimpleDispatchInfo,
 };
 use frame_system::{self as system, ensure_signed};
+use sp_std::prelude::*;
 
 pub trait Trait: system::Trait {
 	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
@@ -58,18 +58,18 @@ decl_module! {
 		fn deposit_event() = default;
 
 		/// Join the `AllMembers` vec before joining a group
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		fn join_all_members(origin) -> DispatchResult {
 			let new_member = ensure_signed(origin)?;
 			ensure!(!Self::is_member(&new_member), "already a member, can't join");
-			<AllMembers<T>>::append(vec!(new_member.clone())).map_err(|_e| "appending new member error")?;
+			<AllMembers<T>>::append(&new_member);
 
 			Self::deposit_event(RawEvent::NewMember(new_member));
 			Ok(())
 		}
 
 		/// Put MemberScore (for testing purposes)
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		fn join_a_group(origin, index: GroupIndex, score: u32) -> DispatchResult {
 			let member = ensure_signed(origin)?;
 			ensure!(Self::is_member(&member), "not a member, can't remove");
@@ -81,7 +81,7 @@ decl_module! {
 		}
 
 		/// Remove a member
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		fn remove_member(origin) -> DispatchResult {
 			let member_to_remove = ensure_signed(origin)?;
 			ensure!(Self::is_member(&member_to_remove), "not a member, can't remove");
@@ -93,7 +93,7 @@ decl_module! {
 		}
 
 		/// Remove group score
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		fn remove_group_score(origin, group: GroupIndex) -> DispatchResult {
 			let member = ensure_signed(origin)?;
 

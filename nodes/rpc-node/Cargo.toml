@@ -3,7 +3,7 @@ authors = ['Anonymous']
 build = 'build.rs'
 edition = '2018'
 name = 'rpc-node'
-version = '2.0.0-alpha.6'
+version = "2.0.0-alpha.8"
 homepage = 'https://substrate.dev/recipes'
 repository = 'https://github.com/substrate-developer-hub/recipes'
 description = 'A Substrate node that demonstrates a custom RPC endpoint'
@@ -23,27 +23,26 @@ structopt = "0.3.8"
 jsonrpc-core = "14.0.3"
 jsonrpc-core-client = "14.0.3"
 jsonrpc-derive = "14.0.3"
-sc-rpc = { version = '2.0.0-alpha.6' }
-sc-client-api = '2.0.0-alpha.6'
-sc-client-db = '0.8.0-alpha.6'
-sum-storage-rpc = { path = "../../pallets/sum-storage/rpc" }
 ctrlc = { features = ['termination'], version = '3.1.3' }
 futures01 = { package = 'futures', version = '0.1.29'}
-sc-basic-authorship = '0.8.0-alpha.6'
-sc-cli = '0.8.0-alpha.6'
-sc-client = '0.8.0-alpha.6'
-sc-consensus-manual-seal = '0.8.0-alpha.6'
-sc-executor = '0.8.0-alpha.6'
-sc-network = '0.8.0-alpha.6'
-sc-service = '0.8.0-alpha.6'
-sc-transaction-pool = '2.0.0-alpha.6'
-sp-consensus = '0.8.0-alpha.6'
-sp-core = '2.0.0-alpha.6'
-sp-inherents = '2.0.0-alpha.6'
-sp-io = '2.0.0-alpha.6'
-sp-runtime = '2.0.0-alpha.6'
-sp-timestamp = '2.0.0-alpha.6'
-sp-transaction-pool = '2.0.0-alpha.6'
+sc-rpc = '2.0.0-alpha.8'
+sc-client-api = '2.0.0-alpha.8'
+sum-storage-rpc = { path = "../../pallets/sum-storage/rpc" }
+sc-basic-authorship = '0.8.0-alpha.8'
+sc-cli = '0.8.0-alpha.8'
+sc-consensus = '0.8.0-alpha.8'
+sc-consensus-manual-seal = '0.8.0-alpha.8'
+sc-executor = '0.8.0-alpha.8'
+sc-network = '0.8.0-alpha.8'
+sc-service = '0.8.0-alpha.8'
+sc-transaction-pool = '2.0.0-alpha.8'
+sp-consensus = '0.8.0-alpha.8'
+sp-core = '2.0.0-alpha.8'
+sp-inherents = '2.0.0-alpha.8'
+sp-io = '2.0.0-alpha.8'
+sp-runtime = '2.0.0-alpha.8'
+sp-timestamp = '2.0.0-alpha.8'
+sp-transaction-pool = '2.0.0-alpha.8'
 
 # RPC Node only works with Runtime's that provide the sum-storage-runtime-api
 # That means it only works with the api-runtime
@@ -51,4 +50,4 @@ runtime = { package = "api-runtime", path = "../../runtimes/api-runtime" }
 
 [build-dependencies]
 vergen = '3.0.4'
-substrate-build-script-utils = '2.0.0-alpha.6'
+substrate-build-script-utils = '2.0.0-alpha.8'

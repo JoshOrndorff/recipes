@@ -4,11 +4,10 @@
 //! This pallet uses the `blake2_128_concat` hasher. This is a good default hasher.
 
 #![cfg_attr(not(feature = "std"), no_std)]
+#![allow(clippy::string_lit_as_bytes)]
 
-use frame_support::{decl_event, decl_module, decl_storage, decl_error,
-	dispatch::DispatchResult,
-	ensure,
-	weights::SimpleDispatchInfo,
+use frame_support::{
+	decl_error, decl_event, decl_module, decl_storage, dispatch::DispatchResult, ensure,
 };
 use frame_system::{self as system, ensure_signed};
 
@@ -65,7 +64,7 @@ decl_module! {
 		fn deposit_event() = default;
 
 		/// Set the value stored at a particular key
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		fn set_single_entry(origin, entry: u32) -> DispatchResult {
 			// A user can only set their own entry
 			let user = ensure_signed(origin)?;
@@ -77,7 +76,7 @@ decl_module! {
 		}
 
 		/// Read the value stored at a particular key and emit it in an event
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		fn get_single_entry(origin, account: T::AccountId) -> DispatchResult {
 			// Any user can get any other user's entry
 			let getter = ensure_signed(origin)?;
@@ -90,7 +89,7 @@ decl_module! {
 
 		/// Read the value stored at a particular key,while removing it from the map.
 		/// Also emit the read value in an event
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		fn take_single_entry(origin) -> DispatchResult {
 			// A user can only take (delete) their own entry
 			let user = ensure_signed(origin)?;
@@ -102,7 +101,7 @@ decl_module! {
 		}
 
 		/// Increase the value associated with a particular key
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		fn increase_single_entry(origin, add_this_val: u32) -> DispatchResult {
 			// A user can only mutate their own entry
 			let user = ensure_signed(origin)?;

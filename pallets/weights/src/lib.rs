@@ -1,13 +1,13 @@
 #![cfg_attr(not(feature = "std"), no_std)]
+#![allow(clippy::string_lit_as_bytes)]
 
 //! Transaction Weight Examples
 
 use frame_support::{
+	decl_module, decl_storage,
+	dispatch::{DispatchResult, PaysFee, WeighData},
 	ensure,
-	decl_module,
-	decl_storage,
-	dispatch::{DispatchResult, WeighData, PaysFee},
-	weights::{ DispatchClass, Weight, ClassifyDispatch, SimpleDispatchInfo},
+	weights::{ClassifyDispatch, DispatchClass, Pays, Weight},
 };
 use frame_system as system;
 
@@ -27,18 +27,17 @@ pub struct Linear(u32);
 // The actual weight calculation happens in the `impl WeighData` block
 impl WeighData<(&u32,)> for Linear {
 	fn weigh_data(&self, (x,): (&u32,)) -> Weight {
-
 		// Use saturation so that an extremely large parameter value
 		// Does not cause overflow.
-		x.saturating_mul(self.0)
+		x.saturating_mul(self.0).into()
 	}
 }
 
 // The PaysFee trait indicates whether fees should actually be charged from the caller. If not,
 // the weights are still applied toward the block maximums.
 impl<T> PaysFee<T> for Linear {
-	fn pays_fee(&self, _: T) -> bool {
-		true
+	fn pays_fee(&self, _: T) -> Pays {
+		Pays::Yes
 	}
 }
 
@@ -58,12 +57,11 @@ pub struct Quadratic(u32, u32, u32);
 
 impl WeighData<(&u32, &u32)> for Quadratic {
 	fn weigh_data(&self, (x, y): (&u32, &u32)) -> Weight {
-
 		let ax2 = x.saturating_mul(*x).saturating_mul(self.0);
 		let by = y.saturating_mul(self.1);
 		let c = self.2;
 
-		ax2.saturating_add(by).saturating_add(c)
+		ax2.saturating_add(by).saturating_add(c).into()
 	}
 }
 
@@ -75,8 +73,8 @@ impl<T> ClassifyDispatch<T> for Quadratic {
 }
 
 impl<T> PaysFee<T> for Quadratic {
-	fn pays_fee(&self, _: T) -> bool {
-		true
+	fn pays_fee(&self, _: T) -> Pays {
+		Pays::Yes
 	}
 }
 
@@ -87,19 +85,18 @@ pub struct Conditional(u32);
 
 impl WeighData<(&bool, &u32)> for Conditional {
 	fn weigh_data(&self, (switch, val): (&bool, &u32)) -> Weight {
-
 		if *switch {
 			val.saturating_mul(self.0)
-		}
-		else {
+		} else {
 			self.0
 		}
+		.into()
 	}
 }
 
 impl<T> PaysFee<T> for Conditional {
-	fn pays_fee(&self, _: T) -> bool {
-		true
+	fn pays_fee(&self, _: T) -> Pays {
+		Pays::Yes
 	}
 }
 
@@ -114,9 +111,9 @@ decl_module! {
 	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
 
 		// Store value does not loop at all so a fixed weight is appropriate. Fixed weights can
-		// be assigned using types available in the Substrate framework. No custom coding is
+		// be assigned using integer constants. No custom coding is
 		// necessary.
-		#[weight = SimpleDispatchInfo::FixedNormal(100)]
+		#[weight = 10_000]
 		fn store_value(_origin, entry: u32) -> DispatchResult {
 
 			StoredValue::put(entry);

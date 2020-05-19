@@ -1,4 +1,5 @@
 #![cfg_attr(not(feature = "std"), no_std)]
+#![allow(clippy::string_lit_as_bytes)]
 
 //! A pallet to demonstrate configurable pallet constants.
 //! This pallet has a single storage value that can be added to by calling the
@@ -8,17 +9,14 @@
 //! The stored value is cleared (set to zero) at a regular interval which is specified
 //! as a configuration constant.
 
-use sp_runtime::traits::Zero;
 use frame_support::{
-	decl_event,
-	decl_module,
-	decl_storage,
-	dispatch::{DispatchResult, DispatchError},
+	decl_event, decl_module, decl_storage,
+	dispatch::{DispatchError, DispatchResult},
 	ensure,
 	traits::Get,
-	weights::SimpleDispatchInfo,
 };
 use frame_system::{self as system, ensure_signed};
+use sp_runtime::traits::Zero;
 
 #[cfg(test)]
 mod tests;
@@ -58,7 +56,7 @@ decl_module! {
 		const ClearFrequency: T::BlockNumber = T::ClearFrequency::get();
 
 		/// Add to the stored value. The `val_to_add` parameter cannot exceed the specified manimum.
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		fn add_value(origin, val_to_add: u32) -> DispatchResult {
 			let _ = ensure_signed(origin)?;
 			ensure!(val_to_add <= T::MaxAddend::get(), "value must be <= maximum add amount constant");
@@ -78,7 +76,7 @@ decl_module! {
 
 		/// For testing purposes
 		/// Sets the stored value to a given value
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		fn set_value(origin, value: u32) -> DispatchResult {
 			let _ = ensure_signed(origin)?;
 			<SingleValue>::put(value);

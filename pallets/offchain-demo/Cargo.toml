@@ -1,6 +1,6 @@
 [package]
 name = "offchain-demo"
-version = "2.0.0-alpha.6"
+version = "2.0.0-alpha.8"
 authors = ["Parity Technologies <admin@parity.io>"]
 edition = "2018"
 homepage = "https://substrate.dev/recipes/"
@@ -17,12 +17,12 @@ alt_serde = { version = "1", default-features = false, features = ["derive"] }
 serde_json = { version = "1", default-features = false, git = "https://github.com/Xanewok/json", branch = "no-std", features = ["alloc"] }
 
 # Substrate dependencies
-frame-support = { default-features = false, version = '2.0.0-alpha.6' }
-frame-system = { default-features = false, version = '2.0.0-alpha.6' }
-sp-core = { default-features = false, version = '2.0.0-alpha.6' }
-sp-io = { default-features = false, version = '2.0.0-alpha.6' }
-sp-runtime = { default-features = false, version = '2.0.0-alpha.6' }
-sp-std = { default-features = false, version = '2.0.0-alpha.6' }
+frame-support = { version = '2.0.0-alpha.8', default-features = false }
+frame-system = { version = '2.0.0-alpha.8', default-features = false }
+sp-runtime = { version = '2.0.0-alpha.8', default-features = false }
+sp-core = { version = '2.0.0-alpha.8', default-features = false }
+sp-io = { version = '2.0.0-alpha.8', default-features = false }
+sp-std = { version = '2.0.0-alpha.8', default-features = false }
 
 [features]
 default = ['std']

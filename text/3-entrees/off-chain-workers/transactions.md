@@ -150,7 +150,7 @@ src: [`runtimes/ocw-runtime/src/lib.rs`](https://github.com/substrate-developer-
 ```rust
 /// The SignedExtension to the basic transaction logic.
 pub type SignedExtra = (
-	system::CheckVersion<Runtime>,
+	system::CheckTxVersion<Runtime>,
 	system::CheckGenesis<Runtime>,
 	system::CheckEra<Runtime>,
 	system::CheckNonce<Runtime>,

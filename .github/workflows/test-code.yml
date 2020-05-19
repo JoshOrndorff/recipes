@@ -1,15 +1,17 @@
-name: Test
+name: Test Code
 
 on:
   pull_request:
     branches:
     - master
+    - develop
   push:
     branches:
     - master
+    - develop
 
 jobs:
-  build:
+  test-code:
     runs-on: ubuntu-18.04
 
     steps:
@@ -39,10 +41,14 @@ jobs:
       uses: actions-rs/toolchain@v1
       with:
         profile: minimal
-        toolchain: nightly-2020-03-09
-        components: rustfmt
+        toolchain: nightly-2020-05-07
+        components: rustfmt, clippy
         target: wasm32-unknown-unknown
+        override: true
         default: true
+
+    - name: Run clippy
+      run: cargo +nightly-2020-05-07 clippy -- -D warnings
 
     - name: Check Kitchen
       run: cargo check --all
