@@ -40,13 +40,13 @@ You can navigate to the  [Polkadot-JS Apps](https://polkadot.js.org/apps/#/setti
 
 > If you are not clicking the link above but visiting Apps directly, by default Apps connects to Kusama network. You will need to switch to your locally running network, with only one node, by clicking on the network icon on Apps top left corner.
 >
-> ![Screenshot: Switching Network](../img/apps-select-network.png)
+> ![Screenshot: Switching Network](../assets/apps-select-network.png)
 
 > Some browsers, notably Firefox, will not connect to a local node from an https website. An easy work around is to try another browser, like Chromium. Another option is to [host this interface locally](https://github.com/polkadot-js/apps#development).
 
 If you're not already on the `Settings -> Developer`page, please navigate there. Copy the contents of `runtimes/super-runtime/types.json` into Apps.
 
-![Screenshot: pasting types into Apps UI](../img/apps-types.png)
+![Screenshot: pasting types into Apps UI](../assets/apps-types.png)
 
 The kitchen node uses the super runtime by default. As you work through the recipes, you'll learn that it is easy to use other runtimes in this node, or use other nodes entirely. When you do use another runtime, you need to insert the appropriate types from the `runtimes/<whatever runtime you're using>/types.json` file. Every runtime that ships with the Recipes has this file.
 

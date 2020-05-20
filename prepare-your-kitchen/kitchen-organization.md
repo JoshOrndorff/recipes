@@ -10,7 +10,7 @@ To understand how the code in this repository is organized, let's first take a l
 
 Much, but not all, of the Recipes focuses on writing runtimes with FRAME, Parity's Framework for composing runtimes from individual building blocks called Pallets. Runtimes built with FRAME typically contain several such pallets. The kitchen node you built previously follows this paradigm.
 
-![Substrate Architecture Diagram](../img/substrate-architecture.png)
+![Substrate Architecture Diagram](../assets/substrate-architecture.png)
 
 ## The Directories in our Kitchen
 

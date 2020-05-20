@@ -16,7 +16,7 @@ The `basic-pow` node demonstrates how wire a custom consensus engine into the Su
 
 You may remember from the [hello-substrate recipe](../2-appetizers/1-hello-substrate.md) that a Substrate node has two parts. An outer part that is responsible for gossiping transactions and blocks, handling [rpc requests](./custom-rpc.md), and reaching consensus. And a runtime that is responsible for the business logic of the chain. This architecture diagram illustrates the distinction.
 
-![Substrate Architecture Diagram](../img/substrate-architecture.png)
+![Substrate Architecture Diagram](../../assets/substrate-architecture.png)
 
 In principle the consensus engine, part of the outer node, is agnostic over the runtime that is used with it. But in practice, most consensus engines will require the runtime to provide certain [runtime APIs](./runtime-api.md) that affect the engine. For example, Aura and Babe query the runtime for the set of validators. A more real-world PoW consensus would query the runtime for the block difficulty. Additionally, some runtimes rely on the consensus engine to provide [pre-runtime digests](https://substrate.dev/rustdocs/master/sp_runtime/generic/enum.DigestItem.html#variant.PreRuntime). For example, runtimes that include the Babe pallet expect a pre-runtime digest containing information about the current babe slot.
 
