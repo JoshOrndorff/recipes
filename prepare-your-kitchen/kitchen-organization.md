@@ -106,11 +106,11 @@ adding-machine = { path = "../../pallets/adding-machine", default-features = fal
 basic-token = { path = "../../pallets/basic-token", default-features = false }
 ```
 
-Here we see that the runtime depends on many pallets. Some of these pallets come from Substrate itself. Indeed, Substrate offers a rich collection of commonly used pallets which you may use in your own runtimes. This runtime also contains several custom pallets that are written right here in our Kitchen.
+Here we see that the runtime depends on many pallets. Some of these pallets come from Substrate itself. Indeed, Substrate offers a rich collection of commonly used pallets which you may use in your own runtimes. This runtime also contains several custom pallets that are written right here in our Kitchen. As you work through the recipes, you'll learn to add and remove your own pallets.
+
+Each runtime directory also contains a `types.json` file. This file contains information about the datatypes that are used in the runtime. When connecting a user interface to a Substrate node, the UI needs this type information so it can properly encode transactions. We'll see an example of using these types in the next section.
 
 ## Common Patterns
-
-We will not yet look closely at individual Pallets. We will begin that endeavor in the next chapter -- Appetizers.
 
 We've just observed the general pattern used throughout the recipes. From the inside out, we see a piece of pallet code stored in `pallets/<pallet-name>/src/lib.rs`. The pallet is then included into a runtime by adding its name and relative path in `runtimes/<runtime-name>/Cargo.toml`. That runtime is then installed in a node by adding its name and relative path in `nodes/<node-name>/Cargo.toml`. Of course adding pallets and runtimes also requires changing actual _code_ as well. We will cover those details in due course. For now we're just focusing on macroscopic relationships between the parts of a Substrate node.
 
@@ -118,10 +118,10 @@ Some recipes explore aspects of Blockchain development that are outside of the r
 
 ## Additional Resources
 
-Substrate Developer Hub offers tutorials that go into more depth about writing pallets and including them in runtimes. If you desire, you may read them as well.
+Substrate Developer Hub offers tutorials that go into depth about writing pallets and including them in runtimes. If you desire, you may read them as well.
 
-* [Creating an External Pallet](https://substrate.dev/docs/en/next/tutorials/creating-a-runtime-module)
-* [Adding a Pallet to Your Runtime Tutorial](https://substrate.dev/docs/en/next/tutorials/adding-a-module-to-your-runtime)
+* [Creating an External Pallet](https://www.substrate.io/tutorials/pallet-in-own-crate)
+* [Adding a Pallet to Your Runtime Tutorial](https://www.substrate.io/tutorials/add-a-pallet/)
 
 # Let's Get Cooking!
 

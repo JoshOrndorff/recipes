@@ -4,6 +4,6 @@ Any experienced chef will tell you that cooking delicious blockchains... I mean 
 
 This section covers:
 
-* [Building a Node](./1-build-node.md) - Compile and execute your first Substrate-based blockchain node.
-* [Interacting with the Node](./2-interact-node.md) - Submit transactions and inspect state with a user interface.
-* [Understanding the Kitchen's Organization](./3-kitchen-organization.md) - How is the code organized, and why?
+* [Building a Node](./build-node.md) - Compile and execute your first Substrate-based blockchain node.
+* [Interacting with the Node](./interact-node.md) - Submit transactions and inspect state with a user interface.
+* [Understanding the Kitchen's Organization](./kitchen-organization.md) - How is the code organized, and why?
