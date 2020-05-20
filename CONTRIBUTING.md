@@ -36,10 +36,11 @@ The `develop` branch is where active development happens. It is where new recipe
 It is time  to tag a new release when either, enough new features have been contributed that releasing makes sense, or, more likely, Substrate itself has tagged a new release. The release process also follows gitflow. The process of creating a new release is usually undertaken by the project maintainer, but the steps are outlined here nonetheless.
 
 1. Create a release branch off of `develop`.
-2. Update dependencies to crates.io.
-3. Update version of each Recipes crate.
-4. Make a pull request against `master`.
-5. Tag the new release version in the history of `master` only after the release branch is merged.
+1. Update dependencies to crates.io.
+1. Update version of each Recipes crate.
+1. Update rustdocs links from crate.parity.io to substrate.dev/rustdocs/_appropriate-version_
+1. Make a pull request against `master`.
+1. Tag the new release version in the history of `master` only after the release branch is merged.
 
 ## Proposing Changes and Additions
 
