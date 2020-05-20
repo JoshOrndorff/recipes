@@ -5,11 +5,21 @@
 	"TOC": [
 		{
 			"title": "Prepare your kitchen",
-			"items": [ "index", "build-node", "interact-node", "kitchen-organization" ]
+			"items": [ "README", "build-node", "interact-node", "kitchen-organization" ]
 		},
 		{
 			"title": "Appetizers",
-			"items": [ "pallets/hello-substrate", "nodes/babe-grandpa-node" ]
+			"items": [ "pallets/hello-substrate", "pallets/single-value", "pallets/handling-errors", "pallets/simple-event" ]
+		},
+		{
+			"title": "Chef's Specials",
+			"items": [
+				"pallets/charity",
+				"pallets/compounding-interest",
+				"runtimes/weight-fee-runtime",
+				"nodes/hybrid-consensus",
+				"nodes/manual-seal"
+			]
 		}
 	]
 }
