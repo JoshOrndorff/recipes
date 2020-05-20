@@ -144,7 +144,7 @@ pub type System = system::Module<TestRuntime>;
 pub type TestPallet = Module<TestRuntime>;
 ```
 
-With this, it is possible to use this type in the unit tests. For example, the block number can be set with [`set_block_number`](https://substrate.dev/rustdocs/master/frame_system/struct.Module.html#method.set_block_number)
+With this, it is possible to use this type in the unit tests. For example, the block number can be set with [`set_block_number`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_system/struct.Module.html#method.set_block_number)
 
 ```rust, ignore
 #[test]
@@ -229,7 +229,7 @@ add_extra_genesis {
 }
 ```
 
-To use `new_test_ext` in a runtime test, we call the method and call [`execute_with`](https://substrate.dev/rustdocs/master/sp_state_machine/struct.TestExternalities.html#method.execute_with) on the returned `runtime_io::TestExternalities`
+To use `new_test_ext` in a runtime test, we call the method and call [`execute_with`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sp_state_machine/struct.TestExternalities.html#method.execute_with) on the returned `runtime_io::TestExternalities`
 
 ```rust, ignore
 #[test]
@@ -253,7 +253,7 @@ pub struct ExtBuilder;
 
 The behavior for constructing the test environment is contained the methods on the `ExtBuilder` unit structure. This fosters multiple levels of configuration depending on if the test requires a common default instance of the environment or a more specific edge case configuration. The latter is explored in more detail in [Custom Test Environment](./externalities.md).
 
-Like `new_test_ext`, the `build()` method on the `ExtBuilder` object returns an instance of [`TestExternalities`](https://substrate.dev/rustdocs/master/sp_state_machine/struct.TestExternalities.html). [Externalities](https://substrate.dev/rustdocs/master/sp_externalities/index.html) are an abstraction that allows the runtime to access features of the outer node such as storage or offchain workers.
+Like `new_test_ext`, the `build()` method on the `ExtBuilder` object returns an instance of [`TestExternalities`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sp_state_machine/struct.TestExternalities.html). [Externalities](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sp_externalities/index.html) are an abstraction that allows the runtime to access features of the outer node such as storage or offchain workers.
 
 In this case, create a mock storage from the default genesis configuration.
 
@@ -277,7 +277,7 @@ fn fake_test_example() {
 }
 ```
 
-While testing in this environment, runtimes that require signed extrinsics (aka take `origin` as a parameter) will require transactions coming from an `Origin`. This requires importing the [`impl_outer_origin`](https://substrate.dev/rustdocs/master/frame_support/macro.impl_outer_origin.html) macro from `support`
+While testing in this environment, runtimes that require signed extrinsics (aka take `origin` as a parameter) will require transactions coming from an `Origin`. This requires importing the [`impl_outer_origin`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/macro.impl_outer_origin.html) macro from `support`
 
 ```rust, ignore
 use support::{impl_outer_origin};
@@ -301,7 +301,7 @@ fn last_value_updates() {
 
 Run these tests with `cargo test`, an optional parameter is the test's name to only run that test and not all tests.
 
-Note that the input to `Origin::signed` is the `system::Trait`'s `AccountId` type which was set to `u64` for the `TestRuntime` implementation. In theory, this could be set to some other type as long as it conforms to the [trait bound](https://substrate.dev/rustdocs/master/frame_system/trait.Trait.html#associatedtype.AccountId),
+Note that the input to `Origin::signed` is the `system::Trait`'s `AccountId` type which was set to `u64` for the `TestRuntime` implementation. In theory, this could be set to some other type as long as it conforms to the [trait bound](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_system/trait.Trait.html#associatedtype.AccountId),
 
 ```rust, ignore
 pub trait Trait: 'static + Eq + Clone {

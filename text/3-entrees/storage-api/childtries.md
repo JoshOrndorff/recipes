@@ -12,7 +12,7 @@ Every change in the leaves percolates up to the root, thereby providing a comple
 
 ## Runtime Child Storage <a name = "storj"></a>
 
-To interact with child tries, there are methods exposed in [runtime child storage](https://substrate.dev/rustdocs/master/frame_support/storage/child/index.html). Of the methods listed in the documentation, it is worth emphasizing the method associated with batch deletion.
+To interact with child tries, there are methods exposed in [runtime child storage](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/storage/child/index.html). Of the methods listed in the documentation, it is worth emphasizing the method associated with batch deletion.
 
 ```rust, ignore
 pub fn kill_trie(index: ObjectCount) {
@@ -24,7 +24,7 @@ pub fn kill_trie(index: ObjectCount) {
 }
 ```
 
-[`kill_storage`](https://substrate.dev/rustdocs/master/frame_support/storage/child/fn.kill_storage.html) deletes all  `(key, value)` pairs associated with the `storage_key`. The basic API for interacting with a given child trie follows this format:
+[`kill_storage`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/storage/child/fn.kill_storage.html) deletes all  `(key, value)` pairs associated with the `storage_key`. The basic API for interacting with a given child trie follows this format:
 
 ```rust, ignore
 // pseudocode

@@ -1,7 +1,7 @@
 # Configurable Pallet Constants
 *[`pallets/constant-config`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/constant-config)*
 
-To declare constant values within a runtime, it is necessary to import the [`Get`](https://substrate.dev/rustdocs/master/frame_support/traits/trait.Get.html) trait from `frame_support`
+To declare constant values within a runtime, it is necessary to import the [`Get`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/traits/trait.Get.html) trait from `frame_support`
 
 ```rust, ignore
 use frame_support::traits::Get;
@@ -86,7 +86,7 @@ To test the range of pallet configurations introduced by configurable constants,
 
 ## Supplying the Constant Value
 
-When the pallet is included in a runtime, the runtime developer supplies the value of the constant using the [`parameter_types!` macro](https://substrate.dev/rustdocs/master/frame_support/macro.parameter_types.html). This pallet is included in the `super-runtime` where we see the following macro invocation and trat implementation.
+When the pallet is included in a runtime, the runtime developer supplies the value of the constant using the [`parameter_types!` macro](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/macro.parameter_types.html). This pallet is included in the `super-runtime` where we see the following macro invocation and trat implementation.
 
 ```rust
 parameter_types! {

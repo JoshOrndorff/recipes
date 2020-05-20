@@ -1,6 +1,6 @@
 # Storage API
 
-We've already encountered the [`decl_storage!` macro](https://substrate.dev/rustdocs/master/frame_support/macro.decl_storage.html) in the appetizer on [storage items](../../2-appetizers/2-storage-values.md). There is a rich storage API in Substrate which we will explore in this section.
+We've already encountered the [`decl_storage!` macro](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/macro.decl_storage.html) in the appetizer on [storage items](../../2-appetizers/2-storage-values.md). There is a rich storage API in Substrate which we will explore in this section.
 
 For crypto*currencies*, storage might consist of a mapping between account keys and corresponding balances.
 

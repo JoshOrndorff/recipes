@@ -5,7 +5,7 @@ Storage is used for data that should be kept between blocks, and accessible to f
 
 ## Declaring Storage
 
-A pallet's storage items are declared with the [`decl_storage!` macro](https://substrate.dev/rustdocs/master/frame_support/macro.decl_storage.html).
+A pallet's storage items are declared with the [`decl_storage!` macro](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/macro.decl_storage.html).
 
 ```rust, ignore
 decl_storage! {
@@ -32,7 +32,7 @@ StoredAccount get(fn stored_account): T::AccountId;
 
 ## Reading and Writing to Storage
 
-Functions used to access a single storage value are defined in the [`StorageValue` trait](https://substrate.dev/rustdocs/master/frame_support/storage/trait.StorageValue.html). In this pallet, we use the most common method, `put`, but it is worth skimming the other methods so you know what is available.
+Functions used to access a single storage value are defined in the [`StorageValue` trait](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/storage/trait.StorageValue.html). In this pallet, we use the most common method, `put`, but it is worth skimming the other methods so you know what is available.
 
 The `set_value` method demonstrates writing to storage, as well as taking a parameter in our dispatchable call.
 
@@ -55,7 +55,7 @@ let my_val = Self::stored_value();
 
 ## Storing the Callers Account
 
-In terms of storage, the `set_account` method is quite similar to `set_value`, but it also demonstrates how to retreive the `AccountId` of the caller using the [`ensure_signed` function](https://substrate.dev/rustdocs/master/frame_system/fn.ensure_signed.html).
+In terms of storage, the `set_account` method is quite similar to `set_value`, but it also demonstrates how to retreive the `AccountId` of the caller using the [`ensure_signed` function](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_system/fn.ensure_signed.html).
 
 ```rust, ignore
 fn set_account(origin) -> DispatchResult {
@@ -71,7 +71,7 @@ Because `AccountId` type comes from the configuration trait, we must use slightl
 
 ## Constructing the Runtime
 
-We learned about the [`construct_runtime!` macro](https://substrate.dev/rustdocs/master/frame_support/macro.construct_runtime.html) in the previous section. Because this pallet uses storage items, we must add this to the line in construct runtime. In the Super Runtime, we see the additional `Storage` feature.
+We learned about the [`construct_runtime!` macro](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/macro.construct_runtime.html) in the previous section. Because this pallet uses storage items, we must add this to the line in construct runtime. In the Super Runtime, we see the additional `Storage` feature.
 
 ```rust, ignore
 construct_runtime!(

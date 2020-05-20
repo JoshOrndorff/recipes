@@ -1,7 +1,7 @@
 # Generating Randomness
 *[pallets/randomness](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/randomness/)*
 
-Randomness is useful in computer programs for everything from gambling, to generating DNA for digital kitties, to selecting block authors. Randomness is hard to come by in deterministic computers as explained at [random.org](https://www.random.org/randomness/). This is particularly true in the context of a blockchain when all the nodes in the network must agree on the state of the chain. Some techniques have been developed to address this problem including [RanDAO](https://github.com/randao/randao) and [Verifiable Random Functions](https://en.wikipedia.org/wiki/Verifiable_random_function). Substrate abstracts the implementation of a randomness source using the [`Randomness` trait](https://substrate.dev/rustdocs/master/frame_support/traits/trait.Randomness.html), and provides a few implementations. This recipe will demonstrate using the `Randomness` trait and two concrete implementations.
+Randomness is useful in computer programs for everything from gambling, to generating DNA for digital kitties, to selecting block authors. Randomness is hard to come by in deterministic computers as explained at [random.org](https://www.random.org/randomness/). This is particularly true in the context of a blockchain when all the nodes in the network must agree on the state of the chain. Some techniques have been developed to address this problem including [RanDAO](https://github.com/randao/randao) and [Verifiable Random Functions](https://en.wikipedia.org/wiki/Verifiable_random_function). Substrate abstracts the implementation of a randomness source using the [`Randomness` trait](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/traits/trait.Randomness.html), and provides a few implementations. This recipe will demonstrate using the `Randomness` trait and two concrete implementations.
 
 ## Disclaimer
 
@@ -40,11 +40,11 @@ pub trait Trait: system::Trait {
 }
 ```
 
-We've provided the `Output` type as [`H256`](https://substrate.dev/rustdocs/master/sp_core/struct.H256.html).
+We've provided the `Output` type as [`H256`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sp_core/struct.H256.html).
 
 ## Collective Coin Flipping
 
-Substrate's [Randomness Collective Flip pallet](https://substrate.dev/rustdocs/master/pallet_randomness_collective_flip/index.html) uses a safe mixing algorithm to generate randomness using the entropy of previous block hashes. Because it is dependent on previous blocks, it can take many blocks for the seed to change.
+Substrate's [Randomness Collective Flip pallet](https://substrate.dev/rustdocs/v2.0.0-alpha.8/pallet_randomness_collective_flip/index.html) uses a safe mixing algorithm to generate randomness using the entropy of previous block hashes. Because it is dependent on previous blocks, it can take many blocks for the seed to change.
 
 A naive randomness source based on block hashes would take the hash of the previous block and use it as a random seed. Such a technique has the significant disadvantage that the block author can preview the random seed, and choose to discard the block choosing a slightly modified block with a more desirable hash. This pallet is subject to similar manipulation by the previous 81 block authors rather than just the previous 1.
 
@@ -59,7 +59,7 @@ Although it may _seem_ harmless, **you should not hash the result** of the rando
 
 ## Babe VRF Output
 
-Substrate's [Babe pallet](https://substrate.dev/rustdocs/master/pallet_babe/index.html) which is primarily responsible for managing validator rotation in Babe consensus, also collects the VRF outputs that Babe validators publish to demonstrate that they are permitted to author a block. These VRF outputs can be used to provide a random seed.
+Substrate's [Babe pallet](https://substrate.dev/rustdocs/v2.0.0-alpha.8/pallet_babe/index.html) which is primarily responsible for managing validator rotation in Babe consensus, also collects the VRF outputs that Babe validators publish to demonstrate that they are permitted to author a block. These VRF outputs can be used to provide a random seed.
 
 Because we are accessing the randomness via the `Randomness` trait, the calls look the same as before.
 

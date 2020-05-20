@@ -3,7 +3,7 @@
 
 ## Just Plain Currency
 
-To use a balances type in the runtime, import the [`Currency`](https://substrate.dev/rustdocs/master/frame_support/traits/trait.Currency.html) trait from `frame_support`.
+To use a balances type in the runtime, import the [`Currency`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/traits/trait.Currency.html) trait from `frame_support`.
 
 ```rust, ignore
 use support::traits::Currency;
@@ -17,7 +17,7 @@ pub trait Trait: system::Trait {
 }
 ```
 
-Defining an associated type with this trait bound allows this pallet to access the provided methods of [`Currency`](https://substrate.dev/rustdocs/master/frame_support/traits/trait.Currency.html). For example, it is straightforward to check the total issuance of the system:
+Defining an associated type with this trait bound allows this pallet to access the provided methods of [`Currency`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/traits/trait.Currency.html). For example, it is straightforward to check the total issuance of the system:
 
 ```rust, ignore
 // in decl_module block
@@ -30,11 +30,11 @@ As promised, it is also possible to type alias a balances type for use in the ru
 type BalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::Balance;
 ```
 
-This new `BalanceOf<T>` type satisfies the type constraints of `Self::Balance` for the provided methods of `Currency`. This means that this type can be used for [transfer](https://substrate.dev/rustdocs/master/frame_support/traits/trait.Currency.html#tymethod.transfer), [minting](https://substrate.dev/rustdocs/master/frame_support/traits/trait.Currency.html#tymethod.deposit_into_existing), and much more.
+This new `BalanceOf<T>` type satisfies the type constraints of `Self::Balance` for the provided methods of `Currency`. This means that this type can be used for [transfer](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/traits/trait.Currency.html#tymethod.transfer), [minting](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/traits/trait.Currency.html#tymethod.deposit_into_existing), and much more.
 
 ## Reservable Currency
 
-Substrate's [Treasury pallet](https://substrate.dev/rustdocs/master/pallet_treasury/index.html) uses the `Currency` type for bonding spending proposals. To reserve and unreserve balances for bonding, `treasury` uses the [`ReservableCurrency`](https://substrate.dev/rustdocs/master/frame_support/traits/trait.ReservableCurrency.html) trait. The import and associated type declaration follow convention
+Substrate's [Treasury pallet](https://substrate.dev/rustdocs/v2.0.0-alpha.8/pallet_treasury/index.html) uses the `Currency` type for bonding spending proposals. To reserve and unreserve balances for bonding, `treasury` uses the [`ReservableCurrency`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/traits/trait.ReservableCurrency.html) trait. The import and associated type declaration follow convention
 
 ```rust, ignore
 use frame_support::traits::{Currency, ReservableCurrency};
@@ -76,13 +76,13 @@ pub fn unreserve_funds(origin, amount: BalanceOf<T>) -> DispatchResult {
 
 ## Lockable Currency
 
-Substrate's [Staking pallet](https://substrate.dev/rustdocs/master/pallet_staking/index.html) similarly uses [`LockableCurrency`](https://substrate.dev/rustdocs/master/frame_support/traits/trait.LockableCurrency.html) trait for more nuanced handling of capital locking based on time increments. This type can be very useful in the context of economic systems that enforce accountability by collateralizing fungible resources. Import this trait in the usual way
+Substrate's [Staking pallet](https://substrate.dev/rustdocs/v2.0.0-alpha.8/pallet_staking/index.html) similarly uses [`LockableCurrency`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/traits/trait.LockableCurrency.html) trait for more nuanced handling of capital locking based on time increments. This type can be very useful in the context of economic systems that enforce accountability by collateralizing fungible resources. Import this trait in the usual way
 
 ```rust, ignore
 use frame_support::traits::{LockIdentifier, LockableCurrency}
 ```
 
-To use `LockableCurrency`, it is necessary to define a [`LockIdentifier`](https://substrate.dev/rustdocs/master/frame_support/traits/type.LockIdentifier.html).
+To use `LockableCurrency`, it is necessary to define a [`LockIdentifier`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/traits/type.LockIdentifier.html).
 
 ```rust, ignore
 const EXAMPLE_ID: LockIdentifier = *b"example ";
@@ -108,9 +108,9 @@ fn lock_capital(origin, amount: BalanceOf<T>) -> DispatchResult {
 
 ## Imbalances
 
-Functions that alter balances return an object of the [`Imbalance`](https://substrate.dev/rustdocs/master/frame_support/traits/trait.Imbalance.html) type to express how much account balances have been altered in aggregate. This is useful in the context of state transitions that adjust the total supply of the `Currency` type in question.
+Functions that alter balances return an object of the [`Imbalance`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/traits/trait.Imbalance.html) type to express how much account balances have been altered in aggregate. This is useful in the context of state transitions that adjust the total supply of the `Currency` type in question.
 
-To manage this supply adjustment, the [`OnUnbalanced`](https://substrate.dev/rustdocs/master/frame_support/traits/trait.OnUnbalanced.html) handler is often used. An example might look something like
+To manage this supply adjustment, the [`OnUnbalanced`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/traits/trait.OnUnbalanced.html) handler is often used. An example might look something like
 
 ```rust, ignore
 pub fn reward_funds(origin, to_reward: T::AccountId, reward: BalanceOf<T>) {
