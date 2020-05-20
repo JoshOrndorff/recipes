@@ -3,7 +3,7 @@
 The Substrate Recipes strive to identify and extract useful patterns and examples of developing on Substrate, and to present those patterns in an approachable and fun format. **Your help is Welcome!**
 
 The Recipes are part of the Substrate Developer Hub, so inter-linking between the Recipes and other DevHub facets is common. In particular, the Recipes frequently links to:
-* The [Reference Docs](https://substrate.dev/rustdocs/master/)
+* The [Reference Docs](https://crates.parity.io/)
 * The [Tutorials](https://substrate.io/tutorials/)
 * The [Knowledge Base](https://substrate.io/kb/learn-substrate)
 

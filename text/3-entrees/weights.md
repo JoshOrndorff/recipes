@@ -15,7 +15,7 @@ fn some_call(...) -> Result {
 }
 ```
 
-For simple transactions a fixed weight will do. Substrate provides the [`SimpleDispatchInfo` enum](https://substrate.dev/rustdocs/master/frame_support/weights/enum.SimpleDispatchInfo.html) for situations like this.
+For simple transactions a fixed weight will do. Substrate provides the [`SimpleDispatchInfo` enum](https://crates.parity.io/frame_support/weights/enum.SimpleDispatchInfo.html) for situations like this.
 ```rust, ignore
 decl_module! {
 	pub struct Module<T: Trait> for enum Call {
@@ -45,10 +45,10 @@ impl WeighData<(&bool, &u32)> for Conditional {
 ```
 
 In addition to the [`WeightData`
-Trait](https://substrate.dev/rustdocs/master/frame_support/weights/trait.WeighData.html), shown
+Trait](https://crates.parity.io/frame_support/weights/trait.WeighData.html), shown
 above, types that are used to calculate transaction weights, must also implement
-[`ClassifyDispatch`](https://substrate.dev/rustdocs/master/frame_support/weights/trait.ClassifyDispatch.html),
-and [`PaysFee`](https://substrate.dev/rustdocs/master/frame_support/weights/trait.PaysFee.html).
+[`ClassifyDispatch`](https://crates.parity.io/frame_support/weights/trait.ClassifyDispatch.html),
+and [`PaysFee`](https://crates.parity.io/frame_support/weights/trait.PaysFee.html).
 
 
 ```rust,ignore
