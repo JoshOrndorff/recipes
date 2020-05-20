@@ -353,7 +353,7 @@ impl<T: Trait> Module<T> {
 		// By default, the http request is async from the runtime perspective. So we are asking the
 		//   runtime to wait here.
 		// The returning value here is a `Result` of `Result`, so we are unwrapping it twice by two `?`
-		//   ref: https://substrate.dev/rustdocs/master/sp_runtime/offchain/http/struct.PendingRequest.html#method.try_wait
+		//   ref: https://substrate.dev/rustdocs/v2.0.0-alpha.8/sp_runtime/offchain/http/struct.PendingRequest.html#method.try_wait
 		let response = pending
 			.try_wait(timeout)
 			.map_err(|_| <Error<T>>::HttpFetchingError)?

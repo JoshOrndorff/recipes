@@ -77,7 +77,7 @@ pub trait Trait: system::Trait {
 
 This associated type needs to be specified by the runtime when the runtime is to include this pallet (implement this pallet trait).
 
-Looking at the [rustdoc of `SubmitSignedTransaction`](https://substrate.dev/rustdocs/master/frame_system/offchain/trait.SubmitSignedTransaction.html), it says that we should use the `TransactionSubmitter` implementation type. Let's do that in our runtime.
+We should use the `TransactionSubmitter` implementation type. Let's do that in our runtime.
 
 src: [`runtimes/ocw-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime/src/lib.rs)
 
@@ -96,7 +96,7 @@ impl offchain_demo::Trait for Runtime {
 }
 ```
 
-Now if we build the `kitchen-node`, we will see the compiler complain that the trait bound for `Runtime: frame_system::offchain::CreateTransaction` is not satisfied. We learn that when using `SubmitSignedTransaction`, we also need to have our runtime implement the [`CreateTransaction` trait](https://substrate.dev/rustdocs/master/frame_system/offchain/trait.CreateTransaction.html). So let's implement this in our runtime.
+Now if we build the `kitchen-node`, we will see the compiler complain that the trait bound for `Runtime: frame_system::offchain::CreateTransaction` is not satisfied. We learn that when using `SubmitSignedTransaction`, we also need to have our runtime implement the `CreateTransaction` trait. So let's implement this in our runtime.
 
 src: [`runtimes/ocw-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime/src/lib.rs)
 
@@ -195,7 +195,7 @@ You will notice that we run a for loop in the returned result. This implies that
 
 Eventually, the `call` transaction is made on-chain via the `create_transaction` function we defined earlier when we implemented `CreateTransaction` trait in our runtime.
 
-If you are wondering where we insert the local account in the pallet app crypto, it is actually in the outer node's [service](https://substrate.dev/rustdocs/master/sc_service/index.html).
+If you are wondering where we insert the local account in the pallet app crypto, it is actually in the outer node's [service](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sc_service/index.html).
 
 src: [`nodes/kitchen-node/src/service.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/nodes/kitchen-node/src/service.rs)
 

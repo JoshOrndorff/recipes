@@ -31,7 +31,7 @@ So far, nothing we've done is specific to runtime APIs. In the coming sections, 
 ## Defining the API
 The first step in adding a runtime API to your runtime is defining its interface using a Rust trait. This is done in the `sum-storage/runtime-api/src/lib.rs` file. This file can live anywhere you like, but because it defines an API that is closely related to a particular pallet, it makes sense to include the API definition in the pallet's directory.
 
-The code to define the API is quite simple, and looks almost like any old Rust trait. The one addition is that it must be placed in the [`decl_runtime_apis!` macro](https://substrate.dev/rustdocs/master/sp_api/macro.decl_runtime_apis.html). This macro allows the outer node to query the runtime API at specific blocks. Although this runtime API only provides a single function, you may write as many as you like.
+The code to define the API is quite simple, and looks almost like any old Rust trait. The one addition is that it must be placed in the [`decl_runtime_apis!` macro](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sp_api/macro.decl_runtime_apis.html). This macro allows the outer node to query the runtime API at specific blocks. Although this runtime API only provides a single function, you may write as many as you like.
 
 ```rust
 sp_api::decl_runtime_apis! {
@@ -44,7 +44,7 @@ sp_api::decl_runtime_apis! {
 ## Implementing the API
 With our pallet written and our runtime API defined, we may now implement the API for our runtime. This happens in the main runtime aggregation file. In our case we've provided the `api-runtime` in `runtimes/api-runtime/src/lib.rs`.
 
-As with defining the API, implementing a runtime API looks similar to implementing any old Rust trait with the exception that the implementation must go inside of the [`impl_runtime_apis!` macro](https://substrate.dev/rustdocs/master/sp_api/macro.impl_runtime_apis.html). Every runtime must use `iml_runtime_apis!` because the [`Core` API](https://substrate.dev/rustdocs/master/sp_api/trait.Core.html) is required. We will add an implementation for our own API alongside the others in this macro. Our implementation is straight-forward as it merely calls the pallet's helper function that we wrote previously.
+As with defining the API, implementing a runtime API looks similar to implementing any old Rust trait with the exception that the implementation must go inside of the [`impl_runtime_apis!` macro](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sp_api/macro.impl_runtime_apis.html). Every runtime must use `iml_runtime_apis!` because the [`Core` API](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sp_api/trait.Core.html) is required. We will add an implementation for our own API alongside the others in this macro. Our implementation is straight-forward as it merely calls the pallet's helper function that we wrote previously.
 
 ```rust
 impl_runtime_apis! {
@@ -58,10 +58,10 @@ impl_runtime_apis! {
 }
 ```
 
-You may be wondering about the `Block` type parameter which is present here, but not in our definition. This type parameter is added by the macros along with a few other features. All runtime APIs have this type parameter to facilitate querying the runtime at arbitrary blocks. Read more about this in the docs for [`impl_runtime_apis!`](https://substrate.dev/rustdocs/master/sp_api/macro.impl_runtime_apis.html).
+You may be wondering about the `Block` type parameter which is present here, but not in our definition. This type parameter is added by the macros along with a few other features. All runtime APIs have this type parameter to facilitate querying the runtime at arbitrary blocks. Read more about this in the docs for [`impl_runtime_apis!`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sp_api/macro.impl_runtime_apis.html).
 
 ## Calling the Runtime API
-We've now successfully added a runtime API to our runtime. The outer node can now call this API to query the runtime for the sum of two storage values. Given a reference to a ['client'](https://substrate.dev/rustdocs/master/sc_client/struct.Client.html) we can make the call like this.
+We've now successfully added a runtime API to our runtime. The outer node can now call this API to query the runtime for the sum of two storage values. Given a reference to a ['Client'](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sc_service/client/struct.Client.html) we can make the call like this.
 
 ```rust
 let sum_at_block_fifty = client.runtime_api().get_sum(&50);

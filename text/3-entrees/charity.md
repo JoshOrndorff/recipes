@@ -7,7 +7,7 @@ The Charity pallet represents a simple charitable organization that collects fun
 
 ## Instantiate a Pot
 
-Our charity needs an account to hold its funds. Unlike other accounts, it will not be controlled by a user's cryptographic key pair, but directly by the pallet. To instantiate such a pool of funds, import [`ModuleId`](https://substrate.dev/rustdocs/master/sp_runtime/struct.ModuleId.html) and [`AccountIdConversion`](https://substrate.dev/rustdocs/master/sp_runtime/traits/trait.AccountIdConversion.html) from [`sp-runtime`](https://substrate.dev/rustdocs/master/sp_runtime/index.html).
+Our charity needs an account to hold its funds. Unlike other accounts, it will not be controlled by a user's cryptographic key pair, but directly by the pallet. To instantiate such a pool of funds, import [`ModuleId`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sp_runtime/struct.ModuleId.html) and [`AccountIdConversion`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sp_runtime/traits/trait.AccountIdConversion.html) from [`sp-runtime`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sp_runtime/index.html).
 
 ```rust, ignore
 use sp-runtime::{ModuleId, traits::AccountIdConversion};
@@ -52,7 +52,7 @@ fn donate(
 ```
 
 ## Imbalances
-The second way the charity can receive funds is by absorbing imbalances created elsewhere in the runtime. An [`Imbalance`](https://substrate.dev/rustdocs/master/frame_support/traits/trait.Imbalance.html) is created whenever tokens are burned, or minted. Because our charity wants to _collect_ funds, we are specifically interested in [`NegativeImbalance`](https://substrate.dev/rustdocs/master/pallet_balances/struct.NegativeImbalance.html)s. Negative imbalances are created, for example, when a validator is slashed for violating consensus rules, transaction fees are collected, or another pallet burns funds as part of an incentive-alignment mechanism. To allow our pallet to absorb these imbalances, we implement the [`OnUnbalanced` trait](https://substrate.dev/rustdocs/master/frame_support/traits/trait.OnUnbalanced.html).
+The second way the charity can receive funds is by absorbing imbalances created elsewhere in the runtime. An [`Imbalance`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/traits/trait.Imbalance.html) is created whenever tokens are burned, or minted. Because our charity wants to _collect_ funds, we are specifically interested in [`NegativeImbalance`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/pallet_balances/struct.NegativeImbalance.html)s. Negative imbalances are created, for example, when a validator is slashed for violating consensus rules, transaction fees are collected, or another pallet burns funds as part of an incentive-alignment mechanism. To allow our pallet to absorb these imbalances, we implement the [`OnUnbalanced` trait](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/traits/trait.OnUnbalanced.html).
 
 ```rust,ignore
 use frame_support::traits::{OnUnbalanced, Imbalance};
@@ -71,4 +71,4 @@ impl<T: Trait> OnUnbalanced<NegativeImbalanceOf<T>> for Module<T> {
 ```
 
 # Allocating Funds
-In order for the charity to affect change with the funds it has collected it must be able to allocate those funds. Our charity pallet abstracts the governance of where funds will be allocated to the rest of the runtime. Funds can be allocated by a root call to the `allocate` extrinsic. One good example of a governance mechanism for such decisions is Substrate's own [Democracy pallet](https://substrate.dev/rustdocs/master/pallet_democracy/index.html).
+In order for the charity to affect change with the funds it has collected it must be able to allocate those funds. Our charity pallet abstracts the governance of where funds will be allocated to the rest of the runtime. Funds can be allocated by a root call to the `allocate` extrinsic. One good example of a governance mechanism for such decisions is Substrate's own [Democracy pallet](https://substrate.dev/rustdocs/v2.0.0-alpha.8/pallet_democracy/index.html).

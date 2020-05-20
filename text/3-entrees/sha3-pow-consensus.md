@@ -1,7 +1,7 @@
 # Sha3 Proof of Work Algorithms
 *[`consensus/sha3pow`](https://github.com/substrate-developer-hub/recipes/tree/master/consensus/sha3pow)*
 
-[Proof of Work](https://en.wikipedia.org/wiki/Proof_of_work) is not a single consensus algorithm. Rather it is a class of algorithms represented in Substrate by the [`PowAlgorithm` trait](https://substrate.dev/rustdocs/master/sc_consensus_pow/trait.PowAlgorithm.html). Before we can build a PoW node we must specify a concrete PoW algorithm by implementing this trait. In this recipe we specify two concrete PoW algorithms, both of which are based on the [sha3 hashing algorithm](https://en.wikipedia.org/wiki/SHA-3).
+[Proof of Work](https://en.wikipedia.org/wiki/Proof_of_work) is not a single consensus algorithm. Rather it is a class of algorithms represented in Substrate by the [`PowAlgorithm` trait](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sc_consensus_pow/trait.PowAlgorithm.html). Before we can build a PoW node we must specify a concrete PoW algorithm by implementing this trait. In this recipe we specify two concrete PoW algorithms, both of which are based on the [sha3 hashing algorithm](https://en.wikipedia.org/wiki/SHA-3).
 
 ## Minimal Sha3 PoW
 
@@ -125,7 +125,7 @@ Having understood the fundamentals, we can now build a more realistic sha3 algor
 
 ### Defining the `Sha3Algorithm` Struct
 
-We begin as before by defining a struct that will implement the `PowAlgorithm` trait. Unlike before, this struct must hold a reference to the [`Client`](https://substrate.dev/rustdocs/master/sc_client/struct.Client.html) so it can call the appropriate runtime APIs.
+We begin as before by defining a struct that will implement the `PowAlgorithm` trait. Unlike before, this struct must hold a reference to the [`Client`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sc_service/client/struct.Client.html) so it can call the appropriate runtime APIs.
 
 ```rust, ignore
 /// A complete PoW Algorithm that uses Sha3 hashing.
@@ -161,7 +161,7 @@ impl<C> Clone for Sha3Algorithm<C> {
 
 ### Implementing the `PowAlgorithm` trait
 
-As before we implement the `PowAlgorithm` trait for out `Sha3Algorithm`. This time we supply more complex trait bounds to ensure that the client the algorithm holds a reference to actually provides the [`DifficultyAPI`](https://substrate.dev/rustdocs/master/sp_consensus_pow/trait.DifficultyApi.html) necessary to fetch the PoW difficulty from the runtime.
+As before we implement the `PowAlgorithm` trait for out `Sha3Algorithm`. This time we supply more complex trait bounds to ensure that the client the algorithm holds a reference to actually provides the [`DifficultyAPI`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sp_consensus_pow/trait.DifficultyApi.html) necessary to fetch the PoW difficulty from the runtime.
 
 ```rust, ignore
 // Here we implement the general PowAlgorithm trait for our concrete Sha3Algorithm

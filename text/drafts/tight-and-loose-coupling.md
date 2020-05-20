@@ -8,7 +8,7 @@ Pallets may access their own associated types as well as the associated types of
 pub trait Trait: system::Trait {}
 ```
 
-This provides access to `Hash`, `AccountId`, and `BlockNumber` anywhere that specifies the generic `<T: Trait>` using `T::<Type>`. It also provides access to other useful types, declared in [`frame_system`'s configuration trait](https://substrate.dev/rustdocs/master/frame_system/trait.Trait.html).
+This provides access to `Hash`, `AccountId`, and `BlockNumber` anywhere that specifies the generic `<T: Trait>` using `T::<Type>`. It also provides access to other useful types, declared in [`frame_system`'s configuration trait](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_system/trait.Trait.html).
 
 > basically add a note here on why traits are important for runtime development `=>` we are in the business of building libraries to support the configuration and modular and extensible digital infrastructure...
 
@@ -17,4 +17,4 @@ This provides access to `Hash`, `AccountId`, and `BlockNumber` anywhere that spe
 
 ## support::traits
 
-Unlike in smart contract development, the way to inherit shared behavior is not to directly import other pallets. Instead, it is common to either implement the same logic in the new context or utilize a trait from [`frame_support`](https://substrate.dev/rustdocs/master/frame_support/index.html) to guide the new implementation. By abstracting common behavior from pallets into `frame_support`, Substrate makes it easy to extract and enforce best practices in the runtime.
+Unlike in smart contract development, the way to inherit shared behavior is not to directly import other pallets. Instead, it is common to either implement the same logic in the new context or utilize a trait from [`frame_support`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/index.html) to guide the new implementation. By abstracting common behavior from pallets into `frame_support`, Substrate makes it easy to extract and enforce best practices in the runtime.
