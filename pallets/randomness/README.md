@@ -34,7 +34,7 @@ Common values to use for a subject include:
 
 To bring a randomness source into scope, we include it in our configuration trait with the appropriate trait bound. This pallet, being a demo, will use two different sources. Using multiple sources is not necessary in practice.
 
-```rust, ignore
+```rust
 pub trait Trait: system::Trait {
 	type Event: From<Event> + Into<<Self as system::Trait>::Event>;
 
@@ -54,7 +54,7 @@ A naive randomness source based on block hashes would take the hash of the previ
 
 Calling the randomness source from rust code is straightforward.
 
-```rust, ignore
+```rust
 let random_seed = T::CollectiveFlipRandomnessSource::random_seed();
 let random_result = T::CollectiveFlipRandomnessSource::random(&subject);
 ```
@@ -67,7 +67,7 @@ Substrate's [Babe pallet](https://substrate.dev/rustdocs/master/pallet_babe/inde
 
 Because we are accessing the randomness via the `Randomness` trait, the calls look the same as before.
 
-```rust, ignore
+```rust
 let random_seed = T::BabeRandomnessSource::random_seed();
 let random_result = T::BabeRandomnessSource::random(&subject);
 ```

@@ -15,7 +15,7 @@ Some use cases:
 
 Substrate's own Balances and Collective pallets are good examples of real-world code using this technique. The default Substrate node has two instances of the Collectives pallet that make up its Council and Technical Committee. Each collective has its own storage, events, and configuration.
 
-```rust, ignore
+```rust
 Council: collective::<Instance1>::{Module, Call, Storage, Origin<T>, Event<T>, Config<T>},
 TechnicalCommittee: collective::<Instance2>::{Module, Call, Storage, Origin<T>, Event<T>, Config<T>}
 ```
@@ -28,7 +28,7 @@ Writing an instantiable pallet is almost entirely the same process as writing a 
 > Instantiable pallets _must_ call the `decl_storage!` macro so that the `Instance` type is created.
 
 ### Configuration Trait
-```rust, ignore
+```rust
 pub trait Trait<I: Instance>: system::Trait {
 	/// The overarching event type.
 	type Event: From<Event<Self, I>> + Into<<Self as system::Trait>::Event>;
@@ -36,7 +36,7 @@ pub trait Trait<I: Instance>: system::Trait {
 ```
 
 ### Storage Declaration
-```rust, ignore
+```rust
 decl_storage! {
 	trait Store for Module<T: Trait<I>, I: Instance> as TemplatePallet {
 		...
@@ -45,7 +45,7 @@ decl_storage! {
 ```
 
 ### Declaring the `Module` Struct
-```rust, ignore
+```rust
 decl_module! {
 	/// The module declaration.
 	pub struct Module<T: Trait<I>, I: Instance> for enum Call where origin: T::Origin {
@@ -54,23 +54,23 @@ decl_module! {
 }
 ```
 ### Accessing Storage
-```rust, ignore
+```rust
 <Something<T, I>>::put(something);
 ```
 
 If the storage item does not use any types specified in the configuration trait, the T is omitted, as always.
 
-```rust, ignore
+```rust
 <Something<I>>::put(something);
 ```
 
 ### Event initialization
-```rust, ignore
+```rust
 fn deposit_event() = default;
 ```
 
 ### Event Declaration
-```rust, ignore
+```rust
 decl_event!(
 	pub enum Event<T, I> where AccountId = <T as system::Trait>::AccountId {
 		...
@@ -84,7 +84,7 @@ The syntax for including an instance of an instantiable pallet in a runtime is s
 
 ### Implementing Configuration Traits
 Each instance needs to be configured separately. Configuration consists of implementing the specific instance's trait. The following snippet shows a configuration for `Instance1`.
-```rust, ignore
+```rust
 impl template::Trait<template::Instance1> for Runtime {
 	type Event = Event;
 }
@@ -92,7 +92,7 @@ impl template::Trait<template::Instance1> for Runtime {
 
 ### Using the `construct_runtime!` Macro
 The final step of installing the pallet instance in your runtime is updating the `construct_runtime!` macro. You may give each instance a meaningful name. Here I've called `Instance1` `FirstTemplate`.
-```rust, ignore
+```rust
 FirstTemplate: template::<Instance1>::{Module, Call, Storage, Event<T>, Config},
 ```
 
@@ -102,25 +102,25 @@ One drawback of instantiable pallets, as we've presented them so far, is that th
 
 To make your instantiable pallet support DefaultInstance, you must specify it in four places.
 
-```rust, ignore
+```rust
 pub trait Trait<I=DefaultInstance>: system::Trait {
 ```
 
-```rust, ignore
+```rust
 decl_storage! {
 	trait Store for Module<T: Trait<I>, I: Instance=DefaultInstance> as TemplateModule {
 		...
 	}
 }
 ```
-```rust, ignore
+```rust
 decl_module! {
 	pub struct Module<T: Trait<I>, I: Instance = DefaultInstance> for enum Call where origin: T::Origin {
 		...
 	}
 }
 ```
-```rust, ignore
+```rust
 decl_event!(
 	pub enum Event<T, I=DefaultInstance> where ... {
 		...
@@ -134,7 +134,7 @@ Having made these changes, a developer who uses your pallet doesn't need to know
 Some pallets require a genesis configuration to be specified. Let's look to the default Substrate node's use of the Collective pallet as an example.
 
 In its `chain_spec.rs` file we see
-```rust, ignore
+```rust
 GenesisConfig {
 	...
 	collective_Instance1: Some(CouncilConfig {

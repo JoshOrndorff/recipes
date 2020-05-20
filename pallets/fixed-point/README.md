@@ -26,7 +26,7 @@ We'll using the most common approach which takes its fixed point implementation 
 
 To begin we declare the storage item that will hold our accumulated product. You can see that the trait provides a handy function for getting the identity value which we use to set the default storage value to `1`.
 
-```rust, ignore
+```rust
 decl_storage! {
 	trait Store for Module<T: Trait> as Example {
 		// --snip--
@@ -39,7 +39,7 @@ decl_storage! {
 
 The only extrinsic for this Permill accumulator is the one that allows users to submit new `Permill` values to get multiplied into the accumulator.
 
-```rust, ignore
+```rust
 fn update_permill(origin, new_factor: Permill) -> DispatchResult {
 	ensure_signed(origin)?;
 
@@ -68,7 +68,7 @@ As in the `Permill` example, we begin by declaring the storage item. With substr
 
 > We're able to use `U16F16` as a storage item type because it, and the other substrate-fixed types, implements the parity scale codec.
 
-```rust, ignore
+```rust
 decl_storage! {
 	trait Store for Module<T: Trait> as Example {
 		// --snip--
@@ -81,7 +81,7 @@ decl_storage! {
 
 Next we implement the extrinsic that allows users to update the accumulator by multiplying in a new value.
 
-```rust, ignore
+```rust
 fn update_fixed(origin, new_factor: U16F16) -> DispatchResult {
 	ensure_signed(origin)?;
 
@@ -126,7 +126,7 @@ Although the concepts are straight-forward, you'll see that manually implementin
 
 As before, we begin by declaring the storage value. This time around it is just a simple u32. But the default value, `1 << 16` looks quite funny. If you haven't encountered it before `<<` is Rust's [bit shift operator](https://doc.rust-lang.org/reference/expressions/operator-expr.html#arithmetic-and-logical-binary-operators). It takes a value and moves all the bits to the left. In this case we start with the value `1` and move it 16 bits to the left. This is because Rust interprets `1` as a regular `u32` value and puts the `1` in the far right place value. But because we're treating this `u32` specially, we need to shift that bit to the middle just left of the imaginary radix point.
 
-```rust, ignore
+```rust
 decl_storage! {
 	trait Store for Module<T: Trait> as Example {
 		// --snip--
@@ -139,7 +139,7 @@ decl_storage! {
 
 The extrinsic to multiply a new factor into the accumulator follows the same general flow as in the other two implementations. In this case, there are more intermediate values calculated, and more comments explaining the bit-shifting operations. In the function body most intermediate values are held in `u64` variables. This is because when you multiply two 32-bit numbers, you can end up with as much as 64 bits in the product.
 
-```rust, ignore
+```rust
 fn update_manual(origin, new_factor: u32) -> DispatchResult {
 	ensure_signed(origin)?;
 

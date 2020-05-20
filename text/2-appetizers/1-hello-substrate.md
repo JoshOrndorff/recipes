@@ -7,7 +7,7 @@ The first pallet we'll explore is a simple "hello world" example. This pallet wi
 
 The very first line of code tells the rust compiler that this crate should not use rust's standard library except when explicitly told to. This is useful because Substrate runtimes compile to Web Assembly where the standard library is not available.
 
-```rust, ignore
+```rust
 #![cfg_attr(not(feature = "std"), no_std)]
 ```
 
@@ -15,7 +15,7 @@ The very first line of code tells the rust compiler that this crate should not u
 
 Next, you'll find imports that come from various parts of the Substrate framework. All pallets will import from a few common crates including [`frame-support`](https://substrate.dev/rustdocs/master/frame_support/index.html), and [`frame-system`](https://substrate.dev/rustdocs/master/frame_system/index.html).  Complex pallets will have many imports as we'll see later. The `hello-substrate` pallet uses these imports.
 
-```rust, ignore
+```rust
 use frame_support::{ decl_module, dispatch::DispatchResult, debug };
 use frame_system::{ self as system, ensure_signed };
 use sp_runtime::print;
@@ -29,7 +29,7 @@ Next we see a reference to the tests module. This pallet has tests written in a 
 
 Next, each pallet has a configuration trait which is called `Trait`. The configuration trait can be used to access features from other pallets, or [constants](../3-entrees/constants.md) that effect the pallet's behavior. This pallet is simple enough that our configuration trait can remain empty, although it must still exist.
 
-```rust, ignore
+```rust
 pub trait Trait: system::Trait {}
 ```
 
@@ -37,7 +37,7 @@ pub trait Trait: system::Trait {}
 
 A Dispatchable call is a function that a blockchain user can call as part of an Extrinsic. "Extrinsic" is Substrate jargon meaning a call from outside of the chain. Most of the time they are transactions, and for now it is fine to think of them as transactions. Dispatchable calls are defined in the [`decl_module!` macro](https://substrate.dev/rustdocs/master/frame_support/macro.decl_module.html).
 
-```rust, ignore
+```rust
 decl_module! {
 	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
 
@@ -61,7 +61,7 @@ Right before the `hello-substrate` function, we see the line `#[weight = 10_000]
 
 Let's take a closer look at our dispatchable call.
 
-```rust, ignore
+```rust
 pub fn say_hello(origin) -> DispatchResult {
 	// Ensure that the caller is a regular keypair account
 	let caller = ensure_signed(origin)?;
@@ -134,7 +134,7 @@ You can see the other pallets' trait implementations in the surrounding lines. M
 
 Finally, we add our pallet to the [`construct_runtime!` macro](https://substrate.dev/rustdocs/master/frame_support/macro.construct_runtime.html).
 
-```rust, ignore
+```rust
 construct_runtime!(
 	pub enum Runtime where
 		Block = Block,

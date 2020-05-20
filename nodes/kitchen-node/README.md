@@ -41,7 +41,7 @@ With a runtime of our choosing listed among our dependencies, we can provide the
 
 We begin by invoking the [`native_executor_instance!` macro](https://substrate.dev/rustdocs/master/sc_executor/macro.native_executor_instance.html). This creates an executor which is responsible for executing transactions in  the runtime and determining whether to run the native of wasm version of the runtime.
 
-```rust_ignore
+```rust
 native_executor_instance!(
 	pub Executor,
 	runtime::api::dispatch,
@@ -51,7 +51,7 @@ native_executor_instance!(
 
 Finally, we create a new `ServiceBuilder` for a full node. (The `$` in the syntax is because we are in a [macro definition](https://doc.rust-lang.org/book/ch19-06-macros.html).
 
-```rust, ignore
+```rust
 let builder = sc_service::ServiceBuilder::new_full::<
 	runtime::opaque::Block, runtime::RuntimeApi, crate::service::Executor
 >($config)?
@@ -77,7 +77,7 @@ The dependency on `sc-client-db` will become unnecessary once [issue #238](https
 
 We begin by creating a [`Proposer`](https://substrate.dev/rustdocs/master/sc_basic_authorship/struct.Proposer.html) which will be responsible for creating proposing blocks in the chain.
 
-```rust, ignore
+```rust
 let proposer = sc_basic_authorship::ProposerFactory::new(
 	service.client().clone(),
 	service.transaction_pool(),
@@ -88,7 +88,7 @@ let proposer = sc_basic_authorship::ProposerFactory::new(
 
 Next we make a manual-seal import queue. This process is identical to creating the import queue used in the [Manual Seal Node](./manual-seal.md). It is also similar to, but simpler than, the [basic-pow](./basic-pow.md) import queue.
 
-```rust, ignore
+```rust
 .with_import_queue(|_config, client, _select_chain, _transaction_pool| {
 	Ok(sc_consensus_manual_seal::import_queue::<_, sc_client_db::Backend<_>>(Box::new(client)))
 })?;
@@ -98,7 +98,7 @@ Next we make a manual-seal import queue. This process is identical to creating t
 
 As with every authoring engine, instant seal needs to be run as an `async` authoring task.
 
-```rust, ignore
+```rust
 let authorship_future = sc_consensus_manual_seal::run_instant_seal(
 	Box::new(service.client()),
 	proposer,
@@ -111,7 +111,7 @@ let authorship_future = sc_consensus_manual_seal::run_instant_seal(
 
 With the future created, we can now kick it off using the service's [`spawn_essential_task` method](https://substrate.dev/rustdocs/master/sc_service/struct.Service.html#method.spawn_essential_task).
 
-```rust, ignore
+```rust
 service.spawn_essential_task("instant-seal", authorship_future);
 ```
 
@@ -119,7 +119,7 @@ service.spawn_essential_task("instant-seal", authorship_future);
 
 The light client is not yet supported in this node, but it likely will be in the future (See [issue #238](https://github.com/substrate-developer-hub/recipes/pull/238).) Because it will typically be used for learning, experimenting, and testing in a single-node environment this restriction should not cause many problems.. Instead we mark it as `unimplemented!`.
 
-```rust, ignore
+```rust
 /// Builds a new service for a light client.
 pub fn new_light(_config: Configuration) -> Result<impl AbstractService, ServiceError>
 {

@@ -28,7 +28,7 @@ The [Substrate Service](https://substrate.dev/rustdocs/master/sc_service/trait.A
 
 The particular builder method that is relevant here is [`with_import_queue`](https://substrate.dev/rustdocs/master/sc_service/struct.ServiceBuilder.html#method.with_import_queue). Here we construct an instance of the [`PowBlockImport` struct](https://substrate.dev/rustdocs/master/sc_consensus_pow/struct.PowBlockImport.html), providing it with references to our client, our `MinimalSha3Algorithm`, and some other necessary data.
 
-```rust, ignore
+```rust
 builder
 	.with_import_queue(|_config, client, select_chain, _transaction_pool| {
 
@@ -63,7 +63,7 @@ You may have noticed that when we created the `PowBlockImport` we gave it two se
 
 Both the BlockImport and the `import_queue` are given an instance called `inherent_data_providers`. This object is created in a helper function defined at the beginning of `service.rs`
 
-```rust, ignore
+```rust
 pub fn build_inherent_data_providers() -> Result<InherentDataProviders, ServiceError> {
 	let providers = InherentDataProviders::new();
 
@@ -82,7 +82,7 @@ Anything that implements the [`ProvideInherentData` trait](https://substrate.dev
 
 We've already implemented a mining algorithm as part of our [`MinimalSha3Algorithm`](./sha3-pow-consensus.md), but we haven't yet told our service to actually mine with that algorithm. This is our last task in the `new_full` function.
 
-```rust, ignore
+```rust
 if participates_in_consensus {
 	let proposer = sc_basic_authorship::ProposerFactory::new(
 		service.client(),

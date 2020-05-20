@@ -12,7 +12,7 @@ Any computational resources used by a transaction must be accounted for so that 
 
 ## Assigning Transaction Weights
 Pallet authors can annotate their dispatchable function with a weight using syntax like this,
-```rust, ignore
+```rust
 #[weight = <Some Weighting Instance>]
 fn some_call(...) -> Result {
 	// --snip--
@@ -20,7 +20,7 @@ fn some_call(...) -> Result {
 ```
 
 For simple transactions a fixed weight will do. Substrate provides the [`SimpleDispatchInfo` enum](https://substrate.dev/rustdocs/master/frame_support/weights/enum.SimpleDispatchInfo.html) for situations like this.
-```rust, ignore
+```rust
 decl_module! {
 	pub struct Module<T: Trait> for enum Call {
 
@@ -32,7 +32,7 @@ decl_module! {
 
 For more complex transactions, custom weight calculations can be performed that consider the parameters passed to the call. This snippet shows a weighting struct that weighs transactions where the first parameter
 is a `boo`l. If the first parameter is `true`, then the weight is linear in the second parameter. Otherwise the weight is constant. A transaction where this weighting scheme makes sense is demonstrated in the kitchen.
-```rust, ignore
+```rust
 pub struct Conditional(u32);
 
 impl WeighData<(&bool, &u32)> for Conditional {
@@ -55,7 +55,7 @@ above, types that are used to calculate transaction weights, must also implement
 and [`PaysFee`](https://substrate.dev/rustdocs/master/frame_support/weights/trait.PaysFee.html).
 
 
-```rust,ignore
+```rust
 impl<T> ClassifyDispatch<T> for Conditional {
     fn classify_dispatch(&self, _: T) -> DispatchClass {
         // Classify all calls as Normal (which is the default)
@@ -64,7 +64,7 @@ impl<T> ClassifyDispatch<T> for Conditional {
 }
 ```
 
-```rust,ignore
+```rust
 impl PaysFee for Conditional {
     fn pays_fee(&self) -> bool {
         true

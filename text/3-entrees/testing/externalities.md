@@ -2,7 +2,7 @@
 
 [`execution-schedule`](../execution-schedule.md)'s configuration trait has three [configurable constants](../constants.md). For this mock runtime, the `ExtBuilder` defines setters to enable the `TestExternalities` instance for each unit test to configure the local test runtime environment with different value assignments. For context, the `Trait` for `execution-schedule`,
 
-```rust, ignore
+```rust
 // other type aliases
 pub type PriorityScore = u32;
 
@@ -25,7 +25,7 @@ The mock runtime environment extends the [previously discussed](./mock.md) `ExtB
 
 > This completes the [builder](https://youtu.be/geovSK3wMB8?t=729) pattern by defining a default configuraton to be used in a plurality of test cases while also providing setter methods to overwrite the values for each field.
 
-```rust, ignore
+```rust
 pub struct ExtBuilder {
     signal_quota: u32,
     execution_frequency: u64,
@@ -44,7 +44,7 @@ impl Default for ExtBuilder {
 
 The setter methods for each configurable constant are defined in the `ExtBuilder` methods. This allows each instance of `ExtBuilder` to set the constant parameters for the unit test in question.
 
-```rust, ignore
+```rust
 impl ExtBuilder {
     pub fn signal_quota(mut self, signal_quota: u32) -> Self {
         self.signal_quota = signal_quota;
@@ -64,7 +64,7 @@ impl ExtBuilder {
 
 To allow for separate copies of the constant objects to be used in each thread, the variables assigned as constants are declared as [`thread_local!`](https://substrate.dev/rustdocs/master/thread_local/index.html),
 
-```rust, ignore
+```rust
 thread_local! {
     static SIGNAL_QUOTA: RefCell<u32> = RefCell::new(0);
     static EXECUTION_FREQUENCY: RefCell<u64> = RefCell::new(0);
@@ -74,7 +74,7 @@ thread_local! {
 
 Each configurable constant type also maintains unit structs with implementation of `Get<T>` from the type `T` assigned to the pallet constant in the mock runtime implementation.
 
-```rust, ignore
+```rust
 pub struct SignalQuota;
 impl Get<u32> for SignalQuota {
     fn get() -> u32 {
@@ -98,7 +98,7 @@ impl Get<u32> for TaskLimit {
 ```
 The build method on `ExtBuilder` sets the associated constants before building the default storage configuration.
 
-```rust, ignore
+```rust
 impl ExtBuilder {
     // setters
     pub fn set_associated_consts(&self) {
@@ -112,7 +112,7 @@ impl ExtBuilder {
 
 To build the default test environment, the syntax looks like
 
-```rust, ignore
+```rust
 #[test]
 fn fake_test() {
     ExtBuilder::default()
@@ -125,7 +125,7 @@ fn fake_test() {
 
 To configure a test environment in which the `execution_frequency` is set to `2`, the `eras_change_correctly` test invokes the `execution_frequency` setter declared in as a method on `ExtBuilder`,
 
-```rust, ignore
+```rust
 #[test]
 fn fake_test2() {
     ExtBuilder::default()

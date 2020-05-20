@@ -6,7 +6,7 @@ In Rust, a `struct`, or structure, is a custom data type that lets you name and 
 ## Defining a Struct
 To define a _simple_ custom struct for the runtime, the following syntax may be used:
 
-```rust, ignore
+```rust
 #[derive(Encode, Decode, Default, Clone, PartialEq)]
 pub struct MyStruct {
     some_number: u32,
@@ -18,7 +18,7 @@ In the code snippet above, the [derive macro](https://doc.rust-lang.org/rust-by-
 
 To use the `Encode` and `Decode` traits, it is necessary to import them.
 
-```rust, ignore
+```rust
 use frame_support::codec::{Encode, Decode};
 ```
 
@@ -26,7 +26,7 @@ use frame_support::codec::{Encode, Decode};
 
 The simple struct shown earlier only uses Rust primitive types for its fields. In the common case where you want to store types that come from your pallet's configuration trait (or the configuration trait of another pallet in your runtime), you must use generic type parameters in your struct's definition.
 
-```rust, ignore
+```rust
 #[derive(Encode, Decode, Clone, Default, RuntimeDebug)]
 pub struct InnerThing<Hash, Balance> {
 	number: u32,
@@ -39,7 +39,7 @@ Here you can see that we want to store items of type `Hash` and `Balance` in the
 
 It is often convenient to make a type alias that takes `T`, your pallet's configuration trait, as a single type parameter. Doing so simply saves you typing in the future.
 
-```rust, ignore
+```rust
 type InnerThingOf<T> = InnerThing<<T as system::Trait>::Hash, <T as balances::Trait>::Balance>;
 ```
 
@@ -47,7 +47,7 @@ type InnerThingOf<T> = InnerThing<<T as system::Trait>::Hash, <T as balances::Tr
 
 Using one of our structs as a storage item is not significantly different than using a primitive type. When using a generic struct, we must supply all of the generic type parameters. This snippet shows how to supply thos parameters when you have a type alias (like we do for `InnerThing`) as well as when you don't. Whether to include the type alias is a matter of style and taste, but it is generally preferred when the entire type exceeds the preferred line length.
 
-```rust, ignore
+```rust
 decl_storage! {
 	trait Store for Module<T: Trait> as NestedStructs {
 		InnerThingsByNumbers get(fn inner_things_by_numbers):
@@ -60,7 +60,7 @@ decl_storage! {
 
 Interacting with the storage maps is now exactly as it was when we didn't use any custom structs
 
-```rust, ignore
+```rust
 fn insert_inner_thing(origin, number: u32, hash: T::Hash, balance: T::Balance) -> DispatchResult {
 	let _ = ensure_signed(origin)?;
 	let thing = InnerThing {
@@ -78,7 +78,7 @@ fn insert_inner_thing(origin, number: u32, hash: T::Hash, balance: T::Balance) -
 
 Structs can also contain other structs as their fields. We have demonstrated this with the type `SuperThing`. As you see, any generic types needed by the inner struct must also be supplied to the outer.
 
-```rust, ignore
+```rust
 #[derive(Encode, Decode, Default, RuntimeDebug)]
 pub struct SuperThing<Hash, Balance> {
 	super_number: u32,

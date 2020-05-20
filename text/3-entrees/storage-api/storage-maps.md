@@ -7,7 +7,7 @@ In the appetizer on [storage values](../../2-appetizers/2-storage-values.md) we 
 
 We declare a single storage map with the following syntax.
 
-```rust, ignore
+```rust
 decl_storage! {
 	trait Store for Module<T: Trait> as SimpleMap {
 		SimpleMap get(fn simple_map): map hasher(blake2_128_concat) T::AccountId => u32;
@@ -41,7 +41,7 @@ The `identity` "hasher" is really not a hasher at all, but merely an [identity f
 
 This pallet demonstrated some of the most common methods available in a storage map including `insert`, `get`, `take`, and `contains_key`.
 
-```rust, ignore
+```rust
 // Insert
 <SimpleMap<T>>::insert(&user, entry);
 

@@ -15,7 +15,7 @@ For this implementation we've chosen to use Substrate's [`Percent` type](https:/
 
 The only storage item needed is a tracker of the account's balance. In order to focus on the fixed-point- and interest-related topics, this pallet does not actually interface with a `Currency`. Instead we just allow anyone to "deposit" or "withdraw" funds with no source or destination.
 
-```rust, ignore
+```rust
 decl_storage! {
 	trait Store for Module<T: Trait> as Example {
 		// --snip--
@@ -28,7 +28,7 @@ decl_storage! {
 
 There are two extrinsics associated with the discrete interest account. The `deposit_discrete` extrinsic is shown here, and the `withdraw_discrete` extrinsic is nearly identical. Check it out in the kitchen.
 
-```rust, ignore
+```rust
 fn deposit_discrete(origin, val_to_add: u64) -> DispatchResult {
 	ensure_signed(origin)?;
 
@@ -47,7 +47,7 @@ The flow of these deposit and withdraw extrinsics is entirely straight-forward. 
 
 Because the interest is paid discretely every ten blocks it can be handled independently of deposits and withdrawals. The interest calculation happens automatically in the `on_finalize` block.
 
-```rust, ignore
+```rust
 fn on_finalize(n: T::BlockNumber) {
 	// Apply newly-accrued discrete interest every ten blocks
 	if (n % 10.into()).is_zero() {
@@ -82,7 +82,7 @@ With continuously compounded interest, we _could_ update the interest in `on_fin
 
 To facilitate this implementation, we represent the state of the account not only as a balance, but as a balance, paired with the time when that balance was last updated.
 
-```rust, ignore
+```rust
 #[derive(Encode, Decode, Default)]
 pub struct ContinuousAccountData<BlockNumber> {
 	/// The balance of the account after last manual adjustment
@@ -96,7 +96,7 @@ You can see we've chosen substrate-fixed's `I32F32` as our balance type this tim
 
 With the struct to represent the account's state defined, we can initialize the storage value.
 
-```rust, ignore
+```rust
 decl_storage! {
 	trait Store for Module<T: Trait> as Example {
 		// --snip--
@@ -109,7 +109,7 @@ decl_storage! {
 
 As before, there are two relevant extrinsics, `deposit_continuous` and `withdraw_continuous`. They are nearly identical so we'll only show one.
 
-```rust, ignore
+```rust
 fn deposit_continuous(origin, val_to_add: u64) -> DispatchResult {
 	ensure_signed(origin)?;
 
@@ -132,7 +132,7 @@ fn deposit_continuous(origin, val_to_add: u64) -> DispatchResult {
 
 This function itself isn't too insightful. It does the same basic things as the discrete variant: look up the old value and the deposit, update storage, and emit an event. The one interesting part is that it calls a helper function to get the account's previous value. This helper function calculates the value of the account considering all the interest that has accrued since the last time the account was touched. Let's take a closer look.
 
-```rust, ignore
+```rust
 fn value_of_continuous_account(now: &<T as system::Trait>::BlockNumber) -> I32F32 {
 	// Get the old state of the accout
 	let ContinuousAccountData{

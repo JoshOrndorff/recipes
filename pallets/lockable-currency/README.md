@@ -12,13 +12,13 @@ public_url: https://github.com/substrate-developer-hub/recipes/tree/master/palle
 
 To use a balances type in the runtime, import the [`Currency`](https://substrate.dev/rustdocs/master/frame_support/traits/trait.Currency.html) trait from `frame_support`.
 
-```rust, ignore
+```rust
 use support::traits::Currency;
 ```
 
 The `Currency` trait provides an abstraction over a fungible assets system. To use such a fuingible asset from your pallet, include an associated type with the `Currency` trait bound in your pallet's configuration trait.
 
-```rust, ignore
+```rust
 pub trait Trait: system::Trait {
 	type Currency: Currency<Self::AccountId>;
 }
@@ -26,14 +26,14 @@ pub trait Trait: system::Trait {
 
 Defining an associated type with this trait bound allows this pallet to access the provided methods of [`Currency`](https://substrate.dev/rustdocs/master/frame_support/traits/trait.Currency.html). For example, it is straightforward to check the total issuance of the system:
 
-```rust, ignore
+```rust
 // in decl_module block
 T::Currency::total_issuance();
 ```
 
 As promised, it is also possible to type alias a balances type for use in the runtime:
 
-```rust, ignore
+```rust
 type BalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::Balance;
 ```
 
@@ -43,7 +43,7 @@ This new `BalanceOf<T>` type satisfies the type constraints of `Self::Balance` f
 
 Substrate's [Treasury pallet](https://substrate.dev/rustdocs/master/pallet_treasury/index.html) uses the `Currency` type for bonding spending proposals. To reserve and unreserve balances for bonding, `treasury` uses the [`ReservableCurrency`](https://substrate.dev/rustdocs/master/frame_support/traits/trait.ReservableCurrency.html) trait. The import and associated type declaration follow convention
 
-```rust, ignore
+```rust
 use frame_support::traits::{Currency, ReservableCurrency};
 
 pub trait Trait: system::Trait {
@@ -53,7 +53,7 @@ pub trait Trait: system::Trait {
 
 To lock or unlock some quantity of funds, it is sufficient to invoke `reserve` and `unreserve` respectively
 
-```rust, ignore
+```rust
 pub fn reserve_funds(origin, amount: BalanceOf<T>) -> DispatchResult {
 	let locker = ensure_signed(origin)?;
 
@@ -67,7 +67,7 @@ pub fn reserve_funds(origin, amount: BalanceOf<T>) -> DispatchResult {
 }
 ```
 
-```rust, ignore
+```rust
 pub fn unreserve_funds(origin, amount: BalanceOf<T>) -> DispatchResult {
 	let unlocker = ensure_signed(origin)?;
 
@@ -85,19 +85,19 @@ pub fn unreserve_funds(origin, amount: BalanceOf<T>) -> DispatchResult {
 
 Substrate's [Staking pallet](https://substrate.dev/rustdocs/master/pallet_staking/index.html) similarly uses [`LockableCurrency`](https://substrate.dev/rustdocs/master/frame_support/traits/trait.LockableCurrency.html) trait for more nuanced handling of capital locking based on time increments. This type can be very useful in the context of economic systems that enforce accountability by collateralizing fungible resources. Import this trait in the usual way
 
-```rust, ignore
+```rust
 use frame_support::traits::{LockIdentifier, LockableCurrency}
 ```
 
 To use `LockableCurrency`, it is necessary to define a [`LockIdentifier`](https://substrate.dev/rustdocs/master/frame_support/traits/type.LockIdentifier.html).
 
-```rust, ignore
+```rust
 const EXAMPLE_ID: LockIdentifier = *b"example ";
 ```
 
 By using this `EXAMPLE_ID`, it is straightforward to define logic within the runtime to schedule locking, unlocking, and extending existing locks.
 
-```rust, ignore
+```rust
 fn lock_capital(origin, amount: BalanceOf<T>) -> DispatchResult {
 	let user = ensure_signed(origin)?;
 
@@ -119,7 +119,7 @@ Functions that alter balances return an object of the [`Imbalance`](https://subs
 
 To manage this supply adjustment, the [`OnUnbalanced`](https://substrate.dev/rustdocs/master/frame_support/traits/trait.OnUnbalanced.html) handler is often used. An example might look something like
 
-```rust, ignore
+```rust
 pub fn reward_funds(origin, to_reward: T::AccountId, reward: BalanceOf<T>) {
 	let _ = ensure_signed(origin)?;
 

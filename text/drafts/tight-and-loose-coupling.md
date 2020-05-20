@@ -4,7 +4,7 @@ Pallets may access their own associated types as well as the associated types of
 
 > Another option, loosely coupling to other pallets, is discussed further later.
 
-```rust, ignore
+```rust
 pub trait Trait: system::Trait {}
 ```
 

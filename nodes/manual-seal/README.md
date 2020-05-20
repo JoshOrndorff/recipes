@@ -63,7 +63,7 @@ So far we've learned how to use the manual seal node and why it might be useful.
 
 We begin by creating a manual-seal import queue. This process is identical to creating the import queue used in the [Kitchen Node](./kitchen-node.md). It is also similar to, but simpler than, the [basic-pow](./basic-pow.md) import queue.
 
-```rust, ignore
+```rust
 .with_import_queue(|_config, client, _select_chain, _transaction_pool| {
 	Ok(sc_consensus_manual_seal::import_queue::<_, sc_client_db::Backend<_>>(Box::new(client)))
 })?;
@@ -73,7 +73,7 @@ We begin by creating a manual-seal import queue. This process is identical to cr
 
 The light client is not yet supported in this node, but it likely will be in the future (See [issue #238](https://github.com/substrate-developer-hub/recipes/pull/238).) Because it will typically be used for learning, experimenting, and testing in a single-node environment this restriction should not cause many problems.. Instead we mark it as `unimplemented!`.
 
-```rust, ignore
+```rust
 /// Builds a new service for a light client.
 pub fn new_light(_config: Configuration) -> Result<impl AbstractService, ServiceError>
 {
@@ -93,18 +93,18 @@ Because the return type of this function contains `impl AbstractService`, Rust's
 Because the node runs in manual seal mode, we need to wire up the RPC commands that we explored earlier. This process is nearly identical to those described in the [custom rpc recipe](./custom-rpc.md).
 
 As prep work, we make a type alias,
-```rust, ignore
+```rust
 type RpcExtension = jsonrpc_core::IoHandler<sc_rpc::Metadata>;
 ```
 
 Next we create a channel over which the rpc handler and the authorship task can communicate with one another. The RPC handler will send messages asking to create or finalize a block and the import queue will receive the message and do so.
 
-```rust, ignore
+```rust
 // channel for the rpc handler to communicate with the authorship task.
 let (command_sink, commands_stream) = futures::channel::mpsc::channel(1000);
 ```
 
-```rust, ignore
+```rust
 let service = builder
 	// manual-seal relies on receiving sealing requests aka EngineCommands over rpc.
 	.with_rpc_extensions(|_| -> Result<RpcExtension, _> {
@@ -123,7 +123,7 @@ let service = builder
 
 As with every authoring engine, manual seal needs to be run as an `async` authoring tasks. Here we provide the receiving end of the channel we created earlier.
 
-```rust, ignore
+```rust
 // Background authorship future.
 let authorship_future = manual_seal::run_manual_seal(
 		Box::new(service.client()),
@@ -138,7 +138,7 @@ let authorship_future = manual_seal::run_manual_seal(
 
 With the future created, we can now kick it off using the service's [`spawn_essential_task` method](https://substrate.dev/rustdocs/master/sc_service/struct.Service.html#method.spawn_essential_task).
 
-```rust, ignore
+```rust
 // we spawn the future on a background thread managed by service.
 service.spawn_essential_task("manual-seal", authorship_future);
 ```

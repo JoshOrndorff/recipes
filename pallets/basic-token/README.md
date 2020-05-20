@@ -16,7 +16,7 @@ The primary storage item is the mapping between AccountIds and Balances describe
 
 The next two storage items set the total supply of the token and keep track of whether the token has been initialized yet.
 
-```rust, ignore
+```rust
 decl_storage! {
 	trait Store for Module<T: Trait> as Token {
 		pub Balances get(get_balance): map hasher(blake2_128_concat) T::AccountId => u64;
@@ -34,7 +34,7 @@ Because users can influence the keys in our storage map, we've chosen the `blake
 
 The pallet defines events and errors for common lifecycle events such as successful and failed transfers, and successful and failed initialization.
 
-```rust, ignore
+```rust
 decl_event!(
 	pub enum Event<T>
 	where
@@ -79,7 +79,7 @@ To transfer tokens, a user who owns some tokens calls the `transfer` method spec
 
 We again check for error conditions before mutating storage. In this case it is _not_ necessary to check whether the token has been initialized. If it has not, nobody has any funds and the transfer will simply fail with `InsufficientFunds`.
 
-```rust, ignore
+```rust
 fn transfer(_origin, to: T::AccountId, value: u64) -> DispatchResult {
 	let sender = ensure_signed(_origin)?;
 	let sender_balance = Self::get_balance(&sender);

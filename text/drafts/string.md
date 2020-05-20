@@ -4,7 +4,7 @@ Runtime storage is for storing the state of the business logic for which the run
 
 Here's a workaround to store a string in the runtime using JavaScript to convert the string to hex and back. You probably shouldn't do this...
 
-```rust, ignore
+```rust
 use frame_support::{StorageValue, dispatch::Result};
 use rstd::prelude::*;
 

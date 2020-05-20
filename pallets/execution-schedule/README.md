@@ -19,7 +19,7 @@ This example also demonstrates
 
 The context of the example is scheduling the execution of tasks in a queue stored in the runtime. Tasks are structs declared like
 
-```rust, ignore
+```rust
 pub struct Task<BlockNumber> {
     id: TaskId,
     priority_score: PriorityScore,
@@ -41,7 +41,7 @@ Tasks with support are prioritized during execution every `ExecutionFrequency` n
 
 The module's `Trait`:
 
-```rust, ignore
+```rust
 // other type aliases
 pub type PriorityScore = u32;
 
@@ -62,7 +62,7 @@ pub trait Trait: system::Trait {
 
 The task object is a struct,
 
-```rust, ignore
+```rust
 pub type TaskId = Vec<u8>;
 pub type PriorityScore = u32;
 
@@ -79,7 +79,7 @@ The runtime method for proposing a task emits an event with the expected executi
 
 Before adding a runtime method to estimate the `execution_time`, implement a naive implementation that iterates the global `BlockNumber` until it is divisible by `ExecutionFrequency` (which implies execution in `on_finalize` in this block).
 
-```rust, ignore
+```rust
 fn naive_execution_estimate(now: T::BlockNumber) -> T::BlockNumber {
     // the frequency with which tasks are batch executed
     let batch_frequency = T::ExecutionFrequency::get();
@@ -98,7 +98,7 @@ fn naive_execution_estimate(now: T::BlockNumber) -> T::BlockNumber {
 
 This naive implementation unsurprisingly worked...
 
-```rust, ignore
+```rust
 #[test]
 fn naive_estimator_works() {
     // should use quickcheck to cover entire range of checks
@@ -123,7 +123,7 @@ fn naive_estimator_works() {
 
 ...but it is obvious that there is a better way. If execution is scheduled every constant `ExecutionFrequency` number of blocks, then it should be straightforward to calculate the next execution block without this slow iterate and check modulus method. My first attempt at a better implementation of `execution_estimate(n: T::BlockNumber) -> T::BlockNumber` was
 
-```rust, ignore
+```rust
 fn execution_estimate(n: T::BlockNumber) -> T::BlockNumber {
         let batch_frequency = T::ExecutionFrequency::get();
         let miss = n % batch_frequency;
@@ -133,7 +133,7 @@ fn execution_estimate(n: T::BlockNumber) -> T::BlockNumber {
 
 The above code failed the `estimator_works` unit test
 
-```rust, ignore
+```rust
 #[test]
 fn estimator_works() {
     ExtBuilder::default()
@@ -154,7 +154,7 @@ fn estimator_works() {
 
 The error helped me catch the logic mistake and change it to
 
-```rust, ignore
+```rust
 fn execution_estimate(n: T::BlockNumber) -> T::BlockNumber {
     let batch_frequency = T::ExecutionFrequency::get();
     let miss = n % batch_frequency;
@@ -168,7 +168,7 @@ This makes more sense. Current block number `% T::ExecutionFrequency::get()` is,
 
 Each period of task proposals and voting is considered a round, expressed as `RoundIndex: u32` such that the global round is stored in the runtime storage as `Era`.
 
-```rust, ignore
+```rust
 pub type RoundIndex = u32;
 
 decl_storage! {
@@ -180,7 +180,7 @@ decl_storage! {
 
 This storage value acts as a global counter of the round, which is also used as the `prefix_key` of a `double_map` that tracks the member's remaining voting power in the `SignalBank` runtime storage item. This map and the round counter are updated in the `on_initialize` hook.
 
-```rust, ignore
+```rust
 // in on_initialize
 let last_era = <Era>::get();
 <SignalBank<T>>::remove_prefix(&last_era);
@@ -191,13 +191,13 @@ let next_era: RoundIndex = last_era + 1;
 
 The `SignalBank` tracks the signalling power of each member of the `council`. By using a `double-map` with the prefix as the round number, it is straightforward to perform batch removal of state related to signalling in the previous round.
 
-```rust, ignore
+```rust
 <SignalBank<T>>::remove_prefix(&last_era);
 ```
 
 In practice, this organization of logic uses something like a ring buffer; the `on_initialize` both batch deletes all signalling records from the previous round while, in the same code block, doling out an equal amount of voting power to all members for the next round.
 
-```rust, ignore
+```rust
 // ...continuation of last code block
 let signal_quota = T::SignalQuota::get();
 <Council<T>>::get().into_iter().for_each(|member| {
@@ -209,7 +209,7 @@ The aforementioned ring buffer is maintained in the `on_initialize` block. The m
 
 This is a common way of only exercising expensive batch execution functions every periodic number of blocks. Still, the second to last statement is confusing. The first time I encountered the problem, I placed the following in the `on_initialize` if statement that controls the maintenance of the `SignalBank` and `Era` storage values,
 
-```rust, ignore
+```rust
 // in on_initialize(n: T::BlockNumber)
 if (n % (T::ExecutionFrequency + 1.into())).is_zero() {
     //changing and repopulating of `Era` and `SignalBank`
@@ -218,7 +218,7 @@ if (n % (T::ExecutionFrequency + 1.into())).is_zero() {
 
 I only noticed this mistake while testing whether eras progress as expected. Specifically, the following test failed
 
-```rust, ignore
+```rust
 #[test]
     fn eras_change_correctly() {
     ExtBuilder::default()
@@ -236,7 +236,7 @@ I only noticed this mistake while testing whether eras progress as expected. Spe
 
 The test failed with an error message claiming that the first `assert_eq!` left side was 4 which does not equal 6. This error message caused me to inspect the if condition, which I realized should be changed to (the current implementation),
 
-```rust, ignore
+```rust
 // in on_initialize(n: T::BlockNumber)
 if ((n - 1.into()) % T::ExecutionFrequency).is_zero() {
     //changing and repopulating of `Era` and `SignalBank`

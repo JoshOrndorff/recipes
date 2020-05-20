@@ -7,13 +7,13 @@ public_url: https://github.com/substrate-developer-hub/recipes/tree/master/palle
 
 To declare constant values within a runtime, it is necessary to import the [`Get`](https://substrate.dev/rustdocs/master/frame_support/traits/trait.Get.html) trait from `frame_support`
 
-```rust, ignore
+```rust
 use frame_support::traits::Get;
 ```
 
 Configurable constants are declared as associated types in the pallet's configuration trait using the `Get<T>` syntax for any type `T`.
 
-```rust, ignore
+```rust
 pub trait Trait: system::Trait {
 	type Event: From<Event> + Into<<Self as system::Trait>::Event>;
 
@@ -27,7 +27,7 @@ pub trait Trait: system::Trait {
 
 In order to make these constants and their values appear in the runtime metadata, it is necessary to declare them with the `const` syntax in the `decl_module!` block. Usually constants are declared at the top of this block, right after `fn deposit_event`.
 
-```rust, ignore
+```rust
 decl_module! {
 	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
 		fn deposit_event() = default;
@@ -43,7 +43,7 @@ decl_module! {
 
 This example manipulates a single value in storage declared as `SingleValue`.
 
-```rust, ignore
+```rust
 decl_storage! {
 	trait Store for Module<T: Trait> as Example {
 		SingleValue get(fn single_value): u32;
@@ -53,7 +53,7 @@ decl_storage! {
 
 `SingleValue` is set to `0` every `ClearFrequency` number of blocks in the `on_finalize` function that runs at the end of blocks execution.
 
-```rust, ignore
+```rust
 fn on_finalize(n: T::BlockNumber) {
 	if (n % T::ClearFrequency::get()).is_zero() {
 		let c_val = <SingleValue>::get();
@@ -65,7 +65,7 @@ fn on_finalize(n: T::BlockNumber) {
 
 Signed transactions may invoke the `add_value` runtime method to increase `SingleValue` as long as each call adds less than `MaxAddend`. *There is no anti-sybil mechanism so a user could just split a larger request into multiple smaller requests to overcome the `MaxAddend`*, but overflow is still handled appropriately.
 
-```rust, ignore
+```rust
 fn add_value(origin, val_to_add: u32) -> DispatchResult {
 	let _ = ensure_signed(origin)?;
 	ensure!(val_to_add <= T::MaxAddend::get(), "value must be <= maximum add amount constant");

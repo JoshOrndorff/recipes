@@ -23,7 +23,7 @@ Each of the parameters described above is set in the `transaction_payment` palle
 
 src: [`runtimes/super-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/super-runtime/src/lib.rs)
 
-```rust,ignore
+```rust
 parameter_types! {
 	pub const TransactionBaseFee: u128 = 0;
 	pub const TransactionByteFee: u128 = 1;
@@ -47,7 +47,7 @@ This example uses a quadratic conversion and supports custom coefficients.
 
 src: [`runtimes/weight-fee-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/weight-fee-runtime/src/lib.rs)
 
-```rust, ignore
+```rust
 pub struct QuadraticWeightToFee<C0, C1, C2>(C0, C1, C2);
 
 impl<C0, C1, C2> Convert<Weight, Balance> for QuadraticWeightToFee<C0, C1, C2>
@@ -71,7 +71,7 @@ Having calculated the amount of fees due, runtime authors must decide which asse
 
 src: [`runtimes/weight-fee-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/weight-fee-runtime/src/lib.rs)
 
-```rust,ignore
+```rust
 impl transaction_payment::Trait for Runtime {
 
 	// A generic asset whose ID is stored in the generic_asset pallet's runtime storage

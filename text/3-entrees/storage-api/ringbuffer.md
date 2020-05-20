@@ -11,7 +11,7 @@ The [`ringbuffer-queue/src/lib.rs`](https://github.com/substrate-developer-hub/r
 ## Defining the RingBuffer Trait <a name = "trait"></a>
 First we define the queue interface we want to use:
 
-```rust, ignore
+```rust
 pub trait RingBufferTrait<Item>
 where
 	Item: Codec + EncodeLike,
@@ -32,7 +32,7 @@ It defines the usual `push`, `pop` and `is_empty` functions we expect from a que
 ## Specifying the RingBuffer Transient <a name = "transient"></a>
 Now we want to add an implementation of the trait. We will be storing the start and end of the ringbuffer separately from the actual items and will thus need to store these in our struct:
 
-```rust, ignore
+```rust
 pub struct RingBufferTransient<Index>
 where
 	Index: Codec + EncodeLike + Eq + Copy,
@@ -46,7 +46,7 @@ where
 In order to access the underlying storage we will also need to include the bounds (we will call the type `B`) and the item storage (whose type will be `M`). In order to specify the constraints on the storage map (`M`) we will also need to specify the `Item` type.
 This results in the following struct definition:
 
-```rust, ignore
+```rust
 pub struct RingBufferTransient<Item, B, M, Index>
 where
 	Item: Codec + EncodeLike,
@@ -69,7 +69,7 @@ We need the [`PhantomData`](https://doc.rust-lang.org/std/marker/struct.PhantomD
 ### The Complete Type
 There are two more alterations we will make to our struct to make it work well:
 
-```rust, ignore
+```rust
 type DefaultIdx = u16;
 pub struct RingBufferTransient<Item, B, M, Index = DefaultIdx>
 where
@@ -92,7 +92,7 @@ Now that we have the type definition for `RingBufferTransient` we need to write 
 ### Instantiating the Transient
 First we need to specify how to create a new instance by providing a `new` function:
 
-```rust, ignore
+```rust
 impl<Item, B, M, Index> RingBufferTransient<Item, B, M, Index>
 where // ... same where clause as the type, elided here
 {
@@ -114,7 +114,7 @@ Here we access the bounds stored in storage to initialize the transient.
 ### Implementing the `RingBufferTrait`
 We will now implement the `RingBufferTrait`:
 
-```rust, ignore
+```rust
 impl<Item, B, M, Index> RingBufferTrait<Item> for RingBufferTransient<Item, B, M, Index>
 where // same as the struct definition
 	Item: Codec + EncodeLike,
@@ -129,7 +129,7 @@ where // same as the struct definition
 
 `commit` just consists of putting the potentially changed bounds into storage. You will notice that we don't update the bounds' storage when changing them in the other functions.
 
-```rust, ignore
+```rust
 	fn is_empty(&self) -> bool {
 		self.start == self.end
 	}
@@ -137,7 +137,7 @@ where // same as the struct definition
 
 The `is_empty` function just checks whether the start and end bounds have the same value to determine whether the queue is empty, thus avoiding expensive storage accesses. This means we need to uphold the corresponding invariant in the other (notably the `push`) functions.
 
-```rust, ignore
+```rust
 	fn push(&mut self, item: Item) {
 		M::insert(self.end, item);
 		// this will intentionally overflow and wrap around when bonds_end
@@ -161,7 +161,7 @@ The `if` is necessary because we need to keep the invariant that `start == end` 
 
 The last function we implement is `pop`:
 
-```rust, ignore
+```rust
 	fn pop(&mut self) -> Option<Item> {
 		if self.is_empty() {
 			return None;
@@ -178,7 +178,7 @@ We can return `None` on `is_empty` because we are upholding the invariant. If th
 ### Implementing Drop
 In order to make the usage more ergonomic and to avoid synchronization errors (where the storage map diverges from the bounds) we also implement the [`Drop` trait](https://doc.rust-lang.org/std/ops/trait.Drop.html):
 
-```rust, ignore
+```rust
 impl<Item, B, M, Index> Drop for RingBufferTransient<Item, B, M, Index>
 where // ... same where clause elided
 {
@@ -193,7 +193,7 @@ On `drop`, we `commit` the bounds to storage. With this implementation of `Drop`
 ## Typical Usage <a name = "usage"></a>
 The [`lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/ringbuffer-queue/src/lib.rs) file of the pallet shows typical usage of the transient.
 
-```rust, ignore
+```rust
 impl<T: Trait> Module<T> {
 	fn queue_transient() -> Box<dyn RingBufferTrait<ValueStruct>> {
 		Box::new(RingBufferTransient::<
@@ -211,7 +211,7 @@ See the Rust book's section on [trait objects](https://doc.rust-lang.org/book/ch
 
 The `add_multiple` function shows the actual typical usage of our transient:
 
-```rust, ignore
+```rust
 pub fn add_multiple(origin, integers: Vec<i32>, boolean: bool) -> DispatchResult {
 	let _user = ensure_signed(origin)?;
 	let mut queue = Self::queue_transient();

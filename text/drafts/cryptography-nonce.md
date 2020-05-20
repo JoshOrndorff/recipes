@@ -2,7 +2,7 @@
 
 Sometimes we require a unique identifier for items that may take the exact same form, but have different block numbers. In the [`utxo-workshop`](https://github.com/nczhu/utxo-workshop), the UTXO set included a `salt` field for UTXO output to establish uniqueness for every transaction. This ensures that, as long as the outputs are validated in different blocks, they can both be invoked independently without leaking information regarding the `TransactionInput`'s `Signature`.
 
-```rust, ignore
+```rust
 TransactionOutput {
     value: Value    // u128 alias
     pubkey: H256    // public key

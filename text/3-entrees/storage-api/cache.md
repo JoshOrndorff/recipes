@@ -3,7 +3,7 @@
 
 Calls to runtime storage have an associated cost. With this in mind, multiple calls to storage values should be avoided when possible.
 
-```rust, ignore
+```rust
 decl_storage! {
 	trait Store for Module<T: Trait> as StorageCache {
 		// copy type
@@ -20,7 +20,7 @@ decl_storage! {
 
 For [`Copy`](https://doc.rust-lang.org/std/marker/trait.Copy.html) types, it is easy to reuse previous storage calls by simply reusing the value (which is automatically cloned upon reuse). With this in mind, the second call in the following code is unnecessary:
 
-```rust, ignore
+```rust
 fn increase_value_no_cache(origin, some_val: u32) -> DispatchResult {
 	let _ = ensure_signed(origin)?;
 	let original_call = <SomeCopyValue>::get();
@@ -38,7 +38,7 @@ fn increase_value_no_cache(origin, some_val: u32) -> DispatchResult {
 
 Instead, the initial call value should be reused. In this example, the `SomeCopyValue` value is [`Copy`](https://doc.rust-lang.org/std/marker/trait.Copy.html) so we should prefer the following code without the unnecessary second call to storage:
 
-```rust, ignore
+```rust
 fn increase_value_w_copy(origin, some_val: u32) -> DispatchResult {
 	let _ = ensure_signed(origin)?;
 	let original_call = <SomeCopyValue>::get();
@@ -61,7 +61,7 @@ The runtime methods enable the calling account to swap the `T::AccountId` value 
 2. the calling account is in `GroupMembers`
 
 The first implementation makes a second unnecessary call to runtime storage instead of cloning the call for `existing_key`:
-```rust, ignore
+```rust
 fn swap_king_no_cache(origin) -> DispatchResult {
 	let new_king = ensure_signed(origin)?;
 	let existing_king = <KingMember<T>>::get();
@@ -107,7 +107,7 @@ To learn more, run the command again with --verbose.
 
 Fixing this only requires cloning the original value before it is moved:
 
-```rust, ignore
+```rust
 fn swap_king_with_cache(origin) -> DispatchResult {
 	let new_king = ensure_signed(origin)?;
 	let existing_king = <KingMember<T>>::get();

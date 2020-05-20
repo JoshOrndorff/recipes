@@ -6,13 +6,13 @@ It is often useful to designate some functions as permissioned and, therefore, a
 To manage the set of members allowed to access the methods in question, we may store a vector in runtime storage. Without access to the standard library, it is necessary to use the [`Vec` struct](https://substrate.dev/rustdocs/master/sp_std/vec/struct.Vec.html) from the `sp-std` crate.
 
 
-```rust, ignore
+```rust
 use sp_std::vec::Vec;
 ```
 
 In the runtime, the membership set can be stored as
 
-```rust, ignore
+```rust
 decl_storage! {
 	trait Store for Module<T: Trait> as PGeneric {
 		Members get(fn members): Vec<&T::AccountId>;
@@ -24,7 +24,7 @@ decl_storage! {
 
 If the membership is permissionless such anyone can join, an `add_member` function could be expressed as follows
 
-```rust, ignore
+```rust
 fn add_member(origin) -> DispatchResult {
 	let new_member = ensure_signed(origin)?;
 
@@ -41,7 +41,7 @@ Here we've used the [`append` method](https://substrate.dev/rustdocs/master/fram
 
 To increase the readability of the code, the membership check is extracted into its own auxiliary runtime method.
 
-```rust, ignore
+```rust
 impl<T: Trait> Module<T> {
 	pub fn is_member(who: &T::AccountId) -> bool {
 		Self::members().contains(who)

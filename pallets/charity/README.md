@@ -13,13 +13,13 @@ The Charity pallet represents a simple charitable organization that collects fun
 
 Our charity needs an account to hold its funds. Unlike other accounts, it will not be controlled by a user's cryptographic key pair, but directly by the pallet. To instantiate such a pool of funds, import [`ModuleId`](https://substrate.dev/rustdocs/master/sp_runtime/struct.ModuleId.html) and [`AccountIdConversion`](https://substrate.dev/rustdocs/master/sp_runtime/traits/trait.AccountIdConversion.html) from [`sp-runtime`](https://substrate.dev/rustdocs/master/sp_runtime/index.html).
 
-```rust, ignore
+```rust
 use sp-runtime::{ModuleId, traits::AccountIdConversion};
 ```
 
 With these imports, a `PALLET_ID` constant can be generated as an identifier for the pool of funds. The `PALLET_ID` must be exactly eight characters long which is why we've included the exclamation point. (Well, that and Charity work is just so exciting!) This identifier can be converted into an `AccountId` with the `into_account()` method provided by the `AccountIdConversion` trait.
 
-```rust, ignore
+```rust
 const PALLET_ID: ModuleId = ModuleId(*b"Charity!");
 
 impl<T: Trait> Module<T> {
@@ -41,7 +41,7 @@ Our charity can receive funds in two different ways.
 ## Donations
 The first and perhaps more familiar way is through charitable donations. Donations can be made through a standard `donate` extrinsic which accepts the amount to be donated as a parameter.
 
-```rust,ignore
+```rust
 fn donate(
 		origin,
 		amount: BalanceOf<T>
@@ -58,7 +58,7 @@ fn donate(
 ## Imbalances
 The second way the charity can receive funds is by absorbing imbalances created elsewhere in the runtime. An [`Imbalance`](https://substrate.dev/rustdocs/master/frame_support/traits/trait.Imbalance.html) is created whenever tokens are burned, or minted. Because our charity wants to _collect_ funds, we are specifically interested in [`NegativeImbalance`](https://substrate.dev/rustdocs/master/pallet_balances/struct.NegativeImbalance.html)s. Negative imbalances are created, for example, when a validator is slashed for violating consensus rules, transaction fees are collected, or another pallet burns funds as part of an incentive-alignment mechanism. To allow our pallet to absorb these imbalances, we implement the [`OnUnbalanced` trait](https://substrate.dev/rustdocs/master/frame_support/traits/trait.OnUnbalanced.html).
 
-```rust,ignore
+```rust
 use frame_support::traits::{OnUnbalanced, Imbalance};
 type NegativeImbalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::NegativeImbalance;
 
