@@ -15,14 +15,15 @@ fn some_call(...) -> Result {
 }
 ```
 
-For simple transactions a fixed weight will do. Substrate provides the [`SimpleDispatchInfo` enum](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/weights/enum.SimpleDispatchInfo.html) for situations like this.
+For simple transactions a fixed weight will do. Substrate allows simply specifying a constant integer in cases situations like this.
 ```rust, ignore
 decl_module! {
 	pub struct Module<T: Trait> for enum Call {
 
-		#[weight = SimpleDispatchInfo::FixedNormal(100)]
-		fn store_value(_origin, entry: u32) -> Result {
-			// --snip--
+		#[weight = 10_000]
+		fn store_value(_origin, entry: u32) -> DispatchResult {
+			StoredValue::put(entry);
+			Ok(())
 		}
 ```
 
