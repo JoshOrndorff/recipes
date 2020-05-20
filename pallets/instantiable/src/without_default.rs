@@ -1,7 +1,5 @@
 //! An example instantiable pallet (without default instance)
 
-#![cfg_attr(not(feature = "std"), no_std)]
-
 use frame_support::{decl_event, decl_module, decl_storage, dispatch::DispatchResult};
 use frame_system::{self as system, ensure_signed};
 

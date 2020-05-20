@@ -940,18 +940,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "11c0346158a19b3627234e15596f5e465c360fcdb97d817bcb255e0510f5a788"
 
 [[package]]
-name = "default-instance"
-version = "2.0.0-alpha.7"
-dependencies = [
- "frame-support",
- "frame-system",
- "parity-scale-codec",
- "sp-core",
- "sp-io",
- "sp-runtime",
-]
-
-[[package]]
 name = "derive_more"
 version = "0.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1999,6 +1987,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "instantiable"
+version = "2.0.0-alpha.7"
+dependencies = [
+ "frame-support",
+ "frame-system",
+ "parity-scale-codec",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+]
+
+[[package]]
 name = "integer-sqrt"
 version = "0.1.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2272,18 +2272,6 @@ dependencies = [
  "regex",
  "rocksdb",
  "smallvec 1.4.0",
-]
-
-[[package]]
-name = "last-caller"
-version = "2.0.0-alpha.7"
-dependencies = [
- "frame-support",
- "frame-system",
- "parity-scale-codec",
- "sp-core",
- "sp-io",
- "sp-runtime",
 ]
 
 [[package]]
@@ -6324,7 +6312,6 @@ dependencies = [
  "check-membership",
  "compounding-interest",
  "constant-config",
- "default-instance",
  "double-map",
  "execution-schedule",
  "fixed-point",
@@ -6333,7 +6320,7 @@ dependencies = [
  "frame-system",
  "generic-event",
  "hello-substrate",
- "last-caller",
+ "instantiable",
  "pallet-balances",
  "pallet-randomness-collective-flip",
  "pallet-sudo",

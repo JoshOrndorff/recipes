@@ -1,5 +1,5 @@
 [package]
-name = "default-instance"
+name = "instantiable"
 version = "2.0.0-alpha.7"
 authors = ["Joshy"]
 edition = "2018"

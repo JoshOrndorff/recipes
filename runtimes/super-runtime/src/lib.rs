@@ -27,6 +27,8 @@ use sp_runtime::{
 };
 use sp_std::prelude::*;
 
+use instantiable::without_default as last_caller;
+
 #[cfg(feature = "std")]
 use sp_version::NativeVersion;
 use sp_version::RuntimeVersion;
@@ -249,13 +251,13 @@ impl check_membership::Trait for Runtime {
 
 // The following two configuration traits are for two different instances of the deafult-instance
 // pallet. Notice that only the second instance has to explicitly specify an instance.
-impl default_instance::Trait for Runtime {
-	type Event = Event;
-}
-
-impl default_instance::Trait<default_instance::Instance2> for Runtime {
-	type Event = Event;
-}
+// impl default_instance::Trait for Runtime {
+// 	type Event = Event;
+// }
+//
+// impl default_instance::Trait<default_instance::Instance2> for Runtime {
+// 	type Event = Event;
+// }
 
 impl double_map::Trait for Runtime {
 	type Event = Event;
@@ -289,9 +291,9 @@ impl last_caller::Trait<last_caller::Instance1> for Runtime {
 	type Event = Event;
 }
 
-impl last_caller::Trait<last_caller::Instance2> for Runtime {
-	type Event = Event;
-}
+// impl last_caller::Trait<last_caller::Instance2> for Runtime {
+// 	type Event = Event;
+// }
 
 impl ringbuffer_queue::Trait for Runtime {
 	type Event = Event;
@@ -347,15 +349,15 @@ construct_runtime!(
 		CheckMembership: check_membership::{Module, Call, Storage, Event<T>},
 		ConmpoundingInterest: compounding_interest::{Module, Call, Storage, Event},
 		ConstantConfig: constant_config::{Module, Call, Storage, Event},
-		DefaultInstance1: default_instance::{Module, Call, Storage, Event<T>},
-		DefaultInstance2: default_instance::<Instance2>::{Module, Call, Storage, Event<T>},
+		// DefaultInstance1: default_instance::{Module, Call, Storage, Event<T>},
+		// DefaultInstance2: default_instance::<Instance2>::{Module, Call, Storage, Event<T>},
 		DoubleMap: double_map::{Module, Call, Storage, Event<T>},
 		ExecutionSchedule: execution_schedule::{Module, Call, Storage, Event<T>},
 		FixedPoint: fixed_point::{Module, Call, Storage, Event},
 		HelloSubstrate: hello_substrate::{Module, Call},
 		GenericEvent: generic_event::{Module, Call, Event<T>},
 		LastCaller1: last_caller::<Instance1>::{Module, Call, Storage, Event<T>},
-		LastCaller2: last_caller::<Instance2>::{Module, Call, Storage, Event<T>},
+		// LastCaller2: last_caller::<Instance2>::{Module, Call, Storage, Event<T>},
 		RingbufferQueue: ringbuffer_queue::{Module, Call, Storage, Event<T>},
 		RandomnessDemo: randomness::{Module, Call, Storage, Event},
 		SimpleEvent: simple_event::{Module, Call, Event},
