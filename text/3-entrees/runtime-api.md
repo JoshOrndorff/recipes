@@ -61,7 +61,7 @@ impl_runtime_apis! {
 You may be wondering about the `Block` type parameter which is present here, but not in our definition. This type parameter is added by the macros along with a few other features. All runtime APIs have this type parameter to facilitate querying the runtime at arbitrary blocks. Read more about this in the docs for [`impl_runtime_apis!`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sp_api/macro.impl_runtime_apis.html).
 
 ## Calling the Runtime API
-We've now successfully added a runtime API to our runtime. The outer node can now call this API to query the runtime for the sum of two storage values. Given a reference to a ['client'](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sc_client/struct.Client.html) we can make the call like this.
+We've now successfully added a runtime API to our runtime. The outer node can now call this API to query the runtime for the sum of two storage values. Given a reference to a ['Client'](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sc_service/client/struct.Client.html) we can make the call like this.
 
 ```rust
 let sum_at_block_fifty = client.runtime_api().get_sum(&50);
