@@ -1,5 +1,9 @@
-# Fixed Point Arithmetic
-*[`pallets/fixed-point`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/fixed-point)*
+---
+slug: fixed-point
+lan: en
+title: Fixed Point Arithmetic
+public_url: https://github.com/substrate-developer-hub/recipes/tree/master/pallets/fixed-point
+---
 
 When programmers learn to use non-integer numbers in their programs, they are usually taught to use [floating point](https://en.wikipedia.org/wiki/Floating-point_arithmetic)s. In blockchain, we use an alternative representation of fractional numbers called [fixed point](https://en.wikipedia.org/wiki/Fixed-point_arithmetic). There are several ways to use fixed point numbers, and this recipe will introduce three of them. In particular we'll see:
 

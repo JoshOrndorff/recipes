@@ -1,5 +1,9 @@
-# Instantiable Pallets
-*[`pallets/instantiable`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/instantiable)*
+---
+slug: instantiable
+lan: en
+title: Instantiable Pallets
+public_url: https://github.com/substrate-developer-hub/recipes/tree/master/pallets/instantiable
+---
 
 Instantiable pallets enable multiple instances of the same pallet logic within a single runtime. Each instance of the pallet has its own independent storage, and extrinsics must specify which instance of the pallet they are intended for. These patterns are illustrated in the kitchen in the last-caller and default-instance pallets.
 

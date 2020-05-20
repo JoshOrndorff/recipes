@@ -1,5 +1,9 @@
-# Compounding Interest
-*[`pallets/compounding-interest`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/compounding-interest)*
+---
+slug: compounding-interest
+lan: en
+title: Compounding Interest
+public_url: https://github.com/substrate-developer-hub/recipes/tree/master/pallets/compounding-interest
+---
 
 Many financial agreements involve interest for loaned or borrowed money. [Compounding interest](https://en.wikipedia.org/wiki/Compound_interest) is when new interest is paid on top of not only the original loan amount, the so-called "principal", but also any interest that has been previously paid. In this recipe we will use [fixed point arithmetic](../fixed-point/README.md) to track non-integer account balances in the Substrate runtime.
 

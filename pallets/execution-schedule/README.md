@@ -1,5 +1,9 @@
-# Execution Schedule
-*[`pallets/execution-schedule`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/execution-schedule)*
+---
+slug: execution-schedule
+lan: en
+title: Execution Schedule
+public_url: https://github.com/substrate-developer-hub/recipes/tree/master/pallets/execution-schedule
+---
 
 This pallet abstracts away the scheduling of task execution and governs the priority of tasks using a council of `AccountId`s stored in runtime storage.
 

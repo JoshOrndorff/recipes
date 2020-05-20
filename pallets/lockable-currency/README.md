@@ -1,3 +1,10 @@
+---
+slug: lockable-currency
+lan: en
+title: Lockable Currency
+public_url: https://github.com/substrate-developer-hub/recipes/tree/master/pallets/lockable-currency
+---
+
 # Currency Types
 *[`pallets/lockable-currency`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/lockable-currency), [`pallets/reservable-currency`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/reservable-currency), [`pallets/currency-imbalances`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/currency-imbalances)*
 

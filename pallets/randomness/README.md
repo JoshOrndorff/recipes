@@ -1,5 +1,9 @@
-# Generating Randomness
-*[pallets/randomness](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/randomness/)*
+---
+slug: randomness
+lan: en
+title: Randomness
+public_url: https://github.com/substrate-developer-hub/recipes/tree/master/pallets/randomness/
+---
 
 Randomness is useful in computer programs for everything from gambling, to generating DNA for digital kitties, to selecting block authors. Randomness is hard to come by in deterministic computers as explained at [random.org](https://www.random.org/randomness/). This is particularly true in the context of a blockchain when all the nodes in the network must agree on the state of the chain. Some techniques have been developed to address this problem including [RanDAO](https://github.com/randao/randao) and [Verifiable Random Functions](https://en.wikipedia.org/wiki/Verifiable_random_function). Substrate abstracts the implementation of a randomness source using the [`Randomness` trait](https://substrate.dev/rustdocs/master/frame_support/traits/trait.Randomness.html), and provides a few implementations. This recipe will demonstrate using the `Randomness` trait and two concrete implementations.
 
