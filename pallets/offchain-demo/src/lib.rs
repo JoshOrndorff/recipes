@@ -179,7 +179,7 @@ decl_module! {
 		}
 
 		#[weight = 0]
-		pub fn submit_number_unsigned(origin, _block: T::BlockNumber, number: u64) -> DispatchResult {
+		pub fn submit_number_unsigned(origin, number: u64) -> DispatchResult {
 			debug::info!("submit_number_unsigned: {:?}", number);
 			let _ = ensure_none(origin)?;
 			Self::append_or_replace_number(None, number)
@@ -214,6 +214,7 @@ impl<T: Trait> Module<T> {
 			}
 
 			// displaying the average
+			let num_len = numbers.len();
 			let average = match num_len {
 				0 => 0,
 				_ => numbers.iter().sum::<u64>() / (num_len as u64),
@@ -406,12 +407,7 @@ impl<T: Trait> Module<T> {
 	fn unsigned_submit_number(block_number: T::BlockNumber) -> Result<(), Error<T>> {
 		let submission: u64 = block_number.try_into().ok().unwrap() as u64;
 		// Submitting the current block number back on-chain.
-		// `blocknumber` and `submission` params are always the same value but in different
-		//   data type. They seem redundant, but in reality they have different purposes.
-		//   `submission` is the number to be recorded back on-chain. `block_number` is checked in
-		//   `validate_unsigned` function so only one `Call::submit_number_unsigned` is accepted in
-		//   each block generation phase.
-		let call = Call::submit_number_unsigned(block_number, submission);
+		let call = Call::submit_number_unsigned(submission);
 
 		SubmitTransaction::<T, Call<T>>::submit_unsigned_transaction(call.into()).map_err(|e| {
 			debug::error!("Failed in unsigned_submit_number: {:?}", e);
@@ -424,19 +420,14 @@ impl<T: Trait> frame_support::unsigned::ValidateUnsigned for Module<T> {
 	type Call = Call<T>;
 
 	fn validate_unsigned(_source: TransactionSource, call: &Self::Call) -> TransactionValidity {
-		if let Call::submit_number_unsigned(block_num, number) = call {
-			debug::native::info!(
-				"off-chain send_unsigned: block_num: {}| number: {}",
-				block_num,
-				number
-			);
+		if let Call::submit_number_unsigned(number) = call {
+			debug::native::info!("off-chain send_unsigned: number: {}", number);
 
 			ValidTransaction::with_tag_prefix("offchain-demo")
 				.priority(T::UnsignedPriority::get())
-				.and_requires([number])
-				.and_provides(block_num)
+				.and_provides([b"submit_number_unsigned"])
 				.longevity(3)
-				.propagate(false)
+				.propagate(true)
 				.build()
 		} else {
 			InvalidTransaction::Call.into()
