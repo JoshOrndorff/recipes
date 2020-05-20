@@ -152,7 +152,7 @@
 <p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/single-value"><code>pallets/single-value</code></a></em></p>
 <p>Storage is used for data that should be kept between blocks, and accessible to future transactions. Most runtimes will have many storage values, and together the storage values make up the blockchain's &quot;state&quot;. The storage values themselves are <em>not</em> stored in the blocks. Instead the blocks contains extrinsics which represent <em>changes</em> to the storage values. It is the job of each node in a blockchain network to keep track of the current storage. The current state of storage can be determined by executing all of the blocks in the chain.</p>
 <h2><a class="header" href="#declaring-storage" id="declaring-storage">Declaring Storage</a></h2>
-<p>A pallet's storage items are declared with the <a href="https://substrate.dev/rustdocs/master/frame_support/macro.decl_storage.html"><code>decl_storage!</code> macro</a>.</p>
+<p>A pallet's storage items are declared with the <a href="https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/macro.decl_storage.html"><code>decl_storage!</code> macro</a>.</p>
 <pre><code class="language-rust ignore">decl_storage! {
     trait Store for Module&lt;T: Trait&gt; as SingleValue {
         // --snip--
@@ -169,7 +169,7 @@
 <pre><code class="language-rust ignore">StoredAccount get(fn stored_account): T::AccountId;
 </code></pre>
 <h2><a class="header" href="#reading-and-writing-to-storage" id="reading-and-writing-to-storage">Reading and Writing to Storage</a></h2>
-<p>Functions used to access a single storage value are defined in the <a href="https://substrate.dev/rustdocs/master/frame_support/storage/trait.StorageValue.html"><code>StorageValue</code> trait</a>. In this pallet, we use the most common method, <code>put</code>, but it is worth skimming the other methods so you know what is available.</p>
+<p>Functions used to access a single storage value are defined in the <a href="https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/storage/trait.StorageValue.html"><code>StorageValue</code> trait</a>. In this pallet, we use the most common method, <code>put</code>, but it is worth skimming the other methods so you know what is available.</p>
 <p>The <code>set_value</code> method demonstrates writing to storage, as well as taking a parameter in our dispatchable call.</p>
 <pre><code class="language-rust ignore">fn set_value(origin, value: u32) -&gt; DispatchResult {
 	let _ = ensure_signed(origin)?;
@@ -185,7 +185,7 @@ let my_val = StoredValue::get();
 let my_val = Self::stored_value();
 </code></pre>
 <h2><a class="header" href="#storing-the-callers-account" id="storing-the-callers-account">Storing the Callers Account</a></h2>
-<p>In terms of storage, the <code>set_account</code> method is quite similar to <code>set_value</code>, but it also demonstrates how to retreive the <code>AccountId</code> of the caller using the <a href="https://substrate.dev/rustdocs/master/frame_system/fn.ensure_signed.html"><code>ensure_signed</code> function</a>.</p>
+<p>In terms of storage, the <code>set_account</code> method is quite similar to <code>set_value</code>, but it also demonstrates how to retreive the <code>AccountId</code> of the caller using the <a href="https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_system/fn.ensure_signed.html"><code>ensure_signed</code> function</a>.</p>
 <pre><code class="language-rust ignore">fn set_account(origin) -&gt; DispatchResult {
 	let who = ensure_signed(origin)?;
 
@@ -196,7 +196,7 @@ let my_val = Self::stored_value();
 </code></pre>
 <p>Because <code>AccountId</code> type comes from the configuration trait, we must use slightly different syntax. Notice the <code>&lt;T&gt;</code> attached to the name of the storage value this time. Notice also that because <code>AccountId</code> is not primitive, we lend a reference to it rather than transferring ownership.</p>
 <h2><a class="header" href="#constructing-the-runtime" id="constructing-the-runtime">Constructing the Runtime</a></h2>
-<p>We learned about the <a href="https://substrate.dev/rustdocs/master/frame_support/macro.construct_runtime.html"><code>construct_runtime!</code> macro</a> in the previous section. Because this pallet uses storage items, we must add this to the line in construct runtime. In the Super Runtime, we see the additional <code>Storage</code> feature.</p>
+<p>We learned about the <a href="https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/macro.construct_runtime.html"><code>construct_runtime!</code> macro</a> in the previous section. Because this pallet uses storage items, we must add this to the line in construct runtime. In the Super Runtime, we see the additional <code>Storage</code> feature.</p>
 <pre><code class="language-rust ignore">construct_runtime!(
 	pub enum Runtime where
 		Block = Block,

@@ -158,7 +158,7 @@
 <p>This construction lends itself to efficient removal of subgroups of a dataset (similar to <a href="./double.html"><code>double_map</code></a>). By associating a common prefix with related data, the dataset can be partitioned to effectively batch deletions.</p>
 <p>Every change in the leaves percolates up to the root, thereby providing a complete, succinct history of all changes to the underlying data structure in the form of the trie root hash.</p>
 <h2><a class="header" href="#runtime-child-storage-a-name--storja" id="runtime-child-storage-a-name--storja">Runtime Child Storage <a name = "storj"></a></a></h2>
-<p>To interact with child tries, there are methods exposed in <a href="https://substrate.dev/rustdocs/master/frame_support/storage/child/index.html">runtime child storage</a>. Of the methods listed in the documentation, it is worth emphasizing the method associated with batch deletion.</p>
+<p>To interact with child tries, there are methods exposed in <a href="https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/storage/child/index.html">runtime child storage</a>. Of the methods listed in the documentation, it is worth emphasizing the method associated with batch deletion.</p>
 <pre><code class="language-rust ignore">pub fn kill_trie(index: ObjectCount) {
 	let id = Self::id_from_index(index);
 	child::kill_storage(
@@ -167,7 +167,7 @@
 	);
 }
 </code></pre>
-<p><a href="https://substrate.dev/rustdocs/master/frame_support/storage/child/fn.kill_storage.html"><code>kill_storage</code></a> deletes all  <code>(key, value)</code> pairs associated with the <code>storage_key</code>. The basic API for interacting with a given child trie follows this format:</p>
+<p><a href="https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/storage/child/fn.kill_storage.html"><code>kill_storage</code></a> deletes all  <code>(key, value)</code> pairs associated with the <code>storage_key</code>. The basic API for interacting with a given child trie follows this format:</p>
 <pre><code class="language-rust ignore">// pseudocode
 child::do(trie_id, key, value);
 </code></pre>

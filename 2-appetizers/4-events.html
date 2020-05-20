@@ -170,7 +170,7 @@
 }
 </code></pre>
 <h2><a class="header" href="#declaring-events" id="declaring-events">Declaring Events</a></h2>
-<p>To declare an event, use the <a href="https://substrate.dev/rustdocs/master/frame_support/macro.decl_event.html"><code>decl_event!</code> macro</a>. Like any rust enum, Events have names, and can optionally carry data with them. The syntax is slightly different depending on whether the events carry data of primitive types, or generic types from the pallet's configuration trait. These two techniques are demonstrated in the <code>simple-event</code> and <code>generic-event</code> pallets respectively.</p>
+<p>To declare an event, use the <a href="https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/macro.decl_event.html"><code>decl_event!</code> macro</a>. Like any rust enum, Events have names, and can optionally carry data with them. The syntax is slightly different depending on whether the events carry data of primitive types, or generic types from the pallet's configuration trait. These two techniques are demonstrated in the <code>simple-event</code> and <code>generic-event</code> pallets respectively.</p>
 <h3><a class="header" href="#simple-events" id="simple-events">Simple Events</a></h3>
 <p>The simplest example of an event uses the following syntax</p>
 <pre><code class="language-rust ignore">decl_event!(

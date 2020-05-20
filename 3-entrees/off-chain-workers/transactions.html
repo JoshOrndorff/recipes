@@ -208,7 +208,7 @@ pub mod crypto {
 <span class="boring">}
 </span></code></pre></pre>
 <p>This associated type needs to be specified by the runtime when the runtime is to include this pallet (implement this pallet trait).</p>
-<p>Looking at the <a href="https://substrate.dev/rustdocs/master/frame_system/offchain/trait.SubmitSignedTransaction.html">rustdoc of <code>SubmitSignedTransaction</code></a>, it says that we should use the <code>TransactionSubmitter</code> implementation type. Let's do that in our runtime.</p>
+<p>We should use the <code>TransactionSubmitter</code> implementation type. Let's do that in our runtime.</p>
 <p>src: <a href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime/src/lib.rs"><code>runtimes/ocw-runtime/src/lib.rs</code></a></p>
 <pre><pre class="playpen"><code class="language-rust">
 <span class="boring">#![allow(unused_variables)]
@@ -227,7 +227,7 @@ impl offchain_demo::Trait for Runtime {
 }
 <span class="boring">}
 </span></code></pre></pre>
-<p>Now if we build the <code>kitchen-node</code>, we will see the compiler complain that the trait bound for <code>Runtime: frame_system::offchain::CreateTransaction</code> is not satisfied. We learn that when using <code>SubmitSignedTransaction</code>, we also need to have our runtime implement the <a href="https://substrate.dev/rustdocs/master/frame_system/offchain/trait.CreateTransaction.html"><code>CreateTransaction</code> trait</a>. So let's implement this in our runtime.</p>
+<p>Now if we build the <code>kitchen-node</code>, we will see the compiler complain that the trait bound for <code>Runtime: frame_system::offchain::CreateTransaction</code> is not satisfied. We learn that when using <code>SubmitSignedTransaction</code>, we also need to have our runtime implement the <code>CreateTransaction</code> trait. So let's implement this in our runtime.</p>
 <p>src: <a href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime/src/lib.rs"><code>runtimes/ocw-runtime/src/lib.rs</code></a></p>
 <pre><pre class="playpen"><code class="language-rust">
 <span class="boring">#![allow(unused_variables)]
@@ -322,7 +322,7 @@ pub type SignedExtra = (
 <p>We have a function reference to <code>Call::submit_number_signed(submission)</code>. This is the function we are going to submit back to on-chain, and passing it to <code>T::SubmitSignedTransaction::submit_signed(call)</code>.</p>
 <p>You will notice that we run a for loop in the returned result. This implies that this call may make multiple transactions and return multiple results. It is because this call actually signs and sends the transaction with each of the accounts that can be found locally under the application crypto (which we defined earlier in <code>pub mod crypto {...}</code>). You can view this as the local accounts that are managed under this pallet namespace. Right now, we only have one key in the app crypto, so only one signed transaction is made.</p>
 <p>Eventually, the <code>call</code> transaction is made on-chain via the <code>create_transaction</code> function we defined earlier when we implemented <code>CreateTransaction</code> trait in our runtime.</p>
-<p>If you are wondering where we insert the local account in the pallet app crypto, it is actually in the outer node's <a href="https://substrate.dev/rustdocs/master/sc_service/index.html">service</a>.</p>
+<p>If you are wondering where we insert the local account in the pallet app crypto, it is actually in the outer node's <a href="https://substrate.dev/rustdocs/v2.0.0-alpha.8/sc_service/index.html">service</a>.</p>
 <p>src: <a href="https://github.com/substrate-developer-hub/recipes/tree/master/nodes/kitchen-node/src/service.rs"><code>nodes/kitchen-node/src/service.rs</code></a></p>
 <pre><pre class="playpen"><code class="language-rust">
 <span class="boring">#![allow(unused_variables)]

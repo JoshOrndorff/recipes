@@ -150,7 +150,7 @@
                     <main>
                         <h1><a class="header" href="#efficent-subgroup-removal-by-subkey-double-maps" id="efficent-subgroup-removal-by-subkey-double-maps">Efficent Subgroup Removal by Subkey: Double Maps</a></h1>
 <p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/double-map"><code>pallets/double-map</code></a></em></p>
-<p>For some runtimes, it may be necessary to remove a subset of values in a key-value mapping. If the subset maintain an associated identifier type, this can be done in a clean way with the <a href="https://substrate.dev/rustdocs/master/frame_support/storage/trait.StorageDoubleMap.html"><code>double_map</code></a> via the <code>remove_prefix</code> api.</p>
+<p>For some runtimes, it may be necessary to remove a subset of values in a key-value mapping. If the subset maintain an associated identifier type, this can be done in a clean way with the <a href="https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/storage/trait.StorageDoubleMap.html"><code>double_map</code></a> via the <code>remove_prefix</code> api.</p>
 <pre><code class="language-rust ignore">pub type GroupIndex = u32; // this is Encode (which is necessary for double_map)
 
 decl_storage! {

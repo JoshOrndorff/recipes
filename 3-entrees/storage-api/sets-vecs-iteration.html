@@ -192,7 +192,7 @@ fn member_action(origin) -&gt; Result {
 	}
 }
 </code></pre>
-<p>Before <a href="https://github.com/paritytech/substrate/pull/3071">3071</a> was merged, it was necessary to call <a href="https://substrate.dev/rustdocs/master/frame_support/storage/trait.StorageValue.html#tymethod.mutate"><code>mutate</code></a> to push new values to a vector stored in runtime storage.</p>
+<p>Before <a href="https://github.com/paritytech/substrate/pull/3071">3071</a> was merged, it was necessary to call <a href="https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/storage/trait.StorageValue.html#tymethod.mutate"><code>mutate</code></a> to push new values to a vector stored in runtime storage.</p>
 <pre><code class="language-rust ignore">fn mutate_to_append(origin) -&gt; Result {
     let user = ensure_signed(origin)?;
 
@@ -202,7 +202,7 @@ fn member_action(origin) -&gt; Result {
     Ok(())
 }
 </code></pre>
-<p>For vectors stored in the runtime, mutation can be relatively expensive. This follows from the fact that <code>mutate</code> entails decoding the vector, making changes, and re-encoding the whole vector. It seems wasteful to decode the entire vector, push a new item, and then re-encode the whole thing. This provides sufficient motivation for <a href="https://substrate.dev/rustdocs/master/frame_support/storage/trait.StorageValue.html#tymethod.append"><code>append</code></a>:</p>
+<p>For vectors stored in the runtime, mutation can be relatively expensive. This follows from the fact that <code>mutate</code> entails decoding the vector, making changes, and re-encoding the whole vector. It seems wasteful to decode the entire vector, push a new item, and then re-encode the whole thing. This provides sufficient motivation for <a href="https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/storage/trait.StorageValue.html#tymethod.append"><code>append</code></a>:</p>
 <pre><code class="language-rust ignore">fn append_new_entries(origin) -&gt; Result {
     let user = ensure_signed(origin)?;
 

@@ -219,7 +219,7 @@ fn set_value_works() {
 }
 </code></pre>
 <h3><a class="header" href="#expected-events-are-emitted-a-name--eventsa" id="expected-events-are-emitted-a-name--eventsa">Expected Events are Emitted <a name = "events"></a></a></h3>
-<p>The common way of testing expected event emission behavior requires importing <code>support</code>'s <a href="https://substrate.dev/rustdocs/master/frame_support/macro.impl_outer_event.html"><code>impl_outer_event!</code></a> macro</p>
+<p>The common way of testing expected event emission behavior requires importing <code>support</code>'s <a href="https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/macro.impl_outer_event.html"><code>impl_outer_event!</code></a> macro</p>
 <pre><code class="language-rust ignore">use support::impl_outer_event;
 </code></pre>
 <p>The <code>TestEvent</code> enum imports and uses the pallet's <code>Event</code> enum. The new local pallet, <code>hello_substrate</code>, re-exports the contents of the root to give a name for the current crate to <code>impl_outer_event!</code>.</p>
@@ -237,7 +237,7 @@ impl Trait for TestRuntime {
 	type Event = TestEvent;
 }
 </code></pre>
-<p>Testing the correct emission of events compares constructions of expected events with the entries in the <a href="https://substrate.dev/rustdocs/master/frame_system/struct.Module.html#method.events"><code>System::events</code></a> vector of <code>EventRecord</code>s. In <a href="https://github.com/substrate-developer-hub/recipes/tree/master//pallets/adding-machine"><code>pallets/adding-machine</code></a>,</p>
+<p>Testing the correct emission of events compares constructions of expected events with the entries in the <a href="https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_system/struct.Module.html#method.events"><code>System::events</code></a> vector of <code>EventRecord</code>s. In <a href="https://github.com/substrate-developer-hub/recipes/tree/master//pallets/adding-machine"><code>pallets/adding-machine</code></a>,</p>
 <pre><code class="language-rust ignore">#[test]
 fn add_emits_correct_event() {
 	ExtBuilder::build().execute_with(|| {

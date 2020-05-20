@@ -149,7 +149,7 @@
                 <div id="content" class="content">
                     <main>
                         <h1><a class="header" href="#storage-api" id="storage-api">Storage API</a></h1>
-<p>We've already encountered the <a href="https://substrate.dev/rustdocs/master/frame_support/macro.decl_storage.html"><code>decl_storage!</code> macro</a> in the appetizer on <a href="../../2-appetizers/2-storage-values.html">storage items</a>. There is a rich storage API in Substrate which we will explore in this section.</p>
+<p>We've already encountered the <a href="https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/macro.decl_storage.html"><code>decl_storage!</code> macro</a> in the appetizer on <a href="../../2-appetizers/2-storage-values.html">storage items</a>. There is a rich storage API in Substrate which we will explore in this section.</p>
 <p>For crypto<em>currencies</em>, storage might consist of a mapping between account keys and corresponding balances.</p>
 <p>More generally, blockchains provide an interface to store and interact with data in a verifiable and globally irreversible way. In this context, data is stored in a series of snapshots, each of which may be accessed at a later point in time, but, once created, snapshots are considered irreversible.</p>
 <p>Arbitrary data may be stored, as long as its data type is serializable in Substrate i.e. implements <a href="https://docs.rs/parity-scale-codec/1.3.0/parity_scale_codec/#encode"><code>Encode</code></a> and <a href="https://docs.rs/parity-scale-codec/1.3.0/parity_scale_codec/#decode"><code>Decode</code></a> traits.</p>

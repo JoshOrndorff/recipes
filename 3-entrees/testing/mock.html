@@ -266,7 +266,7 @@ impl Trait for TestRuntime {
 pub type System = system::Module&lt;TestRuntime&gt;;
 pub type TestPallet = Module&lt;TestRuntime&gt;;
 </code></pre>
-<p>With this, it is possible to use this type in the unit tests. For example, the block number can be set with <a href="https://substrate.dev/rustdocs/master/frame_system/struct.Module.html#method.set_block_number"><code>set_block_number</code></a></p>
+<p>With this, it is possible to use this type in the unit tests. For example, the block number can be set with <a href="https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_system/struct.Module.html#method.set_block_number"><code>set_block_number</code></a></p>
 <pre><code class="language-rust ignore">#[test]
 fn add_emits_correct_event() {
 	// ExtBuilder syntax is explained further below
@@ -335,7 +335,7 @@ version = '2.0.0-alpha.7'
 	});
 }
 </code></pre>
-<p>To use <code>new_test_ext</code> in a runtime test, we call the method and call <a href="https://substrate.dev/rustdocs/master/sp_state_machine/struct.TestExternalities.html#method.execute_with"><code>execute_with</code></a> on the returned <code>runtime_io::TestExternalities</code></p>
+<p>To use <code>new_test_ext</code> in a runtime test, we call the method and call <a href="https://substrate.dev/rustdocs/v2.0.0-alpha.8/sp_state_machine/struct.TestExternalities.html#method.execute_with"><code>execute_with</code></a> on the returned <code>runtime_io::TestExternalities</code></p>
 <pre><code class="language-rust ignore">#[test]
 fn fake_test() {
 	new_test_ext().execute_with(|| {
@@ -350,7 +350,7 @@ fn fake_test() {
 <pre><code class="language-rust ignore">pub struct ExtBuilder;
 </code></pre>
 <p>The behavior for constructing the test environment is contained the methods on the <code>ExtBuilder</code> unit structure. This fosters multiple levels of configuration depending on if the test requires a common default instance of the environment or a more specific edge case configuration. The latter is explored in more detail in <a href="./externalities.html">Custom Test Environment</a>.</p>
-<p>Like <code>new_test_ext</code>, the <code>build()</code> method on the <code>ExtBuilder</code> object returns an instance of <a href="https://substrate.dev/rustdocs/master/sp_state_machine/struct.TestExternalities.html"><code>TestExternalities</code></a>. <a href="https://substrate.dev/rustdocs/master/sp_externalities/index.html">Externalities</a> are an abstraction that allows the runtime to access features of the outer node such as storage or offchain workers.</p>
+<p>Like <code>new_test_ext</code>, the <code>build()</code> method on the <code>ExtBuilder</code> object returns an instance of <a href="https://substrate.dev/rustdocs/v2.0.0-alpha.8/sp_state_machine/struct.TestExternalities.html"><code>TestExternalities</code></a>. <a href="https://substrate.dev/rustdocs/v2.0.0-alpha.8/sp_externalities/index.html">Externalities</a> are an abstraction that allows the runtime to access features of the outer node such as storage or offchain workers.</p>
 <p>In this case, create a mock storage from the default genesis configuration.</p>
 <pre><code class="language-rust ignore">impl ExtBuilder {
 	pub fn build() -&gt; runtime_io::TestExternalities {
@@ -367,7 +367,7 @@ fn fake_test_example() {
 	})
 }
 </code></pre>
-<p>While testing in this environment, runtimes that require signed extrinsics (aka take <code>origin</code> as a parameter) will require transactions coming from an <code>Origin</code>. This requires importing the <a href="https://substrate.dev/rustdocs/master/frame_support/macro.impl_outer_origin.html"><code>impl_outer_origin</code></a> macro from <code>support</code></p>
+<p>While testing in this environment, runtimes that require signed extrinsics (aka take <code>origin</code> as a parameter) will require transactions coming from an <code>Origin</code>. This requires importing the <a href="https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/macro.impl_outer_origin.html"><code>impl_outer_origin</code></a> macro from <code>support</code></p>
 <pre><code class="language-rust ignore">use support::{impl_outer_origin};
 
 impl_outer_origin!{
@@ -384,7 +384,7 @@ fn last_value_updates() {
 }
 </code></pre>
 <p>Run these tests with <code>cargo test</code>, an optional parameter is the test's name to only run that test and not all tests.</p>
-<p>Note that the input to <code>Origin::signed</code> is the <code>system::Trait</code>'s <code>AccountId</code> type which was set to <code>u64</code> for the <code>TestRuntime</code> implementation. In theory, this could be set to some other type as long as it conforms to the <a href="https://substrate.dev/rustdocs/master/frame_system/trait.Trait.html#associatedtype.AccountId">trait bound</a>,</p>
+<p>Note that the input to <code>Origin::signed</code> is the <code>system::Trait</code>'s <code>AccountId</code> type which was set to <code>u64</code> for the <code>TestRuntime</code> implementation. In theory, this could be set to some other type as long as it conforms to the <a href="https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_system/trait.Trait.html#associatedtype.AccountId">trait bound</a>,</p>
 <pre><code class="language-rust ignore">pub trait Trait: 'static + Eq + Clone {
 	//...
 	type AccountId: Parameter + Member + MaybeSerializeDeserialize + Debug + MaybeDisplay + Ord + Default;

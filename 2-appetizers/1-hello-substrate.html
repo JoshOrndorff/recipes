@@ -156,7 +156,7 @@
 <pre><code class="language-rust ignore">#![cfg_attr(not(feature = &quot;std&quot;), no_std)]
 </code></pre>
 <h2><a class="header" href="#imports" id="imports">Imports</a></h2>
-<p>Next, you'll find imports that come from various parts of the Substrate framework. All pallets will import from a few common crates including <a href="https://substrate.dev/rustdocs/master/frame_support/index.html"><code>frame-support</code></a>, and <a href="https://substrate.dev/rustdocs/master/frame_system/index.html"><code>frame-system</code></a>.  Complex pallets will have many imports as we'll see later. The <code>hello-substrate</code> pallet uses these imports.</p>
+<p>Next, you'll find imports that come from various parts of the Substrate framework. All pallets will import from a few common crates including <a href="https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/index.html"><code>frame-support</code></a>, and <a href="https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_system/index.html"><code>frame-system</code></a>.  Complex pallets will have many imports as we'll see later. The <code>hello-substrate</code> pallet uses these imports.</p>
 <pre><code class="language-rust ignore">use frame_support::{ decl_module, dispatch::DispatchResult, debug };
 use frame_system::{ self as system, ensure_signed };
 use sp_runtime::print;
@@ -168,7 +168,7 @@ use sp_runtime::print;
 <pre><code class="language-rust ignore">pub trait Trait: system::Trait {}
 </code></pre>
 <h2><a class="header" href="#dispatchable-calls" id="dispatchable-calls">Dispatchable Calls</a></h2>
-<p>A Dispatchable call is a function that a blockchain user can call as part of an Extrinsic. &quot;Extrinsic&quot; is Substrate jargon meaning a call from outside of the chain. Most of the time they are transactions, and for now it is fine to think of them as transactions. Dispatchable calls are defined in the <a href="https://substrate.dev/rustdocs/master/frame_support/macro.decl_module.html"><code>decl_module!</code> macro</a>.</p>
+<p>A Dispatchable call is a function that a blockchain user can call as part of an Extrinsic. &quot;Extrinsic&quot; is Substrate jargon meaning a call from outside of the chain. Most of the time they are transactions, and for now it is fine to think of them as transactions. Dispatchable calls are defined in the <a href="https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/macro.decl_module.html"><code>decl_module!</code> macro</a>.</p>
 <pre><code class="language-rust ignore">decl_module! {
 	pub struct Module&lt;T: Trait&gt; for enum Call where origin: T::Origin {
 
@@ -182,7 +182,7 @@ use sp_runtime::print;
 	}
 }
 </code></pre>
-<p>As you can see, our <code>hello-substrate</code> pallet has a dispatchable call that takes a single argument, called <code>origin</code> which we'll investigate shortly. The call returns a <a href="https://substrate.dev/rustdocs/master/frame_support/dispatch/type.DispatchResult.html"><code>DispatchResult</code></a> which can be either <code>Ok(())</code> indicating that the call succeeded, or an <code>Err</code> which we'll investigate in the <a href="./3-errors.html">appetizer about errors</a>.</p>
+<p>As you can see, our <code>hello-substrate</code> pallet has a dispatchable call that takes a single argument, called <code>origin</code> which we'll investigate shortly. The call returns a <a href="https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/dispatch/type.DispatchResult.html"><code>DispatchResult</code></a> which can be either <code>Ok(())</code> indicating that the call succeeded, or an <code>Err</code> which we'll investigate in the <a href="./3-errors.html">appetizer about errors</a>.</p>
 <h3><a class="header" href="#weight-annotations" id="weight-annotations">Weight Annotations</a></h3>
 <p>Right before the <code>hello-substrate</code> function, we see the line <code>#[weight = 10_000]</code>. This line attaches a default weight to the call. Ultimately weights affect the fees a user will have to pay to call the function. Weights are a very interesting aspect of developing with Substrate, but they too shall be covered later in the section on <a href="../3-entrees/weights.html">Weights</a>. For now, and for may of the recipes pallets, we will simply use the default weight as we have done here.</p>
 <h2><a class="header" href="#inside-a-dispatchable-call" id="inside-a-dispatchable-call">Inside a Dispatchable Call</a></h2>
@@ -200,16 +200,16 @@ use sp_runtime::print;
 	Ok(())
 }
 </code></pre>
-<p>This function essentially does three things. First, it uses the <a href="https://substrate.dev/rustdocs/master/frame_system/fn.ensure_signed.html"><code>ensure_signed</code> function</a> to ensure that the caller of the function was a regular user who owns a private key. This function also returns who that caller was. We store the caller's identity in the <code>caller</code> variable.</p>
-<p>Second, it prints a message and logs the caller. Notice that we aren't using Rust's normal <code>println!</code> macro, but rather a special <a href="https://substrate.dev/rustdocs/master/sp_runtime/fn.print.html"><code>print</code> function</a> and <a href="https://substrate.dev/rustdocs/master/frame_support/debug/macro.info.html"><code>debug::info!</code> macro</a>. The reason for this is explained in the next section.</p>
+<p>This function essentially does three things. First, it uses the <a href="https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_system/fn.ensure_signed.html"><code>ensure_signed</code> function</a> to ensure that the caller of the function was a regular user who owns a private key. This function also returns who that caller was. We store the caller's identity in the <code>caller</code> variable.</p>
+<p>Second, it prints a message and logs the caller. Notice that we aren't using Rust's normal <code>println!</code> macro, but rather a special <a href="https://substrate.dev/rustdocs/v2.0.0-alpha.8/sp_runtime/fn.print.html"><code>print</code> function</a> and <a href="https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/debug/macro.info.html"><code>debug::info!</code> macro</a>. The reason for this is explained in the next section.</p>
 <p>Finally, the call returns <code>Ok(())</code> to indicate that the call has succeeded. At a glance it seems that there is no way for this call to fail, but this is not quite true. The <code>ensure_signed</code> function, used at the beginning, can return an error if the call was not from a signed origin. This is the first time we're seeing the important paradigm &quot;<strong>Verify first, write last</strong>&quot;. In Substrate development, it is important that you always ensure preconditions are met and return errors at the beginning. After these checks have completed, then you may begin the functions computation.</p>
 <h2><a class="header" href="#printing-from-the-runtime" id="printing-from-the-runtime">Printing from the Runtime</a></h2>
 <p>Printing to the terminal from a Rust program is typically very simple using the <code>println!</code> macro. However, Substrate runtimes are compiled to Web Assembly as well as a regular native binary, and do not have access to rust's standard library. That means we cannot use the regular <code>println!</code>. I encourage you to modify the code to try using <code>println!</code> and confirm that it will not compile. Nonetheless, printing a message from the runtime is useful both for logging information, and also for debugging.</p>
 <p><img src="../img/substrate-architecture.png" alt="Substrate Architecture Diagram" /></p>
-<p>At the top of our pallet, we imported <code>sp_runtime</code>'s <a href="https://substrate.dev/rustdocs/master/sp_runtime/fn.print.html"><code>print</code> function</a>. This special function allows the runtime to pass a message for printing to the outer part of the node which is not built to Wasm. This function is only able to print items that implement the <a href="https://substrate.dev/rustdocs/master/sp_runtime/traits/trait.Printable.html"><code>Printable</code> trait</a>. Luckily all the primitive types already implement this trait, and you can implement the trait for your own datatypes too.</p>
+<p>At the top of our pallet, we imported <code>sp_runtime</code>'s <a href="https://substrate.dev/rustdocs/v2.0.0-alpha.8/sp_runtime/fn.print.html"><code>print</code> function</a>. This special function allows the runtime to pass a message for printing to the outer part of the node which is not built to Wasm. This function is only able to print items that implement the <a href="https://substrate.dev/rustdocs/v2.0.0-alpha.8/sp_runtime/traits/trait.Printable.html"><code>Printable</code> trait</a>. Luckily all the primitive types already implement this trait, and you can implement the trait for your own datatypes too.</p>
 <p><strong>Print function note:</strong> To actually see the printed messages, we need to use the flag <code>-lruntime=debug</code> when running the kitchen node. So, for the kitchen node, the command would become <code>./target/release/kitchen-node --dev -lruntime=debug</code>.</p>
 <p>The next line demonstrates using <code>debug::info!</code> macro to log to the screen and also inspecting the variable's content. The syntax inside the macro is very similar to what regular rust macro <code>println!</code> takes.</p>
-<p><strong>Runtime logger note:</strong> When we execute the runtime in native, <code>debug::info!</code> messages are printed. However, if we execute the runtime in Wasm, then an additional step to initialise <a href="https://substrate.dev/rustdocs/master/frame_support/debug/struct.RuntimeLogger.html">RuntimeLogger</a> is required.</p>
+<p><strong>Runtime logger note:</strong> When we execute the runtime in native, <code>debug::info!</code> messages are printed. However, if we execute the runtime in Wasm, then an additional step to initialise <a href="https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/debug/struct.RuntimeLogger.html">RuntimeLogger</a> is required.</p>
 <h2><a class="header" href="#installing-the-pallet-in-a-runtime" id="installing-the-pallet-in-a-runtime">Installing the Pallet in a Runtime</a></h2>
 <p>In order to actually use a pallet, it must be installed in a Substrate runtime. This particular pallet is installed in the <code>super-runtime</code> which you built as part of the kitchen node. To install a pallet in a runtime, you must do three things.</p>
 <h3><a class="header" href="#depend-on-the-pallet" id="depend-on-the-pallet">Depend on the Pallet</a></h3>
@@ -232,7 +232,7 @@ std = [
 </code></pre>
 <p>You can see the other pallets' trait implementations in the surrounding lines. Most of them are more complex.</p>
 <h3><a class="header" href="#add-it-to-construct_runtime" id="add-it-to-construct_runtime">Add it to <code>construct_runtime!</code></a></h3>
-<p>Finally, we add our pallet to the <a href="https://substrate.dev/rustdocs/master/frame_support/macro.construct_runtime.html"><code>construct_runtime!</code> macro</a>.</p>
+<p>Finally, we add our pallet to the <a href="https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/macro.construct_runtime.html"><code>construct_runtime!</code> macro</a>.</p>
 <pre><code class="language-rust ignore">construct_runtime!(
 	pub enum Runtime where
 		Block = Block,
