@@ -64,71 +64,60 @@ pub mod crypto {
 
 This is the application key to be used as the prefix for this pallet in underlying storage.
 
-Second, we have added an additional associated type `SubmitSignedTransaction`.
+Second, we have added an additional associated type `AuthorityId`.
 
 src: [`pallets/offchain-demo/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/lib.rs)
 
 ```rust
 pub trait Trait: system::Trait {
 	//...snip
-	type SubmitSignedTransaction: offchain::SubmitSignedTransaction<Self, <Self as Trait>::Call>;
+	type AuthorityId: AppCrypto<Self::Public, Self::Signature>;
 }
 ```
 
 This associated type needs to be specified by the runtime when the runtime is to include this pallet (implement this pallet trait).
 
-Looking at the [rustdoc of `SubmitSignedTransaction`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_system/offchain/trait.SubmitSignedTransaction.html), it says that we should use the `TransactionSubmitter` implementation type. Let's do that in our runtime.
+Now if we build the `kitchen-node`, we will see the compiler complain that there are three trait bounds `Runtime: frame_system::offchain::CreateSignedTransaction`, `frame_system::offchain::SigningTypes`, and `frame_system::offchain::SendTransactionTypes` are not satisfied. We learn that when using `SubmitSignedTransaction`, we also need to have our runtime implement the [`CreateSignedTransaction` trait](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_system/offchain/trait.CreateSignedTransaction.html). So let's implement this in our runtime.
 
 src: [`runtimes/ocw-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime/src/lib.rs)
 
 ```rust
-type SubmitTransaction = system::offchain::TransactionSubmitter<
-	offchain_demo::crypto::Public,
-	Runtime,
-	UncheckedExtrinsic
->;
-
-impl offchain_demo::Trait for Runtime {
-	type Call = Call;
-	type Event = Event;
-	type SubmitSignedTransaction = SubmitTransaction;
-	//...snip
-}
-```
-
-Now if we build the `kitchen-node`, we will see the compiler complain that the trait bound for `Runtime: frame_system::offchain::CreateTransaction` is not satisfied. We learn that when using `SubmitSignedTransaction`, we also need to have our runtime implement the [`CreateTransaction` trait](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_system/offchain/trait.CreateTransaction.html). So let's implement this in our runtime.
-
-src: [`runtimes/ocw-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime/src/lib.rs)
-
-```rust
-impl system::offchain::CreateTransaction<Runtime, UncheckedExtrinsic> for Runtime {
-	type Public = <Signature as Verify>::Signer;
-	type Signature = Signature;
-
-	fn create_transaction<TSigner: system::offchain::Signer<Self::Public, Self::Signature>> (
+impl<LocalCall> frame_system::offchain::CreateSignedTransaction<LocalCall> for Runtime
+where
+	Call: From<LocalCall>,
+{
+	fn create_transaction<C: frame_system::offchain::AppCrypto<Self::Public, Self::Signature>>(
 		call: Call,
-		public: Self::Public,
+		public: <Signature as sp_runtime::traits::Verify>::Signer,
 		account: AccountId,
 		index: Index,
-	) -> Option<(Call, <UncheckedExtrinsic as sp_runtime::traits::Extrinsic>::SignaturePayload)> {
+	) -> Option<(
+		Call,
+		<UncheckedExtrinsic as sp_runtime::traits::Extrinsic>::SignaturePayload,
+	)> {
 		let period = BlockHashCount::get() as u64;
 		let current_block = System::block_number()
-			.saturated_into::<u64>().saturating_sub(1);
+			.saturated_into::<u64>()
+			.saturating_sub(1);
 		let tip = 0;
 		let extra: SignedExtra = (
-			system::CheckVersion::<Runtime>::new(),
-			system::CheckGenesis::<Runtime>::new(),
-			system::CheckEra::<Runtime>::from(generic::Era::mortal(period, current_block)),
-			system::CheckNonce::<Runtime>::from(index),
-			system::CheckWeight::<Runtime>::new(),
-			transaction_payment::ChargeTransactionPayment::<Runtime>::from(tip),
+			frame_system::CheckTxVersion::<Runtime>::new(),
+			frame_system::CheckGenesis::<Runtime>::new(),
+			frame_system::CheckEra::<Runtime>::from(generic::Era::mortal(period, current_block)),
+			frame_system::CheckNonce::<Runtime>::from(index),
+			frame_system::CheckWeight::<Runtime>::new(),
+			pallet_transaction_payment::ChargeTransactionPayment::<Runtime>::from(tip),
 		);
 
-		let raw_payload = SignedPayload::new(call, extra).map_err(|e| {
-			debug::native::warn!("SignedPayload error: {:?}", e);
-		}).ok()?;
+		#[cfg_attr(not(feature = "std"), allow(unused_variables))]
+		let raw_payload = SignedPayload::new(call, extra)
+			.map_err(|e| {
+				debug::native::warn!("SignedPayload error: {:?}", e);
+			})
+			.ok()?;
 
-		let signature = TSigner::sign(public, &raw_payload)?;
+		let signature = raw_payload.using_encoded(|payload| C::sign(payload, public))?;
+
 		let address = account;
 		let (call, extra, _) = raw_payload.deconstruct();
 		Some((call, (address, signature, extra)))
@@ -143,7 +132,7 @@ There is a lot happening in the code. But basically we are:
 - Signing the `call` and `extra`, also called signed extension, and
 - Making the call(`call`, which includes the call paramters) and passing the sender `address`, signature of the data `signature`, and its signed extension `extra` on-chain as a transaction.
 
-We also define `SignedExtra` data type later in the runtime.
+`SignedExtra` data type is defined later in the runtime.
 
 src: [`runtimes/ocw-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime/src/lib.rs)
 
@@ -158,6 +147,24 @@ pub type SignedExtra = (
 	transaction_payment::ChargeTransactionPayment<Runtime>,
 );
 ```
+
+Next, the remaining two traits are also implemented.
+
+```rust
+impl frame_system::offchain::SigningTypes for Runtime {
+	type Public = <Signature as sp_runtime::traits::Verify>::Signer;
+	type Signature = Signature;
+}
+
+impl<C> frame_system::offchain::SendTransactionTypes<C> for Runtime
+where
+	Call: From<C>,
+{
+	type OverarchingCall = Call;
+	type Extrinsic = UncheckedExtrinsic;
+}
+```
+
 
 ### Sending Signed Transactions
 
@@ -226,24 +233,7 @@ pub fn new_full(config: Configuration<GenesisConfig>)
 
 ### Setup
 
-For unsigned transactions, we have the equivalent setup in the pallet configuration trait. In the first step, we add back the `SubmitUnsignedTransaction` associated type.
-
-src: [`pallets/offchain-demo/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/lib.rs)
-
-```rust
-pub trait Trait: system::Trait {
-	/// The overarching dispatch call type.
-	type Call: From<Call<Self>>;
-	/// The overarching event type.
-	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
-	/// The type to submit unsigned transactions.
-	type SubmitUnsignedTransaction:
-		offchain::SubmitUnsignedTransaction<Self, <Self as Trait>::Call>;
-	// ...snip
-}
-```
-
-By default, unsigned transactions are rejected by the Substrate runtime unless they are explicitly allowed. So in the second step, we need to write the logic to allow unsigned transactions for certain particular dispatched functions as follows:
+By default, unsigned transactions are rejected by the Substrate runtime unless they are explicitly allowed. So we need to write the logic to allow unsigned transactions for certain particular dispatched functions as follows:
 
 src: [`pallets/offchain-demo/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/lib.rs)
 
@@ -251,17 +241,16 @@ src: [`pallets/offchain-demo/src/lib.rs`](https://github.com/substrate-developer
 impl<T: Trait> support::unsigned::ValidateUnsigned for Module<T> {
 	type Call = Call<T>;
 
-	fn validate_unsigned(call: &Self::Call) -> TransactionValidity {
-		if let Call::submit_number_unsigned(block_num, number) = call {
-			debug::native::info!("off-chain send_unsigned: block_num: {}| number: {}", block_num, number);
+	fn validate_unsigned(_source: TransactionSource, call: &Self::Call) -> TransactionValidity {
+		if let Call::submit_number_unsigned(number) = call {
+			debug::native::info!("off-chain send_unsigned: number: {}", number);
 
-			Ok(ValidTransaction {
-				priority: 1 << 20,
-				requires: vec![],
-				provides: vec![codec::Encode::encode(&(KEY_TYPE.0, block_num))],
-				longevity: 3,
-				propagate: false,
-			})
+			ValidTransaction::with_tag_prefix("offchain-demo")
+				.priority(T::UnsignedPriority::get())
+				.and_provides([b"submit_number_unsigned"])
+				.longevity(3)
+				.propagate(true)
+				.build()
 		} else {
 			InvalidTransaction::Call.into()
 		}
@@ -274,27 +263,12 @@ We implement `ValidateUnsigned`, and the allowance logic is added inside the `va
 The `ValidTransaction` object has some fields that touch on concepts that we have not discussed before:
 
 - `priority`: Ordering of two transactions, given their dependencies are satisfied.
-- `requires`: List of tags this transaction depends on.
+- `requires`: List of tags this transaction depends on. Not shown in the above code as it is not necessary in this case.
 - `provides`: List of tags provided by this transaction. Successfully importing the transaction will enable other transactions that depend on these tags to be included as well. `provides` and `requires` tags allow Substrate to build a dependency graph of transactions and import them in the right order.
 - `longevity`: Transaction longevity, which describes the minimum number of blocks the transaction is valid for. After this period the transaction should be removed from the pool or revalidated.
 - `propagate`: Indication if the transaction should be propagated to other peers. By setting to `false` the transaction will still be considered for inclusion in blocks that are authored on the current node, but will never be sent to other peers.
 
-Third, we define the associated type of `SubmitUnsignedTransaction` in our runtime.
-
-src: [`runtimes/ocw-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime/src/lib.rs)
-
-```rust
-type SubmitTransaction = system::offchain::TransactionSubmitter<
-	offchain_demo::crypto::Public,
-	Runtime,
-	UncheckedExtrinsic
->;
-
-impl offchain_demo::Trait for Runtime {
-	//...snip
-	type SubmitUnsignedTransaction = SubmitTransaction;
-}
-```
+We are using the [builder pattern](https://github.com/rust-unofficial/patterns/blob/master/patterns/builder.md) to build up this object.
 
 Finally, to tell the runtime that we have our own `ValidateUnsigned` logic, we also need to pass this as a parameter when constructing the runtime.
 
