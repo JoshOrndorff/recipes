@@ -125,7 +125,7 @@ Having understood the fundamentals, we can now build a more realistic sha3 algor
 
 ### Defining the `Sha3Algorithm` Struct
 
-We begin as before by defining a struct that will implement the `PowAlgorithm` trait. Unlike before, this struct must hold a reference to the [`Client`](https://crates.parity.io/sc_client/struct.Client.html) so it can call the appropriate runtime APIs.
+We begin as before by defining a struct that will implement the `PowAlgorithm` trait. Unlike before, this struct must hold a reference to the [`Client`](https://crates.parity.io/sc_service/client/struct.Client.html) so it can call the appropriate runtime APIs.
 
 ```rust, ignore
 /// A complete PoW Algorithm that uses Sha3 hashing.
