@@ -129,15 +129,16 @@ fn basic_setup_works() {
 fn create_works() {
 	new_test_ext().execute_with(|| {
 		// Now try to create a crowdfund campaign
-		assert_ok!(Crowdfund::create(Origin::signed(1), 1000, 9));
+		assert_ok!(Crowdfund::create(Origin::signed(1), 2, 1000, 9));
 		assert_eq!(Crowdfund::fund_count(), 1);
 		// This is what the initial `fund_info` should look like
 		let fund_info = FundInfo {
+			beneficiary: 2,
 			deposit: 1,
 			raised: 0,
 			// 5 blocks length + 3 block ending period + 1 starting block
 			end: 9,
-			cap: 1000,
+			goal: 1000,
 		};
 		assert_eq!(Crowdfund::funds(0), Some(fund_info));
 		// User has deposit removed from their free balance
@@ -147,80 +148,60 @@ fn create_works() {
 	});
 }
 
-// #[test]
-// fn create_handles_basic_errors() {
-// 	new_test_ext().execute_with(|| {
-// 		// Cannot create a crowdfund with bad slots
-// 		assert_noop!(
-// 			Crowdfund::create(Origin::signed(1), 1000, 4, 1, 9),
-// 			Error::<Test>::LastSlotBeforeFirstSlot
-// 		);
-// 		assert_noop!(
-// 			Crowdfund::create(Origin::signed(1), 1000, 1, 5, 9),
-// 			Error::<Test>::LastSlotTooFarInFuture
-// 		);
-//
-// 		// Cannot create a crowdfund without some deposit funds
-// 		assert_noop!(
-// 			Crowdfund::create(Origin::signed(1337), 1000, 1, 3, 9),
-// 			BalancesError::<Test, _>::InsufficientBalance
-// 		);
-// 	});
-// }
-//
-// #[test]
-// fn contribute_works() {
-// 	new_test_ext().execute_with(|| {
-// 		// Set up a crowdfund
-// 		assert_ok!(Crowdfund::create(Origin::signed(1), 1000, 1, 4, 9));
-// 		assert_eq!(Balances::free_balance(1), 999);
-// 		assert_eq!(Balances::free_balance(Crowdfund::fund_account_id(0)), 1);
-//
-// 		// No contributions yet
-// 		assert_eq!(Crowdfund::contribution_get(0, &1), 0);
-//
-// 		// User 1 contributes to their own crowdfund
-// 		assert_ok!(Crowdfund::contribute(Origin::signed(1), 0, 49));
-// 		// User 1 has spent some funds to do this, transfer fees **are** taken
-// 		assert_eq!(Balances::free_balance(1), 950);
-// 		// Contributions are stored in the trie
-// 		assert_eq!(Crowdfund::contribution_get(0, &1), 49);
-// 		// Contributions appear in free balance of crowdfund
-// 		assert_eq!(Balances::free_balance(Crowdfund::fund_account_id(0)), 50);
-// 		// Crowdfund is added to NewRaise
-// 		assert_eq!(Crowdfund::new_raise(), vec![0]);
-//
-// 		let fund = Crowdfund::funds(0).unwrap();
-//
-// 		// Last contribution time recorded
-// 		assert_eq!(fund.last_contribution, LastContribution::PreEnding(0));
-// 		assert_eq!(fund.raised, 49);
-// 	});
-// }
-//
-// #[test]
-// fn contribute_handles_basic_errors() {
-// 	new_test_ext().execute_with(|| {
-// 		// Cannot contribute to non-existing fund
-// 		assert_noop!(Crowdfund::contribute(Origin::signed(1), 0, 49), Error::<Test>::InvalidFundIndex);
-// 		// Cannot contribute below minimum contribution
-// 		assert_noop!(Crowdfund::contribute(Origin::signed(1), 0, 9), Error::<Test>::ContributionTooSmall);
-//
-// 		// Set up a crowdfund
-// 		assert_ok!(Crowdfund::create(Origin::signed(1), 1000, 1, 4, 9));
-// 		assert_ok!(Crowdfund::contribute(Origin::signed(1), 0, 101));
-//
-// 		// Cannot contribute past the limit
-// 		assert_noop!(Crowdfund::contribute(Origin::signed(2), 0, 900), Error::<Test>::CapExceeded);
-//
-// 		// Move past end date
-// 		run_to_block(10);
-//
-// 		// Cannot contribute to ended fund
-// 		assert_noop!(Crowdfund::contribute(Origin::signed(1), 0, 49), Error::<Test>::ContributionPeriodOver);
-// 	});
-// }
-//
+#[test]
+fn create_handles_insufficient_balance() {
+	new_test_ext().execute_with(|| {
+		assert_noop!(
+			Crowdfund::create(Origin::signed(1337), 2, 1000, 9),
+			BalancesError::<Test, _>::InsufficientBalance
+		);
+	});
+}
+
+#[test]
+fn contribute_works() {
+	new_test_ext().execute_with(|| {
+		// Set up a crowdfund
+		assert_ok!(Crowdfund::create(Origin::signed(1), 2, 1000, 9));
+		assert_eq!(Balances::free_balance(1), 999);
+		assert_eq!(Balances::free_balance(Crowdfund::fund_account_id(0)), 1);
+
+		// No contributions yet
+		assert_eq!(Crowdfund::contribution_get(0, &1), 0);
+
+		// User 1 contributes to their own crowdfund
+		assert_ok!(Crowdfund::contribute(Origin::signed(1), 0, 49));
+		// User 1 has spent some funds to do this, transfer fees **are** taken
+		assert_eq!(Balances::free_balance(1), 950);
+		// Contributions are stored in the trie
+		assert_eq!(Crowdfund::contribution_get(0, &1), 49);
+		// Contributions appear in free balance of crowdfund
+		assert_eq!(Balances::free_balance(Crowdfund::fund_account_id(0)), 50);
+		// Last contribution time recorded
+		assert_eq!(Crowdfund::funds(0).unwrap().raised, 49);
+	});
+}
+
+#[test]
+fn contribute_handles_basic_errors() {
+	new_test_ext().execute_with(|| {
+		// Cannot contribute to non-existing fund
+		assert_noop!(Crowdfund::contribute(Origin::signed(1), 0, 49), Error::<Test>::InvalidIndex);
+		// Cannot contribute below minimum contribution
+		assert_noop!(Crowdfund::contribute(Origin::signed(1), 0, 9), Error::<Test>::ContributionTooSmall);
+
+		// Set up a crowdfund
+		assert_ok!(Crowdfund::create(Origin::signed(1), 2, 1000, 9));
+		assert_ok!(Crowdfund::contribute(Origin::signed(1), 0, 101));
+
+		// Move past end date
+		run_to_block(10);
+
+		// Cannot contribute to ended fund
+		assert_noop!(Crowdfund::contribute(Origin::signed(1), 0, 49), Error::<Test>::ContributionPeriodOver);
+	});
+}
+
 // #[test]
 // fn fix_deploy_data_works() {
 // 	new_test_ext().execute_with(|| {

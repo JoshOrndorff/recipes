@@ -26,8 +26,9 @@ mod tests;
 
 const PALLET_ID: ModuleId = ModuleId(*b"ex/cfund");
 
-type BalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::Balance;
-type FundInfoOf<T> = FundInfo<BalanceOf<T>, <T as system::Trait>::BlockNumber>;
+type AccountIdOf<T> = <T as system::Trait>::AccountId;
+type BalanceOf<T> = <<T as Trait>::Currency as Currency<AccountIdOf<T>>>::Balance;
+type FundInfoOf<T> = FundInfo<AccountIdOf<T>, BalanceOf<T>, <T as system::Trait>::BlockNumber>;
 
 /// The pallet's configuration trait
 pub trait Trait: system::Trait {
@@ -54,7 +55,9 @@ pub type FundIndex = u32;
 
 #[derive(Encode, Decode, Default, PartialEq, Eq)]
 #[cfg_attr(feature = "std", derive(Debug))]
-pub struct FundInfo<Balance, BlockNumber> {
+pub struct FundInfo<AccountId, Balance, BlockNumber> {
+	/// The account that will recieve the funds if the campaign is successful
+	beneficiary: AccountId,
 	/// The amount of deposit placed
 	deposit: Balance,
 	/// The total amount raised
@@ -62,7 +65,7 @@ pub struct FundInfo<Balance, BlockNumber> {
 	/// Block number after which funding must have succeeded
 	end: BlockNumber,
 	/// Upper bound on `raised`
-	cap: Balance,
+	goal: Balance,
 }
 
 decl_storage! {
@@ -90,6 +93,7 @@ decl_event! {
 		Withdrew(AccountId, FundIndex, Balance, BlockNumber),
 		Retiring(FundIndex, BlockNumber),
 		Dissolved(FundIndex, BlockNumber, AccountId),
+		Dispensed(FundIndex, BlockNumber, AccountId),
 	}
 }
 
@@ -103,12 +107,14 @@ decl_error! {
 		InvalidIndex,
 		/// The crowdfund's contribution period has ended; no more contributions will be accepted
 		ContributionPeriodOver,
-		/// You may not withdraw funds while the fund is still active
+		/// You may not withdraw or dispense funds while the fund is still active
 		FundStillActive,
 		/// You cannot withdraw funds because you have not contributed any
 		NoContribution,
 		/// You cannot dissolve a fund that has not yet completed its retirement period
 		FundNotRetired,
+		/// Cannot dispense funds from an unsuccessful fund
+		UnsuccessfulFund,
 	}
 }
 
@@ -120,7 +126,8 @@ decl_module! {
 		#[weight = 10_000]
 		fn create(
 			origin,
-			cap: BalanceOf<T>,
+			beneficiary: AccountIdOf<T>,
+			goal: BalanceOf<T>,
 			end: T::BlockNumber,
 		) {
 			let creator = ensure_signed(origin)?;
@@ -145,10 +152,11 @@ decl_module! {
 			T::Currency::resolve_creating(&Self::fund_account_id(index), imb);
 
 			<Funds<T>>::insert(index, FundInfo {
+				beneficiary,
 				deposit,
 				raised: Zero::zero(),
 				end,
-				cap,
+				goal,
 			});
 
 			Self::deposit_event(RawEvent::Created(index, now));
@@ -241,6 +249,49 @@ decl_module! {
 			Self::crowdfund_kill(index);
 
 			Self::deposit_event(RawEvent::Dissolved(index, now, reporter));
+		}
+
+		/// Dispense a payment to the beneficiary of a successful crowdfund.
+		/// The beneficiary receives the contributed funds and the caller receives
+		/// the deposit as a reward to incentivize clearing settled crowdfunds out of storage.
+		#[weight = 10_000]
+		fn dispense(origin, index: FundIndex) {
+			let caller = ensure_signed(origin)?;
+
+			let fund = Self::funds(index).ok_or(Error::<T>::InvalidIndex)?;
+
+			// Check that enough time has passed to remove from storage
+			let now = <system::Module<T>>::block_number();
+			ensure!(now >= fund.end + T::RetirementPeriod::get(), Error::<T>::FundStillActive);
+
+			// Check that the fund was actually successful
+			ensure!(fund.raised > fund.goal, Error::<T>::UnsuccessfulFund);
+
+			let account = Self::fund_account_id(index);
+
+			// Beneficiary collects the contributed funds
+			let _ = T::Currency::resolve_into_existing(&fund.beneficiary, T::Currency::withdraw(
+				&account,
+				fund.raised,
+				WithdrawReasons::from(WithdrawReason::Transfer),
+				ExistenceRequirement::AllowDeath,
+			)?);
+
+			// Caller collects the deposit
+			let _ = T::Currency::resolve_into_existing(&caller, T::Currency::withdraw(
+				&account,
+				fund.deposit,
+				WithdrawReasons::from(WithdrawReason::Transfer),
+				ExistenceRequirement::AllowDeath,
+			)?);
+
+			// Remove the fund info from storage
+			<Funds<T>>::remove(index);
+			// Remove all the contributor info from storage in a single write.
+			// This is possible thanks to the use of a child tree.
+			Self::crowdfund_kill(index);
+
+			Self::deposit_event(RawEvent::Dispensed(index, now, caller));
 		}
 	}
 }
