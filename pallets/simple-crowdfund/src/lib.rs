@@ -5,34 +5,34 @@
 //! from the parachain logic.
 
 use parity_scale_codec::{Decode, Encode};
-use sp_core::{Blake2Hasher, Hasher};
+use sp_core::Hasher;
 use sp_std::prelude::*;
 use sp_runtime::{
 	traits::{AccountIdConversion, Saturating, Zero},
 	ModuleId,
 };
-use sp_storage::well_known_keys::CHILD_STORAGE_KEY_PREFIX;
 use frame_support::{
-	decl_event, decl_module, decl_storage, ensure,
+	decl_error, decl_event, decl_module, decl_storage, ensure,
 	storage::child,
 	traits::{
-		Currency, ExistenceRequirement, Get, OnUnbalanced, ReservableCurrency, WithdrawReason,
+		Currency, ExistenceRequirement, Get, ReservableCurrency, WithdrawReason,
 		WithdrawReasons,
 	},
 };
-
 use frame_system::{self as system, ensure_signed};
 
 const PALLET_ID: ModuleId = ModuleId(*b"ex/cfund");
 
 type AccountIdOf<T> = <T as system::Trait>::AccountId;
 type BalanceOf<T> = <<T as Trait>::Currency as Currency<AccountIdOf<T>>>::Balance;
-type NegativeImbalanceOf<T> = <<T as Trait>::Currency as Currency<AccountIdOf<T>>>::NegativeImbalance;
 type FundInfoOf<T> = FundInfo<AccountIdOf<T>, BalanceOf<T>, <T as system::Trait>::BlockNumber>;
 
+/// The pallet's configuration trait
 pub trait Trait: system::Trait {
+	/// The ubiquious Event type
 	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
 
+	/// The currency in which the crowdfunds will be denominated
 	type Currency: ReservableCurrency<Self::AccountId>;
 
 	/// The amount to be held on deposit by the owner of a crowdfund
@@ -59,8 +59,6 @@ pub struct FundInfo<AccountId, Balance, BlockNumber> {
 	deposit: Balance,
 	/// The total amount raised
 	raised: Balance,
-	/// Block number at which contributions are first accepted
-	start: BlockNumber,
 	/// Block number after which funding must have succeeded
 	end: BlockNumber,
 	/// Upper bound on `raised`
@@ -75,6 +73,9 @@ decl_storage! {
 
 		/// The total number of funds that have so far been allocated.
 		FundCount get(fn fund_count): FundIndex;
+
+		// Additional information is stored i na child trie. See the helper
+		// functions in the impl<T: Trait> Module<T> block below
 	}
 }
 
@@ -92,6 +93,25 @@ decl_event! {
 	}
 }
 
+decl_error! {
+	pub enum Error for Module<T: Trait> {
+		/// Crowdfund must end after it starts
+		EndTooEarly,
+		/// Must contribute at least the minimum amount of funds
+		ContributionTooSmall,
+		/// The fund index specified does not exist
+		InvalidIndex,
+		/// The crowdfund's contribution period has ended; no more contributions will be accepted
+		ContributionPeriodOver,
+		/// You may not withdraw funds while the fund is still active
+		FundStillActive,
+		/// You cannot withdraw funds because you have not contributed any
+		NoContribution,
+		/// You cannot dissolve a fund that has not yet completed its retirement period
+		FundNotRetired,
+	}
+}
+
 decl_module! {
 	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
 		fn deposit_event() = default;
@@ -101,14 +121,12 @@ decl_module! {
 		fn create(
 			origin,
 			cap: BalanceOf<T>,
-			start: T::BlockNumber,
 			end: T::BlockNumber,
 		) {
 			let owner = ensure_signed(origin)?;
 			let now = <system::Module<T>>::block_number();
 
-			ensure!(start < end, "must start before it ends");
-			ensure!(end > now, "end must be in the future");
+			ensure!(end > now, Error::<T>::EndTooEarly);
 
 			let deposit = T::SubmissionDeposit::get();
 			let imb = T::Currency::withdraw(
@@ -130,7 +148,6 @@ decl_module! {
 				owner,
 				deposit,
 				raised: Zero::zero(),
-				start,
 				end,
 				cap,
 			});
@@ -143,17 +160,22 @@ decl_module! {
 		fn contribute(origin, index: FundIndex, value: BalanceOf<T>) {
 			let who = ensure_signed(origin)?;
 
-			ensure!(value >= T::MinContribution::get(), "contribution too small");
-			let mut fund = Self::funds(index).ok_or("invalid fund index")?;
+			ensure!(value >= T::MinContribution::get(), Error::<T>::ContributionTooSmall);
+			let mut fund = Self::funds(index).ok_or(Error::<T>::InvalidIndex)?;
 
 			// Make sure crowdfund has not ended
 			let now = <system::Module<T>>::block_number();
-			ensure!(fund.end > now, "contribution period ended");
+			ensure!(fund.end > now, Error::<T>::ContributionPeriodOver);
 
-			// Add value if cap is not exceeded
-			ensure!(fund.raised + value < fund.cap, "contributions exceed cap");
-			T::Currency::transfer(&who, &Self::fund_account_id(index), value, ExistenceRequirement::AllowDeath)?;
+			// Add contribution to the fund
+			T::Currency::transfer(
+				&who,
+				&Self::fund_account_id(index),
+				value,
+				ExistenceRequirement::AllowDeath
+			)?;
 			fund.raised += value;
+			Funds::<T>::insert(index, &fund);
 
 			let balance = Self::contribution_get(index, &who);
 			let balance = balance.saturating_add(value);
@@ -167,13 +189,13 @@ decl_module! {
 		fn withdraw(origin, #[compact] index: FundIndex) {
 			let who = ensure_signed(origin)?;
 
-			let mut fund = Self::funds(index).ok_or("invalid fund index")?;
+			let mut fund = Self::funds(index).ok_or(Error::<T>::InvalidIndex)?;
 			let now = <system::Module<T>>::block_number();
-			ensure!(fund.end < now, "no more withdrawals");
+			ensure!(fund.end < now, Error::<T>::FundStillActive);
 			// dcb4p: add withdrawal period `=>` could structure as an auction or ico
 
 			let balance = Self::contribution_get(index, &who);
-			ensure!(balance > Zero::zero(), "no contributions stored");
+			ensure!(balance > Zero::zero(), Error::<T>::NoContribution);
 
 			// TODO: is this appropriate for all structures like this or
 			// - is this just for polkadot/crowdfund?
@@ -184,9 +206,9 @@ decl_module! {
 				ExistenceRequirement::AllowDeath
 			)?);
 
+			// Update storage
 			Self::contribution_kill(index, &who);
 			fund.raised = fund.raised.saturating_sub(balance);
-
 			<Funds<T>>::insert(index, &fund);
 
 			Self::deposit_event(RawEvent::Withdrew(who, index, balance, now));
@@ -199,11 +221,11 @@ decl_module! {
 		fn dissolve(origin, index: FundIndex) {
 			let reporter = ensure_signed(origin)?;
 
-			let fund = Self::funds(index).ok_or("invalid fund index")?;
+			let fund = Self::funds(index).ok_or(Error::<T>::InvalidIndex)?;
 
 			// Check that enough time has passed to remove from storage
 			let now = <system::Module<T>>::block_number();
-			ensure!(now >= fund.end + T::RetirementPeriod::get(), "retirement period not over");
+			ensure!(now >= fund.end + T::RetirementPeriod::get(), Error::<T>::FundNotRetired);
 
 			let account = Self::fund_account_id(index);
 
