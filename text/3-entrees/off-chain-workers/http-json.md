@@ -1,14 +1,21 @@
 # HTTP Fetching and JSON Parsing in Off-chain Workers
 
-*[`pallets/offchain-demo`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo)*
+_[`pallets/offchain-demo`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo)_
 
 ## HTTP Fetching
 
-In traditional web app, it is often necessary to communicate with third-party APIs to fetch data that the app itself does not contains. But this becomes tricky in blockchain decentralized apps because HTTP requests are indeterministic. There are uncertainty in terms of whether the HTTP request will come back, how long it takes, and if the result stays the same when the result is being validated by another node at a future point.
+In traditional web app, it is often necessary to communicate with third-party APIs to fetch data
+that the app itself does not contains. But this becomes tricky in blockchain decentralized apps
+because HTTP requests are indeterministic. There are uncertainty in terms of whether the HTTP
+request will come back, how long it takes, and if the result stays the same when the result is being
+validated by another node at a future point.
 
-In Substrate, we solve this problem by using off-chain workers to issue HTTP requests and get the result back.
+In Substrate, we solve this problem by using off-chain workers to issue HTTP requests and get the
+result back.
 
-In `pallets/offchain-demo/src/lib.rs`, we have an example of fetching information of github organization `substrate-developer-hub` via its public API. Then we extract the `login`, `blog`, and `public_repos` values out.
+In `pallets/offchain-demo/src/lib.rs`, we have an example of fetching information of github
+organization `substrate-developer-hub` via its public API. Then we extract the `login`, `blog`, and
+`public_repos` values out.
 
 First, include the tools implemented in `sp_runtime::offchain` at the top.
 
@@ -28,7 +35,8 @@ let remote_url = str::from_utf8(&remote_url_bytes)
 let request = rt_offchain::http::Request::get(remote_url);
 ```
 
-We should also set a timeout period so the http request does not hold indefinitely. For github API usage, we also need to add extra HTTP header information to it. This is how we do it.
+We should also set a timeout period so the http request does not hold indefinitely. For github API
+usage, we also need to add extra HTTP header information to it. This is how we do it.
 
 ```rust
 // Keeping the offchain worker execution time reasonable, so limiting the call to be within 3s.
@@ -45,9 +53,11 @@ let pending = request
 	.map_err(|_| <Error<T>>::HttpFetchingError)?; // Here we capture and return any http error.
 ```
 
-HTTP requests from off-chain worker are fetched asynchronously. Here we use `try_wait()` to wait for the result to come back, and terminate and return if any errors occured.
+HTTP requests from off-chain worker are fetched asynchronously. Here we use `try_wait()` to wait for
+the result to come back, and terminate and return if any errors occured.
 
-Then, We check for the response status code to ensure it is okay with HTTP status code equals to 200. Any status code that is non-200 is regarded as error and return.
+Then, We check for the response status code to ensure it is okay with HTTP status code equals
+to 200. Any status code that is non-200 is regarded as error and return.
 
 ```rust
 let response = pending.try_wait(timeout)
@@ -60,7 +70,8 @@ if response.code != 200 {
 }
 ```
 
-Finally, get the response back with `response.body()` iterator. Since we are in a `no_std` environment, we collect them back as a vector of bytes instead of a string and return.
+Finally, get the response back with `response.body()` iterator. Since we are in a `no_std`
+environment, we collect them back as a vector of bytes instead of a string and return.
 
 ```rust
 Ok(response.body().collect::<Vec<u8>>())
@@ -68,11 +79,18 @@ Ok(response.body().collect::<Vec<u8>>())
 
 ## JSON Parsing
 
-We usually get JSON objects back when requesting from HTTP APIs. The next task is to parse the JSON object and fetch the required (key, value) pair out. This is demonstrated in the `fetch_n_parse` function.
+We usually get JSON objects back when requesting from HTTP APIs. The next task is to parse the JSON
+object and fetch the required (key, value) pair out. This is demonstrated in the `fetch_n_parse`
+function.
 
 ### Setup
 
-In Rust, `serde` and `serde-json` are the popular combo-package used for JSON parsing. Due to the project setup of compiling Substrate node with `serde` feature `std` on and cargo feature unification limitation, we cannot simultaneously have `serde` feature `std` off (`no_std` on) when compiling the runtime ([details described in this issue](https://github.com/rust-lang/cargo/issues/4463)). So we are going to use a renamed `serde` crate, `alt_serde`, in our offchain-demo pallet to remedy this situation.
+In Rust, `serde` and `serde-json` are the popular combo-package used for JSON parsing. Due to the
+project setup of compiling Substrate node with `serde` feature `std` on and cargo feature
+unification limitation, we cannot simultaneously have `serde` feature `std` off (`no_std` on) when
+compiling the runtime
+([details described in this issue](https://github.com/rust-lang/cargo/issues/4463)). So we are going
+to use a renamed `serde` crate, `alt_serde`, in our offchain-demo pallet to remedy this situation.
 
 src: `pallets/offchain-demo/Cargo.toml`
 
@@ -91,13 +109,17 @@ serde_json = { version = "1", default-features = false, git = "https://github.co
 # ...
 ```
 
-We also use a modified version of `serde_json` that has the latest `alloc` feature and again depends on only `alt_serde`.
+We also use a modified version of `serde_json` that has the latest `alloc` feature and again depends
+on only `alt_serde`.
 
-> Another way of compiling `serde` with `no_std` in runtime is to use a cargo nightly feature, [additional feature resolver](https://github.com/rust-lang/cargo/pull/7820) ([relevant doc](https://doc.rust-lang.org/nightly/cargo/reference/unstable.html#resolver)).
+> Another way of compiling `serde` with `no_std` in runtime is to use a cargo nightly feature,
+> [additional feature resolver](https://github.com/rust-lang/cargo/pull/7820)
+> ([relevant doc](https://doc.rust-lang.org/nightly/cargo/reference/unstable.html#resolver)).
 
 ### Deserializing JSON string to struct
 
-Then we use the usual `serde-derive` approach on deserializing. First we define the struct with fields we are interested to extract out.
+Then we use the usual `serde-derive` approach on deserializing. First we define the struct with
+fields we are interested to extract out.
 
 src: `pallets/offchain-demo/src/lib.rs`
 
@@ -120,7 +142,8 @@ struct GithubInfo {
 }
 ```
 
-By default, `serde` deserialize JSON string to the datatype `String`. We want to write our own deserializer to convert it to vector of bytes.
+By default, `serde` deserialize JSON string to the datatype `String`. We want to write our own
+deserializer to convert it to vector of bytes.
 
 ```rust
 pub fn de_string_to_bytes<'de, D>(de: D) -> Result<Vec<u8>, D::Error>

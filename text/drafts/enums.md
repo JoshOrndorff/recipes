@@ -1,8 +1,13 @@
 # Ergonomic Enums
 
-In the [`utxo-workshop`](https://github.com/nczhu/utxo-workshop), the code utilizes an [enum](https://doc.rust-lang.org/rust-by-example/custom_types/enum.html) to manage a data race scenario in which a transaction could arrive before some transactions that it `require`s. 
+In the [`utxo-workshop`](https://github.com/nczhu/utxo-workshop), the code utilizes an
+[enum](https://doc.rust-lang.org/rust-by-example/custom_types/enum.html) to manage a data race
+scenario in which a transaction could arrive before some transactions that it `require`s.
 
-*Alice sends Bob 100 units and Bob sends Eve 80 of those units. Let's assume that Bob's transaction is dependent upon Alice's transaction. If Alice's transaction takes a few more seconds to arrive, we do not want to throw out Bob's transaction. Instead of panicking, we should place Bob's transaction in a temporary queue and lock it for some defined time period.*
+_Alice sends Bob 100 units and Bob sends Eve 80 of those units. Let's assume that Bob's transaction
+is dependent upon Alice's transaction. If Alice's transaction takes a few more seconds to arrive, we
+do not want to throw out Bob's transaction. Instead of panicking, we should place Bob's transaction
+in a temporary queue and lock it for some defined time period._
 
 To see this pattern in action, see the `check_transaction` runtime function:
 
@@ -10,7 +15,7 @@ To see this pattern in action, see the `check_transaction` runtime function:
 pub fn check_transaction(transaction: &Transaction) -> CheckResult<'_>
 ```
 
-This function  returns `CheckResult<'_>`. The type signature of `CheckResult<T>`:
+This function returns `CheckResult<'_>`. The type signature of `CheckResult<T>`:
 
 ```rust, ignore
 pub type CheckResult<'a> = rstd::result::Result<CheckInfo<'a>, &'static str>;
@@ -29,7 +34,10 @@ pub enum CheckInfo<'a> {
 }
 ```
 
-This reveals that in the event of a successful call, it returns either the `Total`s struct that can be easily decomposed to calculate leftover value and distribute it evenly among the authorities OR returns a wrapper around the missing UTXOs which were necessary for verification. Here's the code in `check_transaction` that expresses this logic:
+This reveals that in the event of a successful call, it returns either the `Total`s struct that can
+be easily decomposed to calculate leftover value and distribute it evenly among the authorities OR
+returns a wrapper around the missing UTXOs which were necessary for verification. Here's the code in
+`check_transaction` that expresses this logic:
 
 ```rust, ignore
 if missing_utxo.is_empty() {
@@ -46,4 +54,7 @@ if missing_utxo.is_empty() {
 }
 ```
 
-This pattern demonstrates one way to safely handle the common data race that occurs when a conditional transaction arrives in the transaction pool before the arrival of a transaction that it `require`s. *We can extract this pattern to safely handle conditional paths in our code for which panics are undesirable, but it is also preferrable to pause processing.*
+This pattern demonstrates one way to safely handle the common data race that occurs when a
+conditional transaction arrives in the transaction pool before the arrival of a transaction that it
+`require`s. _We can extract this pattern to safely handle conditional paths in our code for which
+panics are undesirable, but it is also preferrable to pause processing._

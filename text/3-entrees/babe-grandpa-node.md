@@ -2,20 +2,17 @@
 
 _[`nodes/babe-grandpa-node`](https://github.com/substrate-developer-hub/recipes/tree/master/nodes/babe-grandpa-node)_
 
-The `babe-grandpa-node` uses the [Babe](https://crates.parity.io/sc_consensus_babe/index.html)
-Proof of Authority consensus engine to determine who may author blocks, and the
-[Grandpa](https://crates.parity.io/sc_finality_grandpa/index.html) finality gadget to
-provide [deterministic finality](https://www.substrate.io/kb/advanced/consensus#finality) to past
-blocks. This is the same design used in Polkadot. Understanding this recipe requires familiarity
-with Substrate's [block import pipeline](https://www.substrate.io/kb/advanced/block-import).
+The `babe-grandpa-node` uses the [Babe](https://crates.parity.io/sc_consensus_babe/index.html) Proof
+of Authority consensus engine to determine who may author blocks, and the
+[Grandpa](https://crates.parity.io/sc_finality_grandpa/index.html) finality gadget to provide
+[deterministic finality](https://www.substrate.io/kb/advanced/consensus#finality) to past blocks.
+This is the same design used in Polkadot. Understanding this recipe requires familiarity with
+Substrate's [block import pipeline](https://www.substrate.io/kb/advanced/block-import).
 
 In this recipe we will learn about:
 
--   The
-    [GrandpaAPI](https://crates.parity.io/sp_finality_grandpa/trait.GrandpaApi.html)
-    runtime API
--   The [BabeApi](https://crates.parity.io/sc_consensus_babe/trait.BabeApi.html)
-    runtime API
+-   The [GrandpaAPI](https://crates.parity.io/sp_finality_grandpa/trait.GrandpaApi.html) runtime API
+-   The [BabeApi](https://crates.parity.io/sc_consensus_babe/trait.BabeApi.html) runtime API
 -   The [block import pipeline](https://www.substrate.io/kb/advanced/block-import)
 
 ## The Block Import Pipeline
@@ -169,8 +166,8 @@ sc_finality_grandpa::setup_disabled_grandpa(
 
 Both Babe and Grandpa rely on getting their authority sets from the runtime via the
 [BabeAPI](https://crates.parity.io/sc_consensus_babe/trait.BabeApi.html) and the
-[GrandpaAPI](https://crates.parity.io/sp_finality_grandpa/trait.GrandpaApi.html). So
-trying to build this node with a runtime that does not provide these APIs will fail to compile.
+[GrandpaAPI](https://crates.parity.io/sp_finality_grandpa/trait.GrandpaApi.html). So trying to build
+this node with a runtime that does not provide these APIs will fail to compile.
 
 ### Pre Runtime Digests
 
@@ -179,8 +176,7 @@ we also cannot use a runtime designed for this node with different consensus eng
 
 Because BABE is a slot-based consensus engine, it must inform the runtime which slot each block was
 intended for. To do this, it uses a technique known as a pre-runtime digest. It has two kinds,
-[`PrimaryPreDigest`](https://crates.parity.io/sc_consensus_babe/struct.PrimaryPreDigest.html)
-and
+[`PrimaryPreDigest`](https://crates.parity.io/sc_consensus_babe/struct.PrimaryPreDigest.html) and
 [`SecondaryPlainPreDigest`](https://crates.parity.io/sc_consensus_babe/struct.SecondaryPlainPreDigest.html).
 The Babe authorship task automatically inserts these digest items in each block it authors.
 
