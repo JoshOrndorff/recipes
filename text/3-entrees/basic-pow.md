@@ -53,7 +53,7 @@ Once the `PowBlockImport` is constructed, we can use it to create an actual impo
 
 ### The Block Import Pipeline
 
-You may have noticed that when we created the `PowBlockImport` we gave it two separate references to the client. The second reference will always be to a client. But the first is interesting. The [rustdocs tell us](https://crates.parity.io/sc_consensus_pow/struct.PowBlockImport.html#method.new) that the first parameter is `inner: BlockImport<B, Transaction = TransactionFor<C, B>>`. Why would a block import have a reference to another block import? Because the "block import pipeline" is constructed in an onion-like fashion, where one layer of block import wraps the next. In this minimal PoW node, there is only one layer to the onion. But in other nodes, including our own kitchen node, there are two layers: one for babe and one for grandpa.
+You may have noticed that when we created the `PowBlockImport` we gave it two separate references to the client. The second reference will always be to a client. But the first is interesting. The [rustdocs tell us](https://crates.parity.io/sc_consensus_pow/struct.PowBlockImport.html#method.new) that the first parameter is `inner: BlockImport<B, Transaction = TransactionFor<C, B>>`. Why would a block import have a reference to another block import? Because the "block import pipeline" is constructed in an onion-like fashion, where one layer of block import wraps the next. Learn more about this pattern in the knowledgebase article on the [block import pipeline](https://www.substrate.io/kb/advanced/block-import).
 
 ### Inherent Data Providers
 
