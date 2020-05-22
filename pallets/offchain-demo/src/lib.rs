@@ -419,6 +419,7 @@ impl<T: Trait> frame_support::unsigned::ValidateUnsigned for Module<T> {
 	type Call = Call<T>;
 
 	fn validate_unsigned(_source: TransactionSource, call: &Self::Call) -> TransactionValidity {
+		#[allow(unused_variables)]
 		if let Call::submit_number_unsigned(number) = call {
 			debug::native::info!("off-chain send_unsigned: number: {}", number);
 
