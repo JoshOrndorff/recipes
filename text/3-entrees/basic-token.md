@@ -1,16 +1,24 @@
 # Basic Token
-*[`pallets/basic-token`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/basic-token)*
+
+_[`pallets/basic-token`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/basic-token)_
 
 This recipe demonstrates a simple but functional token in a pallet.
 
 ## Mapping Accounts to Balances
-Mappings are a very powerful primitive. A *stateful* cryptocurrency might store a mapping between accounts and balances. Likewise, mappings prove useful when representing *owned* data. By tracking ownership with maps, it is easy manage permissions for modifying values specific to individual users or groups.
+
+Mappings are a very powerful primitive. A _stateful_ cryptocurrency might store a mapping between
+accounts and balances. Likewise, mappings prove useful when representing _owned_ data. By tracking
+ownership with maps, it is easy manage permissions for modifying values specific to individual users
+or groups.
 
 ## Storage Items
 
-The primary storage item is the mapping between AccountIds and Balances described above. Every account that holds tokens appears as a key in that map and its value is the number of tokens it holds.
+The primary storage item is the mapping between AccountIds and Balances described above. Every
+account that holds tokens appears as a key in that map and its value is the number of tokens it
+holds.
 
-The next two storage items set the total supply of the token and keep track of whether the token has been initialized yet.
+The next two storage items set the total supply of the token and keep track of whether the token has
+been initialized yet.
 
 ```rust, ignore
 decl_storage! {
@@ -24,11 +32,13 @@ decl_storage! {
 }
 ```
 
-Because users can influence the keys in our storage map, we've chosen the `blake2_128_concat` hasher as described in the recipe on [storage maps](storage-api/storage-maps.md)s.
+Because users can influence the keys in our storage map, we've chosen the `blake2_128_concat` hasher
+as described in the recipe on [storage maps](storage-api/storage-maps.md)s.
 
 ## Events and Errors
 
-The pallet defines events and errors for common lifecycle events such as successful and failed transfers, and successful and failed initialization.
+The pallet defines events and errors for common lifecycle events such as successful and failed
+transfers, and successful and failed initialization.
 
 ```rust, ignore
 decl_event!(
@@ -54,7 +64,12 @@ decl_error! {
 ```
 
 ## Initializing the Token
-In order for the token to be useful, some accounts need to own it. There are many possible ways to initialize a token including genesis config, claims process, lockdrop, and many more. This pallet will use a simple process where the first user to call the `init` function receives all of the funds. The total supply is hard-coded in the pallet in a fairly naive way: It is specified as the default value in the `decl_storage!` block.
+
+In order for the token to be useful, some accounts need to own it. There are many possible ways to
+initialize a token including genesis config, claims process, lockdrop, and many more. This pallet
+will use a simple process where the first user to call the `init` function receives all of the
+funds. The total supply is hard-coded in the pallet in a fairly naive way: It is specified as the
+default value in the `decl_storage!` block.
 
 ```rust ignore
 fn init(origin) -> DispatchResult {
@@ -68,12 +83,17 @@ fn init(origin) -> DispatchResult {
 }
 ```
 
-As usual, we first check for preconditions. In this case that means making sure that the token is not already initialized. Then we do any mutation necessary.
+As usual, we first check for preconditions. In this case that means making sure that the token is
+not already initialized. Then we do any mutation necessary.
 
 ## Transferring Tokens
-To transfer tokens, a user who owns some tokens calls the `transfer` method specifying the recipient and the amount of tokens to transfer as parameters.
 
-We again check for error conditions before mutating storage. In this case it is _not_ necessary to check whether the token has been initialized. If it has not, nobody has any funds and the transfer will simply fail with `InsufficientFunds`.
+To transfer tokens, a user who owns some tokens calls the `transfer` method specifying the recipient
+and the amount of tokens to transfer as parameters.
+
+We again check for error conditions before mutating storage. In this case it is _not_ necessary to
+check whether the token has been initialized. If it has not, nobody has any funds and the transfer
+will simply fail with `InsufficientFunds`.
 
 ```rust, ignore
 fn transfer(_origin, to: T::AccountId, value: u64) -> DispatchResult {
@@ -96,4 +116,6 @@ fn transfer(_origin, to: T::AccountId, value: u64) -> DispatchResult {
 
 ## Don't Panic!
 
-When adding the incoming balance, notice the peculiar `.expect` method. In a Substrate runtime, **you must never panic**. To encourage careful thinking about your code, you use the `.expect` method and provide a proof of why the potential panic will never happen.
+When adding the incoming balance, notice the peculiar `.expect` method. In a Substrate runtime,
+**you must never panic**. To encourage careful thinking about your code, you use the `.expect`
+method and provide a proof of why the potential panic will never happen.
