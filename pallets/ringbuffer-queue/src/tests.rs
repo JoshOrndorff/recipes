@@ -1,5 +1,7 @@
 use super::{RawEvent, ValueStruct};
 use crate::{Module, Trait};
+use frame_support::{assert_ok, impl_outer_event, impl_outer_origin, parameter_types};
+use frame_system as system;
 use sp_core::H256;
 use sp_io::TestExternalities;
 use sp_runtime::{
@@ -7,8 +9,6 @@ use sp_runtime::{
 	traits::{BlakeTwo256, IdentityLookup},
 	Perbill,
 };
-use frame_support::{assert_ok, impl_outer_event, impl_outer_origin, parameter_types};
-use frame_system as system;
 
 impl_outer_origin! {
 	pub enum Origin for TestRuntime {}
@@ -36,6 +36,9 @@ impl system::Trait for TestRuntime {
 	type Event = TestEvent;
 	type BlockHashCount = BlockHashCount;
 	type MaximumBlockWeight = MaximumBlockWeight;
+	type DbWeight = ();
+	type BlockExecutionWeight = ();
+	type ExtrinsicBaseWeight = ();
 	type MaximumBlockLength = MaximumBlockLength;
 	type AvailableBlockRatio = AvailableBlockRatio;
 	type Version = ();
@@ -80,7 +83,13 @@ impl ExtBuilder {
 fn add_to_queue_works() {
 	ExtBuilder::build().execute_with(|| {
 		assert_ok!(RingBuffer::add_to_queue(Origin::signed(1), 1, true));
-		assert_eq!(RingBuffer::get_value(0), ValueStruct{ integer: 1, boolean: true});
+		assert_eq!(
+			RingBuffer::get_value(0),
+			ValueStruct {
+				integer: 1,
+				boolean: true
+			}
+		);
 		assert_eq!(RingBuffer::range(), (0, 1));
 	})
 }
@@ -88,8 +97,18 @@ fn add_to_queue_works() {
 #[test]
 fn add_multiple_works() {
 	ExtBuilder::build().execute_with(|| {
-		assert_ok!(RingBuffer::add_multiple(Origin::signed(1), vec![1, 2, 3], true));
-		assert_eq!(RingBuffer::get_value(0), ValueStruct{ integer: 1, boolean: true});
+		assert_ok!(RingBuffer::add_multiple(
+			Origin::signed(1),
+			vec![1, 2, 3],
+			true
+		));
+		assert_eq!(
+			RingBuffer::get_value(0),
+			ValueStruct {
+				integer: 1,
+				boolean: true
+			}
+		);
 		assert_eq!(RingBuffer::range(), (0, 3));
 	})
 }
@@ -98,7 +117,13 @@ fn add_multiple_works() {
 fn pop_works() {
 	ExtBuilder::build().execute_with(|| {
 		assert_ok!(RingBuffer::add_to_queue(Origin::signed(1), 1, true));
-		assert_eq!(RingBuffer::get_value(0), ValueStruct{ integer: 1, boolean: true});
+		assert_eq!(
+			RingBuffer::get_value(0),
+			ValueStruct {
+				integer: 1,
+				boolean: true
+			}
+		);
 		assert_eq!(RingBuffer::range(), (0, 1));
 
 		assert_ok!(RingBuffer::pop_from_queue(Origin::signed(1)));

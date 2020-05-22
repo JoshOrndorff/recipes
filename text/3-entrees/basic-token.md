@@ -59,7 +59,7 @@ In order for the token to be useful, some accounts need to own it. There are man
 ```rust ignore
 fn init(origin) -> DispatchResult {
 	let sender = ensure_signed(origin)?;
-	ensure!(Self::is_init() == false, <Error<T>>::AlreadyInitialized);
+	ensure!(!Self::is_init(), <Error<T>>::AlreadyInitialized);
 
 	<Balances<T>>::insert(sender, Self::total_supply());
 

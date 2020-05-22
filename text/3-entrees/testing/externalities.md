@@ -62,7 +62,7 @@ impl ExtBuilder {
 }
 ```
 
-To allow for separate copies of the constant objects to be used in each thread, the variables assigned as constants are declared as [`thread_local!`](https://substrate.dev/rustdocs/master/thread_local/index.html),
+To allow for separate copies of the constant objects to be used in each thread, the variables assigned as constants are declared as [`thread_local!`](https://crates.parity.io/thread_local/index.html),
 
 ```rust, ignore
 thread_local! {

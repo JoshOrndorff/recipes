@@ -1,4 +1,3 @@
-
 use crate::chain_spec;
 use crate::cli::Cli;
 use crate::service;
@@ -59,8 +58,8 @@ pub fn run() -> sc_cli::Result<()> {
 			runner.run_node(
 				// The light client is not implemented. Calling it will panic.
 				service::new_light,
-				move |config: _| service::new_full(config),
-				runtime::VERSION
+				service::new_full,
+				runtime::VERSION,
 			)
 		}
 	}

@@ -4,9 +4,10 @@ on:
   pull_request:
     branches:
     - master
+    - develop
 
 jobs:
-  build:
+  build-book:
     runs-on: ubuntu-18.04
     steps:
     - uses: actions/checkout@v1

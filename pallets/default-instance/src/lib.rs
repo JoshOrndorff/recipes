@@ -2,11 +2,7 @@
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
-use frame_support::{
-	decl_event, decl_module, decl_storage,
-	dispatch::DispatchResult,
-	weights::SimpleDispatchInfo,
-};
+use frame_support::{decl_event, decl_module, decl_storage, dispatch::DispatchResult};
 use frame_system::{self as system, ensure_signed};
 
 // The pallet's configuration trait takes an instance as a type parameter. The instance type is
@@ -47,7 +43,7 @@ decl_module! {
 
 		/// The only dispatchable call, updates the single storage item,
 		/// and emits an event.
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		fn call(origin) -> DispatchResult {
 			let caller = ensure_signed(origin)?;
 

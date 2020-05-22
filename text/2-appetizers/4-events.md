@@ -31,7 +31,7 @@ decl_module! {
 
 ## Declaring Events
 
-To declare an event, use the [`decl_event!` macro](https://substrate.dev/rustdocs/master/frame_support/macro.decl_event.html). Like any rust enum, Events have names, and can optionally carry data with them. The syntax is slightly different depending on whether the events carry data of primitive types, or generic types from the pallet's configuration trait. These two techniques are demonstrated in the `simple-event` and `generic-event` pallets respectively.
+To declare an event, use the [`decl_event!` macro](https://crates.parity.io/frame_support/macro.decl_event.html). Like any rust enum, Events have names, and can optionally carry data with them. The syntax is slightly different depending on whether the events carry data of primitive types, or generic types from the pallet's configuration trait. These two techniques are demonstrated in the `simple-event` and `generic-event` pallets respectively.
 
 ### Simple Events
 
@@ -64,9 +64,7 @@ This example also demonstrates how the `where` clause can be used to specify typ
 
 Events are emitted from dispatchable calls using the `deposit_event` method.
 
-> Starting from
-> [Substrate `v2.0.0-alpha.6`](https://github.com/paritytech/substrate/tree/v2.0.0-alpha.6),
-> events are not emitted on block 0. So any dispatchable calls made during genesis block formation
+> Events are not emitted on block 0. So any dispatchable calls made during genesis block formation
 > will have no events emitted.
 
 ### Simple Events

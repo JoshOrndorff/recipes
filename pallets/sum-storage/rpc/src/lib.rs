@@ -1,23 +1,17 @@
 //! RPC interface for the transaction payment module.
 
-use std::sync::Arc;
-use sp_blockchain::HeaderBackend;
 use jsonrpc_core::{Error as RpcError, ErrorCode, Result};
 use jsonrpc_derive::rpc;
-use sp_runtime::{
-	generic::BlockId,
-	traits::{Block as BlockT},
-};
 use sp_api::ProvideRuntimeApi;
+use sp_blockchain::HeaderBackend;
+use sp_runtime::{generic::BlockId, traits::Block as BlockT};
+use std::sync::Arc;
 use sum_storage_runtime_api::SumStorageApi as SumStorageRuntimeApi;
 
 #[rpc]
 pub trait SumStorageApi<BlockHash> {
 	#[rpc(name = "sumStorage_getSum")]
-	fn get_sum(
-		&self,
-		at: Option<BlockHash>
-	) -> Result<u32>;
+	fn get_sum(&self, at: Option<BlockHash>) -> Result<u32>;
 }
 
 /// A struct that implements the `SumStorageApi`.
@@ -31,7 +25,10 @@ pub struct SumStorage<C, M> {
 impl<C, M> SumStorage<C, M> {
 	/// Create new `SumStorage` instance with the given reference to the client.
 	pub fn new(client: Arc<C>) -> Self {
-		Self { client, _marker: Default::default() }
+		Self {
+			client,
+			_marker: Default::default(),
+		}
 	}
 }
 
@@ -52,8 +49,7 @@ impl<C, M> SumStorage<C, M> {
 // 	}
 // }
 
-impl<C, Block> SumStorageApi<<Block as BlockT>::Hash>
-	for SumStorage<C, Block>
+impl<C, Block> SumStorageApi<<Block as BlockT>::Hash> for SumStorage<C, Block>
 where
 	Block: BlockT,
 	C: Send + Sync + 'static,
@@ -61,16 +57,11 @@ where
 	C: HeaderBackend<Block>,
 	C::Api: SumStorageRuntimeApi<Block>,
 {
-	fn get_sum(
-		&self,
-		at: Option<<Block as BlockT>::Hash>
-	) -> Result<u32> {
-
+	fn get_sum(&self, at: Option<<Block as BlockT>::Hash>) -> Result<u32> {
 		let api = self.client.runtime_api();
 		let at = BlockId::hash(at.unwrap_or_else(||
 			// If the block hash is not supplied assume the best block.
-			self.client.info().best_hash
-		));
+			self.client.info().best_hash));
 
 		let runtime_api_result = api.get_sum(&at);
 		runtime_api_result.map_err(|e| RpcError {

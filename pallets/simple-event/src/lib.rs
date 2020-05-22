@@ -3,11 +3,7 @@
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
-use frame_support::{
-	decl_event, decl_module,
-	dispatch::DispatchResult,
-	weights::SimpleDispatchInfo,
-};
+use frame_support::{decl_event, decl_module, dispatch::DispatchResult};
 use system::ensure_signed;
 
 #[cfg(test)]
@@ -22,7 +18,7 @@ decl_module! {
 		fn deposit_event() = default;
 
 		/// A simple call that does little more than emit an event
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		fn do_something(origin, input: u32) -> DispatchResult {
 			let _ = ensure_signed(origin)?;
 

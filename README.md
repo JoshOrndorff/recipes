@@ -8,11 +8,12 @@ _A Hands-On Cookbook for Aspiring Blockchain Chefs_
 Ready to roll up your sleeves and cook some blockchain? Read the book online at [substrate.dev/recipes](https://substrate.dev/recipes)
 
 ## Repository Structure
-There are four primary directories in this repository:
+There are five primary directories in this repository:
 
 * **Text**: Source of [the book](https://substrate.dev/recipes) written in markdown. This text describes the code in the other three directories.
-* **Pallets**: Complete pallets for use in FRAME-based runtimes.
-* **Runtimes**: Complete runtimes for use in Substrate nodes.
+* **Pallets**: Pallets for use in FRAME-based runtimes.
+* **Runtimes**: Runtimes for use in Substrate nodes.
+* **Consensus**: Consensus engines for use in Substrate nodes.
 * **Nodes**: Complete Substrate nodes ready to run.
 
 The book is built with [mdbook](https://rust-lang-nursery.github.io/mdBook/) and deployed via [github pages](https://pages.github.com/).
@@ -22,4 +23,4 @@ The Substrate Recipes are [GPL 3.0 Licensed](LICENSE) It is open source and [ope
 
 ## Using Recipes in External Projects
 
-The pallets and runtimes provided here are tested and ready to be used in other Substrate-based blockchains. The big caveat is that you must use the same upstream Substrate version throughout the project. The recipes currently use Substrate@`v2.0.0-alpha.6`.
+The pallets and runtimes provided here are tested and ready to be used in other Substrate-based blockchains. The big caveat is that you must use the same upstream Substrate version throughout the project.

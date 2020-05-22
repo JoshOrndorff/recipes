@@ -1,12 +1,10 @@
 //! A pallet to demonstrate the `ReservableCurrency` trait
 //! borrows collateral locking logic from pallet_treasury
 
-
 use frame_support::{
 	decl_event, decl_module,
 	dispatch::DispatchResult,
-	traits::{Currency, ReservableCurrency, ExistenceRequirement::AllowDeath},
-	weights::SimpleDispatchInfo,
+	traits::{Currency, ExistenceRequirement::AllowDeath, ReservableCurrency},
 };
 use frame_system::{self as system, ensure_signed};
 
@@ -43,7 +41,7 @@ decl_module! {
 		fn deposit_event() = default;
 
 		/// Reserves the specified amount of funds from the caller
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		pub fn reserve_funds(origin, amount: BalanceOf<T>) -> DispatchResult {
 			let locker = ensure_signed(origin)?;
 
@@ -57,7 +55,7 @@ decl_module! {
 		}
 
 		/// Unreserves the specified amount of funds from the caller
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		pub fn unreserve_funds(origin, amount: BalanceOf<T>) -> DispatchResult {
 			let unlocker = ensure_signed(origin)?;
 
@@ -71,7 +69,7 @@ decl_module! {
 		}
 
 		/// Transfers funds. Essentially a wrapper around the Currency's own transfer method
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		pub fn transfer_funds(origin, dest: T::AccountId, amount: BalanceOf<T>) -> DispatchResult {
 			let sender = ensure_signed(origin)?;
 
@@ -85,7 +83,7 @@ decl_module! {
 
 		/// Atomically unreserves funds and and transfers them.
 		/// might be useful in closed economic systems
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		pub fn unreserve_and_transfer(
 			origin,
 			to_punish: T::AccountId,
@@ -94,7 +92,7 @@ decl_module! {
 		) -> DispatchResult {
 			let _ = ensure_signed(origin)?; // dangerous because can be called with any signature (so dont do this in practice ever!)
 
-                        // If collateral is bigger than to_punish's reserved_balance, store what's left in overdraft.
+						// If collateral is bigger than to_punish's reserved_balance, store what's left in overdraft.
 			let overdraft = T::Currency::unreserve(&to_punish, collateral);
 
 			T::Currency::transfer(&to_punish, &dest, collateral - overdraft, AllowDeath)?;
