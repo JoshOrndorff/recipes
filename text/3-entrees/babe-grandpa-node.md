@@ -2,9 +2,9 @@
 
 _[`nodes/babe-grandpa-node`](https://github.com/substrate-developer-hub/recipes/tree/master/nodes/babe-grandpa-node)_
 
-The `babe-grandpa-node` uses the [Babe](https://substrate.dev/rustdocs/master/sc_consensus_babe/)
+The `babe-grandpa-node` uses the [Babe](https://crates.parity.io/sc_consensus_babe/)
 Proof of Authority consensus engine to determine who may author blocks, and the
-[Grandpa](https://substrate.dev/rustdocs/master/sc_finality_grandpa/index.html) finality gadget to
+[Grandpa](https://crates.parity.io/sc_finality_grandpa/index.html) finality gadget to
 provide [deterministic finality](https://www.substrate.io/kb/advanced/consensus#finality) to past
 blocks. This is the same design used in Polkadot. Understanding this recipe requires familiarity
 with Substrate's [block import pipeline](https://www.substrate.io/kb/advanced/block-import).
@@ -12,9 +12,9 @@ with Substrate's [block import pipeline](https://www.substrate.io/kb/advanced/bl
 In this recipe we will learn about:
 
 -   The
-    [GrandpaAPI](https://substrate.dev/rustdocs/master/sp_finality_grandpa/trait.GrandpaApi.html)
+    [GrandpaAPI](https://crates.parity.io/sp_finality_grandpa/trait.GrandpaApi.html)
     runtime API
--   The [BabeApi](https://substrate.dev/rustdocs/master/sc_consensus_babe/trait.BabeApi.html)
+-   The [BabeApi](https://crates.parity.io/sc_consensus_babe/trait.BabeApi.html)
     runtime API
 -   The [block import pipeline](https://www.substrate.io/kb/advanced/block-import)
 
@@ -97,7 +97,7 @@ provider.
 
 Any node that is acting as an authority and participating in Babe consensus, must run an `async`
 authorship task. We begin by creating an instance of
-[`BabeParams`](https://substrate.dev/rustdocs/master/sc_consensus_babe/struct.BabeParams.html).
+[`BabeParams`](https://crates.parity.io/sc_consensus_babe/struct.BabeParams.html).
 
 ```rust, ignore
 let babe_config = sc_consensus_babe::BabeParams {
@@ -125,7 +125,7 @@ service.spawn_essential_task("babe", babe);
 
 Just as we needed an `async` worker to author blocks with Babe, we need an `async` worker to listen
 to and cast grandpa votes. Again, we begin by creating an instance of
-[`GrandpaParams`](https://substrate.dev/rustdocs/master/sc_finality_grandpa/struct.GrandpaParams.html)
+[`GrandpaParams`](https://crates.parity.io/sc_finality_grandpa/struct.GrandpaParams.html)
 
 ```rust, ignore
 let grandpa_config = sc_finality_grandpa::GrandpaParams {
@@ -168,8 +168,8 @@ sc_finality_grandpa::setup_disabled_grandpa(
 ### Runtime APIs
 
 Both Babe and Grandpa rely on getting their authority sets from the runtime via the
-[BabeAPI](https://substrate.dev/rustdocs/master/sc_consensus_babe/trait.BabeApi.html) and the
-[GrandpaAPI](https://substrate.dev/rustdocs/master/sp_finality_grandpa/trait.GrandpaApi.html). So
+[BabeAPI](https://crates.parity.io/sc_consensus_babe/trait.BabeApi.html) and the
+[GrandpaAPI](https://crates.parity.io/sp_finality_grandpa/trait.GrandpaApi.html). So
 trying to build this node with a runtime that does not provide these APIs will fail to compile.
 
 ### Pre Runtime Digests
@@ -179,9 +179,9 @@ we also cannot use a runtime designed for this node with different consensus eng
 
 Because BABE is a slot-based consensus engine, it must inform the runtime which slot each block was
 intended for. To do this, it uses a technique known as a pre-runtime digest. It has two kinds,
-[`RawPrimaryPredigest`](https://substrate.dev/rustdocs/master/sp_consensus_babe/digests/struct.RawPrimaryPreDigest.html)
+[`RawPrimaryPredigest`](https://crates.parity.io/sp_consensus_babe/digests/struct.RawPrimaryPreDigest.html)
 and
-[`SecondaryPreDigest`](https://substrate.dev/rustdocs/master/sp_consensus_babe/digests/struct.SecondaryPreDigest.html).
+[`SecondaryPreDigest`](https://crates.parity.io/sp_consensus_babe/digests/struct.SecondaryPreDigest.html).
 The Babe authorship task automatically inserts these digest items in each block it authors.
 
 Because the runtime needs to interpret these pre-runtime digests, they are not optional. That means
