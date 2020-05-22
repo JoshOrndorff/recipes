@@ -192,13 +192,11 @@ decl_module! {
 			let mut fund = Self::funds(index).ok_or(Error::<T>::InvalidIndex)?;
 			let now = <system::Module<T>>::block_number();
 			ensure!(fund.end < now, Error::<T>::FundStillActive);
-			// dcb4p: add withdrawal period `=>` could structure as an auction or ico
 
 			let balance = Self::contribution_get(index, &who);
 			ensure!(balance > Zero::zero(), Error::<T>::NoContribution);
 
-			// TODO: is this appropriate for all structures like this or
-			// - is this just for polkadot/crowdfund?
+			// Return funds to caller without charging a transfer fee
 			let _ = T::Currency::resolve_into_existing(&who, T::Currency::withdraw(
 				&Self::fund_account_id(index),
 				balance,
@@ -245,8 +243,6 @@ decl_module! {
 
 			Self::deposit_event(RawEvent::Dissolved(index, now, reporter));
 		}
-
-		// fn on_finalize(n: T::BlockNumber)
 	}
 }
 
@@ -258,9 +254,11 @@ impl<T: Trait> Module<T> {
 	pub fn fund_account_id(index: FundIndex) -> T::AccountId {
 		PALLET_ID.into_sub_account(index)
 	}
-	/// Find the ID associated with the Child Trie
-	/// to access the respective trie
-	/// (see invocations in the other methods below for context)
+
+	/// Find the ID associated with the fund
+	///
+	/// Each fund stores information about its contributors and their contributions in a child trie
+	/// This helper function calculates the id of the associated child trie.
 	pub fn id_from_index(index: FundIndex) -> child::ChildInfo {
 		let mut buf = Vec::new();
 		buf.extend_from_slice(b"crowdfnd");
@@ -269,21 +267,26 @@ impl<T: Trait> Module<T> {
 		child::ChildInfo::new_default(T::Hashing::hash(&buf[..]).as_ref())
 	}
 
+	/// Record a contribution in the associated child trie.
 	pub fn contribution_put(index: FundIndex, who: &T::AccountId, balance: &BalanceOf<T>) {
 		let id = Self::id_from_index(index);
 		who.using_encoded(|b| child::put(&id, b, &balance));
 	}
 
+	/// Lookup a contribution in the associated child trie.
 	pub fn contribution_get(index: FundIndex, who: &T::AccountId) -> BalanceOf<T> {
 		let id = Self::id_from_index(index);
 		who.using_encoded(|b| child::get_or_default::<BalanceOf<T>>(&id, b))
 	}
 
+	/// Remove a contribution from an associated child trie.
 	pub fn contribution_kill(index: FundIndex, who: &T::AccountId) {
 		let id = Self::id_from_index(index);
 		who.using_encoded(|b| child::kill(&id, b));
 	}
 
+	/// Remove the enire record of contributions in the associated child trie in a single
+	/// storage write.
 	pub fn crowdfund_kill(index: FundIndex) {
 		let id = Self::id_from_index(index);
 		child::kill_storage(&id);
