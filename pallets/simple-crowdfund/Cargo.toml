@@ -27,3 +27,7 @@ sp-storage = { version = '2.0.0-dev', git = 'https://github.com/paritytech/subst
 balances = { package = 'pallet-balances', version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '12e08fd25455053e3cedc8b19beb7e77330a5713', default-features = false }
 sp-std = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '12e08fd25455053e3cedc8b19beb7e77330a5713', default-features = false }
 sp-core = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '12e08fd25455053e3cedc8b19beb7e77330a5713', default-features = false }
+
+[dev-dependencies]
+sp-core = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '12e08fd25455053e3cedc8b19beb7e77330a5713', default-features = false }
+sp-io = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '12e08fd25455053e3cedc8b19beb7e77330a5713', default-features = false }

@@ -21,11 +21,13 @@ use frame_support::{
 };
 use frame_system::{self as system, ensure_signed};
 
+#[cfg(test)]
+mod tests;
+
 const PALLET_ID: ModuleId = ModuleId(*b"ex/cfund");
 
-type AccountIdOf<T> = <T as system::Trait>::AccountId;
-type BalanceOf<T> = <<T as Trait>::Currency as Currency<AccountIdOf<T>>>::Balance;
-type FundInfoOf<T> = FundInfo<AccountIdOf<T>, BalanceOf<T>, <T as system::Trait>::BlockNumber>;
+type BalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::Balance;
+type FundInfoOf<T> = FundInfo<BalanceOf<T>, <T as system::Trait>::BlockNumber>;
 
 /// The pallet's configuration trait
 pub trait Trait: system::Trait {
@@ -50,11 +52,9 @@ pub trait Trait: system::Trait {
 /// Simple index for identifying a fund.
 pub type FundIndex = u32;
 
-#[derive(Encode, Decode, Default)]
+#[derive(Encode, Decode, Default, PartialEq, Eq)]
 #[cfg_attr(feature = "std", derive(Debug))]
-pub struct FundInfo<AccountId, Balance, BlockNumber> {
-	/// The ownning account which placed the deposit
-	owner: AccountId,
+pub struct FundInfo<Balance, BlockNumber> {
 	/// The amount of deposit placed
 	deposit: Balance,
 	/// The total amount raised
@@ -123,14 +123,14 @@ decl_module! {
 			cap: BalanceOf<T>,
 			end: T::BlockNumber,
 		) {
-			let owner = ensure_signed(origin)?;
+			let creator = ensure_signed(origin)?;
 			let now = <system::Module<T>>::block_number();
 
 			ensure!(end > now, Error::<T>::EndTooEarly);
 
 			let deposit = T::SubmissionDeposit::get();
 			let imb = T::Currency::withdraw(
-				&owner,
+				&creator,
 				deposit,
 				WithdrawReasons::from(WithdrawReason::Transfer),
 				ExistenceRequirement::AllowDeath,
@@ -145,7 +145,6 @@ decl_module! {
 			T::Currency::resolve_creating(&Self::fund_account_id(index), imb);
 
 			<Funds<T>>::insert(index, FundInfo {
-				owner,
 				deposit,
 				raised: Zero::zero(),
 				end,
