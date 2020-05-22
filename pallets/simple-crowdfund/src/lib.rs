@@ -1,15 +1,18 @@
-//! Simple Crowdfund Example
-//! - example of using `child-trie` in practice
-//! - designed to be a more simple version of polkadot/runtime/crowdfund
+//! Simple Crowdfund
+//!
+//! This pallet demonstrates a simple on-chain crowd-funding mechanism.
+//! It is based on Polkadot's crowdfund pallet, but is simplified and decoupled
+//! from the parachain logic.
+
 use parity_scale_codec::{Decode, Encode};
 use sp_core::{Blake2Hasher, Hasher};
-use rstd::prelude::*;
+use sp_std::prelude::*;
 use sp_runtime::{
     traits::{AccountIdConversion, Saturating, Zero},
     ModuleId,
 };
 use sp_storage::well_known_keys::CHILD_STORAGE_KEY_PREFIX;
-use support::{
+use frame_support::{
     decl_event, decl_module, decl_storage, ensure,
     storage::child,
     traits::{
@@ -17,12 +20,13 @@ use support::{
         WithdrawReasons,
     },
 };
-use system::ensure_signed;
+
+use frame_system::{self as system, ensure_signed};
 
 const PALLET_ID: ModuleId = ModuleId(*b"ex/cfund");
 
-type BalanceOf<T> = <<T as Trait>::Currency as Currency<AccountIdOf<T>>>::Balance;
 type AccountIdOf<T> = <T as system::Trait>::AccountId;
+type BalanceOf<T> = <<T as Trait>::Currency as Currency<AccountIdOf<T>>>::Balance;
 type NegativeImbalanceOf<T> = <<T as Trait>::Currency as Currency<AccountIdOf<T>>>::NegativeImbalance;
 type FundInfoOf<T> = FundInfo<AccountIdOf<T>, BalanceOf<T>, <T as system::Trait>::BlockNumber>;
 
@@ -41,9 +45,6 @@ pub trait Trait: system::Trait {
     /// The period of time (in blocks) after an unsuccessful crowdfund ending during which
     /// contributors are able to withdraw their funds. After this period, their funds are lost.
     type RetirementPeriod: Get<Self::BlockNumber>;
-
-    /// What to do with funds that were not withdrawn.
-    type OrphanedFunds: OnUnbalanced<NegativeImbalanceOf<Self>>;
 }
 
 /// Simple index for identifying a fund.
@@ -69,15 +70,11 @@ pub struct FundInfo<AccountId, Balance, BlockNumber> {
 decl_storage! {
     trait Store for Module<T: Trait> as ChildTrie {
         /// Info on all of the funds.
-        Funds get(funds):
-            map hasher(blake2_256) FundIndex => Option<FundInfoOf<T>>;
+        Funds get(fn funds):
+            map hasher(blake2_128_concat) FundIndex => Option<FundInfoOf<T>>;
 
         /// The total number of funds that have so far been allocated.
-        FundCount get(fund_count): FundIndex;
-
-        /// The funds that have had additional contributions during the last block. This is used
-        /// in order to determine which funds should submit new or updated bids.
-        NewRaise get(new_raise): Vec<FundIndex>;
+        FundCount get(fn fund_count): FundIndex;
     }
 }
 
@@ -91,7 +88,7 @@ decl_event! {
         Contributed(AccountId, FundIndex, Balance, BlockNumber),
         Withdrew(AccountId, FundIndex, Balance, BlockNumber),
         Retiring(FundIndex, BlockNumber),
-        Dissolved(FundIndex, BlockNumber),
+        Dissolved(FundIndex, BlockNumber, AccountId),
     }
 }
 
@@ -99,13 +96,15 @@ decl_module! {
     pub struct Module<T: Trait> for enum Call where origin: T::Origin {
         fn deposit_event() = default;
 
-        fn create(origin,
-            #[compact] cap: BalanceOf<T>,
-            #[compact] start: T::BlockNumber,
-            #[compact] end: T::BlockNumber,
+		/// Create a new fund
+		#[weight = 10_000]
+        fn create(
+			origin,
+            cap: BalanceOf<T>,
+            start: T::BlockNumber,
+            end: T::BlockNumber,
         ) {
             let owner = ensure_signed(origin)?;
-
             let now = <system::Module<T>>::block_number();
 
             ensure!(start < end, "must start before it ends");
@@ -139,7 +138,9 @@ decl_module! {
             Self::deposit_event(RawEvent::Created(index, now));
         }
 
-        fn contribute(origin, #[compact] index: FundIndex, #[compact] value: BalanceOf<T>) {
+		/// Contribute funds to an existing fund
+		#[weight = 10_000]
+        fn contribute(origin, index: FundIndex, value: BalanceOf<T>) {
             let who = ensure_signed(origin)?;
 
             ensure!(value >= T::MinContribution::get(), "contribution too small");
@@ -151,7 +152,7 @@ decl_module! {
 
             // Add value if cap is not exceeded
             ensure!(fund.raised + value < fund.cap, "contributions exceed cap");
-            T::Currency::transfer(&who, &Self::fund_account_id(index), value)?;
+            T::Currency::transfer(&who, &Self::fund_account_id(index), value, ExistenceRequirement::AllowDeath)?;
             fund.raised += value;
 
             let balance = Self::contribution_get(index, &who);
@@ -162,6 +163,7 @@ decl_module! {
         }
 
         /// Withdraw full balance of a contributor to a fund
+		#[weight = 10_000]
         fn withdraw(origin, #[compact] index: FundIndex) {
             let who = ensure_signed(origin)?;
 
@@ -190,8 +192,12 @@ decl_module! {
             Self::deposit_event(RawEvent::Withdrew(who, index, balance, now));
         }
 
-        fn dissolve(origin, #[compact] index: FundIndex) {
-            let _ = ensure_signed(origin)?;
+		/// Dissolve an entire crowdfund after its retirement period has expired.
+		/// Anyone can call this function, and they are incentivized to do so because
+		/// They inheret the deposit.
+		#[weight = 10_000]
+        fn dissolve(origin, index: FundIndex) {
+            let reporter = ensure_signed(origin)?;
 
             let fund = Self::funds(index).ok_or("invalid fund index")?;
 
@@ -201,24 +207,21 @@ decl_module! {
 
             let account = Self::fund_account_id(index);
 
-            let _ = T::Currency::resolve_into_existing(&fund.owner, T::Currency::withdraw(
+			// Dissolver collects the deposit and any remaining funds
+            let _ = T::Currency::resolve_into_existing(&reporter, T::Currency::withdraw(
                 &account,
-                fund.deposit,
+                fund.deposit + fund.raised,
                 WithdrawReasons::from(WithdrawReason::Transfer),
                 ExistenceRequirement::AllowDeath,
             )?);
 
-            T::OrphanedFunds::on_unbalanced(T::Currency::withdraw(
-                &account,
-                fund.raised,
-                WithdrawReasons::from(WithdrawReason::Transfer),
-                ExistenceRequirement::AllowDeath
-            )?);
-
-            Self::crowdfund_kill(index);
+			// Remove the fund info from storage
             <Funds<T>>::remove(index);
+			// Remove all the contributor info from storage in a single write.
+			// This is possible thanks to the use of a child tree.
+            Self::crowdfund_kill(index);
 
-            Self::deposit_event(RawEvent::Dissolved(index, now));
+            Self::deposit_event(RawEvent::Dissolved(index, now, reporter));
         }
 
         // fn on_finalize(n: T::BlockNumber)
@@ -233,37 +236,34 @@ impl<T: Trait> Module<T> {
     pub fn fund_account_id(index: FundIndex) -> T::AccountId {
         PALLET_ID.into_sub_account(index)
     }
+	/// Find the ID associated with the Child Trie
+	/// to access the respective trie
+	/// (see invocations in the other methods below for context)
+	pub fn id_from_index(index: FundIndex) -> child::ChildInfo {
+		let mut buf = Vec::new();
+		buf.extend_from_slice(b"crowdfnd");
+		buf.extend_from_slice(&index.to_le_bytes()[..]);
 
-    pub fn id_from_index(index: FundIndex) -> Vec<u8> {
-        let mut buf = Vec::new();
-        buf.extend_from_slice(b"ex/cfund");
-        buf.extend_from_slice(&index.to_le_bytes()[..]);
-
-        CHILD_STORAGE_KEY_PREFIX
-            .into_iter()
-            .chain(b"default:")
-            .chain(Blake2Hasher::hash(&buf[..]).as_ref().into_iter())
-            .cloned()
-            .collect()
-    }
+		child::ChildInfo::new_default(T::Hashing::hash(&buf[..]).as_ref())
+	}
 
     pub fn contribution_put(index: FundIndex, who: &T::AccountId, balance: &BalanceOf<T>) {
         let id = Self::id_from_index(index);
-        who.using_encoded(|b| child::put(id.as_ref(), b, &balance));
+        who.using_encoded(|b| child::put(&id, b, &balance));
     }
 
     pub fn contribution_get(index: FundIndex, who: &T::AccountId) -> BalanceOf<T> {
         let id = Self::id_from_index(index);
-        who.using_encoded(|b| child::get_or_default::<BalanceOf<T>>(id.as_ref(), b))
+        who.using_encoded(|b| child::get_or_default::<BalanceOf<T>>(&id, b))
     }
 
     pub fn contribution_kill(index: FundIndex, who: &T::AccountId) {
         let id = Self::id_from_index(index);
-        who.using_encoded(|b| child::kill(id.as_ref(), b));
+        who.using_encoded(|b| child::kill(&id, b));
     }
 
     pub fn crowdfund_kill(index: FundIndex) {
         let id = Self::id_from_index(index);
-        child::kill_storage(id.as_ref());
+        child::kill_storage(&id);
     }
 }

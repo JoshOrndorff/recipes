@@ -5406,6 +5406,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "simple-crowdfund"
+version = "2.0.0-alpha.8"
+dependencies = [
+ "frame-support",
+ "frame-system",
+ "pallet-balances",
+ "parity-scale-codec",
+ "sp-core",
+ "sp-runtime",
+ "sp-std",
+ "sp-storage",
+]
+
+[[package]]
 name = "simple-event"
 version = "2.0.0-alpha.7"
 dependencies = [

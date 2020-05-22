@@ -20,7 +20,7 @@ members = [
 	"pallets/randomness",
 	"pallets/reservable-currency",
 	"pallets/ringbuffer-queue",
-	# "pallets/simple-crowdfund",
+	"pallets/simple-crowdfund",
 	"pallets/simple-event",
 	"pallets/simple-map",
 	"pallets/single-value",
