@@ -28,10 +28,6 @@ mod tests;
 
 const PALLET_ID: ModuleId = ModuleId(*b"ex/cfund");
 
-type AccountIdOf<T> = <T as system::Trait>::AccountId;
-type BalanceOf<T> = <<T as Trait>::Currency as Currency<AccountIdOf<T>>>::Balance;
-type FundInfoOf<T> = FundInfo<AccountIdOf<T>, BalanceOf<T>, <T as system::Trait>::BlockNumber>;
-
 /// The pallet's configuration trait
 pub trait Trait: system::Trait {
 	/// The ubiquious Event type
@@ -54,6 +50,10 @@ pub trait Trait: system::Trait {
 
 /// Simple index for identifying a fund.
 pub type FundIndex = u32;
+
+type AccountIdOf<T> = <T as system::Trait>::AccountId;
+type BalanceOf<T> = <<T as Trait>::Currency as Currency<AccountIdOf<T>>>::Balance;
+type FundInfoOf<T> = FundInfo<AccountIdOf<T>, BalanceOf<T>, <T as system::Trait>::BlockNumber>;
 
 #[derive(Encode, Decode, Default, PartialEq, Eq)]
 #[cfg_attr(feature = "std", derive(Debug))]
@@ -340,7 +340,7 @@ impl<T: Trait> Module<T> {
 		who.using_encoded(|b| child::kill(&id, b));
 	}
 
-	/// Remove the enire record of contributions in the associated child trie in a single
+	/// Remove the entire record of contributions in the associated child trie in a single
 	/// storage write.
 	pub fn crowdfund_kill(index: FundIndex) {
 		let id = Self::id_from_index(index);
