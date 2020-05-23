@@ -1,48 +1,52 @@
 # Summary
 
 [Introduction](./introduction.md)
-
--   [Preparing Your Kitchen](./1-prepare-kitchen/index.md) -
-    [Building A Node](./1-prepare-kitchen/1-build-node.md) -
-    [Interacting with a Node](./1-prepare-kitchen/2-interact-node.md) -
-    [Kitchen Organization](./1-prepare-kitchen/3-kitchen-organization.md)
--   [Appetizers](./2-appetizers/index.md) - [Hello Substrate](./2-appetizers/1-hello-substrate.md) -
-    [Single Value Storage](./2-appetizers/2-storage-values.md) -
-    [Handling Errors](./2-appetizers/3-errors.md) -
-    [Events Verify Execution](./2-appetizers/4-events.md)
--   [Entrees](./3-entrees/index.md) - [Runtime Storage API](./3-entrees/storage-api/index.md) -
-    [Storage Maps](./3-entrees/storage-api/storage-maps.md) -
-    [Cache Locally > Storage Calls](./3-entrees/storage-api/cache.md) -
-    [Sets, Vectors, Iteration](./3-entrees/storage-api/sets-vecs-iteration.md) -
-    [Subgroup Removal by Subkey: Double Maps](./3-entrees/storage-api/double.md) -
-    [Efficient Subgroup Removal by Subkey: Child Tries](./3-entrees/storage-api/childtries.md) -
-    [Storing custom structs](./3-entrees/storage-api/structs.md) -
-    [Ringbuffer Queue](./3-entrees/storage-api/ringbuffer.md) -
-    [Basic Token](./3-entrees/basic-token.md) - [Configurable Constants](./3-entrees/constants.md) -
-    [Instantiable Pallets](./3-entrees/instantiable.md) -
-    [Weights for Resource Accounting](./3-entrees/weights.md) -
-    [Transaction Fees for Economic Security](./3-entrees/fees.md) -
-    [Charity and Imbalances](./3-entrees/charity.md) -
-    [Fixed Point Arithmetic](./3-entrees/fixed-point.md) -
-    [Off-chain Workers](./3-entrees/off-chain-workers/index.md) -
-    [Transactions](./3-entrees/off-chain-workers/transactions.md) -
-    [HTTP Fetching & JSON Parsing](./3-entrees/off-chain-workers/http-json.md) -
-    [Local Storage](./3-entrees/off-chain-workers/storage.md) -
-    [Runtime APIs](./3-entrees/runtime-api.md) - [Custom RPCs](./3-entrees/custom-rpc.md) -
-    [Sha3 Pow Consensus Algorithms](./3-entrees/sha3-pow-consensus.md) -
-    [Basic Proof of Work Node](./3-entrees/basic-pow.md) -
-    [Hybrid PoW/PoS Consensus Node](./3-entrees/hybrid-consensus.md) -
-    [Manual Seal Consensus](./3-entrees/manual-seal.md) -
-    [Kitchen Node - An reusable instant seal node](./3-entrees/kitchen-node.md) -
-    [Currency Types](./3-entrees/currency.md) - [Generating Randomness](./3-entrees/randomness.md) -
-    [Execution Schedule](./3-entrees/execution-schedule.md) -
-    [Permissioned Methods](./3-entrees/permissioned-methods.md) -
-    [Testing](./3-entrees/testing/index.md) -
-    [Basic Test Environments](./3-entrees/testing/mock.md) -
-    [Common Tests](./3-entrees/testing/common.md) -
-    [Off-chain Worker Test Environment](./3-entrees/testing/off-chain-workers.md) -
-    [Custom Test Environment](./3-entrees/testing/externalities.md) -
-    [Safe Math](./3-entrees/safemath.md)
+- [Preparing Your Kitchen](./1-prepare-kitchen/index.md)
+	- [Building A Node](./1-prepare-kitchen/1-build-node.md)
+	- [Interacting with a Node](./1-prepare-kitchen/2-interact-node.md)
+	- [Kitchen Organization](./1-prepare-kitchen/3-kitchen-organization.md)
+- [Appetizers](./2-appetizers/index.md)
+	- [Hello Substrate](./2-appetizers/1-hello-substrate.md)
+	- [Single Value Storage](./2-appetizers/2-storage-values.md)
+	- [Handling Errors](./2-appetizers/3-errors.md)
+	- [Events Verify Execution](./2-appetizers/4-events.md)
+- [Entrees](./3-entrees/index.md)
+	- [Runtime Storage API](./3-entrees/storage-api/index.md)
+		- [Storage Maps](./3-entrees/storage-api/storage-maps.md)
+		- [Cache Locally > Storage Calls](./3-entrees/storage-api/cache.md)
+		- [Sets, Vectors, Iteration](./3-entrees/storage-api/sets-vecs-iteration.md)
+		- [Subgroup Removal by Subkey: Double Maps](./3-entrees/storage-api/double.md)
+		- [Efficient Subgroup Removal by Subkey: Child Tries](./3-entrees/storage-api/childtries.md)
+		- [Storing custom structs](./3-entrees/storage-api/structs.md)
+		- [Ringbuffer Queue](./3-entrees/storage-api/ringbuffer.md)
+	- [Basic Token](./3-entrees/basic-token.md)
+	- [Configurable Constants](./3-entrees/constants.md)
+	- [Instantiable Pallets](./3-entrees/instantiable.md)
+	- [Weights for Resource Accounting](./3-entrees/weights.md)
+	- [Transaction Fees for Economic Security](./3-entrees/fees.md)
+	- [Charity and Imbalances](./3-entrees/charity.md)
+	- [Fixed Point Arithmetic](./3-entrees/fixed-point.md)
+	- [Off-chain Workers](./3-entrees/off-chain-workers/index.md)
+		- [Transactions](./3-entrees/off-chain-workers/transactions.md)
+		- [HTTP Fetching & JSON Parsing](./3-entrees/off-chain-workers/http-json.md)
+		- [Local Storage](./3-entrees/off-chain-workers/storage.md)
+	- [Runtime APIs](./3-entrees/runtime-api.md)
+	- [Custom RPCs](./3-entrees/custom-rpc.md)
+	- [Sha3 Pow Consensus Algorithms](./3-entrees/sha3-pow-consensus.md)
+	- [Basic Proof of Work Node](./3-entrees/basic-pow.md)
+	- [Hybrid PoW/PoS Consensus Node](./3-entrees/hybrid-consensus.md)
+	- [Manual Seal Consensus](./3-entrees/manual-seal.md)
+	- [Kitchen Node - An reusable instant seal node](./3-entrees/kitchen-node.md)
+	- [Currency Types](./3-entrees/currency.md)
+	- [Generating Randomness](./3-entrees/randomness.md)
+	- [Execution Schedule](./3-entrees/execution-schedule.md)
+	- [Permissioned Methods](./3-entrees/permissioned-methods.md)
+	- [Testing](./3-entrees/testing/index.md)
+		- [Basic Test Environments](./3-entrees/testing/mock.md)
+		- [Common Tests](./3-entrees/testing/common.md)
+		- [Off-chain Worker Test Environment](./3-entrees/testing/off-chain-workers.md)
+		- [Custom Test Environment](./3-entrees/testing/externalities.md)
+	- [Safe Math](./3-entrees/safemath.md)
 
 ---
 
