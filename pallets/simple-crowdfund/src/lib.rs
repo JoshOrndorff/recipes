@@ -4,22 +4,21 @@
 //! It is based on Polkadot's crowdfund pallet, but is simplified and decoupled
 //! from the parachain logic.
 
-use parity_scale_codec::{Decode, Encode};
-use sp_core::Hasher;
-use sp_std::prelude::*;
-use sp_runtime::{
-	traits::{AccountIdConversion, Saturating, Zero},
-	ModuleId,
-};
 use frame_support::{
 	decl_error, decl_event, decl_module, decl_storage, ensure,
 	storage::child,
 	traits::{
-		Currency, ExistenceRequirement, Get, ReservableCurrency, WithdrawReason,
-		WithdrawReasons,
+		Currency, ExistenceRequirement, Get, ReservableCurrency, WithdrawReason, WithdrawReasons,
 	},
 };
 use frame_system::{self as system, ensure_signed};
+use parity_scale_codec::{Decode, Encode};
+use sp_core::Hasher;
+use sp_runtime::{
+	traits::{AccountIdConversion, Saturating, Zero},
+	ModuleId,
+};
+use sp_std::prelude::*;
 
 #[cfg(test)]
 mod tests;
@@ -262,23 +261,25 @@ decl_module! {
 
 			// Check that enough time has passed to remove from storage
 			let now = <system::Module<T>>::block_number();
-			ensure!(now >= fund.end + T::RetirementPeriod::get(), Error::<T>::FundStillActive);
+
+			ensure!(now >= fund.end, Error::<T>::FundStillActive);
 
 			// Check that the fund was actually successful
-			ensure!(fund.raised > fund.goal, Error::<T>::UnsuccessfulFund);
+			ensure!(fund.raised >= fund.goal, Error::<T>::UnsuccessfulFund);
 
 			let account = Self::fund_account_id(index);
 
 			// Beneficiary collects the contributed funds
-			let _ = T::Currency::resolve_into_existing(&fund.beneficiary, T::Currency::withdraw(
+			let _ = T::Currency::resolve_creating(&fund.beneficiary, T::Currency::withdraw(
 				&account,
 				fund.raised,
 				WithdrawReasons::from(WithdrawReason::Transfer),
 				ExistenceRequirement::AllowDeath,
 			)?);
 
+			println!("Going to reward {:?} with {:?} tokens", &caller, fund.deposit);
 			// Caller collects the deposit
-			let _ = T::Currency::resolve_into_existing(&caller, T::Currency::withdraw(
+			let _ = T::Currency::resolve_creating(&caller, T::Currency::withdraw(
 				&account,
 				fund.deposit,
 				WithdrawReasons::from(WithdrawReason::Transfer),

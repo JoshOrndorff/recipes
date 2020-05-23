@@ -1,16 +1,16 @@
 use super::*;
 
 use frame_support::{
-	impl_outer_origin, assert_ok, assert_noop, parameter_types,
-	traits::{OnInitialize, OnFinalize},
+	assert_noop, assert_ok, impl_outer_origin, parameter_types,
+	traits::{OnFinalize, OnInitialize},
 };
-use frame_support::traits::{Contains, ContainsLengthBound};
 use sp_core::H256;
 // The testing primitives are very useful for avoiding having to work with signatures
 // or public keys. `u64` is used as the `AccountId` and no `Signature`s are requried.
 use sp_runtime::{
-	Perbill, Permill, Percent, testing::Header, DispatchResult,
+	testing::Header,
 	traits::{BlakeTwo256, IdentityLookup},
+	Perbill, Percent, Permill,
 };
 
 impl_outer_origin! {
@@ -96,10 +96,14 @@ use balances::Error as BalancesError;
 // This function basically just builds a genesis storage key/value store according to
 // our desired mockup.
 fn new_test_ext() -> sp_io::TestExternalities {
-	let mut t = system::GenesisConfig::default().build_storage::<Test>().unwrap();
-	balances::GenesisConfig::<Test>{
+	let mut t = system::GenesisConfig::default()
+		.build_storage::<Test>()
+		.unwrap();
+	balances::GenesisConfig::<Test> {
 		balances: vec![(1, 1000), (2, 2000), (3, 3000), (4, 4000)],
-	}.assimilate_storage(&mut t).unwrap();
+	}
+	.assimilate_storage(&mut t)
+	.unwrap();
 	t.into()
 }
 
@@ -186,9 +190,15 @@ fn contribute_works() {
 fn contribute_handles_basic_errors() {
 	new_test_ext().execute_with(|| {
 		// Cannot contribute to non-existing fund
-		assert_noop!(Crowdfund::contribute(Origin::signed(1), 0, 49), Error::<Test>::InvalidIndex);
+		assert_noop!(
+			Crowdfund::contribute(Origin::signed(1), 0, 49),
+			Error::<Test>::InvalidIndex
+		);
 		// Cannot contribute below minimum contribution
-		assert_noop!(Crowdfund::contribute(Origin::signed(1), 0, 9), Error::<Test>::ContributionTooSmall);
+		assert_noop!(
+			Crowdfund::contribute(Origin::signed(1), 0, 9),
+			Error::<Test>::ContributionTooSmall
+		);
 
 		// Set up a crowdfund
 		assert_ok!(Crowdfund::create(Origin::signed(1), 2, 1000, 9));
@@ -198,7 +208,10 @@ fn contribute_handles_basic_errors() {
 		run_to_block(10);
 
 		// Cannot contribute to ended fund
-		assert_noop!(Crowdfund::contribute(Origin::signed(1), 0, 49), Error::<Test>::ContributionPeriodOver);
+		assert_noop!(
+			Crowdfund::contribute(Origin::signed(1), 0, 49),
+			Error::<Test>::ContributionPeriodOver
+		);
 	});
 }
 
@@ -240,16 +253,25 @@ fn withdraw_handles_basic_errors() {
 		run_to_block(5);
 
 		// Cannot withdraw before fund ends
-		assert_noop!(Crowdfund::withdraw(Origin::signed(1), 0), Error::<Test>::FundStillActive);
+		assert_noop!(
+			Crowdfund::withdraw(Origin::signed(1), 0),
+			Error::<Test>::FundStillActive
+		);
 
-		// Skip all the retirement period
+		// Skip to the retirement period
 		// Crowdfund is unsuccessful 100 + 200 + 300 < 1000
 		run_to_block(10);
 
 		// Cannot withdraw if they did not contribute
-		assert_noop!(Crowdfund::withdraw(Origin::signed(2), 0), Error::<Test>::NoContribution);
+		assert_noop!(
+			Crowdfund::withdraw(Origin::signed(2), 0),
+			Error::<Test>::NoContribution
+		);
 		// Cannot withdraw from a non-existent fund
-		assert_noop!(Crowdfund::withdraw(Origin::signed(1), 1), Error::<Test>::InvalidIndex);
+		assert_noop!(
+			Crowdfund::withdraw(Origin::signed(1), 1),
+			Error::<Test>::InvalidIndex
+		);
 	});
 }
 
@@ -281,10 +303,9 @@ fn dissolve_works() {
 		assert_eq!(Balances::free_balance(7), 601);
 
 		// Storage trie is removed
-		assert_eq!(Crowdfund::contribution_get(0,&0), 0);
+		assert_eq!(Crowdfund::contribution_get(0, &0), 0);
 		// Fund storage is removed
 		assert_eq!(Crowdfund::funds(0), None);
-
 	});
 }
 
@@ -299,13 +320,92 @@ fn dissolve_handles_basic_errors() {
 		assert_ok!(Crowdfund::contribute(Origin::signed(3), 0, 300));
 
 		// Cannot dissolve an invalid fund index
-		assert_noop!(Crowdfund::dissolve(Origin::signed(1), 1), Error::<Test>::InvalidIndex);
+		assert_noop!(
+			Crowdfund::dissolve(Origin::signed(1), 1),
+			Error::<Test>::InvalidIndex
+		);
 		// Cannot dissolve an active fund
-		assert_noop!(Crowdfund::dissolve(Origin::signed(1), 0), Error::<Test>::FundNotRetired);
+		assert_noop!(
+			Crowdfund::dissolve(Origin::signed(1), 0),
+			Error::<Test>::FundNotRetired
+		);
 
 		run_to_block(10);
 
 		// Cannot disolve an ended but not yet retired fund
-		assert_noop!(Crowdfund::dissolve(Origin::signed(1), 0), Error::<Test>::FundNotRetired);
+		assert_noop!(
+			Crowdfund::dissolve(Origin::signed(1), 0),
+			Error::<Test>::FundNotRetired
+		);
+	});
+}
+
+#[test]
+fn dispense_works() {
+	new_test_ext().execute_with(|| {
+		// Set up a crowdfund
+		assert_ok!(Crowdfund::create(Origin::signed(1), 20, 1000, 9));
+		// Transfer fee is taken here
+		assert_ok!(Crowdfund::contribute(Origin::signed(1), 0, 100));
+		assert_ok!(Crowdfund::contribute(Origin::signed(2), 0, 200));
+		assert_ok!(Crowdfund::contribute(Origin::signed(3), 0, 300));
+		assert_ok!(Crowdfund::contribute(Origin::signed(3), 0, 400));
+
+		// Skip to the retirement period
+		// Crowdfund is successful 100 + 200 + 300 + 400  >= 1000
+		run_to_block(10);
+
+		// Check initiator's balance.
+		assert_eq!(Balances::free_balance(1), 899);
+		// Check current funds (contributions + deposit)
+		assert_eq!(Balances::free_balance(Crowdfund::fund_account_id(0)), 1001);
+
+		// Account 7 dispenses the crowdfund
+		assert_ok!(Crowdfund::dispense(Origin::signed(7), 0));
+
+		// Fund account is emptied
+		assert_eq!(Balances::free_balance(Crowdfund::fund_account_id(0)), 0);
+		// Beneficiary account is funded
+		assert_eq!(Balances::free_balance(20), 1000);
+		// Dispensor account is rewarded deposit
+		assert_eq!(Balances::free_balance(7), 1);
+
+		// Storage trie is removed
+		assert_eq!(Crowdfund::contribution_get(0, &0), 0);
+		// Fund storage is removed
+		assert_eq!(Crowdfund::funds(0), None);
+	});
+}
+
+#[test]
+fn dispense_handles_basic_errors() {
+	new_test_ext().execute_with(|| {
+		// Set up a crowdfund
+		assert_ok!(Crowdfund::create(Origin::signed(1), 2, 1000, 9));
+		// Transfer fee is taken here
+		assert_ok!(Crowdfund::contribute(Origin::signed(1), 0, 100));
+		assert_ok!(Crowdfund::contribute(Origin::signed(2), 0, 200));
+		assert_ok!(Crowdfund::contribute(Origin::signed(3), 0, 300));
+
+		// Cannot dispense an invalid fund index
+		assert_noop!(
+			Crowdfund::dispense(Origin::signed(1), 1),
+			Error::<Test>::InvalidIndex
+		);
+		// Cannot dispense an active fund
+		assert_noop!(
+			Crowdfund::dispense(Origin::signed(1), 0),
+			Error::<Test>::FundStillActive
+		);
+
+		// Skip to the retirement period
+		// Crowdfund is unsuccessful 100 + 200 + 300 < 1000
+		run_to_block(10);
+
+		// Cannot disopens an ended but unsuccessful fund
+		assert_noop!(
+			Crowdfund::dispense(Origin::signed(1), 0),
+			Error::<Test>::UnsuccessfulFund
+		);
 	});
 }
