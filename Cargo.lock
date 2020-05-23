@@ -672,18 +672,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "child-trie"
-version = "2.0.0-alpha.7"
-dependencies = [
- "frame-support",
- "frame-system",
- "parity-scale-codec",
- "sp-core",
- "sp-runtime",
- "sp-std",
-]
-
-[[package]]
 name = "chrono"
 version = "0.4.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -6358,6 +6346,7 @@ dependencies = [
  "randomness",
  "ringbuffer-queue",
  "serde",
+ "simple-crowdfund",
  "simple-event",
  "simple-map",
  "single-value",

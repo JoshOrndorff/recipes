@@ -32,6 +32,7 @@ hello-substrate = { path = "../../pallets/hello-substrate", default-features = f
 last-caller = { path = "../../pallets/last-caller", default-features = false }
 ringbuffer-queue = { path = "../../pallets/ringbuffer-queue", default-features = false }
 randomness = { path = "../../pallets/randomness", default-features = false }
+simple-crowdfund = { path = "../../pallets/simple-crowdfund", default-features = false}
 simple-event = { path = "../../pallets/simple-event", default-features = false }
 simple-map = { path = "../../pallets/simple-map", default-features = false }
 single-value = { path = "../../pallets/single-value", default-features = false }
@@ -105,6 +106,7 @@ std = [
 	"last-caller/std",
 	"randomness/std",
 	"ringbuffer-queue/std",
+	"simple-crowdfund/std",
 	"simple-event/std",
 	"simple-map/std",
 	"single-value/std",

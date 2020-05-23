@@ -4,21 +4,24 @@
 //! It is based on Polkadot's crowdfund pallet, but is simplified and decoupled
 //! from the parachain logic.
 
-use frame_support::{
-	decl_error, decl_event, decl_module, decl_storage, ensure,
-	storage::child,
-	traits::{
-		Currency, ExistenceRequirement, Get, ReservableCurrency, WithdrawReason, WithdrawReasons,
-	},
-};
-use frame_system::{self as system, ensure_signed};
+#![cfg_attr(not(feature = "std"), no_std)]
+
 use parity_scale_codec::{Decode, Encode};
 use sp_core::Hasher;
+use sp_std::prelude::*;
 use sp_runtime::{
 	traits::{AccountIdConversion, Saturating, Zero},
 	ModuleId,
 };
-use sp_std::prelude::*;
+use frame_support::{
+	decl_error, decl_event, decl_module, decl_storage, ensure,
+	storage::child,
+	traits::{
+		Currency, ExistenceRequirement, Get, ReservableCurrency, WithdrawReason,
+		WithdrawReasons,
+	},
+};
+use frame_system::{self as system, ensure_signed};
 
 #[cfg(test)]
 mod tests;
@@ -277,7 +280,6 @@ decl_module! {
 				ExistenceRequirement::AllowDeath,
 			)?);
 
-			println!("Going to reward {:?} with {:?} tokens", &caller, fund.deposit);
 			// Caller collects the deposit
 			let _ = T::Currency::resolve_creating(&caller, T::Currency::withdraw(
 				&account,

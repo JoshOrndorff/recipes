@@ -20,6 +20,16 @@
     "boolean": "bool"
   },
   "BufferIndex": "u8",
+  "AccountIdOf": "AccountId",
+  "BalanceOf": "Balance",
+  "FundInfoOf": "FundInfo",
+  "FundInfo": {
+    "beneficiary": "AccountId",
+    "deposit": "Balance",
+    "raised": "Balance",
+    "end": "BlockNumber",
+    "goal": "Balance"
+  },
   "InnerThing": {
     "number": "u32",
     "hash": "Hash",
