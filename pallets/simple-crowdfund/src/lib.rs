@@ -124,6 +124,8 @@ decl_module! {
 	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
 		fn deposit_event() = default;
 
+		type Error = Error<T>;
+
 		/// Create a new fund
 		#[weight = 10_000]
 		fn create(

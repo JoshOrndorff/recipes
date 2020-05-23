@@ -30,6 +30,7 @@
     "end": "BlockNumber",
     "goal": "Balance"
   },
+  "FundIndex": "u32",
   "InnerThing": {
     "number": "u32",
     "hash": "Hash",

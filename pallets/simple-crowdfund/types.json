@@ -8,5 +8,6 @@
 		"raised": "Balance",
 		"end": "BlockNumber",
 		"goal": "Balance"
-	}
+	},
+	"FundIndex": "u32"
 }
