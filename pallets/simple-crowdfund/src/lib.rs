@@ -235,7 +235,7 @@ decl_module! {
 			let account = Self::fund_account_id(index);
 
 			// Dissolver collects the deposit and any remaining funds
-			let _ = T::Currency::resolve_into_existing(&reporter, T::Currency::withdraw(
+			let _ = T::Currency::resolve_creating(&reporter, T::Currency::withdraw(
 				&account,
 				fund.deposit + fund.raised,
 				WithdrawReasons::from(WithdrawReason::Transfer),

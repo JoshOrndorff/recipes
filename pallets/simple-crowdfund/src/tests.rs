@@ -202,459 +202,110 @@ fn contribute_handles_basic_errors() {
 	});
 }
 
-// #[test]
-// fn fix_deploy_data_works() {
-// 	new_test_ext().execute_with(|| {
-// 		// Set up a crowdfund
-// 		assert_ok!(Crowdfund::create(Origin::signed(1), 1000, 1, 4, 9));
-// 		assert_eq!(Balances::free_balance(1), 999);
-//
-// 		// Add deploy data
-// 		assert_ok!(Crowdfund::fix_deploy_data(
-// 			Origin::signed(1),
-// 			0,
-// 			<Test as system::Trait>::Hash::default(),
-// 			0,
-// 			vec![0].into()
-// 		));
-//
-// 		let fund = Crowdfund::funds(0).unwrap();
-//
-// 		// Confirm deploy data is stored correctly
-// 		assert_eq!(
-// 			fund.deploy_data,
-// 			Some(DeployData {
-// 				code_hash: <Test as system::Trait>::Hash::default(),
-// 				code_size: 0,
-// 				initial_head_data: vec![0].into(),
-// 			}),
-// 		);
-// 	});
-// }
-//
-// #[test]
-// fn fix_deploy_data_handles_basic_errors() {
-// 	new_test_ext().execute_with(|| {
-// 		// Set up a crowdfund
-// 		assert_ok!(Crowdfund::create(Origin::signed(1), 1000, 1, 4, 9));
-// 		assert_eq!(Balances::free_balance(1), 999);
-//
-// 		// Cannot set deploy data by non-owner
-// 		assert_noop!(Crowdfund::fix_deploy_data(
-// 			Origin::signed(2),
-// 			0,
-// 			<Test as system::Trait>::Hash::default(),
-// 			0,
-// 			vec![0].into()),
-// 			Error::<Test>::InvalidOrigin
-// 		);
-//
-// 		// Cannot set deploy data to an invalid index
-// 		assert_noop!(Crowdfund::fix_deploy_data(
-// 			Origin::signed(1),
-// 			1,
-// 			<Test as system::Trait>::Hash::default(),
-// 			0,
-// 			vec![0].into()),
-// 			Error::<Test>::InvalidFundIndex
-// 		);
-//
-// 		// Cannot set deploy data after it already has been set
-// 		assert_ok!(Crowdfund::fix_deploy_data(
-// 			Origin::signed(1),
-// 			0,
-// 			<Test as system::Trait>::Hash::default(),
-// 			0,
-// 			vec![0].into(),
-// 		));
-//
-// 		assert_noop!(Crowdfund::fix_deploy_data(
-// 			Origin::signed(1),
-// 			0,
-// 			<Test as system::Trait>::Hash::default(),
-// 			0,
-// 			vec![1].into()),
-// 			Error::<Test>::ExistingDeployData
-// 		);
-// 	});
-// }
-//
-// #[test]
-// fn onboard_works() {
-// 	new_test_ext().execute_with(|| {
-// 		// Set up a crowdfund
-// 		assert_ok!(Slots::new_auction(Origin::ROOT, 5, 1));
-// 		assert_ok!(Crowdfund::create(Origin::signed(1), 1000, 1, 4, 9));
-// 		assert_eq!(Balances::free_balance(1), 999);
-//
-// 		// Add deploy data
-// 		assert_ok!(Crowdfund::fix_deploy_data(
-// 			Origin::signed(1),
-// 			0,
-// 			<Test as system::Trait>::Hash::default(),
-// 			0,
-// 			vec![0].into(),
-// 		));
-//
-// 		// Fund crowdfund
-// 		assert_ok!(Crowdfund::contribute(Origin::signed(2), 0, 1000));
-//
-// 		run_to_block(10);
-//
-// 		// Endings count incremented
-// 		assert_eq!(Crowdfund::endings_count(), 1);
-//
-// 		// Onboard crowdfund
-// 		assert_ok!(Crowdfund::onboard(Origin::signed(1), 0, 0.into()));
-//
-// 		let fund = Crowdfund::funds(0).unwrap();
-// 		// Crowdfund is now assigned a parachain id
-// 		assert_eq!(fund.parachain, Some(0.into()));
-// 		// This parachain is managed by Slots
-// 		assert_eq!(Slots::managed_ids(), vec![0.into()]);
-// 	});
-// }
-//
-// #[test]
-// fn onboard_handles_basic_errors() {
-// 	new_test_ext().execute_with(|| {
-// 		// Set up a crowdfund
-// 		assert_ok!(Slots::new_auction(Origin::ROOT, 5, 1));
-// 		assert_ok!(Crowdfund::create(Origin::signed(1), 1000, 1, 4, 9));
-// 		assert_eq!(Balances::free_balance(1), 999);
-//
-// 		// Fund crowdfund
-// 		assert_ok!(Crowdfund::contribute(Origin::signed(2), 0, 1000));
-//
-// 		run_to_block(10);
-//
-// 		// Cannot onboard invalid fund index
-// 		assert_noop!(Crowdfund::onboard(Origin::signed(1), 1, 0.into()), Error::<Test>::InvalidFundIndex);
-// 		// Cannot onboard crowdfund without deploy data
-// 		assert_noop!(Crowdfund::onboard(Origin::signed(1), 0, 0.into()), Error::<Test>::UnsetDeployData);
-//
-// 		// Add deploy data
-// 		assert_ok!(Crowdfund::fix_deploy_data(
-// 			Origin::signed(1),
-// 			0,
-// 			<Test as system::Trait>::Hash::default(),
-// 			0,
-// 			vec![0].into(),
-// 		));
-//
-// 		// Cannot onboard fund with incorrect parachain id
-// 		assert_noop!(Crowdfund::onboard(Origin::signed(1), 0, 1.into()), SlotsError::<Test>::ParaNotOnboarding);
-//
-// 		// Onboard crowdfund
-// 		assert_ok!(Crowdfund::onboard(Origin::signed(1), 0, 0.into()));
-//
-// 		// Cannot onboard fund again
-// 		assert_noop!(Crowdfund::onboard(Origin::signed(1), 0, 0.into()), Error::<Test>::AlreadyOnboard);
-// 	});
-// }
-//
-// #[test]
-// fn begin_retirement_works() {
-// 	new_test_ext().execute_with(|| {
-// 		// Set up a crowdfund
-// 		assert_ok!(Slots::new_auction(Origin::ROOT, 5, 1));
-// 		assert_ok!(Crowdfund::create(Origin::signed(1), 1000, 1, 4, 9));
-// 		assert_eq!(Balances::free_balance(1), 999);
-//
-// 		// Add deploy data
-// 		assert_ok!(Crowdfund::fix_deploy_data(
-// 			Origin::signed(1),
-// 			0,
-// 			<Test as system::Trait>::Hash::default(),
-// 			0,
-// 			vec![0].into(),
-// 		));
-//
-// 		// Fund crowdfund
-// 		assert_ok!(Crowdfund::contribute(Origin::signed(2), 0, 1000));
-//
-// 		run_to_block(10);
-//
-// 		// Onboard crowdfund
-// 		assert_ok!(Crowdfund::onboard(Origin::signed(1), 0, 0.into()));
-// 		// Fund is assigned a parachain id
-// 		let fund = Crowdfund::funds(0).unwrap();
-// 		assert_eq!(fund.parachain, Some(0.into()));
-//
-// 		// Off-boarding is set to the crowdfund account
-// 		assert_eq!(Slots::offboarding(ParaId::from(0)), Crowdfund::fund_account_id(0));
-//
-// 		run_to_block(50);
-//
-// 		// Retire crowdfund to remove parachain id
-// 		assert_ok!(Crowdfund::begin_retirement(Origin::signed(1), 0));
-//
-// 		// Fund should no longer have parachain id
-// 		let fund = Crowdfund::funds(0).unwrap();
-// 		assert_eq!(fund.parachain, None);
-//
-// 	});
-// }
-//
-// #[test]
-// fn begin_retirement_handles_basic_errors() {
-// 	new_test_ext().execute_with(|| {
-// 		// Set up a crowdfund
-// 		assert_ok!(Slots::new_auction(Origin::ROOT, 5, 1));
-// 		assert_ok!(Crowdfund::create(Origin::signed(1), 1000, 1, 4, 9));
-// 		assert_eq!(Balances::free_balance(1), 999);
-//
-// 		// Add deploy data
-// 		assert_ok!(Crowdfund::fix_deploy_data(
-// 			Origin::signed(1),
-// 			0,
-// 			<Test as system::Trait>::Hash::default(),
-// 			0,
-// 			vec![0].into(),
-// 		));
-//
-// 		// Fund crowdfund
-// 		assert_ok!(Crowdfund::contribute(Origin::signed(2), 0, 1000));
-//
-// 		run_to_block(10);
-//
-// 		// Cannot retire fund that is not onboarded
-// 		assert_noop!(Crowdfund::begin_retirement(Origin::signed(1), 0), Error::<Test>::NotParachain);
-//
-// 		// Onboard crowdfund
-// 		assert_ok!(Crowdfund::onboard(Origin::signed(1), 0, 0.into()));
-// 		// Fund is assigned a parachain id
-// 		let fund = Crowdfund::funds(0).unwrap();
-// 		assert_eq!(fund.parachain, Some(0.into()));
-//
-// 		// Cannot retire fund whose deposit has not been returned
-// 		assert_noop!(Crowdfund::begin_retirement(Origin::signed(1), 0), Error::<Test>::ParaHasDeposit);
-//
-// 		run_to_block(50);
-//
-// 		// Cannot retire invalid fund index
-// 		assert_noop!(Crowdfund::begin_retirement(Origin::signed(1), 1), Error::<Test>::InvalidFundIndex);
-//
-// 		// Cannot retire twice
-// 		assert_ok!(Crowdfund::begin_retirement(Origin::signed(1), 0));
-// 		assert_noop!(Crowdfund::begin_retirement(Origin::signed(1), 0), Error::<Test>::NotParachain);
-// 	});
-// }
-//
-// #[test]
-// fn withdraw_works() {
-// 	new_test_ext().execute_with(|| {
-// 		// Set up a crowdfund
-// 		assert_ok!(Slots::new_auction(Origin::ROOT, 5, 1));
-// 		assert_ok!(Crowdfund::create(Origin::signed(1), 1000, 1, 4, 9));
-// 		// Transfer fee is taken here
-// 		assert_ok!(Crowdfund::contribute(Origin::signed(1), 0, 100));
-// 		assert_ok!(Crowdfund::contribute(Origin::signed(2), 0, 200));
-// 		assert_ok!(Crowdfund::contribute(Origin::signed(3), 0, 300));
-//
-// 		// Skip all the way to the end
-// 		run_to_block(50);
-//
-// 		// User can withdraw their full balance without fees
-// 		assert_ok!(Crowdfund::withdraw(Origin::signed(1), 0));
-// 		assert_eq!(Balances::free_balance(1), 999);
-//
-// 		assert_ok!(Crowdfund::withdraw(Origin::signed(2), 0));
-// 		assert_eq!(Balances::free_balance(2), 2000);
-//
-// 		assert_ok!(Crowdfund::withdraw(Origin::signed(3), 0));
-// 		assert_eq!(Balances::free_balance(3), 3000);
-// 	});
-// }
-//
-// #[test]
-// fn withdraw_handles_basic_errors() {
-// 	new_test_ext().execute_with(|| {
-// 		// Set up a crowdfund
-// 		assert_ok!(Slots::new_auction(Origin::ROOT, 5, 1));
-// 		assert_ok!(Crowdfund::create(Origin::signed(1), 1000, 1, 4, 9));
-// 		// Transfer fee is taken here
-// 		assert_ok!(Crowdfund::contribute(Origin::signed(1), 0, 49));
-// 		assert_eq!(Balances::free_balance(1), 950);
-//
-// 		run_to_block(5);
-//
-// 		// Cannot withdraw before fund ends
-// 		assert_noop!(Crowdfund::withdraw(Origin::signed(1), 0), Error::<Test>::FundNotEnded);
-//
-// 		run_to_block(10);
-//
-// 		// Cannot withdraw if they did not contribute
-// 		assert_noop!(Crowdfund::withdraw(Origin::signed(2), 0), Error::<Test>::NoContributions);
-// 		// Cannot withdraw from a non-existent fund
-// 		assert_noop!(Crowdfund::withdraw(Origin::signed(1), 1), Error::<Test>::InvalidFundIndex);
-// 	});
-// }
-//
-// #[test]
-// fn dissolve_works() {
-// 	new_test_ext().execute_with(|| {
-// 		// Set up a crowdfund
-// 		assert_ok!(Slots::new_auction(Origin::ROOT, 5, 1));
-// 		assert_ok!(Crowdfund::create(Origin::signed(1), 1000, 1, 4, 9));
-// 		// Transfer fee is taken here
-// 		assert_ok!(Crowdfund::contribute(Origin::signed(1), 0, 100));
-// 		assert_ok!(Crowdfund::contribute(Origin::signed(2), 0, 200));
-// 		assert_ok!(Crowdfund::contribute(Origin::signed(3), 0, 300));
-//
-// 		// Skip all the way to the end
-// 		run_to_block(50);
-//
-// 		// Check initiator's balance.
-// 		assert_eq!(Balances::free_balance(1), 899);
-// 		// Check current funds (contributions + deposit)
-// 		assert_eq!(Balances::free_balance(Crowdfund::fund_account_id(0)), 601);
-//
-// 		// Dissolve the crowdfund
-// 		assert_ok!(Crowdfund::dissolve(Origin::signed(1), 0));
-//
-// 		// Fund account is emptied
-// 		assert_eq!(Balances::free_balance(Crowdfund::fund_account_id(0)), 0);
-// 		// Deposit is returned
-// 		assert_eq!(Balances::free_balance(1), 900);
-// 		// Treasury account is filled
-// 		assert_eq!(Balances::free_balance(Treasury::account_id()), 600);
-//
-// 		// Storage trie is removed
-// 		assert_eq!(Crowdfund::contribution_get(0,&0), 0);
-// 		// Fund storage is removed
-// 		assert_eq!(Crowdfund::funds(0), None);
-//
-// 	});
-// }
-//
-// #[test]
-// fn dissolve_handles_basic_errors() {
-// 	new_test_ext().execute_with(|| {
-// 		// Set up a crowdfund
-// 		assert_ok!(Slots::new_auction(Origin::ROOT, 5, 1));
-// 		assert_ok!(Crowdfund::create(Origin::signed(1), 1000, 1, 4, 9));
-// 		// Transfer fee is taken here
-// 		assert_ok!(Crowdfund::contribute(Origin::signed(1), 0, 100));
-// 		assert_ok!(Crowdfund::contribute(Origin::signed(2), 0, 200));
-// 		assert_ok!(Crowdfund::contribute(Origin::signed(3), 0, 300));
-//
-// 		// Cannot dissolve an invalid fund index
-// 		assert_noop!(Crowdfund::dissolve(Origin::signed(1), 1), Error::<Test>::InvalidFundIndex);
-// 		// Cannot dissolve a fund in progress
-// 		assert_noop!(Crowdfund::dissolve(Origin::signed(1), 0), Error::<Test>::InRetirementPeriod);
-//
-// 		run_to_block(10);
-//
-// 		// Onboard fund
-// 		assert_ok!(Crowdfund::fix_deploy_data(
-// 			Origin::signed(1),
-// 			0,
-// 			<Test as system::Trait>::Hash::default(),
-// 			0,
-// 			vec![0].into(),
-// 		));
-// 		assert_ok!(Crowdfund::onboard(Origin::signed(1), 0, 0.into()));
-//
-// 		// Cannot dissolve an active fund
-// 		assert_noop!(Crowdfund::dissolve(Origin::signed(1), 0), Error::<Test>::HasActiveParachain);
-// 	});
-// }
-//
-// #[test]
-// fn fund_before_auction_works() {
-// 	new_test_ext().execute_with(|| {
-// 		// Create a crowdfund before an auction is created
-// 		assert_ok!(Crowdfund::create(Origin::signed(1), 1000, 1, 4, 9));
-// 		// Users can already contribute
-// 		assert_ok!(Crowdfund::contribute(Origin::signed(1), 0, 49));
-// 		// Fund added to NewRaise
-// 		assert_eq!(Crowdfund::new_raise(), vec![0]);
-//
-// 		// Some blocks later...
-// 		run_to_block(2);
-// 		// Create an auction
-// 		assert_ok!(Slots::new_auction(Origin::ROOT, 5, 1));
-// 		// Add deploy data
-// 		assert_ok!(Crowdfund::fix_deploy_data(
-// 			Origin::signed(1),
-// 			0,
-// 			<Test as system::Trait>::Hash::default(),
-// 			0,
-// 			vec![0].into(),
-// 		));
-// 		// Move to the end of auction...
-// 		run_to_block(12);
-//
-// 		// Endings count incremented
-// 		assert_eq!(Crowdfund::endings_count(), 1);
-//
-// 		// Onboard crowdfund
-// 		assert_ok!(Crowdfund::onboard(Origin::signed(1), 0, 0.into()));
-//
-// 		let fund = Crowdfund::funds(0).unwrap();
-// 		// Crowdfund is now assigned a parachain id
-// 		assert_eq!(fund.parachain, Some(0.into()));
-// 		// This parachain is managed by Slots
-// 		assert_eq!(Slots::managed_ids(), vec![0.into()]);
-// 	});
-// }
-//
-// #[test]
-// fn fund_across_multiple_auctions_works() {
-// 	new_test_ext().execute_with(|| {
-// 		// Create an auction
-// 		assert_ok!(Slots::new_auction(Origin::ROOT, 5, 1));
-// 		// Create two competing crowdfunds, with end dates across multiple auctions
-// 		// Each crowdfund is competing for the same slots, so only one can win
-// 		assert_ok!(Crowdfund::create(Origin::signed(1), 1000, 1, 4, 30));
-// 		assert_ok!(Crowdfund::create(Origin::signed(2), 1000, 1, 4, 30));
-//
-// 		// Contribute to all, but more money to 0, less to 1
-// 		assert_ok!(Crowdfund::contribute(Origin::signed(1), 0, 300));
-// 		assert_ok!(Crowdfund::contribute(Origin::signed(1), 1, 200));
-//
-// 		// Add deploy data to all
-// 		assert_ok!(Crowdfund::fix_deploy_data(
-// 			Origin::signed(1),
-// 			0,
-// 			<Test as system::Trait>::Hash::default(),
-// 			0,
-// 			vec![0].into(),
-// 		));
-// 		assert_ok!(Crowdfund::fix_deploy_data(
-// 			Origin::signed(2),
-// 			1,
-// 			<Test as system::Trait>::Hash::default(),
-// 			0,
-// 			vec![0].into(),
-// 		));
-//
-// 		// End the current auction, fund 0 wins!
-// 		run_to_block(10);
-// 		assert_eq!(Crowdfund::endings_count(), 1);
-// 		// Onboard crowdfund
-// 		assert_ok!(Crowdfund::onboard(Origin::signed(1), 0, 0.into()));
-// 		let fund = Crowdfund::funds(0).unwrap();
-// 		// Crowdfund is now assigned a parachain id
-// 		assert_eq!(fund.parachain, Some(0.into()));
-// 		// This parachain is managed by Slots
-// 		assert_eq!(Slots::managed_ids(), vec![0.into()]);
-//
-// 		// Create a second auction
-// 		assert_ok!(Slots::new_auction(Origin::ROOT, 5, 1));
-// 		// Contribute to existing funds add to NewRaise
-// 		assert_ok!(Crowdfund::contribute(Origin::signed(1), 1, 10));
-//
-// 		// End the current auction, fund 1 wins!
-// 		run_to_block(20);
-// 		assert_eq!(Crowdfund::endings_count(), 2);
-// 		// Onboard crowdfund
-// 		assert_ok!(Crowdfund::onboard(Origin::signed(2), 1, 1.into()));
-// 		let fund = Crowdfund::funds(1).unwrap();
-// 		// Crowdfund is now assigned a parachain id
-// 		assert_eq!(fund.parachain, Some(1.into()));
-// 		// This parachain is managed by Slots
-// 		assert_eq!(Slots::managed_ids(), vec![0.into(), 1.into()]);
-// 	});
-// }
+#[test]
+fn withdraw_works() {
+	new_test_ext().execute_with(|| {
+		// Set up a crowdfund
+		assert_ok!(Crowdfund::create(Origin::signed(1), 2, 1000, 9));
+		// Transfer fees are taken here
+		assert_ok!(Crowdfund::contribute(Origin::signed(1), 0, 100));
+		assert_ok!(Crowdfund::contribute(Origin::signed(2), 0, 200));
+		assert_ok!(Crowdfund::contribute(Origin::signed(3), 0, 300));
+
+		// Skip all the way to the end
+		// Crowdfund is unsuccessful 100 + 200 + 300 < 1000
+		run_to_block(50);
+
+		// User can withdraw their full balance without fees
+		assert_ok!(Crowdfund::withdraw(Origin::signed(1), 0));
+		assert_eq!(Balances::free_balance(1), 999);
+
+		assert_ok!(Crowdfund::withdraw(Origin::signed(2), 0));
+		assert_eq!(Balances::free_balance(2), 2000);
+
+		assert_ok!(Crowdfund::withdraw(Origin::signed(3), 0));
+		assert_eq!(Balances::free_balance(3), 3000);
+	});
+}
+
+#[test]
+fn withdraw_handles_basic_errors() {
+	new_test_ext().execute_with(|| {
+		// Set up a crowdfund
+		assert_ok!(Crowdfund::create(Origin::signed(1), 2, 1000, 9));
+		// Transfer fee is taken here
+		assert_ok!(Crowdfund::contribute(Origin::signed(1), 0, 49));
+		assert_eq!(Balances::free_balance(1), 950);
+
+		run_to_block(5);
+
+		// Cannot withdraw before fund ends
+		assert_noop!(Crowdfund::withdraw(Origin::signed(1), 0), Error::<Test>::FundStillActive);
+
+		// Skip all the retirement period
+		// Crowdfund is unsuccessful 100 + 200 + 300 < 1000
+		run_to_block(10);
+
+		// Cannot withdraw if they did not contribute
+		assert_noop!(Crowdfund::withdraw(Origin::signed(2), 0), Error::<Test>::NoContribution);
+		// Cannot withdraw from a non-existent fund
+		assert_noop!(Crowdfund::withdraw(Origin::signed(1), 1), Error::<Test>::InvalidIndex);
+	});
+}
+
+#[test]
+fn dissolve_works() {
+	new_test_ext().execute_with(|| {
+		// Set up a crowdfund
+		assert_ok!(Crowdfund::create(Origin::signed(1), 2, 1000, 9));
+		// Transfer fee is taken here
+		assert_ok!(Crowdfund::contribute(Origin::signed(1), 0, 100));
+		assert_ok!(Crowdfund::contribute(Origin::signed(2), 0, 200));
+		assert_ok!(Crowdfund::contribute(Origin::signed(3), 0, 300));
+
+		// Skip all the way to the end
+		// Crowdfund is unsuccessful 100 + 200 + 300 < 1000
+		run_to_block(50);
+
+		// Check initiator's balance.
+		assert_eq!(Balances::free_balance(1), 899);
+		// Check current funds (contributions + deposit)
+		assert_eq!(Balances::free_balance(Crowdfund::fund_account_id(0)), 601);
+
+		// Account 7 dissolves the crowdfund claiming the remaining funds
+		assert_ok!(Crowdfund::dissolve(Origin::signed(7), 0));
+
+		// Fund account is emptied
+		assert_eq!(Balances::free_balance(Crowdfund::fund_account_id(0)), 0);
+		// Dissolver account is rewarded
+		assert_eq!(Balances::free_balance(7), 601);
+
+		// Storage trie is removed
+		assert_eq!(Crowdfund::contribution_get(0,&0), 0);
+		// Fund storage is removed
+		assert_eq!(Crowdfund::funds(0), None);
+
+	});
+}
+
+#[test]
+fn dissolve_handles_basic_errors() {
+	new_test_ext().execute_with(|| {
+		// Set up a crowdfund
+		assert_ok!(Crowdfund::create(Origin::signed(1), 2, 1000, 9));
+		// Transfer fee is taken here
+		assert_ok!(Crowdfund::contribute(Origin::signed(1), 0, 100));
+		assert_ok!(Crowdfund::contribute(Origin::signed(2), 0, 200));
+		assert_ok!(Crowdfund::contribute(Origin::signed(3), 0, 300));
+
+		// Cannot dissolve an invalid fund index
+		assert_noop!(Crowdfund::dissolve(Origin::signed(1), 1), Error::<Test>::InvalidIndex);
+		// Cannot dissolve an active fund
+		assert_noop!(Crowdfund::dissolve(Origin::signed(1), 0), Error::<Test>::FundNotRetired);
+
+		run_to_block(10);
+
+		// Cannot disolve an ended but not yet retired fund
+		assert_noop!(Crowdfund::dissolve(Origin::signed(1), 0), Error::<Test>::FundNotRetired);
+	});
+}
