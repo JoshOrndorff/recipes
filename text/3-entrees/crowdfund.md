@@ -2,15 +2,24 @@
 
 _[`pallets/simple-crowdfund`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-crowdfund)_
 
-This pallet demonstrates a simple on-chain crowdfunding app where participants can pool funds toward a common goal. It demonstrates a pallet that controls multiple token accounts, and storing data in [child storage](https://crates.parity.io/frame_support/storage/child/index.html).
+This pallet demonstrates a simple on-chain crowdfunding app where participants can pool funds toward
+a common goal. It demonstrates a pallet that controls multiple token accounts, and storing data in
+[child storage](https://crates.parity.io/frame_support/storage/child/index.html).
 
 ## Basic Usage
 
-Any user can start a crowdfund by specifying a goal amount for the crowdfund, an end time, and a beneficiary who will receive the pooled funds if the goal is reached by the end time. If the fund is not successful, it enters into a retirement period when contributors can reclaim their pledged funds. Finally, an unsuccessful fund can be dissolved, sending any remaining tokens to the user who dissolves it.
+Any user can start a crowdfund by specifying a goal amount for the crowdfund, an end time, and a
+beneficiary who will receive the pooled funds if the goal is reached by the end time. If the fund is
+not successful, it enters into a retirement period when contributors can reclaim their pledged
+funds. Finally, an unsuccessful fund can be dissolved, sending any remaining tokens to the user who
+dissolves it.
 
 ## Configuration Trait
 
-We begin by declaring our configuration trait. In addition to the ubiquitous `Event` type, our crowdfund pallet will depend on a notion of [`Currency`](https://crates.parity.io/frame_support/traits/trait.Currency.html), and three [configuration constants](./constants.md).
+We begin by declaring our configuration trait. In addition to the ubiquitous `Event` type, our
+crowdfund pallet will depend on a notion of
+[`Currency`](https://crates.parity.io/frame_support/traits/trait.Currency.html), and three
+[configuration constants](./constants.md).
 
 ```rust, ignore
 /// The pallet's configuration trait
@@ -55,7 +64,8 @@ pub struct FundInfo<AccountId, Balance, BlockNumber> {
 }
 ```
 
-In addition to this `FundInfo` struct, we also introduce an index type to track the number of funds that have ever been created and three convenience aliases.
+In addition to this `FundInfo` struct, we also introduce an index type to track the number of funds
+that have ever been created and three convenience aliases.
 
 ```rust, ignore
 pub type FundIndex = u32;
@@ -67,7 +77,8 @@ type FundInfoOf<T> = FundInfo<AccountIdOf<T>, BalanceOf<T>, <T as system::Trait>
 
 ## Storage
 
-The pallet has two storage items declared the usual way using `decl_storage!`. The first is the index that tracks the number of funds, and the second is mapping from index to `FundInfo`.
+The pallet has two storage items declared the usual way using `decl_storage!`. The first is the
+index that tracks the number of funds, and the second is mapping from index to `FundInfo`.
 
 ```rust, ignore
 decl_storage! {
@@ -85,9 +96,14 @@ decl_storage! {
 }
 ```
 
-This pallet also stores the data about which users have contributed and how many funds they contributed in a [child trie](https://crates.parity.io/frame_support/storage/child/index.html). This child trie is not explicitly declared anywhere.
+This pallet also stores the data about which users have contributed and how many funds they
+contributed in a [child trie](https://crates.parity.io/frame_support/storage/child/index.html). This
+child trie is not explicitly declared anywhere.
 
-The use of the child trie provides two advantages over using standard storage. First, it allows for removing the entirety of the trie is a single storage write when the fund is dispensed or dissolved. Second, it allows any contributor to prove that they contributed using a [Merkle Proof](https://medium.com/crypto-0-nite/merkle-proofs-explained-6dd429623dc5).
+The use of the child trie provides two advantages over using standard storage. First, it allows for
+removing the entirety of the trie is a single storage write when the fund is dispensed or dissolved.
+Second, it allows any contributor to prove that they contributed using a
+[Merkle Proof](https://medium.com/crypto-0-nite/merkle-proofs-explained-6dd429623dc5).
 
 ### Using the Child Trie API
 
@@ -120,7 +136,10 @@ pub fn crowdfund_kill(index: FundIndex) {
 }
 ```
 
-Because this pallet uses not just one child trie, but a trie for each active crowdfund, we need to generate a unique [`ChildInfo`](https://crates.parity.io/frame_support/storage/child/enum.ChildInfo.html) for each of them. To ensure that the ids are really unique, we incluce the `FundIndex` in the generation.
+Because this pallet uses not just one child trie, but a trie for each active crowdfund, we need to
+generate a unique
+[`ChildInfo`](https://crates.parity.io/frame_support/storage/child/enum.ChildInfo.html) for each of
+them. To ensure that the ids are really unique, we incluce the `FundIndex` in the generation.
 
 ```rust, ignore
 pub fn id_from_index(index: FundIndex) -> child::ChildInfo {
@@ -134,11 +153,18 @@ pub fn id_from_index(index: FundIndex) -> child::ChildInfo {
 
 ## Pallet Dispatchables
 
-The dispatchable functions in this pallet follow a standard flow of verifying preconditions, raising appropriate errors, mutating storage, and finally emitting events. We will not present them all in this writeup, but as always, you're encouraged to experiment with the recipe.
+The dispatchable functions in this pallet follow a standard flow of verifying preconditions, raising
+appropriate errors, mutating storage, and finally emitting events. We will not present them all in
+this writeup, but as always, you're encouraged to experiment with the recipe.
 
-We will look closely only at the `dispense` dispatchable which pays the funds to the beneficiary after a successful crowdfund. This dispatchable, as well as `dissolve`, use an incentivization scheme to encourage users of the chain to eliminate extra data as soon as possible.
+We will look closely only at the `dispense` dispatchable which pays the funds to the beneficiary
+after a successful crowdfund. This dispatchable, as well as `dissolve`, use an incentivization
+scheme to encourage users of the chain to eliminate extra data as soon as possible.
 
-Data from finished funds takes up space on chain, so it is best to settle the fund and cleanup the data as soon as possible. To incentivize this behavior, the pallet awards the initial deposit to whoever calls the `dispense` function. Users, in hopes of receiving this reward, will race to call these cleanup methods before each other.
+Data from finished funds takes up space on chain, so it is best to settle the fund and cleanup the
+data as soon as possible. To incentivize this behavior, the pallet awards the initial deposit to
+whoever calls the `dispense` function. Users, in hopes of receiving this reward, will race to call
+these cleanup methods before each other.
 
 ```rust, ignore
 /// Dispense a payment to the beneficiary of a successful crowdfund.
@@ -177,4 +203,7 @@ fn dispense(origin, index: FundIndex) {
 	)?);
 ```
 
-This pallet also uses Currency [`Imbalance`](https://crates.parity.io/frame_support/traits/trait.Imbalance.html)s as discussed in the [Charity](./charity.md) recipe, to make transfers without incurring transfer fees to the crowdfund pallet itself.
+This pallet also uses Currency
+[`Imbalance`](https://crates.parity.io/frame_support/traits/trait.Imbalance.html)s as discussed in
+the [Charity](./charity.md) recipe, to make transfers without incurring transfer fees to the
+crowdfund pallet itself.
