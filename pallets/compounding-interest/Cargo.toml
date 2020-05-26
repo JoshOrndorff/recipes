@@ -1,9 +1,21 @@
 [package]
 name = "compounding-interest"
-version = "2.0.0-alpha.7"
+version = "2.0.0-dev"
 authors = ["Joshy Orndorff"]
+repository = 'https://github.com/substrate-developer-hub/recipes'
 edition = "2018"
 license = "GPL-3.0-or-later"
+description = "A savings account that uses fixed point arithmetic to implement compounding interest"
+
+[package.metadata.substrate]
+categories = [
+	"pallet",
+	"tokens",
+	"accounts",
+	"tutorial",
+	"recipe",
+]
+compatibility_version = "2.0.0-dev"
 
 [features]
 default = ['std']

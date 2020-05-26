@@ -2,8 +2,19 @@
 name = "currency-imbalances"
 version = "2.0.0-alpha.7"
 authors = ["4meta5"]
+repository = 'https://github.com/substrate-developer-hub/recipes'
 edition = "2018"
 license = "GPL-3.0-or-later"
+description = "A pallet that demonstrates using currency imbalances"
+
+[package.metadata.substrate]
+categories = [
+	"pallet",
+	"tokens",
+	"tutorial",
+	"recipe",
+]
+compatibility_version = "2.0.0-dev"
 
 [features]
 default = ['std']

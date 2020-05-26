@@ -2,8 +2,18 @@
 name = "default-instance"
 version = "2.0.0-alpha.7"
 authors = ["Joshy"]
+repository = 'https://github.com/substrate-developer-hub/recipes'
 edition = "2018"
 license = "GPL-3.0-or-later"
+description = "An instantiable pallet featuring deafult instance"
+
+[package.metadata.substrate]
+categories = [
+	"pallet",
+	"tutorial",
+	"recipe",
+]
+compatibility_version = "2.0.0-dev"
 
 [features]
 default = ['std']

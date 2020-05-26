@@ -1,9 +1,21 @@
 [package]
 name = "ringbuffer-queue"
-version = "2.0.0-alpha.7"
+version = "2.0.0-dev"
 authors = ["apopiak"]
+repository = 'https://github.com/substrate-developer-hub/recipes'
 edition = "2018"
 license = "GPL-3.0-or-later"
+description = "A pallet that demonstrates a ringbuffer queue built on top of Substrate's storage"
+
+[package.metadata.substrate]
+categories = [
+	"pallet",
+	"transient storage adapter",
+	"ringbuffer",
+	"tutorial",
+	"recipe",
+]
+compatibility_version = "2.0.0-dev"
 
 [features]
 default = ['std']

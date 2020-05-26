@@ -1,9 +1,20 @@
 [package]
 name = "weights"
-version = "2.0.0-alpha.7"
+version = "2.0.0-dev"
 authors = ["Anonymous"]
+repository = 'https://github.com/substrate-developer-hub/recipes'
 edition = "2018"
 license = "GPL-3.0-or-later"
+description = "A pallet that demonstrates weight annotations on dispatchable calls"
+
+[package.metadata.substrate]
+categories = [
+	"pallet",
+	"weights",
+	"tutorial",
+	"recipe",
+]
+compatibility_version = "2.0.0-dev"
 
 [features]
 default = ['std']
