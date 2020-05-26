@@ -1,12 +1,20 @@
 [package]
 authors = ['Joshy Orndorff']
 edition = '2018'
-homepage = 'https://substrate.dev/recipes'
 name = 'basic-pow'
 repository = 'https://github.com/substrate-developer-hub/recipes'
-version = "2.0.0-alpha.7"
+version = "2.0.0-dev"
 description = 'A Substrate node that demonstrates minimal proof of work consensus'
 license = "GPL-3.0-or-later"
+
+[package.metadata.substrate]
+categories = [
+	"Node",
+	"PoW",
+	"tutorial",
+	"recipe",
+]
+compatibility_version = "2.0.0-dev"
 
 [[bin]]
 name = 'basic-pow'

@@ -1,9 +1,21 @@
 [package]
 name = "last-caller"
-version = "2.0.0-alpha.7"
+version = "2.0.0-dev"
 authors = ["Joshy"]
+repository = 'https://github.com/substrate-developer-hub/recipes'
 edition = "2018"
 license = "GPL-3.0-or-later"
+description = "An instantiable pallet that tracks the last account to call it"
+
+[package.metadata.substrate]
+categories = [
+	"pallet",
+	"instantiable",
+	"accounts",
+	"tutorial",
+	"recipe",
+]
+compatibility_version = "2.0.0-dev"
 
 [features]
 default = ['std']

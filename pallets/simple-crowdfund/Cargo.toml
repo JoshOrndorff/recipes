@@ -1,9 +1,20 @@
 [package]
 name = "simple-crowdfund"
-version = "2.0.0-alpha.8"
+version = "2.0.0-dev"
 authors = ["4meta5"]
+repository = 'https://github.com/substrate-developer-hub/recipes'
 edition = "2018"
 license = "GPL-3.0-or-later"
+description = "A pallet that implements a crowdfund and demonstrates using child storage tries"
+
+[package.metadata.substrate]
+categories = [
+	"pallet",
+	"child trie",
+	"tutorial",
+	"recipe",
+]
+compatibility_version = "2.0.0-dev"
 
 [features]
 default = ['std']

@@ -23,8 +23,4 @@ single value can be stored in runtime storage. In this section, we cover
 -   [storing sets, checking membership, and iteration](./sets-vecs-iteration.md)
 -   [efficient subgroup removal by key prefix with double maps](./double.md)
 -   [storing custom structs](./structs.md)
-
-_in-progress_
-
--   [cheap inclusion proofs with child tries](./childtries.md)
 -   [transient storage adapters by example of a ringbuffer queue](./ringbuffer.md)

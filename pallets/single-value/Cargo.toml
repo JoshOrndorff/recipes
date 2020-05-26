@@ -1,9 +1,19 @@
 [package]
 name = "single-value"
-version = "2.0.0-alpha.7"
+version = "2.0.0-dev"
+repository = 'https://github.com/substrate-developer-hub/recipes'
 authors = ["4meta5"]
 edition = "2018"
 license = "GPL-3.0-or-later"
+description = "A pallet that demonstrates storing values in Substrate storage"
+
+[package.metadata.substrate]
+categories = [
+	"pallet",
+	"tutorial",
+	"recipe",
+]
+compatibility_version = "2.0.0-dev"
 
 [features]
 default = ['std']

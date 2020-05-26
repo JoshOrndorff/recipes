@@ -1,11 +1,20 @@
 [package]
 name = "offchain-demo"
-version = "2.0.0-alpha.7"
+version = "2.0.0-dev"
 authors = ["Parity Technologies <admin@parity.io>"]
 edition = "2018"
-homepage = "https://substrate.dev/recipes/"
 repository = "https://github.com/substrate-developer-hub/recipes/"
 license = "GPL-3.0-or-later"
+description = "A pallet that demonstrates many aspects of offchain workers"
+
+[package.metadata.substrate]
+categories = [
+	"pallet",
+	"offchain worker",
+	"tutorial",
+	"recipe",
+]
+compatibility_version = "2.0.0-dev"
 
 [dependencies]
 # external dependencies
