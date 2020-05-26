@@ -181,7 +181,7 @@ intended for. To do this, it uses a technique known as a pre-runtime digest. It 
 The BABE authorship task automatically inserts these digest items in each block it authors.
 
 Because the runtime needs to interpret these pre-runtime digests, they are not optional. That means
-runtimes that expect the pre-digests _require_ the pre-digests, and cannot be used in nodes that
-don't provide them. This limits the reusability of runtimes. Unlike the rest of the Recipes where
-runtimes can be freely swapped between nodes, the `babe-grandpa-runtime` can _only_ be used in a
-node that provides the proper pre-runtime digests.
+runtimes that expect the pre-digests require the pre-digests, and cannot be used unmodified in nodes
+that don't provide the pre-digests. Unlike other runtimes in the Recipes where runtimes can be
+freely swapped between nodes, the babe-grandpa-runtime can only be used in a node that is actually
+running BABE
