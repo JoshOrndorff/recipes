@@ -304,6 +304,20 @@ impl randomness::Trait for Runtime {
 	type BabeRandomnessSource = RandomnessCollectiveFlip;
 }
 
+parameter_types! {
+	pub const SubmissionDeposit: u128 = 10;
+	pub const MinContribution: u128 = 10;
+	pub const RetirementPeriod: u32 = 10;
+}
+
+impl simple_crowdfund::Trait for Runtime {
+	type Event = Event;
+	type Currency = Balances;
+	type SubmissionDeposit = SubmissionDeposit;
+	type MinContribution = MinContribution;
+	type RetirementPeriod = RetirementPeriod;
+}
+
 impl simple_event::Trait for Runtime {
 	type Event = Event;
 }
@@ -358,6 +372,7 @@ construct_runtime!(
 		LastCaller2: last_caller::<Instance2>::{Module, Call, Storage, Event<T>},
 		RingbufferQueue: ringbuffer_queue::{Module, Call, Storage, Event<T>},
 		RandomnessDemo: randomness::{Module, Call, Storage, Event},
+		SimpleCrowdfund: simple_crowdfund::{Module, Call, Storage, Event<T>},
 		SimpleEvent: simple_event::{Module, Call, Event},
 		SimpleMap: simple_map::{Module, Call, Storage, Event<T>},
 		SingleValue: single_value::{Module, Call, Storage},

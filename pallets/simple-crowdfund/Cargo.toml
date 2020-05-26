@@ -1,6 +1,6 @@
 [package]
 name = "simple-crowdfund"
-version = "2.0.0-alpha.7"
+version = "2.0.0-alpha.8"
 authors = ["4meta5"]
 edition = "2018"
 license = "GPL-3.0-or-later"
@@ -9,11 +9,11 @@ license = "GPL-3.0-or-later"
 default = ['std']
 std = [
     'parity-scale-codec/std',
-    'support/std',
-    'system/std',
+    'frame-support/std',
+    'frame-system/std',
     'balances/std',
     'sp-runtime/std',
-    'rstd/std',
+    'sp-std/std',
     'sp-core/std',
     'sp-storage/std',
 ]
@@ -27,3 +27,7 @@ sp-storage = { version = '2.0.0-dev', git = 'https://github.com/paritytech/subst
 balances = { package = 'pallet-balances', version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '12e08fd25455053e3cedc8b19beb7e77330a5713', default-features = false }
 sp-std = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '12e08fd25455053e3cedc8b19beb7e77330a5713', default-features = false }
 sp-core = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '12e08fd25455053e3cedc8b19beb7e77330a5713', default-features = false }
+
+[dev-dependencies]
+sp-core = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '12e08fd25455053e3cedc8b19beb7e77330a5713', default-features = false }
+sp-io = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '12e08fd25455053e3cedc8b19beb7e77330a5713', default-features = false }

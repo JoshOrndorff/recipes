@@ -24,6 +24,7 @@ const pallets = [
   "randomness",
   "ringbuffer-queue",
   "randomness",
+  "simple-crowdfund",
   "simple-event",
   "simple-map",
   "single-value",
