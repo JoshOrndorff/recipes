@@ -7,7 +7,9 @@ This recipe demonstrates a Substrate-based node that employs hybrid consensus. S
 [deterministic finality](https://www.substrate.io/kb/advanced/consensus#finality). The minimal proof
 of work consensus lives entirely outside of the runtime while the grandpa finality obtains its
 authorities from the runtime via the
-[GrandpaAPI](https://crates.parity.io/sp_finality_grandpa/trait.GrandpaApi.html)
+[GrandpaAPI](https://crates.parity.io/sp_finality_grandpa/trait.GrandpaApi.html). Understanding this
+recipe requires familiarity with Substrate's
+[block import pipeline](https://www.substrate.io/kb/advanced/block-import).
 
 ## The Block Import Pipeline
 

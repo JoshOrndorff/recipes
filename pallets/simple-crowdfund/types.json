@@ -1,1 +1,13 @@
-{}
+{
+	"AccountIdOf": "AccountId",
+	"BalanceOf": "Balance",
+	"FundInfoOf": "FundInfo",
+	"FundInfo": {
+		"beneficiary": "AccountId",
+		"deposit": "Balance",
+		"raised": "Balance",
+		"end": "BlockNumber",
+		"goal": "Balance"
+	},
+	"FundIndex": "u32"
+}
