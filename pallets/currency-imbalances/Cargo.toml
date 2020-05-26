@@ -1,6 +1,6 @@
 [package]
 name = "currency-imbalances"
-version = "2.0.0-alpha.7"
+version = "2.0.0-dev"
 authors = ["4meta5"]
 repository = 'https://github.com/substrate-developer-hub/recipes'
 edition = "2018"

@@ -87,15 +87,13 @@ without the UI.
 
 ### The Cargo Dependencies
 
-Installing the instant seal engine has two dependencies whereas the runtime had only one.
+Installing the instant seal engine has three dependencies whereas the runtime had only one.
 
 ```toml
-sp-consensus = '0.8.0-alpha.7'
-sc-consensus-manual-seal = '0.8.0-alpha.7'
+sc-consensus = { version = '0.8.0-dev', git = 'https://github.com/paritytech/substrate', rev = '12e08fd25455053e3cedc8b19beb7e77330a5713' }
+sc-consensus-manual-seal = { version = '0.8.0-dev', git = 'https://github.com/paritytech/substrate', rev = '12e08fd25455053e3cedc8b19beb7e77330a5713' }
+sp-consensus = { version = '0.8.0-dev', git = 'https://github.com/paritytech/substrate', rev = '12e08fd25455053e3cedc8b19beb7e77330a5713' }
 ```
-
-The dependency on `sc-client-db` will become unnecessary once
-[issue #238](https://github.com/substrate-developer-hub/recipes/pull/238) is merged.
 
 ### The Proposer
 
