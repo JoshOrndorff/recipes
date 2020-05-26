@@ -1,10 +1,10 @@
-# Babe and Grandpa Node
+# BABE and GRANDPA Node
 
 _[`nodes/babe-grandpa-node`](https://github.com/substrate-developer-hub/recipes/tree/master/nodes/babe-grandpa-node)_
 
-The `babe-grandpa-node` uses the [Babe](https://crates.parity.io/sc_consensus_babe/index.html) Proof
+The `babe-grandpa-node` uses the [BABE](https://crates.parity.io/sc_consensus_babe/index.html) Proof
 of Authority consensus engine to determine who may author blocks, and the
-[Grandpa](https://crates.parity.io/sc_finality_grandpa/index.html) finality gadget to provide
+[GRANDPA](https://crates.parity.io/sc_finality_grandpa/index.html) finality gadget to provide
 [deterministic finality](https://www.substrate.io/kb/advanced/consensus#finality) to past blocks.
 This is the same design used in Polkadot. Understanding this recipe requires familiarity with
 Substrate's [block import pipeline](https://www.substrate.io/kb/advanced/block-import).
@@ -24,10 +24,10 @@ will wrap the client with a
 and wrap that with a
 [`BabeBlockImport`](https://crates.parity.io/sc_consensus_babe/struct.BabeBlockImport.html).
 
-We begin by creating the block import for grandpa. In addition to the block import itself, we get
+We begin by creating the block import for GRANDPA. In addition to the block import itself, we get
 back a `grandpa_link`. This link is a channel over which the block import can communicate with the
-background task that actually casts grandpa votes. The
-[details of the grandpa protocol](https://research.web3.foundation/en/latest/polkadot/GRANDPA.html)
+background task that actually casts GRANDPA votes. The
+[details of the GRANDPA protocol](https://research.web3.foundation/en/latest/polkadot/GRANDPA.html)
 are beyond the scope of this recipe.
 
 ```rust, ignore
@@ -45,8 +45,8 @@ right after constructing it.
 let justification_import = grandpa_block_import.clone();
 ```
 
-With the grandpa block import created, we can now create the Babe block import. The Babe block
-import is the outer-most layer of the block import onion and it wraps the grandpa block import.
+With the GRANDPA block import created, we can now create the BABE block import. The BABE block
+import is the outer-most layer of the block import onion and it wraps the GRANDPA block import.
 
 ```rust, ignore
 let (babe_block_import, babe_link) = sc_consensus_babe::block_import(
@@ -56,15 +56,15 @@ let (babe_block_import, babe_link) = sc_consensus_babe::block_import(
 )?;
 ```
 
-Again we are given back a babe link which will be used to communicate with the import queue and
+Again we are given back a BABE link which will be used to communicate with the import queue and
 background authoring worker.
 
 ## The Import Queue
 
 With the block import pipeline setup, we can proceed to creating the import queue which will feed
-blocks from the network into the import pipeline. We make it using Babe's `import_queue` helper
-function. Notice that it requires the babe link, and the entire block import pipeline which we refer
-to as `babe_block_import` because Babe is the outermost layer.
+blocks from the network into the import pipeline. We make it using BABE's `import_queue` helper
+function. Notice that it requires the BABE link, and the entire block import pipeline which we refer
+to as `babe_block_import` because BABE is the outermost layer.
 
 ```rust, ignore
 let import_queue = sc_consensus_babe::import_queue(
@@ -90,9 +90,9 @@ provider.
 })?
 ```
 
-## Spawning the Babe Authorship Task
+## Spawning the BABE Authorship Task
 
-Any node that is acting as an authority and participating in Babe consensus, must run an `async`
+Any node that is acting as an authority and participating in BABE consensus, must run an `async`
 authorship task. We begin by creating an instance of
 [`BabeParams`](https://crates.parity.io/sc_consensus_babe/struct.BabeParams.html).
 
@@ -118,10 +118,10 @@ let babe = sc_consensus_babe::start_babe(babe_config)?;
 service.spawn_essential_task("babe", babe);
 ```
 
-## Spawning the Grandpa Task
+## Spawning the GRANDPA Task
 
-Just as we needed an `async` worker to author blocks with Babe, we need an `async` worker to listen
-to and cast grandpa votes. Again, we begin by creating an instance of
+Just as we needed an `async` worker to author blocks with BABE, we need an `async` worker to listen
+to and cast GRANDPA votes. Again, we begin by creating an instance of
 [`GrandpaParams`](https://crates.parity.io/sc_finality_grandpa/struct.GrandpaParams.html)
 
 ```rust, ignore
@@ -145,12 +145,12 @@ service.spawn_essential_task(
 );
 ```
 
-### Disabled Grandpa
+### Disabled GRANDPA
 
-Proof of Authority networks generally contain many full nodes that are not authorities. When Grandpa
-is present in the network, we still need to tell the node how to interpret grandpa-related messages
+Proof of Authority networks generally contain many full nodes that are not authorities. When GRANDPA
+is present in the network, we still need to tell the node how to interpret GRANDPA-related messages
 it may receive (just ignore them) and ensure that the correct inherents are still included in blocks
-in the case that the node _is_ an authority in Babe but not Grandpa.
+in the case that the node _is_ an authority in BABE but not GRANDPA.
 
 ```rust, ignore
 sc_finality_grandpa::setup_disabled_grandpa(
@@ -164,7 +164,7 @@ sc_finality_grandpa::setup_disabled_grandpa(
 
 ### Runtime APIs
 
-Both Babe and Grandpa rely on getting their authority sets from the runtime via the
+Both BABE and GRANDPA rely on getting their authority sets from the runtime via the
 [BabeAPI](https://crates.parity.io/sc_consensus_babe/trait.BabeApi.html) and the
 [GrandpaAPI](https://crates.parity.io/sp_finality_grandpa/trait.GrandpaApi.html). So trying to build
 this node with a runtime that does not provide these APIs will fail to compile.
@@ -178,7 +178,7 @@ Because BABE is a slot-based consensus engine, it must inform the runtime which 
 intended for. To do this, it uses a technique known as a pre-runtime digest. It has two kinds,
 [`PrimaryPreDigest`](https://crates.parity.io/sc_consensus_babe/struct.PrimaryPreDigest.html) and
 [`SecondaryPlainPreDigest`](https://crates.parity.io/sc_consensus_babe/struct.SecondaryPlainPreDigest.html).
-The Babe authorship task automatically inserts these digest items in each block it authors.
+The BABE authorship task automatically inserts these digest items in each block it authors.
 
 Because the runtime needs to interpret these pre-runtime digests, they are not optional. That means
 runtimes that expect the pre-digests _require_ the pre-digests, and cannot be used in nodes that
