@@ -2,12 +2,20 @@
 authors = ['Seun LanLege', 'Joshy Orndorff']
 build = 'build.rs'
 edition = '2018'
-homepage = 'https://substrate.dev'
 name = 'manual-seal'
 repository = 'https://github.com/paritytech/substrate/'
 version = '2.0.0-alpha.7'
 description = 'A Substrate-based node that uses the instant-seal and manual-seal consensus engines'
 license = "GPL-3.0-or-later"
+
+[package.metadata.substrate]
+categories = [
+	"Node",
+	"Manual Seal",
+	"tutorial",
+	"recipe",
+]
+compatibility_version = "2.0.0-dev"
 
 [[bin]]
 name = 'manual-seal'
