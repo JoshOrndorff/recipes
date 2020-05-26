@@ -6,7 +6,7 @@ edition = "2018"
 license = "GPL-3.0-or-later"
 
 [dependencies]
-sp-api = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '12e08fd25455053e3cedc8b19beb7e77330a5713', default-features = false}
+sp-api = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d', default-features = false}
 
 [dev-dependencies]
 serde_json = "1.0.41"
