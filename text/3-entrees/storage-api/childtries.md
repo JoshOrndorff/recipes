@@ -1,18 +1,28 @@
 # Child Tries
-*[`pallets/child-trie`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/child-trie)*, *[`pallets/simple-crowdfund`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-crowdfund)*
 
-* [Runtime Child Storage](#storj)
-* [Crowdfund Example](#smplcrwd)
+_[`pallets/child-trie`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/child-trie)_,
+_[`pallets/simple-crowdfund`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-crowdfund)_
 
-A [trie](https://en.wikipedia.org/wiki/Trie) is an ordered tree structure for managing dynamic sets. For any given parent node, all descendants (children) share a common prefix associated with the parent.
+-   [Runtime Child Storage](#storj)
+-   [Crowdfund Example](#smplcrwd)
 
-This construction lends itself to efficient removal of subgroups of a dataset (similar to [`double_map`](./double.md)). By associating a common prefix with related data, the dataset can be partitioned to effectively batch deletions.
+A [trie](https://en.wikipedia.org/wiki/Trie) is an ordered tree structure for managing dynamic sets.
+For any given parent node, all descendants (children) share a common prefix associated with the
+parent.
 
-Every change in the leaves percolates up to the root, thereby providing a complete, succinct history of all changes to the underlying data structure in the form of the trie root hash.
+This construction lends itself to efficient removal of subgroups of a dataset (similar to
+[`double_map`](./double.md)). By associating a common prefix with related data, the dataset can be
+partitioned to effectively batch deletions.
+
+Every change in the leaves percolates up to the root, thereby providing a complete, succinct history
+of all changes to the underlying data structure in the form of the trie root hash.
 
 ## Runtime Child Storage <a name = "storj"></a>
 
-To interact with child tries, there are methods exposed in [runtime child storage](https://substrate.dev/rustdocs/master/frame_support/storage/child/index.html). Of the methods listed in the documentation, it is worth emphasizing the method associated with batch deletion.
+To interact with child tries, there are methods exposed in
+[runtime child storage](https://crates.parity.io/frame_support/storage/child/index.html). Of the
+methods listed in the documentation, it is worth emphasizing the method associated with batch
+deletion.
 
 ```rust, ignore
 pub fn kill_trie(index: ObjectCount) {
@@ -24,7 +34,9 @@ pub fn kill_trie(index: ObjectCount) {
 }
 ```
 
-[`kill_storage`](https://substrate.dev/rustdocs/master/frame_support/storage/child/fn.kill_storage.html) deletes all  `(key, value)` pairs associated with the `storage_key`. The basic API for interacting with a given child trie follows this format:
+[`kill_storage`](https://crates.parity.io/frame_support/storage/child/fn.kill_storage.html) deletes
+all `(key, value)` pairs associated with the `storage_key`. The basic API for interacting with a
+given child trie follows this format:
 
 ```rust, ignore
 // pseudocode
@@ -45,7 +57,12 @@ pub fn kv_put(index: ObjectCount, who: &T::AccountId, value_to_put: ValAppended)
 }
 ```
 
-The code in [`pallets/child-trie`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/child-trie) demonstrates a minimal way of organizing the basic child-trie api methods (as done in [`polkadot/runtime/crowdfund`](https://github.com/paritytech/polkadot/blob/c003d73c65cdcc0367340db09522c91d1d3851fc/runtime/common/src/crowdfund.rs)). It separates out the generation of the child trie id from the index with a runtime method `id_from_index`.
+The code in
+[`pallets/child-trie`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/child-trie)
+demonstrates a minimal way of organizing the basic child-trie api methods (as done in
+[`polkadot/runtime/crowdfund`](https://github.com/paritytech/polkadot/blob/c003d73c65cdcc0367340db09522c91d1d3851fc/runtime/common/src/crowdfund.rs)).
+It separates out the generation of the child trie id from the index with a runtime method
+`id_from_index`.
 
 ```rust, ignore
 pub fn id_from_index(index: ObjectCount) -> Vec<u8> {
@@ -65,15 +82,23 @@ pub fn id_from_index(index: ObjectCount) -> Vec<u8> {
 This results in less code for each method.
 
 ## smpl-crowdfund <a name = "smplcrwd"></a>
-*[`pallets/simple-crowdfund`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-crowdfund)*
 
-Child tries are useful for batch deletion of `(key, value)` pairs associated with a specific `trie_id`. This is relevant to the [polkadot/crowdfund](https://github.com/paritytech/polkadot/blob/master/runtime/common/src/crowdfund.rs) pallet, which tracks `(AccountId, BalanceOf<T>)` associated with a specific crowdfund. `BalanceOf<T>` represents the contributions of an `AccountId`. The identifier for each crowdfund is defined
+_[`pallets/simple-crowdfund`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-crowdfund)_
+
+Child tries are useful for batch deletion of `(key, value)` pairs associated with a specific
+`trie_id`. This is relevant to the
+[polkadot/crowdfund](https://github.com/paritytech/polkadot/blob/master/runtime/common/src/crowdfund.rs)
+pallet, which tracks `(AccountId, BalanceOf<T>)` associated with a specific crowdfund.
+`BalanceOf<T>` represents the contributions of an `AccountId`. The identifier for each crowdfund is
+defined
 
 ```rust, ignore
 type FundIndex = u32
 ```
 
-With these three types, this storage item effectively manages `(FundIndex, AccountId, BalanceOf<T>)`. By maintaining a separate `child` for every `FundIndex`, this api allows for efficient batch deletions when crowdfunds are ended and dissolved.
+With these three types, this storage item effectively manages
+`(FundIndex, AccountId, BalanceOf<T>)`. By maintaining a separate `child` for every `FundIndex`,
+this api allows for efficient batch deletions when crowdfunds are ended and dissolved.
 
 ```rust, ignore
 // polkadot/runtime/crowdfund
@@ -83,8 +108,12 @@ pub fn crowdfund_kill(index: FundIndex) {
 }
 ```
 
-The child trie api is useful when data associated with an identifier needs to be isolated to facilitate efficient batch removal. In this case, all the information associated with a given crowdfund should be removed when the crowdfund is dissolved.
+The child trie api is useful when data associated with an identifier needs to be isolated to
+facilitate efficient batch removal. In this case, all the information associated with a given
+crowdfund should be removed when the crowdfund is dissolved.
 
 ### caveat coder
 
-Each individual call to read/write to the child trie is more expensive than it would be for `map` or `double_map`. This cost is poorly amortized over a large number of calls, but can be significantly reduced by following a proper batch execution strategy.
+Each individual call to read/write to the child trie is more expensive than it would be for `map` or
+`double_map`. This cost is poorly amortized over a large number of calls, but can be significantly
+reduced by following a proper batch execution strategy.

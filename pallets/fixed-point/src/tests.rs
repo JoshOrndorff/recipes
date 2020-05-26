@@ -1,5 +1,8 @@
 use super::Event;
-use crate::{Module, Trait, Error};
+use crate::{Error, Module, Trait};
+use frame_support::{assert_noop, assert_ok, impl_outer_event, impl_outer_origin, parameter_types};
+use frame_system::{self as system, EventRecord, Phase};
+use sp_arithmetic::Permill;
 use sp_core::H256;
 use sp_io::TestExternalities;
 use sp_runtime::{
@@ -7,9 +10,6 @@ use sp_runtime::{
 	traits::{BlakeTwo256, IdentityLookup},
 	Perbill,
 };
-use sp_arithmetic::Permill;
-use frame_support::{assert_ok, assert_noop, impl_outer_event, impl_outer_origin, parameter_types};
-use frame_system::{self as system, EventRecord, Phase};
 use substrate_fixed::types::U16F16;
 
 impl_outer_origin! {
@@ -38,6 +38,9 @@ impl system::Trait for TestRuntime {
 	type Event = TestEvent;
 	type BlockHashCount = BlockHashCount;
 	type MaximumBlockWeight = MaximumBlockWeight;
+	type DbWeight = ();
+	type BlockExecutionWeight = ();
+	type ExtrinsicBaseWeight = ();
 	type MaximumBlockLength = MaximumBlockLength;
 	type AvailableBlockRatio = AvailableBlockRatio;
 	type Version = ();
@@ -91,9 +94,9 @@ fn all_accumulators_start_at_one() {
 fn manual_impl_works() {
 	ExtBuilder::build().execute_with(|| {
 		// Setup some constants
-		let one : u32 = 1 << 16;
-		let half : u32 = one / 2;
-		let quarter : u32 = half / 2;
+		let one: u32 = 1 << 16;
+		let half: u32 = one / 2;
+		let quarter: u32 = half / 2;
 
 		// Multiply by half
 		assert_ok!(FixedPoint::update_manual(Origin::signed(1), half));
@@ -108,38 +111,34 @@ fn manual_impl_works() {
 		assert_eq!(FixedPoint::manual_value(), quarter);
 
 		// Check for the correct events
-		assert_eq!(System::events(), vec![
-			EventRecord {
-				phase: Phase::Initialization,
-				event: TestEvent::fixed_point(Event::ManualUpdated(
-					half,
-					half,
-				)),
-				topics: vec![],
-			},
-			EventRecord {
-				phase: Phase::Initialization,
-				event: TestEvent::fixed_point(Event::ManualUpdated(
-					half,
-					quarter,
-				)),
-				topics: vec![],
-			},
-		]);
+		assert_eq!(
+			System::events(),
+			vec![
+				EventRecord {
+					phase: Phase::Initialization,
+					event: TestEvent::fixed_point(Event::ManualUpdated(half, half,)),
+					topics: vec![],
+				},
+				EventRecord {
+					phase: Phase::Initialization,
+					event: TestEvent::fixed_point(Event::ManualUpdated(half, quarter,)),
+					topics: vec![],
+				},
+			]
+		);
 	})
 }
 
 #[test]
 fn manual_impl_overflows() {
 	ExtBuilder::build().execute_with(|| {
-
 		// Although 2^17 is able to fit in a u32, we're using our u32s in a weird way where
 		// only the first 16 bits represent integer positions, and the remaining 16 bits
 		// represent fractional positions. 2^17 cannot fit in the 16 available integer
 		// positions, thus we expect this to overflow.
 
 		// Setup some constants
-		let one : u32 = 1 << 16;
+		let one: u32 = 1 << 16;
 
 		// Multiply by 2 ^ 10
 		assert_ok!(FixedPoint::update_manual(Origin::signed(1), one << 10));
@@ -172,24 +171,21 @@ fn permill_impl_works() {
 		assert_eq!(FixedPoint::permill_value(), quarter);
 
 		// Check for the correct events
-		assert_eq!(System::events(), vec![
-			EventRecord {
-				phase: Phase::Initialization,
-				event: TestEvent::fixed_point(Event::PermillUpdated(
-					half,
-					half,
-				)),
-				topics: vec![],
-			},
-			EventRecord {
-				phase: Phase::Initialization,
-				event: TestEvent::fixed_point(Event::PermillUpdated(
-					half,
-					quarter,
-				)),
-				topics: vec![],
-			},
-		]);
+		assert_eq!(
+			System::events(),
+			vec![
+				EventRecord {
+					phase: Phase::Initialization,
+					event: TestEvent::fixed_point(Event::PermillUpdated(half, half,)),
+					topics: vec![],
+				},
+				EventRecord {
+					phase: Phase::Initialization,
+					event: TestEvent::fixed_point(Event::PermillUpdated(half, quarter,)),
+					topics: vec![],
+				},
+			]
+		);
 	})
 }
 
@@ -218,36 +214,35 @@ fn fixed_impl_works() {
 		assert_eq!(FixedPoint::fixed_value(), quarter);
 
 		// Check for the correct events
-		assert_eq!(System::events(), vec![
-			EventRecord {
-				phase: Phase::Initialization,
-				event: TestEvent::fixed_point(Event::FixedUpdated(
-					half,
-					half,
-				)),
-				topics: vec![],
-			},
-			EventRecord {
-				phase: Phase::Initialization,
-				event: TestEvent::fixed_point(Event::FixedUpdated(
-					half,
-					quarter,
-				)),
-				topics: vec![],
-			},
-		]);
+		assert_eq!(
+			System::events(),
+			vec![
+				EventRecord {
+					phase: Phase::Initialization,
+					event: TestEvent::fixed_point(Event::FixedUpdated(half, half,)),
+					topics: vec![],
+				},
+				EventRecord {
+					phase: Phase::Initialization,
+					event: TestEvent::fixed_point(Event::FixedUpdated(half, quarter,)),
+					topics: vec![],
+				},
+			]
+		);
 	})
 }
 
 #[test]
 fn fixed_impl_overflows() {
 	ExtBuilder::build().execute_with(|| {
-
 		// U16F16 has 16 bits of integer storage, so just like with our manual
 		// implementation, a value of 2 ^ 17 will cause overflow.
 
 		// Multiply by 2 ^ 10
-		assert_ok!(FixedPoint::update_fixed(Origin::signed(1), U16F16::from_num(1 << 10)));
+		assert_ok!(FixedPoint::update_fixed(
+			Origin::signed(1),
+			U16F16::from_num(1 << 10)
+		));
 
 		// Multiple by an additional 2 ^  7 which should cause the overflow
 		assert_noop!(

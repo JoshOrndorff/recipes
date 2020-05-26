@@ -8,27 +8,22 @@
 //! Funds can only be allocated by a root call to the `allocate` extrinsic/
 #![cfg_attr(not(feature = "std"), no_std)]
 
+use sp_runtime::{traits::AccountIdConversion, ModuleId};
 use sp_std::prelude::*;
-use sp_runtime::{
-	traits::{AccountIdConversion},
-	ModuleId,
-};
 
 use frame_support::{
-	decl_event,
-	decl_module,
-	decl_storage,
-	dispatch::{DispatchResult, DispatchError},
-	traits::{Currency, ExistenceRequirement::AllowDeath, OnUnbalanced, Imbalance},
-	weights::SimpleDispatchInfo,
+	decl_event, decl_module, decl_storage,
+	dispatch::{DispatchError, DispatchResult},
+	traits::{Currency, ExistenceRequirement::AllowDeath, Imbalance, OnUnbalanced},
 };
-use frame_system::{self as system, ensure_signed, ensure_root};
+use frame_system::{self as system, ensure_root, ensure_signed};
 
 #[cfg(test)]
 mod tests;
 
 type BalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::Balance;
-type NegativeImbalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::NegativeImbalance;
+type NegativeImbalanceOf<T> =
+	<<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::NegativeImbalance;
 
 /// Hardcoded pallet ID; used to create the special Pot Account
 /// Must be exactly 8 characters long
@@ -78,7 +73,7 @@ decl_module! {
 		fn deposit_event() = default;
 
 		/// Donate some funds to the charity
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		fn donate(
 			origin,
 			amount: BalanceOf<T>
@@ -96,7 +91,7 @@ decl_module! {
 		///
 		/// Take funds from the Charity's pot and send them somewhere. This call requires root origin,
 		/// which means it must come from a governance mechanism such as Substrate's Democracy pallet.
-		#[weight = SimpleDispatchInfo::default()]
+		#[weight = 10_000]
 		fn allocate(
 			origin,
 			dest: T::AccountId,

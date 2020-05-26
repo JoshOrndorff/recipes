@@ -11,3 +11,4 @@ runtimes/*/Cargo.lock
 
 # Javascript snippets burried in the code
 **/node_modules
+.idea/*

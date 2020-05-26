@@ -1,12 +1,12 @@
 use crate::*;
-use primitives::H256;
+use frame_support::{assert_ok, impl_outer_event, impl_outer_origin, parameter_types};
+use sp_core::H256;
 use sp_io::TestExternalities;
 use sp_runtime::{
 	testing::Header,
-	traits::{BlakeTwo256, IdentityLookup, AtLeast32Bit},
+	traits::{AtLeast32Bit, BlakeTwo256, IdentityLookup},
 	Perbill,
 };
-use frame_support::{assert_ok, impl_outer_event, impl_outer_origin, parameter_types};
 
 // hacky Eq implementation for testing InnerThing
 impl<Hash: Clone, Balance: Copy + AtLeast32Bit> PartialEq for InnerThing<Hash, Balance> {
@@ -49,6 +49,9 @@ impl system::Trait for TestRuntime {
 	type Event = TestEvent;
 	type BlockHashCount = BlockHashCount;
 	type MaximumBlockWeight = MaximumBlockWeight;
+	type DbWeight = ();
+	type BlockExecutionWeight = ();
+	type ExtrinsicBaseWeight = ();
 	type MaximumBlockLength = MaximumBlockLength;
 	type AvailableBlockRatio = AvailableBlockRatio;
 	type Version = ();
@@ -109,7 +112,12 @@ fn insert_inner_works() {
 		// prepare hash
 		let data = H256::from_low_u64_be(16);
 		// insert inner thing
-		assert_ok!(StructStorage::insert_inner_thing(Origin::signed(1), 3u32, data, 7u64.into()));
+		assert_ok!(StructStorage::insert_inner_thing(
+			Origin::signed(1),
+			3u32,
+			data,
+			7u64.into()
+		));
 
 		// check storage matches expectations
 		let expected_storage_item = InnerThing {
@@ -123,8 +131,7 @@ fn insert_inner_works() {
 		);
 
 		// check events emitted match expectations
-		let expected_event =
-			TestEvent::struct_storage(RawEvent::NewInnerThing(3u32, data, 7u64));
+		let expected_event = TestEvent::struct_storage(RawEvent::NewInnerThing(3u32, data, 7u64));
 		assert!(System::events().iter().any(|a| a.event == expected_event));
 	})
 }
@@ -135,9 +142,18 @@ fn insert_super_thing_with_existing_works() {
 		// prepare hash
 		let data = H256::from_low_u64_be(16);
 		// insert inner first (tested in direct test above)
-		assert_ok!(StructStorage::insert_inner_thing(Origin::signed(1), 3u32, data, 7u64.into()));
+		assert_ok!(StructStorage::insert_inner_thing(
+			Origin::signed(1),
+			3u32,
+			data,
+			7u64.into()
+		));
 		// insert super with existing inner
-		assert_ok!(StructStorage::insert_super_thing_with_existing_inner(Origin::signed(1), 3u32, 5u32));
+		assert_ok!(StructStorage::insert_super_thing_with_existing_inner(
+			Origin::signed(1),
+			3u32,
+			5u32
+		));
 
 		// check storage matches expectations
 		let expected_inner = InnerThing {
@@ -195,8 +211,7 @@ fn insert_super_with_new_inner_works() {
 			expected_outer
 		);
 
-		let expected_event =
-			TestEvent::struct_storage(RawEvent::NewInnerThing(3u32, data, 7u64));
+		let expected_event = TestEvent::struct_storage(RawEvent::NewInnerThing(3u32, data, 7u64));
 		assert!(System::events().iter().any(|a| a.event == expected_event));
 		let expected_event2 = TestEvent::struct_storage(RawEvent::NewSuperThingByNewInner(
 			5u32,
