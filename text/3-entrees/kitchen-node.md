@@ -35,7 +35,7 @@ It is worth noting that this node does not work with _all_ of the recipes' runti
 
 With a runtime of our choosing listed among our dependencies, we can provide the runtime to the [`ServiceBuilder`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sc_service/struct.ServiceBuilder.html). The `ServiceBuilder` is responsible for assembling all of the necessary pieces that a node will need, and creating a [`Substrate Service`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sc_service/struct.Service.html) which will manage the communication between them.
 
-We begin by invoking the [`native_executor_instance!` macro](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sc_executor/macro.native_executor_instance.html). This creates an executor which is responsible for executing transactions in  the runtime and determining whether to run the native of wasm version of the runtime.
+We begin by invoking the [`native_executor_instance!` macro](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sc_executor/macro.native_executor_instance.html). This creates an executor which is responsible for executing transactions in the runtime and determining whether to run the native or Wasm version of the runtime.
 
 ```rust_ignore
 native_executor_instance!(
