@@ -301,12 +301,6 @@ parameter_types! {
 	// conversion techniques is harmless.
 	pub const FeeWeightRatio: u128 = 1_000;
 
-	// Used with QuadraticWeightToFee conversion. Leaving these constants in tact when using other
-	// conversion techniques is harmless.
-	pub const WeightFeeConstant: u128 = 1_000;
-	pub const WeightFeeLinear: u128 = 100;
-	pub const WeightFeeQuadratic : u128 = 10;
-
 	// Establish the byte-fee. It is used in all configurations.
 	pub const TransactionByteFee: u128 = 1;
 }
@@ -326,7 +320,7 @@ impl transaction_payment::Trait for Runtime {
 	// serialized transaction in bytes
 	type TransactionByteFee = TransactionByteFee;
 
-	// Function to convert dispatch weight to a chargeable fee.
+	// Convert dispatch weight to a chargeable fee.
 	// Enable exactly one of the following options.
 	//type WeightToFee = IdentityFee<Balance>;
 	type WeightToFee = LinearWeightToFee<FeeWeightRatio>;
