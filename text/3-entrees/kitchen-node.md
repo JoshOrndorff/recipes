@@ -54,7 +54,7 @@ will manage the communication between them.
 We begin by invoking the
 [`native_executor_instance!` macro](https://crates.parity.io/sc_executor/macro.native_executor_instance.html).
 This creates an executor which is responsible for executing transactions in the runtime and
-determining whether to run the native of wasm version of the runtime.
+determining whether to run the native or Wasm version of the runtime.
 
 ```rust_ignore
 native_executor_instance!(
