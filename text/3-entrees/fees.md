@@ -67,7 +67,7 @@ pub struct LinearWeightToFee<C>(sp_std::marker::PhantomData<C>);
 ```
 
 Then we implement `WeightToFeePolynomial` for it. When implementing this trait, your main job is to
-return set of
+return a set of
 [`WeightToFeeCoefficient`](https://crates.parity.io/frame_support/weights/struct.WeightToFeeCoefficient.html)s.
 These coefficients can have integer and fractional parts and be positive or negative. In our
 `LinearWeightToFee` there is a single integer coefficient supplied by the associated type.
