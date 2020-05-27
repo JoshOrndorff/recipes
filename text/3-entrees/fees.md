@@ -118,7 +118,7 @@ impl transaction_payment::Trait for Runtime {
 
 More complex polynomials can also be used. When using complex polynomials, it is unlikely that your
 logic will be reused among multiple chains, so it is generally not worth the overhead of making the
-coefficients configurable. The `QuadraticWeightToFee` demonstrate a 2nd degree polynomial with
+coefficients configurable. The `QuadraticWeightToFee` demonstrates a 2nd-degree polynomial with
 hard-coded non-integer signed coefficients.
 
 ```rust, ignore
