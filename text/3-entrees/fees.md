@@ -22,8 +22,9 @@ total_fee = transaction_length * length_fee + weight_to_fee(total_weight)
 
 ## Setting the Parameters
 
-Each of the parameters described above is set in the `transaction_payment` pallet's configuration
-trait. For example, the `super-runtime` sets these parameters as follows.
+Each of the parameters described above is set in the
+[transaction payment pallet](https://crates.parity.io/pallet_transaction_payment/index.html)'s
+configuration trait. For example, the `super-runtime` sets these parameters as follows.
 
 src:
 [`runtimes/super-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/super-runtime/src/lib.rs)
