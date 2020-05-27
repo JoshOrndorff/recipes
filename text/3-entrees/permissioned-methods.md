@@ -2,9 +2,13 @@
 
 _[pallets/check-membership](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/check-membership)_
 
+<<<<<<< HEAD
 It is often useful to designate some functions as permissioned and, therefore, accessible only to a
 defined group. In this case, we check that the transaction that invokes the runtime function is
 signed before verifying that the signature corresponds to a member of the permissioned set.
+=======
+To manage the set of members allowed to access the methods in question, we may store a vector in runtime storage. Without access to the standard library, it is necessary to use the [`Vec` struct](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sp_std/vec/struct.Vec.html) from the `sp-std` crate.
+>>>>>>> master
 
 To manage the set of members allowed to access the methods in question, we may store a vector in
 runtime storage. Without access to the standard library, it is necessary to use the
@@ -42,10 +46,14 @@ fn add_member(origin) -> DispatchResult {
 }
 ```
 
+<<<<<<< HEAD
 Here we've used the
 [`append` method](https://crates.parity.io/frame_support/storage/trait.StorageValue.html#tymethod.append)
 to add the new member to the list. This allows a quick way to add data to the end of the vector
 without decoding the entire vector.
+=======
+Here we've used the [`append` method](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/storage/trait.StorageValue.html#tymethod.append) to add the new member to the list. This allows a quick way to add data to the end of the vector without decoding the entire vector.
+>>>>>>> master
 
 To increase the readability of the code, the membership check is extracted into its own auxiliary
 runtime method.

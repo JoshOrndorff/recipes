@@ -19,11 +19,15 @@ Assembly where the standard library is not available.
 
 ## Imports
 
+<<<<<<< HEAD
 Next, you'll find imports that come from various parts of the Substrate framework. All pallets will
 import from a few common crates including
 [`frame-support`](https://crates.parity.io/frame_support/index.html), and
 [`frame-system`](https://crates.parity.io/frame_system/index.html). Complex pallets will have many
 imports as we'll see later. The `hello-substrate` pallet uses these imports.
+=======
+Next, you'll find imports that come from various parts of the Substrate framework. All pallets will import from a few common crates including [`frame-support`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/index.html), and [`frame-system`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_system/index.html).  Complex pallets will have many imports as we'll see later. The `hello-substrate` pallet uses these imports.
+>>>>>>> master
 
 ```rust, ignore
 use frame_support::{ decl_module, dispatch::DispatchResult, debug };
@@ -50,11 +54,15 @@ pub trait Trait: system::Trait {}
 
 ## Dispatchable Calls
 
+<<<<<<< HEAD
 A Dispatchable call is a function that a blockchain user can call as part of an Extrinsic.
 "Extrinsic" is Substrate jargon meaning a call from outside of the chain. Most of the time they are
 transactions, and for now it is fine to think of them as transactions. Dispatchable calls are
 defined in the
 [`decl_module!` macro](https://crates.parity.io/frame_support/macro.decl_module.html).
+=======
+A Dispatchable call is a function that a blockchain user can call as part of an Extrinsic. "Extrinsic" is Substrate jargon meaning a call from outside of the chain. Most of the time they are transactions, and for now it is fine to think of them as transactions. Dispatchable calls are defined in the [`decl_module!` macro](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/macro.decl_module.html).
+>>>>>>> master
 
 ```rust, ignore
 decl_module! {
@@ -71,6 +79,7 @@ decl_module! {
 }
 ```
 
+<<<<<<< HEAD
 As you can see, our `hello-substrate` pallet has a dispatchable call that takes a single argument,
 called `origin` which we'll investigate shortly. The call returns a
 [`DispatchResult`](https://crates.parity.io/frame_support/dispatch/type.DispatchResult.html) which
@@ -84,6 +93,12 @@ attaches a default weight to the call. Ultimately weights affect the fees a user
 call the function. Weights are a very interesting aspect of developing with Substrate, but they too
 shall be covered later in the section on [Weights](../3-entrees/weights.md). For now, and for may of
 the recipes pallets, we will simply use the default weight as we have done here.
+=======
+As you can see, our `hello-substrate` pallet has a dispatchable call that takes a single argument, called `origin` which we'll investigate shortly. The call returns a [`DispatchResult`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/dispatch/type.DispatchResult.html) which can be either `Ok(())` indicating that the call succeeded, or an `Err` which we'll investigate in the [appetizer about errors](./3-errors.md).
+
+### Weight Annotations
+Right before the `hello-substrate` function, we see the line `#[weight = 10_000]`. This line attaches a default weight to the call. Ultimately weights affect the fees a user will have to pay to call the function. Weights are a very interesting aspect of developing with Substrate, but they too shall be covered later in the section on [Weights](../3-entrees/weights.md). For now, and for may of the recipes pallets, we will simply use the default weight as we have done here.
+>>>>>>> master
 
 ## Inside a Dispatchable Call
 
@@ -104,6 +119,7 @@ pub fn say_hello(origin) -> DispatchResult {
 }
 ```
 
+<<<<<<< HEAD
 This function essentially does three things. First, it uses the
 [`ensure_signed` function](https://crates.parity.io/frame_system/fn.ensure_signed.html) to ensure
 that the caller of the function was a regular user who owns a private key. This function also
@@ -114,6 +130,11 @@ Second, it prints a message and logs the caller. Notice that we aren't using Rus
 [`print` function](https://crates.parity.io/sp_runtime/fn.print.html) and
 [`debug::info!` macro](https://crates.parity.io/frame_support/debug/macro.info.html). The reason for
 this is explained in the next section.
+=======
+This function essentially does three things. First, it uses the [`ensure_signed` function](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_system/fn.ensure_signed.html) to ensure that the caller of the function was a regular user who owns a private key. This function also returns who that caller was. We store the caller's identity in the `caller` variable.
+
+Second, it prints a message and logs the caller. Notice that we aren't using Rust's normal `println!` macro, but rather a special [`print` function](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sp_runtime/fn.print.html) and [`debug::info!` macro](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/debug/macro.info.html). The reason for this is explained in the next section.
+>>>>>>> master
 
 Finally, the call returns `Ok(())` to indicate that the call has succeeded. At a glance it seems
 that there is no way for this call to fail, but this is not quite true. The `ensure_signed`
@@ -133,6 +154,7 @@ for debugging.
 
 ![Substrate Architecture Diagram](../img/substrate-architecture.png)
 
+<<<<<<< HEAD
 At the top of our pallet, we imported `sp_runtime`'s
 [`print` function](https://crates.parity.io/sp_runtime/fn.print.html). This special function allows
 the runtime to pass a message for printing to the outer part of the node which is not built to Wasm.
@@ -140,6 +162,9 @@ This function is only able to print items that implement the
 [`Printable` trait](https://crates.parity.io/sp_runtime/traits/trait.Printable.html). Luckily all
 the primitive types already implement this trait, and you can implement the trait for your own
 datatypes too.
+=======
+At the top of our pallet, we imported `sp_runtime`'s [`print` function](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sp_runtime/fn.print.html). This special function allows the runtime to pass a message for printing to the outer part of the node which is not built to Wasm. This function is only able to print items that implement the [`Printable` trait](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sp_runtime/traits/trait.Printable.html). Luckily all the primitive types already implement this trait, and you can implement the trait for your own datatypes too.
+>>>>>>> master
 
 **Print function note:** To actually see the printed messages, we need to use the flag
 `-lruntime=debug` when running the kitchen node. So, for the kitchen node, the command would become
@@ -149,9 +174,13 @@ The next line demonstrates using `debug::info!` macro to log to the screen and a
 variable's content. The syntax inside the macro is very similar to what regular rust macro
 `println!` takes.
 
+<<<<<<< HEAD
 **Runtime logger note:** When we execute the runtime in native, `debug::info!` messages are printed.
 However, if we execute the runtime in Wasm, then an additional step to initialise
 [RuntimeLogger](https://crates.parity.io/frame_support/debug/struct.RuntimeLogger.html) is required.
+=======
+**Runtime logger note:** When we execute the runtime in native, `debug::info!` messages are printed. However, if we execute the runtime in Wasm, then an additional step to initialise [RuntimeLogger](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/debug/struct.RuntimeLogger.html) is required.
+>>>>>>> master
 
 ## Installing the Pallet in a Runtime
 
@@ -197,8 +226,12 @@ complex.
 
 ### Add it to `construct_runtime!`
 
+<<<<<<< HEAD
 Finally, we add our pallet to the
 [`construct_runtime!` macro](https://crates.parity.io/frame_support/macro.construct_runtime.html).
+=======
+Finally, we add our pallet to the [`construct_runtime!` macro](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/macro.construct_runtime.html).
+>>>>>>> master
 
 ```rust, ignore
 construct_runtime!(

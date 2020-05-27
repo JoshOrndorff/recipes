@@ -93,6 +93,7 @@ pub trait Trait: system::Trait {
 This associated type needs to be specified by the runtime when the runtime is to include this pallet
 (implement this pallet trait).
 
+<<<<<<< HEAD
 Now if we build the `kitchen-node`, we will see the compiler complain that there are three trait
 bounds `Runtime: frame_system::offchain::CreateSignedTransaction`,
 `frame_system::offchain::SigningTypes`, and `frame_system::offchain::SendTransactionTypes` are not
@@ -100,16 +101,46 @@ satisfied. We learn that when using `SubmitSignedTransaction`, we also need to h
 implement the
 [`CreateSignedTransaction` trait](https://crates.parity.io/frame_system/offchain/trait.CreateSignedTransaction.html).
 So let's implement this in our runtime.
+=======
+We should use the `TransactionSubmitter` implementation type. Let's do that in our runtime.
+>>>>>>> master
 
 src:
 [`runtimes/ocw-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime/src/lib.rs)
 
 ```rust
+<<<<<<< HEAD
 impl<LocalCall> frame_system::offchain::CreateSignedTransaction<LocalCall> for Runtime
 where
 	Call: From<LocalCall>,
 {
 	fn create_transaction<C: frame_system::offchain::AppCrypto<Self::Public, Self::Signature>>(
+=======
+type SubmitTransaction = system::offchain::TransactionSubmitter<
+	offchain_demo::crypto::Public,
+	Runtime,
+	UncheckedExtrinsic
+>;
+
+impl offchain_demo::Trait for Runtime {
+	type Call = Call;
+	type Event = Event;
+	type SubmitSignedTransaction = SubmitTransaction;
+	//...snip
+}
+```
+
+Now if we build the `kitchen-node`, we will see the compiler complain that the trait bound for `Runtime: frame_system::offchain::CreateTransaction` is not satisfied. We learn that when using `SubmitSignedTransaction`, we also need to have our runtime implement the `CreateTransaction` trait. So let's implement this in our runtime.
+
+src: [`runtimes/ocw-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime/src/lib.rs)
+
+```rust
+impl system::offchain::CreateTransaction<Runtime, UncheckedExtrinsic> for Runtime {
+	type Public = <Signature as Verify>::Signer;
+	type Signature = Signature;
+
+	fn create_transaction<TSigner: system::offchain::Signer<Self::Public, Self::Signature>> (
+>>>>>>> master
 		call: Call,
 		public: <Signature as sp_runtime::traits::Verify>::Signer,
 		account: AccountId,
@@ -235,8 +266,12 @@ one signed transaction is made.
 Eventually, the `call` transaction is made on-chain via the `create_transaction` function we defined
 earlier when we implemented `CreateTransaction` trait in our runtime.
 
+<<<<<<< HEAD
 If you are wondering where we insert the local account in the pallet app crypto, it is actually in
 the outer node's [service](https://crates.parity.io/sc_service/index.html).
+=======
+If you are wondering where we insert the local account in the pallet app crypto, it is actually in the outer node's [service](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sc_service/index.html).
+>>>>>>> master
 
 src:
 [`nodes/kitchen-node/src/service.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/nodes/kitchen-node/src/service.rs)

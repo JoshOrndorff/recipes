@@ -1,6 +1,10 @@
 [package]
 name = "offchain-demo"
+<<<<<<< HEAD
 version = "2.0.0-rc2"
+=======
+version = "2.0.0-alpha.8"
+>>>>>>> master
 authors = ["Parity Technologies <admin@parity.io>"]
 edition = "2018"
 repository = "https://github.com/substrate-developer-hub/recipes/"
@@ -26,12 +30,21 @@ alt_serde = { version = "1", default-features = false, features = ["derive"] }
 serde_json = { version = "1", default-features = false, git = "https://github.com/Xanewok/json", branch = "no-std", features = ["alloc"] }
 
 # Substrate dependencies
+<<<<<<< HEAD
 frame-support = { version = '2.0.0-rc2', default-features = false }
 frame-system = { version = '2.0.0-rc2', default-features = false }
 sp-runtime = { version = '2.0.0-rc2', default-features = false }
 sp-core = { version = '2.0.0-rc2', default-features = false }
 sp-io = { version = '2.0.0-rc2', default-features = false }
 sp-std = { version = '2.0.0-rc2', default-features = false }
+=======
+frame-support = { version = '2.0.0-alpha.8', default-features = false }
+frame-system = { version = '2.0.0-alpha.8', default-features = false }
+sp-runtime = { version = '2.0.0-alpha.8', default-features = false }
+sp-core = { version = '2.0.0-alpha.8', default-features = false }
+sp-io = { version = '2.0.0-alpha.8', default-features = false }
+sp-std = { version = '2.0.0-alpha.8', default-features = false }
+>>>>>>> master
 
 [features]
 default = ['std']

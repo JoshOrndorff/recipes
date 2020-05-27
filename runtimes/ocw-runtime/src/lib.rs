@@ -16,8 +16,13 @@ pub mod genesis;
 use sp_api::impl_runtime_apis;
 use sp_core::{Encode, OpaqueMetadata, H256};
 use sp_runtime::traits::{
+<<<<<<< HEAD
 	BlakeTwo256, Block as BlockT, IdentifyAccount, IdentityLookup,
 	SaturatedConversion, Saturating, Verify,
+=======
+	BlakeTwo256, Block as BlockT, ConvertInto, IdentifyAccount, IdentityLookup,
+	SaturatedConversion, Verify,
+>>>>>>> master
 };
 use sp_runtime::{
 	create_runtime_str, generic,
@@ -36,7 +41,10 @@ pub use frame_support::{
 	traits::Randomness,
 	weights::{
 		constants::{BlockExecutionWeight, ExtrinsicBaseWeight, RocksDbWeight, WEIGHT_PER_SECOND},
+<<<<<<< HEAD
 		IdentityFee,
+=======
+>>>>>>> master
 		Weight,
 	},
 	StorageValue,
@@ -156,10 +164,13 @@ impl frame_system::Trait for Runtime {
 	/// The base weight of any extrinsic processed by the runtime, independent of the
 	/// logic of that extrinsic. (Signature verification, nonce increment, fee, etc...)
 	type ExtrinsicBaseWeight = ExtrinsicBaseWeight;
+<<<<<<< HEAD
 	/// The maximum weight that a single extrinsic of `Normal` dispatch class can have,
 	/// idependent of the logic of that extrinsic. (Roughly max block weight - average on
 	/// initialize cost).
 	type MaximumExtrinsicWeight = MaximumExtrinsicWeight;
+=======
+>>>>>>> master
 	/// Maximum size of all encoded transactions (in bytes) that are allowed in one block.
 	type MaximumBlockLength = MaximumBlockLength;
 	/// Portion of the block weight that is available to all normal transactions.

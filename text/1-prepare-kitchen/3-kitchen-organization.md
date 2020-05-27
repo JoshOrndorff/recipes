@@ -25,12 +25,20 @@ typically contain several such pallets. The kitchen node you built previously fo
 
 There are five primary directories in this repository:
 
+<<<<<<< HEAD
 -   **Text**: Source of [the book](https://substrate.dev/recipes) written in markdown. This is what
     you're reading right now.
 -   **Pallets**: Pallets for use in FRAME-based runtimes.
 -   **Runtimes**: Runtimes for use in Substrate nodes.
 -   **Consensus**: Consensus engines for use in Substrate nodes.
 -   **Nodes**: Complete Substrate nodes ready to run.
+=======
+* **Text**: Source of [the book](https://substrate.dev/recipes) written in markdown. This is what you're reading right now.
+* **Pallets**: Pallets for use in FRAME-based runtimes.
+* **Runtimes**: Runtimes for use in Substrate nodes.
+* **Consensus**: Consensus engines for use in Substrate nodes.
+* **Nodes**: Complete Substrate nodes ready to run.
+>>>>>>> master
 
 Exploring those directories reveals a tree that looks like this
 
@@ -80,6 +88,8 @@ them come from Substrate itself. Indeed most parts of this Kitchen Node are not 
 specialized, and Substrate offers robust implementations that we can use. The runtime does not come
 from Substrate. Rather, we use our super-runtime which is in the `runtimes` folder.
 
+Looking inside the Kitchen Node's `Cargo.toml` file we see that it has many dependencies. Most of them come from Substrate itself. Indeed most parts of this Kitchen Node are not unique or specialized, and Substrate offers robust implementations that we can use. The runtime does not come from Substrate. Rather, we use our super-runtime which is in the `runtimes` folder.
+
 **`nodes/kitchen-node/Cargo.toml`**
 
 ```TOML
@@ -95,11 +105,21 @@ runtime = { package = "super-runtime", path = "../../runtimes/super-runtime" }
 # To use this runtime, compile the node with `ocw` feature enabled,
 #   `cargo build --release --features ocw`.
 # runtime = { package = "ocw-runtime", path = "../../runtimes/ocw-runtime" }
+<<<<<<< HEAD
 
 # Runtime with custom runtime-api (custom API only used in rpc-node)
 # runtime = { package = "api-runtime", path = "../../runtimes/api-runtime" }
 # ---
 ```
+=======
+
+# Runtime with custom runtime-api (custom API only used in rpc-node)
+# runtime = { package = "api-runtime", path = "../../runtimes/api-runtime" }
+# ---
+```
+
+The commented lines, quoted above, show that the Super Runtime is not the only runtime we could have chosen. We could also use the Weight-Fee runtime, and I encourage you to try that experiment (remember, instructions to re-compile the node are in the previous section).
+>>>>>>> master
 
 The commented lines, quoted above, show that the Super Runtime is not the only runtime we could have
 chosen. We could also use the Weight-Fee runtime, and I encourage you to try that experiment

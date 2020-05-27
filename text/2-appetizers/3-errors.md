@@ -8,9 +8,13 @@ as well as integer overflow (a serious and realistic example), and throws the ap
 
 ## Declaring Errors
 
+<<<<<<< HEAD
 Errors are declared with the
 [`decl_error!` macro](https://crates.parity.io/frame_support/macro.decl_error.html). Although it is
 optional, it is good practice to write doc comments for each error variant as demonstrated here.
+=======
+Errors are declared with the [`decl_error!` macro](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/macro.decl_error.html). Although it is optional, it is good practice to write doc comments for each error variant as demonstrated here.
+>>>>>>> master
 
 ```rust, ignore
 decl_error! {
@@ -25,10 +29,14 @@ decl_error! {
 
 ## Throwing Errors in `match` Statement
 
+<<<<<<< HEAD
 Errors can be thrown in two different ways, both of which are demonstrated in the the `add`
 dispatchable call. The first is with the
 [`ensure!` macro](https://crates.parity.io/frame_support/macro.ensure.html) where the error to throw
 is the second parameter. The second is to throw the error by explicitly returning it.
+=======
+Errors can be thrown in two different ways, both of which are demonstrated in the the `add` dispatchable call. The first is with the [`ensure!` macro](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/macro.ensure.html) where the error to throw is the second parameter. The second is to throw the error by explicitly returning it.
+>>>>>>> master
 
 ```rust, ignore
 fn add(origin, val_to_add: u32) -> DispatchResult {

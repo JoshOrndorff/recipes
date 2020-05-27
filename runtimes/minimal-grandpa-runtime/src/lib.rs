@@ -18,7 +18,10 @@ use frame_support::{
 	traits::KeyOwnerProofSystem,
 	weights::{
 		constants::{BlockExecutionWeight, ExtrinsicBaseWeight, RocksDbWeight, WEIGHT_PER_SECOND},
+<<<<<<< HEAD
 		IdentityFee,
+=======
+>>>>>>> master
 		Weight,
 	},
 };
@@ -27,7 +30,11 @@ use grandpa::{AuthorityId as GrandpaId, AuthorityList as GrandpaAuthorityList};
 use sp_api::impl_runtime_apis;
 use sp_core::{crypto::KeyTypeId, OpaqueMetadata, H256};
 use sp_runtime::traits::{
+<<<<<<< HEAD
 	BlakeTwo256, Block as BlockT, IdentifyAccount, IdentityLookup, NumberFor, Saturating, Verify,
+=======
+	BlakeTwo256, Block as BlockT, IdentifyAccount, IdentityLookup, NumberFor, Verify,
+>>>>>>> master
 };
 use sp_runtime::{
 	create_runtime_str, generic, impl_opaque_keys,
@@ -39,6 +46,14 @@ use sp_std::prelude::*;
 use sp_version::NativeVersion;
 use sp_version::RuntimeVersion;
 
+<<<<<<< HEAD
+=======
+// These structs are used in one of the commented-by-default implementations of
+// transaction_payment::Trait. Don't warn when they are unused.
+#[allow(unused_imports)]
+use sp_runtime::traits::ConvertInto;
+
+>>>>>>> master
 // A few exports that help ease life for downstream crates.
 pub use balances::Call as BalancesCall;
 pub use frame_support::{construct_runtime, parameter_types, traits::Randomness, StorageValue};
@@ -100,8 +115,13 @@ pub mod opaque {
 
 /// This runtime version.
 pub const VERSION: RuntimeVersion = RuntimeVersion {
+<<<<<<< HEAD
 	spec_name: create_runtime_str!("minimal-grandpa-runtime"),
 	impl_name: create_runtime_str!("minimal-grandpa-runtime"),
+=======
+	spec_name: create_runtime_str!("weight-fee-runtime"),
+	impl_name: create_runtime_str!("weight-fee-runtime"),
+>>>>>>> master
 	authoring_version: 1,
 	spec_version: 1,
 	impl_version: 1,
@@ -122,9 +142,12 @@ parameter_types! {
 	pub const BlockHashCount: BlockNumber = 250;
 	pub const MaximumBlockWeight: Weight = 2 * WEIGHT_PER_SECOND;
 	pub const AvailableBlockRatio: Perbill = Perbill::from_percent(75);
+<<<<<<< HEAD
 	/// Assume 10% of weight for average on_initialize calls.
 	pub const MaximumExtrinsicWeight: Weight = AvailableBlockRatio::get()
 		.saturating_sub(Perbill::from_percent(10)) * MaximumBlockWeight::get();
+=======
+>>>>>>> master
 	pub const MaximumBlockLength: u32 = 5 * 1024 * 1024;
 	pub const Version: RuntimeVersion = VERSION;
 }
@@ -162,10 +185,13 @@ impl system::Trait for Runtime {
 	/// The base weight of any extrinsic processed by the runtime, independent of the
 	/// logic of that extrinsic. (Signature verification, nonce increment, fee, etc...)
 	type ExtrinsicBaseWeight = ExtrinsicBaseWeight;
+<<<<<<< HEAD
 	/// The maximum weight that a single extrinsic of `Normal` dispatch class can have,
 	/// idependent of the logic of that extrinsic. (Roughly max block weight - average on
 	/// initialize cost).
 	type MaximumExtrinsicWeight = MaximumExtrinsicWeight;
+=======
+>>>>>>> master
 	/// Maximum size of all encoded transactions (in bytes) that are allowed in one block.
 	type MaximumBlockLength = MaximumBlockLength;
 	/// Portion of the block weight that is available to all normal transactions.
@@ -237,7 +263,11 @@ impl transaction_payment::Trait for Runtime {
 	type Currency = Balances;
 	type OnTransactionPayment = ();
 	type TransactionByteFee = TransactionByteFee;
+<<<<<<< HEAD
 	type WeightToFee = IdentityFee<Balance>;
+=======
+	type WeightToFee = ConvertInto;
+>>>>>>> master
 	type FeeMultiplierUpdate = ();
 }
 

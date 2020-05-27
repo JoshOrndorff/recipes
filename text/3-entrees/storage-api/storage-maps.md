@@ -19,6 +19,7 @@ decl_storage! {
 }
 ```
 
+<<<<<<< HEAD
 Much of this should look familiar to you from storage values. Reading the line from left to right we
 have:
 
@@ -30,6 +31,13 @@ have:
     hasher. More on this below.
 -   `T::AccountId => u32` - The specific key and value tyes of the map. This is a map from
     `AccountId`s to `u32`s.
+=======
+Much of this should look familiar to you from storage values. Reading the line from left to right we have:
+* `SimpleMap` - the name of the storage map
+* `get(fn simple_map)` - the name of a getter function that will return values from the map.
+* `: map hasher(blake2_128_concat)` - beginning of the type declaration. This is a map and it will use the [`blake2_128_concat`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/trait.Hashable.html#tymethod.blake2_128_concat) hasher. More on this below.
+* `T::AccountId => u32` - The specific key and value tyes of the map. This is a map from `AccountId`s to `u32`s.
+>>>>>>> master
 
 ## Choosing a Hasher
 
@@ -84,7 +92,11 @@ let entry = <SimpleMap<T>>::take(&user);
 <SimpleMap<T>>::contains_key(&user)
 ```
 
+<<<<<<< HEAD
 The rest of the API is documented in the rustdocs on the
 [`StorageMap` trait](https://crates.parity.io/frame_support/storage/trait.StorageMap.html). You do
 not need to explicitly `use` this trait because the `decl_storage!` macro will do it for you if you
 use a storage map.
+=======
+The rest of the API is documented in the rustdocs on the [`StorageMap` trait](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/storage/trait.StorageMap.html). You do not need to explicitly `use` this trait because the `decl_storage!` macro will do it for you if you use a storage map.
+>>>>>>> master

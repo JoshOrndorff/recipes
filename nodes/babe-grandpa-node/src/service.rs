@@ -104,11 +104,15 @@ pub fn new_full(config: Configuration) -> Result<impl AbstractService, ServiceEr
 
 	if role.is_authority() {
 		let proposer =
+<<<<<<< HEAD
 			sc_basic_authorship::ProposerFactory::new(
 				service.client(),
 				service.transaction_pool(),
 				service.prometheus_registry().as_ref(),
 			);
+=======
+			sc_basic_authorship::ProposerFactory::new(service.client(), service.transaction_pool());
+>>>>>>> master
 
 		let client = service.client();
 		let select_chain = service

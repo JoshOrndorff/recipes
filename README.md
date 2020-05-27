@@ -11,8 +11,18 @@ Ready to roll up your sleeves and cook some blockchain? Read the book online at
 [substrate.dev/recipes](https://substrate.dev/recipes)
 
 ## Repository Structure
+<<<<<<< HEAD
 
 There are five primary directories in this repository:
+=======
+There are five primary directories in this repository:
+
+* **Text**: Source of [the book](https://substrate.dev/recipes) written in markdown. This text describes the code in the other three directories.
+* **Pallets**: Pallets for use in FRAME-based runtimes.
+* **Runtimes**: Runtimes for use in Substrate nodes.
+* **Consensus**: Consensus engines for use in Substrate nodes.
+* **Nodes**: Complete Substrate nodes ready to run.
+>>>>>>> master
 
 -   **Text**: Source of [the book](https://substrate.dev/recipes) written in markdown. This text
     describes the code in the other three directories.
@@ -31,6 +41,10 @@ The Substrate Recipes are [GPL 3.0 Licensed](LICENSE) It is open source and
 
 ## Using Recipes in External Projects
 
+<<<<<<< HEAD
 The pallets and runtimes provided here are tested and ready to be used in other Substrate-based
 blockchains. The big caveat is that you must use the same upstream Substrate version throughout the
 project.
+=======
+The pallets and runtimes provided here are tested and ready to be used in other Substrate-based blockchains. The big caveat is that you must use the same upstream Substrate version throughout the project.
+>>>>>>> master

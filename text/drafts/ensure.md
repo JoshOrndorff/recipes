@@ -4,11 +4,15 @@ Within each dispatchable function, it is important to perform requisite checks p
 changes. Unlike existing smart contract platforms, Substrate requires greater attention to detail
 because mid-function panics will persist any prior changes made to storage.
 
+<<<<<<< HEAD
 **Place [`ensure!`](https://crates.parity.io/frame_support/macro.ensure.html) checks at the top of
 each runtime function's logic to verify that all requisite conditions are met before performing any
 storage changes.** This is similar to
 [`require()`](https://ethereum.stackexchange.com/questions/15166/difference-between-require-and-assert-and-the-difference-between-revert-and-thro)
 checks at the top of function bodies in Solidity contracts.
+=======
+**Place [`ensure!`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/macro.ensure.html) checks at the top of each runtime function's logic to verify that all requisite conditions are met before performing any storage changes.** This is similar to [`require()`](https://ethereum.stackexchange.com/questions/15166/difference-between-require-and-assert-and-the-difference-between-revert-and-thro) checks at the top of function bodies in Solidity contracts.
+>>>>>>> master
 
 In the [set storage and iteration](../storage/iterate.md), a vector was stored in the runtime to
 allow for simple membership checks for methods only available to members.

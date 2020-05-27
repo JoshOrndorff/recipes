@@ -1,4 +1,8 @@
 #![cfg_attr(not(feature = "std"), no_std)]
+<<<<<<< HEAD
+=======
+#![allow(clippy::string_lit_as_bytes)]
+>>>>>>> master
 
 //! A Pallet to demonstrate using currency imbalances
 //!

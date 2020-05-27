@@ -1,6 +1,10 @@
 # Manual Seal
 
+<<<<<<< HEAD
 _[`nodes/kitchen-node`](https://github.com/substrate-developer-hub/recipes/tree/master/nodes/kitchen-node)_
+=======
+This recipe demonstrates a general purpose Substrate node that supports most of the recipes' runtimes, and uses [Instant Seal consensus](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sc_consensus_manual_seal/index.html).
+>>>>>>> master
 
 This recipe demonstrates a general purpose Substrate node that supports most of the recipes'
 runtimes, and uses
@@ -38,6 +42,7 @@ Installing a different runtime in the node is just a matter of commenting out th
 line, and enabling another one. Try the weight-fee runtime for example. Of course cargo will
 complain if you try to import two crates under the name `runtime`.
 
+<<<<<<< HEAD
 It is worth noting that this node does not work with _all_ of the recipes' runtimes. In particular,
 it is not compatible with the babe-grandpa runtime. That runtime uses the babe pallet which requires
 a node that will include a special
@@ -55,6 +60,15 @@ We begin by invoking the
 [`native_executor_instance!` macro](https://crates.parity.io/sc_executor/macro.native_executor_instance.html).
 This creates an executor which is responsible for executing transactions in the runtime and
 determining whether to run the native of wasm version of the runtime.
+=======
+It is worth noting that this node does not work with _all_ of the recipes' runtimes. In particular, it is not compatible with the babe-grandpa runtime. That runtime uses the babe pallet which requires a node that will include a special [`PreRuntime` `DigestItem`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sp_runtime/enum.DigestItem.html#variant.PreRuntime).
+
+### Building a Service with the Runtime
+
+With a runtime of our choosing listed among our dependencies, we can provide the runtime to the [`ServiceBuilder`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sc_service/struct.ServiceBuilder.html). The `ServiceBuilder` is responsible for assembling all of the necessary pieces that a node will need, and creating a [`Substrate Service`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sc_service/struct.Service.html) which will manage the communication between them.
+
+We begin by invoking the [`native_executor_instance!` macro](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sc_executor/macro.native_executor_instance.html). This creates an executor which is responsible for executing transactions in the runtime and determining whether to run the native or Wasm version of the runtime.
+>>>>>>> master
 
 ```rust_ignore
 native_executor_instance!(
@@ -76,6 +90,7 @@ let builder = sc_service::ServiceBuilder::new_full::<
 
 ## Instant Seal Consensus
 
+<<<<<<< HEAD
 The instant seal consensus engine, and its cousin the manual seal consensus engine, are both
 included in the same
 [`sc-consensus-manual-seal` crate](https://crates.parity.io/sc_consensus_manual_seal/index.html).
@@ -93,13 +108,28 @@ Installing the instant seal engine has three dependencies whereas the runtime ha
 sc-consensus = '0.8.0-rc2'
 sc-consensus-manual-seal = '0.8.0-rc2'
 sp-consensus = '0.8.0-rc2'
+=======
+The instant seal consensus engine, and its cousin the manual seal consensus engine, are both included in the same [`sc-consensus-manual-seal` crate](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sc_consensus_manual_seal/index.html). The recipes has a recipe dedicated to using [manual seal](./manual-seal.md). Instant seal is a very convenient tool for when you are developing or experimenting with a runtime. The consensus engine simply authors a new block whenever a new transaction is available in the queue. This is similar to [Truffle Suite's Ganache](https://www.trufflesuite.com/ganache) in the Ethereum ecosystem, but without the UI.
+
+### The Cargo Dependencies
+
+Installing the instant seal engine has two dependencies whereas the runtime had only one.
+
+```toml
+sp-consensus = '0.8.0-alpha.7'
+sc-consensus-manual-seal = '0.8.0-alpha.7'
+>>>>>>> master
 ```
 
 ### The Proposer
 
+<<<<<<< HEAD
 We begin by creating a
 [`Proposer`](https://crates.parity.io/sc_basic_authorship/struct.Proposer.html) which will be
 responsible for creating proposing blocks in the chain.
+=======
+We begin by creating a [`Proposer`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sc_basic_authorship/struct.Proposer.html) which will be responsible for creating proposing blocks in the chain.
+>>>>>>> master
 
 ```rust, ignore
 let proposer = sc_basic_authorship::ProposerFactory::new(
@@ -135,8 +165,12 @@ let authorship_future = sc_consensus_manual_seal::run_instant_seal(
 );
 ```
 
+<<<<<<< HEAD
 With the future created, we can now kick it off using the service's
 [`spawn_essential_task` method](https://crates.parity.io/sc_service/struct.Service.html#method.spawn_essential_task).
+=======
+With the future created, we can now kick it off using the service's [`spawn_essential_task` method](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sc_service/struct.Service.html#method.spawn_essential_task).
+>>>>>>> master
 
 ```rust, ignore
 service.spawn_essential_task("instant-seal", authorship_future);

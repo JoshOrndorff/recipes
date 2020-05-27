@@ -20,6 +20,7 @@ use frame_support::{
 	weights::{
 		constants::{BlockExecutionWeight, ExtrinsicBaseWeight, RocksDbWeight, WEIGHT_PER_SECOND},
 		Weight,
+<<<<<<< HEAD
 		WeightToFeePolynomial,
 		WeightToFeeCoefficient,
 		WeightToFeeCoefficients,
@@ -31,6 +32,15 @@ use sp_api::impl_runtime_apis;
 use sp_core::{OpaqueMetadata, H256};
 use sp_runtime::traits::{
 	BlakeTwo256, Block as BlockT, IdentifyAccount, IdentityLookup, Saturating, Verify,
+=======
+	},
+};
+use frame_system as system;
+use sp_api::impl_runtime_apis;
+use sp_core::{OpaqueMetadata, H256};
+use sp_runtime::traits::{
+	BlakeTwo256, Block as BlockT, Convert, IdentifyAccount, IdentityLookup, Verify,
+>>>>>>> master
 };
 use sp_runtime::{
 	create_runtime_str, generic,
@@ -47,7 +57,11 @@ use sp_version::RuntimeVersion;
 #[allow(unused_imports)]
 use generic_asset::{AssetCurrency, AssetIdProvider, SpendingAssetCurrency};
 #[allow(unused_imports)]
+<<<<<<< HEAD
 use frame_support::weights::IdentityFee;
+=======
+use sp_runtime::traits::ConvertInto;
+>>>>>>> master
 
 // A few exports that help ease life for downstream crates.
 pub use balances::Call as BalancesCall;
@@ -164,10 +178,13 @@ impl system::Trait for Runtime {
 	/// The base weight of any extrinsic processed by the runtime, independent of the
 	/// logic of that extrinsic. (Signature verification, nonce increment, fee, etc...)
 	type ExtrinsicBaseWeight = ExtrinsicBaseWeight;
+<<<<<<< HEAD
 	/// The maximum weight that a single extrinsic of `Normal` dispatch class can have,
 	/// idependent of the logic of that extrinsic. (Roughly max block weight - average on
 	/// initialize cost).
 	type MaximumExtrinsicWeight = MaximumExtrinsicWeight;
+=======
+>>>>>>> master
 	/// Maximum size of all encoded transactions (in bytes) that are allowed in one block.
 	type MaximumBlockLength = MaximumBlockLength;
 	/// Portion of the block weight that is available to all normal transactions.
@@ -233,6 +250,7 @@ impl weights::Trait for Runtime {}
 /// encapsulates an integer constant in units of balance per weight.
 pub struct LinearWeightToFee<C>(sp_std::marker::PhantomData<C>);
 
+<<<<<<< HEAD
 impl<C> WeightToFeePolynomial for LinearWeightToFee<C>
 where
 	C: Get<Balance>,
@@ -260,6 +278,41 @@ pub struct QuadraticWeightToFee;
 
 impl WeightToFeePolynomial for QuadraticWeightToFee {
 	type Balance = Balance;
+=======
+impl<C> Convert<Weight, Balance> for LinearWeightToFee<C>
+where
+	C: Get<Balance>,
+{
+	fn convert(w: Weight) -> Balance {
+		// substrate-node a weight of 10_000 (smallest non-zero weight) to be mapped to 10^7 units of
+		// fees, hence:
+		let coefficient = C::get();
+		Balance::from(w).saturating_mul(coefficient)
+	}
+}
+
+/// Convert from weight to balance via a quadratic curve. The type parameters encapsulate the
+/// coefficients.
+pub struct QuadraticWeightToFee<C0, C1, C2>(C0, C1, C2);
+
+impl<C0, C1, C2> Convert<Weight, Balance> for QuadraticWeightToFee<C0, C1, C2>
+where
+	C0: Get<Balance>,
+	C1: Get<Balance>,
+	C2: Get<Balance>,
+{
+	fn convert(w: Weight) -> Balance {
+		let c0 = C0::get();
+		let c1 = C1::get();
+		let c2 = C2::get();
+		let w = Balance::from(w);
+
+		// All the safe math reduces to
+		// c0 + c1 * w + c2 * w * w
+
+		let c1w = c1.saturating_mul(w);
+		let c2w2 = c2.saturating_mul(w).saturating_mul(w);
+>>>>>>> master
 
 	fn polynomial() -> WeightToFeeCoefficients<Self::Balance> {
 		let linear = WeightToFeeCoefficient {
@@ -301,6 +354,15 @@ parameter_types! {
 	// conversion techniques is harmless.
 	pub const FeeWeightRatio: u128 = 1_000;
 
+<<<<<<< HEAD
+=======
+	// Used with QuadraticWeightToFee conversion. Leaving these constants in tact when using other
+	// conversion techniques is harmless.
+	pub const WeightFeeConstant: u128 = 1_000;
+	pub const WeightFeeLinear: u128 = 100;
+	pub const WeightFeeQuadratic : u128 = 10;
+
+>>>>>>> master
 	// Establish the byte-fee. It is used in all configurations.
 	pub const TransactionByteFee: u128 = 1;
 }
@@ -309,9 +371,15 @@ impl transaction_payment::Trait for Runtime {
 	// The asset in which fees will be collected.
 	// Enable exactly one of the following options.
 	type Currency = Balances; // The balances pallet (The most common choice)
+<<<<<<< HEAD
 	// type Currency = FixedGenericAsset<Self>; // A generic asset whose ID is hard-coded above.
 	//type Currency = SpendingAssetCurrency<Self>; // A generic asset whose ID is stored in the
 	                                               // generic_asset pallet's runtime storage
+=======
+						  //type Currency = FixedGenericAsset<Self>; // A generic asset whose ID is hard-coded above.
+						  //type Currency = SpendingAssetCurrency<Self>; // A generic asset whose ID is stored in the
+						  // generic_asset pallet's runtime storage
+>>>>>>> master
 
 	// What to do when fees are paid. () means take no additional actions.
 	type OnTransactionPayment = ();

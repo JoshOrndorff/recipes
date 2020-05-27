@@ -39,7 +39,10 @@ impl system::Trait for TestRuntime {
 	type DbWeight = ();
 	type BlockExecutionWeight = ();
 	type ExtrinsicBaseWeight = ();
+<<<<<<< HEAD
 	type MaximumExtrinsicWeight = MaximumBlockWeight;
+=======
+>>>>>>> master
 	type MaximumBlockLength = MaximumBlockLength;
 	type AvailableBlockRatio = AvailableBlockRatio;
 	type Version = ();

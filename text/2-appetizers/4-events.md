@@ -43,12 +43,16 @@ decl_module! {
 
 ## Declaring Events
 
+<<<<<<< HEAD
 To declare an event, use the
 [`decl_event!` macro](https://crates.parity.io/frame_support/macro.decl_event.html). Like any rust
 enum, Events have names, and can optionally carry data with them. The syntax is slightly different
 depending on whether the events carry data of primitive types, or generic types from the pallet's
 configuration trait. These two techniques are demonstrated in the `simple-event` and `generic-event`
 pallets respectively.
+=======
+To declare an event, use the [`decl_event!` macro](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/macro.decl_event.html). Like any rust enum, Events have names, and can optionally carry data with them. The syntax is slightly different depending on whether the events carry data of primitive types, or generic types from the pallet's configuration trait. These two techniques are demonstrated in the `simple-event` and `generic-event` pallets respectively.
+>>>>>>> master
 
 ### Simple Events
 

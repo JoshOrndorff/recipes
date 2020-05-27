@@ -1,4 +1,5 @@
 # Sha3 Proof of Work Algorithms
+<<<<<<< HEAD
 
 _[`consensus/sha3pow`](https://github.com/substrate-developer-hub/recipes/tree/master/consensus/sha3pow)_
 
@@ -14,6 +15,15 @@ recipe we specify two concrete PoW algorithms, both of which are based on the
 First we turn our attention to a minimal working implementation. This consensus engine is kept
 intentionally simple. It omits some features that make Proof of Work practical for real-world use
 such as difficulty adjustment.
+=======
+*[`consensus/sha3pow`](https://github.com/substrate-developer-hub/recipes/tree/master/consensus/sha3pow)*
+
+[Proof of Work](https://en.wikipedia.org/wiki/Proof_of_work) is not a single consensus algorithm. Rather it is a class of algorithms represented in Substrate by the [`PowAlgorithm` trait](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sc_consensus_pow/trait.PowAlgorithm.html). Before we can build a PoW node we must specify a concrete PoW algorithm by implementing this trait. In this recipe we specify two concrete PoW algorithms, both of which are based on the [sha3 hashing algorithm](https://en.wikipedia.org/wiki/SHA-3).
+
+## Minimal Sha3 PoW
+
+First we turn our attention to a minimal working implementation. This consensus engine is kept intentionally simple. It omits some features that make Proof of Work practical for real-world use such as difficulty adjustment.
+>>>>>>> master
 
 Begin by creating a struct that will implement the `PowAlgorithm Trait`.
 
@@ -24,6 +34,7 @@ Begin by creating a struct that will implement the `PowAlgorithm Trait`.
 pub struct MinimalSha3Algorithm;
 ```
 
+<<<<<<< HEAD
 Because this is a _minimal_ PoW algorithm, our struct can also be quite simple. In fact, it is a
 [unit struct](https://doc.rust-lang.org/rust-by-example/custom_types/structs.html). A more complex
 PoW algorithm that interfaces with the runtime would need to hold a reference to the client. An
@@ -36,6 +47,13 @@ example of this (on an older Substrate codebase) can be seen in
 The first function we must provide returns the difficulty of the next block to be mined. In our
 minimal sha3 algorithm, this function is quite simple. The difficulty is fixed. This means that as
 more mining power joins the network, the block time will become faster.
+=======
+Because this is a _minimal_ PoW algorithm, our struct can also be quite simple. In fact, it is a [unit struct](https://doc.rust-lang.org/rust-by-example/custom_types/structs.html). A more complex PoW algorithm that interfaces with the runtime would need to hold a reference to the client. An example of this (on an older Substrate codebase) can be seen in [Kulupu](https://github.com/kulupu/kulupu/)'s [RandomXAlgorithm](https://github.com/kulupu/kulupu/blob/3500b7f62fdf90be7608b2d813735a063ad1c458/pow/src/lib.rs#L137-L145).
+
+### Difficulty
+
+The first function we must provide returns the difficulty of the next block to be mined. In our minimal sha3 algorithm, this function is quite simple. The difficulty is fixed. This means that as more mining power joins the network, the block time will become faster.
+>>>>>>> master
 
 ```rust, ignore
 impl<B: BlockT<Hash=H256>> PowAlgorithm<B> for Sha3Algorithm {
@@ -53,11 +71,15 @@ impl<B: BlockT<Hash=H256>> PowAlgorithm<B> for Sha3Algorithm {
 
 ### Verification
 
+<<<<<<< HEAD
 Our PoW algorithm must also be able to verify blocks provided by other authors. We are first given
 the pre-hash, which is a hash of the block before the proof of work seal is attached. We are also
 given the seal, which testifies that the work has been done, and the difficulty that the block
 author needed to meet. This function first confirms that the provided seal actually meets the target
 difficulty, then it confirms that the seal is actually valid for the given pre-hash.
+=======
+Our PoW algorithm must also be able to verify blocks provided by other authors. We are first given the pre-hash, which is a hash of the block before the proof of work seal is attached. We are also given the seal, which testifies that the work has been done, and the difficulty that the block author needed to meet. This function first confirms that the provided seal actually meets the target difficulty, then it confirms that the seal is actually valid for the given pre-hash.
+>>>>>>> master
 
 ```rust, ignore
 fn verify(
@@ -134,6 +156,7 @@ fn mine(
 }
 ```
 
+<<<<<<< HEAD
 Notice that this function takes a parameter for the number of rounds of mining it should attempt. If
 no block has been successfully mined in this time, the method will return. This gives the service a
 chance to check whether any new blocks have been received from other authors since the mining
@@ -154,6 +177,19 @@ We begin as before by defining a struct that will implement the `PowAlgorithm` t
 this struct must hold a reference to the
 [`Client`](https://crates.parity.io/sc_service/client/struct.Client.html) so it can call the
 appropriate runtime APIs.
+=======
+Notice that this function takes a parameter for the number of rounds of mining it should attempt. If no block has been successfully mined in this time, the method will return. This gives the service a chance to check whether any new blocks have been received from other authors since the mining started. If a valid block has been received, then we will start mining on it. If no such block has been received, we will go in for another try at mining on the same block as before.
+
+
+
+## Realistic Sha3 PoW
+
+Having understood the fundamentals, we can now build a more realistic sha3 algorithm. The primary difference here is that this algorithm will fetch the difficulty from the runtime via a [runtime api](./runtime-api.md). This change allows the runtime to dynamically adjust the difficulty based on block time. So if more mining power joins the network, the diffculty adjusts, and the blocktime remains constant.
+
+### Defining the `Sha3Algorithm` Struct
+
+We begin as before by defining a struct that will implement the `PowAlgorithm` trait. Unlike before, this struct must hold a reference to the [`Client`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sc_service/client/struct.Client.html) so it can call the appropriate runtime APIs.
+>>>>>>> master
 
 ```rust, ignore
 /// A complete PoW Algorithm that uses Sha3 hashing.
@@ -173,8 +209,12 @@ impl<C> Sha3Algorithm<C> {
 }
 ```
 
+<<<<<<< HEAD
 And finally we manually implement `Clone`. We cannot derive clone as we did for the
 `MinimalSha3Algorithm`.
+=======
+And finally we manually implement `Clone`. We cannot derive clone as we did for the `MinimalSha3Algorithm`.
+>>>>>>> master
 
 ```rust, ignore
 // Manually implement clone. Deriving doesn't work because
@@ -186,6 +226,7 @@ impl<C> Clone for Sha3Algorithm<C> {
 }
 ```
 
+<<<<<<< HEAD
 > It isn't critical to understand _why_ the manual `Clone` implementation is necessary, just that it
 > is necessary.
 
@@ -195,6 +236,13 @@ As before we implement the `PowAlgorithm` trait for out `Sha3Algorithm`. This ti
 complex trait bounds to ensure that the client the algorithm holds a reference to actually provides
 the [`DifficultyAPI`](https://crates.parity.io/sp_consensus_pow/trait.DifficultyApi.html) necessary
 to fetch the PoW difficulty from the runtime.
+=======
+> It isn't critical to understand _why_ the manual `Clone` implementation is necessary, just that it is necessary.
+
+### Implementing the `PowAlgorithm` trait
+
+As before we implement the `PowAlgorithm` trait for out `Sha3Algorithm`. This time we supply more complex trait bounds to ensure that the client the algorithm holds a reference to actually provides the [`DifficultyAPI`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sp_consensus_pow/trait.DifficultyApi.html) necessary to fetch the PoW difficulty from the runtime.
+>>>>>>> master
 
 ```rust, ignore
 // Here we implement the general PowAlgorithm trait for our concrete Sha3Algorithm
@@ -210,9 +258,13 @@ impl<B: BlockT<Hash=H256>, C> PowAlgorithm<B> for Sha3Algorithm<C> where
 
 ### Difficulty
 
+<<<<<<< HEAD
 The implementation of `PowAlgorithm`'s `difficulty` function, no longer returns a fxed value, but
 rather calls into the runtime API which is guaranteed to exist because of the trait bounds. It also
 maps any errors that may have occurred when using the API.
+=======
+The implementation of `PowAlgorithm`'s `difficulty` function, no longer returns a fxed value, but rather calls into the runtime API which is guaranteed to exist because of the trait bounds. It also maps any errors that may have occurred when using the API.
+>>>>>>> master
 
 ```rust, ignore
 fn difficulty(&self, parent: B::Hash) -> Result<Self::Difficulty, Error<B>> {

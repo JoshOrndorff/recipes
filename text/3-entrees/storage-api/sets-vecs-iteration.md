@@ -65,10 +65,14 @@ decl_storage! {
 }
 ```
 
+<<<<<<< HEAD
 Before [3071](https://github.com/paritytech/substrate/pull/3071) was merged, it was necessary to
 call
 [`mutate`](https://crates.parity.io/frame_support/storage/trait.StorageValue.html#tymethod.mutate)
 to push new values to a vector stored in runtime storage.
+=======
+Before [3071](https://github.com/paritytech/substrate/pull/3071) was merged, it was necessary to call [`mutate`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/storage/trait.StorageValue.html#tymethod.mutate) to push new values to a vector stored in runtime storage.
+>>>>>>> master
 
 ```rust, ignore
 fn mutate_to_append(origin) -> Result {
@@ -81,11 +85,16 @@ fn mutate_to_append(origin) -> Result {
 }
 ```
 
+<<<<<<< HEAD
 For vectors stored in the runtime, mutation can be relatively expensive. This follows from the fact
 that `mutate` entails decoding the vector, making changes, and re-encoding the whole vector. It
 seems wasteful to decode the entire vector, push a new item, and then re-encode the whole thing.
 This provides sufficient motivation for
 [`append`](https://crates.parity.io/frame_support/storage/trait.StorageValue.html#tymethod.append):
+=======
+For vectors stored in the runtime, mutation can be relatively expensive. This follows from the fact that `mutate` entails decoding the vector, making changes, and re-encoding the whole vector. It seems wasteful to decode the entire vector, push a new item, and then re-encode the whole thing. This provides sufficient motivation for [`append`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/storage/trait.StorageValue.html#tymethod.append):
+
+>>>>>>> master
 
 ```rust, ignore
 fn append_new_entries(origin) -> Result {

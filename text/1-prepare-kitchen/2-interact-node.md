@@ -5,9 +5,13 @@ your first blockchain.
 
 ## Launch a Development Node
 
+<<<<<<< HEAD
 Before we launch our node we will purge any chain data. If you've followed the instructions exactly,
 you will not yet have any chain data to purge, but on each subsequent run, you will, and it is best
 to get in the habit of purging your chain now. We will start our node in development mode (`--dev`).
+=======
+Before we launch our node we will purge any chain data. If you've followed the instructions exactly, you will not yet have any chain data to purge, but on each subsequent run, you will, and it is best to get in the habit of purging your chain now. We will start our node in development mode (`--dev`).
+>>>>>>> master
 
 ```bash
 # Purge existing blockchain data (if any)
@@ -17,11 +21,15 @@ to get in the habit of purging your chain now. We will start our node in develop
 ./target/release/kitchen-node --dev
 ```
 
+<<<<<<< HEAD
 You should now see your node up and running and waiting for transactions. This Kitchen Node, and
 several other nodes included with the Recipes, is an instant seal node. That means it will not
 create any blocks until there are transactions to process. It also means that when a transaction is
 ready, the node will instantly create a block. Instant seal nodes are ideal for experimenting with
 your Substrate runtime. The output looks something like this.
+=======
+You should now see your node up and running and waiting for transactions. This Kitchen Node, and several other nodes included with the Recipes, is an instant seal node. That means it will not create any blocks until there are transactions to process. It also means that when a transaction is ready, the node will instantly create a block. Instant seal nodes are ideal for experimenting with your Substrate runtime. The output looks something like this.
+>>>>>>> master
 
 ```
 2020-05-18 14:33:35 Running in --dev mode, RPC CORS has been disabled.
@@ -51,9 +59,13 @@ with our blockchain, we need to give it a little chain-specific information know
 You'll learn what all this means as you work through the recipes; for now just follow the
 instructions.
 
+<<<<<<< HEAD
 > If you are not clicking the link above but visiting Apps directly, by default Apps connects to
 > Kusama network. You will need to switch to your locally running network, with only one node, by
 > clicking on the network icon on Apps top left corner.
+=======
+> If you are not clicking the link above but visiting Apps directly, by default Apps connects to Kusama network. You will need to switch to your locally running network, with only one node, by clicking on the network icon on Apps top left corner.
+>>>>>>> master
 >
 > ![Screenshot: Switching Network](../img/apps-select-network.png)
 
@@ -66,6 +78,7 @@ of `runtimes/super-runtime/types.json` into Apps.
 
 ![Screenshot: pasting types into Apps UI](../img/apps-types.png)
 
+<<<<<<< HEAD
 The kitchen node uses the super runtime by default. As you work through the recipes, you'll learn
 that it is easy to use other runtimes in this node, or use other nodes entirely. When you do use
 another runtime, you need to insert the appropriate types from the
@@ -78,3 +91,10 @@ You may now submit a simple token transfer transaction using the "Transfer" tab.
 will notice that your node instantly creates a block, and the transaction is processed. As you work
 through the recipes, you will use the **Chain State** tab to query the blockchain status and
 **Extrinsics** to send transactions to the blockchain. Play around for a bit before moving on.
+=======
+The kitchen node uses the super runtime by default. As you work through the recipes, you'll learn that it is easy to use other runtimes in this node, or use other nodes entirely. When you do use another runtime, you need to insert the appropriate types from the `runtimes/<whatever runtime you're using>/types.json` file. Every runtime that ships with the Recipes has this file.
+
+## Submitting a Transaction
+
+You may now submit a simple token transfer transaction using the "Transfer" tab. When you do, you will notice that your node instantly creates a block, and the transaction is processed. As you work through the recipes, you will use the **Chain State** tab to query the blockchain status and **Extrinsics** to send transactions to the blockchain. Play around for a bit before moving on.
+>>>>>>> master

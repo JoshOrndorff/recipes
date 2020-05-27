@@ -87,11 +87,15 @@ pub fn new_full(config: Configuration) -> Result<impl AbstractService, ServiceEr
 
 	if is_authority {
 		let proposer =
+<<<<<<< HEAD
 			sc_basic_authorship::ProposerFactory::new(
 				service.client(),
 				service.transaction_pool(),
 				service.prometheus_registry().as_ref(),
 			);
+=======
+			sc_basic_authorship::ProposerFactory::new(service.client(), service.transaction_pool());
+>>>>>>> master
 
 		let authorship_future = sc_consensus_manual_seal::run_instant_seal(
 			Box::new(service.client()),
