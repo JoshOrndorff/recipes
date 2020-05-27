@@ -60,7 +60,7 @@ Another common way to convert weight to fees is linearly. When converting linear
 multiplied by a constant coefficient to determine the fee to charge. This is demonstrated in the
 `weight-fee-runtime` with the `LinearWeightToFee` struct.
 
-We declare the struct with a associated type `C` which will provide the coefficient.
+We declare the struct with an associated type `C`, which will provide the coefficient.
 
 ```rust, ignore
 pub struct LinearWeightToFee<C>(sp_std::marker::PhantomData<C>);
