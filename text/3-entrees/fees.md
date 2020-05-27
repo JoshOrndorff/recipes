@@ -98,7 +98,7 @@ This struct is reusable, and works with different coefficients. Using it looks l
 
 ```rust, ignore
 parameter_types! {
-	// Used with LinearWeightToFee conversion. Leaving this constant in tact when using other
+	// Used with LinearWeightToFee conversion. Leaving this constant intact when using other
 	// conversion techniques is harmless.
 	pub const FeeWeightRatio: u128 = 1_000;
 
