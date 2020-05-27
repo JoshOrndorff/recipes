@@ -5,7 +5,7 @@ authors = ["4meta5"]
 repository = 'https://github.com/substrate-developer-hub/recipes'
 edition = "2018"
 license = "GPL-3.0-or-later"
-desciption = "A pallet that demonstrates Substrate's storage maps"
+description = "A pallet that demonstrates Substrate's storage maps"
 
 [package.metadata.substrate]
 categories = [

@@ -5,7 +5,7 @@ authors = ["shawntabrizi"]
 repository = 'https://github.com/substrate-developer-hub/recipes'
 edition = "2018"
 license = "GPL-3.0-or-later"
-descriotion = "A pallet that demonstrates printing output the a node's console"
+description = "A pallet that demonstrates printing output the a node's console"
 
 [package.metadata.substrate]
 categories = [
