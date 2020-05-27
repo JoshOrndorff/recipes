@@ -36,12 +36,12 @@ sp-std = { version = '2.0.0-rc2', default-features = false }
 sp-transaction-pool = { version = '2.0.0-rc2', default-features = false }
 sp-version = { version = '2.0.0-rc2', default-features = false }
 
-balances = { package = 'pallet-balances', version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d', default-features = false }
-transaction-payment = { package = 'pallet-transaction-payment', version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d', default-features = false }
-grandpa = { package = 'pallet-grandpa', version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d', default-features = false }
-randomness-collective-flip = { package = 'pallet-randomness-collective-flip', version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d', default-features = false }
-timestamp = { package = 'pallet-timestamp', version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d', default-features = false }
-sudo = { package = 'pallet-sudo', version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d', default-features = false }
+balances = { package = 'pallet-balances', version = '2.0.0-rc2', default-features = false }
+transaction-payment = { package = 'pallet-transaction-payment', version = '2.0.0-rc2', default-features = false }
+grandpa = { package = 'pallet-grandpa', version = '2.0.0-rc2', default-features = false }
+randomness-collective-flip = { package = 'pallet-randomness-collective-flip', version = '2.0.0-rc2', default-features = false }
+timestamp = { package = 'pallet-timestamp', version = '2.0.0-rc2', default-features = false }
+sudo = { package = 'pallet-sudo', version = '2.0.0-rc2', default-features = false }
 
 [build-dependencies]
 wasm-builder-runner = { package = "substrate-wasm-builder-runner", version = "1.0.4" }
