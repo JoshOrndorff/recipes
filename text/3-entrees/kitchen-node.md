@@ -1,4 +1,4 @@
-# Manual Seal
+# Kitchen Node (Instant Seal)
 
 _[`nodes/kitchen-node`](https://github.com/substrate-developer-hub/recipes/tree/master/nodes/kitchen-node)_
 
