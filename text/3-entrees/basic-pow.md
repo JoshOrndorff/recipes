@@ -114,7 +114,7 @@ pub fn build_inherent_data_providers() -> Result<InherentDataProviders, ServiceE
 Anything that implements the
 [`ProvideInherentData` trait](https://substrate.dev/rustdocs/v2.0.0-rc2/sp_inherents/trait.ProvideInherentData.html)
 may be used here. The block authoring logic must supply all inherents that the runtime expects. In
-this case of this basic-pow chain, that is just the
+the case of this basic-pow chain, that is just the
 [`TimestampInherentData`](https://substrate.dev/rustdocs/v2.0.0-rc2/sp_timestamp/trait.TimestampInherentData.html)
 expected by the [timestamp pallet](https://substrate.dev/rustdocs/v2.0.0-rc2/pallet_timestamp/index.html). In order
 to register other inherents, you would call `register_provider` multiple times, and map errors
