@@ -22,7 +22,7 @@ issue, please inlcude the following information.
 -   **What recipe has the issue** - You may specify the recipe by name (e.g. "Basic PoW Node"),
     directory (eg. `/nodes/basic-pow`), or GitHub link (eg.
     https://github.com/substrate-developer-hub/recipes/tree/master/nodes/basic-pow). Other
-    unambiguous ways of specifying the particular recipe are also acceptable (eg. crates.io link, or
+    unambiguous ways of specifying the particular recipe are also acceptable (e.g. crates.io link, or
     rendered text link).
 -   **Steps to reproduce** - What actions did you take to notice the issue? Did you submit a
     particular extrinsic? Did you compile the code a particular way? What command did you run the
