@@ -57,7 +57,7 @@ Substrate development, the `develop` branch allows dependencies from git.
 
 ### Cutting a Release
 
-It is time to tag a new release when either, enough new features have been contributed that
+It is time to tag a new release when either enough new features have been contributed that
 releasing makes sense, or, more likely, Substrate itself has tagged a new release. The release
 process also follows gitflow. The process of creating a new release is usually undertaken by the
 project maintainer, but the steps are outlined here nonetheless.
