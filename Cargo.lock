@@ -689,6 +689,7 @@ dependencies = [
  "frame-system",
  "parity-scale-codec",
  "sp-core",
+ "sp-io",
  "sp-runtime",
  "sp-std",
  "vec-set",

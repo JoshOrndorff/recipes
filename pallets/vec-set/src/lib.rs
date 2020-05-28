@@ -56,7 +56,7 @@ decl_module! {
 
 		/// Adds a member to the membership set unless the max is reached
 		#[weight = 10_000]
-		fn add_member(origin) -> DispatchResult {
+		pub fn add_member(origin) -> DispatchResult {
 			let new_member = ensure_signed(origin)?;
 
 			let mut members = Members::<T>::get();
