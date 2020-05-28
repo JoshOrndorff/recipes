@@ -13,7 +13,7 @@ pub trait Trait: system::Trait {}
 
 This provides access to `Hash`, `AccountId`, and `BlockNumber` anywhere that specifies the generic
 `<T: Trait>` using `T::<Type>`. It also provides access to other useful types, declared in
-[`frame_system`'s configuration trait](https://crates.parity.io/frame_system/trait.Trait.html).
+[`frame_system`'s configuration trait](https://substrate.dev/rustdocs/v2.0.0-rc2/frame_system/trait.Trait.html).
 
 > basically add a note here on why traits are important for runtime development `=>` we are in the
 > business of building libraries to support the configuration and modular and extensible digital
@@ -26,6 +26,6 @@ This provides access to `Hash`, `AccountId`, and `BlockNumber` anywhere that spe
 
 Unlike in smart contract development, the way to inherit shared behavior is not to directly import
 other pallets. Instead, it is common to either implement the same logic in the new context or
-utilize a trait from [`frame_support`](https://crates.parity.io/frame_support/index.html) to guide
+utilize a trait from [`frame_support`](https://substrate.dev/rustdocs/v2.0.0-rc2/frame_support/index.html) to guide
 the new implementation. By abstracting common behavior from pallets into `frame_support`, Substrate
 makes it easy to extract and enforce best practices in the runtime.
