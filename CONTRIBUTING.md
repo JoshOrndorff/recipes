@@ -19,7 +19,7 @@ issue, please inlcude the following information.
 
 -   **Short summary of the issue encountered** - In a sentence or two explain what the issue is at a
     high level.
--   **What recipe has the issue** - You may specify the recipe by name (eg. )"Basic PoW Node"),
+-   **What recipe has the issue** - You may specify the recipe by name (e.g. "Basic PoW Node"),
     directory (eg. `/nodes/basic-pow`), or GitHub link (eg.
     https://github.com/substrate-developer-hub/recipes/tree/master/nodes/basic-pow). Other
     unambiguous ways of specifying the particular recipe are also acceptable (eg. crates.io link, or
