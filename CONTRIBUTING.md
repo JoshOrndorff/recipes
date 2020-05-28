@@ -34,7 +34,7 @@ issue, please inlcude the following information.
 
 ## Git Workflow
 
-The recipes follows closely to
+The recipes adhere closely to
 [gitflow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow). That means
 there are two main branches in the repository, `master`, and `develop` as well as any number of
 topic branches. If you aren't familiar with gitflow, it is worth reading that article and studying
