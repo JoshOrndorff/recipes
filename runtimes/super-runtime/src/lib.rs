@@ -252,9 +252,18 @@ impl constant_config::Trait for Runtime {
 	type ClearFrequency = ClearFrequency;
 }
 
-impl check_membership::Trait for Runtime {
-	type Event = Event;
-}
+// The following two configuration traits are for the loosely- and tightly-coupled variants
+// of the check membership pallet. Both pallets are housed in the same `check-membership` crate.
+// impl check_membership::loose::Trait for Runtime {
+// 	type Event = Event;
+// 	// You can choose either the vec-set or map-set implementation of the AccountSet trait
+// 	type MembershipSource = VecSet;
+// 	// type MembershipSource = MapSet;
+// }
+//
+// impl check_membership::tight::Trait for Runtime {
+// 	type Event = Event;
+// }
 
 // The following two configuration traits are for two different instances of the deafult-instance
 // pallet. Notice that only the second instance has to explicitly specify an instance.
@@ -301,6 +310,10 @@ impl last_caller::Trait<last_caller::Instance1> for Runtime {
 impl last_caller::Trait<last_caller::Instance2> for Runtime {
 	type Event = Event;
 }
+
+// impl map_set::Trait for Runtime {
+// 	type Event = Event;
+// }
 
 impl ringbuffer_queue::Trait for Runtime {
 	type Event = Event;
@@ -367,7 +380,8 @@ construct_runtime!(
 		AddingMachine: adding_machine::{Module, Call, Storage},
 		BasicToken: basic_token::{Module, Call, Storage, Event<T>},
 		Charity: charity::{Module, Call, Storage, Event<T>},
-		CheckMembership: check_membership::{Module, Call, Storage, Event<T>},
+		// CheckMembershipLoose: check_membership::loose::{Module, Call, Event<T>},
+		// CheckMembershipTight: check_membership::tight::{Module, Call, Event<T>},
 		ConmpoundingInterest: compounding_interest::{Module, Call, Storage, Event},
 		ConstantConfig: constant_config::{Module, Call, Storage, Event},
 		DefaultInstance1: default_instance::{Module, Call, Storage, Event<T>},
@@ -379,6 +393,7 @@ construct_runtime!(
 		GenericEvent: generic_event::{Module, Call, Event<T>},
 		LastCaller1: last_caller::<Instance1>::{Module, Call, Storage, Event<T>},
 		LastCaller2: last_caller::<Instance2>::{Module, Call, Storage, Event<T>},
+		// MapSet: map_set::{Module, Call, Storage, Event<T>},
 		RingbufferQueue: ringbuffer_queue::{Module, Call, Storage, Event<T>},
 		RandomnessDemo: randomness::{Module, Call, Storage, Event},
 		SimpleCrowdfund: simple_crowdfund::{Module, Call, Storage, Event<T>},
@@ -387,7 +402,7 @@ construct_runtime!(
 		SingleValue: single_value::{Module, Call, Storage},
 		StorageCache: storage_cache::{Module, Call, Storage, Event<T>},
 		StructStorage: struct_storage::{Module, Call, Storage, Event<T>},
-		VecSet: vec_set::{Module, Call, Storage, Event<T>},
+		// VecSet: vec_set::{Module, Call, Storage, Event<T>},
 	}
 );
 

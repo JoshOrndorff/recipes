@@ -6528,7 +6528,6 @@ dependencies = [
  "storage-cache",
  "struct-storage",
  "substrate-wasm-builder-runner",
- "vec-set",
 ]
 
 [[package]]
