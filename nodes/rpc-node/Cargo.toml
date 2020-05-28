@@ -3,7 +3,7 @@ authors = ['Anonymous']
 build = 'build.rs'
 edition = '2018'
 name = 'rpc-node'
-version = '2.0.0-dev'
+version = "2.0.0-rc2"
 repository = 'https://github.com/substrate-developer-hub/recipes'
 description = 'A Substrate node that demonstrates a custom RPC endpoint'
 license = "GPL-3.0-or-later"
@@ -16,7 +16,7 @@ categories = [
 	"Instant Seal",
 	"recipe",
 ]
-compatibility_version = "2.0.0-dev"
+compatibility_version = "2.0.0-rc2"
 
 [[bin]]
 name = 'rpc-node'

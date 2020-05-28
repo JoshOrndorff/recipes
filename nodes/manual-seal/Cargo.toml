@@ -4,7 +4,7 @@ build = 'build.rs'
 edition = '2018'
 name = 'manual-seal'
 repository = 'https://github.com/paritytech/substrate/'
-version = '2.0.0-dev'
+version = "2.0.0-rc2"
 description = 'A Substrate-based node that uses the instant-seal and manual-seal consensus engines'
 license = "GPL-3.0-or-later"
 
@@ -15,7 +15,7 @@ categories = [
 	"tutorial",
 	"recipe",
 ]
-compatibility_version = "2.0.0-dev"
+compatibility_version = "2.0.0-rc2"
 
 [[bin]]
 name = 'manual-seal'

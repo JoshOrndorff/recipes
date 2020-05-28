@@ -1,6 +1,6 @@
 [package]
 name = "offchain-demo"
-version = "2.0.0-dev"
+version = "2.0.0-rc2"
 authors = ["Parity Technologies <admin@parity.io>"]
 edition = "2018"
 repository = "https://github.com/substrate-developer-hub/recipes/"
@@ -14,7 +14,7 @@ categories = [
 	"tutorial",
 	"recipe",
 ]
-compatibility_version = "2.0.0-dev"
+compatibility_version = "2.0.0-rc2"
 
 [dependencies]
 # external dependencies

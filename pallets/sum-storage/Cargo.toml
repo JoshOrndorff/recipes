@@ -1,6 +1,6 @@
 [package]
 name = "sum-storage"
-version = "2.0.0-dev"
+version = "2.0.0-rc2"
 authors = ["Joshy Orndorff"]
 edition = "2018"
 description = "A pallet with two storage items whose sum is exposed via a custom runtime API"
@@ -13,7 +13,7 @@ categories = [
 	"tutorial",
 	"recipe",
 ]
-compatibility_version = "2.0.0-dev"
+compatibility_version = "2.0.0-rc2"
 
 
 [dependencies]
