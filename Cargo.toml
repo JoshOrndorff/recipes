@@ -41,4 +41,5 @@ members = [
 	"nodes/manual-seal",
 	"nodes/rpc-node",
 	"consensus/sha3pow",
+	"traits/account-set",
 ]
