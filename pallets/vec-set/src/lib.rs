@@ -6,6 +6,7 @@
 use frame_support::{decl_error, decl_event, decl_module, decl_storage, dispatch::DispatchResult, ensure};
 use frame_system::{self as system, ensure_signed};
 use sp_std::prelude::*;
+use sp_std::collections::btree_set::BTreeSet;
 use account_set::AccountSet;
 
 #[cfg(test)]
@@ -53,7 +54,7 @@ decl_module! {
 
 		type Error = Error<T>;
 
-		/// Appends a member to the membership set unless the max is reached
+		/// Adds a member to the membership set unless the max is reached
 		#[weight = 10_000]
 		fn add_member(origin) -> DispatchResult {
 			let new_member = ensure_signed(origin)?;
@@ -100,5 +101,13 @@ decl_module! {
 		}
 
 		// also see `append_or_insert`, `append_or_put` in pallet-elections/phragmen, democracy
+	}
+}
+
+impl<T: Trait> AccountSet for Module<T> {
+	type AccountId = T::AccountId;
+
+	fn accounts() -> BTreeSet<T::AccountId> {
+		Self::members().into_iter().collect::<BTreeSet<_>>()
 	}
 }
