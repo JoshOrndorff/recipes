@@ -1,59 +1,21 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
-//! Pallet that demonstrates a minimal access control check. When a user calls this pallet's
-//! only dispatchable function, `check_membership`, the caller is checked against a set of approved
-//! callers. Only if the caller is approved, do they successfully emit the event.
+//! This Module contains two nearly identical Substrate pallets. Both demonstrate access control
+//! and coupling multiple pallets together ina FRAME runtime.
 //!
-//! The list of approved members is provided by the vec-set pallet. In order for this pallet to be
-//! used, the vec-set pallet must also be present in the runtime.
+//! The _tight_ variant demonstrates tightly coupling pallets and is itself tightly-coupled to the
+//! vec-set pallet.
+//!
+//! The _loose_ variant demonstrates loosely coupling pallets and is itself loosely-coupled through
+//! the AccountSet trait.
 
 
-use frame_support::{decl_error, decl_event, decl_module, dispatch::DispatchResult};
-use frame_system::{self as system, ensure_signed};
+pub mod loose;
+pub mod tight;
 
-#[cfg(test)]
-mod tests;
-
-pub trait Trait: system::Trait + vec_set::Trait {
-	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
-}
-
-decl_event!(
-	pub enum Event<T>
-	where
-		AccountId = <T as system::Trait>::AccountId,
-	{
-		/// The caller is a member.
-		IsAMember(AccountId),
-	}
-);
-
-decl_error! {
-	pub enum Error for Module<T: Trait> {
-		/// The caller is not a member
-		NotAMember,
-	}
-}
-
-decl_module! {
-	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
-		fn deposit_event() = default;
-
-		/// Checks whether the caller is a member of the set of Account Ids provided by the vec-set
-		/// pallet. Emits an event if they are, and errors if not.
-		#[weight = 10_000]
-		fn check_membership(origin) -> DispatchResult {
-			let caller = ensure_signed(origin)?;
-
-			// Get the members from the vec-set pallet
-			let members = vec_set::Module::<T>::members();
-
-			// Check whether the caller is a member
-			members.binary_search(&caller).map_err(|_| Error::<T>::NotAMember)?;
-
-			// If the previous call didn't error, then the caller is a member, so emit the event
-			Self::deposit_event(RawEvent::IsAMember(caller));
-			Ok(())
-		}
-	}
-}
+// TODO I don't think I need these because they are referenced in the individual pallet variants
+// #[cfg(test)]
+// mod loose_tests;
+//
+// #[cfg(test)]
+// mod tight_tests;
