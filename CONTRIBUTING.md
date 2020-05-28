@@ -51,7 +51,7 @@ likely because relevant crates.io does not yet host the relevant crates.
 
 ### Develop Branch
 
-The `develop` branch is where active development happens. It is where new recipes, restructures,
+The `develop` branch is where active development happens. It is where new recipes,
 revisions, CI updates, and most other changes are merged. In order to keep up with the latest
 Substrate development, the `develop` branch allows dependencies from git.
 
