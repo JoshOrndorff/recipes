@@ -67,7 +67,7 @@ decl_module! {
 			// leverage the binary search which makes this check O(log n).
 			match members.binary_search(&new_member) {
 				// If the search succeeds, the caller is already a member, so just return
-				Ok(_) => Ok(()),
+				Ok(_) => Err(Error::<T>::AlreadyMember)?,
 				// If the search fails, the caller is not a member and we learned the index where
 				// they should be inserted
 				Err(index) => {
