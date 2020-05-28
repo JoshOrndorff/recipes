@@ -690,6 +690,7 @@ dependencies = [
  "sp-core",
  "sp-runtime",
  "sp-std",
+ "vec-set",
 ]
 
 [[package]]

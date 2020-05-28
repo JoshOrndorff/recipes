@@ -1,23 +1,21 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
-//! Permissioned Function with Generic Event
-//! a permissioned funtion which can only be called by the "owner". An event is emitted
-//! when the function is successfully executed.
-use frame_support::{decl_event, decl_module, decl_storage, dispatch::DispatchResult, ensure};
+//! Pallet that demonstrates a minimal access control check. When a user calls this pallet's
+//! only dispatchable function, `check_membership`, the caller is checked against a set of approved
+//! callers. Only if the caller is approved, do they successfully emit the event.
+//!
+//! The list of approved members is provided by the vec-set pallet. In order for this pallet to be
+//! used, the vec-set pallet must also be present in the runtime.
+
+
+use frame_support::{decl_error, decl_event, decl_module, dispatch::DispatchResult};
 use frame_system::{self as system, ensure_signed};
-use sp_std::vec::Vec;
 
 #[cfg(test)]
 mod tests;
 
-pub trait Trait: system::Trait {
+pub trait Trait: system::Trait + vec_set::Trait {
 	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
-}
-
-decl_storage! {
-	trait Store for Module<T: Trait> as PGeneric {
-		Members get(fn members): Vec<T::AccountId>;
-	}
 }
 
 decl_event!(
@@ -25,43 +23,37 @@ decl_event!(
 	where
 		AccountId = <T as system::Trait>::AccountId,
 	{
-		AddMember(AccountId),
-		RemoveMember(AccountId),
+		/// The caller is a member.
+		IsAMember(AccountId),
 	}
 );
+
+decl_error! {
+	pub enum Error for Module<T: Trait> {
+		/// The caller is not a member
+		NotAMember,
+	}
+}
 
 decl_module! {
 	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
 		fn deposit_event() = default;
 
-		/// Adds the caller to the membership set unless the caller is already present
+		/// Checks whether the caller is a member of the set of Account Ids provided by the vec-set
+		/// pallet. Emits an event if they are, and errors if not.
 		#[weight = 10_000]
-		fn add_member(origin) -> DispatchResult {
-			let new_member = ensure_signed(origin)?;
+		fn check_membership(origin) -> DispatchResult {
+			let caller = ensure_signed(origin)?;
 
-			// Ensure that the caller is not already a member
-			ensure!(!Self::is_member(&new_member), "already a member");
+			// Get the members from the vec-set pallet
+			let members = vec_set::Module::<T>::members();
 
-			<Members<T>>::append(&new_member);
-			Self::deposit_event(RawEvent::AddMember(new_member));
+			// Check whether the caller is a member
+			members.binary_search(&caller).map_err(|_| Error::<T>::NotAMember)?;
+
+			// If the previous call didn't error, then the caller is a member, so emit the event
+			Self::deposit_event(RawEvent::IsAMember(caller));
 			Ok(())
 		}
-
-		/// Removes the caller from the membership set
-		#[weight = 10_000]
-		fn remove_member(origin) -> DispatchResult {
-			let old_member = ensure_signed(origin)?;
-			ensure!(Self::is_member(&old_member), "not a member so can't be taken out of the set");
-			// keep all members except for the member in question
-			<Members<T>>::mutate(|mem| mem.retain(|m| m != &old_member));
-			Self::deposit_event(RawEvent::RemoveMember(old_member));
-			Ok(())
-		}
-	}
-}
-
-impl<T: Trait> Module<T> {
-	pub fn is_member(who: &T::AccountId) -> bool {
-		Self::members().contains(who)
 	}
 }
