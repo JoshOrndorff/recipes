@@ -7185,6 +7185,7 @@ checksum = "3fc439f2794e98976c88a2a2dafce96b930fe8010b0a256b3c2199a773933168"
 name = "vec-set"
 version = "2.0.0-dev"
 dependencies = [
+ "account-set",
  "frame-support",
  "frame-system",
  "parity-scale-codec",
