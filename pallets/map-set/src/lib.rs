@@ -5,6 +5,7 @@
 
 use frame_support::{decl_error, decl_event, decl_module, decl_storage, dispatch::DispatchResult, ensure};
 use frame_system::{self as system, ensure_signed};
+use frame_support::storage::IterableStorageMap;
 use sp_std::prelude::*;
 use sp_std::collections::btree_set::BTreeSet;
 use account_set::AccountSet;
@@ -85,10 +86,13 @@ decl_module! {
 	}
 }
 
-// impl<T: Trait> AccountSet for Module<T> {
-// 	type AccountId = T::AccountId;
-//
-// 	fn accounts() -> BTreeSet<T::AccountId> {
-// 		Self::members().into_iter().collect::<BTreeSet<_>>()
-// 	}
-// }
+impl<T: Trait> AccountSet for Module<T> {
+	type AccountId = T::AccountId;
+
+	fn accounts() -> BTreeSet<T::AccountId> {
+		<Members::<T> as IterableStorageMap<T::AccountId, bool>>
+			::iter()
+			.map(|(acct, _)| acct)
+			.collect::<BTreeSet<_>>()
+	}
+}
