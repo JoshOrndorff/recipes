@@ -3,7 +3,7 @@ name = "fixed-point"
 version = "2.0.0-rc2"
 authors = ["Joshy Orndorff"]
 edition = "2018"
-description = "A pallet that demonstrates using fixed point arithmetic on Substrate"
+description = "A pallet that demonstrates using fixed point arithmetic in Substrate"
 license = "GPL-3.0-or-later"
 repository = "https://github.com/substrate-developer-hub/recipes"
 
