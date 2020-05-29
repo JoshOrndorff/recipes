@@ -5,7 +5,7 @@ _See [Testing](./index.html) page for list of kitchen pallets with unit test cov
 There are two main patterns on writing tests for pallets. We can put the tests:
 
 1. At the bottom of the pallet, place unit tests in a separate Rust module with a special
-   compilation flag
+   compilation attribute:
 
     ```rust, ignore
     #[cfg(test)]
@@ -71,7 +71,7 @@ Now, declare the mock runtime as a unit structure
 pub struct TestRuntime;
 ```
 
-The `derive` macro attribute provides implementations of the `Clone + PartialEq + Eq + Debug` traits
+The `derive` macro attribute provides implementations of the `Clone`, `PartialEq`, `Eq`, `Debug` traits
 for the `TestRuntime` struct.
 
 The mock runtime also needs to implement the tested pallet's `Trait`. If it is unnecessary to test
@@ -270,7 +270,7 @@ environment specified in `new_test_ext`
 
 _[`pallets/struct-storage`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/struct-storage)_
 
-Another approach for a more flexible runtime test environment instantiates a unit struct
+Another approach providing for a more flexible runtime test environment, instantiates a unit struct
 `ExtBuilder`,
 
 ```rust, ignore
@@ -309,7 +309,7 @@ fn fake_test_example() {
 }
 ```
 
-While testing in this environment, runtimes that require signed extrinsics (aka take `origin` as a
+While testing in this environment, runtimes that require signed extrinsics (i.e. take `origin` as a
 parameter) will require transactions coming from an `Origin`. This requires importing the
 [`impl_outer_origin`](https://substrate.dev/rustdocs/v2.0.0-rc2/frame_support/macro.impl_outer_origin.html) macro
 from `support`
@@ -322,7 +322,7 @@ impl_outer_origin!{
 }
 ```
 
-It is possible to placed signed transactions as parameters in runtime methods that require the
+It is possible to place signed transactions as parameters in runtime methods that require the
 `origin` input. See the
 [full code in the kitchen](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/hello-substrate),
 but this looks like
@@ -356,7 +356,7 @@ pub trait Trait: 'static + Eq + Clone {
 ### Setting for Testing Event Emittances
 
 Events are not emitted on block 0. So when testing for whether events are emitted, we manually set
-the block number in the test environment from 0 to 1 as the following:
+the block number in the test environment from 0 to 1 like so:
 
 ```rust
 impl ExtBuilder {
