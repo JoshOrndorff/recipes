@@ -1,6 +1,6 @@
 [package]
 name = "weights"
-version = "2.0.0-rc2"
+version = "2.0.0-dev"
 authors = ["Anonymous"]
 repository = 'https://github.com/substrate-developer-hub/recipes'
 edition = "2018"
@@ -14,7 +14,7 @@ categories = [
 	"tutorial",
 	"recipe",
 ]
-compatibility_version = "2.0.0-rc2"
+compatibility_version = "2.0.0-dev"
 
 [features]
 default = ['std']
@@ -27,10 +27,10 @@ std = [
 
 [dependencies]
 parity-scale-codec = { version = "1.3.0", features = ["derive"], default-features = false }
-frame-support = { version = '2.0.0-rc2', default-features = false }
-frame-system = { version = '2.0.0-rc2', default-features = false }
-sp-runtime = { version = '2.0.0-rc2', default-features = false }
+frame-support = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d', default-features = false }
+frame-system = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d', default-features = false }
+sp-runtime = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d', default-features = false }
 
 
 [dev-dependencies]
-sp-core = { version = '2.0.0-rc2', default-features = false }
+sp-core = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d', default-features = false }

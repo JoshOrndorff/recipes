@@ -4,7 +4,7 @@ build = 'build.rs'
 edition = '2018'
 name = 'manual-seal'
 repository = 'https://github.com/paritytech/substrate/'
-version = "2.0.0-rc2"
+version = '2.0.0-dev'
 description = 'A Substrate-based node that uses the instant-seal and manual-seal consensus engines'
 license = "GPL-3.0-or-later"
 
@@ -15,7 +15,7 @@ categories = [
 	"tutorial",
 	"recipe",
 ]
-compatibility_version = "2.0.0-rc2"
+compatibility_version = "2.0.0-dev"
 
 [[bin]]
 name = 'manual-seal'
@@ -30,23 +30,23 @@ sha3 = "0.8"
 rand = { version = "0.7", features = ["small_rng"] }
 jsonrpc-core = "14.0.5"
 
-sc-consensus = '0.8.0-rc2'
-sc-consensus-manual-seal = '0.8.0-rc2'
-sc-rpc = '2.0.0-rc2'
-sc-client-api = '2.0.0-rc2'
-sp-blockchain =  '2.0.0-rc2'
-sp-timestamp = '2.0.0-rc2'
-sc-basic-authorship = '0.8.0-rc2'
-sc-cli = '0.8.0-rc2'
-sc-executor = '0.8.0-rc2'
-sc-network = '0.8.0-rc2'
-sc-service = '0.8.0-rc2'
-sc-transaction-pool = '2.0.0-rc2'
-sp-consensus = '0.8.0-rc2'
-sp-core = '2.0.0-rc2'
-sp-inherents = '2.0.0-rc2'
-sp-runtime = '2.0.0-rc2'
-sp-transaction-pool = '2.0.0-rc2'
+sc-consensus = { version = '0.8.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d' }
+sc-consensus-manual-seal = { version = '0.8.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d' }
+sc-rpc = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d' }
+sc-client-api = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d' }
+sp-blockchain =  { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d' }
+sp-timestamp = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d' }
+sc-basic-authorship = { version = '0.8.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d' }
+sc-cli = { version = '0.8.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d' }
+sc-executor = { version = '0.8.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d' }
+sc-network = { version = '0.8.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d' }
+sc-service = { version = '0.8.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d' }
+sc-transaction-pool = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d' }
+sp-consensus = { version = '0.8.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d' }
+sp-core = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d' }
+sp-inherents = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d' }
+sp-runtime = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d' }
+sp-transaction-pool = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d' }
 
 # This node is compatible with any of the runtimes below
 # ---
@@ -64,4 +64,4 @@ runtime = { package = "super-runtime", path = "../../runtimes/super-runtime" }
 
 [build-dependencies]
 vergen = '3.0.4'
-substrate-build-script-utils = '2.0.0-rc2'
+substrate-build-script-utils = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d' }
