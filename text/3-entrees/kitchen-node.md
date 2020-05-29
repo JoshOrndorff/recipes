@@ -90,9 +90,9 @@ without the UI.
 Installing the instant seal engine has three dependencies whereas the runtime had only one.
 
 ```toml
-sc-consensus = { version = '0.8.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d' }
-sc-consensus-manual-seal = { version = '0.8.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d' }
-sp-consensus = { version = '0.8.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d' }
+sc-consensus = { version = '0.8.0-dev', git = 'https://github.com/paritytech/substrate', rev = 'cd305af2a9f8ec7d13081b6dc6807014b207dab8' }
+sc-consensus-manual-seal = { version = '0.8.0-dev', git = 'https://github.com/paritytech/substrate', rev = 'cd305af2a9f8ec7d13081b6dc6807014b207dab8' }
+sp-consensus = { version = '0.8.0-dev', git = 'https://github.com/paritytech/substrate', rev = 'cd305af2a9f8ec7d13081b6dc6807014b207dab8' }
 ```
 
 ### The Proposer

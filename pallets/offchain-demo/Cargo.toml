@@ -26,12 +26,12 @@ alt_serde = { version = "1", default-features = false, features = ["derive"] }
 serde_json = { version = "1", default-features = false, git = "https://github.com/Xanewok/json", branch = "no-std", features = ["alloc"] }
 
 # Substrate dependencies
-frame-support = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d', default-features = false }
-frame-system = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d', default-features = false }
-sp-runtime = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d', default-features = false }
-sp-core = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d', default-features = false }
-sp-io = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d', default-features = false }
-sp-std = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d', default-features = false }
+frame-support = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = 'cd305af2a9f8ec7d13081b6dc6807014b207dab8', default-features = false }
+frame-system = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = 'cd305af2a9f8ec7d13081b6dc6807014b207dab8', default-features = false }
+sp-runtime = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = 'cd305af2a9f8ec7d13081b6dc6807014b207dab8', default-features = false }
+sp-core = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = 'cd305af2a9f8ec7d13081b6dc6807014b207dab8', default-features = false }
+sp-io = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = 'cd305af2a9f8ec7d13081b6dc6807014b207dab8', default-features = false }
+sp-std = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = 'cd305af2a9f8ec7d13081b6dc6807014b207dab8', default-features = false }
 
 [features]
 default = ['std']

@@ -18,8 +18,8 @@ compatibility_version = "2.0.0-dev"
 parity-scale-codec = '1.3.0'
 sha3 = "0.8"
 rand = { version = "0.7", features = ["small_rng"] }
-sc-consensus-pow = { version = '0.8.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d' }
-sp-api = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d' }
-sp-consensus-pow = { version = '0.8.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d' }
-sp-core = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d' }
-sp-runtime = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d' }
+sc-consensus-pow = { version = '0.8.0-dev', git = 'https://github.com/paritytech/substrate', rev = 'cd305af2a9f8ec7d13081b6dc6807014b207dab8' }
+sp-api = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = 'cd305af2a9f8ec7d13081b6dc6807014b207dab8' }
+sp-consensus-pow = { version = '0.8.0-dev', git = 'https://github.com/paritytech/substrate', rev = 'cd305af2a9f8ec7d13081b6dc6807014b207dab8' }
+sp-core = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = 'cd305af2a9f8ec7d13081b6dc6807014b207dab8' }
+sp-runtime = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = 'cd305af2a9f8ec7d13081b6dc6807014b207dab8' }
