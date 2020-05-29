@@ -120,7 +120,7 @@ that there is no way for this call to fail, but this is not quite true. The `ens
 function, used at the beginning, can return an error if the call was not from a signed origin. This
 is the first time we're seeing the important paradigm "**Verify first, write last**". In Substrate
 development, it is important that you always ensure preconditions are met and return errors at the
-beginning. After these checks have completed, then you may begin the functions computation.
+beginning. After these checks have completed, then you may begin the function's computation.
 
 ## Printing from the Runtime
 
