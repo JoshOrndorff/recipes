@@ -21,6 +21,7 @@ pub trait Trait: system::Trait {
 
 decl_storage! {
 	trait Store for Module<T: Trait> as VecMap {
+		// The set of all members. Stored as a single vec
 		Members get(fn members): Vec<T::AccountId>;
 	}
 }
@@ -67,7 +68,7 @@ decl_module! {
 			// leverage the binary search which makes this check O(log n).
 			match members.binary_search(&new_member) {
 				// If the search succeeds, the caller is already a member, so just return
-				Ok(_) => Err(Error::<T>::AlreadyMember)?,
+				Ok(_) => Err(Error::<T>::AlreadyMember.into()),
 				// If the search fails, the caller is not a member and we learned the index where
 				// they should be inserted
 				Err(index) => {
@@ -96,7 +97,7 @@ decl_module! {
 					Ok(())
 				},
 				// If the search fails, the caller is not a member, so just return
-				Err(_) => Err(Error::<T>::NotMember)?,
+				Err(_) => Err(Error::<T>::NotMember.into()),
 			}
 		}
 
