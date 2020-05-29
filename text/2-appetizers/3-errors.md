@@ -58,7 +58,7 @@ verified all preconditions, and thrown all possible errors before ever writing t
 In fact, the pattern of:
 
 -   calling functions that returned a `Result` or `Option`, and
--   checking if the result is `Some` or `Ok`. If not, returns from the function early with an error
+-   checking if the result is `Some` or `Ok` and if not, return from the function early with an error
 
 are so common that there are two standard Rust methods help performing the task.
 
