@@ -16,8 +16,8 @@ pub mod genesis;
 use sp_api::impl_runtime_apis;
 use sp_core::{Encode, OpaqueMetadata, H256};
 use sp_runtime::traits::{
-	BlakeTwo256, Block as BlockT, IdentifyAccount, IdentityLookup,
-	SaturatedConversion, Saturating, Verify,
+	BlakeTwo256, Block as BlockT, IdentifyAccount, IdentityLookup, SaturatedConversion, Saturating,
+	Verify,
 };
 use sp_runtime::{
 	create_runtime_str, generic,
@@ -36,8 +36,7 @@ pub use frame_support::{
 	traits::Randomness,
 	weights::{
 		constants::{BlockExecutionWeight, ExtrinsicBaseWeight, RocksDbWeight, WEIGHT_PER_SECOND},
-		IdentityFee,
-		Weight,
+		IdentityFee, Weight,
 	},
 	StorageValue,
 };

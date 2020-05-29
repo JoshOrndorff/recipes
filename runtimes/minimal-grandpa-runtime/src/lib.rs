@@ -18,8 +18,7 @@ use frame_support::{
 	traits::KeyOwnerProofSystem,
 	weights::{
 		constants::{BlockExecutionWeight, ExtrinsicBaseWeight, RocksDbWeight, WEIGHT_PER_SECOND},
-		IdentityFee,
-		Weight,
+		IdentityFee, Weight,
 	},
 };
 use frame_system as system;
