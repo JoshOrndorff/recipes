@@ -64,7 +64,7 @@ project maintainer, but the steps are outlined here nonetheless.
 
 1. Create a release branch off of `develop`.
 1. Update dependencies to crates.io.
-1. Update version of each Recipes crate.
+1. Update the version of each Recipes crate.
 1. Update rustdocs links from crate.parity.io to substrate.dev/rustdocs/_appropriate-version_
 1. Make a pull request against `master`.
 1. Tag the new release version in the history of `master` only after the release branch is merged.
