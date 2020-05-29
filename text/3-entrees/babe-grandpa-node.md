@@ -169,7 +169,7 @@ Both BABE and GRANDPA rely on getting their authority sets from the runtime via 
 [GrandpaAPI](https://substrate.dev/rustdocs/v2.0.0-rc2/sp_finality_grandpa/trait.GrandpaApi.html). So trying to build
 this node with a runtime that does not provide these APIs will fail to compile.
 
-### Pre Runtime Digests
+### Pre-Runtime Digests
 
 Just as we cannot use this node with a runtime that does not provide the appropriate runtime APIs,
 we also cannot use a runtime designed for this node with different consensus engines.

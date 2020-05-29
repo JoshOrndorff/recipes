@@ -24,7 +24,7 @@ distinction.
 
 ![Substrate Architecture Diagram](../img/substrate-architecture.png)
 
-In principle the consensus engine, part of the outer node, is agnostic over the runtime that is used
+In principle the consensus engine, part of the outer node, is agnostic to the runtime that is used
 with it. But in practice, most consensus engines will require the runtime to provide certain
 [runtime APIs](./runtime-api.md) that affect the engine. For example, Aura and Babe query the
 runtime for the set of validators. A more real-world PoW consensus would query the runtime for the

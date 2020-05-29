@@ -5,7 +5,7 @@ authors = ["4meta5, Joshy Orndorff"]
 repository = 'https://github.com/substrate-developer-hub/recipes'
 edition = "2018"
 license = "GPL-3.0-or-later"
-description = "A pallet that adds subitted values to a stored accumulator, and checks for errors."
+description = "A pallet that adds submitted values to a stored accumulator and checks for errors."
 
 [package.metadata.substrate]
 categories = [

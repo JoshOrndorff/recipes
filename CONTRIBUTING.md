@@ -65,17 +65,17 @@ project maintainer, but the steps are outlined here nonetheless.
 1. Create a release branch off of `develop`.
 1. Update dependencies to crates.io.
 1. Update the version of each Recipes crate.
-1. Update rustdocs links from crate.parity.io to substrate.dev/rustdocs/_appropriate-version_
+1. Update rustdocs links from crates.parity.io to substrate.dev/rustdocs/_appropriate-version_
 1. Make a pull request against `master`.
 1. Tag the new release version in the history of `master` only after the release branch is merged.
 
 ## Proposing Changes and Additions
 
 If you would like to make a change or addition to the recipes, you do not need anyone's permission
-to get started. You may simply open a Pull Request against the `develop` branch. Of course, not all
+to get started. You simply open a Pull Request against the `develop` branch. Of course, not all
 changes will be accepted, and changes should either be in line with the existing Recipes structure
-or refactor that structure for a good reason. If you would like to get preliminary input from the
-Recipes' maintainers before beginning, you may
+or refactor that structure for a good reason. If you want preliminary input from the
+Recipes' maintainers before beginning, please
 [open an issue](https://github.com/substrate-developer-hub/recipes/issues) discussing your idea
 first. Either approach (PR or issue) is welcome.
 
