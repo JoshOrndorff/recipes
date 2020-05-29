@@ -47,7 +47,7 @@ the diagrams. One of the diagrams is included below.
 The `master` branch contains stable, published code and is where release versions are tagged.
 Released versions will always be in the history of the `master` branch. The code on `master` uses
 published dependencies from `crates.io` and uses git dependencies only where absolutely necessary
-likely because relevant crates.io does not yet host the relevant crates.
+likely because crates.io does not yet host the relevant crates.
 
 ### Develop Branch
 
