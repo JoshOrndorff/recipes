@@ -3,7 +3,7 @@
 _[`pallets/adding-machine`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/adding-machine)_
 
 As we've mentioned before, in Substrate development it is important to **Verify first, write
-last**. In this recipe, we'll create an adding machine checks for unlucky numbers (a silly example)
+last**. In this recipe, we'll create an adding machine that checks for unlucky numbers (a silly example)
 as well as integer overflow (a serious and realistic example), and throws the appropriate errors.
 
 ## Declaring Errors
