@@ -111,7 +111,7 @@ expensive way to iterate over runtime storage items. Moreover,
 _[child tries](https://github.com/substrate-developer-hub/recipes/issues/35)_ enable cheap inclusion
 proofs without the same lookup costs associated with vectors.
 
-Even so, there are a few tricks to alleviate the costs of iterating over runtime storage items like
+Even so, there are a few tricks to alleviate the cost of iterating over runtime storage items like
 vectors. For example, it is
 [cheaper to iterate over a slice](https://twitter.com/heinz_gies/status/1121490424739303425) than a
 vector. With this in mind, store items in the runtime as vectors and transform them into slices
