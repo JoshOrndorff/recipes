@@ -1,7 +1,7 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 //! A pallet that implements a storage set on top of a sorted vec and demonstrates performance
-//! tradeoffs when using vec sets.
+//! tradeoffs when using map sets.
 
 use frame_support::{decl_error, decl_event, decl_module, decl_storage, dispatch::DispatchResult, ensure};
 use frame_system::{self as system, ensure_signed};

@@ -13,6 +13,8 @@ use account_set::AccountSet;
 #[cfg(test)]
 mod tests;
 
+/// A maximum number of members. When membership reaches this number, no new members may join.
+pub const MAX_MEMBERS: u32 = 16;
 
 pub trait Trait: system::Trait {
 	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
@@ -24,6 +26,9 @@ decl_storage! {
 		// true. It is necessary because the underlying storage can't distinguish
 		// between 0-byte values and non-existant values so () can't be used.
 		Members get(fn members): map hasher(blake2_128_concat) T::AccountId => bool;
+		// The total number of members stored in the map.
+		// Because the map does no store its size, we must store it separately
+		MemberCount: u32;
 	}
 }
 
@@ -45,6 +50,8 @@ decl_error! {
 		AlreadyMember,
 		/// Cannot give up membership because you are not currently a member
 		NotMember,
+		/// Cannot add another member because the limit is already reached
+		MembershipLimitReached,
 	}
 }
 
@@ -59,6 +66,9 @@ decl_module! {
 		fn add_member(origin) -> DispatchResult {
 			let new_member = ensure_signed(origin)?;
 
+			let member_count = MemberCount::get();
+			ensure!(member_count < MAX_MEMBERS, Error::<T>::MembershipLimitReached);
+
 			// We don't want to add duplicate members, so we check whether the potential new
 			// member is already present in the list. Because the membership is stored as a hash
 			// map this check is constant time O(1)
@@ -66,6 +76,7 @@ decl_module! {
 
 			// Insert the new member and emit the event
 			Members::<T>::insert(&new_member, true);
+			MemberCount::put(member_count + 1); // overflow check not necessary because of maximum
 			Self::deposit_event(RawEvent::MemberAdded(new_member));
 			Ok(())
 		}
@@ -78,6 +89,7 @@ decl_module! {
 			ensure!(Members::<T>::contains_key(&old_member), Error::<T>::NotMember);
 
 			Members::<T>::remove(&old_member);
+			MemberCount::mutate(|v| *v -= 1);
 			Self::deposit_event(RawEvent::MemberRemoved(old_member));
 			Ok(())
 		}

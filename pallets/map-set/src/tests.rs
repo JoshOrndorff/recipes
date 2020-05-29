@@ -104,6 +104,22 @@ fn cant_add_duplicate_members() {
 }
 
 #[test]
+fn cant_exceed_max_members() {
+	ExtBuilder::build().execute_with(|| {
+		// Add 16 members, reaching the max
+		for i in 0..16 {
+			assert_ok!(MapSet::add_member(Origin::signed(i)));
+		}
+
+		// Try to add the 17th member exceeding the max
+		assert_noop!(
+			MapSet::add_member(Origin::signed(16)),
+			Error::<TestRuntime>::MembershipLimitReached
+		);
+	})
+}
+
+#[test]
 fn remove_member_works() {
 	ExtBuilder::build().execute_with(|| {
 		assert_ok!(MapSet::add_member(Origin::signed(1)));
