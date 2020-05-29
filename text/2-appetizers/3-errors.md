@@ -78,7 +78,7 @@ fn add_alternate(origin, val_to_add: u32) -> DispatchResult {
 ```
 
 Notice the pattern of `.ok_or(<Error<T>>::MyError)?;`. This is really handy when you have a function
-call that returns an `Option` and you expect there should be a value inside. If not, returns early
+call that returns an `Option` and you expect there should be a value inside. If not, return early
 with an error message, all the while unwrapping the value for your further processing.
 
 If your function returns a `Result<T, E>`, you could apply `.map_err(|_e| <Error<T>>::MyError)?;` in
