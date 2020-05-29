@@ -1,5 +1,4 @@
 #![cfg_attr(not(feature = "std"), no_std)]
-#![allow(clippy::string_lit_as_bytes)]
 
 //! A pallet that demonstrates how to use append instead of mutate
 use frame_support::{decl_event, decl_module, decl_storage, dispatch::DispatchResult, ensure};

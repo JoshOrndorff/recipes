@@ -4,7 +4,6 @@
 //! This pallet uses the `blake2_128_concat` hasher. This is a good default hasher.
 
 #![cfg_attr(not(feature = "std"), no_std)]
-#![allow(clippy::string_lit_as_bytes)]
 
 use frame_support::{
 	decl_error, decl_event, decl_module, decl_storage, dispatch::DispatchResult, ensure,

@@ -1,6 +1,9 @@
 # Custom Test Environment
 
-[`execution-schedule`](../execution-schedule.md)'s configuration trait has three [configurable constants](../constants.md). For this mock runtime, the `ExtBuilder` defines setters to enable the `TestExternalities` instance for each unit test to configure the local test runtime environment with different value assignments. For context, the `Trait` for `execution-schedule`,
+[`execution-schedule`](../execution-schedule.md)'s configuration trait has three
+[configurable constants](../constants.md). For this mock runtime, the `ExtBuilder` defines setters
+to enable the `TestExternalities` instance for each unit test to configure the local test runtime
+environment with different value assignments. For context, the `Trait` for `execution-schedule`,
 
 ```rust, ignore
 // other type aliases
@@ -21,9 +24,12 @@ pub trait Trait: system::Trait {
 }
 ```
 
-The mock runtime environment extends the [previously discussed](./mock.md) `ExtBuilder` pattern with fields for each configurable constant and a default implementation.
+The mock runtime environment extends the [previously discussed](./mock.md) `ExtBuilder` pattern with
+fields for each configurable constant and a default implementation.
 
-> This completes the [builder](https://youtu.be/geovSK3wMB8?t=729) pattern by defining a default configuraton to be used in a plurality of test cases while also providing setter methods to overwrite the values for each field.
+> This completes the [builder](https://youtu.be/geovSK3wMB8?t=729) pattern by defining a default
+> configuraton to be used in a plurality of test cases while also providing setter methods to
+> overwrite the values for each field.
 
 ```rust, ignore
 pub struct ExtBuilder {
@@ -42,7 +48,8 @@ impl Default for ExtBuilder {
 }
 ```
 
-The setter methods for each configurable constant are defined in the `ExtBuilder` methods. This allows each instance of `ExtBuilder` to set the constant parameters for the unit test in question.
+The setter methods for each configurable constant are defined in the `ExtBuilder` methods. This
+allows each instance of `ExtBuilder` to set the constant parameters for the unit test in question.
 
 ```rust, ignore
 impl ExtBuilder {
@@ -62,7 +69,9 @@ impl ExtBuilder {
 }
 ```
 
-To allow for separate copies of the constant objects to be used in each thread, the variables assigned as constants are declared as [`thread_local!`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/thread_local/index.html),
+To allow for separate copies of the constant objects to be used in each thread, the variables
+assigned as constants are declared as
+[`thread_local!`](https://substrate.dev/rustdocs/v2.0.0-rc2/thread_local/index.html),
 
 ```rust, ignore
 thread_local! {
@@ -72,7 +81,8 @@ thread_local! {
 }
 ```
 
-Each configurable constant type also maintains unit structs with implementation of `Get<T>` from the type `T` assigned to the pallet constant in the mock runtime implementation.
+Each configurable constant type also maintains unit structs with implementation of `Get<T>` from the
+type `T` assigned to the pallet constant in the mock runtime implementation.
 
 ```rust, ignore
 pub struct SignalQuota;
@@ -96,7 +106,9 @@ impl Get<u32> for TaskLimit {
     }
 }
 ```
-The build method on `ExtBuilder` sets the associated constants before building the default storage configuration.
+
+The build method on `ExtBuilder` sets the associated constants before building the default storage
+configuration.
 
 ```rust, ignore
 impl ExtBuilder {
@@ -123,7 +135,9 @@ fn fake_test() {
 }
 ```
 
-To configure a test environment in which the `execution_frequency` is set to `2`, the `eras_change_correctly` test invokes the `execution_frequency` setter declared in as a method on `ExtBuilder`,
+To configure a test environment in which the `execution_frequency` is set to `2`, the
+`eras_change_correctly` test invokes the `execution_frequency` setter declared in as a method on
+`ExtBuilder`,
 
 ```rust, ignore
 #[test]
@@ -137,6 +151,10 @@ fn fake_test2() {
 }
 ```
 
-The test environment mocked above is actually used for the cursory and incomplete test `eras_change_correctly`. This test guided the structure of the if condition in `on_initialize` to periodically reset the `SignalBank` and increment the `Era`.
+The test environment mocked above is actually used for the cursory and incomplete test
+`eras_change_correctly`. This test guided the structure of the if condition in `on_initialize` to
+periodically reset the `SignalBank` and increment the `Era`.
 
-For more examples of the mock runtime scaffolding pattern used in [`execution-schedule`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/execution-schedule), see `balances/mock.rs` and `contract/tests.rs`.
+For more examples of the mock runtime scaffolding pattern used in
+[`execution-schedule`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/execution-schedule),
+see `balances/mock.rs` and `contract/tests.rs`.

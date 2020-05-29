@@ -1,7 +1,8 @@
 # Cache Multiple Calls
-*[`pallets/storage-cache`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/storage-cache)*
 
-Calls to runtime storage have an associated cost. With this in mind, multiple calls to storage values should be avoided when possible.
+_[`pallets/storage-cache`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/storage-cache)_
+
+Calls to runtime storage have an associated cost and developers should strive to minimize the number of calls.
 
 ```rust, ignore
 decl_storage! {
@@ -18,7 +19,8 @@ decl_storage! {
 
 ## Copy Types
 
-For [`Copy`](https://doc.rust-lang.org/std/marker/trait.Copy.html) types, it is easy to reuse previous storage calls by simply reusing the value (which is automatically cloned upon reuse). With this in mind, the second call in the following code is unnecessary:
+For [`Copy`](https://doc.rust-lang.org/std/marker/trait.Copy.html) types, it is easy to reuse
+previous storage calls by simply reusing the value (which is automatically cloned upon reuse). In the code below, the second call is unnecessary:
 
 ```rust, ignore
 fn increase_value_no_cache(origin, some_val: u32) -> DispatchResult {
@@ -36,7 +38,9 @@ fn increase_value_no_cache(origin, some_val: u32) -> DispatchResult {
 }
 ```
 
-Instead, the initial call value should be reused. In this example, the `SomeCopyValue` value is [`Copy`](https://doc.rust-lang.org/std/marker/trait.Copy.html) so we should prefer the following code without the unnecessary second call to storage:
+Instead, the initial call value should be reused. In this example, the `SomeCopyValue` value is
+[`Copy`](https://doc.rust-lang.org/std/marker/trait.Copy.html) so we should prefer the following
+code without the unnecessary second call to storage:
 
 ```rust, ignore
 fn increase_value_w_copy(origin, some_val: u32) -> DispatchResult {
@@ -54,13 +58,18 @@ fn increase_value_w_copy(origin, some_val: u32) -> DispatchResult {
 
 ## Clone Types
 
-If the type was not `Copy`, but was [`Clone`](https://doc.rust-lang.org/std/clone/trait.Clone.html), then it is still preferred to clone the value in the method than to make another call to runtime storage.
+If the type was not `Copy`, but was [`Clone`](https://doc.rust-lang.org/std/clone/trait.Clone.html),
+then it is still better to clone the value in the method than to make another call to runtime
+storage.
 
 The runtime methods enable the calling account to swap the `T::AccountId` value in storage if
+
 1. the existing storage value is not in `GroupMembers` AND
 2. the calling account is in `GroupMembers`
 
-The first implementation makes a second unnecessary call to runtime storage instead of cloning the call for `existing_key`:
+The first implementation makes a second unnecessary call to runtime storage instead of cloning the
+call for `existing_key`:
+
 ```rust, ignore
 fn swap_king_no_cache(origin) -> DispatchResult {
 	let new_king = ensure_signed(origin)?;
@@ -82,7 +91,8 @@ fn swap_king_no_cache(origin) -> DispatchResult {
 }
 ```
 
-If the `existing_key` is used without a `clone` in the event emission instead of `old_king`, then the compiler returns the following error
+If the `existing_key` is used without a `clone` in the event emission instead of `old_king`, then
+the compiler returns the following error
 
 ```bash
 error[E0382]: use of moved value: `existing_king`
@@ -129,4 +139,6 @@ fn swap_king_with_cache(origin) -> DispatchResult {
 }
 ```
 
-Not all types implement [`Copy`](https://doc.rust-lang.org/std/marker/trait.Copy.html) or [`Clone`](https://doc.rust-lang.org/std/clone/trait.Clone.html), so it is important to discern other patterns that minimize and alleviate the cost of calls to storage.
+Not all types implement [`Copy`](https://doc.rust-lang.org/std/marker/trait.Copy.html) or
+[`Clone`](https://doc.rust-lang.org/std/clone/trait.Clone.html), so it is important to discern other
+patterns that minimize and alleviate the cost of calls to storage.

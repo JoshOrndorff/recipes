@@ -1,9 +1,21 @@
 [package]
 name = "ringbuffer-queue"
-version = "2.0.0-alpha.8"
+version = "2.0.0-rc2"
 authors = ["apopiak"]
+repository = 'https://github.com/substrate-developer-hub/recipes'
 edition = "2018"
 license = "GPL-3.0-or-later"
+description = "A pallet that demonstrates a ringbuffer queue built on top of Substrate's storage"
+
+[package.metadata.substrate]
+categories = [
+	"pallet",
+	"transient storage adapter",
+	"ringbuffer",
+	"tutorial",
+	"recipe",
+]
+compatibility_version = "2.0.0-rc2"
 
 [features]
 default = ['std']
@@ -15,11 +27,11 @@ std = [
 
 [dependencies]
 codec = { package = 'parity-scale-codec', default-features = false, features = ['derive'], version = '1.3.0' }
-frame-support = { version = '2.0.0-alpha.8', default-features = false }
-frame-system = { version = '2.0.0-alpha.8', default-features = false }
-sp-std = { version = '2.0.0-alpha.8', default-features = false }
+frame-support = { version = '2.0.0-rc2', default-features = false }
+frame-system = { version = '2.0.0-rc2', default-features = false }
+sp-std = { version = '2.0.0-rc2', default-features = false }
 
 [dev-dependencies]
-sp-runtime = { version = '2.0.0-alpha.8', default-features = false }
-sp-core = { version = '2.0.0-alpha.8', default-features = false }
-sp-io = { version = '2.0.0-alpha.8', default-features = false }
+sp-runtime = { version = '2.0.0-rc2', default-features = false }
+sp-core = { version = '2.0.0-rc2', default-features = false }
+sp-io = { version = '2.0.0-rc2', default-features = false }

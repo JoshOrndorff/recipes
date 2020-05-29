@@ -1,7 +1,11 @@
 # Efficent Subgroup Removal by Subkey: Double Maps
-*[`pallets/double-map`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/double-map)*
 
-For some runtimes, it may be necessary to remove a subset of values in a key-value mapping. If the subset maintain an associated identifier type, this can be done in a clean way with the [`double_map`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/storage/trait.StorageDoubleMap.html) via the `remove_prefix` api.
+_[`pallets/double-map`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/double-map)_
+
+For some runtimes, it may be necessary to remove a subset of values in a key-value mapping. If the
+subset maintain an associated identifier type, this can be done in a clean way with the
+[`double_map`](https://substrate.dev/rustdocs/v2.0.0-rc2/frame_support/storage/trait.StorageDoubleMap.html) via the
+`remove_prefix` api.
 
 ```rust, ignore
 pub type GroupIndex = u32; // this is Encode (which is necessary for double_map)
@@ -19,7 +23,9 @@ decl_storage! {
 }
 ```
 
-For the purposes of this example, store the scores of each members in a map that associates this `u32` value with two keys: (1) a `GroupIndex` identifier, and (2) the member's `AccountId`. This allows for efficient removal of all values associated with a specific `GroupIndex` identifier.
+For the purposes of this example, store the scores of each member in a map that associates this
+`u32` value with two keys: (1) a `GroupIndex` identifier, and (2) the member's `AccountId`. This
+allows for efficient removal of all values associated with a specific `GroupIndex` identifier.
 
 ```rust, ignore
 fn remove_group_score(origin, group: GroupIndex) -> DispatchResult {

@@ -59,6 +59,7 @@ impl system::Trait for TestRuntime {
 	type DbWeight = ();
 	type BlockExecutionWeight = ();
 	type ExtrinsicBaseWeight = ();
+	type MaximumExtrinsicWeight = MaximumBlockWeight;
 	type MaximumBlockLength = MaximumBlockLength;
 	type AvailableBlockRatio = AvailableBlockRatio;
 	type Version = ();
@@ -207,6 +208,6 @@ fn offchain_send_unsigned_tx() {
 		assert!(pool_state.read().transactions.is_empty());
 		let tx = TestExtrinsic::decode(&mut &*tx).unwrap();
 		assert_eq!(tx.signature, None);
-		assert_eq!(tx.call, Call::submit_number_unsigned(num, num));
+		assert_eq!(tx.call, Call::submit_number_unsigned(num));
 	});
 }

@@ -1,28 +1,58 @@
 # Basic Proof of Work
-*[`nodes/basic-pow`](https://github.com/substrate-developer-hub/recipes/tree/master/nodes/basic-pow)*
 
-The `basic-pow` node demonstrates how wire a custom consensus engine into the Substrate Service. It uses a minimal proof of work consensus engine to reach agreement over the blockchain. It will teach us many useful aspects of dealing with consensus and prepare us to understand more advanced consensus engines in the future. In particular we will learn about:
+_[`nodes/basic-pow`](https://github.com/substrate-developer-hub/recipes/tree/master/nodes/basic-pow)_
 
-* Substrate's [`BlockImport` trait](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sp_consensus/block_import/trait.BlockImport.html)
-* Substrate's [import pipeline](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sp_consensus/import_queue/index.html)
-* Structure of a typical [Substrate Service](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sc_service/index.html)
-* Configuration of [`InherentDataProvider`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sp_authorship/struct.InherentDataProvider.html)s
+The `basic-pow` node demonstrates how to wire up a custom consensus engine into the Substrate Service. It
+uses a minimal proof of work consensus engine to reach agreement over the blockchain. It will teach
+us many useful aspects of dealing with consensus and prepare us to understand more advanced
+consensus engines in the future. In particular we will learn about:
+
+-   Substrate's
+    [`BlockImport` trait](https://substrate.dev/rustdocs/v2.0.0-rc2/sp_consensus/block_import/trait.BlockImport.html)
+-   Substrate's [import pipeline](https://substrate.dev/rustdocs/v2.0.0-rc2/sp_consensus/import_queue/index.html)
+-   Structure of a typical [Substrate Service](https://substrate.dev/rustdocs/v2.0.0-rc2/sc_service/index.html)
+-   Configuration of
+    [`InherentDataProvider`](https://substrate.dev/rustdocs/v2.0.0-rc2/sp_authorship/struct.InherentDataProvider.html)s
 
 ## The Structure of a Node
 
-You may remember from the [hello-substrate recipe](../2-appetizers/1-hello-substrate.md) that a Substrate node has two parts. An outer part that is responsible for gossiping transactions and blocks, handling [rpc requests](./custom-rpc.md), and reaching consensus. And a runtime that is responsible for the business logic of the chain. This architecture diagram illustrates the distinction.
+You may remember from the [hello-substrate recipe](../2-appetizers/1-hello-substrate.md) that a
+Substrate node has two parts. An outer part that is responsible for gossiping transactions and
+blocks, handling [rpc requests](./custom-rpc.md), and reaching consensus. And a runtime that is
+responsible for the business logic of the chain. This architecture diagram illustrates the
+distinction.
 
 ![Substrate Architecture Diagram](../img/substrate-architecture.png)
 
-In principle the consensus engine, part of the outer node, is agnostic over the runtime that is used with it. But in practice, most consensus engines will require the runtime to provide certain [runtime APIs](./runtime-api.md) that affect the engine. For example, Aura and Babe query the runtime for the set of validators. A more real-world PoW consensus would query the runtime for the block difficulty. Additionally, some runtimes rely on the consensus engine to provide [pre-runtime digests](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sp_runtime/generic/enum.DigestItem.html#variant.PreRuntime). For example, runtimes that include the Babe pallet expect a pre-runtime digest containing information about the current babe slot.
+In principle the consensus engine, part of the outer node, is agnostic to the runtime that is used
+with it. But in practice, most consensus engines will require the runtime to provide certain
+[runtime APIs](./runtime-api.md) that affect the engine. For example, Aura and Babe query the
+runtime for the set of validators. A more real-world PoW consensus would query the runtime for the
+block difficulty. Additionally, some runtimes rely on the consensus engine to provide
+[pre-runtime digests](https://substrate.dev/rustdocs/v2.0.0-rc2/sp_runtime/generic/enum.DigestItem.html#variant.PreRuntime).
+For example, runtimes that include the Babe pallet expect a pre-runtime digest containing
+information about the current babe slot.
 
-In this recipe we will avoid those practical complexities by using the [Minimal Sha3 Proof of Work](./sha3-pow-consensus.md) consensus engine, and a dedicated `pow-runtime` which are truly isolated from each other. The contents of the runtime should be familiar, and will not be discussed here.
+In this recipe we will avoid those practical complexities by using the
+[Minimal Sha3 Proof of Work](./sha3-pow-consensus.md) consensus engine, and a dedicated
+`pow-runtime` which are truly isolated from each other. The contents of the runtime should be
+familiar, and will not be discussed here.
 
 ## The Service Builder
 
-The [Substrate Service](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sc_service/trait.AbstractService.html) is the main coordinator of the various parts of a Substrate node, including consensus. The service is large and takes many parameters, so it is built with a [ServiceBuilder](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sc_service/struct.ServiceBuilder.html) following [Rust's builder pattern](https://doc.rust-lang.org/1.0.0/style/ownership/builders.html). This code is demonstrated in the nodes `src/service.rs` file.
+The [Substrate Service](https://substrate.dev/rustdocs/v2.0.0-rc2/sc_service/trait.AbstractService.html) is the main
+coordinator of the various parts of a Substrate node, including consensus. The service is large and
+takes many parameters, so it is built with a
+[ServiceBuilder](https://substrate.dev/rustdocs/v2.0.0-rc2/sc_service/struct.ServiceBuilder.html) following
+[Rust's builder pattern](https://doc.rust-lang.org/1.0.0/style/ownership/builders.html). This code
+is demonstrated in the nodes `src/service.rs` file.
 
-The particular builder method that is relevant here is [`with_import_queue`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sc_service/struct.ServiceBuilder.html#method.with_import_queue). Here we construct an instance of the [`PowBlockImport` struct](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sc_consensus_pow/struct.PowBlockImport.html), providing it with references to our client, our `MinimalSha3Algorithm`, and some other necessary data.
+The particular builder method that is relevant here is
+[`with_import_queue`](https://substrate.dev/rustdocs/v2.0.0-rc2/sc_service/struct.ServiceBuilder.html#method.with_import_queue).
+Here we construct an instance of the
+[`PowBlockImport` struct](https://substrate.dev/rustdocs/v2.0.0-rc2/sc_consensus_pow/struct.PowBlockImport.html),
+providing it with references to our client, our `MinimalSha3Algorithm`, and some other necessary
+data.
 
 ```rust, ignore
 builder
@@ -49,15 +79,24 @@ builder
 	})?;
 ```
 
-Once the `PowBlockImport` is constructed, we can use it to create an actual import queue that the service will use for importing blocks into the client.
+Once the `PowBlockImport` is constructed, we can use it to create an actual import queue that the
+service will use for importing blocks into the client.
 
 ### The Block Import Pipeline
 
-You may have noticed that when we created the `PowBlockImport` we gave it two separate references to the client. The second reference will always be to a client. But the first is interesting. The [rustdocs tell us](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sc_consensus_pow/struct.PowBlockImport.html#method.new) that the first parameter is `inner: BlockImport<B, Transaction = TransactionFor<C, B>>`. Why would a block import have a reference to another block import? Because the "block import pipeline" is constructed in an onion-like fashion, where one layer of block import wraps the next. In this minimal PoW node, there is only one layer to the onion. But in other nodes, including our own kitchen node, there are two layers: one for babe and one for grandpa.
+You may have noticed that when we created the `PowBlockImport` we gave it two separate references to
+the client. The second reference will always be to a client. But the first is interesting. The
+[rustdocs tell us](https://substrate.dev/rustdocs/v2.0.0-rc2/sc_consensus_pow/struct.PowBlockImport.html#method.new)
+that the first parameter is `inner: BlockImport<B, Transaction = TransactionFor<C, B>>`. Why would a
+block import have a reference to another block import? Because the "block import pipeline" is
+constructed in an onion-like fashion, where one layer of block import wraps the next. Learn more
+about this pattern in the knowledgebase article on the
+[block import pipeline](https://www.substrate.io/kb/advanced/block-import).
 
 ### Inherent Data Providers
 
-Both the BlockImport and the `import_queue` are given an instance called `inherent_data_providers`. This object is created in a helper function defined at the beginning of `service.rs`
+Both the BlockImport and the `import_queue` are given an instance called `inherent_data_providers`.
+This object is created in a helper function defined at the beginning of `service.rs`
 
 ```rust, ignore
 pub fn build_inherent_data_providers() -> Result<InherentDataProviders, ServiceError> {
@@ -72,11 +111,20 @@ pub fn build_inherent_data_providers() -> Result<InherentDataProviders, ServiceE
 }
 ```
 
-Anything that implements the [`ProvideInherentData` trait](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sp_inherents/trait.ProvideInherentData.html) may be used here. The block authoring logic must supply all inherents that the runtime expects. In this case of this basic-pow chain, that is just the [`TimestampInherentData`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sp_timestamp/trait.TimestampInherentData.html) expected by the [timestamp pallet](https://substrate.dev/rustdocs/v2.0.0-alpha.8/pallet_timestamp/index.html). In order to register other inherents, you would call `register_provider` multiple times, and map errors accordingly.
+Anything that implements the
+[`ProvideInherentData` trait](https://substrate.dev/rustdocs/v2.0.0-rc2/sp_inherents/trait.ProvideInherentData.html)
+may be used here. The block authoring logic must supply all inherents that the runtime expects. In
+the case of this basic-pow chain, that is just the
+[`TimestampInherentData`](https://substrate.dev/rustdocs/v2.0.0-rc2/sp_timestamp/trait.TimestampInherentData.html)
+expected by the [timestamp pallet](https://substrate.dev/rustdocs/v2.0.0-rc2/pallet_timestamp/index.html). In order
+to register other inherents, you would call `register_provider` multiple times, and map errors
+accordingly.
 
 ## Mining
 
-We've already implemented a mining algorithm as part of our [`MinimalSha3Algorithm`](./sha3-pow-consensus.md), but we haven't yet told our service to actually mine with that algorithm. This is our last task in the `new_full` function.
+We've already implemented a mining algorithm as part of our
+[`MinimalSha3Algorithm`](./sha3-pow-consensus.md), but we haven't yet told our service to actually
+mine with that algorithm. This is our last task in the `new_full` function.
 
 ```rust, ignore
 if participates_in_consensus {
@@ -111,19 +159,34 @@ if participates_in_consensus {
 }
 ```
 
-We begin by testing whether this node participates in consensus, which is to say we check whether the user wants the node to act as a miner. If this node is to be a miner, we gather references to various parts of the node that the [`start_mine` function](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sc_consensus_pow/fn.start_mine.html) requires, and define that we will attempt 500 rounds of mining for each block before pausing. Finally we call `start_mine`.
+We begin by testing whether this node participates in consensus, which is to say we check whether
+the user wants the node to act as a miner. If this node is to be a miner, we gather references to
+various parts of the node that the
+[`start_mine` function](https://substrate.dev/rustdocs/v2.0.0-rc2/sc_consensus_pow/fn.start_mine.html) requires, and
+define that we will attempt 500 rounds of mining for each block before pausing. Finally we call
+`start_mine`.
 
 ## The Light Client
 
-The last thing in the `service.rs` file is constructing the [light client](https://www.parity.io/what-is-a-light-client/)'s service. This code is quite similar to the construction of the full service.
+The last thing in the `service.rs` file is constructing the
+[light client](https://www.parity.io/what-is-a-light-client/)'s service. This code is quite similar
+to the construction of the full service.
 
-Instead of using the `with_import_queue` function we used previously, we use the `with_import_queue_and_fprb` function. FPRB stand for [`FinalityProofRequestBuilder`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sc_network/config/trait.FinalityProofRequestBuilder.html). In chains with deterministic finality, light clients must request proofs of finality from full nodes. But in our chain, we do not have deterministic finality, so we can use the [`DummyFinalityProofRequestBuilder`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/sc_network/config/struct.DummyFinalityProofRequestBuilder.html) which does nothing except satisfying Rust's type checker.
+Instead of using the `with_import_queue` function we used previously, we use the
+`with_import_queue_and_fprb` function. FPRB stand for
+[`FinalityProofRequestBuilder`](https://substrate.dev/rustdocs/v2.0.0-rc2/sc_network/config/trait.FinalityProofRequestBuilder.html).
+In chains with deterministic finality, light clients must request proofs of finality from full
+nodes. But in our chain, we do not have deterministic finality, so we can use the
+[`DummyFinalityProofRequestBuilder`](https://substrate.dev/rustdocs/v2.0.0-rc2/sc_network/config/struct.DummyFinalityProofRequestBuilder.html)
+which does nothing except satisfying Rust's type checker.
 
-Once the dummy request builder is configured, the `BlockImport` and import queue are configured exactly as they were in the full node.
+Once the dummy request builder is configured, the `BlockImport` and import queue are configured
+exactly as they were in the full node.
 
 ## Note of Finality
 
-If we run the `basic-pow` node now, we see in console logs, that the finalized block always remains at 0.
+If we run the `basic-pow` node now, we see in console logs, that the finalized block always remains
+at 0.
 
 ```
 ...
@@ -134,4 +197,6 @@ If we run the `basic-pow` node now, we see in console logs, that the finalized b
 2020-03-22 12:50:15 Idle (1 peers), best: #189 (0x8581…9f5a), finalized #0 (0xff0d…5cb9), ⬇ 0 ⬆ 0
 ```
 
-This is expected because Proof of Work is a consensus mechanism with probabilistic finality. This means a block is never truly finalized and can always be reverted. The further behind the blockchain head a block is, the less likely it is going to be reverted.
+This is expected because Proof of Work is a consensus mechanism with probabilistic finality. This
+means a block is never truly finalized and can always be reverted. The further behind the blockchain
+head a block is, the less likely it is going to be reverted.

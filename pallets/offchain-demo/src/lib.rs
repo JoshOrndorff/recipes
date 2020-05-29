@@ -1,7 +1,6 @@
 //! A demonstration of an offchain worker that sends onchain callbacks
 
 #![cfg_attr(not(feature = "std"), no_std)]
-#![allow(clippy::string_lit_as_bytes)]
 
 #[cfg(test)]
 mod tests;
@@ -179,7 +178,7 @@ decl_module! {
 		}
 
 		#[weight = 0]
-		pub fn submit_number_unsigned(origin, _block: T::BlockNumber, number: u64) -> DispatchResult {
+		pub fn submit_number_unsigned(origin, number: u64) -> DispatchResult {
 			debug::info!("submit_number_unsigned: {:?}", number);
 			let _ = ensure_none(origin)?;
 			Self::append_or_replace_number(None, number)
@@ -214,6 +213,7 @@ impl<T: Trait> Module<T> {
 			}
 
 			// displaying the average
+			let num_len = numbers.len();
 			let average = match num_len {
 				0 => 0,
 				_ => numbers.iter().sum::<u64>() / (num_len as u64),
@@ -257,7 +257,7 @@ impl<T: Trait> Module<T> {
 		// If we are using a get-check-set access pattern, we likely want to use `mutate` to access
 		// the storage in one go.
 		//
-		// Ref: https://substrate.dev/rustdocs/v2.0.0-alpha.7/sp_runtime/offchain/storage/struct.StorageValueRef.html
+		// Ref: https://substrate.dev/rustdocs/v2.0.0-rc2/sp_runtime/offchain/storage/struct.StorageValueRef.html
 		if let Some(Some(gh_info)) = s_info.get::<GithubInfo>() {
 			// gh-info has already been fetched. Return early.
 			debug::info!("cached gh-info: {:?}", gh_info);
@@ -353,7 +353,7 @@ impl<T: Trait> Module<T> {
 		// By default, the http request is async from the runtime perspective. So we are asking the
 		//   runtime to wait here.
 		// The returning value here is a `Result` of `Result`, so we are unwrapping it twice by two `?`
-		//   ref: https://substrate.dev/rustdocs/v2.0.0-alpha.8/sp_runtime/offchain/http/struct.PendingRequest.html#method.try_wait
+		//   ref: https://substrate.dev/rustdocs/v2.0.0-rc2/sp_runtime/offchain/http/struct.PendingRequest.html#method.try_wait
 		let response = pending
 			.try_wait(timeout)
 			.map_err(|_| <Error<T>>::HttpFetchingError)?
@@ -406,12 +406,7 @@ impl<T: Trait> Module<T> {
 	fn unsigned_submit_number(block_number: T::BlockNumber) -> Result<(), Error<T>> {
 		let submission: u64 = block_number.try_into().ok().unwrap() as u64;
 		// Submitting the current block number back on-chain.
-		// `blocknumber` and `submission` params are always the same value but in different
-		//   data type. They seem redundant, but in reality they have different purposes.
-		//   `submission` is the number to be recorded back on-chain. `block_number` is checked in
-		//   `validate_unsigned` function so only one `Call::submit_number_unsigned` is accepted in
-		//   each block generation phase.
-		let call = Call::submit_number_unsigned(block_number, submission);
+		let call = Call::submit_number_unsigned(submission);
 
 		SubmitTransaction::<T, Call<T>>::submit_unsigned_transaction(call.into()).map_err(|e| {
 			debug::error!("Failed in unsigned_submit_number: {:?}", e);
@@ -424,19 +419,15 @@ impl<T: Trait> frame_support::unsigned::ValidateUnsigned for Module<T> {
 	type Call = Call<T>;
 
 	fn validate_unsigned(_source: TransactionSource, call: &Self::Call) -> TransactionValidity {
-		if let Call::submit_number_unsigned(block_num, number) = call {
-			debug::native::info!(
-				"off-chain send_unsigned: block_num: {}| number: {}",
-				block_num,
-				number
-			);
+		#[allow(unused_variables)]
+		if let Call::submit_number_unsigned(number) = call {
+			debug::native::info!("off-chain send_unsigned: number: {}", number);
 
 			ValidTransaction::with_tag_prefix("offchain-demo")
 				.priority(T::UnsignedPriority::get())
-				.and_requires([number])
-				.and_provides(block_num)
+				.and_provides([b"submit_number_unsigned"])
 				.longevity(3)
-				.propagate(false)
+				.propagate(true)
 				.build()
 		} else {
 			InvalidTransaction::Call.into()

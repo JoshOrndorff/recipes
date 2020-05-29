@@ -1,5 +1,5 @@
-//! This Runtime demonstrates how to config signed and unsigned transaction handler to be used
-//   by off-chain worker in its including pallets.
+//! This Runtime demonstrates how to configure signed and unsigned transaction handler to be used
+//!   by off-chain worker in its including pallets.
 
 #![cfg_attr(not(feature = "std"), no_std)]
 // `construct_runtime!` does a lot of recursion and requires us to increase the limit to 256.
@@ -16,8 +16,8 @@ pub mod genesis;
 use sp_api::impl_runtime_apis;
 use sp_core::{Encode, OpaqueMetadata, H256};
 use sp_runtime::traits::{
-	BlakeTwo256, Block as BlockT, ConvertInto, IdentifyAccount, IdentityLookup,
-	SaturatedConversion, Verify,
+	BlakeTwo256, Block as BlockT, IdentifyAccount, IdentityLookup,
+	SaturatedConversion, Saturating, Verify,
 };
 use sp_runtime::{
 	create_runtime_str, generic,
@@ -36,6 +36,7 @@ pub use frame_support::{
 	traits::Randomness,
 	weights::{
 		constants::{BlockExecutionWeight, ExtrinsicBaseWeight, RocksDbWeight, WEIGHT_PER_SECOND},
+		IdentityFee,
 		Weight,
 	},
 	StorageValue,
@@ -115,6 +116,9 @@ parameter_types! {
 	pub const BlockHashCount: BlockNumber = 250;
 	pub const MaximumBlockWeight: Weight = 2 * WEIGHT_PER_SECOND;
 	pub const AvailableBlockRatio: Perbill = Perbill::from_percent(75);
+	/// Assume 10% of weight for average on_initialize calls.
+	pub const MaximumExtrinsicWeight: Weight = AvailableBlockRatio::get()
+		.saturating_sub(Perbill::from_percent(10)) * MaximumBlockWeight::get();
 	pub const MaximumBlockLength: u32 = 5 * 1024 * 1024;
 	pub const Version: RuntimeVersion = VERSION;
 }
@@ -152,6 +156,10 @@ impl frame_system::Trait for Runtime {
 	/// The base weight of any extrinsic processed by the runtime, independent of the
 	/// logic of that extrinsic. (Signature verification, nonce increment, fee, etc...)
 	type ExtrinsicBaseWeight = ExtrinsicBaseWeight;
+	/// The maximum weight that a single extrinsic of `Normal` dispatch class can have,
+	/// idependent of the logic of that extrinsic. (Roughly max block weight - average
+	/// on_initialize cost).
+	type MaximumExtrinsicWeight = MaximumExtrinsicWeight;
 	/// Maximum size of all encoded transactions (in bytes) that are allowed in one block.
 	type MaximumBlockLength = MaximumBlockLength;
 	/// Portion of the block weight that is available to all normal transactions.
@@ -205,7 +213,7 @@ impl pallet_transaction_payment::Trait for Runtime {
 	type Currency = pallet_balances::Module<Runtime>;
 	type OnTransactionPayment = ();
 	type TransactionByteFee = TransactionByteFee;
-	type WeightToFee = ConvertInto;
+	type WeightToFee = IdentityFee<Balance>;
 	type FeeMultiplierUpdate = ();
 }
 

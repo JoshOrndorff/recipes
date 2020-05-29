@@ -1,11 +1,20 @@
 [package]
 name = "offchain-demo"
-version = "2.0.0-alpha.8"
+version = "2.0.0-rc2"
 authors = ["Parity Technologies <admin@parity.io>"]
 edition = "2018"
-homepage = "https://substrate.dev/recipes/"
 repository = "https://github.com/substrate-developer-hub/recipes/"
 license = "GPL-3.0-or-later"
+description = "A pallet that demonstrates many aspects of offchain workers"
+
+[package.metadata.substrate]
+categories = [
+	"pallet",
+	"offchain worker",
+	"tutorial",
+	"recipe",
+]
+compatibility_version = "2.0.0-rc2"
 
 [dependencies]
 # external dependencies
@@ -17,12 +26,12 @@ alt_serde = { version = "1", default-features = false, features = ["derive"] }
 serde_json = { version = "1", default-features = false, git = "https://github.com/Xanewok/json", branch = "no-std", features = ["alloc"] }
 
 # Substrate dependencies
-frame-support = { version = '2.0.0-alpha.8', default-features = false }
-frame-system = { version = '2.0.0-alpha.8', default-features = false }
-sp-runtime = { version = '2.0.0-alpha.8', default-features = false }
-sp-core = { version = '2.0.0-alpha.8', default-features = false }
-sp-io = { version = '2.0.0-alpha.8', default-features = false }
-sp-std = { version = '2.0.0-alpha.8', default-features = false }
+frame-support = { version = '2.0.0-rc2', default-features = false }
+frame-system = { version = '2.0.0-rc2', default-features = false }
+sp-runtime = { version = '2.0.0-rc2', default-features = false }
+sp-core = { version = '2.0.0-rc2', default-features = false }
+sp-io = { version = '2.0.0-rc2', default-features = false }
+sp-std = { version = '2.0.0-rc2', default-features = false }
 
 [features]
 default = ['std']

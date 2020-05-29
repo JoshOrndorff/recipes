@@ -1,12 +1,16 @@
 # Off-chain Worker Test Environment
 
-Learn more about how to set up and use offchain-workers in the [offchain-demo entree](/3-entrees/off-chain-workers/index.md).
+Learn more about how to set up and use offchain-workers in the
+[offchain-demo entree](/3-entrees/off-chain-workers/index.md).
 
 ## Mock Runtime Setup
 
-In addition to everything we need to set up in [Basic Test Environment](./mock.md), we also need to set up the mock for `SubmitTransaction`, and implement the `CreateTransaction` trait for the runtime.
+In addition to everything we need to set up in [Basic Test Environment](./mock.md), we also need to
+set up the mock for `SubmitTransaction`, and implement the `CreateTransaction` trait for the
+runtime.
 
-src: [`pallets/offchain-demo/src/tests.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/tests.rs)
+src:
+[`pallets/offchain-demo/src/tests.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/tests.rs)
 
 ```rust
 type TestExtrinsic = TestXt<Call<TestRuntime>, ()>;
@@ -42,9 +46,14 @@ impl system::offchain::CreateTransaction<TestRuntime, TestExtrinsic> for TestRun
 
 ## Getting the Transaction Pool and Off-chain State
 
-When writing test cases for off-chain workers, we need to look into the transaction pool and current off-chain state to ensure a certain transaction has made its way, and was passed with the right parameters and signature. So in addition to the regular test environment `TestExternalities`, we also need to return references to the transaction pool state and off-chain state for future inspection.
+When writing test cases for off-chain workers, we need to look into the transaction pool and current
+off-chain state to ensure a certain transaction has made its way, and was passed with the right
+parameters and signature. So in addition to the regular test environment `TestExternalities`, we
+also need to return references to the transaction pool state and off-chain state for future
+inspection.
 
-src: [`pallets/offchain-demo/src/tests.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/tests.rs)
+src:
+[`pallets/offchain-demo/src/tests.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/tests.rs)
 
 ```rust
 pub struct ExtBuilder;
@@ -83,11 +92,16 @@ impl ExtBuilder {
 
 ## Testing Off-chain Worker
 
-When we write tests for off-chain workers, we should test only what our off-chain workers do. For example, when our off-chain workers will eventually make a signed transaction to dispatch function A, which does B, C, and D, we write our test for the off-chain worker to test only if function A is dispatched. But whether function A actually does B, C, and D should be tested separately in another test case. This way we keep our tests more robust.
+When we write tests for off-chain workers, we should test only what our off-chain workers do. For
+example, when our off-chain workers will eventually make a signed transaction to dispatch function
+A, which does B, C, and D, we write our test for the off-chain worker to test only if function A is
+dispatched. But whether function A actually does B, C, and D should be tested separately in another
+test case. This way we keep our tests more robust.
 
 This is how we write our test cases.
 
-src: [`pallets/offchain-demo/src/tests.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/tests.rs)
+src:
+[`pallets/offchain-demo/src/tests.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/tests.rs)
 
 ```rust
 #[test]
@@ -115,8 +129,10 @@ fn offchain_send_signed_tx() {
 
 We test that when `OffchainDemo::send_signed(num)` function is being called,
 
-- There is only one transaction made to the transaction pool.
-- The transaction is signed.
-- The transaction is calling the `Call::submit_number_signed` on-chain function with the parameter `num`.
+-   There is only one transaction that made it to the transaction pool.
+-   The transaction is signed.
+-   The transaction is calling the `Call::submit_number_signed` on-chain function with the parameter
+    `num`.
 
-What's performed by the `Call::submit_number_signed` on-chain function is tested in another test case, which would be similar to how you [test for dispatched extrinsic calls](./common.md).
+What's performed by the `Call::submit_number_signed` on-chain function is tested in another test
+case, which would be similar to how you [test for dispatched extrinsic calls](./common.md).

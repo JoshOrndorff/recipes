@@ -5,7 +5,6 @@
 //! `remove_prefix` enables clean removal of all values with the group identifier
 
 #![cfg_attr(not(feature = "std"), no_std)]
-#![allow(clippy::string_lit_as_bytes)]
 
 #[cfg(test)]
 mod tests;

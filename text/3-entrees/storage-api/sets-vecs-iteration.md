@@ -1,15 +1,18 @@
 # Set Storage and Iteration
-*[`pallets/vec-set`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/vec-set)*
 
-Storing a vector in the runtime can often be useful for managing groups and verifying membership. This recipe discusses common patterns encounted when storing vectors in runtime storage.
+_[`pallets/vec-set`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/vec-set)_
 
-* [verifying group membership](#group)
-* [Append vs Mutate](#append)
-* [Iteration in the Runtime](#iterate)
+Storing a vector in the runtime can often be useful for managing groups and verifying membership.
+This recipe discusses common patterns encounted when storing vectors in runtime storage.
+
+-   [verifying group membership](#group)
+-   [Append vs Mutate](#append)
+-   [Iteration in the Runtime](#iterate)
 
 ## Verifying Group Membership <a name = "group"></a>
 
-To maintain a set of `AccountId` to establish group ownership of decisions, it is straightforward to store a vector in the runtime of `AccountId`.
+To maintain a set of `AccountId` to establish group ownership of decisions, it is straightforward to
+store a vector in the runtime of `AccountId`.
 
 ```rust, ignore
 decl_storage! {
@@ -29,7 +32,10 @@ impl<T: Trait> Module<T> {
 }
 ```
 
-This helper method can be placed in other runtime methods to restrict certain changes to runtime storage to privileged groups. Depending on the incentive structure of the network/chain, the members in these groups may have earned membership and the subsequent access rights through loyal contributions to the system.
+This helper method can be placed in other runtime methods to restrict certain changes to runtime
+storage to privileged groups. Depending on the incentive structure of the network/chain, the members
+in these groups may have earned membership and the subsequent access rights through loyal
+contributions to the system.
 
 ```rust, ignore
 // use support::ensure
@@ -41,9 +47,12 @@ fn member_action(origin) -> Result {
 }
 ```
 
-In this example, the helper method facilitates isolation of runtime storage access rights according to membership. In general, **place `ensure!` checks at the top of each runtime function's logic to verify that all of the requisite checks pass before performing any storage changes.**
+In this example, the helper method facilitates isolation of runtime storage access rights according
+to membership. In general, **place `ensure!` checks at the top of each runtime function's logic to
+verify that all of the requisite checks pass before performing any storage changes.**
 
-> NOTE: *[child trie](https://github.com/substrate-developer-hub/recipes/issues/35) storage provides a more efficient data structure for tracking group membership*
+> NOTE: _[child trie](https://github.com/substrate-developer-hub/recipes/issues/35) storage provides
+> a more efficient data structure for tracking group membership_
 
 ## Append vs. Mutate
 
@@ -56,7 +65,10 @@ decl_storage! {
 }
 ```
 
-Before [3071](https://github.com/paritytech/substrate/pull/3071) was merged, it was necessary to call [`mutate`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/storage/trait.StorageValue.html#tymethod.mutate) to push new values to a vector stored in runtime storage.
+Before [3071](https://github.com/paritytech/substrate/pull/3071) was merged, it was necessary to
+call
+[`mutate`](https://substrate.dev/rustdocs/v2.0.0-rc2/frame_support/storage/trait.StorageValue.html#tymethod.mutate)
+to push new values to a vector stored in runtime storage.
 
 ```rust, ignore
 fn mutate_to_append(origin) -> Result {
@@ -69,8 +81,11 @@ fn mutate_to_append(origin) -> Result {
 }
 ```
 
-For vectors stored in the runtime, mutation can be relatively expensive. This follows from the fact that `mutate` entails decoding the vector, making changes, and re-encoding the whole vector. It seems wasteful to decode the entire vector, push a new item, and then re-encode the whole thing. This provides sufficient motivation for [`append`](https://substrate.dev/rustdocs/v2.0.0-alpha.8/frame_support/storage/trait.StorageValue.html#tymethod.append):
-
+For vectors stored in the runtime, mutation can be relatively expensive. This follows from the fact
+that `mutate` entails decoding the vector, making changes, and re-encoding the whole vector. It
+seems wasteful to decode the entire vector, push a new item, and then re-encode the whole thing.
+This provides sufficient motivation for
+[`append`](https://substrate.dev/rustdocs/v2.0.0-rc2/frame_support/storage/trait.StorageValue.html#tymethod.append):
 
 ```rust, ignore
 fn append_new_entries(origin) -> Result {
@@ -84,10 +99,24 @@ fn append_new_entries(origin) -> Result {
 }
 ```
 
-`append` encodes the new values, and pushes them to the already encoded vector without decoding the existing entries. This method removes the unnecessary steps for decoding and re-encoding the unchanged elements.
+`append` encodes the new values, and pushes them to the already encoded vector without decoding the
+existing entries. This method removes the unnecessary steps for decoding and re-encoding the
+unchanged elements.
 
 ## Iteration in the Runtime <a name = "iterate"></a>
 
-In general, iteration in the runtime should be avoided. *In the future*, [offchain-workers](https://github.com/substrate-developer-hub/recipes/issues/45) may provide a less expensive way to iterate over runtime storage items. Moreover, *[child tries](https://github.com/substrate-developer-hub/recipes/issues/35)* enable cheap inclusion proofs without the same lookup costs associated with vectors.
+In general, iteration in the runtime should be avoided. _In the future_,
+[offchain-workers](https://github.com/substrate-developer-hub/recipes/issues/45) may provide a less
+expensive way to iterate over runtime storage items. Moreover,
+_[child tries](https://github.com/substrate-developer-hub/recipes/issues/35)_ enable cheap inclusion
+proofs without the same lookup costs associated with vectors.
 
-Even so, there are a few tricks to alleviate the costs of iterating over runtime storage items like vectors. For example, it is [cheaper to iterate over a slice](https://twitter.com/heinz_gies/status/1121490424739303425) than a vector. With this in mind, store items in the runtime as vectors and transform them into slices after making storage calls. [3041](https://github.com/paritytech/substrate/pull/3041) introduced `insert_ref` and `put_ref` in order to allow equivalent reference-style types to be placed without copy (e.g. a storage item of `Vec<AccountId>` can now be written from a `&[AccountId]`). This enables greater flexibility when working with slices that are associated with vectors stored in the runtime.
+Even so, there are a few tricks to alleviate the cost of iterating over runtime storage items like
+vectors. For example, it is
+[cheaper to iterate over a slice](https://twitter.com/heinz_gies/status/1121490424739303425) than a
+vector. With this in mind, store items in the runtime as vectors and transform them into slices
+after making storage calls. [3041](https://github.com/paritytech/substrate/pull/3041) introduced
+`insert_ref` and `put_ref` in order to allow equivalent reference-style types to be placed without
+copy (e.g. a storage item of `Vec<AccountId>` can now be written from a `&[AccountId]`). This
+enables greater flexibility when working with slices that are associated with vectors stored in the
+runtime.

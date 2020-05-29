@@ -1,5 +1,4 @@
 #![cfg_attr(not(feature = "std"), no_std)]
-#![allow(clippy::string_lit_as_bytes)]
 
 //! A pallet that demonstrates the fundamentals of Fixed Point arithmetic.
 //! This pallet implements three multiplicative accumulators using fixed point.
