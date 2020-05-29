@@ -49,7 +49,7 @@ other nodes.
 ## Checking Your Work
 
 Once the compilation is completed, you can ensure that the node has been built properly by displaying its
-help page. Notice that the node has built to the `target/release` directory. This is the default
+help page. Notice that the node executable is found in the `target/release` directory. This is the default
 location for Rust projects.
 
 ```bash

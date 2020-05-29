@@ -125,7 +125,7 @@ beginning. After these checks have completed, then you may begin the function's 
 ## Printing from the Runtime
 
 Printing to the terminal from a Rust program is typically very simple using the `println!` macro.
-However, Substrate runtimes are compiled to Web Assembly as well as a regular native binary, and do
+However, Substrate runtimes are compiled to both Web Assembly and a regular native binary, and do
 not have access to rust's standard library. That means we cannot use the regular `println!`. I
 encourage you to modify the code to try using `println!` and confirm that it will not compile.
 Nonetheless, printing a message from the runtime is useful both for logging information, and also
@@ -170,7 +170,7 @@ super-runtime, this file is at `runtimes/super-runtime/Cargo.toml`.
 hello-substrate = { path = "../../pallets/hello-substrate", default-features = false }
 ```
 
-Because the runtime is built to both native and Wasm, we must ensure that our pallet is built to the
+Because the runtime is compiled to both native and Wasm, we must ensure that our pallet is built to the
 correct target as well. At the bottom of the `Cargo.toml` file, we see this.
 
 ```toml

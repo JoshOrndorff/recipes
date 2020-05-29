@@ -6,7 +6,7 @@ _[`pallets/lockable-currency`](https://github.com/substrate-developer-hub/recipe
 
 ## Just Plain Currency
 
-To use a balances type in the runtime, import the
+To use a balance type in the runtime, import the
 [`Currency`](https://substrate.dev/rustdocs/v2.0.0-rc2/frame_support/traits/trait.Currency.html) trait from
 `frame_support`.
 
@@ -14,7 +14,7 @@ To use a balances type in the runtime, import the
 use support::traits::Currency;
 ```
 
-The `Currency` trait provides an abstraction over a fungible assets system. To use such a fuingible
+The `Currency` trait provides an abstraction over a [fungible assets](https://en.wikipedia.org/wiki/Fungibility) system. To use such a fungible
 asset from your pallet, include an associated type with the `Currency` trait bound in your pallet's
 configuration trait.
 
@@ -48,7 +48,7 @@ and much more.
 ## Reservable Currency
 
 Substrate's [Treasury pallet](https://substrate.dev/rustdocs/v2.0.0-rc2/pallet_treasury/index.html) uses the
-`Currency` type for bonding spending proposals. To reserve and unreserve balances for bonding,
+`Currency` type for bonding spending proposals. To reserve and unreserve funds for bonding,
 `treasury` uses the
 [`ReservableCurrency`](https://substrate.dev/rustdocs/v2.0.0-rc2/frame_support/traits/trait.ReservableCurrency.html)
 trait. The import and associated type declaration follow convention
