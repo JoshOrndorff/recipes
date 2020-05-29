@@ -59,7 +59,7 @@ Substrate development, the `develop` branch allows dependencies from git.
 
 It is time to tag a new release when either enough new features have been contributed that
 releasing makes sense, or, more likely, Substrate itself has tagged a new release. The release
-process also follows gitflow. Creating a new release is usually initiated by the
+process also follows [GitFlow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow). Creating a new release is usually initiated by the
 project maintainer, but the steps are outlined here nonetheless.
 
 1. Create a release branch off of `develop`.
