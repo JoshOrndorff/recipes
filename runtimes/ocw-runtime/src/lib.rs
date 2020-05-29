@@ -1,4 +1,4 @@
-//! This Runtime demonstrates how to configure signed and unsigned transaction handler to be used
+//! This runtime demonstrates how to configure signed and unsigned transaction handlers to be used
 //!   by off-chain worker in its including pallets.
 
 #![cfg_attr(not(feature = "std"), no_std)]
