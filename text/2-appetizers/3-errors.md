@@ -2,9 +2,9 @@
 
 _[`pallets/adding-machine`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/adding-machine)_
 
-As we've mentioned before, in Substrate development it is important to **Verify first, write
-last**. In this recipe, we'll create an adding machine that checks for unlucky numbers (a silly example)
-as well as integer overflow (a serious and realistic example), and throws the appropriate errors.
+As we've mentioned before, in Substrate development it is important to **Verify first, write last**.
+In this recipe, we'll create an adding machine that checks for unlucky numbers (a silly example) as
+well as integer overflow (a serious and realistic example), and throws the appropriate errors.
 
 ## Declaring Errors
 
@@ -58,7 +58,8 @@ verified all preconditions, and thrown all possible errors before ever writing t
 In fact, the pattern of:
 
 -   calling functions that returned a `Result` or `Option`, and
--   checking if the result is `Some` or `Ok` and if not, return from the function early with an error
+-   checking if the result is `Some` or `Ok` and if not, return from the function early with an
+    error
 
 are so common that there are two standard Rust methods help performing the task.
 

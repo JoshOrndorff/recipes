@@ -47,12 +47,11 @@ You can navigate to the
 [Polkadot-JS Apps](https://polkadot.js.org/apps/#/settings/developer?rpc=ws://127.0.0.1:9944) user
 interface. This is a general purpose interface for interacting with many different Substrate-based
 blockchains including Polkadot. From now on we'll call it "Apps" for short. Before Apps will work
-with our blockchain, we need to give it some chain-specific information known as the "types".
-You'll learn what all this means as you work through the recipes; for now just follow the
-instructions.
+with our blockchain, we need to give it some chain-specific information known as the "types". You'll
+learn what all this means as you work through the recipes; for now just follow the instructions.
 
-> If you are not clicking the link above but visiting Apps directly, by default Apps connects to
-> the Kusama network. You will need to switch to your locally running network, with only one node, by
+> If you are not clicking the link above but visiting Apps directly, by default Apps connects to the
+> Kusama network. You will need to switch to your locally running network, with only one node, by
 > clicking on the network icon on Apps top left corner.
 >
 > ![Screenshot: Switching Network](../img/apps-select-network.png)

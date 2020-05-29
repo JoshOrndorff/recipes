@@ -5,9 +5,9 @@ _[`pallets/generic-event`](https://github.com/substrate-developer-hub/recipes/tr
 
 Having a [transaction](https://substrate.dev/docs/en/overview/glossary#transaction) included in a
 block does not guarantee that the function executed successfully. As we saw in the previous recipe,
-many calls can cause errors, but the transaction may still be included in a block. To verify that functions have
-executed successfully, emit an [event](https://substrate.dev/docs/en/overview/glossary#events) at
-the bottom of the function body.
+many calls can cause errors, but the transaction may still be included in a block. To verify that
+functions have executed successfully, emit an
+[event](https://substrate.dev/docs/en/overview/glossary#events) at the bottom of the function body.
 
 Events notify the off-chain world of successful state transitions.
 

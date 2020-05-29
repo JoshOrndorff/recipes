@@ -14,8 +14,9 @@ To use a balance type in the runtime, import the
 use support::traits::Currency;
 ```
 
-The `Currency` trait provides an abstraction over a [fungible assets](https://en.wikipedia.org/wiki/Fungibility) system. To use such a fungible
-asset from your pallet, include an associated type with the `Currency` trait bound in your pallet's
+The `Currency` trait provides an abstraction over a
+[fungible assets](https://en.wikipedia.org/wiki/Fungibility) system. To use such a fungible asset
+from your pallet, include an associated type with the `Currency` trait bound in your pallet's
 configuration trait.
 
 ```rust, ignore
