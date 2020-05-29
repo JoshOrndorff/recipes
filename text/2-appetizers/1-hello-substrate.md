@@ -40,7 +40,7 @@ Next we see a reference to the tests module. This pallet has tests written in a 
 ## Configuration Trait
 
 Next, each pallet has a configuration trait which is called `Trait`. The configuration trait can be
-used to access features from other pallets, or [constants](../3-entrees/constants.md) that effect
+used to access features from other pallets, or [constants](../3-entrees/constants.md) that affect
 the pallet's behavior. This pallet is simple enough that our configuration trait can remain empty,
 although it must still exist.
 
