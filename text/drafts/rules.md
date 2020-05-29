@@ -8,11 +8,11 @@ Because Substrate grants bare-metal control to developers, certain code patterns
 at runtime. As mentioned in (2) of [Pallet Development Criteria](#criteria), panics can cause
 irreversible storage changes, possibly even bricking the blockchain and rendering it useless.
 
-It is the responsibility of Substrate developers to ensure that the code doesn't panic after
-storage changes. In many cases, safety might be independently verified by the developer while
-writing the code. To facilitate auditability and better testing, Substrate developers should include
-a proof in an `.expect()` call that shows why the code's logic is safe and will not panic.
-Convention dictates formatting the call like so
+It is the responsibility of Substrate developers to ensure that the code doesn't panic after storage
+changes. In many cases, safety might be independently verified by the developer while writing the
+code. To facilitate auditability and better testing, Substrate developers should include a proof in
+an `.expect()` call that shows why the code's logic is safe and will not panic. Convention dictates
+formatting the call like so
 
 ```rust, ignore
 <Object<T>>::method_call().expect("<proof of safety>; qed");

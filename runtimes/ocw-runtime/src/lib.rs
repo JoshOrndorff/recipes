@@ -16,8 +16,8 @@ pub mod genesis;
 use sp_api::impl_runtime_apis;
 use sp_core::{Encode, OpaqueMetadata, H256};
 use sp_runtime::traits::{
-	BlakeTwo256, Block as BlockT, IdentifyAccount, IdentityLookup,
-	SaturatedConversion, Saturating, Verify,
+	BlakeTwo256, Block as BlockT, IdentifyAccount, IdentityLookup, SaturatedConversion, Saturating,
+	Verify,
 };
 use sp_runtime::{
 	create_runtime_str, generic,
@@ -36,8 +36,7 @@ pub use frame_support::{
 	traits::Randomness,
 	weights::{
 		constants::{BlockExecutionWeight, ExtrinsicBaseWeight, RocksDbWeight, WEIGHT_PER_SECOND},
-		IdentityFee,
-		Weight,
+		IdentityFee, Weight,
 	},
 	StorageValue,
 };
@@ -117,7 +116,7 @@ parameter_types! {
 	pub const MaximumBlockWeight: Weight = 2 * WEIGHT_PER_SECOND;
 	pub const AvailableBlockRatio: Perbill = Perbill::from_percent(75);
 	/// Assume 10% of weight for average on_initialize calls.
-	pub const MaximumExtrinsicWeight: Weight = AvailableBlockRatio::get()
+	pub MaximumExtrinsicWeight: Weight = AvailableBlockRatio::get()
 		.saturating_sub(Perbill::from_percent(10)) * MaximumBlockWeight::get();
 	pub const MaximumBlockLength: u32 = 5 * 1024 * 1024;
 	pub const Version: RuntimeVersion = VERSION;

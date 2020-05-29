@@ -22,8 +22,8 @@ toolchain, compile a blockchain node, and learn to interact with the blockchain.
 In Chapter 2, [Appetizers](./2-appetizers/index.md), you will cook your first few recipes, learning
 the fundamentals of Substrate development.
 
-The rest of the book, the "Entrees", can be read in any order; skip to whichever
-recipes interest you.
+The rest of the book, the "Entrees", can be read in any order; skip to whichever recipes interest
+you.
 
 Remember, you can't learn to cook by reading alone. As you work through the book, put on your apron,
 get out some pots and pans, and practice compiling, testing, and hacking on the recipes. Play with

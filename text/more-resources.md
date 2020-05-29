@@ -50,8 +50,8 @@ Rust's other "_zero cost_ abstractions":
     distribute IO-intensive tasks onto a thread pool.
 -   **[Crossbeam](https://github.com/crossbeam-rs/crossbeam)** is all about low-level concurrency:
     atomics, concurrent data structures, synchronization primitives. Same idea as the `std::sync`
-    module. Its goal is to provide tools on top of which libraries like Rayon and Tokio
-    can be built.
+    module. Its goal is to provide tools on top of which libraries like Rayon and Tokio can be
+    built.
 
 ### Asynchrony
 

@@ -5,9 +5,9 @@ _[`pallets/single-value`](https://github.com/substrate-developer-hub/recipes/tre
 Storage is used for data that should be kept between blocks and accessible to future transactions.
 Most runtimes will have many storage values, and together the storage values make up the
 blockchain's "state". The storage values themselves are _not_ stored in the blocks. Instead the
-blocks contain extrinsics that represent _changes_ to the storage values. It is the job of each
-node in a blockchain network to keep track of the current storage. The current state of storage can
-be determined by executing all of the blocks in the chain.
+blocks contain extrinsics that represent _changes_ to the storage values. It is the job of each node
+in a blockchain network to keep track of the current storage. The current state of storage can be
+determined by executing all of the blocks in the chain.
 
 ## Declaring Storage
 
@@ -95,9 +95,9 @@ fn set_account(origin) -> DispatchResult {
 }
 ```
 
-Because the `AccountId` type comes from the configuration trait, we must use slightly different syntax.
-Notice the `<T>` attached to the name of the storage value this time. Notice also that because
-`AccountId` is not primitive, we lend a reference to it rather than transferring ownership.
+Because the `AccountId` type comes from the configuration trait, we must use slightly different
+syntax. Notice the `<T>` attached to the name of the storage value this time. Notice also that
+because `AccountId` is not primitive, we lend a reference to it rather than transferring ownership.
 
 ## Constructing the Runtime
 

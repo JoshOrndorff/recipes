@@ -2,10 +2,10 @@
 
 _[`nodes/basic-pow`](https://github.com/substrate-developer-hub/recipes/tree/master/nodes/basic-pow)_
 
-The `basic-pow` node demonstrates how to wire up a custom consensus engine into the Substrate Service. It
-uses a minimal proof of work consensus engine to reach agreement over the blockchain. It will teach
-us many useful aspects of dealing with consensus and prepare us to understand more advanced
-consensus engines in the future. In particular we will learn about:
+The `basic-pow` node demonstrates how to wire up a custom consensus engine into the Substrate
+Service. It uses a minimal proof of work consensus engine to reach agreement over the blockchain. It
+will teach us many useful aspects of dealing with consensus and prepare us to understand more
+advanced consensus engines in the future. In particular we will learn about:
 
 -   Substrate's
     [`BlockImport` trait](https://crates.parity.io/sp_consensus/block_import/trait.BlockImport.html)
