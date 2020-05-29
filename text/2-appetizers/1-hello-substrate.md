@@ -135,7 +135,7 @@ for debugging.
 
 At the top of our pallet, we imported `sp_runtime`'s
 [`print` function](https://substrate.dev/rustdocs/v2.0.0-rc2/sp_runtime/fn.print.html). This special function allows
-the runtime to pass a message for printing to the outer part of the node which is not built to Wasm.
+the runtime to pass a message for printing to the outer part of the node which is not compiled to Wasm and does have access to the standard library and can perform regular IO.
 This function is only able to print items that implement the
 [`Printable` trait](https://substrate.dev/rustdocs/v2.0.0-rc2/sp_runtime/traits/trait.Printable.html). Luckily all
 the primitive types already implement this trait, and you can implement the trait for your own
