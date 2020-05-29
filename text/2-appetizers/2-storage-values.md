@@ -95,7 +95,7 @@ fn set_account(origin) -> DispatchResult {
 }
 ```
 
-Because `AccountId` type comes from the configuration trait, we must use slightly different syntax.
+Because the `AccountId` type comes from the configuration trait, we must use slightly different syntax.
 Notice the `<T>` attached to the name of the storage value this time. Notice also that because
 `AccountId` is not primitive, we lend a reference to it rather than transferring ownership.
 
