@@ -67,7 +67,7 @@ this section investigates both.
 
 The conceptually simpler way of coupling pallets is known as "tight coupling". When tightly coupling
 to another pallet, you specify the depended pallets name explicitly as a trait bound on your
-pallet's configuration trait. This is demonstrate in the tightly-coupled variant of
+pallet's configuration trait. This is demonstrated in the tightly-coupled variant of
 `check-membership`.
 
 ```rust, ignore
@@ -75,6 +75,8 @@ pub trait Trait: system::Trait + vec_set::Trait {
 	// --snip--
 }
 ```
+
+> This pallet, and all pallets, are tightly coupled to frame_system
 
 Supplying this trait bound means that the tightly-coupled variant of `check-membership` pallet can
 only be installed in a runtime that also has the [`vec-set` pallet]() installed. We also see the
