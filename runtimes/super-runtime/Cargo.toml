@@ -40,7 +40,7 @@ fixed-point = { path = "../../pallets/fixed-point", default-features = false }
 generic-event = { path = "../../pallets/generic-event", default-features = false }
 hello-substrate = { path = "../../pallets/hello-substrate", default-features = false }
 last-caller = { path = "../../pallets/last-caller", default-features = false }
-# map-set = { path = "../../pallets/map-set", default-features = false }
+map-set = { path = "../../pallets/map-set", default-features = false }
 ringbuffer-queue = { path = "../../pallets/ringbuffer-queue", default-features = false }
 randomness = { path = "../../pallets/randomness", default-features = false }
 simple-crowdfund = { path = "../../pallets/simple-crowdfund", default-features = false}
@@ -49,7 +49,7 @@ simple-map = { path = "../../pallets/simple-map", default-features = false }
 single-value = { path = "../../pallets/single-value", default-features = false }
 storage-cache = { path = "../../pallets/storage-cache", default-features = false }
 struct-storage = { path = "../../pallets/struct-storage", default-features = false }
-# vec-set = { path = "../../pallets/vec-set", default-features = false }
+vec-set = { path = "../../pallets/vec-set", default-features = false }
 
 # Other Substrate dependencies
 frame-executive = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d', default-features = false }
@@ -115,7 +115,7 @@ std = [
 	"generic-event/std",
 	"hello-substrate/std",
 	"last-caller/std",
-	# "map-set/std",
+	"map-set/std",
 	"randomness/std",
 	"ringbuffer-queue/std",
 	"simple-crowdfund/std",
@@ -124,5 +124,5 @@ std = [
 	"single-value/std",
 	"storage-cache/std",
 	"struct-storage/std",
-	# "vec-set/std",
+	"vec-set/std",
 ]

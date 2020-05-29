@@ -24,6 +24,7 @@ std = [
     'sp-runtime/std',
     'sp-std/std',
     'vec-set/std',
+    'account-set/std',
 ]
 
 [dependencies]
@@ -32,8 +33,8 @@ frame-support = { version = '2.0.0-dev', git = 'https://github.com/paritytech/su
 frame-system = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d', default-features = false}
 sp-runtime = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d', default-features = false }
 sp-std = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d', default-features = false }
-account-set = { path = '../../traits/account-set' }
-vec-set = { path = '../vec-set' }
+account-set = { path = '../../traits/account-set', default-features = false }
+vec-set = { path = '../vec-set', default-features = false }
 
 [dev-dependencies]
 sp-core = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '45b9f0a9cbf901abaa9f1fca5fe8baeed029133d', default-features = false }

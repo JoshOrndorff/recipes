@@ -6501,6 +6501,7 @@ dependencies = [
  "generic-event",
  "hello-substrate",
  "last-caller",
+ "map-set",
  "pallet-balances",
  "pallet-randomness-collective-flip",
  "pallet-sudo",
@@ -6528,6 +6529,7 @@ dependencies = [
  "storage-cache",
  "struct-storage",
  "substrate-wasm-builder-runner",
+ "vec-set",
 ]
 
 [[package]]
