@@ -13,6 +13,8 @@ use account_set::AccountSet;
 #[cfg(test)]
 mod tests;
 
+/// The pallet's configuration trait
+/// Notice the loose coupling to any pallet that implements the AccountSet behavior
 pub trait Trait: system::Trait {
 	/// The ubiquitous event type
 	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;

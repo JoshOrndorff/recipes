@@ -12,10 +12,3 @@
 
 pub mod loose;
 pub mod tight;
-
-// TODO I don't think I need these because they are referenced in the individual pallet variants
-// #[cfg(test)]
-// mod loose_tests;
-//
-// #[cfg(test)]
-// mod tight_tests;

@@ -41,7 +41,7 @@
 	- [Currency Types](./3-entrees/currency.md)
 	- [Generating Randomness](./3-entrees/randomness.md)
 	- [Execution Schedule](./3-entrees/execution-schedule.md)
-	- [Permissioned Methods](./3-entrees/permissioned-methods.md)
+	- [Tightly- and Loosely-Coupled Pallets](./3-entrees/pallet-coupling.md)
 	- [Testing](./3-entrees/testing/index.md)
 		- [Basic Test Environments](./3-entrees/testing/mock.md)
 		- [Common Tests](./3-entrees/testing/common.md)

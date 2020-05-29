@@ -11,6 +11,8 @@ use frame_system::{self as system, ensure_signed};
 #[cfg(test)]
 mod tests;
 
+/// The pallet's configuration trait.
+/// Notice the explicit tight coupling to the vec_set pallet
 pub trait Trait: system::Trait + vec_set::Trait {
 	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
 }
