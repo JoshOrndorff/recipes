@@ -135,9 +135,9 @@ for debugging.
 
 At the top of our pallet, we imported `sp_runtime`'s
 [`print` function](https://crates.parity.io/sp_runtime/fn.print.html). This special function allows
-the runtime to pass a message for printing to the outer part of the node which is not compiled to Wasm
-and does have access to the standard library and can perform regular IO.
-This function is only able to print items that implement the
+the runtime to pass a message for printing to the outer part of the node which is not compiled to
+Wasm and does have access to the standard library and can perform regular IO. This function is only
+able to print items that implement the
 [`Printable` trait](https://crates.parity.io/sp_runtime/traits/trait.Printable.html). Luckily all
 the primitive types already implement this trait, and you can implement the trait for your own
 datatypes too.
@@ -171,8 +171,8 @@ super-runtime, this file is at `runtimes/super-runtime/Cargo.toml`.
 hello-substrate = { path = "../../pallets/hello-substrate", default-features = false }
 ```
 
-Because the runtime is compiled to both native and Wasm, we must ensure that our pallet is built to the
-correct target as well. At the bottom of the `Cargo.toml` file, we see this.
+Because the runtime is compiled to both native and Wasm, we must ensure that our pallet is built to
+the correct target as well. At the bottom of the `Cargo.toml` file, we see this.
 
 ```toml
 [features]

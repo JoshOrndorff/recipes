@@ -71,8 +71,8 @@ Now, declare the mock runtime as a unit structure
 pub struct TestRuntime;
 ```
 
-The `derive` macro attribute provides implementations of the `Clone`, `PartialEq`, `Eq`, `Debug` traits
-for the `TestRuntime` struct.
+The `derive` macro attribute provides implementations of the `Clone`, `PartialEq`, `Eq`, `Debug`
+traits for the `TestRuntime` struct.
 
 The mock runtime also needs to implement the tested pallet's `Trait`. If it is unnecessary to test
 the pallet's `Event` type, the type can be set to `()`. See further below to test the pallet's

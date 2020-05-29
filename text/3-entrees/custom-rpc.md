@@ -254,8 +254,8 @@ $ curl http://localhost:9933 -H "Content-Type:application/json;charset=utf-8" -d
     }'
 ```
 
-As an exercise, change the storage values and confirm that the RPC provides the correct
-updated sum. Then call the RPC at an old block and confirm you get the old sum.
+As an exercise, change the storage values and confirm that the RPC provides the correct updated sum.
+Then call the RPC at an old block and confirm you get the old sum.
 
 ## Polkadot JS API
 

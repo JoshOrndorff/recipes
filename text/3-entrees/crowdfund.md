@@ -136,8 +136,7 @@ pub fn crowdfund_kill(index: FundIndex) {
 }
 ```
 
-Because this pallet uses one trie for each active crowdfund, we need to
-generate a unique
+Because this pallet uses one trie for each active crowdfund, we need to generate a unique
 [`ChildInfo`](https://crates.parity.io/frame_support/storage/child/enum.ChildInfo.html) for each of
 them. To ensure that the ids are really unique, we incluce the `FundIndex` in the generation.
 

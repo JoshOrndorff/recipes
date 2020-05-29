@@ -90,8 +90,8 @@ fn add_value(origin, val_to_add: u32) -> DispatchResult {
 ```
 
 In more complex patterns, the constant value may be used as a static, base value that is scaled by a
-multiplier to incorporate stateful context for calculating some dynamic fee (i.e. floating transaction
-fees).
+multiplier to incorporate stateful context for calculating some dynamic fee (i.e. floating
+transaction fees).
 
 To test the range of pallet configurations introduced by configurable constants, see
 _[custom configuration of externalities](./testing/externalities.md)_
