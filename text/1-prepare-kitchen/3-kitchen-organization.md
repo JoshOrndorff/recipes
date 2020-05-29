@@ -9,8 +9,8 @@ It is useful to recognize that
 [coding is all about abstraction](https://youtu.be/05H4YsyPA-U?t=1789).
 
 To understand how the code in this repository is organized, let's first take a look at how a
-Substrate node is constructed. Each node has many components that manage things like queueing
-transaction, communicating over a P2P network, reaching consensus on the state of the blockchain,
+Substrate node is constructed. Each node has many components that manage things like the transaction
+queue, communicating over a P2P network, reaching consensus on the state of the blockchain,
 and the chain's actual runtime logic. Each aspect of the node is interesting in its own right, and
 the runtime is particularly interesting because it contains the business logic (aka "state
 transition function") that codifies the chain's functionality.

@@ -2,8 +2,7 @@
 
 _[`pallets/storage-cache`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/storage-cache)_
 
-Calls to runtime storage have an associated cost. With this in mind, multiple calls to storage
-values should be avoided when possible.
+Calls to runtime storage have an associated cost and developers should strive to minimize the number of calls.
 
 ```rust, ignore
 decl_storage! {
@@ -21,8 +20,7 @@ decl_storage! {
 ## Copy Types
 
 For [`Copy`](https://doc.rust-lang.org/std/marker/trait.Copy.html) types, it is easy to reuse
-previous storage calls by simply reusing the value (which is automatically cloned upon reuse). With
-this in mind, the second call in the following code is unnecessary:
+previous storage calls by simply reusing the value, which is automatically cloned upon reuse. In the code below, the second call is unnecessary:
 
 ```rust, ignore
 fn increase_value_no_cache(origin, some_val: u32) -> DispatchResult {
@@ -61,7 +59,7 @@ fn increase_value_w_copy(origin, some_val: u32) -> DispatchResult {
 ## Clone Types
 
 If the type was not `Copy`, but was [`Clone`](https://doc.rust-lang.org/std/clone/trait.Clone.html),
-then it is still preferred to clone the value in the method than to make another call to runtime
+then it is still better to clone the value in the method than to make another call to runtime
 storage.
 
 The runtime methods enable the calling account to swap the `T::AccountId` value in storage if

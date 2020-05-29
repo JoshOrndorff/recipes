@@ -40,7 +40,7 @@ Next we see a reference to the tests module. This pallet has tests written in a 
 ## Configuration Trait
 
 Next, each pallet has a configuration trait which is called `Trait`. The configuration trait can be
-used to access features from other pallets, or [constants](../3-entrees/constants.md) that effect
+used to access features from other pallets, or [constants](../3-entrees/constants.md) that affect
 the pallet's behavior. This pallet is simple enough that our configuration trait can remain empty,
 although it must still exist.
 
@@ -120,12 +120,12 @@ that there is no way for this call to fail, but this is not quite true. The `ens
 function, used at the beginning, can return an error if the call was not from a signed origin. This
 is the first time we're seeing the important paradigm "**Verify first, write last**". In Substrate
 development, it is important that you always ensure preconditions are met and return errors at the
-beginning. After these checks have completed, then you may begin the functions computation.
+beginning. After these checks have completed, then you may begin the function's computation.
 
 ## Printing from the Runtime
 
 Printing to the terminal from a Rust program is typically very simple using the `println!` macro.
-However, Substrate runtimes are compiled to Web Assembly as well as a regular native binary, and do
+However, Substrate runtimes are compiled to both Web Assembly and a regular native binary, and do
 not have access to rust's standard library. That means we cannot use the regular `println!`. I
 encourage you to modify the code to try using `println!` and confirm that it will not compile.
 Nonetheless, printing a message from the runtime is useful both for logging information, and also
@@ -135,7 +135,8 @@ for debugging.
 
 At the top of our pallet, we imported `sp_runtime`'s
 [`print` function](https://crates.parity.io/sp_runtime/fn.print.html). This special function allows
-the runtime to pass a message for printing to the outer part of the node which is not built to Wasm.
+the runtime to pass a message for printing to the outer part of the node which is not compiled to Wasm
+and does have access to the standard library and can perform regular IO.
 This function is only able to print items that implement the
 [`Printable` trait](https://crates.parity.io/sp_runtime/traits/trait.Printable.html). Luckily all
 the primitive types already implement this trait, and you can implement the trait for your own
@@ -170,7 +171,7 @@ super-runtime, this file is at `runtimes/super-runtime/Cargo.toml`.
 hello-substrate = { path = "../../pallets/hello-substrate", default-features = false }
 ```
 
-Because the runtime is built to both native and Wasm, we must ensure that our pallet is built to the
+Because the runtime is compiled to both native and Wasm, we must ensure that our pallet is built to the
 correct target as well. At the bottom of the `Cargo.toml` file, we see this.
 
 ```toml

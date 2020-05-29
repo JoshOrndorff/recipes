@@ -2,8 +2,8 @@
 
 _[`pallets/adding-machine`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/adding-machine)_
 
-As we've mentioned before, in Substrate development, it is important to **Verify first, write
-last**. In this recipe, we'll create an adding machine checks for unlucky numbers (a silly example)
+As we've mentioned before, in Substrate development it is important to **Verify first, write
+last**. In this recipe, we'll create an adding machine that checks for unlucky numbers (a silly example)
 as well as integer overflow (a serious and realistic example), and throws the appropriate errors.
 
 ## Declaring Errors
@@ -58,7 +58,7 @@ verified all preconditions, and thrown all possible errors before ever writing t
 In fact, the pattern of:
 
 -   calling functions that returned a `Result` or `Option`, and
--   checking if the result is `Some` or `Ok`. If not, returns from the function early with an error
+-   checking if the result is `Some` or `Ok` and if not, return from the function early with an error
 
 are so common that there are two standard Rust methods help performing the task.
 
@@ -78,7 +78,7 @@ fn add_alternate(origin, val_to_add: u32) -> DispatchResult {
 ```
 
 Notice the pattern of `.ok_or(<Error<T>>::MyError)?;`. This is really handy when you have a function
-call that returns an `Option` and you expect there should be a value inside. If not, returns early
+call that returns an `Option` and you expect there should be a value inside. If not, return early
 with an error message, all the while unwrapping the value for your further processing.
 
 If your function returns a `Result<T, E>`, you could apply `.map_err(|_e| <Error<T>>::MyError)?;` in

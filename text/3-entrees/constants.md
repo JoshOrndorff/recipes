@@ -90,7 +90,7 @@ fn add_value(origin, val_to_add: u32) -> DispatchResult {
 ```
 
 In more complex patterns, the constant value may be used as a static, base value that is scaled by a
-multiplier to incorporate stateful context for calculating some dynamic fee (ie floating transaction
+multiplier to incorporate stateful context for calculating some dynamic fee (i.e. floating transaction
 fees).
 
 To test the range of pallet configurations introduced by configurable constants, see
@@ -101,7 +101,7 @@ _[custom configuration of externalities](./testing/externalities.md)_
 When the pallet is included in a runtime, the runtime developer supplies the value of the constant
 using the
 [`parameter_types!` macro](https://crates.parity.io/frame_support/macro.parameter_types.html). This
-pallet is included in the `super-runtime` where we see the following macro invocation and trat
+pallet is included in the `super-runtime` where we see the following macro invocation and trait
 implementation.
 
 ```rust

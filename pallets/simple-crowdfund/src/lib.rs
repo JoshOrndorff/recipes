@@ -1,6 +1,6 @@
 //! Simple Crowdfund
 //!
-//! This pallet demonstrates a simple on-chain crowd-funding mechanism.
+//! This pallet demonstrates a simple on-chain crowdfunding mechanism.
 //! It is based on Polkadot's crowdfund pallet, but is simplified and decoupled
 //! from the parachain logic.
 
@@ -225,7 +225,7 @@ decl_module! {
 
 		/// Dissolve an entire crowdfund after its retirement period has expired.
 		/// Anyone can call this function, and they are incentivized to do so because
-		/// They inheret the deposit.
+		/// they inherit the deposit.
 		#[weight = 10_000]
 		fn dissolve(origin, index: FundIndex) {
 			let reporter = ensure_signed(origin)?;

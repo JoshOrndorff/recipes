@@ -169,7 +169,7 @@ Both BABE and GRANDPA rely on getting their authority sets from the runtime via 
 [GrandpaAPI](https://crates.parity.io/sp_finality_grandpa/trait.GrandpaApi.html). So trying to build
 this node with a runtime that does not provide these APIs will fail to compile.
 
-### Pre Runtime Digests
+### Pre-Runtime Digests
 
 Just as we cannot use this node with a runtime that does not provide the appropriate runtime APIs,
 we also cannot use a runtime designed for this node with different consensus engines.
@@ -181,7 +181,7 @@ intended for. To do this, it uses a technique known as a pre-runtime digest. It 
 The BABE authorship task automatically inserts these digest items in each block it authors.
 
 Because the runtime needs to interpret these pre-runtime digests, they are not optional. That means
-runtimes that expect the pre-digests require the pre-digests, and cannot be used unmodified in nodes
+runtimes that expect the pre-digests cannot be used, unmodified, in nodes
 that don't provide the pre-digests. Unlike other runtimes in the Recipes where runtimes can be
 freely swapped between nodes, the babe-grandpa-runtime can only be used in a node that is actually
 running BABE
