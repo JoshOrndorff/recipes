@@ -20,7 +20,7 @@ decl_storage! {
 ## Copy Types
 
 For [`Copy`](https://doc.rust-lang.org/std/marker/trait.Copy.html) types, it is easy to reuse
-previous storage calls by simply reusing the value (which is automatically cloned upon reuse). In the code below, the second call is unnecessary:
+previous storage calls by simply reusing the value, which is automatically cloned upon reuse. In the code below, the second call is unnecessary:
 
 ```rust, ignore
 fn increase_value_no_cache(origin, some_val: u32) -> DispatchResult {
