@@ -89,7 +89,7 @@ started. All of these ideas and more are listed in our
     would like more and better coverage.
 -   **New recipes** - If you know how to do something useful in Substrate that is not yet covered in
     the Recipes, please contribute.
--   **UX improvements** - Any way to make it easier and less confusing to get new users on boarded
+-   **UX improvements** - Any way to make it easier and less confusing to get new users onboarded
     is welcome.
 -   **CI Improvements** - The more tests we have automated, the higher quality the Recipes will be.
 
