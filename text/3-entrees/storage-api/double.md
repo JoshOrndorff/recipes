@@ -23,7 +23,7 @@ decl_storage! {
 }
 ```
 
-For the purposes of this example, store the scores of each members in a map that associates this
+For the purposes of this example, store the scores of each member in a map that associates this
 `u32` value with two keys: (1) a `GroupIndex` identifier, and (2) the member's `AccountId`. This
 allows for efficient removal of all values associated with a specific `GroupIndex` identifier.
 

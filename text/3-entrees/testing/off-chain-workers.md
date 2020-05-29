@@ -129,7 +129,7 @@ fn offchain_send_signed_tx() {
 
 We test that when `OffchainDemo::send_signed(num)` function is being called,
 
--   There is only one transaction made to the transaction pool.
+-   There is only one transaction that made it to the transaction pool.
 -   The transaction is signed.
 -   The transaction is calling the `Call::submit_number_signed` on-chain function with the parameter
     `num`.

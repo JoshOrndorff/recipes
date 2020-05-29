@@ -2,7 +2,7 @@
 
 _[`nodes/basic-pow`](https://github.com/substrate-developer-hub/recipes/tree/master/nodes/basic-pow)_
 
-The `basic-pow` node demonstrates how wire a custom consensus engine into the Substrate Service. It
+The `basic-pow` node demonstrates how to wire up a custom consensus engine into the Substrate Service. It
 uses a minimal proof of work consensus engine to reach agreement over the blockchain. It will teach
 us many useful aspects of dealing with consensus and prepare us to understand more advanced
 consensus engines in the future. In particular we will learn about:
@@ -24,7 +24,7 @@ distinction.
 
 ![Substrate Architecture Diagram](../img/substrate-architecture.png)
 
-In principle the consensus engine, part of the outer node, is agnostic over the runtime that is used
+In principle, the consensus engine (part of the outer node) is agnostic to the runtime that is used
 with it. But in practice, most consensus engines will require the runtime to provide certain
 [runtime APIs](./runtime-api.md) that affect the engine. For example, Aura and Babe query the
 runtime for the set of validators. A more real-world PoW consensus would query the runtime for the
@@ -114,7 +114,7 @@ pub fn build_inherent_data_providers() -> Result<InherentDataProviders, ServiceE
 Anything that implements the
 [`ProvideInherentData` trait](https://crates.parity.io/sp_inherents/trait.ProvideInherentData.html)
 may be used here. The block authoring logic must supply all inherents that the runtime expects. In
-this case of this basic-pow chain, that is just the
+the case of this basic-pow chain, that is just the
 [`TimestampInherentData`](https://crates.parity.io/sp_timestamp/trait.TimestampInherentData.html)
 expected by the [timestamp pallet](https://crates.parity.io/pallet_timestamp/index.html). In order
 to register other inherents, you would call `register_provider` multiple times, and map errors

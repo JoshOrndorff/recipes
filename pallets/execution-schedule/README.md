@@ -1,6 +1,6 @@
 # Execution Schedule
 
-This pallet abstracts away the scheduling of task execution and governs the priority of tasks using
+This pallet provides an abstraction over task execution scheduling and an API to govern the priority of tasks using
 a council of `AccountId`s stored in runtime storage.
 
 Although we could add more nuanced governance to the `Council`, the purpose of this example is to

@@ -78,7 +78,7 @@ type FundInfoOf<T> = FundInfo<AccountIdOf<T>, BalanceOf<T>, <T as system::Trait>
 ## Storage
 
 The pallet has two storage items declared the usual way using `decl_storage!`. The first is the
-index that tracks the number of funds, and the second is mapping from index to `FundInfo`.
+index that tracks the number of funds, and the second is a mapping from index to `FundInfo`.
 
 ```rust, ignore
 decl_storage! {
@@ -128,7 +128,7 @@ pub fn contribution_kill(index: FundIndex, who: &T::AccountId) {
 	who.using_encoded(|b| child::kill(&id, b));
 }
 
-/// Remove the etnire record of contributions in the associated child trie in a single
+/// Remove the entire record of contributions in the associated child trie in a single
 /// storage write.
 pub fn crowdfund_kill(index: FundIndex) {
 	let id = Self::id_from_index(index);
@@ -136,7 +136,7 @@ pub fn crowdfund_kill(index: FundIndex) {
 }
 ```
 
-Because this pallet uses not just one child trie, but a trie for each active crowdfund, we need to
+Because this pallet uses one trie for each active crowdfund, we need to
 generate a unique
 [`ChildInfo`](https://crates.parity.io/frame_support/storage/child/enum.ChildInfo.html) for each of
 them. To ensure that the ids are really unique, we incluce the `FundIndex` in the generation.

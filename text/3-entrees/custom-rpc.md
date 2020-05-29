@@ -93,7 +93,7 @@ Then, once you've called the service builder, you can extend it with an RPC by u
 ## Calling the RPC
 
 Once your node is running, you can test the RPC by calling it with any client that speaks json RPC.
-One widely available option `curl`.
+One widely available option is `curl`.
 
 ```bash
 $ curl http://localhost:9933 -H "Content-Type:application/json;charset=utf-8" -d   '{
@@ -254,11 +254,11 @@ $ curl http://localhost:9933 -H "Content-Type:application/json;charset=utf-8" -d
     }'
 ```
 
-As an exercise, you should change the storage values, and confirm that the RPC provides the correct
+As an exercise, change the storage values and confirm that the RPC provides the correct
 updated sum. Then call the RPC at an old block and confirm you get the old sum.
 
 ## Polkadot JS API
 
-Many frontends interact with Substrate nodes through Polkadot JS API. While the recipes does not
+Many frontends interact with Substrate nodes through Polkadot JS API. While the Recipes does not
 strive to document that project, we have included a snippet of javascript for interacting with these
 custom RPCs in the `nodes/rpc-node/js` directory.

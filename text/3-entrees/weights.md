@@ -7,7 +7,7 @@ be applied, and it is a pallet author's job to ensure that this accounting happe
 provides a mechanism known as transaction weighting to quantify the resources consumed while
 executing a transaction.
 
-_Indeed, mispriced EVM operations have shown how operations that underestimate cost can open
+_Indeed, mispriced EVM operations have shown how operations that underestimate cost can provide
 economic DOS attack vectors: [Onwards; Underpriced EVM Operations](https://www.parity.io/onwards/),
 [Under-Priced DOS Attacks on Ethereum](https://www4.comp.polyu.edu.hk/~csxluo/DoSEVM.pdf)_
 
@@ -38,7 +38,7 @@ decl_module! {
 
 For more complex transactions, custom weight calculations can be performed that consider the
 parameters passed to the call. This snippet shows a weighting struct that weighs transactions where
-the first parameter is a `boo`l. If the first parameter is `true`, then the weight is linear in the
+the first parameter is a `bool`. If the first parameter is `true`, then the weight is linear in the
 second parameter. Otherwise the weight is constant. A transaction where this weighting scheme makes
 sense is demonstrated in the kitchen.
 
@@ -60,7 +60,7 @@ impl WeighData<(&bool, &u32)> for Conditional {
 
 In addition to the
 [`WeightData` Trait](https://crates.parity.io/frame_support/weights/trait.WeighData.html), shown
-above, types that are used to calculate transaction weights, must also implement
+above, types that are used to calculate transaction weights must also implement
 [`ClassifyDispatch`](https://crates.parity.io/frame_support/weights/trait.ClassifyDispatch.html),
 and [`PaysFee`](https://crates.parity.io/frame_support/weights/trait.PaysFee.html).
 

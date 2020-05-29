@@ -1,7 +1,7 @@
 # Kitchen Node
 
 This Substrate-based node does not contain its own runtime. Rather it imports another runtime (like
-the ones here in the kitchen) through it's `Cargo.toml` file, and wraps them with a standard
+the ones here in the kitchen) through its `Cargo.toml` file, and wraps them with a standard
 blockchain chasis including:
 
 -   Babe block production
