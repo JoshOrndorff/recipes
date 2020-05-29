@@ -84,7 +84,6 @@ the caller is not present, there is no work to be done. If the caller is present
 algorithm returns her index, and she can be removed.
 
 ```rust, ignore
-#[weight = 10_000]
 fn remove_member(origin) -> DispatchResult {
 	let old_member = ensure_signed(origin)?;
 
