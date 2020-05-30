@@ -1,13 +1,13 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
-//! This Module contains two nearly identical Substrate pallets. Both demonstrate access control
+//! This module contains two nearly identical Substrate pallets. Both demonstrate access control
 //! and coupling multiple pallets together ina FRAME runtime.
 //!
-//! The _tight_ variant demonstrates tightly coupling pallets and is itself tightly-coupled to the
-//! vec-set pallet.
+//! The _tight_ variant demonstrates tightly coupling pallets and is itself tightly coupled to the
+//! `vec-set` pallet.
 //!
-//! The _loose_ variant demonstrates loosely coupling pallets and is itself loosely-coupled through
-//! the AccountSet trait.
+//! The _loose_ variant demonstrates loosely coupling pallets and is itself loosely coupled through
+//! the `AccountSet` trait.
 
 
 pub mod loose;

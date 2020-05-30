@@ -251,10 +251,10 @@ impl constant_config::Trait for Runtime {
 }
 
 // The following two configuration traits are for the loosely- and tightly-coupled variants
-// of the check membership pallet. Both pallets are housed in the same `check-membership` crate.
+// of the check membership pallet. Both pallets are located in the same `check-membership` crate.
 impl check_membership_loose::Trait for Runtime {
 	type Event = Event;
-	// You can choose either the vec-set or map-set implementation of the AccountSet trait
+	// You can choose either the `vec-set` or `map-set` implementation of the `AccountSet` trait
 	type MembershipSource = VecSet;
 	// type MembershipSource = MapSet;
 }

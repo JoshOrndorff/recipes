@@ -2,8 +2,8 @@
 //! only dispatchable function, `check_membership`, the caller is checked against a set of approved
 //! callers. Only if the caller is approved, do they successfully emit the event.
 //!
-//! The list of approved members is provided by the vec-set pallet. In order for this pallet to be
-//! used, the vec-set pallet must also be present in the runtime.
+//! The list of approved members is provided by the `vec-set` pallet. In order for this pallet to be
+//! used, the `vec-set` pallet must also be present in the runtime.
 
 use frame_support::{decl_error, decl_event, decl_module, dispatch::DispatchResult};
 use frame_system::{self as system, ensure_signed};
@@ -12,7 +12,7 @@ use frame_system::{self as system, ensure_signed};
 mod tests;
 
 /// The pallet's configuration trait.
-/// Notice the explicit tight coupling to the vec_set pallet
+/// Notice the explicit tight coupling to the `vec_set` pallet
 pub trait Trait: system::Trait + vec_set::Trait {
 	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
 }
@@ -38,13 +38,13 @@ decl_module! {
 	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
 		fn deposit_event() = default;
 
-		/// Checks whether the caller is a member of the set of Account Ids provided by the vec-set
+		/// Checks whether the caller is a member of the set of account IDs provided by the `vec-set`
 		/// pallet. Emits an event if they are, and errors if not.
 		#[weight = 10_000]
 		fn check_membership(origin) -> DispatchResult {
 			let caller = ensure_signed(origin)?;
 
-			// Get the members from the vec-set pallet
+			// Get the members from the `vec-set` pallet
 			let members = vec_set::Module::<T>::members();
 
 			// Check whether the caller is a member

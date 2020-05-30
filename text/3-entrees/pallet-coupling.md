@@ -2,7 +2,7 @@
 
 _[pallets/check-membership](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/check-membership)_
 
-The check-membership crate houses two pallets which solve the same problems in slightly different
+The `check-membership` crate contains two pallets that solve the same problems in slightly different
 ways. Both pallets implement a single dispatchable function that can only be successfully executed
 by callers who are members of an
 [access control list](https://en.wikipedia.org/wiki/Access-control_list). The job of maintaining the
@@ -13,9 +13,9 @@ of the pallet.
 ## Twin Pallets
 
 Before we dive into the pallet code, let's talk a bit more about the structure of the crate in the
-`pallets/check-membership` directory. This directory is a single rust crate which contains two
+`pallets/check-membership` directory. This directory is a single Rust crate that contains two
 pallets. The two pallets live in the `pallets/check-membership/tight` and
-`pallets/check-membership/loose` directories. In the crate's main `lib.rs` we merely export each of
+`pallets/check-membership/loose` directories. In the crate's main `lib.rs` we simply export each of
 these variants of the pallet.
 
 ```rust, ignore
@@ -30,7 +30,7 @@ crate.
 
 While the primary learning objective of these twin pallets is understanding the way in which they
 are coupled to the membership-managing pallets, they also demonstrate the concept of an access
-control list which we will investigate first.
+control list, which we will investigate first.
 
 It is often useful to designate some functions as permissioned and, therefore, accessible only to a
 defined group of users. In this pallet, we check that the caller of the `check_membership` function
@@ -59,8 +59,8 @@ fn check_membership(origin) -> DispatchResult {
 ## Coupling Pallets
 
 Each `check-membership` pallet actually contains very little logic. It has no storage of its own and
-a single extrinsic. Which does the membership checking. All of the heavy lifting is abstracted away
-to another pallet. There are two different ways in which pallets can be coupled to one another, and
+a single extrinsic that does the membership checking. All of the heavy lifting is abstracted away
+to another pallet. There are two different ways that pallets can be coupled to one another and
 this section investigates both.
 
 ### Tight Coupling
@@ -76,10 +76,10 @@ pub trait Trait: system::Trait + vec_set::Trait {
 }
 ```
 
-> This pallet, and all pallets, are tightly coupled to frame_system
+> This pallet, and all pallets, are tightly coupled to `frame_system`
 
 Supplying this trait bound means that the tightly-coupled variant of `check-membership` pallet can
-only be installed in a runtime that also has the [`vec-set` pallet]() installed. We also see the
+only be installed in a runtime that also has the [`vec-set` pallet](./storage-api/vec-set.md) installed. We also see the
 tight coupling in the pallet's `Cargo.toml` file, where `vec-set` is listed by name.
 
 ```toml
@@ -101,7 +101,7 @@ depends on exactly the `vec-set` pallet rather than a behavior such as managing 
 ## Loose Coupling
 
 Loose coupling solves the problem of coupling to a specific implementation. When loosely coupling to
-another pallet, you add an associated type to the pallets configuration trait, and ensure the
+another pallet, you add an associated type to the pallet's configuration trait and ensure the
 supplied type implements the necessary behavior by specifying a trait bound.
 
 ```rust, ignore
@@ -132,7 +132,7 @@ We also see the loose coupling in the pallet's `Cargo.toml` file, where `account
 account-set = { path = '../../traits/account-set', default-features = false }
 ```
 
-When it comes time to actually get the set of members, we have use the `accounts` method supplied by
+When it comes time to actually get the set of members, we have to use the `accounts` method supplied by
 the trait.
 
 ```rust, ignore

@@ -6,12 +6,12 @@ A [Set](<https://en.wikipedia.org/wiki/Set_(abstract_data_type)>) is an unordere
 that stores entries without duplicates. Substrate's storage API does not provide a way to declare
 sets explicitly, but they can be implemented using either vectors or maps.
 
-This recipe shows how to implement a storage set on top of a vector, and explores the performance of
+This recipe demonstrates how to implement a storage set on top of a vector, and explores the performance of
 the implementation. When implementing a set in your own runtime, you should compare this technique
 to implementing a [`map-set`](./map-set.md).
 
-In this pallet we implement a set of `AccountId`s. We do not do not use the set for anything in this
-pallet; we merely maintain its membership. Using the set is, demonstrated in the recipe on [pallet
+In this pallet we implement a set of `AccountId`s. We do not use the set for anything in this
+pallet; we simply maintain its membership. Using the set is demonstrated in the recipe on [pallet
 coupling](./pallet-couplin.md]. We provide dispatchable calls to add and remove members, ensuring
 that the number of members never exceeds a hard-coded maximum.
 
@@ -37,13 +37,13 @@ decl_storage! {
 ```
 
 In order to use the `Vec` successfully as a set, we will need to manually ensure that no duplicate
-entries are added. And to ensure reasonable performance, we will enforce that the `Vec` always
-remain sorted. This allows for quickly determining whether an item is present using a
+entries are added. To ensure reasonable performance, we will enforce that the `Vec` always
+remains sorted. This allows for quickly determining whether an item is present using a
 [binary search](https://en.wikipedia.org/wiki/Binary_search_algorithm).
 
 ## Adding Members
 
-Any user may join the membership set by calling the `add_member` dispatchable, so long as they are
+Any user may join the membership set by calling the `add_member` dispatchable, providing they are
 not already a member and the membership limit has not been reached. We check for these two
 conditions first, and then insert the new member only after we are sure it is safe to do so.
 
@@ -73,7 +73,7 @@ pub fn add_member(origin) -> DispatchResult {
 ```
 
 If it turns out that the caller is not already a member, the binary search will fail. In this case
-it still gives back the index into the `Vec` at which the member would have been stored had he been
+it still returns the index into the `Vec` at which the member would have been stored had he been
 present. We then use this information to insert the member at the appropriate location, thus
 maintaining a sorted `Vec`.
 
@@ -110,15 +110,15 @@ Now that we have built our set, let's analyze its performance in some common ope
 
 ### Membership Check
 
-In order to check for the presence of an item in a vec set, we make a single storage read, decode
+In order to check for the presence of an item in a `vec-set`, we make a single storage read, decode
 the entire vector, and perform a binary search.
 
 DB Reads: O(1) Decoding: O(n) Search: O(log n)
 
 ### Updating
 
-Updates to the set, such as adding and removing members, like we demonstrated, requires first
-performing a membership check. In addition it requires re-encoding the entire `Vec` and storing back
+Updates to the set, such as adding and removing members as we demonstrated, requires first
+performing a membership check. It also requires re-encoding the entire `Vec` and storing it back
 in the database.
 
 DB Writes: O(1) Encoding: O(n)
@@ -141,5 +141,5 @@ iterating the entire list is a big win. If your data will be iterated frequently
 It is always important that the weight associated with your dispatchables represent the actual time
 it takes to execute them. In this pallet we have provided an upper bound on the size of the set,
 which places an upper bound on the computation. Thus we get away with constant weight annotations.
-Your set operations should either have a maximum size, or a custom weight function that captures the
+Your set operations should either have a maximum size or a custom weight function that captures the
 computation appropriately.

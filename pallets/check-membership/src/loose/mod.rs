@@ -3,7 +3,7 @@
 //! callers. Only if the caller is approved, do they successfully emit the event.
 //!
 //! The list of approved members is provided by an external source and referenced via an associated
-//! type in this pallet's configuration trait. Any type that implements the AccountSet trait can be
+//! type in this pallet's configuration trait. Any type that implements the `AccountSet` trait can be
 //! used to supply the membership set.
 
 use frame_support::{decl_error, decl_event, decl_module, dispatch::DispatchResult, ensure};
@@ -14,7 +14,7 @@ use account_set::AccountSet;
 mod tests;
 
 /// The pallet's configuration trait
-/// Notice the loose coupling to any pallet that implements the AccountSet behavior
+/// Notice the loose coupling to any pallet that implements the `AccountSet` behavior
 pub trait Trait: system::Trait {
 	/// The ubiquitous event type
 	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
@@ -44,13 +44,13 @@ decl_module! {
 	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
 		fn deposit_event() = default;
 
-		/// Checks whether the caller is a member of the set of Account Ids provided by the
+		/// Checks whether the caller is a member of the set of account IDs provided by the
 		/// MembershipSource type. Emits an event if they are, and errors if not.
 		#[weight = 10_000]
 		fn check_membership(origin) -> DispatchResult {
 			let caller = ensure_signed(origin)?;
 
-			// Get the members from the vec-set pallet
+			// Get the members from the `vec-set` pallet
 			let members = T::MembershipSource::accounts();
 
 			// Check whether the caller is a member

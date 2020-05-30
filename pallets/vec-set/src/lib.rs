@@ -87,7 +87,7 @@ decl_module! {
 
 			let mut members = Members::<T>::get();
 
-			// We have to find out where, in the sorted vec the member is, if anywhere.
+			// We have to find out if the member exists in the sorted vec, and, if so, where.
 			match members.binary_search(&old_member) {
 				// If the search succeeds, the caller is a member, so remove her
 				Ok(index) => {

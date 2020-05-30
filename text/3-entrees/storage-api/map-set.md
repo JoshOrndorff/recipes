@@ -10,8 +10,8 @@ This recipe shows how to implement a storage set on top of a map, and explores t
 the implementation. When implementing a set in your own runtime, you should compare this technique
 to implementing a [`vec-set`](./vec-set.md).
 
-In this pallet we implement a set of `AccountId`s. We do not do not use the set for anything in this
-pallet; we merely maintain its membership. Using the set is, demonstrated in the recipe on [pallet
+In this pallet we implement a set of `AccountId`s. We do not use the set for anything in this
+pallet; we simply maintain its membership. Using the set is demonstrated in the recipe on [pallet
 coupling](./pallet-couplin.md]. We provide dispatchable calls to add and remove members, ensuring
 that the number of members never exceeds a hard-coded maximum.
 
@@ -24,7 +24,7 @@ pub const MAX_MEMBERS: u32 = 16;
 
 We will store the members of our set as the keys in one of Substrate's
 [`StorageMap`](https://crates.parity.io/frame_support/storage/trait.StorageMap.html)s. There is also
-a recipe specifically about [using storage maps](./storage-maps.md). The storage map itself does
+a recipe specifically about [using storage maps](./storage-maps.md). The storage map itself does not
 track its size, so we introduce a second storage value for this purpose.
 
 ```rust, ignore
@@ -35,14 +35,14 @@ decl_storage! {
 		// between 0-byte values and non-existant values so () can't be used.
 		Members get(fn members): map hasher(blake2_128_concat) T::AccountId => bool;
 		// The total number of members stored in the map.
-		// Because the map does no store its size, we must store it separately
+		// Because the map does not store its size, we must store it separately
 		MemberCount: u32;
 	}
 }
 ```
 
 As the code comment says, we will not associate any meaning with the _value_ stored in the map; we
-only care about hte keys. As a convention, the value will always be `true`.
+only care about the keys. As a convention, the value will always be `true`.
 
 ## Adding Members
 
@@ -105,7 +105,7 @@ DB Reads: O(1)
 
 ### Updating
 
-Updates to the set, such as adding and removing members, like we demonstrated, requires first
+Updates to the set, such as adding and removing members as we demonstrated, requires first
 performing a membership check. Additions also require encooding the new item.
 
 DB Reads: O(1) Encoding: O(1) DB Writes: O(1)
@@ -117,9 +117,9 @@ may want a `map-set`.
 
 Iterating over all items in a `map-set` is achieved by using the
 [`IterableStorageMap` trait](https://crates.parity.io/frame_support/storage/trait.IterableStorageMap.html),
-which iterates `(key, value)` pairs (although we don't care about the values). Because each map
+which iterates `(key, value)` pairs (although in this case, we don't care about the values). Because each map
 entry is stored as an individual tree node, iterating a map set requires a database read for each
-item. Finally, the actual processing you do on the items will take some time.
+item. Finally, the actual processing of the items will take some time.
 
 DB Reads: O(n) Decoding: O(n) Processing: O(n)
 
@@ -130,7 +130,7 @@ prefer a [`vec-set`](./vec-set.md).
 ### A Note on Weights
 
 It is always important that the weight associated with your dispatchables represent the actual time
-it takes to execute them. In this pallet we have provided an upper bound on the size of the set,
+it takes to execute them. In this pallet, we have provided an upper bound on the size of the set,
 which places an upper bound on the computation. Thus we get away with constant weight annotations.
-Your set operations should either have a maximum size, or a custom weight function that captures the
+Your set operations should either have a maximum size or a custom weight function that captures the
 computation appropriately.
