@@ -2947,6 +2947,7 @@ dependencies = [
 name = "migration-station"
 version = "2.0.0-dev"
 dependencies = [
+ "check-membership",
  "frame-executive",
  "frame-support",
  "frame-system",
@@ -2969,6 +2970,7 @@ dependencies = [
  "sp-transaction-pool",
  "sp-version",
  "substrate-wasm-builder-runner",
+ "vec-set",
 ]
 
 [[package]]

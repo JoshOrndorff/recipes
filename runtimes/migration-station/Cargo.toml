@@ -42,6 +42,9 @@ sp-std = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate
 sp-transaction-pool = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = 'cd305af2a9f8ec7d13081b6dc6807014b207dab8', default-features = false }
 sp-version = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = 'cd305af2a9f8ec7d13081b6dc6807014b207dab8', default-features = false }
 
+# Recipes Pallets
+check-membership = { path = '../../pallets/check-membership', default-features = false }
+vec-set = { path = '../../pallets/vec-set', default-features = false }
 
 [build-dependencies]
 wasm-builder-runner = { package = "substrate-wasm-builder-runner", version = "1.0.4" }
@@ -75,4 +78,8 @@ std = [
 	"sudo/std",
 	"timestamp/std",
 	"transaction-payment/std",
+
+	# Recipes Pallets
+	"check-membership/std",
+	"vec-set/std",
 ]

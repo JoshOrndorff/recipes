@@ -30,6 +30,8 @@ use sp_std::prelude::*;
 use sp_version::NativeVersion;
 use sp_version::RuntimeVersion;
 
+use check_membership::tight as check_membership_tight;
+
 // A few exports that help ease life for downstream crates.
 pub use balances::Call as BalancesCall;
 pub use frame_support::{
@@ -94,7 +96,7 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
 	spec_name: create_runtime_str!("migration-station"),
 	impl_name: create_runtime_str!("migration-station"),
 	authoring_version: 1,
-	spec_version: 1,
+	spec_version: 2,
 	impl_version: 1,
 	apis: RUNTIME_API_VERSIONS,
 	transaction_version: 1,
@@ -221,6 +223,14 @@ impl sudo::Trait for Runtime {
 	type Call = Call;
 }
 
+impl vec_set::Trait for Runtime {
+	type Event = Event;
+}
+
+impl check_membership_tight::Trait for Runtime {
+	type Event = Event;
+}
+
 construct_runtime!(
 	pub enum Runtime where
 		Block = Block,
@@ -233,6 +243,9 @@ construct_runtime!(
 		RandomnessCollectiveFlip: randomness_collective_flip::{Module, Call, Storage},
 		Sudo: sudo::{Module, Call, Config<T>, Storage, Event<T>},
 		TransactionPayment: transaction_payment::{Module, Storage},
+		// Our own added pallets
+		VecSet: vec_set::{Module, Call, Storage, Event<T>},
+		CheckMembership: check_membership_tight::{Module, Call, Event<T>},
 	}
 );
 
