@@ -1,6 +1,6 @@
 //! Pallet that demonstrates a minimal access control check. When a user calls this pallet's
 //! only dispatchable function, `check_membership`, the caller is checked against a set of approved
-//! callers. Only if the caller is approved, do they successfully emit the event.
+//! callers. If the caller is a member of the set, the pallet's `IsAMember` event is emitted. Otherwise a `NotAMember` error is returned.
 //!
 //! The list of approved members is provided by the `vec-set` pallet. In order for this pallet to be
 //! used, the `vec-set` pallet must also be present in the runtime.
@@ -12,7 +12,7 @@ use frame_system::{self as system, ensure_signed};
 mod tests;
 
 /// The pallet's configuration trait.
-/// Notice the explicit tight coupling to the `vec_set` pallet
+/// Notice the explicit tight coupling to the `vec-set` pallet
 pub trait Trait: system::Trait + vec_set::Trait {
 	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
 }
