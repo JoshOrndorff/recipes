@@ -113,6 +113,8 @@ pub trait Trait: system::Trait {
 }
 ```
 
+> Many palets throught the ecosystem are coupled to a token through the [`Currency` trait](https://crates.parity.io/frame_support/traits/trait.Currency.html).
+
 Having this associated type means that the loosely coupled variant of the `check-membership` pallet
 can be installed in any runtime that can supply it with a set of accounts to use as an access
 control list. The code for the `AccountSet` trait lives in `traits/account-set/src/lib.rs` directory
