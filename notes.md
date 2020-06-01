@@ -6,7 +6,7 @@ This is the draft of my plan for seminar on 2 June 2020
 
 We want a simple instant-seal network with a vanilla runtime. Start by copying the kitchen node and the super runtime. Strip out all the recipes pallets from the super-runtime, and rename stuff as appropriate.
 
-Create a chain spec and launch the network
+Create a chain spec and launch the network. Make sure the node running is a validator and in archive mode.
 
 TODO: If there is time, experiment with including a raw spec with the binary.
 

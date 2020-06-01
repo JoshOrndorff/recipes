@@ -96,8 +96,8 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
 	spec_name: create_runtime_str!("migration-station"),
 	impl_name: create_runtime_str!("migration-station"),
 	authoring_version: 1,
-	spec_version: 2,
-	impl_version: 2,
+	spec_version: 3,
+	impl_version: 1,
 	apis: RUNTIME_API_VERSIONS,
 	transaction_version: 1,
 };
@@ -223,13 +223,13 @@ impl sudo::Trait for Runtime {
 	type Call = Call;
 }
 
-impl vec_set::Trait for Runtime {
+impl map_set::Trait for Runtime {
 	type Event = Event;
 }
 
 impl check_membership_loose::Trait for Runtime {
 	type Event = Event;
-	type MembershipSource = VecSet;
+	type MembershipSource = MapSet;
 }
 
 construct_runtime!(
@@ -245,7 +245,7 @@ construct_runtime!(
 		Sudo: sudo::{Module, Call, Config<T>, Storage, Event<T>},
 		TransactionPayment: transaction_payment::{Module, Storage},
 		// Our own added pallets
-		VecSet: vec_set::{Module, Call, Storage, Event<T>},
+		MapSet: map_set::{Module, Call, Storage, Event<T>},
 		CheckMembership: check_membership_loose::{Module, Call, Event<T>},
 	}
 );
