@@ -59,16 +59,16 @@ fn check_membership(origin) -> DispatchResult {
 ## Coupling Pallets
 
 Each `check-membership` pallet actually contains very little logic. It has no storage of its own and
-a single extrinsic that does the membership checking. All of the heavy lifting is abstracted away
-to another pallet. There are two different ways that pallets can be coupled to one another and
-this section investigates both.
+a single extrinsic that does the membership checking. All of the heavy lifting is abstracted away to
+another pallet. There are two different ways that pallets can be coupled to one another and this
+section investigates both.
 
 ### Tight Coupling
 
-Tightly coupling pallets is more explicit than loosely coupling them. When you are writing a pallet that
-you want to tightly couple with some other pallet as a dependency, you explicitly specify the name of
-the pallet on which you depend as a trait bound on the configuration trait of the pallet you are writing.
-This is demonstrated in the tightly coupled variant of `check-membership`.
+Tightly coupling pallets is more explicit than loosely coupling them. When you are writing a pallet
+that you want to tightly couple with some other pallet as a dependency, you explicitly specify the
+name of the pallet on which you depend as a trait bound on the configuration trait of the pallet you
+are writing. This is demonstrated in the tightly coupled variant of `check-membership`.
 
 ```rust, ignore
 pub trait Trait: system::Trait + vec_set::Trait {
@@ -79,15 +79,15 @@ pub trait Trait: system::Trait + vec_set::Trait {
 > This pallet, and all pallets, are tightly coupled to `frame_system`.
 
 Supplying this trait bound means that the tightly coupled variant of `check-membership` pallet can
-only be installed in a runtime that also has the [`vec-set` pallet](./storage-api/vec-set.md) installed. We also see the
-tight coupling in the pallet's `Cargo.toml` file, where `vec-set` is listed by name.
+only be installed in a runtime that also has the [`vec-set` pallet](./storage-api/vec-set.md)
+installed. We also see the tight coupling in the pallet's `Cargo.toml` file, where `vec-set` is
+listed by name.
 
 ```toml
 vec-set = { path = '../vec-set', default-features = false }
 ```
 
-To actually get the set of members, we have access to the getter function
-declared in `vec-set`.
+To actually get the set of members, we have access to the getter function declared in `vec-set`.
 
 ```rust, ignore
 // Get the members from the vec-set pallet
@@ -95,7 +95,8 @@ let members = vec_set::Module::<T>::members();
 ```
 
 While tightly coupling pallets is conceptually simple, it has the disadvantage that it depends on a
-specific implementation rather than an abstract interface. This makes the code more difficult to maintain over time and is generally frowned upon. The tightly coupled version of `check-membership`
+specific implementation rather than an abstract interface. This makes the code more difficult to
+maintain over time and is generally frowned upon. The tightly coupled version of `check-membership`
 depends on exactly the `vec-set` pallet rather than a behavior such as managing a set of accounts.
 
 ## Loose Coupling
@@ -113,7 +114,8 @@ pub trait Trait: system::Trait {
 }
 ```
 
-> Many palets throught the ecosystem are coupled to a token through the [`Currency` trait](https://crates.parity.io/frame_support/traits/trait.Currency.html).
+> Many palets throught the ecosystem are coupled to a token through the
+> [`Currency` trait](https://crates.parity.io/frame_support/traits/trait.Currency.html).
 
 Having this associated type means that the loosely coupled variant of the `check-membership` pallet
 can be installed in any runtime that can supply it with a set of accounts to use as an access

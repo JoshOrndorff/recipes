@@ -2,18 +2,18 @@
 
 _[`pallets/vec-set`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/vec-set)_
 
-A [Set](https://en.wikipedia.org/wiki/Set_(abstract_data_type)) is an unordered data structure
+A [Set](<https://en.wikipedia.org/wiki/Set_(abstract_data_type)>) is an unordered data structure
 that stores entries without duplicates. Substrate's storage API does not provide a way to declare
 sets explicitly, but they can be implemented using either vectors or maps.
 
-This recipe demonstrates how to implement a storage set on top of a vector, and explores the performance of
-the implementation. When implementing a set in your own runtime, you should compare this technique
-to implementing a [`map-set`](./map-set.md).
+This recipe demonstrates how to implement a storage set on top of a vector, and explores the
+performance of the implementation. When implementing a set in your own runtime, you should compare
+this technique to implementing a [`map-set`](./map-set.md).
 
 In this pallet we implement a set of `AccountId`s. We do not use the set for anything in this
-pallet; we simply maintain the set. Using the set is demonstrated in the recipe on [pallet
-coupling](../pallet-coupling.md). We provide dispatchable calls to add and remove members, ensuring
-that the number of members never exceeds a hard-coded maximum.
+pallet; we simply maintain the set. Using the set is demonstrated in the recipe on
+[pallet coupling](../pallet-coupling.md). We provide dispatchable calls to add and remove members,
+ensuring that the number of members never exceeds a hard-coded maximum.
 
 ```rust, ignore
 /// A maximum number of members. When membership reaches this number, no new members may join.
@@ -37,16 +37,16 @@ decl_storage! {
 ```
 
 In order to use the `Vec` successfully as a set, we will need to manually ensure that no duplicate
-entries are added. To ensure reasonable performance, we will enforce that the `Vec` always
-remains sorted. This allows for quickly determining whether an item is present using a
+entries are added. To ensure reasonable performance, we will enforce that the `Vec` always remains
+sorted. This allows for quickly determining whether an item is present using a
 [binary search](https://en.wikipedia.org/wiki/Binary_search_algorithm).
 
 ## Adding Members
 
 Any user may join the membership set by calling the `add_member` dispatchable, providing they are
 not already a member and the membership limit has not been reached. We check for these two
-conditions first, and then insert the new member only after we are sure it is safe to do so.
-This is an example of the mnemonic idiom, "**verify first write last**".
+conditions first, and then insert the new member only after we are sure it is safe to do so. This is
+an example of the mnemonic idiom, "**verify first write last**".
 
 ```rust, ignore
 pub fn add_member(origin) -> DispatchResult {
@@ -80,9 +80,9 @@ maintaining a sorted `Vec`.
 
 ## Removing a Member
 
-Removing a member is straightforward. We begin by looking for the caller in the list. If
-not present, there is no work to be done. If the caller is present, the search
-algorithm returns her index, and she can be removed.
+Removing a member is straightforward. We begin by looking for the caller in the list. If not
+present, there is no work to be done. If the caller is present, the search algorithm returns her
+index, and she can be removed.
 
 ```rust, ignore
 fn remove_member(origin) -> DispatchResult {
@@ -119,8 +119,10 @@ DB Reads: O(1) Decoding: O(n) Search: O(log n)
 ### Updating
 
 Updates to the set, such as adding and removing members as we demonstrated, requires first
-performing a membership check. It also requires re-encoding the entire `Vec` and storing it back
-in the database. Finally, it still costs the normal [amortized constant time](https://stackoverflow.com/q/200384/4184410) associated with mutating a `Vec`.
+performing a membership check. It also requires re-encoding the entire `Vec` and storing it back in
+the database. Finally, it still costs the normal
+[amortized constant time](https://stackoverflow.com/q/200384/4184410) associated with mutating a
+`Vec`.
 
 DB Writes: O(1) Encoding: O(n)
 
@@ -128,17 +130,18 @@ DB Writes: O(1) Encoding: O(n)
 
 Iterating over all items in a `vec-set` is achieved by using the `Vec`'s own
 [`iter` method](https://doc.rust-lang.org/std/vec/struct.Vec.html#method.iter). The entire set can
-be read from storage in one go, and each item must be decoded. Finally, the actual processing
-you do on the items will take some time.
+be read from storage in one go, and each item must be decoded. Finally, the actual processing you do
+on the items will take some time.
 
 DB Reads: O(1) Decoding: O(n) Processing: O(n)
 
-Because accessing the database is a relatively slow operation, reading the entire list in a single read is a big win. If you need to iterate over the data frequently, you may want a `vec-set`.
+Because accessing the database is a relatively slow operation, reading the entire list in a single
+read is a big win. If you need to iterate over the data frequently, you may want a `vec-set`.
 
 ### A Note on Weights
 
 It is always important that the weight associated with your dispatchables represent the actual time
 it takes to execute them. In this pallet, we have provided an upper bound on the size of the set,
 which places an upper bound on the computation - this means we can use constant weight annotations.
-Your set operations should either have a maximum size or a [custom weight function](../weights.md) that captures the
-computation appropriately.
+Your set operations should either have a maximum size or a [custom weight function](../weights.md)
+that captures the computation appropriately.

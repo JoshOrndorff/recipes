@@ -2,7 +2,7 @@
 
 _[`pallets/map-set`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/map-set)_
 
-A [Set](https://en.wikipedia.org/wiki/Set_(abstract_data_type)) is an unordered data structure
+A [Set](<https://en.wikipedia.org/wiki/Set_(abstract_data_type)>) is an unordered data structure
 that stores entries without duplicates. Substrate's storage API does not provide a way to declare
 sets explicitly, but they can be implemented using either vectors or maps.
 
@@ -11,9 +11,9 @@ the implementation. When implementing a set in your own runtime, you should comp
 to implementing a [`vec-set`](./vec-set.md).
 
 In this pallet we implement a set of `AccountId`s. We do not use the set for anything in this
-pallet; we simply maintain its membership. Using the set is demonstrated in the recipe on [pallet
-coupling](../pallet-coupling.md). We provide dispatchable calls to add and remove members, ensuring
-that the number of members never exceeds a hard-coded maximum.
+pallet; we simply maintain its membership. Using the set is demonstrated in the recipe on
+[pallet coupling](../pallet-coupling.md). We provide dispatchable calls to add and remove members,
+ensuring that the number of members never exceeds a hard-coded maximum.
 
 ```rust, ignore
 /// A maximum number of members. When membership reaches this number, no new members may join.
@@ -72,9 +72,9 @@ When we successfully add a new member, we also manually update the size of the s
 
 ## Removing a Member
 
-Removing a member is straightforward. We begin by looking for the caller in the list. If
-not present, there is no work to be done. If the caller is present, we simply remove
-them and update the size of the set.
+Removing a member is straightforward. We begin by looking for the caller in the list. If not
+present, there is no work to be done. If the caller is present, we simply remove them and update the
+size of the set.
 
 ```rust, ignore
 fn remove_member(origin) -> DispatchResult {
@@ -115,9 +115,9 @@ may want a `map-set`.
 
 Iterating over all items in a `map-set` is achieved by using the
 [`IterableStorageMap` trait](https://crates.parity.io/frame_support/storage/trait.IterableStorageMap.html),
-which iterates `(key, value)` pairs (although in this case, we don't care about the values). Because each map
-entry is stored as an individual trie node, iterating a map set requires a database read for each
-item. Finally, the actual processing of the items will take some time.
+which iterates `(key, value)` pairs (although in this case, we don't care about the values). Because
+each map entry is stored as an individual trie node, iterating a map set requires a database read
+for each item. Finally, the actual processing of the items will take some time.
 
 DB Reads: O(n) Decoding: O(n) Processing: O(n)
 
@@ -130,5 +130,5 @@ prefer a [`vec-set`](./vec-set.md).
 It is always important that the weight associated with your dispatchables represent the actual time
 it takes to execute them. In this pallet, we have provided an upper bound on the size of the set,
 which places an upper bound on the computation - this means we can use constant weight annotations.
-Your set operations should either have a maximum size or a [custom weight function](../weights.md) that captures the
-computation appropriately.
+Your set operations should either have a maximum size or a [custom weight function](../weights.md)
+that captures the computation appropriately.
