@@ -25,14 +25,12 @@ pub const MAX_MEMBERS: u32 = 16;
 We will store the members of our set as the keys in one of Substrate's
 [`StorageMap`](https://crates.parity.io/frame_support/storage/trait.StorageMap.html)s. There is also
 a recipe specifically about [using storage maps](./storage-maps.md). The storage map itself does not
-track its size, so we introduce a second storage value for this purpose.
+track its size internally, so we introduce a second storage value for this purpose.
 
 ```rust, ignore
 decl_storage! {
 	trait Store for Module<T: Trait> as VecMap {
-		// The set of all members. The bool value is useless and will always be
-		// true. It is necessary because the underlying storage can't distinguish
-		// between 0-byte values and non-existant values so () can't be used.
+		// The set of all members.
 		Members get(fn members): map hasher(blake2_128_concat) T::AccountId => bool;
 		// The total number of members stored in the map.
 		// Because the map does not store its size, we must store it separately
@@ -70,13 +68,13 @@ fn add_member(origin) -> DispatchResult {
 }
 ```
 
-When we do successfully add a new member, we also manually update the size of the set.
+When we successfully add a new member, we also manually update the size of the set.
 
 ## Removing a Member
 
-Removing a member is entirely straightforward. We begin by looking for the caller in the list. If
-the caller is not present, there is no work to be done. If the caller is present, we simply remove
-her and update the size of the set.
+Removing a member is straightforward. We begin by looking for the caller in the list. If
+not present, there is no work to be done. If the caller is present, we simply remove
+them and update the size of the set.
 
 ```rust, ignore
 fn remove_member(origin) -> DispatchResult {
@@ -118,7 +116,7 @@ may want a `map-set`.
 Iterating over all items in a `map-set` is achieved by using the
 [`IterableStorageMap` trait](https://crates.parity.io/frame_support/storage/trait.IterableStorageMap.html),
 which iterates `(key, value)` pairs (although in this case, we don't care about the values). Because each map
-entry is stored as an individual tree node, iterating a map set requires a database read for each
+entry is stored as an individual trie node, iterating a map set requires a database read for each
 item. Finally, the actual processing of the items will take some time.
 
 DB Reads: O(n) Decoding: O(n) Processing: O(n)
@@ -131,6 +129,6 @@ prefer a [`vec-set`](./vec-set.md).
 
 It is always important that the weight associated with your dispatchables represent the actual time
 it takes to execute them. In this pallet, we have provided an upper bound on the size of the set,
-which places an upper bound on the computation. Thus we get away with constant weight annotations.
-Your set operations should either have a maximum size or a custom weight function that captures the
+which places an upper bound on the computation - this means we can use constant weight annotations.
+Your set operations should either have a maximum size or a [custom weight function](./weights.html) that captures the
 computation appropriately.
