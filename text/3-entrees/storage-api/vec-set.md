@@ -2,7 +2,7 @@
 
 _[`pallets/vec-set`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/vec-set)_
 
-A [Set](<https://en.wikipedia.org/wiki/Set_(abstract_data_type)>) is an unordered data structure
+A [Set](https://en.wikipedia.org/wiki/Set_(abstract_data_type)) is an unordered data structure
 that stores entries without duplicates. Substrate's storage API does not provide a way to declare
 sets explicitly, but they can be implemented using either vectors or maps.
 
@@ -12,7 +12,7 @@ to implementing a [`map-set`](./map-set.md).
 
 In this pallet we implement a set of `AccountId`s. We do not use the set for anything in this
 pallet; we simply maintain the set. Using the set is demonstrated in the recipe on [pallet
-coupling](./pallet-couplin.md]. We provide dispatchable calls to add and remove members, ensuring
+coupling](../pallet-coupling.md). We provide dispatchable calls to add and remove members, ensuring
 that the number of members never exceeds a hard-coded maximum.
 
 ```rust, ignore
@@ -140,5 +140,5 @@ Because accessing the database is a relatively slow operation, reading the entir
 It is always important that the weight associated with your dispatchables represent the actual time
 it takes to execute them. In this pallet, we have provided an upper bound on the size of the set,
 which places an upper bound on the computation - this means we can use constant weight annotations.
-Your set operations should either have a maximum size or a custom weight function that captures the
+Your set operations should either have a maximum size or a [custom weight function](../weights.md) that captures the
 computation appropriately.
