@@ -22,12 +22,13 @@ pub trait Trait: system::Trait {
 
 decl_storage! {
 	trait Store for Module<T: Trait> as VecMap {
-		// The set of all members. The bool value is useless and will always be
-		// true. It is necessary because the underlying storage can't distinguish
-		// between 0-byte values and non-existent values so `()` can't be used.
+		// The set of all members. The bool value is a workaround and will always be
+		// `true`. It would be nicer to map to `()`, but `()` is encoded as 0 bytes. The
+		// underlying storage cannot distinguish between keys with 0-byte values and keys
+		// not present in the map.
 		Members get(fn members): map hasher(blake2_128_concat) T::AccountId => bool;
 		// The total number of members stored in the map.
-		// Because the map does not store its size, we must store it separately
+		// Because the map does not store its size internally, we must store it separately
 		MemberCount: u32;
 	}
 }
@@ -94,7 +95,6 @@ decl_module! {
 			Ok(())
 		}
 
-		// also see `append_or_insert`, `append_or_put` in pallet-elections/phragmen, democracy
 	}
 }
 
