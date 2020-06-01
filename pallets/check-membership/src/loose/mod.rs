@@ -1,8 +1,8 @@
 //! Pallet that demonstrates a minimal access control check. When a user calls this pallet's
 //! only dispatchable function, `check_membership`, the caller is checked against a set of approved
-//! callers. Only if the caller is approved, do they successfully emit the event.
+//! callers. If the caller is a member of the set, the pallet's `IsAMember` event is emitted. Otherwise a `NotAMember` error is returned.
 //!
-//! The list of approved members is provided by an external source and referenced via an associated
+//! The list of approved members is provided by an external source and exposed through an associated
 //! type in this pallet's configuration trait. Any type that implements the `AccountSet` trait can be
 //! used to supply the membership set.
 
@@ -14,7 +14,7 @@ use account_set::AccountSet;
 mod tests;
 
 /// The pallet's configuration trait
-/// Notice the loose coupling to any pallet that implements the `AccountSet` behavior
+/// Notice the loose coupling: any pallet that implements the `AccountSet` behavior works here.
 pub trait Trait: system::Trait {
 	/// The ubiquitous event type
 	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
