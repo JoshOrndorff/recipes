@@ -64,7 +64,7 @@ impl Trait for TestRuntime {
 }
 
 pub type System = system::Module<TestRuntime>;
-pub type VecSet = Module<TestRuntime>;
+pub type MapSet = Module<TestRuntime>;
 
 pub struct ExtBuilder;
 
@@ -82,22 +82,22 @@ impl ExtBuilder {
 #[test]
 fn add_member_works() {
 	ExtBuilder::build().execute_with(|| {
-		assert_ok!(VecSet::add_member(Origin::signed(1)));
+		assert_ok!(MapSet::add_member(Origin::signed(1)));
 
 		let expected_event = TestEvent::vec_set(RawEvent::MemberAdded(1));
 		assert!(System::events().iter().any(|a| a.event == expected_event));
 
-		assert_eq!(VecSet::members(), vec![1]);
+		assert!(<Members<TestRuntime>>::contains_key(1));
 	})
 }
 
 #[test]
 fn cant_add_duplicate_members() {
 	ExtBuilder::build().execute_with(|| {
-		assert_ok!(VecSet::add_member(Origin::signed(1)));
+		assert_ok!(MapSet::add_member(Origin::signed(1)));
 
 		assert_noop!(
-			VecSet::add_member(Origin::signed(1)),
+			MapSet::add_member(Origin::signed(1)),
 			Error::<TestRuntime>::AlreadyMember
 		);
 	})
@@ -108,12 +108,12 @@ fn cant_exceed_max_members() {
 	ExtBuilder::build().execute_with(|| {
 		// Add 16 members, reaching the max
 		for i in 0..16 {
-			assert_ok!(VecSet::add_member(Origin::signed(i)));
+			assert_ok!(MapSet::add_member(Origin::signed(i)));
 		}
 
 		// Try to add the 17th member exceeding the max
 		assert_noop!(
-			VecSet::add_member(Origin::signed(16)),
+			MapSet::add_member(Origin::signed(16)),
 			Error::<TestRuntime>::MembershipLimitReached
 		);
 	})
@@ -122,15 +122,15 @@ fn cant_exceed_max_members() {
 #[test]
 fn remove_member_works() {
 	ExtBuilder::build().execute_with(|| {
-		assert_ok!(VecSet::add_member(Origin::signed(1)));
-		assert_ok!(VecSet::remove_member(Origin::signed(1)));
+		assert_ok!(MapSet::add_member(Origin::signed(1)));
+		assert_ok!(MapSet::remove_member(Origin::signed(1)));
 
 		// check correct event emission
 		let expected_event = TestEvent::vec_set(RawEvent::MemberRemoved(1));
 		assert!(System::events().iter().any(|a| a.event == expected_event));
 
 		// check storage changes
-		assert_eq!(VecSet::members(), vec![]);
+		assert!(!<Members<TestRuntime>>::contains_key(1));
 	})
 }
 
@@ -139,7 +139,7 @@ fn remove_member_handles_errors() {
 	ExtBuilder::build().execute_with(|| {
 		// 2 is NOT previously added as a member
 		assert_noop!(
-			VecSet::remove_member(Origin::signed(2)),
+			MapSet::remove_member(Origin::signed(2)),
 			Error::<TestRuntime>::NotMember
 		);
 	})

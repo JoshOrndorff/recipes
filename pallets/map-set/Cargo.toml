@@ -1,11 +1,11 @@
 [package]
-name = "vec-set"
+name = "map-set"
 version = "2.0.0-dev"
 repository = 'https://github.com/substrate-developer-hub/recipes'
 authors = ["4meta5"]
 edition = "2018"
 license = "GPL-3.0-or-later"
-description = "A pallet that implements a storage Set on top of a Vec"
+description = "A pallet that implements a storage Set on top of a storage map"
 
 [package.metadata.substrate]
 categories = [
@@ -22,7 +22,7 @@ std = [
     'frame-support/std',
     'frame-system/std',
     'sp-runtime/std',
-    'account-set/std'
+    'account-set/std',
 ]
 
 [dependencies]

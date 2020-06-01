@@ -1,4 +1,4 @@
-use crate::*;
+use crate::loose::*;
 use frame_support::{assert_noop, assert_ok, impl_outer_event, impl_outer_origin, parameter_types};
 use frame_system as system;
 use sp_core::H256;
@@ -48,23 +48,30 @@ impl system::Trait for TestRuntime {
 	type OnKilledAccount = ();
 }
 
-mod vec_set {
-	pub use crate::Event;
+mod check_membership {
+	pub use crate::loose::Event;
 }
 
 impl_outer_event! {
 	pub enum TestEvent for TestRuntime {
 		vec_set<T>,
 		system<T>,
+		check_membership<T>,
 	}
+}
+
+impl vec_set::Trait for TestRuntime {
+	type Event = TestEvent;
 }
 
 impl Trait for TestRuntime {
 	type Event = TestEvent;
+	type MembershipSource = VecSet;
 }
 
 pub type System = system::Module<TestRuntime>;
-pub type VecSet = Module<TestRuntime>;
+pub type VecSet = vec_set::Module<TestRuntime>;
+pub type CheckMembership = Module<TestRuntime>;
 
 pub struct ExtBuilder;
 
@@ -80,67 +87,23 @@ impl ExtBuilder {
 }
 
 #[test]
-fn add_member_works() {
+fn members_can_call() {
 	ExtBuilder::build().execute_with(|| {
 		assert_ok!(VecSet::add_member(Origin::signed(1)));
 
-		let expected_event = TestEvent::vec_set(RawEvent::MemberAdded(1));
+		assert_ok!(CheckMembership::check_membership(Origin::signed(1)));
+
+		let expected_event = TestEvent::check_membership(RawEvent::IsAMember(1));
 		assert!(System::events().iter().any(|a| a.event == expected_event));
-
-		assert_eq!(VecSet::members(), vec![1]);
 	})
 }
 
 #[test]
-fn cant_add_duplicate_members() {
+fn non_members_cant_call() {
 	ExtBuilder::build().execute_with(|| {
-		assert_ok!(VecSet::add_member(Origin::signed(1)));
-
 		assert_noop!(
-			VecSet::add_member(Origin::signed(1)),
-			Error::<TestRuntime>::AlreadyMember
-		);
-	})
-}
-
-#[test]
-fn cant_exceed_max_members() {
-	ExtBuilder::build().execute_with(|| {
-		// Add 16 members, reaching the max
-		for i in 0..16 {
-			assert_ok!(VecSet::add_member(Origin::signed(i)));
-		}
-
-		// Try to add the 17th member exceeding the max
-		assert_noop!(
-			VecSet::add_member(Origin::signed(16)),
-			Error::<TestRuntime>::MembershipLimitReached
-		);
-	})
-}
-
-#[test]
-fn remove_member_works() {
-	ExtBuilder::build().execute_with(|| {
-		assert_ok!(VecSet::add_member(Origin::signed(1)));
-		assert_ok!(VecSet::remove_member(Origin::signed(1)));
-
-		// check correct event emission
-		let expected_event = TestEvent::vec_set(RawEvent::MemberRemoved(1));
-		assert!(System::events().iter().any(|a| a.event == expected_event));
-
-		// check storage changes
-		assert_eq!(VecSet::members(), vec![]);
-	})
-}
-
-#[test]
-fn remove_member_handles_errors() {
-	ExtBuilder::build().execute_with(|| {
-		// 2 is NOT previously added as a member
-		assert_noop!(
-			VecSet::remove_member(Origin::signed(2)),
-			Error::<TestRuntime>::NotMember
+			CheckMembership::check_membership(Origin::signed(1)),
+			Error::<TestRuntime>::NotAMember
 		);
 	})
 }

@@ -40,6 +40,7 @@ fixed-point = { path = "../../pallets/fixed-point", default-features = false }
 generic-event = { path = "../../pallets/generic-event", default-features = false }
 hello-substrate = { path = "../../pallets/hello-substrate", default-features = false }
 last-caller = { path = "../../pallets/last-caller", default-features = false }
+map-set = { path = "../../pallets/map-set", default-features = false }
 ringbuffer-queue = { path = "../../pallets/ringbuffer-queue", default-features = false }
 randomness = { path = "../../pallets/randomness", default-features = false }
 simple-crowdfund = { path = "../../pallets/simple-crowdfund", default-features = false}
@@ -114,6 +115,7 @@ std = [
 	"generic-event/std",
 	"hello-substrate/std",
 	"last-caller/std",
+	"map-set/std",
 	"randomness/std",
 	"ringbuffer-queue/std",
 	"simple-crowdfund/std",

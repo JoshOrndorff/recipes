@@ -15,6 +15,7 @@ members = [
 	"pallets/hello-substrate",
 	"pallets/last-caller",
 	"pallets/lockable-currency",
+	"pallets/map-set",
 	"pallets/offchain-demo",
 	"pallets/randomness",
 	"pallets/reservable-currency",
@@ -41,4 +42,5 @@ members = [
 	"nodes/manual-seal",
 	"nodes/rpc-node",
 	"consensus/sha3pow",
+	"traits/account-set",
 ]

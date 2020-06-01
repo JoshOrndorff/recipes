@@ -20,7 +20,8 @@ The previous _[single-value storage recipe](../../2-appetizers/2-storage-values.
 single value can be stored in runtime storage. In this section, we cover
 
 -   [caching values rather than calling to storage multiple times](./cache.md)
--   [storing sets, checking membership, and iteration](./sets-vecs-iteration.md)
+-   [Vec sets](./vec-set.md)
+-   [Map sets](./map-set.md)
 -   [efficient subgroup removal by key prefix with double maps](./double.md)
 -   [storing custom structs](./structs.md)
 -   [transient storage adapters by example of a ringbuffer queue](./ringbuffer.md)
