@@ -250,7 +250,7 @@ impl constant_config::Trait for Runtime {
 	type ClearFrequency = ClearFrequency;
 }
 
-// The following two configuration traits are for the loosely- and tightly-coupled variants
+// The following two configuration traits are for the loosely and tightly coupled variants
 // of the check membership pallet. Both pallets are located in the same `check-membership` crate.
 impl check_membership_loose::Trait for Runtime {
 	type Event = Event;

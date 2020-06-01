@@ -65,10 +65,10 @@ this section investigates both.
 
 ### Tight Coupling
 
-The conceptually simpler way of coupling pallets is known as "tight coupling". When tightly coupling
-to another pallet, you specify the depended pallets name explicitly as a trait bound on your
-pallet's configuration trait. This is demonstrated in the tightly-coupled variant of
-`check-membership`.
+Tightly coupling pallets is more explicit than loosely coupling them. When you are writing a pallet that
+you want to tightly couple with some other pallet as a dependency, you explicitly specify the name of
+the pallet on which you depend as a trait bound on the configuration trait of the pallet you are writing.
+This is demonstrated in the tightly coupled variant of `check-membership`.
 
 ```rust, ignore
 pub trait Trait: system::Trait + vec_set::Trait {
@@ -76,9 +76,9 @@ pub trait Trait: system::Trait + vec_set::Trait {
 }
 ```
 
-> This pallet, and all pallets, are tightly coupled to `frame_system`
+> This pallet, and all pallets, are tightly coupled to `frame_system`.
 
-Supplying this trait bound means that the tightly-coupled variant of `check-membership` pallet can
+Supplying this trait bound means that the tightly coupled variant of `check-membership` pallet can
 only be installed in a runtime that also has the [`vec-set` pallet](./storage-api/vec-set.md) installed. We also see the
 tight coupling in the pallet's `Cargo.toml` file, where `vec-set` is listed by name.
 
@@ -86,7 +86,7 @@ tight coupling in the pallet's `Cargo.toml` file, where `vec-set` is listed by n
 vec-set = { path = '../vec-set', default-features = false }
 ```
 
-When it comes time to actually get the set of members, we have access to the getter function
+To actually get the set of members, we have access to the getter function
 declared in `vec-set`.
 
 ```rust, ignore
@@ -95,7 +95,7 @@ let members = vec_set::Module::<T>::members();
 ```
 
 While tightly coupling pallets is conceptually simple, it has the disadvantage that it depends on a
-specific implementation rather than an abstract behavior. The tight version of `check-membership`
+specific implementation rather than an abstract interface. This makes the code more difficult to maintain over time and is generally frowned upon. The tightly coupled version of `check-membership`
 depends on exactly the `vec-set` pallet rather than a behavior such as managing a set of accounts.
 
 ## Loose Coupling
@@ -113,7 +113,7 @@ pub trait Trait: system::Trait {
 }
 ```
 
-Having this associated type means that the losoely-coupled variant of the `check-membership` pallet
+Having this associated type means that the loosely coupled variant of the `check-membership` pallet
 can be installed in any runtime that can supply it with a set of accounts to use as an access
 control list. The code for the `AccountSet` trait lives in `traits/account-set/src/lib.rs` directory
 and is quite short.
@@ -132,8 +132,7 @@ We also see the loose coupling in the pallet's `Cargo.toml` file, where `account
 account-set = { path = '../../traits/account-set', default-features = false }
 ```
 
-When it comes time to actually get the set of members, we have to use the `accounts` method supplied by
-the trait.
+To actually get the set of members, we use the `accounts` method supplied by the trait.
 
 ```rust, ignore
 // Get the members from the vec-set pallet
