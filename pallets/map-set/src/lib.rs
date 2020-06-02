@@ -26,10 +26,10 @@ decl_storage! {
 		// `true`. It would be nicer to map to `()`, but `()` is encoded as 0 bytes. The
 		// underlying storage cannot distinguish between keys with 0-byte values and keys
 		// not present in the map.
-		Members get(fn members): map hasher(blake2_128_concat) T::AccountId => bool;
+		pub Members get(fn members): map hasher(blake2_128_concat) T::AccountId => bool;
 		// The total number of members stored in the map.
 		// Because the map does not store its size internally, we must store it separately
-		MemberCount: u32;
+		pub MemberCount: u32;
 	}
 }
 
