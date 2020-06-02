@@ -26,6 +26,8 @@ use sp_runtime::{
 };
 use sp_std::prelude::*;
 
+mod migrations;
+
 #[cfg(feature = "std")]
 use sp_version::NativeVersion;
 use sp_version::RuntimeVersion;
@@ -232,6 +234,10 @@ impl check_membership_loose::Trait for Runtime {
 	type MembershipSource = MapSet;
 }
 
+impl migrations::Trait for Runtime {
+	type Event = Event;
+}
+
 construct_runtime!(
 	pub enum Runtime where
 		Block = Block,
@@ -247,6 +253,8 @@ construct_runtime!(
 		// Our own added pallets
 		MapSet: map_set::{Module, Call, Storage, Event<T>},
 		CheckMembership: check_membership_loose::{Module, Call, Event<T>},
+		// This is no longer the recommended way to do these migrations. But I want to be sure my cod eworks at all before refactoring
+		Migrations: migrations::{Module, Event},
 	}
 );
 

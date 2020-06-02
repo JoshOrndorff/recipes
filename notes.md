@@ -2,11 +2,31 @@
 
 This is the draft of my plan for seminar on 2 June 2020
 
-## Start a Network
+## Prepare the Network
 
-We want a simple instant-seal network with a vanilla runtime. Start by copying the kitchen node and the super runtime. Strip out all the recipes pallets from the super-runtime, and rename stuff as appropriate.
+We want a simple instant-seal network with a vanilla runtime. Start by copying the super runtime. Strip out all the recipes pallets from the super-runtime, and rename stuff as appropriate.  Install the new runtime in the kitchen node.
 
-Create a chain spec and launch the network. Make sure the node running is a validator and in archive mode.
+Create a raw chain spec
+```bash
+./original-binary build-spec --raw > spec.json
+```
+
+Edit the network name, chain type and telemetry endpoints
+
+```json
+"telemetryEndpoints": [
+    [
+      "wss://telemetry.polkadot.io/submit/",
+      1
+    ]
+  ],
+```
+
+
+## Launch the Network
+```bash
+./original-binary --chain=spec.json --dave
+```
 
 TODO: If there is time, experiment with including a raw spec with the binary.
 
