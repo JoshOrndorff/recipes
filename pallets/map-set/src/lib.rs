@@ -21,7 +21,7 @@ pub trait Trait: system::Trait {
 }
 
 decl_storage! {
-	trait Store for Module<T: Trait> as VecMap {
+	trait Store for Module<T: Trait> as MapSet {
 		// The set of all members. The bool value is a workaround and will always be
 		// `true`. It would be nicer to map to `()`, but `()` is encoded as 0 bytes. The
 		// underlying storage cannot distinguish between keys with 0-byte values and keys
