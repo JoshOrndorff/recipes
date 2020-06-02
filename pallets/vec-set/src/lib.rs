@@ -20,7 +20,7 @@ pub trait Trait: system::Trait {
 }
 
 decl_storage! {
-	trait Store for Module<T: Trait> as VecMap {
+	trait Store for Module<T: Trait> as VecSet {
 		// The set of all members. Stored as a single vec
 		Members get(fn members): Vec<T::AccountId>;
 	}
