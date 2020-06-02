@@ -12,7 +12,9 @@ include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 #[cfg(feature = "std")]
 pub mod genesis;
 
+use frame_support::storage::migration::{take_storage_value, put_storage_value};
 use frame_system as system;
+use frame_support::Hashable;
 use sp_api::impl_runtime_apis;
 use sp_core::{OpaqueMetadata, H256};
 use sp_runtime::traits::{BlakeTwo256, Block as BlockT, IdentifyAccount, IdentityLookup, Verify};
@@ -44,6 +46,8 @@ pub use frame_support::{
 pub use sp_runtime::BuildStorage;
 pub use sp_runtime::{Perbill, Permill};
 pub use timestamp::Call as TimestampCall;
+
+mod migrations;
 
 /// An index to a block.
 pub type BlockNumber = u32;
@@ -93,7 +97,7 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
 	spec_name: create_runtime_str!("migration-station"),
 	impl_name: create_runtime_str!("migration-station"),
 	authoring_version: 1,
-	spec_version: 3,
+	spec_version: 4,
 	impl_version: 1,
 	apis: RUNTIME_API_VERSIONS,
 	transaction_version: 1,
@@ -233,6 +237,31 @@ impl map_set::Trait for Runtime {
 	type Event = Event;
 }
 
+// impl migrations::Trait for Runtime {
+// 	type Event = Event;
+// }
+
+struct CustomOnRuntimeUpgrade;
+impl frame_support::traits::OnRuntimeUpgrade for CustomOnRuntimeUpgrade {
+	fn on_runtime_upgrade() -> frame_support::weights::Weight {
+		// Read the current members out of the old storage location storage
+		// Take removes them from the old location
+		let vec_of_members: Vec<AccountId> = take_storage_value(b"VecSet", b"Members", &[]).unwrap();
+
+		// Insert the size of the map
+		put_storage_value(b"MapSet", b"MemberCount", &[], vec_of_members.len() as u32);
+
+		// Iterate over the existing members, writing them to
+		for member in vec_of_members {
+			let map_key = member.blake2_128_concat();
+			put_storage_value(b"MapSet", b"Members", &map_key, true);
+		}
+
+		1_000 // In reality the weight of a migration should be determined by benchmarking
+	}
+}
+pub type Executive = frame_executive::Executive<Runtime, Block, frame_system::ChainContext<Runtime>, Runtime, AllModules, CustomOnRuntimeUpgrade>;
+
 
 construct_runtime!(
 	pub enum Runtime where
@@ -249,6 +278,7 @@ construct_runtime!(
 		CheckMembership: check_membership_loose::{Module, Event<T>, Call},
 		// VecSet: vec_set::{Module, Call, Storage, Event<T>},
 		MapSet: map_set::{Module, Call, Storage, Event<T> },
+		// Migrations: migrations::{Module, Event},
 	}
 );
 
@@ -276,8 +306,8 @@ pub type UncheckedExtrinsic = generic::UncheckedExtrinsic<Address, Call, Signatu
 /// Extrinsic type that has already been checked.
 pub type CheckedExtrinsic = generic::CheckedExtrinsic<AccountId, Call, SignedExtra>;
 /// Executive: handles dispatch to the various pallets.
-pub type Executive =
-	frame_executive::Executive<Runtime, Block, system::ChainContext<Runtime>, Runtime, AllModules>;
+// pub type Executive =
+	// frame_executive::Executive<Runtime, Block, system::ChainContext<Runtime>, Runtime, AllModules>;
 
 impl_runtime_apis! {
 	impl sp_api::Core<Block> for Runtime {
