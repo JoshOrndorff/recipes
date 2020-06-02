@@ -12,7 +12,7 @@ include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 #[cfg(feature = "std")]
 pub mod genesis;
 
-use frame_support::storage::migration::take_storage_value;
+use frame_support::storage::{StorageMap, migration::take_storage_value};
 use frame_system as system;
 use sp_api::impl_runtime_apis;
 use sp_core::{OpaqueMetadata, H256};
@@ -94,7 +94,7 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
 	spec_name: create_runtime_str!("migration-station"),
 	impl_name: create_runtime_str!("migration-station"),
 	authoring_version: 1,
-	spec_version: 4,
+	spec_version: 3,
 	impl_version: 1,
 	apis: RUNTIME_API_VERSIONS,
 	transaction_version: 1,
@@ -234,7 +234,7 @@ impl map_set::Trait for Runtime {
 	type Event = Event;
 }
 
-struct CustomOnRuntimeUpgrade;
+pub struct CustomOnRuntimeUpgrade;
 impl frame_support::traits::OnRuntimeUpgrade for CustomOnRuntimeUpgrade {
 	fn on_runtime_upgrade() -> frame_support::weights::Weight {
 
@@ -251,14 +251,12 @@ impl frame_support::traits::OnRuntimeUpgrade for CustomOnRuntimeUpgrade {
 
 		// Iterate over the existing members, writing them to
 		for member in vec_of_members {
-			Members::<Runtime>::put(member, true);
+			Members::<Runtime>::insert(&member, true);
 		}
 
 		1_000 // In reality the weight of a migration should be determined by benchmarking
 	}
 }
-pub type Executive = frame_executive::Executive<Runtime, Block, frame_system::ChainContext<Runtime>, Runtime, AllModules, CustomOnRuntimeUpgrade>;
-
 
 construct_runtime!(
 	pub enum Runtime where
@@ -301,9 +299,9 @@ pub type SignedExtra = (
 pub type UncheckedExtrinsic = generic::UncheckedExtrinsic<Address, Call, Signature, SignedExtra>;
 /// Extrinsic type that has already been checked.
 pub type CheckedExtrinsic = generic::CheckedExtrinsic<AccountId, Call, SignedExtra>;
-// Executive: handles dispatch to the various pallets.
-// pub type Executive =
-	// frame_executive::Executive<Runtime, Block, system::ChainContext<Runtime>, Runtime, AllModules>;
+/// Executive: handles dispatch to the various pallets.
+pub type Executive =
+	frame_executive::Executive<Runtime, Block, frame_system::ChainContext<Runtime>, Runtime, AllModules, CustomOnRuntimeUpgrade>;
 
 impl_runtime_apis! {
 	impl sp_api::Core<Block> for Runtime {
