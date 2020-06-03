@@ -153,14 +153,14 @@
 <p>The <code>babe-grandpa-node</code> uses the <a href="https://substrate.dev/rustdocs/v2.0.0-rc2/sc_consensus_babe/index.html">BABE</a> Proof
 of Authority consensus engine to determine who may author blocks, and the
 <a href="https://substrate.dev/rustdocs/v2.0.0-rc2/sc_finality_grandpa/index.html">GRANDPA</a> finality gadget to provide
-<a href="https://www.substrate.io/kb/advanced/consensus#finality">deterministic finality</a> to past blocks.
+<a href="https://substrate.dev/docs/en/knowledgebase/advanced/consensus#finality">deterministic finality</a> to past blocks.
 This is the same design used in Polkadot. Understanding this recipe requires familiarity with
-Substrate's <a href="https://www.substrate.io/kb/advanced/block-import">block import pipeline</a>.</p>
+Substrate's <a href="https://substrate.dev/docs/en/knowledgebase/advanced/block-import">block import pipeline</a>.</p>
 <p>In this recipe we will learn about:</p>
 <ul>
 <li>The <a href="https://substrate.dev/rustdocs/v2.0.0-rc2/sp_finality_grandpa/trait.GrandpaApi.html">GrandpaAPI</a> runtime API</li>
 <li>The <a href="https://substrate.dev/rustdocs/v2.0.0-rc2/sc_consensus_babe/trait.BabeApi.html">BabeApi</a> runtime API</li>
-<li>The <a href="https://www.substrate.io/kb/advanced/block-import">block import pipeline</a></li>
+<li>The <a href="https://substrate.dev/docs/en/knowledgebase/advanced/block-import">block import pipeline</a></li>
 </ul>
 <h2><a class="header" href="#the-block-import-pipeline" id="the-block-import-pipeline">The Block Import Pipeline</a></h2>
 <p>The babe-grandpa node's block import pipeline will have three layers. The inner-most layer is the

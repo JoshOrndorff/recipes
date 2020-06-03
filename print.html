@@ -231,7 +231,7 @@ nasty.</p>
 such as Linux, MacOS, or Windows Subsystem for Linux (WSL). If you are a Windows user, WSL is the
 best way to proceed. If you want or need to work in a native Windows environment, this is possible,
 but is not covered in detail here. Please follow along with the
-<a href="https://substrate.dev/docs/en/overview/getting-started#getting-started-on-windows">Getting Started on Windows</a>
+<a href="https://substrate.dev/docs/en/knowledgebase/getting-started/windows-users">Getting Started on Windows</a>
 guide, then return here when you're ready to proceed.</p>
 <h2><a class="header" href="#compile-the-kitchen-node" id="compile-the-kitchen-node">Compile the Kitchen Node</a></h2>
 <p>If you haven't already, <code>git clone</code> the recipes repository. We also want to kick-start the node
@@ -450,8 +450,8 @@ RPC or Consensus would be conceptually similar to changing its runtime.</p>
 <p>Substrate Developer Hub offers tutorials that go into more depth about writing pallets and including
 them in runtimes. If you desire, you may read them as well.</p>
 <ul>
-<li><a href="https://substrate.dev/docs/en/next/tutorials/creating-a-runtime-module">Creating an External Pallet</a></li>
-<li><a href="https://substrate.dev/docs/en/next/tutorials/adding-a-module-to-your-runtime">Adding a Pallet to Your Runtime Tutorial</a></li>
+<li><a href="https://substrate.dev/docs/en/tutorials/create-a-pallet/">Creating an External Pallet</a></li>
+<li><a href="https://substrate.dev/docs/en/tutorials/add-a-pallet-to-your-runtime/">Adding a Pallet to Your Runtime Tutorial</a></li>
 </ul>
 <h1><a class="header" href="#lets-get-cooking" id="lets-get-cooking">Let's Get Cooking!</a></h1>
 <p>When you're ready, we can begin by cooking some appetizer pallets.</p>
@@ -802,10 +802,10 @@ the same spirit.</p>
 <h1><a class="header" href="#using-events" id="using-events">Using Events</a></h1>
 <p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-event"><code>pallets/simple-event</code></a></em>,
 <em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/generic-event"><code>pallets/generic-event</code></a></em></p>
-<p>Having a <a href="https://substrate.dev/docs/en/overview/glossary#transaction">transaction</a> included in a
+<p>Having a <a href="https://substrate.dev/docs/en/knowledgebase/getting-started/glossary#transaction">transaction</a> included in a
 block does not guarantee that the function executed successfully. As we saw in the previous recipe,
 many calls can cause errors, but the transaction may still be included in a block. To verify that functions have
-executed successfully, emit an <a href="https://substrate.dev/docs/en/overview/glossary#events">event</a> at
+executed successfully, emit an <a href="https://substrate.dev/docs/en/knowledgebase/getting-started/glossary#events">event</a> at
 the bottom of the function body.</p>
 <p>Events notify the off-chain world of successful state transitions.</p>
 <h2><a class="header" href="#some-prerequisites" id="some-prerequisites">Some Prerequisites</a></h2>
@@ -2744,7 +2744,7 @@ outside the runtime.</p>
 <p>Before learning how to build your own off-chain worker, you may want to learn about what off-chain
 workers are, why you want to use them, and what kinds of problems they can solve best. These
 topics are covered in
-<a href="https://substrate.dev/docs/en/conceptual/core/off-chain-workers">our guide</a>. Here, we will focus
+<a href="https://substrate.dev/docs/en/knowledgebase/learn-substrate/off-chain-workers">our guide</a>. Here, we will focus
 on using off-chain workers in Substrate.</p>
 </blockquote>
 <p>Off-chain workers contain a set of powerful tools allowing your Substrate node to offload tasks that
@@ -4035,7 +4035,7 @@ that the first parameter is <code>inner: BlockImport&lt;B, Transaction = Transac
 block import have a reference to another block import? Because the &quot;block import pipeline&quot; is
 constructed in an onion-like fashion, where one layer of block import wraps the next. Learn more
 about this pattern in the knowledgebase article on the
-<a href="https://www.substrate.io/kb/advanced/block-import">block import pipeline</a>.</p>
+<a href="https://substrate.dev/docs/en/knowledgebase/advanced/block-import">block import pipeline</a>.</p>
 <h3><a class="header" href="#inherent-data-providers" id="inherent-data-providers">Inherent Data Providers</a></h3>
 <p>Both the BlockImport and the <code>import_queue</code> are given an instance called <code>inherent_data_providers</code>.
 This object is created in a helper function defined at the beginning of <code>service.rs</code></p>
@@ -4130,12 +4130,12 @@ head a block is, the less likely it is going to be reverted.</p>
 <p>This recipe demonstrates a Substrate-based node that employs hybrid consensus. Specifically, it uses
 <a href="3-entrees/./sha3-pow-consensus.html">Sha3 Proof of Work</a> to dictate block authoring, and the
 <a href="https://substrate.dev/rustdocs/v2.0.0-rc2/sc_finality_grandpa/index.html">Grandpa</a> finality gadget to provide
-<a href="https://www.substrate.io/kb/advanced/consensus#finality">deterministic finality</a>. The minimal proof
+<a href="https://substrate.dev/docs/en/knowledgebase/advanced/consensus#finality">deterministic finality</a>. The minimal proof
 of work consensus lives entirely outside of the runtime while the grandpa finality obtains its
 authorities from the runtime via the
 <a href="https://substrate.dev/rustdocs/v2.0.0-rc2/sp_finality_grandpa/trait.GrandpaApi.html">GrandpaAPI</a>. Understanding this
 recipe requires familiarity with Substrate's
-<a href="https://www.substrate.io/kb/advanced/block-import">block import pipeline</a>.</p>
+<a href="https://substrate.dev/docs/en/knowledgebase/advanced/block-import">block import pipeline</a>.</p>
 <h2><a class="header" href="#the-block-import-pipeline-1" id="the-block-import-pipeline-1">The Block Import Pipeline</a></h2>
 <p>Substrate's block import pipeline is structured like an onion in the sense that it is layered. A
 Substrate node can compose pieces of block import logic by wrapping block imports in other block
@@ -4515,14 +4515,14 @@ pub fn new_light(_config: Configuration) -&gt; Result&lt;impl AbstractService, S
 <p>The <code>babe-grandpa-node</code> uses the <a href="https://substrate.dev/rustdocs/v2.0.0-rc2/sc_consensus_babe/index.html">BABE</a> Proof
 of Authority consensus engine to determine who may author blocks, and the
 <a href="https://substrate.dev/rustdocs/v2.0.0-rc2/sc_finality_grandpa/index.html">GRANDPA</a> finality gadget to provide
-<a href="https://www.substrate.io/kb/advanced/consensus#finality">deterministic finality</a> to past blocks.
+<a href="https://substrate.dev/docs/en/knowledgebase/advanced/consensus#finality">deterministic finality</a> to past blocks.
 This is the same design used in Polkadot. Understanding this recipe requires familiarity with
-Substrate's <a href="https://www.substrate.io/kb/advanced/block-import">block import pipeline</a>.</p>
+Substrate's <a href="https://substrate.dev/docs/en/knowledgebase/advanced/block-import">block import pipeline</a>.</p>
 <p>In this recipe we will learn about:</p>
 <ul>
 <li>The <a href="https://substrate.dev/rustdocs/v2.0.0-rc2/sp_finality_grandpa/trait.GrandpaApi.html">GrandpaAPI</a> runtime API</li>
 <li>The <a href="https://substrate.dev/rustdocs/v2.0.0-rc2/sc_consensus_babe/trait.BabeApi.html">BabeApi</a> runtime API</li>
-<li>The <a href="https://www.substrate.io/kb/advanced/block-import">block import pipeline</a></li>
+<li>The <a href="https://substrate.dev/docs/en/knowledgebase/advanced/block-import">block import pipeline</a></li>
 </ul>
 <h2><a class="header" href="#the-block-import-pipeline-2" id="the-block-import-pipeline-2">The Block Import Pipeline</a></h2>
 <p>The babe-grandpa node's block import pipeline will have three layers. The inner-most layer is the
