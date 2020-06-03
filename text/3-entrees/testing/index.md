@@ -24,7 +24,7 @@ The following modules in the kitchen have partial unit test coverage
 -   [`constant-config`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/constant-config)
 -   [`double-map`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/double-map)
 -   [`generic-event`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/generic-event)
--   [`offchain-demo](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo)
+-   [`offchain-demo`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo)
 -   [`simple-event`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-event)
 -   [`simple-map`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-map)
 -   [`single-value`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/single-value)
