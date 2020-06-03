@@ -3,7 +3,7 @@
 > Before learning how to build your own off-chain worker, you may want to learn about what off-chain
 > workers are, why you want to use them, and what kinds of problems they can solve best. These
 > topics are covered in
-> [our guide](https://substrate.dev/docs/en/conceptual/core/off-chain-workers). Here, we will focus
+> [our guide](https://substrate.dev/docs/en/knowledgebase/learn-substrate/off-chain-workers). Here, we will focus
 > on using off-chain workers in Substrate.
 
 Off-chain workers contain a set of powerful tools allowing your Substrate node to offload tasks that
