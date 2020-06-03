@@ -5,15 +5,15 @@ _[`nodes/babe-grandpa-node`](https://github.com/substrate-developer-hub/recipes/
 The `babe-grandpa-node` uses the [BABE](https://substrate.dev/rustdocs/v2.0.0-rc2/sc_consensus_babe/index.html) Proof
 of Authority consensus engine to determine who may author blocks, and the
 [GRANDPA](https://substrate.dev/rustdocs/v2.0.0-rc2/sc_finality_grandpa/index.html) finality gadget to provide
-[deterministic finality](https://www.substrate.io/kb/advanced/consensus#finality) to past blocks.
+[deterministic finality](https://substrate.dev/docs/en/knowledgebase/advanced/consensus#finality) to past blocks.
 This is the same design used in Polkadot. Understanding this recipe requires familiarity with
-Substrate's [block import pipeline](https://www.substrate.io/kb/advanced/block-import).
+Substrate's [block import pipeline](https://substrate.dev/docs/en/knowledgebase/advanced/block-import).
 
 In this recipe we will learn about:
 
 -   The [GrandpaAPI](https://substrate.dev/rustdocs/v2.0.0-rc2/sp_finality_grandpa/trait.GrandpaApi.html) runtime API
 -   The [BabeApi](https://substrate.dev/rustdocs/v2.0.0-rc2/sc_consensus_babe/trait.BabeApi.html) runtime API
--   The [block import pipeline](https://www.substrate.io/kb/advanced/block-import)
+-   The [block import pipeline](https://substrate.dev/docs/en/knowledgebase/advanced/block-import)
 
 ## The Block Import Pipeline
 

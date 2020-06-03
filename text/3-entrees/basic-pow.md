@@ -91,7 +91,7 @@ that the first parameter is `inner: BlockImport<B, Transaction = TransactionFor<
 block import have a reference to another block import? Because the "block import pipeline" is
 constructed in an onion-like fashion, where one layer of block import wraps the next. Learn more
 about this pattern in the knowledgebase article on the
-[block import pipeline](https://www.substrate.io/kb/advanced/block-import).
+[block import pipeline](https://substrate.dev/docs/en/knowledgebase/advanced/block-import).
 
 ### Inherent Data Providers
 
