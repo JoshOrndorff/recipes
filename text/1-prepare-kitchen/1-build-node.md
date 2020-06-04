@@ -21,7 +21,7 @@ These instructions and the rest of the instructions in this chapter assume a uni
 such as Linux, MacOS, or Windows Subsystem for Linux (WSL). If you are a Windows user, WSL is the
 best way to proceed. If you want or need to work in a native Windows environment, this is possible,
 but is not covered in detail here. Please follow along with the
-[Getting Started on Windows](https://substrate.dev/docs/en/overview/getting-started#getting-started-on-windows)
+[Getting Started on Windows](https://substrate.dev/docs/en/knowledgebase/getting-started/windows-users)
 guide, then return here when you're ready to proceed.
 
 ## Compile the Kitchen Node
