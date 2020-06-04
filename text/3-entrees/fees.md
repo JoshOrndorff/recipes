@@ -156,7 +156,7 @@ impl WeightToFeePolynomial for QuadraticWeightToFee {
 
 Having calculated the amount of fees due, runtime authors must decide which asset the fees should be
 paid in. A common choice is the use the
-[`Ballances` pallet](https://substrate.dev/rustdocs/v2.0.0-rc2/pallet_balances/index.html), but any type that
+[`Balances` pallet](https://substrate.dev/rustdocs/v2.0.0-rc2/pallet_balances/index.html), but any type that
 implements the [`Currency` trait](https://substrate.dev/rustdocs/v2.0.0-rc2/frame_support/traits/trait.Currency.html)
 can be used. The weight-fee-runtime demonstrates how to use an asset provided by the
 [`Generic Asset` pallet](https://substrate.dev/rustdocs/v2.0.0-rc2/pallet_generic_asset/index.html).
