@@ -2257,7 +2257,7 @@ impl WeightToFeePolynomial for QuadraticWeightToFee {
 <h2><a class="header" href="#collecting-fees" id="collecting-fees">Collecting Fees</a></h2>
 <p>Having calculated the amount of fees due, runtime authors must decide which asset the fees should be
 paid in. A common choice is the use the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc2/pallet_balances/index.html"><code>Ballances</code> pallet</a>, but any type that
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc2/pallet_balances/index.html"><code>Balances</code> pallet</a>, but any type that
 implements the <a href="https://substrate.dev/rustdocs/v2.0.0-rc2/frame_support/traits/trait.Currency.html"><code>Currency</code> trait</a>
 can be used. The weight-fee-runtime demonstrates how to use an asset provided by the
 <a href="https://substrate.dev/rustdocs/v2.0.0-rc2/pallet_generic_asset/index.html"><code>Generic Asset</code> pallet</a>.</p>
@@ -4125,8 +4125,8 @@ at 0.</p>
 <p>This is expected because Proof of Work is a consensus mechanism with probabilistic finality. This
 means a block is never truly finalized and can always be reverted. The further behind the blockchain
 head a block is, the less likely it is going to be reverted.</p>
-<p>#Hybrid Consensus
-<em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/nodes/hybrid-consensus"><code>nodes/hybrid-consensus</code></a></em></p>
+<h1><a class="header" href="#hybrid-consensus" id="hybrid-consensus">Hybrid Consensus</a></h1>
+<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/nodes/hybrid-consensus"><code>nodes/hybrid-consensus</code></a></em></p>
 <p>This recipe demonstrates a Substrate-based node that employs hybrid consensus. Specifically, it uses
 <a href="3-entrees/./sha3-pow-consensus.html">Sha3 Proof of Work</a> to dictate block authoring, and the
 <a href="https://substrate.dev/rustdocs/v2.0.0-rc2/sc_finality_grandpa/index.html">Grandpa</a> finality gadget to provide
@@ -5161,7 +5161,7 @@ testing framework ported from Haskell to Rust.</p>
 <li><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/constant-config"><code>constant-config</code></a></li>
 <li><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/double-map"><code>double-map</code></a></li>
 <li><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/generic-event"><code>generic-event</code></a></li>
-<li><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo">`offchain-demo</a></li>
+<li><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo"><code>offchain-demo</code></a></li>
 <li><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-event"><code>simple-event</code></a></li>
 <li><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-map"><code>simple-map</code></a></li>
 <li><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/single-value"><code>single-value</code></a></li>
