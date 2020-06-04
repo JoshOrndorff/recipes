@@ -7,9 +7,9 @@ Welcome!**
 The Recipes are part of the Substrate Developer Hub, so inter-linking between the Recipes and other
 DevHub facets is common. In particular, the Recipes frequently links to:
 
--   The [Reference Docs](https://crates.parity.io/)
--   The [Tutorials](https://substrate.io/tutorials/)
--   The [Knowledge Base](https://substrate.io/kb/learn-substrate)
+-   The [Reference Docs](https://substrate.dev/rustdocs/v2.0.0-rc2/)
+-   The [Tutorials](https://substrate.dev/en/tutorials)
+-   The [Knowledge Base](https://substrate.dev/docs/en/)
 
 ## Reporting Bugs
 
