@@ -1,5 +1,6 @@
 # Single Value
 
+<!-- markdown-link-check-disable-next-line -->
 _[`pallets/single-value`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/single-value)_
 
 Storage is used for data that should be kept between blocks and accessible to future transactions.

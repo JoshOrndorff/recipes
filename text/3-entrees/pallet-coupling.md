@@ -1,5 +1,6 @@
 # Tightly- and Loosely-Coupled Pallets
 
+<!-- markdown-link-check-disable-next-line -->
 _[pallets/check-membership](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/check-membership)_
 
 The `check-membership` crate contains two pallets that solve the same problems in slightly different

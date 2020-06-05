@@ -1,6 +1,8 @@
 # Custom RPCs
 
+<!-- markdown-link-check-disable-next-line -->
 _[`nodes/rpc-node`](https://github.com/substrate-developer-hub/recipes/tree/master/nodes/rpc-node)_
+<!-- markdown-link-check-disable-next-line -->
 _[`runtime/api-runtime`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/api-runtime)_
 
 Remote Procedure Calls, or RPCs, are a way for an external program (eg. a frontend) to communicate

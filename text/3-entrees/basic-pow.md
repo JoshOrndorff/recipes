@@ -1,5 +1,6 @@
 # Basic Proof of Work
 
+<!-- markdown-link-check-disable-next-line -->
 _[`nodes/basic-pow`](https://github.com/substrate-developer-hub/recipes/tree/master/nodes/basic-pow)_
 
 The `basic-pow` node demonstrates how to wire up a custom consensus engine into the Substrate

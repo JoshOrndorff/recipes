@@ -1,5 +1,6 @@
 # Execution Schedule
 
+<!-- markdown-link-check-disable-next-line -->
 _[`pallets/execution-schedule`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/execution-schedule)_
 
 <!-- TODO This content may need updated to match the actual pallet -->

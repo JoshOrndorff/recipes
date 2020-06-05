@@ -1,5 +1,6 @@
 # Simple Crowdfund
 
+<!-- markdown-link-check-disable-next-line -->
 _[`pallets/simple-crowdfund`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-crowdfund)_
 
 This pallet demonstrates a simple on-chain crowdfunding app where participants can pool funds toward

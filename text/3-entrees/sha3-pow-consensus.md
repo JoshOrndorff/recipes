@@ -1,5 +1,6 @@
 # Sha3 Proof of Work Algorithms
 
+<!-- markdown-link-check-disable-next-line -->
 _[`consensus/sha3pow`](https://github.com/substrate-developer-hub/recipes/tree/master/consensus/sha3pow)_
 
 [Proof of Work](https://en.wikipedia.org/wiki/Proof_of_work) is not a single consensus algorithm.

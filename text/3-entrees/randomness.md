@@ -1,5 +1,6 @@
 # Generating Randomness
 
+<!-- markdown-link-check-disable-next-line -->
 _[pallets/randomness](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/randomness/)_
 
 Randomness is useful in computer programs for everything from gambling, to generating DNA for

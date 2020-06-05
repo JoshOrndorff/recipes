@@ -1,5 +1,6 @@
 # Using and Storing Structs
 
+<!-- markdown-link-check-disable-next-line -->
 _[`pallets/struct-storage`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/struct-storage)_
 
 In Rust, a `struct`, or structure, is a custom data type that lets you name and package together

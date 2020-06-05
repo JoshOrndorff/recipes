@@ -1,5 +1,6 @@
 # Local Storage in Off-chain Workers
 
+<!-- markdown-link-check-disable-next-line -->
 _[`pallets/offchain-demo`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo)_
 
 Remember we mentioned that off-chain workers (short for **ocw** below) cannot write directly to the

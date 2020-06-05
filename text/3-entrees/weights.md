@@ -1,5 +1,6 @@
 # Computational Resources and Weights
 
+<!-- markdown-link-check-disable-next-line -->
 _[`pallets/weights`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/weights)_
 
 Any computational resources used by a transaction must be accounted for so that appropriate fees can

@@ -1,5 +1,6 @@
 # Charity
 
+<!-- markdown-link-check-disable-next-line -->
 _[`pallets/charity`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/charity)_
 
 The Charity pallet represents a simple charitable organization that collects funds into a pot that
