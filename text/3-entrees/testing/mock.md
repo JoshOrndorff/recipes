@@ -1,6 +1,6 @@
 # Mock Runtime for Unit Testing
 
-_See [Testing](./index.html) page for list of kitchen pallets with unit test coverage._
+_See [Testing](./index.md) page for list of kitchen pallets with unit test coverage._
 
 There are two main patterns on writing tests for pallets. We can put the tests:
 
