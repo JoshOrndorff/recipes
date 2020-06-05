@@ -10,7 +10,7 @@ storage changes.** This is similar to
 [`require()`](https://ethereum.stackexchange.com/questions/15166/difference-between-require-and-assert-and-the-difference-between-revert-and-thro)
 checks at the top of function bodies in Solidity contracts.
 
-In the [set storage and iteration](../storage/iterate.md), a vector was stored in the runtime to
+In the set storage and iteration recipe, a vector was stored in the runtime to
 allow for simple membership checks for methods only available to members.
 
 ```rust, ignore
