@@ -29,7 +29,7 @@ about this value much, and it is fine to use the name of the pallet itself.
 
 This pallet has two storage items, both of which are single storage values. Substrate's storage API
 also supports more complex storage types which are
-[covered in the entrees](../3-entrees/storage-api/index.html). The fundamentals for all types are
+[covered in the entrees](../3-entrees/storage-api/index.md). The fundamentals for all types are
 the same.
 
 Our first storage item is a `u32` value which is declared with this syntax
