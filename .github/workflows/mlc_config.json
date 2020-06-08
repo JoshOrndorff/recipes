@@ -1,10 +1,10 @@
 {
     "ignorePatterns": [
         {
-            "pattern": "^http://crates.io"
+            "pattern": "^https://crates.io"
         },
         {
-            "pattern": "^http://github.com/substrate-developer-hub/recipes/tree/master"
+            "pattern": "^https://github.com/substrate-developer-hub/recipes/tree/master"
         }
     ]
 }
