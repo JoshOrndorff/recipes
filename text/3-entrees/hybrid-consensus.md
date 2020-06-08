@@ -1,6 +1,5 @@
 # Hybrid Consensus
 
-<!-- markdown-link-check-disable-next-line -->
 _[`nodes/hybrid-consensus`](https://github.com/substrate-developer-hub/recipes/tree/master/nodes/hybrid-consensus)_
 
 This recipe demonstrates a Substrate-based node that employs hybrid consensus. Specifically, it uses

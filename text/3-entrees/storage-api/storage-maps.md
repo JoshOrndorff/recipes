@@ -1,6 +1,5 @@
 # Storage Maps
 
-<!-- markdown-link-check-disable-next-line -->
 _[`pallets/simple-map`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-map)_
 
 In the appetizer on [storage values](../../2-appetizers/2-storage-values.md) we learned to store a

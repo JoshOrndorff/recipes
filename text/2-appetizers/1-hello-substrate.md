@@ -1,6 +1,5 @@
 # Hello Substrate
 
-<!-- markdown-link-check-disable-next-line -->
 _[`pallets/hello-substrate`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/hello-substrate)_
 
 The first pallet we'll explore is a simple "hello world" example. This pallet will have one

@@ -1,6 +1,5 @@
 # Handling Errors
 
-<!-- markdown-link-check-disable-next-line -->
 _[`pallets/adding-machine`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/adding-machine)_
 
 As we've mentioned before, in Substrate development it is important to **Verify first, write last**.

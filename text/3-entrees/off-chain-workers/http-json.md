@@ -1,6 +1,5 @@
 # HTTP Fetching and JSON Parsing in Off-chain Workers
 
-<!-- markdown-link-check-disable-next-line -->
 _[`pallets/offchain-demo`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo)_
 
 ## HTTP Fetching

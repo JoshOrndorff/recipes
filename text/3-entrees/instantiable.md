@@ -1,8 +1,6 @@
 # Instantiable Pallets
 
-<!-- markdown-link-check-disable-next-line -->
 _[`pallets/last-caller`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/last-caller)_
-<!-- markdown-link-check-disable-next-line -->
 _[`pallets/default-instance`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/default-instance)_
 
 Instantiable pallets enable multiple instances of the same pallet logic within a single runtime.

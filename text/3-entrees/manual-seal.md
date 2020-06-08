@@ -1,6 +1,5 @@
 # Manual Seal
 
-<!-- markdown-link-check-disable-next-line -->
 _[`nodes/manual-seal`](https://github.com/substrate-developer-hub/recipes/tree/master/nodes/manual-seal)_
 
 This recipe demonstrates a Substrate node using the

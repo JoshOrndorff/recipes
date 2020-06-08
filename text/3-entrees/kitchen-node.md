@@ -1,6 +1,5 @@
 # Kitchen Node (Instant Seal)
 
-<!-- markdown-link-check-disable-next-line -->
 _[`nodes/kitchen-node`](https://github.com/substrate-developer-hub/recipes/tree/master/nodes/kitchen-node)_
 
 This recipe demonstrates a general purpose Substrate node that supports most of the recipes'

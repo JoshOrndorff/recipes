@@ -1,8 +1,6 @@
 # Runtime APIs
 
-<!-- markdown-link-check-disable-next-line -->
 _[`pallets/sum-storage`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/sum-storage)_
-<!-- markdown-link-check-disable-next-line -->
 _[`runtimes/api-runtime`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/api-runtime)_
 
 Each Substrate node contains a runtime. The runtime contains the business logic of the chain. It

@@ -1,6 +1,5 @@
 # Efficent Subgroup Removal by Subkey: Double Maps
 
-<!-- markdown-link-check-disable-next-line -->
 _[`pallets/double-map`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/double-map)_
 
 For some runtimes, it may be necessary to remove a subset of values in a key-value mapping. If the

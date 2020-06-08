@@ -1,6 +1,5 @@
 # Cache Multiple Calls
 
-<!-- markdown-link-check-disable-next-line -->
 _[`pallets/storage-cache`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/storage-cache)_
 
 Calls to runtime storage have an associated cost and developers should strive to minimize the number

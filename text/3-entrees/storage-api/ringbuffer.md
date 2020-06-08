@@ -1,6 +1,5 @@
 # Ringbuffer Queue
 
-<!-- markdown-link-check-disable-next-line -->
 _[`pallets/ringbuffer-queue`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/ringbuffer-queue)_
 
 > Building a transient adapter on top of storage.

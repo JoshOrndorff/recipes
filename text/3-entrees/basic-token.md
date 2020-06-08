@@ -1,6 +1,5 @@
 # Basic Token
 
-<!-- markdown-link-check-disable-next-line -->
 _[`pallets/basic-token`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/basic-token)_
 
 This recipe demonstrates a simple but functional token in a pallet.

@@ -1,8 +1,6 @@
 # Using Events
 
-<!-- markdown-link-check-disable-next-line -->
 _[`pallets/simple-event`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-event)_,
-<!-- markdown-link-check-disable-next-line -->
 _[`pallets/generic-event`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/generic-event)_
 
 Having a [transaction](https://substrate.dev/docs/en/knowledgebase/getting-started/glossary#transaction) included in a

@@ -1,6 +1,5 @@
 # Configurable Pallet Constants
 
-<!-- markdown-link-check-disable-next-line -->
 _[`pallets/constant-config`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/constant-config)_
 
 To declare constant values within a runtime, it is necessary to import the

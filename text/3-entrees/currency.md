@@ -1,10 +1,7 @@
 # Currency Types
 
-<!-- markdown-link-check-disable-next-line -->
 _[`pallets/lockable-currency`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/lockable-currency),
-<!-- markdown-link-check-disable-next-line -->
 [`pallets/reservable-currency`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/reservable-currency),
-<!-- markdown-link-check-disable-next-line -->
 [`pallets/currency-imbalances`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/currency-imbalances)_
 
 ## Just Plain Currency

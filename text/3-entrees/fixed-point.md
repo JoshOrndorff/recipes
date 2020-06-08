@@ -1,8 +1,6 @@
 # Fixed Point Arithmetic
 
-<!-- markdown-link-check-disable-next-line -->
 _[`pallets/fixed-point`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/fixed-point)_
-<!-- markdown-link-check-disable-next-line -->
 _[`pallets/compounding-interest`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/compounding-interest)_
 
 When programmers learn to use non-integer numbers in their programs, they are usually taught to use

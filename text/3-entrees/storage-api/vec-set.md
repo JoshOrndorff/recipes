@@ -1,6 +1,5 @@
 # Using Vectors as Sets
 
-<!-- markdown-link-check-disable-next-line -->
 _[`pallets/vec-set`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/vec-set)_
 
 A [Set](<https://en.wikipedia.org/wiki/Set_(abstract_data_type)>) is an unordered data structure

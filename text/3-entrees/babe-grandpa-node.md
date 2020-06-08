@@ -1,6 +1,5 @@
 # BABE and GRANDPA Node
 
-<!-- markdown-link-check-disable-next-line -->
 _[`nodes/babe-grandpa-node`](https://github.com/substrate-developer-hub/recipes/tree/master/nodes/babe-grandpa-node)_
 
 The `babe-grandpa-node` uses the [BABE](https://crates.parity.io/sc_consensus_babe/index.html) Proof
