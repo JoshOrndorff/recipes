@@ -177,3 +177,12 @@ With the future created, we can now kick it off using the service's
 // we spawn the future on a background thread managed by service.
 service.spawn_essential_task("manual-seal", authorship_future);
 ```
+
+## Combining Instant Seal with Manual Seal
+
+The [Kitchen Node](./kitchen-node.md) uses instant seal which is a variant of manual seal
+that will seal a new block whenever a notification of a new block is received from the transaction pool. Now you may want to have a node that combines both properties so that you can use manual seal to seal new blocks via RPC when you want and otherwise seal blocks when new transactions are imported. This node is very similar to test chains used in other ecosystems, such as Ethereum's `ganache-cli`.
+
+### Using `select` to Merge Futures
+
+As we saw in the previous version of manual seal, 

@@ -3,7 +3,8 @@
 
 mod chain_spec;
 #[macro_use]
-mod service;
+// mod service;
+mod combined_service;
 mod cli;
 mod command;
 
