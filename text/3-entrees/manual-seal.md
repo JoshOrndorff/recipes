@@ -181,17 +181,17 @@ service.spawn_essential_task("manual-seal", authorship_future);
 ## Combining Instant Seal with Manual Seal
 
 It is possible to combine the manual seal of the node we built above with the functionality of the
-[Kitchen Node's](./kitchen-node.md) instant seal to get the best of both worlds. We can use the
-instant seal method to produce blocks and "go forward" in the block number in order to test and
-trigger different functionality in a live environment, while the normal behavior is to seal a block
-whenever a new block is imported. This configuration may be desirable in some testing environments
-and resembles the functionality of Ethereum's `ganache-cli`.
+[Kitchen Node's](./kitchen-node.md) instant seal to get the best of both worlds. This configuration
+may be desirable in development and testing environments. We can use the normal behavior of instant
+seal to create blocks any time a transaction is imported into the pool. On the other hand we can
+move forward in block number by instantly sealing empty blocks. The functionality may be familiar to
+developers of Ethereum smart contracts that have used `ganache-cli`.
 
 ### Implementation
 
-In the same repository for the manual seal node is a file called `combined_service.rs` which
-contains modified code of the normal `service.rs` file we just looked at together. Modifications are
-numbered and begin at line 85.
+In the same directory for the manual seal node is a file called `combined_service.rs`. This file
+contains modified code of the `service.rs` file we just looked at in the section above. Some modification have been made. These modifications are
+numbered and begin at line 85 in the source.
 
 ```rust, ignore
 let pool = service.transaction_pool().pool().clone();
