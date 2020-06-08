@@ -29,7 +29,7 @@ decl_error! {
 decl_module! {
 	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
 
-		/// Adds the supplies value to the stored value.
+		/// Adds the supplied value to the stored value.
 		/// Checks for unlucky number 13.
 		/// Checks for addition overflow using an explicit match
 		#[weight = 10_000]
@@ -51,7 +51,7 @@ decl_module! {
 			Ok(())
 		}
 
-		/// Adds the supplies value to the stored value.
+		/// Adds the supplied value to the stored value.
 		/// Checks for unlucky number 13.
 		/// Checks for addition overflow concisely using `ok_or`
 		#[weight = 10_000]
