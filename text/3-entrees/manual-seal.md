@@ -180,9 +180,58 @@ service.spawn_essential_task("manual-seal", authorship_future);
 
 ## Combining Instant Seal with Manual Seal
 
-The [Kitchen Node](./kitchen-node.md) uses instant seal which is a variant of manual seal
-that will seal a new block whenever a notification of a new block is received from the transaction pool. Now you may want to have a node that combines both properties so that you can use manual seal to seal new blocks via RPC when you want and otherwise seal blocks when new transactions are imported. This node is very similar to test chains used in other ecosystems, such as Ethereum's `ganache-cli`.
+It is possible to combine the manual seal of the node we built above with the functionality
+of the [Kitchen Node's](./kitchen-node.md) instant seal to get the best of both worlds. We can
+use the instant seal method to produce blocks and "go forward" in the block number in order
+to test and trigger different functionality in a live environment, while the normal behavior is
+to seal a block whenever a new block is imported. This configuration may be desirable in some
+testing environments and resembles the functionality of Ethereum's `ganache-cli`.
 
-### Using `select` to Merge Futures
+### Implementation
 
-As we saw in the previous version of manual seal, 
+In the same repository for the manual seal node is a file called `combined_service.rs` which contains modified code of the normal `service.rs` file we just looked at together. Modifications are numbered and begin at line 85.
+
+```rust, ignore
+let pool = service.transaction_pool().pool().clone();
+```
+
+The first step is to create an instance of a transaction pool that will be shared between the `pool_stream` which receives events whenever a new transaction is imported and the service builder.
+
+```rust, ignore
+let pool_stream = pool
+	.validated_pool()
+	.import_notification_stream()
+	.map(|_| {
+		// Every new block create an `EngineCommand` that will seal a new block.
+		rpc::EngineCommand::SealNewBlock {
+			create_empty: false,
+			finalize: false,
+			parent_hash: None,
+			sender: None,
+		}
+	});
+```
+
+Next we implement the instant seal just as it's implemented under the covers in the call to `run_instant_seal`. Namely, we make sure that any new notifications we will submit an RPC `EngineCommand` to seal a new block.
+
+```rust, ignore
+let combined_stream = futures::stream::select(commands_stream, pool_stream);
+```
+
+We combine the futures using the `select` utility which will receive events from either one of the streams we pass to it. In this case, we're passing all notifications received from the manual seal stream and the instant seal stream together.
+
+```rust, ignore
+let authorship_future = manual_seal::run_manual_seal(
+	Box::new(service.client()),
+	proposer,
+	service.client(), // 4) vvvvv
+	pool,             // <- Use the same pool that we used to get `pool_stream`.
+	combined_stream,  // <- Here we place the combined streams. 
+	service.select_chain().unwrap(),
+	inherent_data_providers,
+);
+```
+
+Finally we initialize the authorship_future with the combined streams.
+
+In order to run this variant of the node you will need to uncomment two lines and rebuild the node. In `command.rs` comment the line that reads `use crate::service;` and uncomment `use crate::combined_service as service;`. In `main.rs` comment `mod service;` and uncomment `mod combined_service'`. Now you can rebuild the node and test out that it will seal blocks using the manual method and the instant method together.

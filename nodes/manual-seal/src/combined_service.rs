@@ -8,6 +8,7 @@ use sc_network::config::DummyFinalityProofRequestBuilder;
 use sc_service::{error::Error as ServiceError, AbstractService, Configuration, ServiceBuilder};
 use sp_inherents::InherentDataProviders;
 use std::sync::Arc;
+// Note: We need to use the futures prelude for the `map` function.
 use futures::prelude::*;
 
 // Our native executor instance.
