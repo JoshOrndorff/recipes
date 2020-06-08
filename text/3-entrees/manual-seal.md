@@ -239,7 +239,7 @@ let authorship_future = manual_seal::run_manual_seal(
 );
 ```
 
-Finally we initialize the authorship_future with the combined streams.
+Finally we initialize the `authorship_future` with the combined streams.
 
 In order to run this variant of the node you will need to uncomment two lines and rebuild the node.
 In `command.rs` comment the line that reads `use crate::service;` and uncomment
