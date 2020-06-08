@@ -1,6 +1,6 @@
 # Minimal Blockchain Configuration
 
-[Substate Node](https://github.com/paritytech/substrate/tree/master/node) is Substrate's pre-baked
+[Substate Node](https://github.com/paritytech/substrate/tree/master/bin/node) is Substrate's pre-baked
 blockchain client. By creating and modifying a Substrate Node chain specification file, it is easy
 to configure a new chain and launch a corresponding testnet.
 

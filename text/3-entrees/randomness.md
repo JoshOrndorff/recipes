@@ -119,5 +119,6 @@ these randomness sources. If you'd like to get into the research, here are some 
 
 -   [https://github.com/paritytech/ink/issues/57](https://github.com/paritytech/ink/issues/57)
 -   [https://wiki.polkadot.network/docs/en/learn-randomness](https://wiki.polkadot.network/docs/en/learn-randomness)
+<!-- markdown-link-check-disable-next-line -->
 -   [http://www.cse.huji.ac.il/~nati/PAPERS/coll_coin_fl.pdf](http://www.cse.huji.ac.il/~nati/PAPERS/coll_coin_fl.pdf)
 -   [https://eccc.weizmann.ac.il/report/2018/140/](https://eccc.weizmann.ac.il/report/2018/140/)

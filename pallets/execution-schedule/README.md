@@ -26,5 +26,3 @@ pub struct Task<BlockNumber> {
     expected_execution: BlockNumber,
 }
 ```
-
-I wrote more about this [here](../../../../src/testing/schedule.md).
