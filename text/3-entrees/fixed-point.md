@@ -37,7 +37,7 @@ the features of each.
 
 ### Permill Accumulator
 
-We'll using the most common approach which takes its fixed point implementation from Substrate
+We'll be using the most common approach which takes its fixed point implementation from Substrate
 itself. There are a few fixed-point structs available in Substrate, all of which implement the
 [`PerThing` trait](https://substrate.dev/rustdocs/v2.0.0-rc2/sp_arithmetic/trait.PerThing.html), that cover different
 amounts of precision. For this accumulator example, we'll use the
