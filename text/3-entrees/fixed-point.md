@@ -37,7 +37,7 @@ the features of each.
 
 ### Permill Accumulator
 
-We'll using the most common approach which takes its fixed point implementation from Substrate
+We'll be using the most common approach which takes its fixed point implementation from Substrate
 itself. There are a few fixed-point structs available in Substrate, all of which implement the
 [`PerThing` trait](https://substrate.dev/rustdocs/v2.0.0-rc2/sp_arithmetic/trait.PerThing.html), that cover different
 amounts of precision. For this accumulator example, we'll use the
@@ -254,8 +254,8 @@ away as well.
 > If this business about having more bits after the multiplication is confusing, try this exercise
 > in the more familiar decimal system. Consider these numbers that have 4 total digits (2 integer,
 > and two fractional): 12.34 and 56.78. Multiply them together. How many integer and fractional
-> digits are in the product? Try that again with larger numbers like 01.23 \* 02.48 and smaller like
-> 11.11 and 22.22. Which of these products can be fit back into a 4-digit number like the ones we
+> digits are in the product? Try that again with larger numbers like 98.76 and 99.99, and smaller like
+> 00.11 and 00.22. Which of these products can be fit back into a 4-digit number like the ones we
 > started with?
 
 ## Compounding Interest
