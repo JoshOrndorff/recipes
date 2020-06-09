@@ -1,6 +1,6 @@
 # Handling Errors
 
-_[`pallets/adding-machine`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/adding-machine)_
+_[`View Code on GitHub`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/adding-machine), [Explore in Substrate Playground](https://playground-staging.substrate.dev/?deploy=recipes&files=/home/substrate/workspace/pallets/adding-machine/src/lib.rs)_
 
 As we've mentioned before, in Substrate development it is important to **Verify first, write last**.
 In this recipe, we'll create an adding machine that checks for unlucky numbers (a silly example) as
@@ -89,3 +89,24 @@ the same spirit.
 
 Unlike before, adding errors to our pallet does _not_ require a change to the line in
 `construct_runtime!`. This is just an idiosyncrasy of developing in Substrate.
+
+## Use This Recipe
+* _[View Code on Github](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/adding-machine)_
+* _[Explore in Substrate Playground](https://playground-staging.substrate.dev/?deploy=recipes&files=/home/substrate/workspace/pallets/adding-machine/src/lib.rs)_
+* _Use this pallet in you runtime_
+
+```toml
+[dependencies.addingmachine]
+version = 'v2.0.0-dev'
+git = 'https://github.com/substrate-developer-hub/recipes'
+branch = 'develop'
+default-features = false
+
+# Also adjust the std feature
+[features]
+default = ['std']
+std = [
+    # --snip--
+    'adding-machine/std',
+]
+```

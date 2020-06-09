@@ -1,7 +1,8 @@
 # Using Events
 
-_[`pallets/simple-event`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-event)_,
-_[`pallets/generic-event`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/generic-event)_
+_[`Simple Event Code on GitHub`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-event),
+[`Generic Event Code on GitHub`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/generic-event),
+[Explore in Substrate Playground](https://playground-staging.substrate.dev/?deploy=recipes&files=/home/substrate/workspace/pallets/simple-event/src/lib.rs)__
 
 Having a [transaction](https://substrate.dev/docs/en/knowledgebase/getting-started/glossary#transaction) included in a
 block does not guarantee that the function executed successfully. As we saw in the previous recipe,

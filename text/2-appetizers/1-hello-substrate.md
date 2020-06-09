@@ -1,6 +1,6 @@
 # Hello Substrate
 
-_[View Code on Github](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/hello-substrate), [Explore in Substrate Playground](https://playground-staging.substrate.dev/?deploy=recipes&files=/home/substrate/workspace/pallets/hello-substrate/src/lib.rs)_
+_[View Code on GitHub](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/hello-substrate), [Explore in Substrate Playground](https://playground-staging.substrate.dev/?deploy=recipes&files=/home/substrate/workspace/pallets/hello-substrate/src/lib.rs)_
 
 The first pallet we'll explore is a simple "hello world" example. This pallet will have one
 dispatchable call that prints a message to the node's output. Because this is our first pallet,

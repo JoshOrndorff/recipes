@@ -1,6 +1,6 @@
 # Single Value
 
-_[`pallets/single-value`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/single-value)_
+_[`View Code on Github`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/single-value), [Explore in Substrate Playground](https://playground-staging.substrate.dev/?deploy=recipes&files=/home/substrate/workspace/pallets/single-value/src/lib.rs)_
 
 Storage is used for data that should be kept between blocks and accessible to future transactions.
 Most runtimes will have many storage values, and together the storage values make up the
@@ -117,4 +117,25 @@ construct_runtime!(
 		SingleValue: single_value::{Module, Call, Storage},
 	}
 );
+```
+
+## Use This Recipe
+* _[View Code on GitHub](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/single-value)_
+* _[Explore in Substrate Playground](https://playground-staging.substrate.dev/?deploy=recipes&files=/home/substrate/workspace/pallets/single-value/src/lib.rs)_
+* _Use this pallet in you runtime_
+
+```toml
+[dependencies.single-value]
+version = 'v2.0.0-dev'
+git = 'https://github.com/substrate-developer-hub/recipes'
+branch = 'develop'
+default-features = false
+
+# Also adjust the std feature
+[features]
+default = ['std']
+std = [
+    # --snip--
+    'single-value/std',
+]
 ```
