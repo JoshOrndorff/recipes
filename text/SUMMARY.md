@@ -14,13 +14,14 @@
 	- [Runtime Storage API](./3-entrees/storage-api/index.md)
 		- [Storage Maps](./3-entrees/storage-api/storage-maps.md)
 		- [Cache Locally > Storage Calls](./3-entrees/storage-api/cache.md)
-		- [Sets, Vectors, Iteration](./3-entrees/storage-api/sets-vecs-iteration.md)
+		- [Using Vectors as Sets](./3-entrees/storage-api/vec-set.md)
+		- [Using Maps as Sets](./3-entrees/storage-api/map-set.md)
 		- [Subgroup Removal by Subkey: Double Maps](./3-entrees/storage-api/double.md)
-		- [Efficient Subgroup Removal by Subkey: Child Tries](./3-entrees/storage-api/childtries.md)
 		- [Storing custom structs](./3-entrees/storage-api/structs.md)
 		- [Ringbuffer Queue](./3-entrees/storage-api/ringbuffer.md)
 	- [Basic Token](./3-entrees/basic-token.md)
 	- [Configurable Constants](./3-entrees/constants.md)
+	- [Simple Crowdfund](./3-entrees/crowdfund.md)
 	- [Instantiable Pallets](./3-entrees/instantiable.md)
 	- [Weights for Resource Accounting](./3-entrees/weights.md)
 	- [A Runtime without FRAME](./3-entrees/frameless-runtime.md)
@@ -38,10 +39,11 @@
 	- [Hybrid PoW/PoS Consensus Node](./3-entrees/hybrid-consensus.md)
 	- [Manual Seal Consensus](./3-entrees/manual-seal.md)
 	- [Kitchen Node - An reusable instant seal node](./3-entrees/kitchen-node.md)
+	- [Babe and Grandpa Node](./3-entrees/babe-grandpa-node.md)
 	- [Currency Types](./3-entrees/currency.md)
 	- [Generating Randomness](./3-entrees/randomness.md)
 	- [Execution Schedule](./3-entrees/execution-schedule.md)
-	- [Permissioned Methods](./3-entrees/permissioned-methods.md)
+	- [Tightly- and Loosely-Coupled Pallets](./3-entrees/pallet-coupling.md)
 	- [Testing](./3-entrees/testing/index.md)
 		- [Basic Test Environments](./3-entrees/testing/mock.md)
 		- [Common Tests](./3-entrees/testing/common.md)
@@ -49,6 +51,6 @@
 		- [Custom Test Environment](./3-entrees/testing/externalities.md)
 	- [Safe Math](./3-entrees/safemath.md)
 
------------
+---
 
 [More Resources](./more-resources.md)

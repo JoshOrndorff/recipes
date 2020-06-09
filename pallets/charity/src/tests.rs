@@ -1,5 +1,7 @@
 use crate::*;
 use balances;
+use frame_support::{assert_err, assert_ok, impl_outer_event, impl_outer_origin, parameter_types};
+use frame_system::{self as system, RawOrigin};
 use sp_core::H256;
 use sp_io;
 use sp_runtime::{
@@ -7,8 +9,6 @@ use sp_runtime::{
 	traits::{BlakeTwo256, IdentityLookup},
 	Perbill,
 };
-use frame_support::{assert_ok, assert_err, impl_outer_event, impl_outer_origin, parameter_types};
-use frame_system::{self as system, RawOrigin};
 
 impl_outer_origin! {
 	pub enum Origin for TestRuntime {}
@@ -43,6 +43,7 @@ impl system::Trait for TestRuntime {
 	type DbWeight = ();
 	type BlockExecutionWeight = ();
 	type ExtrinsicBaseWeight = ();
+	type MaximumExtrinsicWeight = MaximumBlockWeight;
 	type MaximumBlockLength = MaximumBlockLength;
 	type AvailableBlockRatio = AvailableBlockRatio;
 	type Version = ();
@@ -88,16 +89,10 @@ pub fn new_test_ext() -> sp_io::TestExternalities {
 		.unwrap();
 	balances::GenesisConfig::<TestRuntime> {
 		// Provide some initial balances
-		balances: vec![
-			(1, 13),
-			(2, 11),
-			(3, 1),
-			(4, 3),
-			(5, 19),
-		],
+		balances: vec![(1, 13), (2, 11), (3, 1), (4, 3), (5, 19)],
 	}
-		.assimilate_storage(&mut t)
-		.unwrap();
+	.assimilate_storage(&mut t)
+	.unwrap();
 	let mut ext: sp_io::TestExternalities = t.into();
 	ext.execute_with(|| System::set_block_number(1));
 	ext
@@ -133,7 +128,10 @@ fn donations_work() {
 fn cant_donate_too_much() {
 	new_test_ext().execute_with(|| {
 		// User 1 donates 20 toekns but only has 13
-		assert_err!(Charity::donate(Origin::signed(1), 20), "Can't make donation");
+		assert_err!(
+			Charity::donate(Origin::signed(1), 20),
+			"Can't make donation"
+		);
 	})
 }
 
@@ -174,6 +172,9 @@ fn cant_allocate_too_much() {
 		assert_ok!(Charity::donate(Origin::signed(1), 10));
 
 		// Charity tries to allocates 20 tokens to user 2
-		assert_err!(Charity::allocate(RawOrigin::Root.into(), 2, 20), "Can't make allocation");
+		assert_err!(
+			Charity::allocate(RawOrigin::Root.into(), 2, 20),
+			"Can't make allocation"
+		);
 	})
 }

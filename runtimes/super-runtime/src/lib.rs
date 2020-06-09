@@ -14,40 +14,38 @@ include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 #[cfg(feature = "std")]
 pub mod genesis;
 
-use sp_std::prelude::*;
-use sp_core::{OpaqueMetadata, H256};
-use sp_runtime::{
-	ApplyExtrinsicResult,
-	create_runtime_str,
-	generic,
-	MultiSignature,
-	transaction_validity::{TransactionValidity, TransactionSource},
-};
-use sp_runtime::traits::{
-	BlakeTwo256, Block as BlockT, IdentityLookup, ConvertInto, Verify, IdentifyAccount,
-};
 use frame_system as system;
 use sp_api::impl_runtime_apis;
+use sp_core::{OpaqueMetadata, H256};
+use sp_runtime::traits::{BlakeTwo256, Block as BlockT, IdentifyAccount, IdentityLookup, Verify};
+use sp_runtime::{
+	create_runtime_str, generic,
+	traits::Saturating,
+	transaction_validity::{TransactionSource, TransactionValidity},
+	ApplyExtrinsicResult, MultiSignature,
+};
+use sp_std::prelude::*;
+use check_membership::{ loose as check_membership_loose, tight as check_membership_tight };
 
 #[cfg(feature = "std")]
 use sp_version::NativeVersion;
 use sp_version::RuntimeVersion;
 
 // A few exports that help ease life for downstream crates.
-#[cfg(any(feature = "std", test))]
-pub use sp_runtime::BuildStorage;
-pub use timestamp::Call as TimestampCall;
 pub use balances::Call as BalancesCall;
-pub use sp_runtime::{Perbill, Permill};
 pub use frame_support::{
-	StorageValue, construct_runtime, parameter_types,
+	construct_runtime, debug, parameter_types,
 	traits::Randomness,
 	weights::{
-		Weight,
 		constants::{BlockExecutionWeight, ExtrinsicBaseWeight, RocksDbWeight, WEIGHT_PER_SECOND},
+		IdentityFee, Weight,
 	},
-	debug,
+	StorageValue,
 };
+#[cfg(any(feature = "std", test))]
+pub use sp_runtime::BuildStorage;
+pub use sp_runtime::{Perbill, Permill};
+pub use timestamp::Call as TimestampCall;
 
 /// An index to a block.
 pub type BlockNumber = u32;
@@ -118,6 +116,9 @@ parameter_types! {
 	pub const BlockHashCount: BlockNumber = 250;
 	pub const MaximumBlockWeight: Weight = 2 * WEIGHT_PER_SECOND;
 	pub const AvailableBlockRatio: Perbill = Perbill::from_percent(75);
+	/// Assume 10% of weight for average on_initialize calls.
+	pub MaximumExtrinsicWeight: Weight = AvailableBlockRatio::get()
+		.saturating_sub(Perbill::from_percent(10)) * MaximumBlockWeight::get();
 	pub const MaximumBlockLength: u32 = 5 * 1024 * 1024;
 	pub const Version: RuntimeVersion = VERSION;
 }
@@ -155,6 +156,10 @@ impl system::Trait for Runtime {
 	/// The base weight of any extrinsic processed by the runtime, independent of the
 	/// logic of that extrinsic. (Signature verification, nonce increment, fee, etc...)
 	type ExtrinsicBaseWeight = ExtrinsicBaseWeight;
+	/// The maximum weight that a single extrinsic of `Normal` dispatch class can have,
+	/// idependent of the logic of that extrinsic. (Roughly max block weight - average on
+	/// initialize cost).
+	type MaximumExtrinsicWeight = MaximumExtrinsicWeight;
 	/// Maximum size of all encoded transactions (in bytes) that are allowed in one block.
 	type MaximumBlockLength = MaximumBlockLength;
 	/// Portion of the block weight that is available to all normal transactions.
@@ -208,7 +213,7 @@ impl transaction_payment::Trait for Runtime {
 	type Currency = balances::Module<Runtime>;
 	type OnTransactionPayment = ();
 	type TransactionByteFee = TransactionByteFee;
-	type WeightToFee = ConvertInto;
+	type WeightToFee = IdentityFee<Balance>;
 	type FeeMultiplierUpdate = ();
 }
 
@@ -245,7 +250,16 @@ impl constant_config::Trait for Runtime {
 	type ClearFrequency = ClearFrequency;
 }
 
-impl check_membership::Trait for Runtime {
+// The following two configuration traits are for the loosely and tightly coupled variants
+// of the check membership pallet. Both pallets are located in the same `check-membership` crate.
+impl check_membership_loose::Trait for Runtime {
+	type Event = Event;
+	// You can choose either the `vec-set` or `map-set` implementation of the `AccountSet` trait
+	type MembershipSource = VecSet;
+	// type MembershipSource = MapSet;
+}
+
+impl check_membership_tight::Trait for Runtime {
 	type Event = Event;
 }
 
@@ -295,6 +309,9 @@ impl last_caller::Trait<last_caller::Instance2> for Runtime {
 	type Event = Event;
 }
 
+impl map_set::Trait for Runtime {
+	type Event = Event;
+}
 
 impl ringbuffer_queue::Trait for Runtime {
 	type Event = Event;
@@ -305,6 +322,20 @@ impl randomness::Trait for Runtime {
 	type CollectiveFlipRandomnessSource = RandomnessCollectiveFlip;
 	//TODO Refactor this recipe to only take one randomness source like a normal pallet would.
 	type BabeRandomnessSource = RandomnessCollectiveFlip;
+}
+
+parameter_types! {
+	pub const SubmissionDeposit: u128 = 10;
+	pub const MinContribution: u128 = 10;
+	pub const RetirementPeriod: u32 = 10;
+}
+
+impl simple_crowdfund::Trait for Runtime {
+	type Event = Event;
+	type Currency = Balances;
+	type SubmissionDeposit = SubmissionDeposit;
+	type MinContribution = MinContribution;
+	type RetirementPeriod = RetirementPeriod;
 }
 
 impl simple_event::Trait for Runtime {
@@ -347,7 +378,8 @@ construct_runtime!(
 		AddingMachine: adding_machine::{Module, Call, Storage},
 		BasicToken: basic_token::{Module, Call, Storage, Event<T>},
 		Charity: charity::{Module, Call, Storage, Event<T>},
-		CheckMembership: check_membership::{Module, Call, Storage, Event<T>},
+		CheckMembershipLoose: check_membership_loose::{Module, Call, Event<T>},
+		CheckMembershipTight: check_membership_tight::{Module, Call, Event<T>},
 		ConmpoundingInterest: compounding_interest::{Module, Call, Storage, Event},
 		ConstantConfig: constant_config::{Module, Call, Storage, Event},
 		DefaultInstance1: default_instance::{Module, Call, Storage, Event<T>},
@@ -359,8 +391,10 @@ construct_runtime!(
 		GenericEvent: generic_event::{Module, Call, Event<T>},
 		LastCaller1: last_caller::<Instance1>::{Module, Call, Storage, Event<T>},
 		LastCaller2: last_caller::<Instance2>::{Module, Call, Storage, Event<T>},
+		MapSet: map_set::{Module, Call, Storage, Event<T>},
 		RingbufferQueue: ringbuffer_queue::{Module, Call, Storage, Event<T>},
 		RandomnessDemo: randomness::{Module, Call, Storage, Event},
+		SimpleCrowdfund: simple_crowdfund::{Module, Call, Storage, Event<T>},
 		SimpleEvent: simple_event::{Module, Call, Event},
 		SimpleMap: simple_map::{Module, Call, Storage, Event<T>},
 		SingleValue: single_value::{Module, Call, Storage},
@@ -382,7 +416,7 @@ pub type SignedBlock = generic::SignedBlock<Block>;
 pub type BlockId = generic::BlockId<Block>;
 /// The SignedExtension to the basic transaction logic.
 pub type SignedExtra = (
-	system::CheckVersion<Runtime>,
+	system::CheckTxVersion<Runtime>,
 	system::CheckGenesis<Runtime>,
 	system::CheckEra<Runtime>,
 	system::CheckNonce<Runtime>,
@@ -394,7 +428,8 @@ pub type UncheckedExtrinsic = generic::UncheckedExtrinsic<Address, Call, Signatu
 /// Extrinsic type that has already been checked.
 pub type CheckedExtrinsic = generic::CheckedExtrinsic<AccountId, Call, SignedExtra>;
 /// Executive: handles dispatch to the various pallets.
-pub type Executive = frame_executive::Executive<Runtime, Block, system::ChainContext<Runtime>, Runtime, AllModules>;
+pub type Executive =
+	frame_executive::Executive<Runtime, Block, system::ChainContext<Runtime>, Runtime, AllModules>;
 
 impl_runtime_apis! {
 	impl sp_api::Core<Block> for Runtime {

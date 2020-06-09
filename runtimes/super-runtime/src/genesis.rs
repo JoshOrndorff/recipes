@@ -1,11 +1,10 @@
 //! Helper module to build a genesis configuration for the super-runtime
 
 use super::{
-	AccountId, BalancesConfig, GenesisConfig,
-	SudoConfig, SystemConfig, WASM_BINARY, Signature,
+	AccountId, BalancesConfig, GenesisConfig, Signature, SudoConfig, SystemConfig, WASM_BINARY,
 };
-use sp_core::{Pair, sr25519};
-use sp_runtime::traits::{Verify, IdentifyAccount};
+use sp_core::{sr25519, Pair};
+use sp_runtime::traits::{IdentifyAccount, Verify};
 
 /// Helper function to generate a crypto pair from seed
 fn get_from_seed<TPair: Pair>(seed: &str) -> TPair::Public {
@@ -17,8 +16,9 @@ fn get_from_seed<TPair: Pair>(seed: &str) -> TPair::Public {
 type AccountPublic = <Signature as Verify>::Signer;
 
 /// Helper function to generate an account ID from seed
-pub fn account_id_from_seed<TPair: Pair>(seed: &str) -> AccountId where
-	AccountPublic: From<TPair::Public>
+pub fn account_id_from_seed<TPair: Pair>(seed: &str) -> AccountId
+where
+	AccountPublic: From<TPair::Public>,
 {
 	AccountPublic::from(get_from_seed::<TPair>(seed)).into_account()
 }
@@ -38,20 +38,19 @@ pub fn dev_genesis() -> GenesisConfig {
 }
 
 /// Helper function to build a genesis configuration
-pub fn testnet_genesis(
-	root_key: AccountId,
-	endowed_accounts: Vec<AccountId>
-) -> GenesisConfig {
+pub fn testnet_genesis(root_key: AccountId, endowed_accounts: Vec<AccountId>) -> GenesisConfig {
 	GenesisConfig {
 		system: Some(SystemConfig {
 			code: WASM_BINARY.to_vec(),
 			changes_trie_config: Default::default(),
 		}),
 		balances: Some(BalancesConfig {
-			balances: endowed_accounts.iter().cloned().map(|k|(k, 1 << 60)).collect(),
+			balances: endowed_accounts
+				.iter()
+				.cloned()
+				.map(|k| (k, 1 << 60))
+				.collect(),
 		}),
-		sudo: Some(SudoConfig {
-			key: root_key,
-		}),
+		sudo: Some(SudoConfig { key: root_key }),
 	}
 }

@@ -1,15 +1,16 @@
 #![cfg_attr(not(feature = "std"), no_std)]
+
 //! Struct Storage
 //! This pallet demonstrates how to declare and store `strcuts` that contain types
 //! that come from the pallet's configuration trait.
 
-use sp_runtime::RuntimeDebug;
 use frame_support::{
 	codec::{Decode, Encode},
 	decl_event, decl_module, decl_storage,
 	dispatch::DispatchResult,
 };
 use frame_system::{self as system, ensure_signed};
+use sp_runtime::RuntimeDebug;
 
 #[cfg(test)]
 mod tests;

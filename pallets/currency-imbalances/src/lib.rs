@@ -1,3 +1,5 @@
+#![cfg_attr(not(feature = "std"), no_std)]
+
 //! A Pallet to demonstrate using currency imbalances
 //!
 //! WARNING: never use this code in production (for demonstration/teaching purposes only)
@@ -5,14 +7,16 @@
 
 use frame_support::{
 	decl_event, decl_module,
-	traits::{Currency, OnUnbalanced, Imbalance, ReservableCurrency},
+	traits::{Currency, Imbalance, OnUnbalanced, ReservableCurrency},
 };
 use frame_system::{self as system, ensure_signed};
 
 // balance type using reservable currency type
 type BalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::Balance;
-type PositiveImbalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::PositiveImbalance;
-type NegativeImbalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::NegativeImbalance;
+type PositiveImbalanceOf<T> =
+	<<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::PositiveImbalance;
+type NegativeImbalanceOf<T> =
+	<<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::NegativeImbalance;
 
 pub trait Trait: system::Trait + Sized {
 	/// The overarching event type
@@ -49,7 +53,7 @@ decl_module! {
 		pub fn slash_funds(origin, to_punish: T::AccountId, collateral: BalanceOf<T>) {
 			let _ = ensure_signed(origin)?;
 
-			let imbalance = T::Currency::slash_reserved(&to_punish, collateral.clone()).0;
+			let imbalance = T::Currency::slash_reserved(&to_punish, collateral).0;
 			T::Slash::on_unbalanced(imbalance);
 
 			let now = <system::Module<T>>::block_number();

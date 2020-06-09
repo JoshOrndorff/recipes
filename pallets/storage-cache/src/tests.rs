@@ -1,4 +1,6 @@
-use crate::{Module, Trait, RawEvent};
+use crate::{Module, RawEvent, Trait};
+use frame_support::{assert_err, assert_ok, impl_outer_event, impl_outer_origin, parameter_types};
+use frame_system as system;
 use sp_core::H256;
 use sp_io;
 use sp_runtime::{
@@ -6,8 +8,6 @@ use sp_runtime::{
 	traits::{BlakeTwo256, IdentityLookup},
 	Perbill,
 };
-use frame_support::{assert_ok, assert_err, impl_outer_event, impl_outer_origin, parameter_types};
-use frame_system as system;
 
 impl_outer_origin! {
 	pub enum Origin for TestRuntime {}
@@ -38,6 +38,7 @@ impl system::Trait for TestRuntime {
 	type DbWeight = ();
 	type BlockExecutionWeight = ();
 	type ExtrinsicBaseWeight = ();
+	type MaximumExtrinsicWeight = MaximumBlockWeight;
 	type MaximumBlockLength = MaximumBlockLength;
 	type AvailableBlockRatio = AvailableBlockRatio;
 	type Version = ();
@@ -191,8 +192,7 @@ fn swap_king_works() {
 		assert_eq!(StorageCache::king_member(), 1);
 		assert_ok!(StorageCache::swap_king_with_cache(Origin::signed(3)));
 
-		let expected_event =
-			TestEvent::storage_cache(RawEvent::BetterKingSwap(1, 3));
+		let expected_event = TestEvent::storage_cache(RawEvent::BetterKingSwap(1, 3));
 		assert!(System::events().iter().any(|a| a.event == expected_event));
 
 		assert_eq!(StorageCache::king_member(), 3);

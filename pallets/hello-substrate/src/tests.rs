@@ -1,12 +1,17 @@
-
-use frame_system::{ self as system, RawOrigin };
-use frame_support::{assert_ok, assert_noop, impl_outer_origin, parameter_types, dispatch::DispatchError };
-use sp_runtime::{Perbill, traits::{IdentityLookup, BlakeTwo256}, testing::Header};
-use sp_io::TestExternalities;
-use sp_core::H256;
 use crate::{Module, Trait};
+use frame_support::{
+	assert_noop, assert_ok, dispatch::DispatchError, impl_outer_origin, parameter_types,
+};
+use frame_system::{self as system, RawOrigin};
+use sp_core::H256;
+use sp_io::TestExternalities;
+use sp_runtime::{
+	testing::Header,
+	traits::{BlakeTwo256, IdentityLookup},
+	Perbill,
+};
 
-impl_outer_origin!{
+impl_outer_origin! {
 	pub enum Origin for TestRuntime {}
 }
 
@@ -35,6 +40,7 @@ impl system::Trait for TestRuntime {
 	type DbWeight = ();
 	type BlockExecutionWeight = ();
 	type ExtrinsicBaseWeight = ();
+	type MaximumExtrinsicWeight = MaximumBlockWeight;
 	type MaximumBlockLength = MaximumBlockLength;
 	type AvailableBlockRatio = AvailableBlockRatio;
 	type Version = ();
@@ -53,7 +59,9 @@ pub struct ExtBuilder;
 
 impl ExtBuilder {
 	pub fn build() -> TestExternalities {
-		let storage = system::GenesisConfig::default().build_storage::<TestRuntime>().unwrap();
+		let storage = system::GenesisConfig::default()
+			.build_storage::<TestRuntime>()
+			.unwrap();
 		let mut ext = TestExternalities::from(storage);
 		ext.execute_with(|| System::set_block_number(1));
 		ext
@@ -70,6 +78,9 @@ fn say_hello_works() {
 #[test]
 fn say_hello_no_root() {
 	ExtBuilder::build().execute_with(|| {
-		assert_noop!(HelloSubstrate::say_hello(RawOrigin::Root.into()), DispatchError::BadOrigin);
+		assert_noop!(
+			HelloSubstrate::say_hello(RawOrigin::Root.into()),
+			DispatchError::BadOrigin
+		);
 	})
 }

@@ -2,17 +2,17 @@
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
-use sp_std::prelude::*;
-use sp_runtime::{traits::Zero, RuntimeDebug};
 use frame_support::{
 	codec::{Decode, Encode},
 	decl_event, decl_module, decl_storage,
-	dispatch::{DispatchResult, DispatchError},
+	dispatch::{DispatchError, DispatchResult},
 	ensure,
 	traits::Get,
 	weights::Weight,
 };
 use frame_system::{self as system, ensure_signed};
+use sp_runtime::{traits::Zero, RuntimeDebug};
+use sp_std::prelude::*;
 
 #[cfg(test)]
 mod tests;
@@ -105,7 +105,7 @@ decl_module! {
 				// clean up the previous double_map with this last_era group index
 				<SignalBank<T>>::remove_prefix(&last_era);
 				// unlikely to overflow so no checked_add
-				let next_era: RoundIndex = last_era + (1u32 as RoundIndex);
+				let next_era: RoundIndex = last_era + 1;
 				Era::put(next_era);
 
 				// get the SignalQuota for each `ExecutionFrequency` period
@@ -204,7 +204,7 @@ impl<T: Trait> Module<T> {
 	pub fn execute_tasks(n: T::BlockNumber) {
 		// task limit in terms of priority allowed to be executed every period
 		let mut task_allowance = T::TaskLimit::get();
-		let mut execution_q = <ExecutionQueue>::get().clone();
+		let mut execution_q = <ExecutionQueue>::get();
 		execution_q.sort_unstable();
 		execution_q.into_iter().for_each(|task_id| {
 			if let Some(task) = <PendingTasks<T>>::get(&task_id) {

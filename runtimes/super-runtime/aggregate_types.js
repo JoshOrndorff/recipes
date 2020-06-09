@@ -24,6 +24,7 @@ const pallets = [
   "randomness",
   "ringbuffer-queue",
   "randomness",
+  "simple-crowdfund",
   "simple-event",
   "simple-map",
   "single-value",
@@ -36,8 +37,7 @@ const pallets = [
 // These specifics are from https://polkadot.js.org/api/start/types.extend.html#impact-on-extrinsics
 const runtimeOwnTypes = {
   "Address": "AccountId",
-  "LookupSource": "AccountId",
-  "Weight": "u32"
+  "LookupSource": "AccountId"
 }
 
 // Loop through all pallets aggregating types

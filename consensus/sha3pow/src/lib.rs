@@ -1,13 +1,13 @@
-use sp_core::{U256, H256};
+use parity_scale_codec::{Decode, Encode};
+use rand::{rngs::SmallRng, thread_rng, SeedableRng};
+use sc_consensus_pow::{Error, PowAlgorithm};
+use sha3::{Digest, Sha3_256};
+use sp_api::ProvideRuntimeApi;
+use sp_consensus_pow::{DifficultyApi, Seal as RawSeal};
+use sp_core::{H256, U256};
 use sp_runtime::generic::BlockId;
 use sp_runtime::traits::Block as BlockT;
-use parity_scale_codec::{Encode, Decode};
-use sc_consensus_pow::{PowAlgorithm, Error};
-use sp_consensus_pow::{Seal as RawSeal, DifficultyApi};
-use sha3::{Sha3_256, Digest};
-use rand::{thread_rng, SeedableRng, rngs::SmallRng};
 use std::sync::Arc;
-use sp_api::ProvideRuntimeApi;
 
 /// Determine whether the given hash satisfies the given difficulty.
 /// The test is done by multiplying the two together. If the product
@@ -45,7 +45,7 @@ impl Compute {
 		Seal {
 			nonce: self.nonce,
 			difficulty: self.difficulty,
-			work: work,
+			work,
 		}
 	}
 }
@@ -56,7 +56,7 @@ impl Compute {
 pub struct MinimalSha3Algorithm;
 
 // Here we implement the general PowAlgorithm trait for our concrete Sha3Algorithm
-impl<B: BlockT<Hash=H256>> PowAlgorithm<B> for MinimalSha3Algorithm {
+impl<B: BlockT<Hash = H256>> PowAlgorithm<B> for MinimalSha3Algorithm {
 	type Difficulty = U256;
 
 	fn difficulty(&self, _parent: B::Hash) -> Result<Self::Difficulty, Error<B>> {
@@ -69,7 +69,7 @@ impl<B: BlockT<Hash=H256>> PowAlgorithm<B> for MinimalSha3Algorithm {
 		_parent: &BlockId<B>,
 		pre_hash: &H256,
 		seal: &RawSeal,
-		difficulty: Self::Difficulty
+		difficulty: Self::Difficulty,
 	) -> Result<bool, Error<B>> {
 		// Try to construct a seal object by decoding the raw seal given
 		let seal = match Seal::decode(&mut &seal[..]) {
@@ -79,7 +79,7 @@ impl<B: BlockT<Hash=H256>> PowAlgorithm<B> for MinimalSha3Algorithm {
 
 		// See whether the hash meets the difficulty requirement. If not, fail fast.
 		if !hash_meets_difficulty(&seal.work, difficulty) {
-			return Ok(false)
+			return Ok(false);
 		}
 
 		// Make sure the provided work actually comes from the correct pre_hash
@@ -90,7 +90,7 @@ impl<B: BlockT<Hash=H256>> PowAlgorithm<B> for MinimalSha3Algorithm {
 		};
 
 		if compute.compute() != seal {
-			return Ok(false)
+			return Ok(false);
 		}
 
 		Ok(true)
@@ -101,15 +101,15 @@ impl<B: BlockT<Hash=H256>> PowAlgorithm<B> for MinimalSha3Algorithm {
 		_parent: &BlockId<B>,
 		pre_hash: &H256,
 		difficulty: Self::Difficulty,
-		round: u32 // The number of nonces to try during this call
+		round: u32, // The number of nonces to try during this call
 	) -> Result<Option<RawSeal>, Error<B>> {
 		// Get a randomness source from the environment; fail if one isn't available
-		let mut rng = SmallRng::from_rng(&mut thread_rng())
-			.map_err(|e| Error::Environment(format!("Initialize RNG failed for mining: {:?}", e)))?;
+		let mut rng = SmallRng::from_rng(&mut thread_rng()).map_err(|e| {
+			Error::Environment(format!("Initialize RNG failed for mining: {:?}", e))
+		})?;
 
 		// Loop the specified number of times
 		for _ in 0..round {
-
 			// Choose a new nonce
 			let nonce = H256::random_using(&mut rng);
 
@@ -123,7 +123,7 @@ impl<B: BlockT<Hash=H256>> PowAlgorithm<B> for MinimalSha3Algorithm {
 
 			// If we solved the PoW then return, otherwise loop again
 			if hash_meets_difficulty(&seal.work, difficulty) {
-				return Ok(Some(seal.encode()))
+				return Ok(Some(seal.encode()));
 			}
 		}
 
@@ -131,8 +131,6 @@ impl<B: BlockT<Hash=H256>> PowAlgorithm<B> for MinimalSha3Algorithm {
 		Ok(None)
 	}
 }
-
-
 
 /// A complete PoW Algorithm that uses Sha3 hashing.
 /// Needs a reference to the client so it can grab the difficulty from the runtime.
@@ -155,7 +153,8 @@ impl<C> Clone for Sha3Algorithm<C> {
 }
 
 // Here we implement the general PowAlgorithm trait for our concrete Sha3Algorithm
-impl<B: BlockT<Hash=H256>, C> PowAlgorithm<B> for Sha3Algorithm<C> where
+impl<B: BlockT<Hash = H256>, C> PowAlgorithm<B> for Sha3Algorithm<C>
+where
 	C: ProvideRuntimeApi<B>,
 	C::Api: DifficultyApi<B, U256>,
 {
@@ -163,10 +162,15 @@ impl<B: BlockT<Hash=H256>, C> PowAlgorithm<B> for Sha3Algorithm<C> where
 
 	fn difficulty(&self, parent: B::Hash) -> Result<Self::Difficulty, Error<B>> {
 		let parent_id = BlockId::<B>::hash(parent);
-		self.client.runtime_api().difficulty(&parent_id)
-			.map_err(|e| sc_consensus_pow::Error::Environment(
-				format!("Fetching difficulty from runtime failed: {:?}", e)
-			))
+		self.client
+			.runtime_api()
+			.difficulty(&parent_id)
+			.map_err(|e| {
+				sc_consensus_pow::Error::Environment(format!(
+					"Fetching difficulty from runtime failed: {:?}",
+					e
+				))
+			})
 	}
 
 	fn verify(
@@ -174,7 +178,7 @@ impl<B: BlockT<Hash=H256>, C> PowAlgorithm<B> for Sha3Algorithm<C> where
 		_parent: &BlockId<B>,
 		pre_hash: &H256,
 		seal: &RawSeal,
-		difficulty: Self::Difficulty
+		difficulty: Self::Difficulty,
 	) -> Result<bool, Error<B>> {
 		// Try to construct a seal object by decoding the raw seal given
 		let seal = match Seal::decode(&mut &seal[..]) {
@@ -184,7 +188,7 @@ impl<B: BlockT<Hash=H256>, C> PowAlgorithm<B> for Sha3Algorithm<C> where
 
 		// See whether the hash meets the difficulty requirement. If not, fail fast.
 		if !hash_meets_difficulty(&seal.work, difficulty) {
-			return Ok(false)
+			return Ok(false);
 		}
 
 		// Make sure the provided work actually comes from the correct pre_hash
@@ -195,7 +199,7 @@ impl<B: BlockT<Hash=H256>, C> PowAlgorithm<B> for Sha3Algorithm<C> where
 		};
 
 		if compute.compute() != seal {
-			return Ok(false)
+			return Ok(false);
 		}
 
 		Ok(true)
@@ -206,15 +210,15 @@ impl<B: BlockT<Hash=H256>, C> PowAlgorithm<B> for Sha3Algorithm<C> where
 		_parent: &BlockId<B>,
 		pre_hash: &H256,
 		difficulty: Self::Difficulty,
-		round: u32 // The number of nonces to try during this call
+		round: u32, // The number of nonces to try during this call
 	) -> Result<Option<RawSeal>, Error<B>> {
 		// Get a randomness source from the environment; fail if one isn't available
-		let mut rng = SmallRng::from_rng(&mut thread_rng())
-			.map_err(|e| Error::Environment(format!("Initialize RNG failed for mining: {:?}", e)))?;
+		let mut rng = SmallRng::from_rng(&mut thread_rng()).map_err(|e| {
+			Error::Environment(format!("Initialize RNG failed for mining: {:?}", e))
+		})?;
 
 		// Loop the specified number of times
 		for _ in 0..round {
-
 			// Choose a new nonce
 			let nonce = H256::random_using(&mut rng);
 
@@ -228,7 +232,7 @@ impl<B: BlockT<Hash=H256>, C> PowAlgorithm<B> for Sha3Algorithm<C> where
 
 			// If we solved the PoW then return, otherwise loop again
 			if hash_meets_difficulty(&seal.work, difficulty) {
-				return Ok(Some(seal.encode()))
+				return Ok(Some(seal.encode()));
 			}
 		}
 

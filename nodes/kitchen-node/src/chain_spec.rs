@@ -1,20 +1,14 @@
-use sp_core::sr25519;
-use sc_service;
 use runtime::{
+	genesis::{account_id_from_seed, dev_genesis, testnet_genesis},
 	GenesisConfig,
-	genesis::{
-		account_id_from_seed,
-		testnet_genesis,
-		dev_genesis,
-	}
 };
+use sp_core::sr25519;
 
 // Note this is the URL for the telemetry server
 //const STAGING_TELEMETRY_URL: &str = "wss://telemetry.polkadot.io/submit/";
 
 /// Specialized `ChainSpec`. This is a specialization of the general Substrate ChainSpec type.
 pub type ChainSpec = sc_service::GenericChainSpec<GenesisConfig>;
-
 
 /// Build a Development ChainSpec
 pub fn dev_config() -> ChainSpec {
@@ -27,7 +21,7 @@ pub fn dev_config() -> ChainSpec {
 		None,
 		None,
 		None,
-		None
+		None,
 	)
 }
 
@@ -37,27 +31,29 @@ pub fn local_testnet_config() -> ChainSpec {
 		"Local Testnet",
 		"local_testnet",
 		sc_service::ChainType::Local,
-		|| testnet_genesis(
-			account_id_from_seed::<sr25519::Pair>("Alice"),
-			vec![
+		|| {
+			testnet_genesis(
 				account_id_from_seed::<sr25519::Pair>("Alice"),
-				account_id_from_seed::<sr25519::Pair>("Bob"),
-				account_id_from_seed::<sr25519::Pair>("Charlie"),
-				account_id_from_seed::<sr25519::Pair>("Dave"),
-				account_id_from_seed::<sr25519::Pair>("Eve"),
-				account_id_from_seed::<sr25519::Pair>("Ferdie"),
-				account_id_from_seed::<sr25519::Pair>("Alice//stash"),
-				account_id_from_seed::<sr25519::Pair>("Bob//stash"),
-				account_id_from_seed::<sr25519::Pair>("Charlie//stash"),
-				account_id_from_seed::<sr25519::Pair>("Dave//stash"),
-				account_id_from_seed::<sr25519::Pair>("Eve//stash"),
-				account_id_from_seed::<sr25519::Pair>("Ferdie//stash"),
-			]
-		),
+				vec![
+					account_id_from_seed::<sr25519::Pair>("Alice"),
+					account_id_from_seed::<sr25519::Pair>("Bob"),
+					account_id_from_seed::<sr25519::Pair>("Charlie"),
+					account_id_from_seed::<sr25519::Pair>("Dave"),
+					account_id_from_seed::<sr25519::Pair>("Eve"),
+					account_id_from_seed::<sr25519::Pair>("Ferdie"),
+					account_id_from_seed::<sr25519::Pair>("Alice//stash"),
+					account_id_from_seed::<sr25519::Pair>("Bob//stash"),
+					account_id_from_seed::<sr25519::Pair>("Charlie//stash"),
+					account_id_from_seed::<sr25519::Pair>("Dave//stash"),
+					account_id_from_seed::<sr25519::Pair>("Eve//stash"),
+					account_id_from_seed::<sr25519::Pair>("Ferdie//stash"),
+				],
+			)
+		},
 		vec![],
 		None,
 		None,
 		None,
-		None
+		None,
 	)
 }

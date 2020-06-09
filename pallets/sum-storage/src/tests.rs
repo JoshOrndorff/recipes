@@ -1,9 +1,11 @@
 use super::*;
 
+use frame_support::{assert_ok, impl_outer_origin, parameter_types, weights::Weight};
 use sp_core::H256;
-use frame_support::{impl_outer_origin, assert_ok, parameter_types, weights::Weight};
 use sp_runtime::{
-	traits::{BlakeTwo256, IdentityLookup}, testing::Header, Perbill,
+	testing::Header,
+	traits::{BlakeTwo256, IdentityLookup},
+	Perbill,
 };
 
 impl_outer_origin! {
@@ -37,6 +39,7 @@ impl system::Trait for Test {
 	type DbWeight = ();
 	type BlockExecutionWeight = ();
 	type ExtrinsicBaseWeight = ();
+	type MaximumExtrinsicWeight = MaximumBlockWeight;
 	type MaximumBlockLength = MaximumBlockLength;
 	type AvailableBlockRatio = AvailableBlockRatio;
 	type Version = ();
@@ -53,7 +56,10 @@ type TemplateModule = Module<Test>;
 // This function basically just builds a genesis storage key/value store according to
 // our desired mockup.
 fn new_test_ext() -> sp_io::TestExternalities {
-	system::GenesisConfig::default().build_storage::<Test>().unwrap().into()
+	system::GenesisConfig::default()
+		.build_storage::<Test>()
+		.unwrap()
+		.into()
 }
 
 #[test]

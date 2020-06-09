@@ -1,0 +1,10 @@
+{
+    "ignorePatterns": [
+        {
+            "pattern": "^https://crates.io"
+        },
+        {
+            "pattern": "^https://github.com/substrate-developer-hub/recipes/tree/master"
+        }
+    ]
+}

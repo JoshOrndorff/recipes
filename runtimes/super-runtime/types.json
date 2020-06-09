@@ -1,7 +1,6 @@
 {
   "Address": "AccountId",
   "LookupSource": "AccountId",
-  "Weight": "u32",
   "ContinuousAccountData": {
     "principal": "u64",
     "deposit_date": "BlockNumber"
@@ -21,7 +20,22 @@
     "boolean": "bool"
   },
   "BufferIndex": "u8",
-  "InnerThing": "InnerThingOf",
+  "AccountIdOf": "AccountId",
+  "BalanceOf": "Balance",
+  "FundInfoOf": "FundInfo",
+  "FundInfo": {
+    "beneficiary": "AccountId",
+    "deposit": "Balance",
+    "raised": "Balance",
+    "end": "BlockNumber",
+    "goal": "Balance"
+  },
+  "FundIndex": "u32",
+  "InnerThing": {
+    "number": "u32",
+    "hash": "Hash",
+    "balance": "Balance"
+  },
   "SuperThing": {
     "super_number": "u32",
     "inner_thing": "InnerThing"

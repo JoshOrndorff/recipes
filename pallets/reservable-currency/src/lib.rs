@@ -1,11 +1,10 @@
 //! A pallet to demonstrate the `ReservableCurrency` trait
 //! borrows collateral locking logic from pallet_treasury
 
-
 use frame_support::{
 	decl_event, decl_module,
 	dispatch::DispatchResult,
-	traits::{Currency, ReservableCurrency, ExistenceRequirement::AllowDeath},
+	traits::{Currency, ExistenceRequirement::AllowDeath, ReservableCurrency},
 };
 use frame_system::{self as system, ensure_signed};
 
@@ -93,7 +92,7 @@ decl_module! {
 		) -> DispatchResult {
 			let _ = ensure_signed(origin)?; // dangerous because can be called with any signature (so dont do this in practice ever!)
 
-                        // If collateral is bigger than to_punish's reserved_balance, store what's left in overdraft.
+						// If collateral is bigger than to_punish's reserved_balance, store what's left in overdraft.
 			let overdraft = T::Currency::unreserve(&to_punish, collateral);
 
 			T::Currency::transfer(&to_punish, &dest, collateral - overdraft, AllowDeath)?;

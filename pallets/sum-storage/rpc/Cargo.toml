@@ -12,12 +12,12 @@ jsonrpc-core-client = "14.0.3"
 jsonrpc-derive = "14.0.3"
 serde = { version = "1.0.101", features = ["derive"], optional = true }
 
-sp-rpc = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72', default_features = false}
-sp-runtime = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72', default_features = false}
-sp-blockchain = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72', default_features = false}
-sp-api = { version = '2.0.0-alpha.7', git = 'https://github.com/paritytech/substrate', rev = '7f73312aa0bf4a4107860141f085e9770ec01b72', default_features = false }
+sp-rpc = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '34695a85650b58bcd7d7e2a677cafc2921251d68', default-features = false}
+sp-runtime = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '34695a85650b58bcd7d7e2a677cafc2921251d68', default-features = false}
+sp-blockchain = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '34695a85650b58bcd7d7e2a677cafc2921251d68', default-features = false}
+sp-api = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '34695a85650b58bcd7d7e2a677cafc2921251d68', default-features = false }
 
-sum-storage-runtime-api = { version = "2.0.0", path = "../runtime-api", default_features = false }
+sum-storage-runtime-api = { version = "2.0.0", path = "../runtime-api", default-features = false }
 
 [features]
 default = ["std"]

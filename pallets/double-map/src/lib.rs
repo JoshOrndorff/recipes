@@ -9,7 +9,6 @@
 #[cfg(test)]
 mod tests;
 
-use sp_std::prelude::*;
 use frame_support::{
 	decl_event, decl_module, decl_storage,
 	dispatch::DispatchResult,
@@ -17,6 +16,7 @@ use frame_support::{
 	storage::{StorageDoubleMap, StorageMap, StorageValue},
 };
 use frame_system::{self as system, ensure_signed};
+use sp_std::prelude::*;
 
 pub trait Trait: system::Trait {
 	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
@@ -61,7 +61,7 @@ decl_module! {
 		fn join_all_members(origin) -> DispatchResult {
 			let new_member = ensure_signed(origin)?;
 			ensure!(!Self::is_member(&new_member), "already a member, can't join");
-			<AllMembers<T>>::append(&new_member.clone());
+			<AllMembers<T>>::append(&new_member);
 
 			Self::deposit_event(RawEvent::NewMember(new_member));
 			Ok(())
