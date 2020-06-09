@@ -1,6 +1,6 @@
 [package]
 name = "ringbuffer-queue"
-version = "2.0.0-dev"
+version = "2.0.0-rc3"
 authors = ["apopiak"]
 repository = 'https://github.com/substrate-developer-hub/recipes'
 edition = "2018"
@@ -15,7 +15,7 @@ categories = [
 	"tutorial",
 	"recipe",
 ]
-compatibility_version = "2.0.0-dev"
+compatibility_version = "2.0.0-rc3"
 
 [features]
 default = ['std']
