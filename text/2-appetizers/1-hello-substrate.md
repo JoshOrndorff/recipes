@@ -1,6 +1,6 @@
 # Hello Substrate
 
-_[`pallets/hello-substrate`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/hello-substrate)_
+_[View Code on Github](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/hello-substrate), [Explore in Substrate Playground](https://playground-staging.substrate.dev/?deploy=recipes&files=/home/substrate/workspace/pallets/hello-substrate/src/lib.rs)_
 
 The first pallet we'll explore is a simple "hello world" example. This pallet will have one
 dispatchable call that prints a message to the node's output. Because this is our first pallet,
@@ -232,3 +232,24 @@ message printed to the log of your node. Remember to run the kitchen node with t
 
 You're now well on your way to becoming a blockchain chef. Let's continue to build our skills with
 another appetizer.
+
+## Use This Recipe
+* _[View Code on Github](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/hello-substrate)_
+* _[Explore in Substrate Playground](https://playground-staging.substrate.dev/?deploy=recipes&files=/home/substrate/workspace/pallets/hello-substrate/src/lib.rs)_
+* _Use this pallet in you runtime_
+
+```toml
+[dependencies.hello-substrate]
+version = 'v2.0.0-dev'
+git = 'https://github.com/substrate-developer-hub/recipes'
+branch = 'develop'
+default-features = false
+
+# Also adjust the std feature
+[features]
+default = ['std']
+std = [
+    # --snip--
+    'hello-substrate/std',
+]
+```
