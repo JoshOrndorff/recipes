@@ -32,24 +32,24 @@ tokio = "0.1.22"
 exit-future = "0.2.0"
 parking_lot = "0.9.0"
 trie-root = "0.15.2"
-sp-io = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '34695a85650b58bcd7d7e2a677cafc2921251d68' }
-sc-cli = { version = '0.8.0-dev', git = 'https://github.com/paritytech/substrate', rev = '34695a85650b58bcd7d7e2a677cafc2921251d68' }
-sc-client-api = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '34695a85650b58bcd7d7e2a677cafc2921251d68' }
-sc-consensus = { version = '0.8.0-dev', git = 'https://github.com/paritytech/substrate', rev = '34695a85650b58bcd7d7e2a677cafc2921251d68' }
-sp-core = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '34695a85650b58bcd7d7e2a677cafc2921251d68' }
-sp-runtime = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '34695a85650b58bcd7d7e2a677cafc2921251d68' }
-sc-executor = { version = '0.8.0-dev', git = 'https://github.com/paritytech/substrate', rev = '34695a85650b58bcd7d7e2a677cafc2921251d68' }
-sc-service = { version = '0.8.0-dev', git = 'https://github.com/paritytech/substrate', rev = '34695a85650b58bcd7d7e2a677cafc2921251d68' }
-sp-inherents = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '34695a85650b58bcd7d7e2a677cafc2921251d68' }
-sc-transaction-pool = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '34695a85650b58bcd7d7e2a677cafc2921251d68' }
-sp-transaction-pool = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '34695a85650b58bcd7d7e2a677cafc2921251d68' }
-sc-network = { version = '0.8.0-dev', git = 'https://github.com/paritytech/substrate', rev = '34695a85650b58bcd7d7e2a677cafc2921251d68' }
-sc-consensus-babe = { version = '0.8.0-dev', git = 'https://github.com/paritytech/substrate', rev = '34695a85650b58bcd7d7e2a677cafc2921251d68' }
-sp-consensus-babe = { version = '0.8.0-dev', git = 'https://github.com/paritytech/substrate', rev = '34695a85650b58bcd7d7e2a677cafc2921251d68' }
-sc-finality-grandpa = { version = '0.8.0-dev', git = 'https://github.com/paritytech/substrate', rev = '34695a85650b58bcd7d7e2a677cafc2921251d68' }
-sp-finality-grandpa = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '34695a85650b58bcd7d7e2a677cafc2921251d68' }
-sc-basic-authorship = { version = '0.8.0-dev', git = 'https://github.com/paritytech/substrate', rev = '34695a85650b58bcd7d7e2a677cafc2921251d68' }
-sp-consensus = { version = '0.8.0-dev', git = 'https://github.com/paritytech/substrate', rev = '34695a85650b58bcd7d7e2a677cafc2921251d68' }
+sp-io = '2.0.0-rc3'
+sc-cli = '0.8.0-rc3'
+sc-client-api = '2.0.0-rc3'
+sc-consensus = '0.8.0-rc3'
+sp-core = '2.0.0-rc3'
+sp-runtime = '2.0.0-rc3'
+sc-executor = '0.8.0-rc3'
+sc-service = '0.8.0-rc3'
+sp-inherents = '2.0.0-rc3'
+sc-transaction-pool = '2.0.0-rc3'
+sp-transaction-pool = '2.0.0-rc3'
+sc-network = '0.8.0-rc3'
+sc-consensus-babe = '0.8.0-rc3'
+sp-consensus-babe = '0.8.0-rc3'
+sc-finality-grandpa = '0.8.0-rc3'
+sp-finality-grandpa = '2.0.0-rc3'
+sc-basic-authorship = '0.8.0-rc3'
+sp-consensus = '0.8.0-rc3'
 
 # This node only works with runtimes that can provide babe and grandpa authorities.
 # No other runtimes that come with the recipes provide these APIs, but the substrate demonstration
@@ -66,7 +66,7 @@ runtime = { package = "babe-grandpa-runtime", path = "../../runtimes/babe-grandp
 
 [build-dependencies]
 vergen = "3.0.4"
-substrate-build-script-utils = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '34695a85650b58bcd7d7e2a677cafc2921251d68' }
+substrate-build-script-utils = '2.0.0-rc3'
 
 [features]
 ocw = []
