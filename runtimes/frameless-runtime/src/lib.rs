@@ -35,6 +35,7 @@ use sp_runtime::{
 };
 // This strange-looking import is usually done by the `construct_runtime!` macro
 use sp_block_builder::runtime_decl_for_BlockBuilder::BlockBuilder;
+#[cfg(feature = "std")]
 use sp_storage::well_known_keys;
 
 #[cfg(any(feature = "std", test))]
