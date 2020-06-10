@@ -9,6 +9,7 @@ include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 
 use parity_scale_codec::{Decode, Encode};
 
+use sp_std::if_std;
 use sp_std::prelude::*;
 use sp_api::impl_runtime_apis;
 use sp_runtime::{
@@ -201,6 +202,9 @@ impl_runtime_apis! {
 		}
 
 		fn execute_block(block: Block) {
+			if_std!{
+				println!("Entering execute_block with {:?}", block);
+			}
 			Self::initialize_block(&block.header);
 
 			for transaction in block.extrinsics {
@@ -217,10 +221,15 @@ impl_runtime_apis! {
 				sp_io::storage::set(&ONLY_KEY, &next_state.encode());
 			}
 
+			//TODO is this necessary? What method is it even calling?
+			// In frame executive, they call final_checks, but that might be different
 			Self::finalize_block();
 		}
 
 		fn initialize_block(header: &<Block as BlockT>::Header) {
+			if_std!{
+				println!("Entering initialize_block with {:?}", header);
+			}
 			// Store the header info we're given for later use when finalizing block.
 			sp_io::storage::set(&HEADER_KEY, &header.encode());
 		}
@@ -228,23 +237,46 @@ impl_runtime_apis! {
 
 	// https://substrate.dev/rustdocs/master/sc_block_builder/trait.BlockBuilderApi.html
 	impl sp_block_builder::BlockBuilder<Block> for Runtime {
-		fn apply_extrinsic(_extrinsic: <Block as BlockT>::Extrinsic) -> ApplyExtrinsicResult {
-			// Executive::apply_extrinsic(extrinsic)
-			// Maybe this is where the core flipping logic goes?
+		fn apply_extrinsic(extrinsic: <Block as BlockT>::Extrinsic) -> ApplyExtrinsicResult {
+			if_std!{
+				println!("Entering apply_extrinsic");
+			}
+
+			let previous_state = sp_io::storage::get(&ONLY_KEY)
+				.map(|bytes| <bool as Decode>::decode(&mut &*bytes).unwrap_or(false))
+				.unwrap_or(false);
+
+			let next_state = match (previous_state, extrinsic) {
+				(_, FramelessTransaction::Set) => true,
+				(_, FramelessTransaction::Clear) => false,
+				(prev_state, FramelessTransaction::Toggle) => !prev_state,
+			};
+
+			sp_io::storage::set(&ONLY_KEY, &next_state.encode());
 			Ok(Ok(()))
 		}
 
 		fn finalize_block() -> <Block as BlockT>::Header {
+			if_std!{
+				println!("Entering finalize_block");
+			}
 			// https://substrate.dev/rustdocs/master/sp_runtime/generic/struct.Header.html
 			let raw_header = sp_io::storage::get(&HEADER_KEY)
 				.expect("We initialized with header, it never got mutated, qed");
 
+			// Clear the raw header out of storage when we are done with it.
+			// sp_io::storage::clear(&HEADER_KEY);
+
 			let mut header = <Block as BlockT>::Header::decode(&mut &*raw_header)
 				.expect("we put a valid header in in the first place, qed");
 
-			let raw_root = &sp_io::storage::root()[..];
+			let raw_state_root = &sp_io::storage::root()[..];
 
-			header.state_root = sp_core::H256::from(sp_io::hashing::blake2_256(raw_root));
+			let state_root = sp_core::H256::from(sp_io::hashing::blake2_256(raw_state_root));
+			if_std!{
+				println!("State root is: {:?}", state_root);
+			}
+			header.state_root = state_root;
 			header
 		}
 
