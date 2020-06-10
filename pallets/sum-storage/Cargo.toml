@@ -1,7 +1,7 @@
 [package]
 name = "sum-storage"
 version = "2.0.0-dev"
-authors = ["Joshy Orndorff"]
+authors = ['Substrate DevHub <https://github.com/substrate-developer-hub>']
 edition = "2018"
 description = "A pallet with two storage items whose sum is exposed via a custom runtime API"
 license = "GPL-3.0-or-later"

@@ -1,5 +1,5 @@
 [package]
-authors = ['Joshy Orndorff, Wei Tang']
+authors = ['Substrate DevHub <https://github.com/substrate-developer-hub>']
 edition = '2018'
 name = 'sha3pow'
 repository = 'https://github.com/substrate-developer-hub/recipes'
