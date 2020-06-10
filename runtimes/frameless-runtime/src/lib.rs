@@ -33,7 +33,7 @@ use sp_runtime::{
 		Verify,
 	}
 };
-//TODO this is a weird import. Is this correct?
+// This strange-looking import is usually done by the `construct_runtime!` macro
 use sp_block_builder::runtime_decl_for_BlockBuilder::BlockBuilder;
 use sp_storage::well_known_keys;
 
@@ -265,7 +265,7 @@ impl_runtime_apis! {
 				.expect("We initialized with header, it never got mutated, qed");
 
 			// Clear the raw header out of storage when we are done with it.
-			// sp_io::storage::clear(&HEADER_KEY);
+			sp_io::storage::clear(&HEADER_KEY);
 
 			let mut header = <Block as BlockT>::Header::decode(&mut &*raw_header)
 				.expect("we put a valid header in in the first place, qed");
@@ -273,10 +273,10 @@ impl_runtime_apis! {
 			let raw_state_root = &sp_io::storage::root()[..];
 
 			let state_root = sp_core::H256::from(sp_io::hashing::blake2_256(raw_state_root));
-			if_std!{
-				println!("State root is: {:?}", state_root);
-			}
 			header.state_root = state_root;
+			if_std!{
+				println!("Returning header: {:?}", header);
+			}
 			header
 		}
 
