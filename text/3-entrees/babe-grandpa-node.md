@@ -2,7 +2,7 @@
 
 _[`nodes/babe-grandpa-node`](https://github.com/substrate-developer-hub/recipes/tree/master/nodes/babe-grandpa-node)_
 
-The `babe-grandpa-node` uses the [BABE](substrate.dev/rustdocs/v2.0.0-rc3/sc_consensus_babe/index.html) Proof
+The `babe-grandpa-node` uses the [BABE](https://substrate.dev/rustdocs/v2.0.0-rc3/sc_consensus_babe/index.html) Proof
 of Authority consensus engine to determine who may author blocks, and the
 [GRANDPA](https://substrate.dev/rustdocs/v2.0.0-rc2/sc_finality_grandpa/index.html) finality gadget to provide
 [deterministic finality](https://substrate.dev/docs/en/knowledgebase/advanced/consensus#finality) to past blocks.
@@ -18,11 +18,11 @@ In this recipe we will learn about:
 ## The Block Import Pipeline
 
 The babe-grandpa node's block import pipeline will have three layers. The inner-most layer is the
-Substrate [`Client`](substrate.dev/rustdocs/v2.0.0-rc3/sc_service/client/struct.Client.html), as always. We
+Substrate [`Client`](https://substrate.dev/rustdocs/v2.0.0-rc3/sc_service/client/struct.Client.html), as always. We
 will wrap the client with a
-[`GrandpaBlockImport`](substrate.dev/rustdocs/v2.0.0-rc3/sc_finality_grandpa/struct.GrandpaBlockImport.html),
+[`GrandpaBlockImport`](https://substrate.dev/rustdocs/v2.0.0-rc3/sc_finality_grandpa/struct.GrandpaBlockImport.html),
 and wrap that with a
-[`BabeBlockImport`](substrate.dev/rustdocs/v2.0.0-rc3/sc_consensus_babe/struct.BabeBlockImport.html).
+[`BabeBlockImport`](https://substrate.dev/rustdocs/v2.0.0-rc3/sc_consensus_babe/struct.BabeBlockImport.html).
 
 We begin by creating the block import for GRANDPA. In addition to the block import itself, we get
 back a `grandpa_link`. This link is a channel over which the block import can communicate with the
@@ -38,7 +38,7 @@ let (grandpa_block_import, grandpa_link) =
 ```
 
 In addition to actual blocks, this same block import will be used to import
-[`Justifications`](substrate.dev/rustdocs/v2.0.0-rc3/sp_runtime/type.Justification.html), so we clone it
+[`Justifications`](https://substrate.dev/rustdocs/v2.0.0-rc3/sp_runtime/type.Justification.html), so we clone it
 right after constructing it.
 
 ```rust, ignore
@@ -94,7 +94,7 @@ provider.
 
 Any node that is acting as an authority and participating in BABE consensus, must run an `async`
 authorship task. We begin by creating an instance of
-[`BabeParams`](substrate.dev/rustdocs/v2.0.0-rc3/sc_consensus_babe/struct.BabeParams.html).
+[`BabeParams`](https://substrate.dev/rustdocs/v2.0.0-rc3/sc_consensus_babe/struct.BabeParams.html).
 
 ```rust, ignore
 let babe_config = sc_consensus_babe::BabeParams {
@@ -122,7 +122,7 @@ service.spawn_essential_task("babe", babe);
 
 Just as we needed an `async` worker to author blocks with BABE, we need an `async` worker to listen
 to and cast GRANDPA votes. Again, we begin by creating an instance of
-[`GrandpaParams`](substrate.dev/rustdocs/v2.0.0-rc3/sc_finality_grandpa/struct.GrandpaParams.html)
+[`GrandpaParams`](https://substrate.dev/rustdocs/v2.0.0-rc3/sc_finality_grandpa/struct.GrandpaParams.html)
 
 ```rust, ignore
 let grandpa_config = sc_finality_grandpa::GrandpaParams {
@@ -165,8 +165,8 @@ sc_finality_grandpa::setup_disabled_grandpa(
 ### Runtime APIs
 
 Both BABE and GRANDPA rely on getting their authority sets from the runtime via the
-[BabeAPI](substrate.dev/rustdocs/v2.0.0-rc3/sc_consensus_babe/trait.BabeApi.html) and the
-[GrandpaAPI](substrate.dev/rustdocs/v2.0.0-rc3/sp_finality_grandpa/trait.GrandpaApi.html). So trying to build
+[BabeAPI](https://substrate.dev/rustdocs/v2.0.0-rc3/sc_consensus_babe/trait.BabeApi.html) and the
+[GrandpaAPI](https://substrate.dev/rustdocs/v2.0.0-rc3/sp_finality_grandpa/trait.GrandpaApi.html). So trying to build
 this node with a runtime that does not provide these APIs will fail to compile.
 
 ### Pre-Runtime Digests
@@ -176,8 +176,8 @@ we also cannot use a runtime designed for this node with different consensus eng
 
 Because BABE is a slot-based consensus engine, it must inform the runtime which slot each block was
 intended for. To do this, it uses a technique known as a pre-runtime digest. It has two kinds,
-[`PrimaryPreDigest`](substrate.dev/rustdocs/v2.0.0-rc3/sc_consensus_babe/struct.PrimaryPreDigest.html) and
-[`SecondaryPlainPreDigest`](substrate.dev/rustdocs/v2.0.0-rc3/sc_consensus_babe/struct.SecondaryPlainPreDigest.html).
+[`PrimaryPreDigest`](https://substrate.dev/rustdocs/v2.0.0-rc3/sc_consensus_babe/struct.PrimaryPreDigest.html) and
+[`SecondaryPlainPreDigest`](https://substrate.dev/rustdocs/v2.0.0-rc3/sc_consensus_babe/struct.SecondaryPlainPreDigest.html).
 The BABE authorship task automatically inserts these digest items in each block it authors.
 
 Because the runtime needs to interpret these pre-runtime digests, they are not optional. That means
