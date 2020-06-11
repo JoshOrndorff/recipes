@@ -1,0 +1,187 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Run Basic pow",
+            "type": "shell",
+            "command": "cargo",
+            "args": ["run", "--release", "-p", "basic-pow", "--", "--dev"],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": [
+            {
+                "owner": "rust",
+                "fileLocation": ["relative", "${workspaceRoot}"],
+                "pattern": {
+                "regexp": "^(.*):(\\d+):(\\d+):\\s+(\\d+):(\\d+)\\s+(warning|error):\\s+(.*)$",
+                "file": 1,
+                "line": 2,
+                "column": 3,
+                "endLine": 4,
+                "endColumn": 5,
+                "severity": 6,
+                "message": 7
+                }
+            }
+            ]
+        },
+        {
+            "label": "Run Babe grandpa node",
+            "type": "shell",
+            "command": "cargo",
+            "args": ["run", "--release", "-p", "babe-grandpa-node", "--", "--dev"],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": [
+            {
+                "owner": "rust",
+                "fileLocation": ["relative", "${workspaceRoot}"],
+                "pattern": {
+                "regexp": "^(.*):(\\d+):(\\d+):\\s+(\\d+):(\\d+)\\s+(warning|error):\\s+(.*)$",
+                "file": 1,
+                "line": 2,
+                "column": 3,
+                "endLine": 4,
+                "endColumn": 5,
+                "severity": 6,
+                "message": 7
+                }
+            }
+            ]
+        },
+        {
+            "label": "Run Hybrid consensus",
+            "type": "shell",
+            "command": "cargo",
+            "args": ["run", "--release", "-p", "hybrid-consensus", "--", "--dev"],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": [
+            {
+                "owner": "rust",
+                "fileLocation": ["relative", "${workspaceRoot}"],
+                "pattern": {
+                "regexp": "^(.*):(\\d+):(\\d+):\\s+(\\d+):(\\d+)\\s+(warning|error):\\s+(.*)$",
+                "file": 1,
+                "line": 2,
+                "column": 3,
+                "endLine": 4,
+                "endColumn": 5,
+                "severity": 6,
+                "message": 7
+                }
+            }
+            ]
+        },
+        {
+            "label": "Run Kitchen node",
+            "type": "shell",
+            "command": "cargo",
+            "args": ["run", "--release", "-p", "kitchen-node", "--", "--dev"],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": [
+            {
+                "owner": "rust",
+                "fileLocation": ["relative", "${workspaceRoot}"],
+                "pattern": {
+                "regexp": "^(.*):(\\d+):(\\d+):\\s+(\\d+):(\\d+)\\s+(warning|error):\\s+(.*)$",
+                "file": 1,
+                "line": 2,
+                "column": 3,
+                "endLine": 4,
+                "endColumn": 5,
+                "severity": 6,
+                "message": 7
+                }
+            }
+            ]
+        },
+        {
+            "label": "Run Manual seal",
+            "type": "shell",
+            "command": "cargo",
+            "args": ["run", "--release", "-p", "manual-seal", "--", "--dev"],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": [
+            {
+                "owner": "rust",
+                "fileLocation": ["relative", "${workspaceRoot}"],
+                "pattern": {
+                "regexp": "^(.*):(\\d+):(\\d+):\\s+(\\d+):(\\d+)\\s+(warning|error):\\s+(.*)$",
+                "file": 1,
+                "line": 2,
+                "column": 3,
+                "endLine": 4,
+                "endColumn": 5,
+                "severity": 6,
+                "message": 7
+                }
+            }
+            ]
+        },
+        {
+            "label": "Run RPC node",
+            "type": "shell",
+            "command": "cargo",
+            "args": ["run", "--release", "-p", "rpc-node", "--", "--dev"],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": [
+            {
+                "owner": "rust",
+                "fileLocation": ["relative", "${workspaceRoot}"],
+                "pattern": {
+                "regexp": "^(.*):(\\d+):(\\d+):\\s+(\\d+):(\\d+)\\s+(warning|error):\\s+(.*)$",
+                "file": 1,
+                "line": 2,
+                "column": 3,
+                "endLine": 4,
+                "endColumn": 5,
+                "severity": 6,
+                "message": 7
+                }
+            }
+            ]
+        }
+    ]
+}
