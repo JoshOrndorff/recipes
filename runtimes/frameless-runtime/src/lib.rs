@@ -273,7 +273,7 @@ impl_runtime_apis! {
 
 			let raw_state_root = &sp_io::storage::root()[..];
 
-			let state_root = sp_core::H256::from(sp_io::hashing::blake2_256(raw_state_root));
+			let state_root = sp_core::H256::decode(&mut &raw_state_root[..]).unwrap();
 			header.state_root = state_root;
 			if_std!{
 				println!("Returning header: {:?}", header);
