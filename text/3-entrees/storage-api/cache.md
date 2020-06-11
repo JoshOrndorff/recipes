@@ -2,7 +2,8 @@
 
 _[`pallets/storage-cache`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/storage-cache)_
 
-Calls to runtime storage have an associated cost and developers should strive to minimize the number of calls.
+Calls to runtime storage have an associated cost and developers should strive to minimize the number
+of calls.
 
 ```rust, ignore
 decl_storage! {
@@ -20,7 +21,8 @@ decl_storage! {
 ## Copy Types
 
 For [`Copy`](https://doc.rust-lang.org/std/marker/trait.Copy.html) types, it is easy to reuse
-previous storage calls by simply reusing the value (which is automatically cloned upon reuse). In the code below, the second call is unnecessary:
+previous storage calls by simply reusing the value, which is automatically cloned upon reuse. In the
+code below, the second call is unnecessary:
 
 ```rust, ignore
 fn increase_value_no_cache(origin, some_val: u32) -> DispatchResult {

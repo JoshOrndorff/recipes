@@ -21,8 +21,8 @@ Assembly where the standard library is not available.
 
 Next, you'll find imports that come from various parts of the Substrate framework. All pallets will
 import from a few common crates including
-[`frame-support`](https://substrate.dev/rustdocs/v2.0.0-rc2/frame_support/index.html), and
-[`frame-system`](https://substrate.dev/rustdocs/v2.0.0-rc2/frame_system/index.html). Complex pallets will have many
+[`frame-support`](https://substrate.dev/rustdocs/v2.0.0-rc3/frame_support/index.html), and
+[`frame-system`](https://substrate.dev/rustdocs/v2.0.0-rc3/frame_system/index.html). Complex pallets will have many
 imports as we'll see later. The `hello-substrate` pallet uses these imports.
 
 ```rust, ignore
@@ -54,7 +54,7 @@ A Dispatchable call is a function that a blockchain user can call as part of an 
 "Extrinsic" is Substrate jargon meaning a call from outside of the chain. Most of the time they are
 transactions, and for now it is fine to think of them as transactions. Dispatchable calls are
 defined in the
-[`decl_module!` macro](https://substrate.dev/rustdocs/v2.0.0-rc2/frame_support/macro.decl_module.html).
+[`decl_module!` macro](https://substrate.dev/rustdocs/v2.0.0-rc3/frame_support/macro.decl_module.html).
 
 ```rust, ignore
 decl_module! {
@@ -73,7 +73,7 @@ decl_module! {
 
 As you can see, our `hello-substrate` pallet has a dispatchable call that takes a single argument,
 called `origin` which we'll investigate shortly. The call returns a
-[`DispatchResult`](https://substrate.dev/rustdocs/v2.0.0-rc2/frame_support/dispatch/type.DispatchResult.html) which
+[`DispatchResult`](https://substrate.dev/rustdocs/v2.0.0-rc3/frame_support/dispatch/type.DispatchResult.html) which
 can be either `Ok(())` indicating that the call succeeded, or an `Err` which we'll investigate in
 the [appetizer about errors](./3-errors.md).
 
@@ -105,14 +105,14 @@ pub fn say_hello(origin) -> DispatchResult {
 ```
 
 This function essentially does three things. First, it uses the
-[`ensure_signed` function](https://substrate.dev/rustdocs/v2.0.0-rc2/frame_system/fn.ensure_signed.html) to ensure
+[`ensure_signed` function](https://substrate.dev/rustdocs/v2.0.0-rc3/frame_system/fn.ensure_signed.html) to ensure
 that the caller of the function was a regular user who owns a private key. This function also
 returns who that caller was. We store the caller's identity in the `caller` variable.
 
 Second, it prints a message and logs the caller. Notice that we aren't using Rust's normal
 `println!` macro, but rather a special
-[`print` function](https://substrate.dev/rustdocs/v2.0.0-rc2/sp_runtime/fn.print.html) and
-[`debug::info!` macro](https://substrate.dev/rustdocs/v2.0.0-rc2/frame_support/debug/macro.info.html). The reason for
+[`print` function](https://substrate.dev/rustdocs/v2.0.0-rc3/sp_runtime/fn.print.html) and
+[`debug::info!` macro](https://substrate.dev/rustdocs/v2.0.0-rc3/frame_support/debug/macro.info.html). The reason for
 this is explained in the next section.
 
 Finally, the call returns `Ok(())` to indicate that the call has succeeded. At a glance it seems
@@ -134,10 +134,11 @@ for debugging.
 ![Substrate Architecture Diagram](../img/substrate-architecture.png)
 
 At the top of our pallet, we imported `sp_runtime`'s
-[`print` function](https://substrate.dev/rustdocs/v2.0.0-rc2/sp_runtime/fn.print.html). This special function allows
-the runtime to pass a message for printing to the outer part of the node which is not compiled to Wasm and does have access to the standard library and can perform regular IO.
-This function is only able to print items that implement the
-[`Printable` trait](https://substrate.dev/rustdocs/v2.0.0-rc2/sp_runtime/traits/trait.Printable.html). Luckily all
+[`print` function](https://substrate.dev/rustdocs/v2.0.0-rc3/sp_runtime/fn.print.html). This special function allows
+the runtime to pass a message for printing to the outer part of the node which is not compiled to
+Wasm and does have access to the standard library and can perform regular IO. This function is only
+able to print items that implement the
+[`Printable` trait](https://substrate.dev/rustdocs/v2.0.0-rc3/sp_runtime/traits/trait.Printable.html). Luckily all
 the primitive types already implement this trait, and you can implement the trait for your own
 datatypes too.
 
@@ -151,7 +152,7 @@ variable's content. The syntax inside the macro is very similar to what regular 
 
 **Runtime logger note:** When we execute the runtime in native, `debug::info!` messages are printed.
 However, if we execute the runtime in Wasm, then an additional step to initialise
-[RuntimeLogger](https://substrate.dev/rustdocs/v2.0.0-rc2/frame_support/debug/struct.RuntimeLogger.html) is required.
+[RuntimeLogger](https://substrate.dev/rustdocs/v2.0.0-rc3/frame_support/debug/struct.RuntimeLogger.html) is required.
 
 ## Installing the Pallet in a Runtime
 
@@ -170,8 +171,8 @@ super-runtime, this file is at `runtimes/super-runtime/Cargo.toml`.
 hello-substrate = { path = "../../pallets/hello-substrate", default-features = false }
 ```
 
-Because the runtime is compiled to both native and Wasm, we must ensure that our pallet is built to the
-correct target as well. At the bottom of the `Cargo.toml` file, we see this.
+Because the runtime is compiled to both native and Wasm, we must ensure that our pallet is built to
+the correct target as well. At the bottom of the `Cargo.toml` file, we see this.
 
 ```toml
 [features]
@@ -198,7 +199,7 @@ complex.
 ### Add it to `construct_runtime!`
 
 Finally, we add our pallet to the
-[`construct_runtime!` macro](https://substrate.dev/rustdocs/v2.0.0-rc2/frame_support/macro.construct_runtime.html).
+[`construct_runtime!` macro](https://substrate.dev/rustdocs/v2.0.0-rc3/frame_support/macro.construct_runtime.html).
 
 ```rust, ignore
 construct_runtime!(

@@ -43,6 +43,7 @@ to._ - [src](http://wiki.c2.com/?PrematureOptimization)
 
 **Rust API Guidelines**
 
+<!-- markdown-link-check-disable-next-line -->
 -   [Official Rust API Guidelines](https://rust-lang-nursery.github.io/api-guidelines/about.html)
 -   [Rust Unofficial Design Patterns](https://github.com/rust-unofficial/patterns)
 -   [Elegant Library API Guidelines](https://deterministic.space/elegant-apis-in-rust.html) by
@@ -56,10 +57,8 @@ We call an algorithm _efficient_ if its running time is polynomial in the size o
 _highly efficient_ if its running time is linear in the size of the input. It is important for all
 on-chain algorithms to be highly efficient, because they must scale linearly as the size of the
 Polkadot network grows. In contrast, off-chain algorithms are only required to be efficient. -
-[Web3 Research](http://research.web3.foundation/en/latest/polkadot/NPoS/1.intro/)
+[Web3 Research](https://research.web3.foundation/en/latest/polkadot/NPoS/)
 
-_See [Substrate Best Practices](https://substrate.dev/docs/en/tutorials/tcr/) for more details on
-how efficiency influences the runtime's economic security._
 
 **Related Reading**
 
@@ -152,7 +151,6 @@ To dive deeper down these 🐰 holes
 
 -   [RustLatam 2019 - Without Boats: Zero-Cost Async IO](https://www.youtube.com/watch?v=skos4B5x7qE)
 -   [Introduction to Async/Await Programming (withoutboats/wakers-i):](https://boats.gitlab.io/blog/post/wakers-i/)
--   [Futures (by Aaron Turon)](http://aturon.github.io/2016/08/11/futures/)
 
 **Projects**
 

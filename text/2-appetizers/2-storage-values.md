@@ -5,14 +5,14 @@ _[`pallets/single-value`](https://github.com/substrate-developer-hub/recipes/tre
 Storage is used for data that should be kept between blocks and accessible to future transactions.
 Most runtimes will have many storage values, and together the storage values make up the
 blockchain's "state". The storage values themselves are _not_ stored in the blocks. Instead the
-blocks contain extrinsics which represent _changes_ to the storage values. It is the job of each
-node in a blockchain network to keep track of the current storage. The current state of storage can
-be determined by executing all of the blocks in the chain.
+blocks contain extrinsics that represent _changes_ to the storage values. It is the job of each node
+in a blockchain network to keep track of the current storage. The current state of storage can be
+determined by executing all of the blocks in the chain.
 
 ## Declaring Storage
 
 A pallet's storage items are declared with the
-[`decl_storage!` macro](https://substrate.dev/rustdocs/v2.0.0-rc2/frame_support/macro.decl_storage.html).
+[`decl_storage!` macro](https://substrate.dev/rustdocs/v2.0.0-rc3/frame_support/macro.decl_storage.html).
 
 ```rust, ignore
 decl_storage! {
@@ -28,7 +28,7 @@ about this value much, and it is fine to use the name of the pallet itself.
 
 This pallet has two storage items, both of which are single storage values. Substrate's storage API
 also supports more complex storage types which are
-[covered in the entrees](../3-entrees/storage-api/index.html). The fundamentals for all types are
+[covered in the entrees](../3-entrees/storage-api/index.md). The fundamentals for all types are
 the same.
 
 Our first storage item is a `u32` value which is declared with this syntax
@@ -53,7 +53,7 @@ StoredAccount get(fn stored_account): T::AccountId;
 ## Reading and Writing to Storage
 
 Functions used to access a single storage value are defined in the
-[`StorageValue` trait](https://substrate.dev/rustdocs/v2.0.0-rc2/frame_support/storage/trait.StorageValue.html). In
+[`StorageValue` trait](https://substrate.dev/rustdocs/v2.0.0-rc3/frame_support/storage/trait.StorageValue.html). In
 this pallet, we use the most common method, `put`, but it is worth skimming the other methods so you
 know what is available.
 
@@ -83,7 +83,7 @@ let my_val = Self::stored_value();
 
 In terms of storage, the `set_account` method is quite similar to `set_value`, but it also
 demonstrates how to retreive the `AccountId` of the caller using the
-[`ensure_signed` function](https://substrate.dev/rustdocs/v2.0.0-rc2/frame_system/fn.ensure_signed.html).
+[`ensure_signed` function](https://substrate.dev/rustdocs/v2.0.0-rc3/frame_system/fn.ensure_signed.html).
 
 ```rust, ignore
 fn set_account(origin) -> DispatchResult {
@@ -95,14 +95,14 @@ fn set_account(origin) -> DispatchResult {
 }
 ```
 
-Because the `AccountId` type comes from the configuration trait, we must use slightly different syntax.
-Notice the `<T>` attached to the name of the storage value this time. Notice also that because
-`AccountId` is not primitive, we lend a reference to it rather than transferring ownership.
+Because the `AccountId` type comes from the configuration trait, we must use slightly different
+syntax. Notice the `<T>` attached to the name of the storage value this time. Notice also that
+because `AccountId` is not primitive, we lend a reference to it rather than transferring ownership.
 
 ## Constructing the Runtime
 
 We learned about the
-[`construct_runtime!` macro](https://substrate.dev/rustdocs/v2.0.0-rc2/frame_support/macro.construct_runtime.html) in
+[`construct_runtime!` macro](https://substrate.dev/rustdocs/v2.0.0-rc3/frame_support/macro.construct_runtime.html) in
 the previous section. Because this pallet uses storage items, we must add this to the line in
 construct runtime. In the Super Runtime, we see the additional `Storage` feature.
 

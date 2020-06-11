@@ -1,7 +1,7 @@
 # Storage API
 
 We've already encountered the
-[`decl_storage!` macro](https://substrate.dev/rustdocs/v2.0.0-rc2/frame_support/macro.decl_storage.html) in the
+[`decl_storage!` macro](https://substrate.dev/rustdocs/v2.0.0-rc3/frame_support/macro.decl_storage.html) in the
 appetizer on [storage items](../../2-appetizers/2-storage-values.md). There is a rich storage API in
 Substrate which we will explore in this section.
 
@@ -20,7 +20,8 @@ The previous _[single-value storage recipe](../../2-appetizers/2-storage-values.
 single value can be stored in runtime storage. In this section, we cover
 
 -   [caching values rather than calling to storage multiple times](./cache.md)
--   [storing sets, checking membership, and iteration](./sets-vecs-iteration.md)
+-   [Vec sets](./vec-set.md)
+-   [Map sets](./map-set.md)
 -   [efficient subgroup removal by key prefix with double maps](./double.md)
 -   [storing custom structs](./structs.md)
 -   [transient storage adapters by example of a ringbuffer queue](./ringbuffer.md)

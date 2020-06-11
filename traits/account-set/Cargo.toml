@@ -1,0 +1,25 @@
+[package]
+name = "account-set"
+version = "2.0.0-rc3"
+authors = ["Joshy Orndorff"]
+repository = 'https://github.com/substrate-developer-hub/recipes'
+edition = "2018"
+license = "GPL-3.0-or-later"
+description = "A trait that supplies a set of accounts for use in a Substrate runtime"
+
+[package.metadata.substrate]
+categories = [
+	"trait",
+	"accounts",
+	"recipe",
+]
+compatibility_version = "2.0.0-rc3"
+
+[features]
+default = ['std']
+std = [
+    'sp-std/std',
+]
+
+[dependencies]
+sp-std = { version = '2.0.0-rc3', default-features = false }

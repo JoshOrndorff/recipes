@@ -10,10 +10,10 @@ It is useful to recognize that
 
 To understand how the code in this repository is organized, let's first take a look at how a
 Substrate node is constructed. Each node has many components that manage things like the transaction
-queue, communicating over a P2P network, reaching consensus on the state of the blockchain,
-and the chain's actual runtime logic. Each aspect of the node is interesting in its own right, and
-the runtime is particularly interesting because it contains the business logic (aka "state
-transition function") that codifies the chain's functionality.
+queue, communicating over a P2P network, reaching consensus on the state of the blockchain, and the
+chain's actual runtime logic. Each aspect of the node is interesting in its own right, and the
+runtime is particularly interesting because it contains the business logic (aka "state transition
+function") that codifies the chain's functionality.
 
 Much, but not all, of the Recipes focuses on writing runtimes with FRAME, Parity's Framework for
 composing runtimes from individual building blocks called Pallets. Runtimes built with FRAME

@@ -5,9 +5,9 @@ _[`pallets/generic-event`](https://github.com/substrate-developer-hub/recipes/tr
 
 Having a [transaction](https://substrate.dev/docs/en/knowledgebase/getting-started/glossary#transaction) included in a
 block does not guarantee that the function executed successfully. As we saw in the previous recipe,
-many calls can cause errors, but the transaction may still be included in a block. To verify that functions have
-executed successfully, emit an [event](https://substrate.dev/docs/en/knowledgebase/getting-started/glossary#events) at
-the bottom of the function body.
+many calls can cause errors, but the transaction may still be included in a block. To verify that
+functions have executed successfully, emit an
+[event](https://substrate.dev/docs/en/knowledgebase/getting-started/glossary#events) at the bottom of the function body.
 
 Events notify the off-chain world of successful state transitions.
 
@@ -44,7 +44,7 @@ decl_module! {
 ## Declaring Events
 
 To declare an event, use the
-[`decl_event!` macro](https://substrate.dev/rustdocs/v2.0.0-rc2/frame_support/macro.decl_event.html). Like any rust
+[`decl_event!` macro](https://substrate.dev/rustdocs/v2.0.0-rc3/frame_support/macro.decl_event.html). Like any rust
 enum, Events have names and can optionally carry data with them. The syntax is slightly different
 depending on whether the events carry data of primitive types, or generic types from the pallet's
 configuration trait. These two techniques are demonstrated in the `simple-event` and `generic-event`

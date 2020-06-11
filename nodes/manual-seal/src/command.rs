@@ -1,6 +1,7 @@
 use crate::chain_spec;
 use crate::cli::Cli;
 use crate::service;
+// use crate::combined_service as service;
 use sc_cli::SubstrateCli;
 
 impl SubstrateCli for Cli {

@@ -13,10 +13,10 @@ Off-chain workers are asynchronously run during block import. Since ocws are not
 they run, at any single instance there could be multiple ocws running, being initiated by previous
 block imports. See diagram below.
 
-![More than one off-chain workers at a single instance](/img/multiple-ocws.png)
+![More than one off-chain workers at a single instance](../../img/multiple-ocws.png)
 
 The storage has a similar API usage as on-chain
-[`StorageValue`](/2-appetizers/2-storage-values.html) with `get`, `set`, and `mutate`. `mutate` is
+[`StorageValue`](../../2-appetizers/2-storage-values.md) with `get`, `set`, and `mutate`. `mutate` is
 using a [`compare-and-set`](https://en.wikipedia.org/wiki/Compare-and-swap) pattern. It compares the
 contents of a memory location with a given value and, only if they are the same, modifies the
 contents of that memory location to a new given value. This is done as a single atomic operation.
@@ -24,7 +24,7 @@ The atomicity guarantees that the new value is calculated based on up-to-date in
 value had been updated by another thread in the meantime, the write would fail.
 
 In this recipe, we will add a cache and lock over our previous
-[http fetching example](./http-json.html). If the cached value existed, we will return using the
+[http fetching example](./http-json.md). If the cached value existed, we will return using the
 cached value. Otherwise we acquire the lock and then fetch from github public API and save it to the
 cache.
 
@@ -58,7 +58,7 @@ fn fetch_if_needed() -> Result<(), Error<T>> {
 ```
 
 Looking at the
-[API doc](https://substrate.dev/rustdocs/v2.0.0-rc2/sp_runtime/offchain/storage/struct.StorageValueRef.html), we see
+[API doc](https://substrate.dev/rustdocs/v2.0.0-rc3/sp_runtime/offchain/storage/struct.StorageValueRef.html), we see
 there are two type of StorageValueRef, created via `::persistent()` and `::local()`. `::local()` is
 not fully implemented yet and `::persistent()` is enough for this use cases. We passed in a key as
 our storage key. As storage keys are namespaced globally, a good practice would be to prepend our
@@ -164,5 +164,5 @@ Finally, whether the `fetch_n_parse()` function success or not, we release the l
 
 ## Reference
 
--   [`StorageValueRef` API doc](https://substrate.dev/rustdocs/v2.0.0-rc2/sp_runtime/offchain/storage/struct.StorageValueRef.html)
+-   [`StorageValueRef` API doc](https://substrate.dev/rustdocs/v2.0.0-rc3/sp_runtime/offchain/storage/struct.StorageValueRef.html)
 -   [`example-offchain-worker` pallet in Substrate repo](https://github.com/paritytech/substrate/tree/master/frame/example-offchain-worker)

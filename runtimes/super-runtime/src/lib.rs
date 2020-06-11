@@ -17,9 +17,7 @@ pub mod genesis;
 use frame_system as system;
 use sp_api::impl_runtime_apis;
 use sp_core::{OpaqueMetadata, H256};
-use sp_runtime::traits::{
-	BlakeTwo256, Block as BlockT, IdentifyAccount, IdentityLookup, Verify,
-};
+use sp_runtime::traits::{BlakeTwo256, Block as BlockT, IdentifyAccount, IdentityLookup, Verify};
 use sp_runtime::{
 	create_runtime_str, generic,
 	traits::Saturating,
@@ -27,6 +25,7 @@ use sp_runtime::{
 	ApplyExtrinsicResult, MultiSignature,
 };
 use sp_std::prelude::*;
+use check_membership::{ loose as check_membership_loose, tight as check_membership_tight };
 
 #[cfg(feature = "std")]
 use sp_version::NativeVersion;
@@ -39,8 +38,7 @@ pub use frame_support::{
 	traits::Randomness,
 	weights::{
 		constants::{BlockExecutionWeight, ExtrinsicBaseWeight, RocksDbWeight, WEIGHT_PER_SECOND},
-		IdentityFee,
-		Weight,
+		IdentityFee, Weight,
 	},
 	StorageValue,
 };
@@ -119,7 +117,7 @@ parameter_types! {
 	pub const MaximumBlockWeight: Weight = 2 * WEIGHT_PER_SECOND;
 	pub const AvailableBlockRatio: Perbill = Perbill::from_percent(75);
 	/// Assume 10% of weight for average on_initialize calls.
-	pub const MaximumExtrinsicWeight: Weight = AvailableBlockRatio::get()
+	pub MaximumExtrinsicWeight: Weight = AvailableBlockRatio::get()
 		.saturating_sub(Perbill::from_percent(10)) * MaximumBlockWeight::get();
 	pub const MaximumBlockLength: u32 = 5 * 1024 * 1024;
 	pub const Version: RuntimeVersion = VERSION;
@@ -252,7 +250,16 @@ impl constant_config::Trait for Runtime {
 	type ClearFrequency = ClearFrequency;
 }
 
-impl check_membership::Trait for Runtime {
+// The following two configuration traits are for the loosely and tightly coupled variants
+// of the check membership pallet. Both pallets are located in the same `check-membership` crate.
+impl check_membership_loose::Trait for Runtime {
+	type Event = Event;
+	// You can choose either the `vec-set` or `map-set` implementation of the `AccountSet` trait
+	type MembershipSource = VecSet;
+	// type MembershipSource = MapSet;
+}
+
+impl check_membership_tight::Trait for Runtime {
 	type Event = Event;
 }
 
@@ -299,6 +306,10 @@ impl last_caller::Trait<last_caller::Instance1> for Runtime {
 }
 
 impl last_caller::Trait<last_caller::Instance2> for Runtime {
+	type Event = Event;
+}
+
+impl map_set::Trait for Runtime {
 	type Event = Event;
 }
 
@@ -367,7 +378,8 @@ construct_runtime!(
 		AddingMachine: adding_machine::{Module, Call, Storage},
 		BasicToken: basic_token::{Module, Call, Storage, Event<T>},
 		Charity: charity::{Module, Call, Storage, Event<T>},
-		CheckMembership: check_membership::{Module, Call, Storage, Event<T>},
+		CheckMembershipLoose: check_membership_loose::{Module, Call, Event<T>},
+		CheckMembershipTight: check_membership_tight::{Module, Call, Event<T>},
 		ConmpoundingInterest: compounding_interest::{Module, Call, Storage, Event},
 		ConstantConfig: constant_config::{Module, Call, Storage, Event},
 		DefaultInstance1: default_instance::{Module, Call, Storage, Event<T>},
@@ -379,6 +391,7 @@ construct_runtime!(
 		GenericEvent: generic_event::{Module, Call, Event<T>},
 		LastCaller1: last_caller::<Instance1>::{Module, Call, Storage, Event<T>},
 		LastCaller2: last_caller::<Instance2>::{Module, Call, Storage, Event<T>},
+		MapSet: map_set::{Module, Call, Storage, Event<T>},
 		RingbufferQueue: ringbuffer_queue::{Module, Call, Storage, Event<T>},
 		RandomnessDemo: randomness::{Module, Call, Storage, Event},
 		SimpleCrowdfund: simple_crowdfund::{Module, Call, Storage, Event<T>},

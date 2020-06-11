@@ -60,7 +60,7 @@ With our RPC written, we're ready to install it on our node. We begin with a few
 jsonrpc-core = "14.0.3"
 jsonrpc-core-client = "14.0.3"
 jsonrpc-derive = "14.0.3"
-sc-rpc = '2.0.0-rc2'
+sc-rpc = '2.0.0-rc3'
 ```
 
 Next, in our `rpc-node`'s `service.rs` file, we extend the service with our RPC. We've chosen to
@@ -254,8 +254,8 @@ $ curl http://localhost:9933 -H "Content-Type:application/json;charset=utf-8" -d
     }'
 ```
 
-As an exercise, change the storage values and confirm that the RPC provides the correct
-updated sum. Then call the RPC at an old block and confirm you get the old sum.
+As an exercise, change the storage values and confirm that the RPC provides the correct updated sum.
+Then call the RPC at an old block and confirm you get the old sum.
 
 ## Polkadot JS API
 

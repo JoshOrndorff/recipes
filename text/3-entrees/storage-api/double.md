@@ -4,7 +4,7 @@ _[`pallets/double-map`](https://github.com/substrate-developer-hub/recipes/tree/
 
 For some runtimes, it may be necessary to remove a subset of values in a key-value mapping. If the
 subset maintain an associated identifier type, this can be done in a clean way with the
-[`double_map`](https://substrate.dev/rustdocs/v2.0.0-rc2/frame_support/storage/trait.StorageDoubleMap.html) via the
+[`double_map`](https://substrate.dev/rustdocs/v2.0.0-rc3/frame_support/storage/trait.StorageDoubleMap.html) via the
 `remove_prefix` api.
 
 ```rust, ignore

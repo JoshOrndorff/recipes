@@ -19,10 +19,7 @@ use frame_support::{
 	traits::Get,
 	weights::{
 		constants::{BlockExecutionWeight, ExtrinsicBaseWeight, RocksDbWeight, WEIGHT_PER_SECOND},
-		Weight,
-		WeightToFeePolynomial,
-		WeightToFeeCoefficient,
-		WeightToFeeCoefficients,
+		Weight, WeightToFeeCoefficient, WeightToFeeCoefficients, WeightToFeePolynomial,
 	},
 };
 use frame_system as system;
@@ -45,9 +42,9 @@ use sp_version::RuntimeVersion;
 // These structs are used in one of the commented-by-default implementations of
 // transaction_payment::Trait. Don't warn when they are unused.
 #[allow(unused_imports)]
-use generic_asset::{AssetCurrency, AssetIdProvider, SpendingAssetCurrency};
-#[allow(unused_imports)]
 use frame_support::weights::IdentityFee;
+#[allow(unused_imports)]
+use generic_asset::{AssetCurrency, AssetIdProvider, SpendingAssetCurrency};
 
 // A few exports that help ease life for downstream crates.
 pub use balances::Call as BalancesCall;
@@ -125,7 +122,7 @@ parameter_types! {
 	pub const MaximumBlockWeight: Weight = 2 * WEIGHT_PER_SECOND;
 	pub const AvailableBlockRatio: Perbill = Perbill::from_percent(75);
 	/// Assume 10% of weight for average on_initialize calls.
-	pub const MaximumExtrinsicWeight: Weight = AvailableBlockRatio::get()
+	pub MaximumExtrinsicWeight: Weight = AvailableBlockRatio::get()
 		.saturating_sub(Perbill::from_percent(10)) * MaximumBlockWeight::get();
 	pub const MaximumBlockLength: u32 = 5 * 1024 * 1024;
 	pub const Version: RuntimeVersion = VERSION;
@@ -309,9 +306,9 @@ impl transaction_payment::Trait for Runtime {
 	// The asset in which fees will be collected.
 	// Enable exactly one of the following options.
 	type Currency = Balances; // The balances pallet (The most common choice)
-	// type Currency = FixedGenericAsset<Self>; // A generic asset whose ID is hard-coded above.
-	//type Currency = SpendingAssetCurrency<Self>; // A generic asset whose ID is stored in the
-	                                               // generic_asset pallet's runtime storage
+						  // type Currency = FixedGenericAsset<Self>; // A generic asset whose ID is hard-coded above.
+						  //type Currency = SpendingAssetCurrency<Self>; // A generic asset whose ID is stored in the
+						  // generic_asset pallet's runtime storage
 
 	// What to do when fees are paid. () means take no additional actions.
 	type OnTransactionPayment = ();

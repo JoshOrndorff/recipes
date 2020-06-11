@@ -4,7 +4,7 @@ _[`nodes/kitchen-node`](https://github.com/substrate-developer-hub/recipes/tree/
 
 This recipe demonstrates a general purpose Substrate node that supports most of the recipes'
 runtimes, and uses
-[Instant Seal consensus](https://substrate.dev/rustdocs/v2.0.0-rc2/sc_consensus_manual_seal/index.html).
+[Instant Seal consensus](https://substrate.dev/rustdocs/v2.0.0-rc3/sc_consensus_manual_seal/index.html).
 
 The kitchen node serves as the first point of entry for most aspiring chefs when they first
 encounter the recipes. By default it builds with the super-runtime, but it can be used with most of
@@ -41,18 +41,18 @@ complain if you try to import two crates under the name `runtime`.
 It is worth noting that this node does not work with _all_ of the recipes' runtimes. In particular,
 it is not compatible with the babe-grandpa runtime. That runtime uses the babe pallet which requires
 a node that will include a special
-[`PreRuntime` `DigestItem`](https://substrate.dev/rustdocs/v2.0.0-rc2/sp_runtime/enum.DigestItem.html#variant.PreRuntime).
+[`PreRuntime` `DigestItem`](https://substrate.dev/rustdocs/v2.0.0-rc3/sp_runtime/enum.DigestItem.html#variant.PreRuntime).
 
 ### Building a Service with the Runtime
 
 With a runtime of our choosing listed among our dependencies, we can provide the runtime to the
-[`ServiceBuilder`](https://substrate.dev/rustdocs/v2.0.0-rc2/sc_service/struct.ServiceBuilder.html). The
+[`ServiceBuilder`](https://substrate.dev/rustdocs/v2.0.0-rc3/sc_service/struct.ServiceBuilder.html). The
 `ServiceBuilder` is responsible for assembling all of the necessary pieces that a node will need,
-and creating a [`Substrate Service`](https://substrate.dev/rustdocs/v2.0.0-rc2/sc_service/struct.Service.html) which
+and creating a [`Substrate Service`](https://substrate.dev/rustdocs/v2.0.0-rc3/sc_service/struct.Service.html) which
 will manage the communication between them.
 
 We begin by invoking the
-[`native_executor_instance!` macro](https://substrate.dev/rustdocs/v2.0.0-rc2/sc_executor/macro.native_executor_instance.html).
+[`native_executor_instance!` macro](https://substrate.dev/rustdocs/v2.0.0-rc3/sc_executor/macro.native_executor_instance.html).
 This creates an executor which is responsible for executing transactions in the runtime and
 determining whether to run the native or Wasm version of the runtime.
 
@@ -78,7 +78,7 @@ let builder = sc_service::ServiceBuilder::new_full::<
 
 The instant seal consensus engine, and its cousin the manual seal consensus engine, are both
 included in the same
-[`sc-consensus-manual-seal` crate](https://substrate.dev/rustdocs/v2.0.0-rc2/sc_consensus_manual_seal/index.html).
+[`sc-consensus-manual-seal` crate](https://substrate.dev/rustdocs/v2.0.0-rc3/sc_consensus_manual_seal/index.html).
 The recipes has a recipe dedicated to using [manual seal](./manual-seal.md). Instant seal is a very
 convenient tool for when you are developing or experimenting with a runtime. The consensus engine
 simply authors a new block whenever a new transaction is available in the queue. This is similar to
@@ -90,15 +90,15 @@ without the UI.
 Installing the instant seal engine has three dependencies whereas the runtime had only one.
 
 ```toml
-sc-consensus = '0.8.0-rc2'
-sc-consensus-manual-seal = '0.8.0-rc2'
-sp-consensus = '0.8.0-rc2'
+sc-consensus = '0.8.0-rc3'
+sc-consensus-manual-seal = '0.8.0-rc3'
+sp-consensus = '0.8.0-rc3'
 ```
 
 ### The Proposer
 
 We begin by creating a
-[`Proposer`](https://substrate.dev/rustdocs/v2.0.0-rc2/sc_basic_authorship/struct.Proposer.html) which will be
+[`Proposer`](https://substrate.dev/rustdocs/v2.0.0-rc3/sc_basic_authorship/struct.Proposer.html) which will be
 responsible for creating proposing blocks in the chain.
 
 ```rust, ignore
@@ -136,7 +136,7 @@ let authorship_future = sc_consensus_manual_seal::run_instant_seal(
 ```
 
 With the future created, we can now kick it off using the service's
-[`spawn_essential_task` method](https://substrate.dev/rustdocs/v2.0.0-rc2/sc_service/struct.Service.html#method.spawn_essential_task).
+[`spawn_essential_task` method](https://substrate.dev/rustdocs/v2.0.0-rc3/sc_service/struct.Service.html#method.spawn_essential_task).
 
 ```rust, ignore
 service.spawn_essential_task("instant-seal", authorship_future);

@@ -1,7 +1,7 @@
 # Execution Schedule
 
-This pallet provides an abstraction over task execution scheduling and an API to govern the priority of tasks using
-a council of `AccountId`s stored in runtime storage.
+This pallet provides an abstraction over task execution scheduling and an API to govern the priority
+of tasks using a council of `AccountId`s stored in runtime storage.
 
 Although we could add more nuanced governance to the `Council`, the purpose of this example is to
 demonstrate how and when to use `on_initialize` and `on_finalize`.
@@ -26,5 +26,3 @@ pub struct Task<BlockNumber> {
     expected_execution: BlockNumber,
 }
 ```
-
-I wrote more about this [here](../../../../src/testing/schedule.md).
