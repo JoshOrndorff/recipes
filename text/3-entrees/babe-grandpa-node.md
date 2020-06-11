@@ -1,5 +1,6 @@
 ---
 title: Babe Grandpa Node
+slug: babe-grandpa-node
 code-link: https://github.com/substrate-developer-hub/recipes/tree/master/nodes/babe-grandpa-node
 ---
 
