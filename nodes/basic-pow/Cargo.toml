@@ -1,5 +1,5 @@
 [package]
-authors = ['Joshy Orndorff']
+authors = ['Substrate DevHub <https://github.com/substrate-developer-hub>']
 edition = '2018'
 name = 'basic-pow'
 repository = 'https://github.com/substrate-developer-hub/recipes'

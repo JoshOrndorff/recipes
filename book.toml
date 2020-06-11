@@ -1,5 +1,5 @@
 [book]
-authors = ["4meta5, Joshy Orndorff"]
+authors = ['Substrate DevHub <https://github.com/substrate-developer-hub>']
 language = "en"
 multilingual = false
 src = "text"

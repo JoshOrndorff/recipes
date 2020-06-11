@@ -2,7 +2,7 @@
 name = "hybrid-consensus"
 version = "2.0.0-dev"
 edition = "2018"
-authors = ['Joshy Orndorff']
+authors = ['Substrate DevHub <https://github.com/substrate-developer-hub>']
 repository = 'https://github.com/substrate-developer-hub/recipes'
 description = 'A Substrate node with PoW authoring and PoA finality'
 license = "GPL-3.0-or-later"
