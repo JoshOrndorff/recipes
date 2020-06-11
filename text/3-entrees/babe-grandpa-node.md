@@ -1,7 +1,7 @@
 ---
 title: Babe Grandpa Node
 slug: babe-grandpa-node
-code-link: https://github.com/substrate-developer-hub/recipes/tree/master/nodes/babe-grandpa-node
+code: https://github.com/substrate-developer-hub/recipes/tree/master/nodes/babe-grandpa-node
 ---
 
 The `babe-grandpa-node` uses the [BABE](https://crates.parity.io/sc_consensus_babe/index.html) Proof

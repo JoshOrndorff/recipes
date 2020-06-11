@@ -1,7 +1,7 @@
 ---
 title: Basic Proof of Work
 slug: basic-pow
-code-link: https://github.com/substrate-developer-hub/recipes/tree/master/nodes/basic-pow
+code: https://github.com/substrate-developer-hub/recipes/tree/master/nodes/basic-pow
 ---
 
 
