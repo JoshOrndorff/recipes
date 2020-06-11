@@ -2,7 +2,7 @@
 name = "kitchen-node"
 version = "2.0.0-dev"
 edition = "2018"
-authors = ['Joshy Orndorff', '4meta5', 'Jimmy Chu']
+authors = ['Substrate DevHub <https://github.com/substrate-developer-hub>']
 repository = 'https://github.com/substrate-developer-hub/recipes'
 description = 'An instant-sealing Substrate node. Can be used with most recipe runtimes.'
 license = "GPL-3.0-or-later"
