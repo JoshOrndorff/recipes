@@ -1,6 +1,7 @@
-# BABE and GRANDPA Node
-
-_[`nodes/babe-grandpa-node`](https://github.com/substrate-developer-hub/recipes/tree/master/nodes/babe-grandpa-node)_
+---
+title: Babe Grandpa Node
+code-link: https://github.com/substrate-developer-hub/recipes/tree/master/nodes/babe-grandpa-node
+---
 
 The `babe-grandpa-node` uses the [BABE](https://crates.parity.io/sc_consensus_babe/index.html) Proof
 of Authority consensus engine to determine who may author blocks, and the

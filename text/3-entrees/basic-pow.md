@@ -1,6 +1,8 @@
-# Basic Proof of Work
+---
+title: Basic Proof of Work
+code-link: https://github.com/substrate-developer-hub/recipes/tree/master/nodes/basic-pow
+---
 
-_[`nodes/basic-pow`](https://github.com/substrate-developer-hub/recipes/tree/master/nodes/basic-pow)_
 
 The `basic-pow` node demonstrates how to wire up a custom consensus engine into the Substrate
 Service. It uses a minimal proof of work consensus engine to reach agreement over the blockchain. It
