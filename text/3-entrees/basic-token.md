@@ -1,6 +1,8 @@
-# Basic Token
-
-_[`pallets/basic-token`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/basic-token)_
+---
+title: Basic Token
+slug: basic-token
+code: https://github.com/substrate-developer-hub/recipes/tree/master/pallets/basic-token
+---
 
 This recipe demonstrates a simple but functional token in a pallet.
 
