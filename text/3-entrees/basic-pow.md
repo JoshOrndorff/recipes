@@ -1,6 +1,6 @@
 ---
 title: Basic Proof of Work
-path: basic-pow
+path: /basic-pow
 code: https://github.com/substrate-developer-hub/recipes/tree/master/nodes/basic-pow
 ---
 
