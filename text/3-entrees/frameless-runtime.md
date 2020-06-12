@@ -3,11 +3,11 @@
 A piece of code can be considered a Substrate Runtime if it implements a few key traits. The most
 fundamental of these traits is the [Core API](https://crates.parity.io/sp_api/trait.Core.html). In
 practice, the runtime must also implement several other APIs which are described below. Typically
-Substrate runtimes are written using Parity's Framework for Runtime Aggregation from Modularized
-Entities, more commonly known as [FRAME](https://www.substrate.io/kb/runtime/frame). FRAME is an
+Substrate runtimes are written using Parity's "Framework for Runtime Aggregation from Modularized
+Entities", more commonly known as [FRAME](https://substrate.dev/docs/en/knowledgebase/runtime/frame). FRAME is an
 excellent way to write runtimes, and all the other runtimes in the Recipes use it. However runtimes
 may be sufficiently simple that FRAME is not necessary, and much can be learned by implementing a
-runtime that does not use FRAME. In this recipe we will do jsut that.
+runtime that does not use FRAME. In this recipe we will do just that.
 
 ## Imports and Type Definitions
 
