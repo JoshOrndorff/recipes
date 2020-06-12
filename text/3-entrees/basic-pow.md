@@ -57,30 +57,7 @@ Here we construct an instance of the
 providing it with references to our client, our `MinimalSha3Algorithm`, and some other necessary
 data.
 
-```rust
-builder
-	.with_import_queue(|_config, client, select_chain, _transaction_pool| {
-
-		let pow_block_import = sc_consensus_pow::PowBlockImport::new(
-			client.clone(),
-			client.clone(),
-			sha3pow::Sha3Algorithm,
-			0, // check inherents starting at block 0
-			select_chain,
-			inherent_data_providers.clone(),
-		);
-
-		let import_queue = sc_consensus_pow::import_queue(
-			Box::new(pow_block_import.clone()),
-			sha3pow::Sha3Algorithm,
-			inherent_data_providers.clone(),
-		)?;
-
-		import_setup = Some(pow_block_import);
-
-		Ok(import_queue)
-	})?;
-```
+`embed:../../nodes/basic-pow/src/service.rs`
 
 Once the `PowBlockImport` is constructed, we can use it to create an actual import queue that the
 service will use for importing blocks into the client.
