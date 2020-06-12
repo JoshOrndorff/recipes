@@ -236,7 +236,7 @@ another appetizer.
 ## Use This Recipe
 * _[View Code on Github](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/hello-substrate)_
 * _[Explore in Substrate Playground](https://playground-staging.substrate.dev/?deploy=recipes&files=/home/substrate/workspace/pallets/hello-substrate/src/lib.rs)_
-* _Use this pallet in you runtime_
+* _Use this pallet in your runtime_
 
 ```toml
 [dependencies.hello-substrate]
