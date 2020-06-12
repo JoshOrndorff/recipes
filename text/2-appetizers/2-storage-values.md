@@ -122,7 +122,7 @@ construct_runtime!(
 ## Use This Recipe
 * _[View Code on GitHub](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/single-value)_
 * _[Explore in Substrate Playground](https://playground-staging.substrate.dev/?deploy=recipes&files=/home/substrate/workspace/pallets/single-value/src/lib.rs)_
-* _Use this pallet in you runtime_
+* _Use this pallet in your runtime_
 
 ```toml
 [dependencies.single-value]
