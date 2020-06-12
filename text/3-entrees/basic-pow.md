@@ -57,7 +57,7 @@ Here we construct an instance of the
 providing it with references to our client, our `MinimalSha3Algorithm`, and some other necessary
 data.
 
-`embed:../../nodes/basic-pow/src/service.rs`
+`embed:../../nodes/basic-pow/src/service.rs#L55-80`
 
 Once the `PowBlockImport` is constructed, we can use it to create an actual import queue that the
 service will use for importing blocks into the client.
