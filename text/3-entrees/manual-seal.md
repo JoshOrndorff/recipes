@@ -87,7 +87,7 @@ We begin by creating a manual-seal import queue. This process is identical to cr
 queue used in the [Kitchen Node](./kitchen-node.md). It is also similar to, but simpler than, the
 [basic-pow](./basic-pow.md) import queue.
 
-```rust, ignore
+```rust
 .with_import_queue(|_config, client, _select_chain, _transaction_pool| {
 	Ok(sc_consensus_manual_seal::import_queue::<_, sc_client_db::Backend<_>>(Box::new(client)))
 })?;
@@ -100,7 +100,7 @@ The light client is not yet supported in this node, but it likely will be in the
 typically be used for learning, experimenting, and testing in a single-node environment this
 restriction should not cause many problems.. Instead we mark it as `unimplemented!`.
 
-```rust, ignore
+```rust
 /// Builds a new service for a light client.
 pub fn new_light(_config: Configuration) -> Result<impl AbstractService, ServiceError>
 {
@@ -124,7 +124,7 @@ earlier. This process is nearly identical to those described in the
 
 As prep work, we make a type alias,
 
-```rust, ignore
+```rust
 type RpcExtension = jsonrpc_core::IoHandler<sc_rpc::Metadata>;
 ```
 
@@ -132,12 +132,12 @@ Next we create a channel over which the rpc handler and the authorship task can 
 another. The RPC handler will send messages asking to create or finalize a block and the import
 queue will receive the message and do so.
 
-```rust, ignore
+```rust
 // channel for the rpc handler to communicate with the authorship task.
 let (command_sink, commands_stream) = futures::channel::mpsc::channel(1000);
 ```
 
-```rust, ignore
+```rust
 let service = builder
 	// manual-seal relies on receiving sealing requests aka EngineCommands over rpc.
 	.with_rpc_extensions(|_| -> Result<RpcExtension, _> {
@@ -157,7 +157,7 @@ let service = builder
 As with every authoring engine, manual seal needs to be run as an `async` authoring tasks. Here we
 provide the receiving end of the channel we created earlier.
 
-```rust, ignore
+```rust
 // Background authorship future.
 let authorship_future = manual_seal::run_manual_seal(
 		Box::new(service.client()),
@@ -173,7 +173,7 @@ let authorship_future = manual_seal::run_manual_seal(
 With the future created, we can now kick it off using the service's
 [`spawn_essential_task` method](https://crates.parity.io/sc_service/struct.Service.html#method.spawn_essential_task).
 
-```rust, ignore
+```rust
 // we spawn the future on a background thread managed by service.
 service.spawn_essential_task("manual-seal", authorship_future);
 ```
@@ -193,14 +193,14 @@ In the same directory for the manual seal node is a file called `combined_servic
 contains modified code of the `service.rs` file we just looked at in the section above. Some modification have been made. These modifications are
 numbered and begin at line 85 in the source.
 
-```rust, ignore
+```rust
 let pool = service.transaction_pool().pool().clone();
 ```
 
 The first step is to create an instance of a transaction pool that will be shared between the
 `pool_stream` which receives events whenever a new transaction is imported and the service builder.
 
-```rust, ignore
+```rust
 let pool_stream = pool
 	.validated_pool()
 	.import_notification_stream()
@@ -219,7 +219,7 @@ Next we implement the instant seal just as it's implemented under the covers in 
 `run_instant_seal`. Namely, we make sure that any new notifications we will submit an RPC
 `EngineCommand` to seal a new block.
 
-```rust, ignore
+```rust
 let combined_stream = futures::stream::select(commands_stream, pool_stream);
 ```
 
@@ -227,7 +227,7 @@ We combine the futures using the `select` utility which will receive events from
 streams we pass to it. In this case, we're passing all notifications received from the manual seal
 stream and the instant seal stream together.
 
-```rust, ignore
+```rust
 let authorship_future = manual_seal::run_manual_seal(
 	Box::new(service.client()),
 	proposer,

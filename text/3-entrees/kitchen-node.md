@@ -56,7 +56,7 @@ We begin by invoking the
 This creates an executor which is responsible for executing transactions in the runtime and
 determining whether to run the native or Wasm version of the runtime.
 
-```rust_ignore
+```rust
 native_executor_instance!(
 	pub Executor,
 	runtime::api::dispatch,
@@ -67,7 +67,7 @@ native_executor_instance!(
 Finally, we create a new `ServiceBuilder` for a full node. (The `$` in the syntax is because we are
 in a [macro definition](https://doc.rust-lang.org/book/ch19-06-macros.html).
 
-```rust, ignore
+```rust
 let builder = sc_service::ServiceBuilder::new_full::<
 	runtime::opaque::Block, runtime::RuntimeApi, crate::service::Executor
 >($config)?
@@ -101,7 +101,7 @@ We begin by creating a
 [`Proposer`](https://crates.parity.io/sc_basic_authorship/struct.Proposer.html) which will be
 responsible for creating proposing blocks in the chain.
 
-```rust, ignore
+```rust
 let proposer = sc_basic_authorship::ProposerFactory::new(
 	service.client().clone(),
 	service.transaction_pool(),
@@ -114,7 +114,7 @@ Next we make a manual-seal import queue. This process is identical to creating t
 in the [Manual Seal Node](./manual-seal.md). It is also similar to, but simpler than, the
 [basic-pow](./basic-pow.md) import queue.
 
-```rust, ignore
+```rust
 .with_import_queue(|_config, client, _select_chain, _transaction_pool| {
 	Ok(sc_consensus_manual_seal::import_queue::<_, sc_client_db::Backend<_>>(Box::new(client)))
 })?;
@@ -124,7 +124,7 @@ in the [Manual Seal Node](./manual-seal.md). It is also similar to, but simpler 
 
 As with every authoring engine, instant seal needs to be run as an `async` authoring task.
 
-```rust, ignore
+```rust
 let authorship_future = sc_consensus_manual_seal::run_instant_seal(
 	Box::new(service.client()),
 	proposer,
@@ -138,7 +138,7 @@ let authorship_future = sc_consensus_manual_seal::run_instant_seal(
 With the future created, we can now kick it off using the service's
 [`spawn_essential_task` method](https://crates.parity.io/sc_service/struct.Service.html#method.spawn_essential_task).
 
-```rust, ignore
+```rust
 service.spawn_essential_task("instant-seal", authorship_future);
 ```
 
@@ -149,7 +149,7 @@ The light client is not yet supported in this node, but it likely will be in the
 typically be used for learning, experimenting, and testing in a single-node environment this
 restriction should not cause many problems.. Instead we mark it as `unimplemented!`.
 
-```rust, ignore
+```rust
 /// Builds a new service for a light client.
 pub fn new_light(_config: Configuration) -> Result<impl AbstractService, ServiceError>
 {

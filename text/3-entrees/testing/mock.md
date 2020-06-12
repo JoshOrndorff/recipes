@@ -7,7 +7,7 @@ There are two main patterns on writing tests for pallets. We can put the tests:
 1. At the bottom of the pallet, place unit tests in a separate Rust module with a special
    compilation attribute:
 
-    ```rust, ignore
+    ```rust
     #[cfg(test)]
     mod tests {
     	// -- snip --
@@ -17,14 +17,14 @@ There are two main patterns on writing tests for pallets. We can put the tests:
 2. In a separate file called `tests.rs` inside `src` folder, and conditionally include tests inside
    the main `lib.rs`. At the top of the `lib.rs`
 
-    ```rust, ignore
+    ```rust
     #[cfg(test)]
     mod tests;
     ```
 
 Now, to use the logic from the pallet under test, bring `Module` and `Trait` into scope.
 
-```rust, ignore
+```rust
 use crate::{Module, Trait};
 ```
 
@@ -33,7 +33,7 @@ use crate::{Module, Trait};
 Before we create the mock runtime that take our pallet to run tests, we first need to create the
 outer environment for the runtime as follows:
 
-```rust, ignore
+```rust
 use support::{impl_outer_event, impl_outer_origin, parameter_types};
 use runtime_primitives::{Perbill, traits::{IdentityLookup, BlakeTwo256}, testing::Header};
 use runtime_io;
@@ -66,7 +66,7 @@ impl_outer_event! {
 
 Now, declare the mock runtime as a unit structure
 
-```rust, ignore
+```rust
 #[derive(Clone, PartialEq, Eq, Debug)]
 pub struct TestRuntime;
 ```
@@ -78,7 +78,7 @@ The mock runtime also needs to implement the tested pallet's `Trait`. If it is u
 the pallet's `Event` type, the type can be set to `()`. See further below to test the pallet's
 `Event` enum.
 
-```rust, ignore
+```rust
 impl Trait for TestRuntime {
 	type Event = ();
 }
@@ -86,7 +86,7 @@ impl Trait for TestRuntime {
 
 Next, we create a new type that wraps the mock `TestRuntime` in the pallet's `Module`.
 
-```rust, ignore
+```rust
 pub type TestPallet = Module<TestRuntime>;
 ```
 
@@ -95,7 +95,7 @@ pallet's `Module`, which is what is ultimately being tested.
 
 In many cases, the pallet's `Trait` is further bound by `system::Trait` like:
 
-```rust, ignore
+```rust
 pub trait Trait: system::Trait {
 	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
 }
@@ -104,7 +104,7 @@ pub trait Trait: system::Trait {
 The mock runtime must inherit and define the `system::Trait` associated types. To do so, `impl` the
 `system::Trait` for `TestRuntime` with types created previously and imported from other crates.
 
-```rust, ignore
+```rust
 #[derive(Clone, PartialEq, Eq, Debug)]
 pub struct TestRuntime;
 
@@ -154,7 +154,7 @@ With this, it is possible to use this type in the unit tests. For example, the b
 set with
 [`set_block_number`](https://crates.parity.io/frame_system/struct.Module.html#method.set_block_number)
 
-```rust, ignore
+```rust
 #[test]
 fn add_emits_correct_event() {
 	// ExtBuilder syntax is explained further below
@@ -169,7 +169,7 @@ fn add_emits_correct_event() {
 
 To build the test runtime environment, import `runtime_io`
 
-```rust, ignore
+```rust
 use runtime_io;
 ```
 
@@ -202,7 +202,7 @@ In
 use the `balances::GenesisConfig` and the pallet's `Genesis::<TestRuntime>` to set the balances of
 the test accounts and establish council membership in the returned test environment.
 
-```rust, ignore
+```rust
 pub fn new_test_ext() -> runtime_io::TestExternalities {
 	let mut t = system::GenesisConfig::default().build_storage::<TestRuntime>().unwrap();
 	balances::GenesisConfig::<TestRuntime> {
@@ -241,7 +241,7 @@ More specifically, this sets the `AccountId`s in the range of `[1, 7]` inclusive
 the `council`. This is expressed in the `decl_module` block with the addition of an
 `add_extra_genesis` block,
 
-```rust, ignore
+```rust
 add_extra_genesis {
 	build(|config| {
 		// ..other stuff..
@@ -254,7 +254,7 @@ To use `new_test_ext` in a runtime test, we call the method and call
 [`execute_with`](https://crates.parity.io/sp_state_machine/struct.TestExternalities.html#method.execute_with)
 on the returned `runtime_io::TestExternalities`
 
-```rust, ignore
+```rust
 #[test]
 fn fake_test() {
 	new_test_ext().execute_with(|| {
@@ -273,7 +273,7 @@ _[`pallets/struct-storage`](https://github.com/substrate-developer-hub/recipes/t
 Another approach providing for a more flexible runtime test environment, instantiates a unit struct
 `ExtBuilder`,
 
-```rust, ignore
+```rust
 pub struct ExtBuilder;
 ```
 
@@ -289,7 +289,7 @@ the runtime to access features of the outer node such as storage or offchain wor
 
 In this case, create a mock storage from the default genesis configuration.
 
-```rust, ignore
+```rust
 impl ExtBuilder {
 	pub fn build() -> runtime_io::TestExternalities {
 		let mut storage = system::GenesisConfig::default().build_storage::<TestRuntime>().unwrap();
@@ -300,7 +300,7 @@ impl ExtBuilder {
 
 which calls some methods to create a test environment,
 
-```rust, ignore
+```rust
 #[test]
 fn fake_test_example() {
 	ExtBuilder::build().execute_with(|| {
@@ -314,7 +314,7 @@ parameter) will require transactions coming from an `Origin`. This requires impo
 [`impl_outer_origin`](https://crates.parity.io/frame_support/macro.impl_outer_origin.html) macro
 from `support`
 
-```rust, ignore
+```rust
 use support::{impl_outer_origin};
 
 impl_outer_origin!{
@@ -327,7 +327,7 @@ It is possible to place signed transactions as parameters in runtime methods tha
 [full code in the kitchen](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/hello-substrate),
 but this looks like
 
-```rust, ignore
+```rust
 #[test]
 fn last_value_updates() {
 	ExtBuilder::build().execute_with(|| {
@@ -345,7 +345,7 @@ Note that the input to `Origin::signed` is the `system::Trait`'s `AccountId` typ
 as it conforms to the
 [trait bound](https://crates.parity.io/frame_system/trait.Trait.html#associatedtype.AccountId),
 
-```rust, ignore
+```rust
 pub trait Trait: 'static + Eq + Clone {
 	//...
 	type AccountId: Parameter + Member + MaybeSerializeDeserialize + Debug + MaybeDisplay + Ord + Default;

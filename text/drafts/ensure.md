@@ -13,7 +13,7 @@ checks at the top of function bodies in Solidity contracts.
 In the set storage and iteration recipe, a vector was stored in the runtime to
 allow for simple membership checks for methods only available to members.
 
-```rust, ignore
+```rust
 decl_storage! {
 	trait Store for Module<T: Trait> as VecMap {
         Members get(fn members): Vec<T::AccountId>;
@@ -30,7 +30,7 @@ impl<T: Trait> Module<T> {
 "_By returning `bool`, we can easily use these methods in `ensure!` statements to verify relevant
 state conditions before making requests in the main runtime methods._"
 
-```rust, ignore
+```rust
 fn member_action(origin) -> Result {
     let member = ensure_signed(origin)?;
     ensure!(Self::is_member(&member), "not a member => cannot do action");

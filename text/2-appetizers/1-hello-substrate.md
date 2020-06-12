@@ -13,7 +13,7 @@ The very first line of code tells the rust compiler that this crate should not u
 library except when explicitly told to. This is useful because Substrate runtimes compile to Web
 Assembly where the standard library is not available.
 
-```rust, ignore
+```rust
 #![cfg_attr(not(feature = "std"), no_std)]
 ```
 
@@ -25,7 +25,7 @@ import from a few common crates including
 [`frame-system`](https://crates.parity.io/frame_system/index.html). Complex pallets will have many
 imports as we'll see later. The `hello-substrate` pallet uses these imports.
 
-```rust, ignore
+```rust
 use frame_support::{ decl_module, dispatch::DispatchResult, debug };
 use frame_system::{ self as system, ensure_signed };
 use sp_runtime::print;
@@ -44,7 +44,7 @@ used to access features from other pallets, or [constants](../3-entrees/constant
 the pallet's behavior. This pallet is simple enough that our configuration trait can remain empty,
 although it must still exist.
 
-```rust, ignore
+```rust
 pub trait Trait: system::Trait {}
 ```
 
@@ -56,7 +56,7 @@ transactions, and for now it is fine to think of them as transactions. Dispatcha
 defined in the
 [`decl_module!` macro](https://crates.parity.io/frame_support/macro.decl_module.html).
 
-```rust, ignore
+```rust
 decl_module! {
 	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
 
@@ -89,7 +89,7 @@ the recipes pallets, we will simply use the default weight as we have done here.
 
 Let's take a closer look at our dispatchable call.
 
-```rust, ignore
+```rust
 pub fn say_hello(origin) -> DispatchResult {
 	// Ensure that the caller is a regular keypair account
 	let caller = ensure_signed(origin)?;
@@ -189,7 +189,7 @@ Next we must implement the pallet's configuration trait. This happens in the run
 file. In the case of the super-runtime, this file is at `runtimes/super-runtime/src/lib.rs`. Because
 this pallet's configuration trait is trivial, so is implementing it.
 
-```rust ignore
+```rust
 impl hello_substrate::Trait for Runtime {}
 ```
 
@@ -201,7 +201,7 @@ complex.
 Finally, we add our pallet to the
 [`construct_runtime!` macro](https://crates.parity.io/frame_support/macro.construct_runtime.html).
 
-```rust, ignore
+```rust
 construct_runtime!(
 	pub enum Runtime where
 		Block = Block,

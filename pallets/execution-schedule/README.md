@@ -18,7 +18,7 @@ This example also demonstrates
 The context of the example is scheduling the execution of tasks in a queue stored in the runtime.
 Tasks are structs declared like
 
-```rust, ignore
+```rust
 pub struct Task<BlockNumber> {
     id: TaskId,
     priority_score: PriorityScore,

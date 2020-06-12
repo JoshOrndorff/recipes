@@ -15,7 +15,7 @@ pallet; we simply maintain its membership. Using the set is demonstrated in the 
 [pallet coupling](../pallet-coupling.md). We provide dispatchable calls to add and remove members,
 ensuring that the number of members never exceeds a hard-coded maximum.
 
-```rust, ignore
+```rust
 /// A maximum number of members. When membership reaches this number, no new members may join.
 pub const MAX_MEMBERS: u32 = 16;
 ```
@@ -27,7 +27,7 @@ We will store the members of our set as the keys in one of Substrate's
 a recipe specifically about [using storage maps](./storage-maps.md). The storage map itself does not
 track its size internally, so we introduce a second storage value for this purpose.
 
-```rust, ignore
+```rust
 decl_storage! {
 	trait Store for Module<T: Trait> as VecMap {
 		// The set of all members.
@@ -48,7 +48,7 @@ Any user may join the membership set by calling the `add_member` dispatchable, s
 not already a member and the membership limit has not been reached. We check for these two
 conditions first, and then insert the new member only after we are sure it is safe to do so.
 
-```rust, ignore
+```rust
 fn add_member(origin) -> DispatchResult {
 	let new_member = ensure_signed(origin)?;
 
@@ -76,7 +76,7 @@ Removing a member is straightforward. We begin by looking for the caller in the 
 present, there is no work to be done. If the caller is present, we simply remove them and update the
 size of the set.
 
-```rust, ignore
+```rust
 fn remove_member(origin) -> DispatchResult {
 	let old_member = ensure_signed(origin)?;
 

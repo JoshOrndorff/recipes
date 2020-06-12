@@ -10,7 +10,7 @@ To use a balance type in the runtime, import the
 [`Currency`](https://crates.parity.io/frame_support/traits/trait.Currency.html) trait from
 `frame_support`.
 
-```rust, ignore
+```rust
 use support::traits::Currency;
 ```
 
@@ -19,7 +19,7 @@ The `Currency` trait provides an abstraction over a
 from your pallet, include an associated type with the `Currency` trait bound in your pallet's
 configuration trait.
 
-```rust, ignore
+```rust
 pub trait Trait: system::Trait {
 	type Currency: Currency<Self::AccountId>;
 }
@@ -29,14 +29,14 @@ Defining an associated type with this trait bound allows this pallet to access t
 of [`Currency`](https://crates.parity.io/frame_support/traits/trait.Currency.html). For example, it
 is straightforward to check the total issuance of the system:
 
-```rust, ignore
+```rust
 // in decl_module block
 T::Currency::total_issuance();
 ```
 
 As promised, it is also possible to type alias a balances type for use in the runtime:
 
-```rust, ignore
+```rust
 type BalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::Balance;
 ```
 
@@ -54,7 +54,7 @@ Substrate's [Treasury pallet](https://crates.parity.io/pallet_treasury/index.htm
 [`ReservableCurrency`](https://crates.parity.io/frame_support/traits/trait.ReservableCurrency.html)
 trait. The import and associated type declaration follow convention
 
-```rust, ignore
+```rust
 use frame_support::traits::{Currency, ReservableCurrency};
 
 pub trait Trait: system::Trait {
@@ -65,7 +65,7 @@ pub trait Trait: system::Trait {
 To lock or unlock some quantity of funds, it is sufficient to invoke `reserve` and `unreserve`
 respectively
 
-```rust, ignore
+```rust
 pub fn reserve_funds(origin, amount: BalanceOf<T>) -> DispatchResult {
 	let locker = ensure_signed(origin)?;
 
@@ -79,7 +79,7 @@ pub fn reserve_funds(origin, amount: BalanceOf<T>) -> DispatchResult {
 }
 ```
 
-```rust, ignore
+```rust
 pub fn unreserve_funds(origin, amount: BalanceOf<T>) -> DispatchResult {
 	let unlocker = ensure_signed(origin)?;
 
@@ -101,21 +101,21 @@ trait for more nuanced handling of capital locking based on time increments. Thi
 useful in the context of economic systems that enforce accountability by collateralizing fungible
 resources. Import this trait in the usual way
 
-```rust, ignore
+```rust
 use frame_support::traits::{LockIdentifier, LockableCurrency}
 ```
 
 To use `LockableCurrency`, it is necessary to define a
 [`LockIdentifier`](https://crates.parity.io/frame_support/traits/type.LockIdentifier.html).
 
-```rust, ignore
+```rust
 const EXAMPLE_ID: LockIdentifier = *b"example ";
 ```
 
 By using this `EXAMPLE_ID`, it is straightforward to define logic within the runtime to schedule
 locking, unlocking, and extending existing locks.
 
-```rust, ignore
+```rust
 fn lock_capital(origin, amount: BalanceOf<T>) -> DispatchResult {
 	let user = ensure_signed(origin)?;
 
@@ -142,7 +142,7 @@ To manage this supply adjustment, the
 [`OnUnbalanced`](https://crates.parity.io/frame_support/traits/trait.OnUnbalanced.html) handler is
 often used. An example might look something like
 
-```rust, ignore
+```rust
 pub fn reward_funds(origin, to_reward: T::AccountId, reward: BalanceOf<T>) {
 	let _ = ensure_signed(origin)?;
 

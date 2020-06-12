@@ -7,7 +7,7 @@ subset maintain an associated identifier type, this can be done in a clean way w
 [`double_map`](https://crates.parity.io/frame_support/storage/trait.StorageDoubleMap.html) via the
 `remove_prefix` api.
 
-```rust, ignore
+```rust
 pub type GroupIndex = u32; // this is Encode (which is necessary for double_map)
 
 decl_storage! {
@@ -27,7 +27,7 @@ For the purposes of this example, store the scores of each member in a map that 
 `u32` value with two keys: (1) a `GroupIndex` identifier, and (2) the member's `AccountId`. This
 allows for efficient removal of all values associated with a specific `GroupIndex` identifier.
 
-```rust, ignore
+```rust
 fn remove_group_score(origin, group: GroupIndex) -> DispatchResult {
 	let member = ensure_signed(origin)?;
 

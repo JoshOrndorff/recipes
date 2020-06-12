@@ -7,7 +7,7 @@ For example, assume an object's hash the unique identifier (key) in a map define
 `decl_storage` block. Before adding a new `(key, value)` pair to the map, verify that the key (hash)
 does not already have an associated value in the map.
 
-```rust, ignore
+```rust
 fn insert_value(origin, hash: Hash, value: u32) {
     // check that key doesn't have an associated value
     ensure!( !(Self::map::exists(&hash)), "key already has an associated value" );

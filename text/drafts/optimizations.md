@@ -91,7 +91,7 @@ dark magic that is `unsafe`_
 To access an element in a specific position, use the `get()` method. This method performs a double
 bound check.
 
-```rust, ignore
+```rust
 for arr in array_of_arrays {
     if let Some(elem) = arr.iter().get(1738) {
         println!("{}", elem);
@@ -108,7 +108,7 @@ If bound checking has already been performed independently of the call, we can i
 `.getunchecked()` to access the element. Although this is `unsafe` to use, it is equivalent to C/C++
 indexing, thereby improving performance when we already know the element's location.
 
-```rust, ignore
+```rust
 for arr in array_of_arrays {
     println!("{}", unsafe { arr.get_unchecked(1738) })
 }

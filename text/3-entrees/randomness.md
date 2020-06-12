@@ -56,7 +56,7 @@ To bring a randomness source into scope, we include it in our configuration trai
 appropriate trait bound. This pallet, being a demo, will use two different sources. Using multiple
 sources is not necessary in practice.
 
-```rust, ignore
+```rust
 pub trait Trait: system::Trait {
 	type Event: From<Event> + Into<<Self as system::Trait>::Event>;
 
@@ -83,7 +83,7 @@ rather than just the previous 1.
 
 Calling the randomness source from rust code is straightforward.
 
-```rust, ignore
+```rust
 let random_seed = T::CollectiveFlipRandomnessSource::random_seed();
 let random_result = T::CollectiveFlipRandomnessSource::random(&subject);
 ```
@@ -104,7 +104,7 @@ can be used to provide a random seed.
 Because we are accessing the randomness via the `Randomness` trait, the calls look the same as
 before.
 
-```rust, ignore
+```rust
 let random_seed = T::BabeRandomnessSource::random_seed();
 let random_result = T::BabeRandomnessSource::random(&subject);
 ```

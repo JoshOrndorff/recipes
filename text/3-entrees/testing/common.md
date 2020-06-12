@@ -20,7 +20,7 @@ In
 [`pallets/adding-machine`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/adding-machine),
 the runtime method `add` checks for overflow
 
-```rust, ignore
+```rust
 decl_module! {
     pub struct Module<T: Trait> for enum Call where origin: T::Origin {
         fn deposit_event() = default;
@@ -41,7 +41,7 @@ decl_module! {
 
 The test below verifies that the expected error is thrown for a specific case of overflow.
 
-```rust, ignore
+```rust
 #[test]
 fn overflow_fails() {
 	ExtBuilder::build().execute_with(|| {
@@ -56,7 +56,7 @@ fn overflow_fails() {
 This requires importing the `assert_err` macro from `support`. With all the previous imported
 objects,
 
-```rust, ignore
+```rust
 #[cfg(test)]
 mod tests {
 	use support::{assert_err, impl_outer_event, impl_outer_origin, parameter_types};
@@ -75,7 +75,7 @@ _[pallets/single-value](https://github.com/substrate-developer-hub/recipes/tree/
 Changes to storage can be checked by direct calls to the storage values. The syntax is the same as
 it would be in the pallet's runtime methods.
 
-```rust, ignore
+```rust
 use crate::*;
 
 #[test]
@@ -92,7 +92,7 @@ fn set_value_works() {
 
 For context, the tested pallets's `decl_storage` block looks like
 
-```rust, ignore
+```rust
 decl_storage! {
   trait Store for Module<T: Trait> as SingleValue {
     StoredValue get(fn stored_value): u32;
@@ -106,7 +106,7 @@ decl_storage! {
 The common way of testing expected event emission behavior requires importing `support`'s
 [`impl_outer_event!`](https://crates.parity.io/frame_support/macro.impl_outer_event.html) macro
 
-```rust, ignore
+```rust
 use support::impl_outer_event;
 ```
 
@@ -114,7 +114,7 @@ The `TestEvent` enum imports and uses the pallet's `Event` enum. The new local p
 `hello_substrate`, re-exports the contents of the root to give a name for the current crate to
 `impl_outer_event!`.
 
-```rust, ignore
+```rust
 mod hello_substrate {
 	pub use crate::Event;
 }
@@ -135,7 +135,7 @@ the [`System::events`](https://crates.parity.io/frame_system/struct.Module.html#
 vector of `EventRecord`s. In
 [`pallets/adding-machine`](https://github.com/substrate-developer-hub/recipes/tree/master//pallets/adding-machine),
 
-```rust, ignore
+```rust
 #[test]
 fn add_emits_correct_event() {
 	ExtBuilder::build().execute_with(|| {
@@ -157,7 +157,7 @@ fn add_emits_correct_event() {
 
 This check requires importing from `system`
 
-```rust, ignore
+```rust
 use system::{EventRecord, Phase};
 ```
 
@@ -166,7 +166,7 @@ A more ergonomic way of testing whether a specific event was emitted might use t
 importing `RawEvent` (or `Event`) from the pallet and `ensure_signed` from `system` to convert
 signed extrinsics to the underlying `AccountId`,
 
-```rust, ignore
+```rust
 #[cfg(test)]
 mod tests {
 	// other imports
@@ -179,7 +179,7 @@ mod tests {
 In
 [`pallets/hello-substrate`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/hello-substrate),
 
-```rust, ignore
+```rust
 #[test]
 fn last_value_updates() {
 	ExtBuilder::build().execute_with(|| {

@@ -22,7 +22,7 @@ holds.
 The next two storage items set the total supply of the token and keep track of whether the token has
 been initialized yet.
 
-```rust, ignore
+```rust
 decl_storage! {
 	trait Store for Module<T: Trait> as Token {
 		pub Balances get(get_balance): map hasher(blake2_128_concat) T::AccountId => u64;
@@ -42,7 +42,7 @@ as described in the recipe on [storage maps](storage-api/storage-maps.md)s.
 The pallet defines events and errors for common lifecycle events such as successful and failed
 transfers, and successful and failed initialization.
 
-```rust, ignore
+```rust
 decl_event!(
 	pub enum Event<T>
 	where
@@ -73,7 +73,7 @@ will use a simple process where the first user to call the `init` function recei
 funds. The total supply is hard-coded in the pallet in a fairly naive way: It is specified as the
 default value in the `decl_storage!` block.
 
-```rust ignore
+```rust
 fn init(origin) -> DispatchResult {
 	let sender = ensure_signed(origin)?;
 	ensure!(!Self::is_init(), <Error<T>>::AlreadyInitialized);
@@ -97,7 +97,7 @@ We again check for error conditions before mutating storage. In this case it is 
 check whether the token has been initialized. If it has not, nobody has any funds and the transfer
 will simply fail with `InsufficientFunds`.
 
-```rust, ignore
+```rust
 fn transfer(_origin, to: T::AccountId, value: u64) -> DispatchResult {
 	let sender = ensure_signed(_origin)?;
 	let sender_balance = Self::get_balance(&sender);

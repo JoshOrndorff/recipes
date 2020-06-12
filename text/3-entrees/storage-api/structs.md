@@ -11,7 +11,7 @@ language, a `struct` is like an object’s data attributes (read more in
 
 To define a _simple_ custom struct for the runtime, the following syntax may be used:
 
-```rust, ignore
+```rust
 #[derive(Encode, Decode, Default, Clone, PartialEq)]
 pub struct MyStruct {
     some_number: u32,
@@ -28,7 +28,7 @@ storage, you will need to derive (or manually ipmlement) each of these traits.
 
 To use the `Encode` and `Decode` traits, it is necessary to import them.
 
-```rust, ignore
+```rust
 use frame_support::codec::{Encode, Decode};
 ```
 
@@ -39,7 +39,7 @@ where you want to store types that come from your pallet's configuration trait (
 trait of another pallet in your runtime), you must use generic type parameters in your struct's
 definition.
 
-```rust, ignore
+```rust
 #[derive(Encode, Decode, Clone, Default, RuntimeDebug)]
 pub struct InnerThing<Hash, Balance> {
 	number: u32,
@@ -55,7 +55,7 @@ generics when declaring the struct.
 It is often convenient to make a type alias that takes `T`, your pallet's configuration trait, as a
 single type parameter. Doing so simply saves you typing in the future.
 
-```rust, ignore
+```rust
 type InnerThingOf<T> = InnerThing<<T as system::Trait>::Hash, <T as balances::Trait>::Balance>;
 ```
 
@@ -67,7 +67,7 @@ shows how to supply thos parameters when you have a type alias (like we do for `
 as when you don't. Whether to include the type alias is a matter of style and taste, but it is
 generally preferred when the entire type exceeds the preferred line length.
 
-```rust, ignore
+```rust
 decl_storage! {
 	trait Store for Module<T: Trait> as NestedStructs {
 		InnerThingsByNumbers get(fn inner_things_by_numbers):
@@ -80,7 +80,7 @@ decl_storage! {
 
 Interacting with the storage maps is now exactly as it was when we didn't use any custom structs
 
-```rust, ignore
+```rust
 fn insert_inner_thing(origin, number: u32, hash: T::Hash, balance: T::Balance) -> DispatchResult {
 	let _ = ensure_signed(origin)?;
 	let thing = InnerThing {
@@ -100,7 +100,7 @@ Structs can also contain other structs as their fields. We have demonstrated thi
 `SuperThing`. As you see, any generic types needed by the inner struct must also be supplied to the
 outer.
 
-```rust, ignore
+```rust
 #[derive(Encode, Decode, Default, RuntimeDebug)]
 pub struct SuperThing<Hash, Balance> {
 	super_number: u32,

@@ -18,7 +18,7 @@ pallets. The two pallets live in the `pallets/check-membership/tight` and
 `pallets/check-membership/loose` directories. In the crate's main `lib.rs` we simply export each of
 these variants of the pallet.
 
-```rust, ignore
+```rust
 pub mod loose;
 pub mod tight;
 ```
@@ -38,7 +38,7 @@ corresponds to a member of the permissioned set.
 
 The loosely coupled variant looks like this.
 
-```rust, ignore
+```rust
 /// Checks whether the caller is a member of the set of Account Ids provided by the
 /// MembershipSource type. Emits an event if they are, and errors if not.
 fn check_membership(origin) -> DispatchResult {
@@ -70,7 +70,7 @@ that you want to tightly couple with some other pallet as a dependency, you expl
 name of the pallet on which you depend as a trait bound on the configuration trait of the pallet you
 are writing. This is demonstrated in the tightly coupled variant of `check-membership`.
 
-```rust, ignore
+```rust
 pub trait Trait: system::Trait + vec_set::Trait {
 	// --snip--
 }
@@ -89,7 +89,7 @@ vec-set = { path = '../vec-set', default-features = false }
 
 To actually get the set of members, we have access to the getter function declared in `vec-set`.
 
-```rust, ignore
+```rust
 // Get the members from the vec-set pallet
 let members = vec_set::Module::<T>::members();
 ```
@@ -105,7 +105,7 @@ Loose coupling solves the problem of coupling to a specific implementation. When
 another pallet, you add an associated type to the pallet's configuration trait and ensure the
 supplied type implements the necessary behavior by specifying a trait bound.
 
-```rust, ignore
+```rust
 pub trait Trait: system::Trait {
 	// --snip--
 
@@ -122,7 +122,7 @@ can be installed in any runtime that can supply it with a set of accounts to use
 control list. The code for the `AccountSet` trait lives in `traits/account-set/src/lib.rs` directory
 and is quite short.
 
-```rust, ignore
+```rust
 pub trait AccountSet {
 	type AccountId;
 
@@ -138,7 +138,7 @@ account-set = { path = '../../traits/account-set', default-features = false }
 
 To actually get the set of members, we use the `accounts` method supplied by the trait.
 
-```rust, ignore
+```rust
 // Get the members from the vec-set pallet
 let members = T::MembershipSource::accounts();
 ```

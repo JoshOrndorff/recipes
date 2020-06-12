@@ -29,7 +29,7 @@ configuration trait. For example, the `super-runtime` sets these parameters as f
 src:
 [`runtimes/super-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/super-runtime/src/lib.rs)
 
-```rust, ignore
+```rust
 parameter_types! {
 	pub const TransactionByteFee: u128 = 1;
 }
@@ -63,7 +63,7 @@ multiplied by a constant coefficient to determine the fee to charge. This is dem
 
 We declare the struct with an associated type `C`, which will provide the coefficient.
 
-```rust, ignore
+```rust
 pub struct LinearWeightToFee<C>(sp_std::marker::PhantomData<C>);
 ```
 
@@ -73,7 +73,7 @@ return a set of
 These coefficients can have integer and fractional parts and be positive or negative. In our
 `LinearWeightToFee` there is a single integer coefficient supplied by the associated type.
 
-```rust, ignore
+```rust
 impl<C> WeightToFeePolynomial for LinearWeightToFee<C>
 where
 	C: Get<Balance>,
@@ -97,7 +97,7 @@ where
 
 This struct is reusable, and works with different coefficients. Using it looks like this.
 
-```rust, ignore
+```rust
 parameter_types! {
 	// Used with LinearWeightToFee conversion. Leaving this constant intact when using other
 	// conversion techniques is harmless.
@@ -122,7 +122,7 @@ logic will be reused among multiple chains, so it is generally not worth the ove
 coefficients configurable. The `QuadraticWeightToFee` demonstrates a 2nd-degree polynomial with
 hard-coded non-integer signed coefficients.
 
-```rust, ignore
+```rust
 pub struct QuadraticWeightToFee;
 
 impl WeightToFeePolynomial for QuadraticWeightToFee {
@@ -164,7 +164,7 @@ can be used. The weight-fee-runtime demonstrates how to use an asset provided by
 src:
 [`runtimes/weight-fee-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/weight-fee-runtime/src/lib.rs)
 
-```rust, ignore
+```rust
 impl transaction_payment::Trait for Runtime {
 
 	// A generic asset whose ID is stored in the generic_asset pallet's runtime storage

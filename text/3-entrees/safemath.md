@@ -9,7 +9,7 @@ use [`checked_add()`](https://crates.parity.io/sp_runtime/traits/trait.CheckedAd
 handle the possibility of overflow when incremementing a global counter. _Note that this check is
 similar to [`SafeMath`](https://ethereumdev.io/safemath-protect-overflows/) in Solidity_.
 
-```rust, ignore
+```rust
 use runtime_primitives::traits::CheckedAdd;
 
 let all_people_count = Self::num_of_people();
@@ -22,7 +22,7 @@ let new_all_people_count = all_people_count.checked_add(1).ok_or("Overflow addin
 [`?` operator](https://doc.rust-lang.org/nightly/edition-guide/rust-2018/error-handling-and-panics/the-question-mark-operator-for-easier-error-handling.html)
 facilitates error propagation. In this case, using `ok_or()` is the same as writing
 
-```rust, ignore
+```rust
 let new_all_people_count = match all_people_count.checked_add(1) {
     Some (c) => c,
     None => return Err("Overflow adding a new person"),

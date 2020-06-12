@@ -15,7 +15,7 @@ pallet; we simply maintain the set. Using the set is demonstrated in the recipe 
 [pallet coupling](../pallet-coupling.md). We provide dispatchable calls to add and remove members,
 ensuring that the number of members never exceeds a hard-coded maximum.
 
-```rust, ignore
+```rust
 /// A maximum number of members. When membership reaches this number, no new members may join.
 pub const MAX_MEMBERS: usize = 16;
 ```
@@ -27,7 +27,7 @@ We will store the members of our set in a Rust
 is ordered and may contain duplicates. Because the `Vec` provides more functionality than our set
 needs, we are able to build a set from the `Vec`. We declare our single storage item as so
 
-```rust, ignore
+```rust
 decl_storage! {
 	trait Store for Module<T: Trait> as VecSet {
 		// The set of all members. Stored as a single vec
@@ -48,7 +48,7 @@ not already a member and the membership limit has not been reached. We check for
 conditions first, and then insert the new member only after we are sure it is safe to do so. This is
 an example of the mnemonic idiom, "**verify first write last**".
 
-```rust, ignore
+```rust
 pub fn add_member(origin) -> DispatchResult {
 	let new_member = ensure_signed(origin)?;
 
@@ -84,7 +84,7 @@ Removing a member is straightforward. We begin by looking for the caller in the 
 present, there is no work to be done. If the caller is present, the search algorithm returns her
 index, and she can be removed.
 
-```rust, ignore
+```rust
 fn remove_member(origin) -> DispatchResult {
 	let old_member = ensure_signed(origin)?;
 

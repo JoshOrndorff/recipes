@@ -21,7 +21,7 @@ crowdfund pallet will depend on a notion of
 [`Currency`](https://crates.parity.io/frame_support/traits/trait.Currency.html), and three
 [configuration constants](./constants.md).
 
-```rust, ignore
+```rust
 /// The pallet's configuration trait
 pub trait Trait: system::Trait {
 	/// The ubiquious Event type
@@ -47,7 +47,7 @@ pub trait Trait: system::Trait {
 
 Our pallet introduces a custom struct that is used to store the metadata about each fund.
 
-```rust, ignore
+```rust
 #[derive(Encode, Decode, Default, PartialEq, Eq)]
 #[cfg_attr(feature = "std", derive(Debug))]
 pub struct FundInfo<AccountId, Balance, BlockNumber> {
@@ -67,7 +67,7 @@ pub struct FundInfo<AccountId, Balance, BlockNumber> {
 In addition to this `FundInfo` struct, we also introduce an index type to track the number of funds
 that have ever been created and three convenience aliases.
 
-```rust, ignore
+```rust
 pub type FundIndex = u32;
 
 type AccountIdOf<T> = <T as system::Trait>::AccountId;
@@ -80,7 +80,7 @@ type FundInfoOf<T> = FundInfo<AccountIdOf<T>, BalanceOf<T>, <T as system::Trait>
 The pallet has two storage items declared the usual way using `decl_storage!`. The first is the
 index that tracks the number of funds, and the second is a mapping from index to `FundInfo`.
 
-```rust, ignore
+```rust
 decl_storage! {
 	trait Store for Module<T: Trait> as ChildTrie {
 		/// Info on all of the funds.
@@ -109,7 +109,7 @@ Second, it allows any contributor to prove that they contributed using a
 
 The child API is abstracted into a few helper functions in the `impl<T: Trait> Module<T>` block.
 
-```rust, ignore
+```rust
 /// Record a contribution in the associated child trie.
 pub fn contribution_put(index: FundIndex, who: &T::AccountId, balance: &BalanceOf<T>) {
 	let id = Self::id_from_index(index);
@@ -140,7 +140,7 @@ Because this pallet uses one trie for each active crowdfund, we need to generate
 [`ChildInfo`](https://crates.parity.io/frame_support/storage/child/enum.ChildInfo.html) for each of
 them. To ensure that the ids are really unique, we incluce the `FundIndex` in the generation.
 
-```rust, ignore
+```rust
 pub fn id_from_index(index: FundIndex) -> child::ChildInfo {
 	let mut buf = Vec::new();
 	buf.extend_from_slice(b"crowdfnd");
@@ -165,7 +165,7 @@ data as soon as possible. To incentivize this behavior, the pallet awards the in
 whoever calls the `dispense` function. Users, in hopes of receiving this reward, will race to call
 these cleanup methods before each other.
 
-```rust, ignore
+```rust
 /// Dispense a payment to the beneficiary of a successful crowdfund.
 /// The beneficiary receives the contributed funds and the caller receives
 /// the deposit as a reward to incentivize clearing settled crowdfunds out of storage.

@@ -57,7 +57,7 @@ Here we construct an instance of the
 providing it with references to our client, our `MinimalSha3Algorithm`, and some other necessary
 data.
 
-```rust, ignore
+```rust
 builder
 	.with_import_queue(|_config, client, select_chain, _transaction_pool| {
 
@@ -101,7 +101,7 @@ about this pattern in the knowledgebase article on the
 Both the BlockImport and the `import_queue` are given an instance called `inherent_data_providers`.
 This object is created in a helper function defined at the beginning of `service.rs`
 
-```rust, ignore
+```rust
 pub fn build_inherent_data_providers() -> Result<InherentDataProviders, ServiceError> {
 	let providers = InherentDataProviders::new();
 
@@ -129,7 +129,7 @@ We've already implemented a mining algorithm as part of our
 [`MinimalSha3Algorithm`](./sha3-pow-consensus.md), but we haven't yet told our service to actually
 mine with that algorithm. This is our last task in the `new_full` function.
 
-```rust, ignore
+```rust
 if participates_in_consensus {
 	let proposer = sc_basic_authorship::ProposerFactory::new(
 		service.client(),

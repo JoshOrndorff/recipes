@@ -11,7 +11,7 @@ to store a mapping from keys to values, similar to Rust's own
 
 We declare a single storage map with the following syntax.
 
-```rust, ignore
+```rust
 decl_storage! {
 	trait Store for Module<T: Trait> as SimpleMap {
 		SimpleMap get(fn simple_map): map hasher(blake2_128_concat) T::AccountId => u32;
@@ -70,7 +70,7 @@ use blake2.
 This pallet demonstrated some of the most common methods available in a storage map including
 `insert`, `get`, `take`, and `contains_key`.
 
-```rust, ignore
+```rust
 // Insert
 <SimpleMap<T>>::insert(&user, entry);
 

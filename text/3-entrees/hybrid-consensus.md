@@ -27,7 +27,7 @@ background task that actually casts grandpa votes. The
 [details of the grandpa protocol](https://research.web3.foundation/en/latest/polkadot/GRANDPA.html)
 are beyond the scope of this recipe.
 
-```rust, ignore
+```rust
 let (grandpa_block_import, grandpa_link) =
 	sc_finality_grandpa::block_import(
 		client.clone(), &(client.clone() as std::sync::Arc<_>), select_chain
@@ -37,14 +37,14 @@ let (grandpa_block_import, grandpa_link) =
 This same block import will be used as a justification import, so we clone it right after
 constructing it.
 
-```rust, ignore
+```rust
 let justification_import = grandpa_block_import.clone();
 ```
 
 With the grandpa block import created, we can now create the PoW block import. The Pow block import
 is the outer-most layer of the block import onion and it wraps the grandpa block import.
 
-```rust, ignore
+```rust
 let pow_block_import = sc_consensus_pow::PowBlockImport::new(
 	grandpa_block_import,
 	client.clone(),
@@ -61,7 +61,7 @@ With the block imports setup, we can proceed to creating the import queue. We ma
 `import_queue` helper function. Notice that it requires the entire block import pipeline which we
 refer to as `pow_block_import` because PoW is the outermost layer.
 
-```rust, ignore
+```rust
 let import_queue = sc_consensus_pow::import_queue(
 	Box::new(pow_block_import),
 	Some(Box::new(justification_import)),
@@ -78,7 +78,7 @@ Occasionally in the operation of a blockchain, other nodes will contact our node
 that a particular block is finalized. To respond to these requests, we include a finality proof
 provider.
 
-```rust, ignore
+```rust
 .with_finality_proof_provider(|client, backend| {
 	let provider = client as Arc<dyn StorageAndProofProvider<_, _>>;
 	Ok(Arc::new(GrandpaFinalityProofProvider::new(backend, provider)) as _)
@@ -90,7 +90,7 @@ provider.
 Any node that is acting as an authority, typically called "miners" in the PoW context, must run a
 mining task in another thread.
 
-```rust, ignore
+```rust
 sc_consensus_pow::start_mine(
 	Box::new(block_import),
 	client,
@@ -117,7 +117,7 @@ Grandpa is _not_ CPU intensive, so we will use a standard `async` worker to list
 grandpa votes. We begin by creating a grandpa
 [`Config`](https://crates.parity.io/sc_finality_grandpa/struct.Config.html).
 
-```rust, ignore
+```rust
 let grandpa_config = sc_finality_grandpa::Config {
 	gossip_duration: Duration::from_millis(333),
 	justification_period: 512,
@@ -131,7 +131,7 @@ let grandpa_config = sc_finality_grandpa::Config {
 We can then use this config to create an instance of
 [`GrandpaParams`](https://crates.parity.io/sc_finality_grandpa/struct.GrandpaParams.html).
 
-```rust, ignore
+```rust
 let grandpa_config = sc_finality_grandpa::GrandpaParams {
 	config: grandpa_config,
 	link: grandpa_link,
@@ -145,7 +145,7 @@ let grandpa_config = sc_finality_grandpa::GrandpaParams {
 
 With the parameters established, we can now create and spawn the authorship future.
 
-```rust, ignore
+```rust
 service.spawn_essential_task(
 	"grandpa-voter",
 	sc_finality_grandpa::run_grandpa_voter(grandpa_config)?
@@ -158,7 +158,7 @@ Proof of Authority networks generally contain many full nodes that are not autho
 is present in the network, we still need to tell the node how to interpret grandpa-related messages
 it may receive (just ignore them).
 
-```rust, ignore
+```rust
 sc_finality_grandpa::setup_disabled_grandpa(
 	service.client(),
 	&inherent_data_providers,

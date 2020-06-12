@@ -15,7 +15,7 @@ economic DOS attack vectors: [Onwards; Underpriced EVM Operations](https://www.p
 
 Pallet authors can annotate their dispatchable function with a weight using syntax like this,
 
-```rust, ignore
+```rust
 #[weight = <Some Weighting Instance>]
 fn some_call(...) -> Result {
 	// --snip--
@@ -25,7 +25,7 @@ fn some_call(...) -> Result {
 For simple transactions a fixed weight will do. Substrate allows simply specifying a constant
 integer in cases situations like this.
 
-```rust, ignore
+```rust
 decl_module! {
 	pub struct Module<T: Trait> for enum Call {
 
@@ -42,7 +42,7 @@ the first parameter is a `bool`. If the first parameter is `true`, then the weig
 second parameter. Otherwise the weight is constant. A transaction where this weighting scheme makes
 sense is demonstrated in the kitchen.
 
-```rust, ignore
+```rust
 pub struct Conditional(u32);
 
 impl WeighData<(&bool, &u32)> for Conditional {
@@ -64,7 +64,7 @@ above, types that are used to calculate transaction weights must also implement
 [`ClassifyDispatch`](https://crates.parity.io/frame_support/weights/trait.ClassifyDispatch.html),
 and [`PaysFee`](https://crates.parity.io/frame_support/weights/trait.PaysFee.html).
 
-```rust, ignore
+```rust
 impl<T> ClassifyDispatch<T> for Conditional {
     fn classify_dispatch(&self, _: T) -> DispatchClass {
         // Classify all calls as Normal (which is the default)
@@ -73,7 +73,7 @@ impl<T> ClassifyDispatch<T> for Conditional {
 }
 ```
 
-```rust, ignore
+```rust
 impl PaysFee for Conditional {
     fn pays_fee(&self) -> bool {
         true

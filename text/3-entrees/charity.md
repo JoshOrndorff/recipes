@@ -19,7 +19,7 @@ import [`ModuleId`](https://crates.parity.io/sp_runtime/struct.ModuleId.html) an
 [`AccountIdConversion`](https://crates.parity.io/sp_runtime/traits/trait.AccountIdConversion.html)
 from [`sp-runtime`](https://crates.parity.io/sp_runtime/index.html).
 
-```rust, ignore
+```rust
 use sp-runtime::{ModuleId, traits::AccountIdConversion};
 ```
 
@@ -28,7 +28,7 @@ The `PALLET_ID` must be exactly eight characters long which is why we've include
 point. (Well, that and Charity work is just so exciting!) This identifier can be converted into an
 `AccountId` with the `into_account()` method provided by the `AccountIdConversion` trait.
 
-```rust, ignore
+```rust
 const PALLET_ID: ModuleId = ModuleId(*b"Charity!");
 
 impl<T: Trait> Module<T> {
@@ -53,7 +53,7 @@ Our charity can receive funds in two different ways.
 The first and perhaps more familiar way is through charitable donations. Donations can be made
 through a standard `donate` extrinsic which accepts the amount to be donated as a parameter.
 
-```rust, ignore
+```rust
 fn donate(
 		origin,
 		amount: BalanceOf<T>
@@ -79,7 +79,7 @@ rules, transaction fees are collected, or another pallet burns funds as part of 
 incentive-alignment mechanism. To allow our pallet to absorb these imbalances, we implement the
 [`OnUnbalanced` trait](https://crates.parity.io/frame_support/traits/trait.OnUnbalanced.html).
 
-```rust, ignore
+```rust
 use frame_support::traits::{OnUnbalanced, Imbalance};
 type NegativeImbalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::NegativeImbalance;
 

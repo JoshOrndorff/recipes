@@ -6,7 +6,7 @@ set included a `salt` field for UTXO output to establish uniqueness for every tr
 ensures that, as long as the outputs are validated in different blocks, they can both be invoked
 independently without leaking information regarding the `TransactionInput`'s `Signature`.
 
-```rust, ignore
+```rust
 TransactionOutput {
     value: Value    // u128 alias
     pubkey: H256    // public key

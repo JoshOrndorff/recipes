@@ -12,7 +12,7 @@ Errors are declared with the
 [`decl_error!` macro](https://crates.parity.io/frame_support/macro.decl_error.html). Although it is
 optional, it is good practice to write doc comments for each error variant as demonstrated here.
 
-```rust, ignore
+```rust
 decl_error! {
 	pub enum Error for Module<T: Trait> {
 		/// Thirteen is unlucky and prohibitted
@@ -30,7 +30,7 @@ dispatchable call. The first is with the
 [`ensure!` macro](https://crates.parity.io/frame_support/macro.ensure.html) where the error to throw
 is the second parameter. The second is to throw the error by explicitly returning it.
 
-```rust, ignore
+```rust
 fn add(origin, val_to_add: u32) -> DispatchResult {
 	let _ = ensure_signed(origin)?;
 
@@ -63,7 +63,7 @@ In fact, the pattern of:
 
 are so common that there are two standard Rust methods help performing the task.
 
-```rust, ignore
+```rust
 fn add_alternate(origin, val_to_add: u32) -> DispatchResult {
 	let _ = ensure_signed(origin)?;
 

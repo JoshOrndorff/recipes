@@ -17,7 +17,7 @@ such as difficulty adjustment.
 
 Begin by creating a struct that will implement the `PowAlgorithm Trait`.
 
-```rust, ignore
+```rust
 /// A minimal PoW algorithm that uses Sha3 hashing.
 /// Difficulty is fixed at 1_000_000
 #[derive(Clone)]
@@ -37,7 +37,7 @@ The first function we must provide returns the difficulty of the next block to b
 minimal sha3 algorithm, this function is quite simple. The difficulty is fixed. This means that as
 more mining power joins the network, the block time will become faster.
 
-```rust, ignore
+```rust
 impl<B: BlockT<Hash=H256>> PowAlgorithm<B> for Sha3Algorithm {
 	type Difficulty = U256;
 
@@ -59,7 +59,7 @@ given the seal, which testifies that the work has been done, and the difficulty 
 author needed to meet. This function first confirms that the provided seal actually meets the target
 difficulty, then it confirms that the seal is actually valid for the given pre-hash.
 
-```rust, ignore
+```rust
 fn verify(
 	&self,
 	_parent: &BlockId<B>,
@@ -97,7 +97,7 @@ fn verify(
 
 Finally our proof of work algorithm needs to be able to mine blocks of our own.
 
-```rust, ignore
+```rust
 fn mine(
 	&self,
 	_parent: &BlockId<B>,
@@ -155,7 +155,7 @@ this struct must hold a reference to the
 [`Client`](https://crates.parity.io/sc_service/client/struct.Client.html) so it can call the
 appropriate runtime APIs.
 
-```rust, ignore
+```rust
 /// A complete PoW Algorithm that uses Sha3 hashing.
 /// Needs a reference to the client so it can grab the difficulty from the runtime.
 pub struct Sha3Algorithm<C> {
@@ -165,7 +165,7 @@ pub struct Sha3Algorithm<C> {
 
 Next we provide a `new` method for conveniently creating instances of our new struct.
 
-```rust, ignore
+```rust
 impl<C> Sha3Algorithm<C> {
 	pub fn new(client: Arc<C>) -> Self {
 		Self { client }
@@ -176,7 +176,7 @@ impl<C> Sha3Algorithm<C> {
 And finally we manually implement `Clone`. We cannot derive clone as we did for the
 `MinimalSha3Algorithm`.
 
-```rust, ignore
+```rust
 // Manually implement clone. Deriving doesn't work because
 // it'll derive impl<C: Clone> Clone for Sha3Algorithm<C>. But C in practice isn't Clone.
 impl<C> Clone for Sha3Algorithm<C> {
@@ -196,7 +196,7 @@ complex trait bounds to ensure that the client the algorithm holds a reference t
 the [`DifficultyAPI`](https://crates.parity.io/sp_consensus_pow/trait.DifficultyApi.html) necessary
 to fetch the PoW difficulty from the runtime.
 
-```rust, ignore
+```rust
 // Here we implement the general PowAlgorithm trait for our concrete Sha3Algorithm
 impl<B: BlockT<Hash=H256>, C> PowAlgorithm<B> for Sha3Algorithm<C> where
 	C: ProvideRuntimeApi<B>,
@@ -214,7 +214,7 @@ The implementation of `PowAlgorithm`'s `difficulty` function, no longer returns 
 rather calls into the runtime API which is guaranteed to exist because of the trait bounds. It also
 maps any errors that may have occurred when using the API.
 
-```rust, ignore
+```rust
 fn difficulty(&self, parent: B::Hash) -> Result<Self::Difficulty, Error<B>> {
 	let parent_id = BlockId::<B>::hash(parent);
 	self.client.runtime_api().difficulty(&parent_id)

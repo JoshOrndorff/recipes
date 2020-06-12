@@ -54,7 +54,7 @@ To begin we declare the storage item that will hold our accumulated product. You
 trait provides a handy function for getting the identity value which we use to set the default
 storage value to `1`.
 
-```rust, ignore
+```rust
 decl_storage! {
 	trait Store for Module<T: Trait> as Example {
 		// --snip--
@@ -68,7 +68,7 @@ decl_storage! {
 The only extrinsic for this Permill accumulator is the one that allows users to submit new `Permill`
 values to get multiplied into the accumulator.
 
-```rust, ignore
+```rust
 fn update_permill(origin, new_factor: Permill) -> DispatchResult {
 	ensure_signed(origin)?;
 
@@ -113,7 +113,7 @@ fixed-point arithmetic, like ours does, it is advisable to keep your data in sub
 > We're able to use `U16F16` as a storage item type because it, and the other substrate-fixed types,
 > implements the parity scale codec.
 
-```rust, ignore
+```rust
 decl_storage! {
 	trait Store for Module<T: Trait> as Example {
 		// --snip--
@@ -127,7 +127,7 @@ decl_storage! {
 Next we implement the extrinsic that allows users to update the accumulator by multiplying in a new
 value.
 
-```rust, ignore
+```rust
 fn update_fixed(origin, new_factor: U16F16) -> DispatchResult {
 	ensure_signed(origin)?;
 
@@ -195,7 +195,7 @@ move it 16 bits to the left. This is because Rust interprets `1` as a regular `u
 the `1` in the far right place value. But because we're treating this `u32` specially, we need to
 shift that bit to the middle just left of the imaginary radix point.
 
-```rust, ignore
+```rust
 decl_storage! {
 	trait Store for Module<T: Trait> as Example {
 		// --snip--
@@ -212,7 +212,7 @@ comments explaining the bit-shifting operations. In the function body most inter
 held in `u64` variables. This is because when you multiply two 32-bit numbers, you can end up with
 as much as 64 bits in the product.
 
-```rust, ignore
+```rust
 fn update_manual(origin, new_factor: u32) -> DispatchResult {
 	ensure_signed(origin)?;
 
@@ -282,7 +282,7 @@ The only storage item needed is a tracker of the account's balance. In order to 
 fixed-point- and interest-related topics, this pallet does not actually interface with a `Currency`.
 Instead we just allow anyone to "deposit" or "withdraw" funds with no source or destination.
 
-```rust, ignore
+```rust
 decl_storage! {
 	trait Store for Module<T: Trait> as Example {
 		// --snip--
@@ -297,7 +297,7 @@ There are two extrinsics associated with the discrete interest account. The `dep
 extrinsic is shown here, and the `withdraw_discrete` extrinsic is nearly identical. Check it out in
 the kitchen.
 
-```rust, ignore
+```rust
 fn deposit_discrete(origin, val_to_add: u64) -> DispatchResult {
 	ensure_signed(origin)?;
 
@@ -318,7 +318,7 @@ simple addition or substraction from the stored value, and they have nothing to 
 Because the interest is paid discretely every ten blocks it can be handled independently of deposits
 and withdrawals. The interest calculation happens automatically in the `on_finalize` block.
 
-```rust, ignore
+```rust
 fn on_finalize(n: T::BlockNumber) {
 	// Apply newly-accrued discrete interest every ten blocks
 	if (n % 10.into()).is_zero() {
@@ -367,7 +367,7 @@ in time".
 To facilitate this implementation, we represent the state of the account not only as a balance, but
 as a balance, paired with the time when that balance was last updated.
 
-```rust, ignore
+```rust
 #[derive(Encode, Decode, Default)]
 pub struct ContinuousAccountData<BlockNumber> {
 	/// The balance of the account after last manual adjustment
@@ -383,7 +383,7 @@ that requires using signed types.
 
 With the struct to represent the account's state defined, we can initialize the storage value.
 
-```rust, ignore
+```rust
 decl_storage! {
 	trait Store for Module<T: Trait> as Example {
 		// --snip--
@@ -397,7 +397,7 @@ decl_storage! {
 As before, there are two relevant extrinsics, `deposit_continuous` and `withdraw_continuous`. They
 are nearly identical so we'll only show one.
 
-```rust, ignore
+```rust
 fn deposit_continuous(origin, val_to_add: u64) -> DispatchResult {
 	ensure_signed(origin)?;
 
@@ -424,7 +424,7 @@ is that it calls a helper function to get the account's previous value. This hel
 calculates the value of the account considering all the interest that has accrued since the last
 time the account was touched. Let's take a closer look.
 
-```rust, ignore
+```rust
 fn value_of_continuous_account(now: &<T as system::Trait>::BlockNumber) -> I32F32 {
 	// Get the old state of the accout
 	let ContinuousAccountData{

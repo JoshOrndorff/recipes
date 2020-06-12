@@ -11,19 +11,19 @@ in a temporary queue and lock it for some defined time period._
 
 To see this pattern in action, see the `check_transaction` runtime function:
 
-```rust, ignore
+```rust
 pub fn check_transaction(transaction: &Transaction) -> CheckResult<'_>
 ```
 
 This function returns `CheckResult<'_>`. The type signature of `CheckResult<T>`:
 
-```rust, ignore
+```rust
 pub type CheckResult<'a> = rstd::result::Result<CheckInfo<'a>, &'static str>;
 ```
 
 The type signature of `CheckInfo<T>`:
 
-```rust, ignore
+```rust
 /// Information collected during transaction verification
 pub enum CheckInfo<'a> {
     /// Combined value of all inputs and outputs
@@ -39,7 +39,7 @@ be easily decomposed to calculate leftover value and distribute it evenly among 
 returns a wrapper around the missing UTXOs which were necessary for verification. Here's the code in
 `check_transaction` that expresses this logic:
 
-```rust, ignore
+```rust
 if missing_utxo.is_empty() {
     ensure!(
         total_input >= total_output,

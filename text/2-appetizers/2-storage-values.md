@@ -14,7 +14,7 @@ determined by executing all of the blocks in the chain.
 A pallet's storage items are declared with the
 [`decl_storage!` macro](https://crates.parity.io/frame_support/macro.decl_storage.html).
 
-```rust, ignore
+```rust
 decl_storage! {
     trait Store for Module<T: Trait> as SingleValue {
         // --snip--
@@ -33,7 +33,7 @@ the same.
 
 Our first storage item is a `u32` value which is declared with this syntax
 
-```rust, ignore
+```rust
 StoredValue get(fn stored_value): u32;
 ```
 
@@ -46,7 +46,7 @@ of the item.
 The next storage item is an `AccountId`. This is not a primitive type, but rather comes from the
 system pallet. Types like this need to be prefixed with a `T::` as we see here.
 
-```rust, ignore
+```rust
 StoredAccount get(fn stored_account): T::AccountId;
 ```
 
@@ -60,7 +60,7 @@ know what is available.
 The `set_value` method demonstrates writing to storage, as well as taking a parameter in our
 dispatchable call.
 
-```rust, ignore
+```rust
 fn set_value(origin, value: u32) -> DispatchResult {
 	let _ = ensure_signed(origin)?;
 
@@ -73,7 +73,7 @@ fn set_value(origin, value: u32) -> DispatchResult {
 To read a value from storage, we could use the `get` method, or we could use the getter method we
 declared in `decl_storage!`.
 
-```rust, ignore
+```rust
 // The following lines are equivalent
 let my_val = StoredValue::get();
 let my_val = Self::stored_value();
@@ -85,7 +85,7 @@ In terms of storage, the `set_account` method is quite similar to `set_value`, b
 demonstrates how to retreive the `AccountId` of the caller using the
 [`ensure_signed` function](https://crates.parity.io/frame_system/fn.ensure_signed.html).
 
-```rust, ignore
+```rust
 fn set_account(origin) -> DispatchResult {
 	let who = ensure_signed(origin)?;
 
@@ -106,7 +106,7 @@ We learned about the
 the previous section. Because this pallet uses storage items, we must add this to the line in
 construct runtime. In the Super Runtime, we see the additional `Storage` feature.
 
-```rust, ignore
+```rust
 construct_runtime!(
 	pub enum Runtime where
 		Block = Block,

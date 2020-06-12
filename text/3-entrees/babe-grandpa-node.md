@@ -32,7 +32,7 @@ background task that actually casts GRANDPA votes. The
 [details of the GRANDPA protocol](https://research.web3.foundation/en/latest/polkadot/GRANDPA.html)
 are beyond the scope of this recipe.
 
-```rust, ignore
+```rust
 let (grandpa_block_import, grandpa_link) =
 	sc_finality_grandpa::block_import(
 		client.clone(), &(client.clone() as std::sync::Arc<_>), select_chain
@@ -43,14 +43,14 @@ In addition to actual blocks, this same block import will be used to import
 [`Justifications`](https://crates.parity.io/sp_runtime/type.Justification.html), so we clone it
 right after constructing it.
 
-```rust, ignore
+```rust
 let justification_import = grandpa_block_import.clone();
 ```
 
 With the GRANDPA block import created, we can now create the BABE block import. The BABE block
 import is the outer-most layer of the block import onion and it wraps the GRANDPA block import.
 
-```rust, ignore
+```rust
 let (babe_block_import, babe_link) = sc_consensus_babe::block_import(
 	sc_consensus_babe::Config::get_or_compute(&*client)?,
 	grandpa_block_import,
@@ -68,7 +68,7 @@ blocks from the network into the import pipeline. We make it using BABE's `impor
 function. Notice that it requires the BABE link, and the entire block import pipeline which we refer
 to as `babe_block_import` because BABE is the outermost layer.
 
-```rust, ignore
+```rust
 let import_queue = sc_consensus_babe::import_queue(
 	babe_link.clone(),
 	babe_block_import.clone(),
@@ -85,7 +85,7 @@ Occasionally in the operation of a blockchain, other nodes will contact our node
 that a particular block is finalized. To respond to these requests, we include a finality proof
 provider.
 
-```rust, ignore
+```rust
 .with_finality_proof_provider(|client, backend| {
 	let provider = client as Arc<dyn StorageAndProofProvider<_, _>>;
 	Ok(Arc::new(GrandpaFinalityProofProvider::new(backend, provider)) as _)
@@ -98,7 +98,7 @@ Any node that is acting as an authority and participating in BABE consensus, mus
 authorship task. We begin by creating an instance of
 [`BabeParams`](https://crates.parity.io/sc_consensus_babe/struct.BabeParams.html).
 
-```rust, ignore
+```rust
 let babe_config = sc_consensus_babe::BabeParams {
 	keystore: service.keystore(),
 	client,
@@ -115,7 +115,7 @@ let babe_config = sc_consensus_babe::BabeParams {
 
 With the parameters established, we can now create and spawn the authorship future.
 
-```rust, ignore
+```rust
 let babe = sc_consensus_babe::start_babe(babe_config)?;
 service.spawn_essential_task("babe", babe);
 ```
@@ -126,7 +126,7 @@ Just as we needed an `async` worker to author blocks with BABE, we need an `asyn
 to and cast GRANDPA votes. Again, we begin by creating an instance of
 [`GrandpaParams`](https://crates.parity.io/sc_finality_grandpa/struct.GrandpaParams.html)
 
-```rust, ignore
+```rust
 let grandpa_config = sc_finality_grandpa::GrandpaParams {
 	config: grandpa_config,
 	link: grandpa_link,
@@ -140,7 +140,7 @@ let grandpa_config = sc_finality_grandpa::GrandpaParams {
 
 With the parameters established, we can now create and spawn the authorship future.
 
-```rust, ignore
+```rust
 service.spawn_essential_task(
 	"grandpa-voter",
 	sc_finality_grandpa::run_grandpa_voter(grandpa_config)?
@@ -154,7 +154,7 @@ is present in the network, we still need to tell the node how to interpret GRAND
 it may receive (just ignore them) and ensure that the correct inherents are still included in blocks
 in the case that the node _is_ an authority in BABE but not GRANDPA.
 
-```rust, ignore
+```rust
 sc_finality_grandpa::setup_disabled_grandpa(
 	service.client(),
 	&inherent_data_providers,

@@ -14,7 +14,7 @@ code. To facilitate auditability and better testing, Substrate developers should
 an `.expect()` call that shows why the code's logic is safe and will not panic. Convention dictates
 formatting the call like so
 
-```rust, ignore
+```rust
 <Object<T>>::method_call().expect("<proof of safety>; qed");
 ```
 
