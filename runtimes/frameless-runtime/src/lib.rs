@@ -272,7 +272,13 @@ impl_runtime_apis! {
 			Ok(ValidTransaction{
 				priority: 1u64,
 				requires: Vec::new(),
-				provides: Vec::new(),
+				// This hach was necessary to make the node accept any transactions at all
+				// When I was setting provides to an empty vec, submiting a transaction failed
+				// the RPC responded {"code":-32603,"message":"Unknown error occurred","data":"Pool(NoTagsProvided)"}
+				// Adding this provides tag solved that. Solutions moving forward:
+				// 1. Require a nonce with each transaction
+				// 2. Try to relax the TxPool's requirement that every transaction provide some tag
+				provides: vec![vec![0]],
 				longevity: TransactionLongevity::max_value(),
 				propagate: true,
 			})
