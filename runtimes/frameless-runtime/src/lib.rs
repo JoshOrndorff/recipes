@@ -27,7 +27,6 @@ use sp_runtime::{
 		BlakeTwo256,
 		Block as BlockT,
 		Extrinsic,
-		GetRuntimeBlockType,
 		IdentifyAccount,
 		Verify,
 	}
@@ -101,13 +100,6 @@ pub fn native_version() -> NativeVersion {
 	}
 }
 
-/// The main struct in this module. In frame this comes from `construct_runtime!`
-pub struct Runtime;
-
-impl GetRuntimeBlockType for Runtime {
-	type RuntimeBlock = opaque::Block;
-}
-
 /// The type that provides the genesis storage values for a new chain
 #[cfg_attr(feature = "std", derive(Serialize, Deserialize, Default))]
 pub struct GenesisConfig;
@@ -138,12 +130,6 @@ pub type Block = generic::Block<Header, FramelessTransaction>;
 pub const BOOLEAN_KEY: [u8; 7] = *b"boolean";
 pub const HEADER_KEY: [u8; 6] = *b"header";
 
-// The SignedExtension to the basic transaction logic.
-// pub type SignedExtra = (
-//	 system::CheckVersion<Runtime>,
-//	 system::CheckGenesis<Runtime>,
-// );
-
 /// The Extrinsic type for this runtime. Currently extrinsics are unsigned.
 #[cfg_attr(feature = "std", derive(Serialize, Deserialize, parity_util_mem::MallocSizeOf))]
 #[derive(Encode, Decode, Debug, PartialEq, Eq, Clone)]
@@ -161,6 +147,9 @@ impl Extrinsic for FramelessTransaction {
 		Some(Self::Toggle)
 	}
 }
+
+/// The main struct in this module. In frame this comes from `construct_runtime!`
+pub struct Runtime;
 
 impl_runtime_apis! {
 	// https://substrate.dev/rustdocs/master/sp_api/trait.Core.html

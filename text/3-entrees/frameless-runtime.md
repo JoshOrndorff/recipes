@@ -4,10 +4,11 @@ A piece of code can be considered a Substrate Runtime if it implements a few key
 fundamental of these traits is the [Core API](https://crates.parity.io/sp_api/trait.Core.html). In
 practice, the runtime must also implement several other APIs which are described below. Typically
 Substrate runtimes are written using Parity's "Framework for Runtime Aggregation from Modularized
-Entities", more commonly known as [FRAME](https://substrate.dev/docs/en/knowledgebase/runtime/frame). FRAME is an
-excellent way to write runtimes, and all the other runtimes in the Recipes use it. However runtimes
-may be sufficiently simple that FRAME is not necessary, and much can be learned by implementing a
-runtime that does not use FRAME. In this recipe we will do just that.
+Entities", more commonly known as
+[FRAME](https://substrate.dev/docs/en/knowledgebase/runtime/frame). FRAME is an excellent way to
+write runtimes, and all the other runtimes in the Recipes use it. However runtimes may be
+sufficiently simple that FRAME is not necessary, and much can be learned by implementing a runtime
+that does not use FRAME. In this recipe we will do just that.
 
 ## Imports and Type Definitions
 
@@ -15,11 +16,66 @@ runtime that does not use FRAME. In this recipe we will do just that.
 
 ## Runtime Versioning
 
-## The `Runtime` Struct
+## Declaring Storage
+
+The storage items we're operating on are never explicitly declared. Defining storage items is
+accomplished in FRAME pallets by the `decl_storage!` macro. We could use that macro here as well. We
+have chosen not to make this a truly FRAMEless runtime.
+
+Instead we will rely on .... We just define storage keys....
+
+## Defining Extrinsics
+
+ususaly done by decl_module
 
 ## The `GenesisConfig` Struct
 
-## Defining Extrinsics
+When starting a new blockchain, it is often useful to initialize some starting state. To do this we
+make a type that implements the
+[`BuildStorage` trait](https://crates.parity.io/sp_runtime/trait.BuildStorage.html). Following
+FRAME's example, we call this unit struct `GenesisConfig`. Because building genesis storage is a job
+that will be performed by the outer node, we only need to compile this type when building to `std`.
+
+```rust, ignore
+/// The type that provides the genesis storage values for a new chain
+#[cfg_attr(feature = "std", derive(Serialize, Deserialize, Default))]
+pub struct GenesisConfig;
+```
+
+We will initialize storage by setting our main Boolean storage value to false. We must also insert
+the runtime's WASM blob into the proper storage location to facilitate Substrate's forkless runtime
+upgrades.
+
+```rust, ignore
+#[cfg(feature = "std")]
+impl BuildStorage for GenesisConfig {
+	fn assimilate_storage(&self, storage: &mut Storage) -> Result<(), String> {
+		// Declare the storage items we need
+		let storage_items = vec![
+			(BOOLEAN_KEY.encode(), false.encode()),
+			(well_known_keys::CODE.into(), WASM_BINARY.to_vec()),
+		];
+
+		// Put them into genesis storage
+		storage.top.extend(
+			storage_items.into_iter()
+		);
+
+		Ok(())
+	}
+}
+```
+
+## The `Runtime` Struct
+
+The primary type that we'll be exporting is a unit struct called `Runtime`. This struct will
+implement all the necessary APIs to make it a runtime. FRAME-based runtimes export a struct called
+`Runtime` as well, but this is not obvious when writing a runtime becuase the struct is typically
+defined by the `construct_runtime!` macro. In our FRAMEless runtime, this declaration is explicit.
+
+```rust, ignore
+pub struct Runtime;
+```
 
 ## Implementing the Runtime APIs
 
