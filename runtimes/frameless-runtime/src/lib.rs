@@ -27,7 +27,6 @@ use sp_runtime::{
 		BlakeTwo256,
 		Block as BlockT,
 		Extrinsic,
-		GetNodeBlockType,
 		GetRuntimeBlockType,
 		IdentifyAccount,
 		Verify,
@@ -125,10 +124,6 @@ pub fn native_version() -> NativeVersion {
 
 /// The main struct in this module. In frame this comes from `construct_runtime!`
 pub struct Runtime;
-
-impl GetNodeBlockType for Runtime {
-	type NodeBlock = opaque::Block;
-}
 
 impl GetRuntimeBlockType for Runtime {
 	type RuntimeBlock = opaque::Block;
