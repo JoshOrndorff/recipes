@@ -86,20 +86,14 @@ pub type AccountId = <<Signature as Verify>::Signer as IdentifyAccount>::Account
 pub mod opaque {
 	use super::*;
 
-	pub use sp_runtime::OpaqueExtrinsic as UncheckedExtrinsic;
+	pub use sp_runtime::OpaqueExtrinsic;
 
 	/// Opaque block header type.
 	pub type Header = generic::Header<BlockNumber, BlakeTwo256>;
 	/// Opaque block type.
-	pub type Block = generic::Block<Header, UncheckedExtrinsic>;
+	pub type Block = generic::Block<Header, OpaqueExtrinsic>;
 	/// Opaque block identifier type.
 	pub type BlockId = generic::BlockId<Block>;
-
-	// impl_opaque_keys! {
-	//	 pub struct SessionKeys {
-	//		 pub babe: Babe,
-	//	 }
-	// }
 }
 
 /// This runtime version.
@@ -137,7 +131,7 @@ impl BuildStorage for GenesisConfig {
 	fn assimilate_storage(&self, storage: &mut Storage) -> Result<(), String> {
 		// Declare the storage items we need
 		let storage_items = vec![
-			(ONLY_KEY.encode(), false.encode()),
+			(BOOLEAN_KEY.encode(), false.encode()),
 			(well_known_keys::CODE.into(), WASM_BINARY.to_vec()),
 		];
 
@@ -161,24 +155,22 @@ pub type SignedBlock = generic::SignedBlock<Block>;
 /// BlockId type as expected by this runtime.
 pub type BlockId = generic::BlockId<Block>;
 
-pub const ONLY_KEY: [u8; 1] = [0];
+pub const BOOLEAN_KEY: [u8; 1] = [0];
 pub const HEADER_KEY: [u8; 6] = *b"header";
 
-// I guess we won't need any of this when using our own unchecked extrinsic type
 // The SignedExtension to the basic transaction logic.
 // pub type SignedExtra = (
 //	 system::CheckVersion<Runtime>,
 //	 system::CheckGenesis<Runtime>,
 // );
-/// Unchecked extrinsic type as expected by this runtime.
 
+/// The Extrinsic type for this runtime. Currently extrinsics are unsigned.
 #[cfg_attr(feature = "std", derive(Serialize, Deserialize, parity_util_mem::MallocSizeOf))]
 #[derive(Encode, Decode, Debug, PartialEq, Eq, Clone)]
 pub enum FramelessTransaction {
 	Set,
 	Clear,
 	Toggle,
-	//TODO in future define call
 }
 
 impl Extrinsic for FramelessTransaction {
@@ -204,7 +196,7 @@ impl_runtime_apis! {
 			Self::initialize_block(&block.header);
 
 			for transaction in block.extrinsics {
-				let previous_state = sp_io::storage::get(&ONLY_KEY)
+				let previous_state = sp_io::storage::get(&BOOLEAN_KEY)
 					.map(|bytes| <bool as Decode>::decode(&mut &*bytes).unwrap_or(false))
 					.unwrap_or(false);
 
@@ -214,7 +206,7 @@ impl_runtime_apis! {
 					(prev_state, FramelessTransaction::Toggle) => !prev_state,
 				};
 
-				sp_io::storage::set(&ONLY_KEY, &next_state.encode());
+				sp_io::storage::set(&BOOLEAN_KEY, &next_state.encode());
 			}
 
 			//TODO is this necessary? What method is it even calling?
@@ -238,7 +230,7 @@ impl_runtime_apis! {
 				println!("Entering apply_extrinsic");
 			}
 
-			let previous_state = sp_io::storage::get(&ONLY_KEY)
+			let previous_state = sp_io::storage::get(&BOOLEAN_KEY)
 				.map(|bytes| <bool as Decode>::decode(&mut &*bytes).unwrap_or(false))
 				.unwrap_or(false);
 
@@ -248,7 +240,7 @@ impl_runtime_apis! {
 				(prev_state, FramelessTransaction::Toggle) => !prev_state,
 			};
 
-			sp_io::storage::set(&ONLY_KEY, &next_state.encode());
+			sp_io::storage::set(&BOOLEAN_KEY, &next_state.encode());
 			Ok(Ok(()))
 		}
 
@@ -268,19 +260,16 @@ impl_runtime_apis! {
 
 			let raw_state_root = &sp_io::storage::root()[..];
 
-			let state_root = sp_core::H256::decode(&mut &raw_state_root[..]).unwrap();
-			header.state_root = state_root;
-			if_std!{
-				println!("Returning header: {:?}", header);
-			}
+			header.state_root = sp_core::H256::decode(&mut &raw_state_root[..]).unwrap();
 			header
 		}
 
+		// This runtime does not expect any inherents so it does not insert any into blocks it builds.
 		fn inherent_extrinsics(_data: sp_inherents::InherentData) -> Vec<<Block as BlockT>::Extrinsic> {
-			// I'm not using any inherents, so I guess I'll just return an empty vec
 			Vec::new()
 		}
 
+		// This runtime does not expect any inherents, so it does not do any inherent checking.
 		fn check_inherents(
 			_block: Block,
 			_data: sp_inherents::InherentData
@@ -288,8 +277,9 @@ impl_runtime_apis! {
 			sp_inherents::CheckInherentsResult::default()
 		}
 
+		// This runtime does not have a need for a random seed. Nor does it make any effort to
+		// supply a random seed.
 		fn random_seed() -> <Block as BlockT>::Hash {
-			// Lol how bad is this? What actually depends on it?
 			<Block as BlockT>::Hash::from([0u8;32])
 		}
 	}
