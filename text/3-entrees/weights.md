@@ -64,7 +64,7 @@ above, types that are used to calculate transaction weights must also implement
 [`ClassifyDispatch`](https://crates.parity.io/frame_support/weights/trait.ClassifyDispatch.html),
 and [`PaysFee`](https://crates.parity.io/frame_support/weights/trait.PaysFee.html).
 
-```rust,ignore
+```rust, ignore
 impl<T> ClassifyDispatch<T> for Conditional {
     fn classify_dispatch(&self, _: T) -> DispatchClass {
         // Classify all calls as Normal (which is the default)
@@ -73,7 +73,7 @@ impl<T> ClassifyDispatch<T> for Conditional {
 }
 ```
 
-```rust,ignore
+```rust, ignore
 impl PaysFee for Conditional {
     fn pays_fee(&self) -> bool {
         true

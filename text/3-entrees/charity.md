@@ -53,7 +53,7 @@ Our charity can receive funds in two different ways.
 The first and perhaps more familiar way is through charitable donations. Donations can be made
 through a standard `donate` extrinsic which accepts the amount to be donated as a parameter.
 
-```rust,ignore
+```rust, ignore
 fn donate(
 		origin,
 		amount: BalanceOf<T>
@@ -79,7 +79,7 @@ rules, transaction fees are collected, or another pallet burns funds as part of 
 incentive-alignment mechanism. To allow our pallet to absorb these imbalances, we implement the
 [`OnUnbalanced` trait](https://crates.parity.io/frame_support/traits/trait.OnUnbalanced.html).
 
-```rust,ignore
+```rust, ignore
 use frame_support::traits::{OnUnbalanced, Imbalance};
 type NegativeImbalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::NegativeImbalance;
 
