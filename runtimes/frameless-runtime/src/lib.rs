@@ -67,33 +67,18 @@ pub type Signature = MultiSignature;
 /// nodes that expect it.
 pub type AccountId = <<Signature as Verify>::Signer as IdentifyAccount>::AccountId;
 
-/// Balance of an account.
-//pub type Balance = u128;
-
-/// Index of a transaction in the chain.
-// pub type Index = u32;
-
-/// A hash of some data used by the chain.
-// pub type Hash = primitives::H256;
-
-/// Digest item type.
-// pub type DigestItem = generic::DigestItem<Hash>;
-
 /// Opaque types. These are used by the CLI to instantiate machinery that don't need to know
 /// the specifics of the runtime. They can then be made to be agnostic over specific formats
 /// of data like extrinsics, allowing for them to continue syncing the network through upgrades
 /// to even the core datastructures.
 pub mod opaque {
 	use super::*;
-
 	pub use sp_runtime::OpaqueExtrinsic;
 
 	/// Opaque block header type.
 	pub type Header = generic::Header<BlockNumber, BlakeTwo256>;
 	/// Opaque block type.
 	pub type Block = generic::Block<Header, OpaqueExtrinsic>;
-	/// Opaque block identifier type.
-	pub type BlockId = generic::BlockId<Block>;
 }
 
 /// This runtime version.
@@ -123,6 +108,7 @@ impl GetRuntimeBlockType for Runtime {
 	type RuntimeBlock = opaque::Block;
 }
 
+/// The type that provides the genesis storage values for a new chain
 #[cfg_attr(feature = "std", derive(Serialize, Deserialize, Default))]
 pub struct GenesisConfig;
 
@@ -144,18 +130,12 @@ impl BuildStorage for GenesisConfig {
 	}
 }
 
-/// The address format for describing accounts.
-// pub type Address = <Indices as StaticLookup>::Source;
 /// Block header type as expected by this runtime.
 pub type Header = generic::Header<BlockNumber, BlakeTwo256>;
 /// Block type as expected by this runtime.
 pub type Block = generic::Block<Header, FramelessTransaction>;
-/// A Block signed with a Justification
-pub type SignedBlock = generic::SignedBlock<Block>;
-/// BlockId type as expected by this runtime.
-pub type BlockId = generic::BlockId<Block>;
 
-pub const BOOLEAN_KEY: [u8; 1] = [0];
+pub const BOOLEAN_KEY: [u8; 7] = *b"boolean";
 pub const HEADER_KEY: [u8; 6] = *b"header";
 
 // The SignedExtension to the basic transaction logic.
