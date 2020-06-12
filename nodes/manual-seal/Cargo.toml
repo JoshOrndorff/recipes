@@ -51,7 +51,7 @@ sp-transaction-pool = { version = '2.0.0-dev', git = 'https://github.com/parityt
 # This node is compatible with any of the runtimes below
 # ---
 # Common runtime configured with most Recipes pallets.
-runtime = { package = "super-runtime", path = "../../runtimes/super-runtime" }
+# runtime = { package = "super-runtime", path = "../../runtimes/super-runtime" }
 
 # runtime = { package = "pow-runtime", path = "../../runtimes/pow-runtime" }
 
@@ -60,6 +60,9 @@ runtime = { package = "super-runtime", path = "../../runtimes/super-runtime" }
 
 # Runtime with custom runtime-api (custom API only used in rpc-node)
 # runtime = { package = "api-runtime", path = "../../runtimes/api-runtime" }
+
+# Runtime that does not use FRAME
+runtime = { package = "frameless-runtime", path = "../../runtimes/frameless-runtime" }
 # ---
 
 [build-dependencies]

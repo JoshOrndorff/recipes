@@ -24,6 +24,7 @@
 	- [Simple Crowdfund](./3-entrees/crowdfund.md)
 	- [Instantiable Pallets](./3-entrees/instantiable.md)
 	- [Weights for Resource Accounting](./3-entrees/weights.md)
+	- [A Runtime without FRAME](./3-entrees/frameless-runtime.md)
 	- [Transaction Fees for Economic Security](./3-entrees/fees.md)
 	- [Charity and Imbalances](./3-entrees/charity.md)
 	- [Fixed Point Arithmetic](./3-entrees/fixed-point.md)
