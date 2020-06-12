@@ -29,7 +29,7 @@ configuration trait. For example, the `super-runtime` sets these parameters as f
 src:
 [`runtimes/super-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/super-runtime/src/lib.rs)
 
-```rust,ignore
+```rust, ignore
 parameter_types! {
 	pub const TransactionByteFee: u128 = 1;
 }
@@ -164,7 +164,7 @@ can be used. The weight-fee-runtime demonstrates how to use an asset provided by
 src:
 [`runtimes/weight-fee-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/weight-fee-runtime/src/lib.rs)
 
-```rust,ignore
+```rust, ignore
 impl transaction_payment::Trait for Runtime {
 
 	// A generic asset whose ID is stored in the generic_asset pallet's runtime storage
