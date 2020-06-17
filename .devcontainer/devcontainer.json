@@ -1,5 +1,5 @@
 {
-  "name": "Substrate recipes",
+  "name": "Substrate Recipes",
   "dockerFile": "Dockerfile",
   "settings": {
     "terminal.integrated.shell.linux": "/bin/bash",
