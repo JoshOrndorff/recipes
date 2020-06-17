@@ -11,7 +11,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Build and push the recipes Docker image
+    - name: Build and push Docker image for Substrate Playground
       uses: docker/build-push-action@v1 # https://github.com/docker/build-push-action
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
