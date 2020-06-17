@@ -34,7 +34,7 @@ jobs:
     - name: Commit .devcontainer.json update
       uses: EndBug/add-and-commit@v4
       with:
-        message: ":bookmark: update image"
+        message: "🔖 Update Docker Image for Substrate Playground"
         add: ".devcontainer/devcontainer.json"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
