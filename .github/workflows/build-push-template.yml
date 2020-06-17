@@ -1,4 +1,4 @@
-name: Build and Push template
+name: Build and Push Playground Image
 
 on:
   push:
