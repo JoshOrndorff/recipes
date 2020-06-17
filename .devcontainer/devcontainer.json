@@ -13,5 +13,6 @@
   "forwardPorts": [
     3000,
     9944
-  ]
+  ],
+  "image": "jeluard/substrate-playground-template-recipes:sha-043ecec"
 }
