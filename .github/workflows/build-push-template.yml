@@ -23,6 +23,7 @@ jobs:
         tag_with_ref: true
         tag_with_sha: true
 
+    # https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-output-parameter
     - run: echo ::set-output name=image::jeluard/substrate-playground-template-recipes:sha-${GITHUB_SHA::7}
       id: env
 
