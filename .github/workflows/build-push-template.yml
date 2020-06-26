@@ -27,11 +27,6 @@ jobs:
     - run: echo ::set-output name=image::jeluard/substrate-playground-template-recipes:sha-${GITHUB_SHA::7}
       id: env
 
-    - name: Update devcontainer.json
-      run: |-
-        t=$(mktemp)
-        cat .devcontainer/devcontainer.json | jq ".image = \"${{ steps.env.outputs.image }}\"" > ${t} && mv ${t} .devcontainer/devcontainer.json
-
     - name: Trigger playground inclusion
       uses: peter-evans/repository-dispatch@v1
       with:
