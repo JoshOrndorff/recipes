@@ -1,7 +1,20 @@
 # Fixed Point Arithmetic
 
-_[`pallets/fixed-point`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/fixed-point)_
-_[`pallets/compounding-interest`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/compounding-interest)_
+`pallets/fixed-point`
+[
+	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
+](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Ffixed-point%2Fsrc%2Flib.rs)
+[
+	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
+](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/fixed-point/src/lib.rs)
+
+`pallets/compounding-interest`
+[
+	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
+](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fcompounding-interest%2Fsrc%2Flib.rs)
+[
+	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
+](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/compounding-interest/src/lib.rs)
 
 When programmers learn to use non-integer numbers in their programs, they are usually taught to use
 [floating point](https://en.wikipedia.org/wiki/Floating-point_arithmetic)s. In blockchain, we use an

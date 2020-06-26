@@ -1,6 +1,12 @@
 # Configurable Pallet Constants
 
-_[`pallets/constant-config`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/constant-config)_
+`pallets/constant-config`
+[
+	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
+](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fconstant-config%2Fsrc%2Flib.rs)
+[
+	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
+](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/constant-config/src/lib.rs)
 
 To declare constant values within a runtime, it is necessary to import the
 [`Get`](https://crates.parity.io/frame_support/traits/trait.Get.html) trait from `frame_support`
