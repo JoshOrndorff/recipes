@@ -1,6 +1,12 @@
 # Manual Seal
 
-_[`nodes/manual-seal`](https://github.com/substrate-developer-hub/recipes/tree/master/nodes/manual-seal)_
+`nodes/manual-seal`
+[
+	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
+](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fnodes%2Fmanual-seal%2Fsrc%2Flib.rs)
+[
+	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
+](https://github.com/substrate-developer-hub/recipes/tree/master/nodes/manual-seal/src/lib.rs)
 
 This recipe demonstrates a Substrate node using the
 [Manual Seal consensus](https://crates.parity.io/sc_consensus_manual_seal/index.html). Unlike the

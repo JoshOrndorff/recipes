@@ -1,6 +1,12 @@
 # Computational Resources and Weights
 
-_[`pallets/weights`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/weights)_
+`pallets/weights`
+[
+	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
+](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fweights%2Fsrc%2Flib.rs)
+[
+	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
+](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/weights/src/lib.rs)
 
 Any computational resources used by a transaction must be accounted for so that appropriate fees can
 be applied, and it is a pallet author's job to ensure that this accounting happens. Substrate
