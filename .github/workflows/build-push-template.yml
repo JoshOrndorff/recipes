@@ -32,14 +32,6 @@ jobs:
         t=$(mktemp)
         cat .devcontainer/devcontainer.json | jq ".image = \"${{ steps.env.outputs.image }}\"" > ${t} && mv ${t} .devcontainer/devcontainer.json
 
-    - name: Commit .devcontainer.json update
-      uses: EndBug/add-and-commit@v4
-      with:
-        message: "🔖 Update Docker Image for Substrate Playground"
-        add: ".devcontainer/devcontainer.json"
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
     - name: Trigger playground inclusion
       uses: peter-evans/repository-dispatch@v1
       with:
