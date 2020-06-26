@@ -1,6 +1,12 @@
 # Single Value
 
-_[`pallets/single-value`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/single-value)_
+`pallets/single-value`
+[
+	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
+](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fsingle-value%2Fsrc%2Flib.rs)
+[
+	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
+](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/single-value/src/lib.rs)
 
 Storage is used for data that should be kept between blocks and accessible to future transactions.
 Most runtimes will have many storage values, and together the storage values make up the
