@@ -78,7 +78,7 @@ pub fn new_full(config: Configuration) -> Result<impl AbstractService, ServiceEr
 			);
 			Ok(io)
 		})?
-		.build()?;
+		.build_full()?;
 
 	if is_authority {
 		// Proposer object for block authorship.
@@ -144,5 +144,5 @@ pub fn new_light(config: Configuration) -> Result<impl AbstractService, ServiceE
 			},
 		)?
 		.with_finality_proof_provider(|_client, _backend| Ok(Arc::new(()) as _))?
-		.build()
+		.build_light()
 }

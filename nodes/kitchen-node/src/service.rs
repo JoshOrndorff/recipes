@@ -67,7 +67,7 @@ pub fn new_full(config: Configuration) -> Result<impl AbstractService, ServiceEr
 		.map_err(sp_consensus::error::Error::InherentData)?;
 
 	let builder = new_full_start!(config);
-	let service = builder.build()?;
+	let service = builder.build_full()?;
 
 	// Initialize seed for signing transaction using off-chain workers
 	#[cfg(feature = "ocw")]
@@ -146,5 +146,5 @@ pub fn new_light(config: Configuration) -> Result<impl AbstractService, ServiceE
 			},
 		)?
 		.with_finality_proof_provider(|_client, _backend| Ok(Arc::new(()) as _))?
-		.build()
+		.build_light()
 }
