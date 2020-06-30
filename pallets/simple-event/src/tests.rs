@@ -25,6 +25,7 @@ parameter_types! {
 
 // The TestRuntime implements two pallet/frame traits: system, and simple_event
 impl system::Trait for TestRuntime {
+	type BaseCallFilter = ();
 	type Origin = Origin;
 	type Index = u64;
 	type Call = ();
