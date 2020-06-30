@@ -146,7 +146,7 @@ let grandpa_config = sc_finality_grandpa::GrandpaParams {
 With the parameters established, we can now create and spawn the authorship future.
 
 ```rust, ignore
-service.spawn_essential_task(
+service.spawn_essential_task_handle().spawn_blocking(
 	"grandpa-voter",
 	sc_finality_grandpa::run_grandpa_voter(grandpa_config)?
 );

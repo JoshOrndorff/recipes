@@ -139,7 +139,7 @@ With the future created, we can now kick it off using the service's
 [`spawn_essential_task` method](https://crates.parity.io/sc_service/struct.Service.html#method.spawn_essential_task).
 
 ```rust, ignore
-service.spawn_essential_task("instant-seal", authorship_future);
+service.spawn_essential_task_handle().spawn_blocking("instant-seal", authorship_future);
 ```
 
 ### What about the Light Client?

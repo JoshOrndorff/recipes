@@ -103,7 +103,7 @@ pub fn new_full(config: Configuration) -> Result<impl AbstractService, ServiceEr
 			inherent_data_providers,
 		);
 
-		service.spawn_essential_task("instant-seal", authorship_future);
+		service.spawn_essential_task_handle().spawn_blocking("instant-seal", authorship_future);
 	};
 
 	Ok(service)

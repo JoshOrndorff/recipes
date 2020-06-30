@@ -175,7 +175,7 @@ With the future created, we can now kick it off using the service's
 
 ```rust, ignore
 // we spawn the future on a background thread managed by service.
-service.spawn_essential_task("manual-seal", authorship_future);
+service.spawn_essential_task_handle().spawn_blocking("manual-seal", authorship_future);
 ```
 
 ## Combining Instant Seal with Manual Seal
