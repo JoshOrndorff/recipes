@@ -4,7 +4,7 @@ on:
   push:
     branches:
     - master
-  # TODO the next three lines are for testing only. Remove them after the CI pipeline is known to work.
+  ## TODO the next three lines are for testing only. Remove them after the CI pipeline is known to work.
   pr:
     branches:
     - develop
