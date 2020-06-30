@@ -5,7 +5,7 @@ on:
     branches:
     - master
   ## TODO the next three lines are for testing only. Remove them after the CI pipeline is known to work.
-  pr:
+  pull_request:
     branches:
     - develop
 
