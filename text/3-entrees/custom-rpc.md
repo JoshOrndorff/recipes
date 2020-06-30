@@ -60,7 +60,7 @@ With our RPC written, we're ready to install it on our node. We begin with a few
 jsonrpc-core = "14.0.3"
 jsonrpc-core-client = "14.0.3"
 jsonrpc-derive = "14.0.3"
-sc-rpc = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '34695a85650b58bcd7d7e2a677cafc2921251d68' }
+sc-rpc = { version = '2.0.0-dev', git = 'https://github.com/paritytech/substrate', rev = '00768a1f21a579c478fe5d4f51e1fa71f7db9fd4' }
 ```
 
 Next, in our `rpc-node`'s `service.rs` file, we extend the service with our RPC. We've chosen to
