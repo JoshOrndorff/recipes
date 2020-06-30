@@ -1,6 +1,12 @@
 # Execution Schedule
 
-_[`pallets/execution-schedule`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/execution-schedule)_
+`pallets/execution-schedule`
+[
+	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
+](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fexecution-schedule%2Fsrc%2Flib.rs)
+[
+	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
+](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/execution-schedule/src/lib.rs)
 
 <!-- TODO This content may need updated to match the actual pallet -->
 

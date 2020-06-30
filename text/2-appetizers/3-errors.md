@@ -1,6 +1,12 @@
 # Handling Errors
 
-_[`pallets/adding-machine`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/adding-machine)_
+`pallets/adding-machine`
+[
+	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
+](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fadding-machine%2Fsrc%2Flib.rs)
+[
+	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
+](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/adding-machine/src/lib.rs)
 
 As we've mentioned before, in Substrate development it is important to **Verify first, write last**.
 In this recipe, we'll create an adding machine that checks for unlucky numbers (a silly example) as

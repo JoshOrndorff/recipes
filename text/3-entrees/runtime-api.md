@@ -1,7 +1,20 @@
 # Runtime APIs
 
-_[`pallets/sum-storage`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/sum-storage)_
-_[`runtimes/api-runtime`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/api-runtime)_
+`pallets/sum-storage`
+[
+	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
+](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fsum-storage%2Fsrc%2Flib.rs)
+[
+	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
+](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/sum-storage/src/lib.rs)
+
+`runtimes/api-runtime`
+[
+	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
+](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fruntimes%2Fapi-runtime%2Fsrc%2Flib.rs)
+[
+	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
+](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/api-runtime/src/lib.rs)
 
 Each Substrate node contains a runtime. The runtime contains the business logic of the chain. It
 defines what transactions are valid and invalid and determines how the chain's state changes in

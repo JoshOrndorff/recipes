@@ -1,6 +1,12 @@
 # Generating Randomness
 
-_[pallets/randomness](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/randomness/)_
+`pallets/randomness`
+[
+	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
+](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Frandomness%2Fsrc%2Flib.rs)
+[
+	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
+](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/randomness/src/lib.rs)
 
 Randomness is useful in computer programs for everything from gambling, to generating DNA for
 digital kitties, to selecting block authors. Randomness is hard to come by in deterministic

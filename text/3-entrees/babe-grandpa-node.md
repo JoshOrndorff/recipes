@@ -1,6 +1,12 @@
 # BABE and GRANDPA Node
 
-_[`nodes/babe-grandpa-node`](https://github.com/substrate-developer-hub/recipes/tree/master/nodes/babe-grandpa-node)_
+`nodes/babe-grandpa-node`
+[
+	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
+](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fnodes%2Fbabe-grandpa-node%2Fsrc%2Flib.rs)
+[
+	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
+](https://github.com/substrate-developer-hub/recipes/tree/master/modes/babe-grandpa-node/src/lib.rs)
 
 The `babe-grandpa-node` uses the [BABE](https://crates.parity.io/sc_consensus_babe/index.html) Proof
 of Authority consensus engine to determine who may author blocks, and the

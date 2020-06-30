@@ -1,6 +1,12 @@
 # Tightly- and Loosely-Coupled Pallets
 
-_[pallets/check-membership](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/check-membership)_
+`pallets/check-membership`
+[
+	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
+](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fcheck-membership%2Fsrc%2Flib.rs)
+[
+	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
+](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/check-membership/src/lib.rs)
 
 The `check-membership` crate contains two pallets that solve the same problems in slightly different
 ways. Both pallets implement a single dispatchable function that can only be successfully executed

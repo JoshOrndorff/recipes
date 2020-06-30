@@ -1,8 +1,28 @@
 # Currency Types
 
-_[`pallets/lockable-currency`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/lockable-currency),
-[`pallets/reservable-currency`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/reservable-currency),
-[`pallets/currency-imbalances`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/currency-imbalances)_
+`pallets/lockable-currency`
+[
+	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
+](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Flockable-currency%2Fsrc%2Flib.rs)
+[
+	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
+](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/lockable-currency/src/lib.rs)
+
+`pallets/reservable-currency`
+[
+	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
+](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Freservable-currency%2Fsrc%2Flib.rs)
+[
+	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
+](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/reservable-currency/src/lib.rs)
+
+`pallets/currency-imbalances`
+[
+	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
+](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fcurrency-imbalances%2Fsrc%2Flib.rs)
+[
+	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
+](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/currency-imbalances/src/lib.rs)
 
 ## Just Plain Currency
 

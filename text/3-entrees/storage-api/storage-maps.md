@@ -1,6 +1,12 @@
 # Storage Maps
 
-_[`pallets/simple-map`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-map)_
+`pallets/simple-map`
+[
+	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
+](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fsimple-map%2Fsrc%2Flib.rs)
+[
+	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
+](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-map/src/lib.rs)
 
 In the appetizer on [storage values](../../2-appetizers/2-storage-values.md) we learned to store a
 single value in blockchain storage to be persisted between blocks. In this recipe, we will see how

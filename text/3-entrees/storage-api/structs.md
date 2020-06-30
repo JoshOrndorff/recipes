@@ -1,6 +1,12 @@
 # Using and Storing Structs
 
-_[`pallets/struct-storage`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/struct-storage)_
+`pallets/struct-storage`
+[
+	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
+](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fstruct-storage%2Fsrc%2Flib.rs)
+[
+	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
+](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/struct-storage/src/lib.rs)
 
 In Rust, a `struct`, or structure, is a custom data type that lets you name and package together
 multiple related values that make up a meaningful group. If you’re familiar with an object-oriented

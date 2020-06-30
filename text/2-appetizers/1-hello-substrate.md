@@ -1,6 +1,12 @@
 # Hello Substrate
 
-_[`pallets/hello-substrate`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/hello-substrate)_
+`pallets/hello-substrate`
+[
+	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
+](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fhello-substrate%2Fsrc%2Flib.rs)
+[
+	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
+](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/hello-substrate/src/lib.rs)
 
 The first pallet we'll explore is a simple "hello world" example. This pallet will have one
 dispatchable call that prints a message to the node's output. Because this is our first pallet,
