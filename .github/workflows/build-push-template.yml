@@ -4,6 +4,10 @@ on:
   push:
     branches:
     - master
+  # TODO the next three lines are for testing only. Remove them after the CI pipeline is known to work.
+  pr:
+    branches:
+    - develop
 
 jobs:
   build-push-template:
@@ -30,7 +34,7 @@ jobs:
     - name: Trigger playground inclusion
       uses: peter-evans/repository-dispatch@v1
       with:
-        token: ${{ secrets.REPO_ACCESS_TOKEN }}
+        token: ${{ secrets.PLAYGROUND_ACCESS_TOKEN }}
         repository: paritytech/substrate-playground
         event-type: template-updated
         client-payload: '{"id": "recipes", "image": "${{ steps.env.outputs.image }}"}'
