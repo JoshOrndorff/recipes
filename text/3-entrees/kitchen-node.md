@@ -96,9 +96,9 @@ without the UI.
 Installing the instant seal engine has three dependencies whereas the runtime had only one.
 
 ```toml
-sc-consensus = { version = '0.8.0-dev', git = 'https://github.com/paritytech/substrate', rev = '34695a85650b58bcd7d7e2a677cafc2921251d68' }
-sc-consensus-manual-seal = { version = '0.8.0-dev', git = 'https://github.com/paritytech/substrate', rev = '34695a85650b58bcd7d7e2a677cafc2921251d68' }
-sp-consensus = { version = '0.8.0-dev', git = 'https://github.com/paritytech/substrate', rev = '34695a85650b58bcd7d7e2a677cafc2921251d68' }
+sc-consensus = { version = '0.8.0-dev', git = 'https://github.com/paritytech/substrate', rev = '00768a1f21a579c478fe5d4f51e1fa71f7db9fd4' }
+sc-consensus-manual-seal = { version = '0.8.0-dev', git = 'https://github.com/paritytech/substrate', rev = '00768a1f21a579c478fe5d4f51e1fa71f7db9fd4' }
+sp-consensus = { version = '0.8.0-dev', git = 'https://github.com/paritytech/substrate', rev = '00768a1f21a579c478fe5d4f51e1fa71f7db9fd4' }
 ```
 
 ### The Proposer
@@ -145,7 +145,7 @@ With the future created, we can now kick it off using the service's
 [`spawn_essential_task` method](https://crates.parity.io/sc_service/struct.Service.html#method.spawn_essential_task).
 
 ```rust, ignore
-service.spawn_essential_task("instant-seal", authorship_future);
+service.spawn_essential_task_handle().spawn_blocking("instant-seal", authorship_future);
 ```
 
 ### What about the Light Client?

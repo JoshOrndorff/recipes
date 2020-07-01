@@ -78,7 +78,7 @@ pub fn new_full(config: Configuration) -> Result<impl AbstractService, ServiceEr
 			);
 			Ok(io)
 		})?
-		.build()?;
+		.build_full()?;
 
 	if is_authority {
 		// Proposer object for block authorship.
@@ -100,7 +100,7 @@ pub fn new_full(config: Configuration) -> Result<impl AbstractService, ServiceEr
 		);
 
 		// we spawn the future on a background thread managed by service.
-		service.spawn_essential_task("manual-seal", authorship_future);
+		service.spawn_essential_task_handle().spawn_blocking("manual-seal", authorship_future);
 	};
 
 	Ok(service)
@@ -144,5 +144,5 @@ pub fn new_light(config: Configuration) -> Result<impl AbstractService, ServiceE
 			},
 		)?
 		.with_finality_proof_provider(|_client, _backend| Ok(Arc::new(()) as _))?
-		.build()
+		.build_light()
 }

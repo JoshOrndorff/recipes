@@ -99,7 +99,7 @@ pub fn new_full(config: Configuration) -> Result<impl AbstractService, ServiceEr
 		// .with_finality_proof_provider(|_client, _backend|
 		// 	Ok(Arc::new(()) as _)
 		// )?
-		.build()?;
+		.build_full()?;
 
 	if is_authority {
 		let proposer = sc_basic_authorship::ProposerFactory::new(
@@ -191,5 +191,5 @@ pub fn new_light(config: Configuration) -> Result<impl AbstractService, ServiceE
 			},
 		)?
 		.with_finality_proof_provider(|_client, _backend| Ok(Arc::new(()) as _))?
-		.build()
+		.build_light()
 }

@@ -225,6 +225,7 @@ mod tests {
 	}
 
 	impl system::Trait for Test {
+		type BaseCallFilter = ();
 		type Origin = Origin;
 		type Call = ();
 		type Index = u64;
