@@ -98,6 +98,14 @@ pub fn new_test_ext() -> sp_io::TestExternalities {
 	ext
 }
 
+/// Charity pot minimum balance is set
+#[test]
+fn pot_min_balance_is_set() {
+	new_test_ext().execute_with(|| {
+		assert_eq!(Charity::pot(), Balances::minimum_balance());
+	})
+}
+
 /// Verifying correct behavior of boilerplate
 #[test]
 fn new_test_ext_behaves() {
