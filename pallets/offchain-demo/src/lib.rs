@@ -44,8 +44,8 @@ pub const KEY_TYPE: KeyTypeId = KeyTypeId(*b"demo");
 pub const NUM_VEC_LEN: usize = 10;
 
 // We are fetching information from github public API about organisation `substrate-developer-hub`.
-pub const HTTP_REMOTE_REQUEST_BYTES: &[u8] = b"https://api.github.com/orgs/substrate-developer-hub";
-pub const HTTP_HEADER_USER_AGENT: &[u8] = b"jimmychu0807";
+pub const HTTP_REMOTE_REQUEST: &str = "https://api.github.com/orgs/substrate-developer-hub";
+pub const HTTP_HEADER_USER_AGENT: &str = "jimmychu0807";
 
 /// Based on the above `KeyTypeId` we need to generate a pallet-specific crypto type wrappers.
 /// We can use from supported crypto kinds (`sr25519`, `ed25519` and `ecdsa`) and augment
@@ -326,15 +326,10 @@ impl<T: Trait> Module<T> {
 	/// This function uses the `offchain::http` API to query the remote github information,
 	///   and returns the JSON response as vector of bytes.
 	fn fetch_from_remote() -> Result<Vec<u8>, Error<T>> {
-		let remote_url_bytes = HTTP_REMOTE_REQUEST_BYTES.to_vec();
-		let user_agent = HTTP_HEADER_USER_AGENT.to_vec();
-		let remote_url =
-			str::from_utf8(&remote_url_bytes).map_err(|_| <Error<T>>::HttpFetchingError)?;
-
-		debug::info!("sending request to: {}", remote_url);
+		debug::info!("sending request to: {}", HTTP_REMOTE_REQUEST);
 
 		// Initiate an external HTTP GET request. This is using high-level wrappers from `sp_runtime`.
-		let request = rt_offchain::http::Request::get(remote_url);
+		let request = rt_offchain::http::Request::get(HTTP_REMOTE_REQUEST);
 
 		// Keeping the offchain worker execution time reasonable, so limiting the call to be within 3s.
 		let timeout = sp_io::offchain::timestamp().add(rt_offchain::Duration::from_millis(3000));
@@ -342,10 +337,7 @@ impl<T: Trait> Module<T> {
 		// For github API request, we also need to specify `user-agent` in http request header.
 		//   See: https://developer.github.com/v3/#user-agent-required
 		let pending = request
-			.add_header(
-				"User-Agent",
-				str::from_utf8(&user_agent).map_err(|_| <Error<T>>::HttpFetchingError)?,
-			)
+			.add_header("User-Agent", HTTP_HEADER_USER_AGENT)
 			.deadline(timeout) // Setting the timeout time
 			.send() // Sending the request out by the host
 			.map_err(|_| <Error<T>>::HttpFetchingError)?;
