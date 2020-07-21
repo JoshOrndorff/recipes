@@ -20,7 +20,10 @@ use frame_system::{
 use sp_core::crypto::KeyTypeId;
 use sp_runtime::{
 	offchain as rt_offchain,
-	offchain::storage::StorageValueRef,
+	offchain::{
+		storage::StorageValueRef,
+		storage_lock::{StorageLock, BlockAndTime},
+	},
 	transaction_validity::{
 		InvalidTransaction, TransactionPriority, TransactionSource, TransactionValidity,
 		ValidTransaction,
@@ -46,6 +49,10 @@ pub const NUM_VEC_LEN: usize = 10;
 // We are fetching information from github public API about organisation `substrate-developer-hub`.
 pub const HTTP_REMOTE_REQUEST: &str = "https://api.github.com/orgs/substrate-developer-hub";
 pub const HTTP_HEADER_USER_AGENT: &str = "jimmychu0807";
+
+pub const FETCH_TIMEOUT_PERIOD: u64 = 3000; // in milli-seconds
+pub const LOCK_TIMEOUT_EXPIRATION: u64 = FETCH_TIMEOUT_PERIOD + 1000; // in milli-seconds
+pub const LOCK_BLOCK_EXPIRATION: u32 = 3; // in block number
 
 /// Based on the above `KeyTypeId` we need to generate a pallet-specific crypto type wrappers.
 /// We can use from supported crypto kinds (`sr25519`, `ed25519` and `ecdsa`) and augment
@@ -247,7 +254,6 @@ impl<T: Trait> Module<T> {
 		// Since the local storage is common for all offchain workers, it's a good practice
 		// to prepend our entry with the pallet name.
 		let s_info = StorageValueRef::persistent(b"offchain-demo::gh-info");
-		let s_lock = StorageValueRef::persistent(b"offchain-demo::lock");
 
 		// The local storage is persisted and shared between runs of the offchain workers,
 		// and offchain workers may run concurrently. We can use the `mutate` function, to
@@ -264,43 +270,29 @@ impl<T: Trait> Module<T> {
 			return Ok(());
 		}
 
-		// We are implementing a mutex lock here with `s_lock`
-		let res: Result<Result<bool, bool>, Error<T>> = s_lock.mutate(|s: Option<Option<bool>>| {
-			match s {
-				// `s` can be one of the following:
-				//   `None`: the lock has never been set. Treated as the lock is free
-				//   `Some(None)`: unexpected case, treated it as AlreadyFetch
-				//   `Some(Some(false))`: the lock is free
-				//   `Some(Some(true))`: the lock is held
+		// off-chain storage can be accessed by off-chain workers from multiple runs, so we want to lock
+		//   it before doing heavy computations and write operations.
+		// ref: https://substrate.dev/rustdocs/v2.0.0-rc3/sp_runtime/offchain/storage_lock/index.html
+		//
+		// There are four ways of defining a lock:
+		//   1) `new` - lock with default time and block exipration
+		//   2) `with_deadline` - lock with default block but custom time exipration
+		//   3) `with_block_deadline` - lock with default time but custom block exipration
+		//   4) `with_block_and_time_deadline` - lock with custom time and block exipration
+		// Here we choose the most custom one for demonstration purpose.
+		let mut lock = StorageLock::<BlockAndTime<Self>>::with_block_and_time_deadline(
+			b"offchain-demo::lock",
+			LOCK_BLOCK_EXPIRATION,
+			rt_offchain::Duration::from_millis(LOCK_TIMEOUT_EXPIRATION)
+		);
 
-				// If the lock has never been set or is free (false), return true to execute `fetch_n_parse`
-				None | Some(Some(false)) => Ok(true),
-
-				// Otherwise, someone already hold the lock (true), we want to skip `fetch_n_parse`.
-				// Covering cases: `Some(None)` and `Some(Some(true))`
-				_ => Err(<Error<T>>::AlreadyFetched),
-			}
-		});
-
-		// Cases of `res` returned result:
-		//   `Err(<Error<T>>)` - lock is held, so we want to skip `fetch_n_parse` function.
-		//   `Ok(Err(true))` - Another ocw is writing to the storage while we set it,
-		//                     we also skip `fetch_n_parse` in this case.
-		//   `Ok(Ok(true))` - successfully acquire the lock, so we run `fetch_n_parse`
-		if let Ok(Ok(true)) = res {
+		// We try to acquire the lock here. If failed, we know the `fetch_n_parse` part inside is being
+		//   executed by previous run of ocw, so the function just returns.
+		// ref: https://substrate.dev/rustdocs/v2.0.0-rc3/sp_runtime/offchain/storage_lock/struct.StorageLock.html#method.try_lock
+		if let Ok(_guard) = lock.try_lock() {
 			match Self::fetch_n_parse() {
-				Ok(gh_info) => {
-					// set gh-info into the storage and release the lock
-					s_info.set(&gh_info);
-					s_lock.set(&false);
-
-					debug::info!("fetched gh-info: {:?}", gh_info);
-				}
-				Err(err) => {
-					// release the lock
-					s_lock.set(&false);
-					return Err(err);
-				}
+				Ok(gh_info) => { s_info.set(&gh_info); }
+				Err(err) => { return Err(err); }
 			}
 		}
 		Ok(())
@@ -332,7 +324,8 @@ impl<T: Trait> Module<T> {
 		let request = rt_offchain::http::Request::get(HTTP_REMOTE_REQUEST);
 
 		// Keeping the offchain worker execution time reasonable, so limiting the call to be within 3s.
-		let timeout = sp_io::offchain::timestamp().add(rt_offchain::Duration::from_millis(3000));
+		let timeout = sp_io::offchain::timestamp()
+			.add(rt_offchain::Duration::from_millis(FETCH_TIMEOUT_PERIOD));
 
 		// For github API request, we also need to specify `user-agent` in http request header.
 		//   See: https://developer.github.com/v3/#user-agent-required
@@ -424,5 +417,12 @@ impl<T: Trait> frame_support::unsigned::ValidateUnsigned for Module<T> {
 		} else {
 			InvalidTransaction::Call.into()
 		}
+	}
+}
+
+impl<T: Trait> rt_offchain::storage_lock::BlockNumberProvider for Module<T> {
+	type BlockNumber = T::BlockNumber;
+	fn current_block_number() -> Self::BlockNumber {
+	  <frame_system::Module<T>>::block_number()
 	}
 }
