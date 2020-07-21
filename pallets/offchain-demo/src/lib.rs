@@ -40,13 +40,13 @@ use alt_serde::{Deserialize, Deserializer};
 ///
 /// Every module that deals with signatures needs to declare its unique identifier for
 /// its crypto keys.
-/// When offchain worker is signing transactions it's going to request keys of type
-/// `KeyTypeId` from the keystore and use the ones it finds to sign the transaction.
+/// When an offchain worker is signing transactions it's going to request keys from type
+/// `KeyTypeId` via the keystore to sign the transaction.
 /// The keys can be inserted manually via RPC (see `author_insertKey`).
 pub const KEY_TYPE: KeyTypeId = KeyTypeId(*b"demo");
 pub const NUM_VEC_LEN: usize = 10;
 
-// We are fetching information from github public API about organisation `substrate-developer-hub`.
+// We are fetching information from the github public API about organization`substrate-developer-hub`.
 pub const HTTP_REMOTE_REQUEST: &str = "https://api.github.com/orgs/substrate-developer-hub";
 pub const HTTP_HEADER_USER_AGENT: &str = "jimmychu0807";
 
@@ -54,9 +54,9 @@ pub const FETCH_TIMEOUT_PERIOD: u64 = 3000; // in milli-seconds
 pub const LOCK_TIMEOUT_EXPIRATION: u64 = FETCH_TIMEOUT_PERIOD + 1000; // in milli-seconds
 pub const LOCK_BLOCK_EXPIRATION: u32 = 3; // in block number
 
-/// Based on the above `KeyTypeId` we need to generate a pallet-specific crypto type wrappers.
-/// We can use from supported crypto kinds (`sr25519`, `ed25519` and `ecdsa`) and augment
-/// the types with this pallet-specific identifier.
+/// Based on the above `KeyTypeId` we need to generate a pallet-specific crypto type wrapper.
+/// We can utilize the supported crypto kinds (`sr25519`, `ed25519` and `ecdsa`) and augment
+/// them with the pallet-specific identifier.
 pub mod crypto {
 	use crate::KEY_TYPE;
 	use sp_core::sr25519::Signature as Sr25519Signature;
@@ -210,7 +210,7 @@ impl<T: Trait> Module<T> {
 	/// Add a new number to the list.
 	fn append_or_replace_number(who: Option<T::AccountId>, number: u64) -> DispatchResult {
 		Numbers::mutate(|numbers| {
-			// The append or replace logic. The `numbers` vector is at most `NUM_VEC_LEN` long.
+			// Append or replace logic. The `numbers` vector is at most `NUM_VEC_LEN` long.
 			let num_len = numbers.len();
 
 			if num_len < NUM_VEC_LEN {
@@ -236,7 +236,7 @@ impl<T: Trait> Module<T> {
 
 	fn choose_tx_type(block_number: T::BlockNumber) -> TransactionType {
 		// Decide what type of transaction to send based on block number.
-		// Each block the offchain worker will send one type of transaction back to the chain.
+		// The offchain worker will send each block a single type of transaction back to the chain.
 		// First a signed transaction, then an unsigned transaction, then an http fetch and json parsing.
 		match block_number.try_into().ok().unwrap() % 3 {
 			0 => TransactionType::SignedSubmitNumber,
@@ -246,22 +246,22 @@ impl<T: Trait> Module<T> {
 		}
 	}
 
-	/// Check if we have fetched github info before. If yes, we use the cached version that is
-	///   stored in off-chain worker storage `storage`. If no, we fetch the remote info and then
+	/// Check if we have fetched github info before. If yes, we can use the cached version
+	///   stored in off-chain worker storage `storage`. If not, we fetch the remote info and
 	///   write the info into the storage for future retrieval.
 	fn fetch_if_needed() -> Result<(), Error<T>> {
-		// Start off by creating a reference to Local Storage value.
+		// Create a reference to Local Storage value.
 		// Since the local storage is common for all offchain workers, it's a good practice
 		// to prepend our entry with the pallet name.
 		let s_info = StorageValueRef::persistent(b"offchain-demo::gh-info");
 
-		// The local storage is persisted and shared between runs of the offchain workers,
-		// and offchain workers may run concurrently. We can use the `mutate` function, to
+		// Local storage is persisted and shared between runs of the offchain workers,
+		// offchain workers may run concurrently. We can use the `mutate` function to
 		// write a storage entry in an atomic fashion.
 		//
-		// It has a similar API as `StorageValue` that offer `get`, `set`, `mutate`.
-		// If we are using a get-check-set access pattern, we likely want to use `mutate` to access
-		// the storage in one go.
+		// With a similar API as `StorageValue` with the variables `get`, `set`, `mutate`.
+		// We will likely want to use `mutate` to access
+		// the storage comprehensively.
 		//
 		// Ref: https://substrate.dev/rustdocs/v2.0.0-rc3/sp_runtime/offchain/storage/struct.StorageValueRef.html
 		if let Some(Some(gh_info)) = s_info.get::<GithubInfo>() {
@@ -270,15 +270,15 @@ impl<T: Trait> Module<T> {
 			return Ok(());
 		}
 
-		// off-chain storage can be accessed by off-chain workers from multiple runs, so we want to lock
-		//   it before doing heavy computations and write operations.
+		// Since off-chain storage can be accessed by off-chain workers from multiple runs, it is important to lock
+		//   it before doing heavy computations or write operations.
 		// ref: https://substrate.dev/rustdocs/v2.0.0-rc3/sp_runtime/offchain/storage_lock/index.html
 		//
 		// There are four ways of defining a lock:
 		//   1) `new` - lock with default time and block exipration
-		//   2) `with_deadline` - lock with default block but custom time exipration
-		//   3) `with_block_deadline` - lock with default time but custom block exipration
-		//   4) `with_block_and_time_deadline` - lock with custom time and block exipration
+		//   2) `with_deadline` - lock with default block but custom time expiration
+		//   3) `with_block_deadline` - lock with default time but custom block expiration
+		//   4) `with_block_and_time_deadline` - lock with custom time and block expiration
 		// Here we choose the most custom one for demonstration purpose.
 		let mut lock = StorageLock::<BlockAndTime<Self>>::with_block_and_time_deadline(
 			b"offchain-demo::lock",
