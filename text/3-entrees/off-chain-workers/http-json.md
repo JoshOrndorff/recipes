@@ -29,25 +29,25 @@ We then issue http requests inside the `fetch_from_remote()` function.
 
 ```rust
 // Initiate an external HTTP GET request. This is using high-level wrappers from `sp_runtime`.
-let remote_url = str::from_utf8(&remote_url_bytes)
-	.map_err(|_| <Error<T>>::HttpFetchingError)?;
-
-let request = rt_offchain::http::Request::get(remote_url);
+let request = rt_offchain::http::Request::get(HTTP_REMOTE_REQUEST);
 ```
 
 We should also set a timeout period so the http request does not hold indefinitely. For github API
 usage, we also need to add extra HTTP header information to it. This is how we do it.
 
 ```rust
+pub const FETCH_TIMEOUT_PERIOD: u64 = 3000; // in milli-seconds
+pub const HTTP_HEADER_USER_AGENT: &str = "my-github-username";
+
+// ...
 // Keeping the offchain worker execution time reasonable, so limiting the call to be within 3s.
-//   `sp_io` pallet offers a timestamp() to get the current timestamp from off-chain perspective.
-let timeout = sp_io::offchain::timestamp().add(rt_offchain::Duration::from_millis(3000));
+let timeout = sp_io::offchain::timestamp()
+	.add(rt_offchain::Duration::from_millis(FETCH_TIMEOUT_PERIOD));
 
 // For github API request, we also need to specify `user-agent` in http request header.
 //   See: https://developer.github.com/v3/#user-agent-required
 let pending = request
-	.add_header("User-Agent", str::from_utf8(&user_agent)
-		.map_err(|_| <Error<T>>::HttpFetchingError)?)
+	.add_header("User-Agent", HTTP_HEADER_USER_AGENT)
 	.deadline(timeout) // Setting the timeout time
 	.send() // Sending the request out by the host
 	.map_err(|_| <Error<T>>::HttpFetchingError)?; // Here we capture and return any http error.
@@ -109,12 +109,7 @@ serde_json = { version = "1", default-features = false, git = "https://github.co
 # ...
 ```
 
-We also use a modified version of `serde_json` that has the latest `alloc` feature and again depends
-on only `alt_serde`.
-
-> Another way of compiling `serde` with `no_std` in runtime is to use a cargo nightly feature,
-> [additional feature resolver](https://github.com/rust-lang/cargo/pull/7820)
-> ([relevant doc](https://doc.rust-lang.org/nightly/cargo/reference/unstable.html#resolver)).
+We also use a modified version of `serde_json` with the latest `alloc` feature and depending on `alt_serde`.
 
 ### Deserializing JSON string to struct
 

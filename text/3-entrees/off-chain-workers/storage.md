@@ -9,7 +9,7 @@ Fortunately, there is also a local storage that persist across runs in off-chain
 local within off-chain workers and not passed within network. Storage of off-chain workers is
 persisted across runs of off-chain workers and blockchain re-organizations.
 
-Off-chain workers are asynchronously run during block import. Since ocws are not limited by how long
+Off-chain workers are asynchronously run at the end of block import. Since ocws are not limited by how long
 they run, at any single instance there could be multiple ocws running, being initiated by previous
 block imports. See diagram below.
 
@@ -37,7 +37,10 @@ src: `offchain-demo/src/lib.rs`
 ```rust
 use sp_runtime::{
 	// ...
-	offchain::{storage::StorageValueRef},
+	offchain::{
+		storage::StorageValueRef,
+		storage_lock::{StorageLock, BlockAndTime},
+	},
 	// ...
 }
 ```
@@ -51,18 +54,13 @@ fn fetch_if_needed() -> Result<(), Error<T>> {
 	// Start off by creating a reference to Local Storage value.
 	// Since the local storage is common for all offchain workers, it's a good practice
 	// to prepend our entry with the pallet name.
-	let storage = StorageValueRef::persistent(b"offchain-demo::gh-info");
-	let s_lock = StorageValueRef::persistent(b"offchain-demo::lock");
+	let s_info = StorageValueRef::persistent(b"offchain-demo::gh-info");
 	// ...
 }
 ```
 
-Looking at the
-[API doc](https://substrate.dev/rustdocs/v2.0.0-rc3/sp_runtime/offchain/storage/struct.StorageValueRef.html), we see
-there are two type of StorageValueRef, created via `::persistent()` and `::local()`. `::local()` is
-not fully implemented yet and `::persistent()` is enough for this use cases. We passed in a key as
-our storage key. As storage keys are namespaced globally, a good practice would be to prepend our
-pallet name in front of our storage key.
+We passed in a key as our storage key. As storage keys are namespaced globally, a good practice
+would be to prepend our pallet name in front of our storage key.
 
 ## Access
 
@@ -84,83 +82,55 @@ fn fetch_if_needed() -> Result<(), Error<T>> {
 }
 ```
 
-As with general on-chain storage, if we have a storage access pattern of **get-check-set**, it is a
-good indicator we should use `mutate`. This makes sure that multiple off-chain workers running
-concurrently does not modify the same storage entry.
-
-We then try to acquire the lock in order to fetch github info.
+We then define a lock and try to acquire it before fetching github info.
 
 ```rust
 fn fetch_if_needed() -> Result<(), Error<T>> {
 	//...
-	// We are implementing a mutex lock here with `s_lock`
-	let res: Result<Result<bool, bool>, Error<T>> = s_lock.mutate(|s: Option<Option<bool>>| {
-		match s {
-			// `s` can be one of the following:
-			//   `None`: the lock has never been set. Treated as the lock is free
-			//   `Some(None)`: unexpected case, treated it as AlreadyFetch
-			//   `Some(Some(false))`: the lock is free
-			//   `Some(Some(true))`: the lock is held
+	// off-chain storage can be accessed by off-chain workers from multiple runs, so we want to lock
+	//   it before doing heavy computations and write operations.
+	// ref: https://substrate.dev/rustdocs/v2.0.0-rc3/sp_runtime/offchain/storage_lock/index.html
+	//
+	// There are four ways of defining a lock:
+	//   1) `new` - lock with default time and block exipration
+	//   2) `with_deadline` - lock with default block but custom time exipration
+	//   3) `with_block_deadline` - lock with default time but custom block exipration
+	//   4) `with_block_and_time_deadline` - lock with custom time and block exipration
+	// Here we choose the most custom one for demonstration purpose.
+	let mut lock = StorageLock::<BlockAndTime<Self>>::with_block_and_time_deadline(
+		b"offchain-demo::lock",
+		LOCK_BLOCK_EXPIRATION,
+		rt_offchain::Duration::from_millis(LOCK_TIMEOUT_EXPIRATION)
+	);
 
-			// If the lock has never been set or is free (false), return true to execute `fetch_n_parse`
-			None | Some(Some(false)) => Ok(true),
+	// We try to acquire the lock here. If failed, we know the fetching logic inside is being
+	//   executed by previous run of ocw, so the function just returns.
+	// ref: https://substrate.dev/rustdocs/v2.0.0-rc3/sp_runtime/offchain/storage_lock/struct.StorageLock.html#method.try_lock
+	if let Ok(_guard) = lock.try_lock() {
+		// fetching logic here ...
+	}
 
-			// Otherwise, someone already hold the lock (true), we want to skip `fetch_n_parse`.
-			// Covering cases: `Some(None)` and `Some(Some(true))`
-			_ => Err(<Error<T>>::AlreadyFetched),
-		}
-	});
 	//...
 }
 ```
 
-We use the `mutate` function to get and set the lock value, taking advantages of its compare-and-set
-access pattern. If the lock is being held by another ocw (with `s` equals value of
-`Some(Some(true))`), we return an error indicating the fetching is done by another ocw.
-
-The return value of the `mutate` has a type of `Result<Result<T, T>, E>`, to indicate one of the
-following cases:
-
--   `Ok(Ok(T))` - the value has been successfully set in the `mutate` closure and saved to the
-    storage.
--   `Ok(Err(T))` - the value has been successfully set in the `mutate` closure, but failed to save
-    to the storage.
--   `Err(_)` - the value has **NOT** been set successfully in the `mutate` closure.
-
-Now we check the returned value of the `mutate` function. If fetching is done by another ocw
-(returning `Err(<Error<T>>)`), or cannot acquire the lock (returning `Ok(Err(true))`), we skip the
-fetching.
+We then perform the fetch after the lock is acquired
 
 ```rust
 fn fetch_if_needed() -> Result<(), Error<T>> {
 	// ...
-	// Cases of `res` returned result:
-	//   `Err(<Error<T>>)` - lock is held, so we want to skip `fetch_n_parse` function.
-	//   `Ok(Err(true))` - Another ocw is writing to the storage while we set it,
-	//                     we also skip `fetch_n_parse` in this case.
-	//   `Ok(Ok(true))` - successfully acquire the lock, so we run `fetch_n_parse`
-	if let Ok(Ok(true)) = res {
+	if let Ok(_guard) = lock.try_lock() {
 		match Self::fetch_n_parse() {
-			Ok(gh_info) => {
-				// set gh-info into the storage and release the lock
-				s_info.set(&gh_info);
-				s_lock.set(&false);
-
-				debug::info!("fetched gh-info: {:?}", gh_info);
-			},
-			Err(err) => {
-				// release the lock
-				s_lock.set(&false);
-				return Err(err);
-			}
+			Ok(gh_info) => { s_info.set(&gh_info); }
+			Err(err) => { return Err(err); }
 		}
 	}
+
 	Ok(())
 }
 ```
 
-Finally, whether the `fetch_n_parse()` function success or not, we release the lock by setting it to
-`false`.
+Finally when the `_guard` variable goes out of scope, the lock is released.
 
 ## Reference
 
