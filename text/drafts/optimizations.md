@@ -156,7 +156,7 @@ To dive deeper down these 🐰 holes
 
 -   [Rust Asynchronous Ecosystem Working Group](https://github.com/rustasync)
 -   [romio](https://github.com/withoutboats/romio)
--   [Tokio Docs](https://tokio.rs/docs/overview/)
+-   [Tokio Tutorials](https://tokio.rs/tokio/tutorial)
 
 ### Concurrency <a name = "concurrency"></a>
 

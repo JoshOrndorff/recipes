@@ -99,9 +99,9 @@ started. All of these ideas and more are listed in our
 ### Rust Code
 
 There is not yet strict enforcement of the
-[Rust in Substrate coding style](https://wiki.parity.io/Substrate-Style-Guide), but it is highly
-encouraged to wrap lines at 120 characters a line (or less) for improving reviewer experience on
-github.
+[Rust in Substrate coding style](https://github.com/paritytech/substrate/blob/master/docs/STYLE_GUIDE.md),
+but it is highly encouraged to wrap lines at 120 characters a line (or less) for improving reviewer
+experience on GitHub.
 
 Graciously invoke `cargo fmt` and `cargo clippy` on any Rust code; This should soon be enforced by
 CI.
