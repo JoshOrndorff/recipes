@@ -1,10 +1,9 @@
 ## Using the Polkadot UI to Interact
 
 To simplify interactions with the custom Substrate runtime, use the
-[Polkadot JS UI for Substrate](https://polkadot.js.org/apps/next/).
+[Polkadot JS UI for Substrate](https://polkadot.js.org/apps).
 
-By default, this UI is configured to interact with the public Substrate test-network BBQ Birch. To
-have it connect to your local node, simply go to:
+To have the UI connect to your local node, simply go to:
 
 ```
 Settings > remote node/endpoint to connect to > Local Node (127.0.0.1:9944)
