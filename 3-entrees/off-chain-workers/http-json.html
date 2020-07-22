@@ -175,10 +175,7 @@ organization <code>substrate-developer-hub</code> via its public API. Then we ex
 <span class="boring">#![allow(unused_variables)]
 </span><span class="boring">fn main() {
 </span>// Initiate an external HTTP GET request. This is using high-level wrappers from `sp_runtime`.
-let remote_url = str::from_utf8(&amp;remote_url_bytes)
-	.map_err(|_| &lt;Error&lt;T&gt;&gt;::HttpFetchingError)?;
-
-let request = rt_offchain::http::Request::get(remote_url);
+let request = rt_offchain::http::Request::get(HTTP_REMOTE_REQUEST);
 <span class="boring">}
 </span></code></pre></pre>
 <p>We should also set a timeout period so the http request does not hold indefinitely. For github API
@@ -186,15 +183,18 @@ usage, we also need to add extra HTTP header information to it. This is how we d
 <pre><pre class="playpen"><code class="language-rust">
 <span class="boring">#![allow(unused_variables)]
 </span><span class="boring">fn main() {
-</span>// Keeping the offchain worker execution time reasonable, so limiting the call to be within 3s.
-//   `sp_io` pallet offers a timestamp() to get the current timestamp from off-chain perspective.
-let timeout = sp_io::offchain::timestamp().add(rt_offchain::Duration::from_millis(3000));
+</span>pub const FETCH_TIMEOUT_PERIOD: u64 = 3000; // in milli-seconds
+pub const HTTP_HEADER_USER_AGENT: &amp;str = &quot;my-github-username&quot;;
+
+// ...
+// Keeping the offchain worker execution time reasonable, so limiting the call to be within 3s.
+let timeout = sp_io::offchain::timestamp()
+	.add(rt_offchain::Duration::from_millis(FETCH_TIMEOUT_PERIOD));
 
 // For github API request, we also need to specify `user-agent` in http request header.
 //   See: https://developer.github.com/v3/#user-agent-required
 let pending = request
-	.add_header(&quot;User-Agent&quot;, str::from_utf8(&amp;user_agent)
-		.map_err(|_| &lt;Error&lt;T&gt;&gt;::HttpFetchingError)?)
+	.add_header(&quot;User-Agent&quot;, HTTP_HEADER_USER_AGENT)
 	.deadline(timeout) // Setting the timeout time
 	.send() // Sending the request out by the host
 	.map_err(|_| &lt;Error&lt;T&gt;&gt;::HttpFetchingError)?; // Here we capture and return any http error.
@@ -250,13 +250,7 @@ serde_json = { version = &quot;1&quot;, default-features = false, git = &quot;ht
 
 # ...
 </code></pre>
-<p>We also use a modified version of <code>serde_json</code> that has the latest <code>alloc</code> feature and again depends
-on only <code>alt_serde</code>.</p>
-<blockquote>
-<p>Another way of compiling <code>serde</code> with <code>no_std</code> in runtime is to use a cargo nightly feature,
-<a href="https://github.com/rust-lang/cargo/pull/7820">additional feature resolver</a>
-(<a href="https://doc.rust-lang.org/nightly/cargo/reference/unstable.html#resolver">relevant doc</a>).</p>
-</blockquote>
+<p>We also use a modified version of <code>serde_json</code> with the latest <code>alloc</code> feature and depending on <code>alt_serde</code>.</p>
 <h3><a class="header" href="#deserializing-json-string-to-struct" id="deserializing-json-string-to-struct">Deserializing JSON string to struct</a></h3>
 <p>Then we use the usual <code>serde-derive</code> approach on deserializing. First we define the struct with
 fields we are interested to extract out.</p>

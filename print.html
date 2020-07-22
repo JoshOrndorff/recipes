@@ -3244,10 +3244,7 @@ organization <code>substrate-developer-hub</code> via its public API. Then we ex
 <span class="boring">#![allow(unused_variables)]
 </span><span class="boring">fn main() {
 </span>// Initiate an external HTTP GET request. This is using high-level wrappers from `sp_runtime`.
-let remote_url = str::from_utf8(&amp;remote_url_bytes)
-	.map_err(|_| &lt;Error&lt;T&gt;&gt;::HttpFetchingError)?;
-
-let request = rt_offchain::http::Request::get(remote_url);
+let request = rt_offchain::http::Request::get(HTTP_REMOTE_REQUEST);
 <span class="boring">}
 </span></code></pre></pre>
 <p>We should also set a timeout period so the http request does not hold indefinitely. For github API
@@ -3255,15 +3252,18 @@ usage, we also need to add extra HTTP header information to it. This is how we d
 <pre><pre class="playpen"><code class="language-rust">
 <span class="boring">#![allow(unused_variables)]
 </span><span class="boring">fn main() {
-</span>// Keeping the offchain worker execution time reasonable, so limiting the call to be within 3s.
-//   `sp_io` pallet offers a timestamp() to get the current timestamp from off-chain perspective.
-let timeout = sp_io::offchain::timestamp().add(rt_offchain::Duration::from_millis(3000));
+</span>pub const FETCH_TIMEOUT_PERIOD: u64 = 3000; // in milli-seconds
+pub const HTTP_HEADER_USER_AGENT: &amp;str = &quot;my-github-username&quot;;
+
+// ...
+// Keeping the offchain worker execution time reasonable, so limiting the call to be within 3s.
+let timeout = sp_io::offchain::timestamp()
+	.add(rt_offchain::Duration::from_millis(FETCH_TIMEOUT_PERIOD));
 
 // For github API request, we also need to specify `user-agent` in http request header.
 //   See: https://developer.github.com/v3/#user-agent-required
 let pending = request
-	.add_header(&quot;User-Agent&quot;, str::from_utf8(&amp;user_agent)
-		.map_err(|_| &lt;Error&lt;T&gt;&gt;::HttpFetchingError)?)
+	.add_header(&quot;User-Agent&quot;, HTTP_HEADER_USER_AGENT)
 	.deadline(timeout) // Setting the timeout time
 	.send() // Sending the request out by the host
 	.map_err(|_| &lt;Error&lt;T&gt;&gt;::HttpFetchingError)?; // Here we capture and return any http error.
@@ -3319,13 +3319,7 @@ serde_json = { version = &quot;1&quot;, default-features = false, git = &quot;ht
 
 # ...
 </code></pre>
-<p>We also use a modified version of <code>serde_json</code> that has the latest <code>alloc</code> feature and again depends
-on only <code>alt_serde</code>.</p>
-<blockquote>
-<p>Another way of compiling <code>serde</code> with <code>no_std</code> in runtime is to use a cargo nightly feature,
-<a href="https://github.com/rust-lang/cargo/pull/7820">additional feature resolver</a>
-(<a href="https://doc.rust-lang.org/nightly/cargo/reference/unstable.html#resolver">relevant doc</a>).</p>
-</blockquote>
+<p>We also use a modified version of <code>serde_json</code> with the latest <code>alloc</code> feature and depending on <code>alt_serde</code>.</p>
 <h3><a class="header" href="#deserializing-json-string-to-struct" id="deserializing-json-string-to-struct">Deserializing JSON string to struct</a></h3>
 <p>Then we use the usual <code>serde-derive</code> approach on deserializing. First we define the struct with
 fields we are interested to extract out.</p>
@@ -3391,7 +3385,7 @@ on-chain storage, that is why they have to submit transactions back on-chain to 
 <p>Fortunately, there is also a local storage that persist across runs in off-chain workers. Storage is
 local within off-chain workers and not passed within network. Storage of off-chain workers is
 persisted across runs of off-chain workers and blockchain re-organizations.</p>
-<p>Off-chain workers are asynchronously run during block import. Since ocws are not limited by how long
+<p>Off-chain workers are asynchronously run at the end of block import. Since ocws are not limited by how long
 they run, at any single instance there could be multiple ocws running, being initiated by previous
 block imports. See diagram below.</p>
 <p><img src="3-entrees/off-chain-workers/../../img/multiple-ocws.png" alt="More than one off-chain workers at a single instance" /></p>
@@ -3414,7 +3408,10 @@ cache.</p>
 </span><span class="boring">fn main() {
 </span>use sp_runtime::{
 	// ...
-	offchain::{storage::StorageValueRef},
+	offchain::{
+		storage::StorageValueRef,
+		storage_lock::{StorageLock, BlockAndTime},
+	},
 	// ...
 }
 <span class="boring">}
@@ -3429,18 +3426,13 @@ worker.</p>
 	// Start off by creating a reference to Local Storage value.
 	// Since the local storage is common for all offchain workers, it's a good practice
 	// to prepend our entry with the pallet name.
-	let storage = StorageValueRef::persistent(b&quot;offchain-demo::gh-info&quot;);
-	let s_lock = StorageValueRef::persistent(b&quot;offchain-demo::lock&quot;);
+	let s_info = StorageValueRef::persistent(b&quot;offchain-demo::gh-info&quot;);
 	// ...
 }
 <span class="boring">}
 </span></code></pre></pre>
-<p>Looking at the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc3/sp_runtime/offchain/storage/struct.StorageValueRef.html">API doc</a>, we see
-there are two type of StorageValueRef, created via <code>::persistent()</code> and <code>::local()</code>. <code>::local()</code> is
-not fully implemented yet and <code>::persistent()</code> is enough for this use cases. We passed in a key as
-our storage key. As storage keys are namespaced globally, a good practice would be to prepend our
-pallet name in front of our storage key.</p>
+<p>We passed in a key as our storage key. As storage keys are namespaced globally, a good practice
+would be to prepend our pallet name in front of our storage key.</p>
 <h2><a class="header" href="#access" id="access">Access</a></h2>
 <p>Once we have the storage reference, we can access the storage via <code>get</code>, <code>set</code>, and <code>mutate</code>. Let's
 demonstrate the <code>mutate</code> function as the usage of the remaining two functions are pretty
@@ -3460,83 +3452,57 @@ self-explanatory.</p>
 }
 <span class="boring">}
 </span></code></pre></pre>
-<p>As with general on-chain storage, if we have a storage access pattern of <strong>get-check-set</strong>, it is a
-good indicator we should use <code>mutate</code>. This makes sure that multiple off-chain workers running
-concurrently does not modify the same storage entry.</p>
-<p>We then try to acquire the lock in order to fetch github info.</p>
+<p>We then define a lock and try to acquire it before fetching github info.</p>
 <pre><pre class="playpen"><code class="language-rust">
 <span class="boring">#![allow(unused_variables)]
 </span><span class="boring">fn main() {
 </span>fn fetch_if_needed() -&gt; Result&lt;(), Error&lt;T&gt;&gt; {
 	//...
-	// We are implementing a mutex lock here with `s_lock`
-	let res: Result&lt;Result&lt;bool, bool&gt;, Error&lt;T&gt;&gt; = s_lock.mutate(|s: Option&lt;Option&lt;bool&gt;&gt;| {
-		match s {
-			// `s` can be one of the following:
-			//   `None`: the lock has never been set. Treated as the lock is free
-			//   `Some(None)`: unexpected case, treated it as AlreadyFetch
-			//   `Some(Some(false))`: the lock is free
-			//   `Some(Some(true))`: the lock is held
+	// off-chain storage can be accessed by off-chain workers from multiple runs, so we want to lock
+	//   it before doing heavy computations and write operations.
+	// ref: https://substrate.dev/rustdocs/v2.0.0-rc3/sp_runtime/offchain/storage_lock/index.html
+	//
+	// There are four ways of defining a lock:
+	//   1) `new` - lock with default time and block exipration
+	//   2) `with_deadline` - lock with default block but custom time exipration
+	//   3) `with_block_deadline` - lock with default time but custom block exipration
+	//   4) `with_block_and_time_deadline` - lock with custom time and block exipration
+	// Here we choose the most custom one for demonstration purpose.
+	let mut lock = StorageLock::&lt;BlockAndTime&lt;Self&gt;&gt;::with_block_and_time_deadline(
+		b&quot;offchain-demo::lock&quot;,
+		LOCK_BLOCK_EXPIRATION,
+		rt_offchain::Duration::from_millis(LOCK_TIMEOUT_EXPIRATION)
+	);
 
-			// If the lock has never been set or is free (false), return true to execute `fetch_n_parse`
-			None | Some(Some(false)) =&gt; Ok(true),
+	// We try to acquire the lock here. If failed, we know the fetching logic inside is being
+	//   executed by previous run of ocw, so the function just returns.
+	// ref: https://substrate.dev/rustdocs/v2.0.0-rc3/sp_runtime/offchain/storage_lock/struct.StorageLock.html#method.try_lock
+	if let Ok(_guard) = lock.try_lock() {
+		// fetching logic here ...
+	}
 
-			// Otherwise, someone already hold the lock (true), we want to skip `fetch_n_parse`.
-			// Covering cases: `Some(None)` and `Some(Some(true))`
-			_ =&gt; Err(&lt;Error&lt;T&gt;&gt;::AlreadyFetched),
-		}
-	});
 	//...
 }
 <span class="boring">}
 </span></code></pre></pre>
-<p>We use the <code>mutate</code> function to get and set the lock value, taking advantages of its compare-and-set
-access pattern. If the lock is being held by another ocw (with <code>s</code> equals value of
-<code>Some(Some(true))</code>), we return an error indicating the fetching is done by another ocw.</p>
-<p>The return value of the <code>mutate</code> has a type of <code>Result&lt;Result&lt;T, T&gt;, E&gt;</code>, to indicate one of the
-following cases:</p>
-<ul>
-<li><code>Ok(Ok(T))</code> - the value has been successfully set in the <code>mutate</code> closure and saved to the
-storage.</li>
-<li><code>Ok(Err(T))</code> - the value has been successfully set in the <code>mutate</code> closure, but failed to save
-to the storage.</li>
-<li><code>Err(_)</code> - the value has <strong>NOT</strong> been set successfully in the <code>mutate</code> closure.</li>
-</ul>
-<p>Now we check the returned value of the <code>mutate</code> function. If fetching is done by another ocw
-(returning <code>Err(&lt;Error&lt;T&gt;&gt;)</code>), or cannot acquire the lock (returning <code>Ok(Err(true))</code>), we skip the
-fetching.</p>
+<p>We then perform the fetch after the lock is acquired</p>
 <pre><pre class="playpen"><code class="language-rust">
 <span class="boring">#![allow(unused_variables)]
 </span><span class="boring">fn main() {
 </span>fn fetch_if_needed() -&gt; Result&lt;(), Error&lt;T&gt;&gt; {
 	// ...
-	// Cases of `res` returned result:
-	//   `Err(&lt;Error&lt;T&gt;&gt;)` - lock is held, so we want to skip `fetch_n_parse` function.
-	//   `Ok(Err(true))` - Another ocw is writing to the storage while we set it,
-	//                     we also skip `fetch_n_parse` in this case.
-	//   `Ok(Ok(true))` - successfully acquire the lock, so we run `fetch_n_parse`
-	if let Ok(Ok(true)) = res {
+	if let Ok(_guard) = lock.try_lock() {
 		match Self::fetch_n_parse() {
-			Ok(gh_info) =&gt; {
-				// set gh-info into the storage and release the lock
-				s_info.set(&amp;gh_info);
-				s_lock.set(&amp;false);
-
-				debug::info!(&quot;fetched gh-info: {:?}&quot;, gh_info);
-			},
-			Err(err) =&gt; {
-				// release the lock
-				s_lock.set(&amp;false);
-				return Err(err);
-			}
+			Ok(gh_info) =&gt; { s_info.set(&amp;gh_info); }
+			Err(err) =&gt; { return Err(err); }
 		}
 	}
+
 	Ok(())
 }
 <span class="boring">}
 </span></code></pre></pre>
-<p>Finally, whether the <code>fetch_n_parse()</code> function success or not, we release the lock by setting it to
-<code>false</code>.</p>
+<p>Finally when the <code>_guard</code> variable goes out of scope, the lock is released.</p>
 <h2><a class="header" href="#reference" id="reference">Reference</a></h2>
 <ul>
 <li><a href="https://substrate.dev/rustdocs/v2.0.0-rc3/sp_runtime/offchain/storage/struct.StorageValueRef.html"><code>StorageValueRef</code> API doc</a></li>
@@ -6238,7 +6204,7 @@ built.</li>
 <ul>
 <li><a href="https://github.com/rustasync">Rust Asynchronous Ecosystem Working Group</a></li>
 <li><a href="https://github.com/withoutboats/romio">romio</a></li>
-<li><a href="https://tokio.rs/docs/overview/">Tokio Docs</a></li>
+<li><a href="https://tokio.rs/tokio/tutorial">Tokio Tutorials</a></li>
 </ul>
 <h3><a class="header" href="#concurrency-1" id="concurrency-1">Concurrency</a></h3>
 <p><strong>Conceptual</strong></p>
