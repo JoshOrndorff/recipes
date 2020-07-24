@@ -73,7 +73,7 @@ This happens in the main runtime aggregation file. In our case we've provided th
 As with defining the API, implementing a runtime API looks similar to implementing any old Rust
 trait with the exception that the implementation must go inside of the
 [`impl_runtime_apis!` macro](https://substrate.dev/rustdocs/v2.0.0-rc3/sp_api/macro.impl_runtime_apis.html). Every
-runtime must use `iml_runtime_apis!` because the
+runtime must use `impl_runtime_apis!` because the
 [`Core` API](https://substrate.dev/rustdocs/v2.0.0-rc3/sp_api/trait.Core.html) is required. We will add an
 implementation for our own API alongside the others in this macro. Our implementation is
 straight-forward as it merely calls the pallet's helper function that we wrote previously.
@@ -95,6 +95,33 @@ definition. This type parameter is added by the macros along with a few other fe
 APIs have this type parameter to facilitate querying the runtime at arbitrary blocks. Read more
 about this in the docs for
 [`impl_runtime_apis!`](https://substrate.dev/rustdocs/v2.0.0-rc3/sp_api/macro.impl_runtime_apis.html).
+
+The type parameters can of course be extended with more, custom types with the only rule being that
+**the type should implement/ be bound by `parity_scale_codec::Decode`**. The following example shows how to make use
+of an extra type parameter in your runtime API.
+
+```rust
+sp_api::decl_runtime_apis! {
+	pub trait SumStorageApi<MyTypeA> where MyTypeA: Codec {
+		fn get_sum() -> u32;
+		fn do_other(cargo: MyTypeA) -> MyTypeA;
+	}
+}
+```
+
+Note that **`Block`** is still added to the final implementation of the runtime.
+
+```rust
+impl_runtime_apis! {
+  // --snip--
+
+  impl sum_storage_rpc_runtime_api::SumStorageApi<Block, MyTypeA> for Runtime {
+		fn get_sum() -> u32 {
+			SumStorage::get_sum()
+		}
+	}
+}
+```
 
 ## Calling the Runtime API
 
