@@ -109,7 +109,7 @@ sp_api::decl_runtime_apis! {
 }
 ```
 
-Note that **`Block`** is still added to the final implementation of the runtime.
+Note that **`Block`** is still added as first parameter to the trait declaration, thus you will need to specify it when using the trait:
 
 ```rust
 impl_runtime_apis! {
