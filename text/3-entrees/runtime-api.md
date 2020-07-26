@@ -97,7 +97,7 @@ about this in the docs for
 [`impl_runtime_apis!`](https://substrate.dev/rustdocs/v2.0.0-rc3/sp_api/macro.impl_runtime_apis.html).
 
 The type parameters can of course be extended with more, custom types with the only rule being that
-**the type should implement/ be bound by `parity_scale_codec::Decode`**. The following example shows how to make use
+**the type should implement/ be bound by `parity_scale_codec::Codec`**. The following example shows how to make use
 of an extra type parameter in your runtime API.
 
 ```rust
