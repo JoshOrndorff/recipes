@@ -102,7 +102,7 @@ of an extra type parameter in your runtime API.
 
 ```rust
 sp_api::decl_runtime_apis! {
-	pub trait SumStorageApi<MyTypeA> where MyTypeA: Codec {
+	pub trait SumStorageApi<MyTypeA: Codec> {
 		fn get_sum() -> u32;
 		fn do_other(cargo: MyTypeA) -> MyTypeA;
 	}
