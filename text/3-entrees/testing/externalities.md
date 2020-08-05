@@ -71,7 +71,7 @@ impl ExtBuilder {
 
 To allow for separate copies of the constant objects to be used in each thread, the variables
 assigned as constants are declared as
-[`thread_local!`](https://substrate.dev/rustdocs/v2.0.0-rc3/thread_local/index.html),
+[`thread_local!`](https://substrate.dev/rustdocs/v2.0.0-rc5/thread_local/index.html),
 
 ```rust, ignore
 thread_local! {

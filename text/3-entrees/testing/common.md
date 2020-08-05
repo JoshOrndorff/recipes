@@ -104,7 +104,7 @@ decl_storage! {
 ### Expected Events are Emitted <a name = "events"></a>
 
 The common way of testing expected event emission behavior requires importing `support`'s
-[`impl_outer_event!`](https://substrate.dev/rustdocs/v2.0.0-rc3/frame_support/macro.impl_outer_event.html) macro
+[`impl_outer_event!`](https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/macro.impl_outer_event.html) macro
 
 ```rust, ignore
 use support::impl_outer_event;
@@ -131,7 +131,7 @@ impl Trait for TestRuntime {
 ```
 
 Testing the correct emission of events compares constructions of expected events with the entries in
-the [`System::events`](https://substrate.dev/rustdocs/v2.0.0-rc3/frame_system/struct.Module.html#method.events)
+the [`System::events`](https://substrate.dev/rustdocs/v2.0.0-rc5/frame_system/struct.Module.html#method.events)
 vector of `EventRecord`s. In
 [`pallets/adding-machine`](https://github.com/substrate-developer-hub/recipes/tree/master//pallets/adding-machine),
 
