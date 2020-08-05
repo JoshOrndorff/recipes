@@ -232,7 +232,7 @@ fn set_value_works() {
 </code></pre>
 <h3><a class="header" href="#expected-events-are-emitted-a-name--eventsa" id="expected-events-are-emitted-a-name--eventsa">Expected Events are Emitted <a name = "events"></a></a></h3>
 <p>The common way of testing expected event emission behavior requires importing <code>support</code>'s
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc3/frame_support/macro.impl_outer_event.html"><code>impl_outer_event!</code></a> macro</p>
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/macro.impl_outer_event.html"><code>impl_outer_event!</code></a> macro</p>
 <pre><code class="language-rust ignore">use support::impl_outer_event;
 </code></pre>
 <p>The <code>TestEvent</code> enum imports and uses the pallet's <code>Event</code> enum. The new local pallet,
@@ -253,7 +253,7 @@ impl Trait for TestRuntime {
 }
 </code></pre>
 <p>Testing the correct emission of events compares constructions of expected events with the entries in
-the <a href="https://substrate.dev/rustdocs/v2.0.0-rc3/frame_system/struct.Module.html#method.events"><code>System::events</code></a>
+the <a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_system/struct.Module.html#method.events"><code>System::events</code></a>
 vector of <code>EventRecord</code>s. In
 <a href="https://github.com/substrate-developer-hub/recipes/tree/master//pallets/adding-machine"><code>pallets/adding-machine</code></a>,</p>
 <pre><code class="language-rust ignore">#[test]

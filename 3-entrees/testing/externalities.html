@@ -212,7 +212,7 @@ allows each instance of <code>ExtBuilder</code> to set the constant parameters f
 </code></pre>
 <p>To allow for separate copies of the constant objects to be used in each thread, the variables
 assigned as constants are declared as
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc3/thread_local/index.html"><code>thread_local!</code></a>,</p>
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/thread_local/index.html"><code>thread_local!</code></a>,</p>
 <pre><code class="language-rust ignore">thread_local! {
     static SIGNAL_QUOTA: RefCell&lt;u32&gt; = RefCell::new(0);
     static EXECUTION_FREQUENCY: RefCell&lt;u64&gt; = RefCell::new(0);
