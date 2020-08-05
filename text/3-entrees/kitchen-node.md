@@ -46,9 +46,9 @@ a node that will include a special
 ### Building a Service with the Runtime
 
 With a runtime of our choosing listed among our dependencies, we can provide the runtime to the
-[`ServiceBuilder`](https://substrate.dev/rustdocs/v2.0.0-rc5/sc_service/struct.ServiceBuilder.html). The
+[`ServiceBuilder`](https://substrate.dev/rustdocs/v2.0.0-rc4/sc_service/struct.ServiceBuilder.html). The
 `ServiceBuilder` is responsible for assembling all of the necessary pieces that a node will need,
-and creating a [`Substrate Service`](https://substrate.dev/rustdocs/v2.0.0-rc5/sc_service/struct.Service.html) which
+and creating a [`Substrate Service`](https://substrate.dev/rustdocs/v2.0.0-rc4/sc_service/struct.Service.html) which
 will manage the communication between them.
 
 We begin by invoking the
@@ -136,7 +136,7 @@ let authorship_future = sc_consensus_manual_seal::run_instant_seal(
 ```
 
 With the future created, we can now kick it off using the service's
-[`spawn_essential_task` method](https://substrate.dev/rustdocs/v2.0.0-rc5/sc_service/struct.Service.html#method.spawn_essential_task).
+[`spawn_essential_task` method](https://substrate.dev/rustdocs/v2.0.0-rc4/sc_service/struct.Service.html#method.spawn_essential_task).
 
 ```rust, ignore
 service.spawn_essential_task("instant-seal", authorship_future);

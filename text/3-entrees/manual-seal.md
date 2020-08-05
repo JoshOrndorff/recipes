@@ -171,7 +171,7 @@ let authorship_future = manual_seal::run_manual_seal(
 ```
 
 With the future created, we can now kick it off using the service's
-[`spawn_essential_task` method](https://substrate.dev/rustdocs/v2.0.0-rc5/sc_service/struct.Service.html#method.spawn_essential_task).
+[`spawn_essential_task` method](https://substrate.dev/rustdocs/v2.0.0-rc4/sc_service/struct.Service.html#method.spawn_essential_task).
 
 ```rust, ignore
 // we spawn the future on a background thread managed by service.
