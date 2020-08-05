@@ -89,7 +89,7 @@ fn fetch_if_needed() -> Result<(), Error<T>> {
 	//...
 	// off-chain storage can be accessed by off-chain workers from multiple runs, so we want to lock
 	//   it before doing heavy computations and write operations.
-	// ref: https://substrate.dev/rustdocs/v2.0.0-rc3/sp_runtime/offchain/storage_lock/index.html
+	// ref: https://substrate.dev/rustdocs/v2.0.0-rc5/sp_runtime/offchain/storage_lock/index.html
 	//
 	// There are four ways of defining a lock:
 	//   1) `new` - lock with default time and block exipration
@@ -105,7 +105,7 @@ fn fetch_if_needed() -> Result<(), Error<T>> {
 
 	// We try to acquire the lock here. If failed, we know the fetching logic inside is being
 	//   executed by previous run of ocw, so the function just returns.
-	// ref: https://substrate.dev/rustdocs/v2.0.0-rc3/sp_runtime/offchain/storage_lock/struct.StorageLock.html#method.try_lock
+	// ref: https://substrate.dev/rustdocs/v2.0.0-rc5/sp_runtime/offchain/storage_lock/struct.StorageLock.html#method.try_lock
 	if let Ok(_guard) = lock.try_lock() {
 		// fetching logic here ...
 	}
@@ -134,5 +134,5 @@ Finally when the `_guard` variable goes out of scope, the lock is released.
 
 ## Reference
 
--   [`StorageValueRef` API doc](https://substrate.dev/rustdocs/v2.0.0-rc3/sp_runtime/offchain/storage/struct.StorageValueRef.html)
+-   [`StorageValueRef` API doc](https://substrate.dev/rustdocs/v2.0.0-rc5/sp_runtime/offchain/storage/struct.StorageValueRef.html)
 -   [`example-offchain-worker` pallet in Substrate repo](https://github.com/paritytech/substrate/tree/master/frame/example-offchain-worker)

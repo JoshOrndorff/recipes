@@ -9,7 +9,7 @@ well as integer overflow (a serious and realistic example), and throws the appro
 ## Declaring Errors
 
 Errors are declared with the
-[`decl_error!` macro](https://substrate.dev/rustdocs/v2.0.0-rc3/frame_support/macro.decl_error.html). Although it is
+[`decl_error!` macro](https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/macro.decl_error.html). Although it is
 optional, it is good practice to write doc comments for each error variant as demonstrated here.
 
 ```rust, ignore
@@ -27,7 +27,7 @@ decl_error! {
 
 Errors can be thrown in two different ways, both of which are demonstrated in the the `add`
 dispatchable call. The first is with the
-[`ensure!` macro](https://substrate.dev/rustdocs/v2.0.0-rc3/frame_support/macro.ensure.html) where the error to throw
+[`ensure!` macro](https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/macro.ensure.html) where the error to throw
 is the second parameter. The second is to throw the error by explicitly returning it.
 
 ```rust, ignore

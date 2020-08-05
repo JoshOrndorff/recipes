@@ -1,11 +1,11 @@
 # Safe Math
 
 We can use the `checked` traits in
-[substrate-primitives](https://substrate.dev/rustdocs/v2.0.0-rc3/sp_runtime/traits/index.html) to protect against
+[substrate-primitives](https://substrate.dev/rustdocs/v2.0.0-rc5/sp_runtime/traits/index.html) to protect against
 [overflow/underflow](https://medium.com/@taabishm2/integer-overflow-underflow-and-floating-point-imprecision-6ba869a99033)
 when incrementing/decrementing objects in our runtime. To follow the
 [Substrate collectable tutorial example](https://shawntabrizi.com/substrate-collectables-workshop/#/2/tracking-all-kitties?id=checking-for-overflowunderflow),
-use [`checked_add()`](https://substrate.dev/rustdocs/v2.0.0-rc3/sp_runtime/traits/trait.CheckedAdd.html) to safely
+use [`checked_add()`](https://substrate.dev/rustdocs/v2.0.0-rc5/sp_runtime/traits/trait.CheckedAdd.html) to safely
 handle the possibility of overflow when incremementing a global counter. _Note that this check is
 similar to [`SafeMath`](https://ethereumdev.io/safemath-protect-overflows/) in Solidity_.
 

@@ -3,7 +3,7 @@
 _[`nodes/manual-seal`](https://github.com/substrate-developer-hub/recipes/tree/master/nodes/manual-seal)_
 
 This recipe demonstrates a Substrate node using the
-[Manual Seal consensus](https://substrate.dev/rustdocs/v2.0.0-rc3/sc_consensus_manual_seal/index.html). Unlike the
+[Manual Seal consensus](https://substrate.dev/rustdocs/v2.0.0-rc5/sc_consensus_manual_seal/index.html). Unlike the
 other consensus engines included with Substrate, manual seal does not create blocks on a regular
 basis. Rather, it waits for an RPC call telling to create a block.
 
@@ -171,7 +171,7 @@ let authorship_future = manual_seal::run_manual_seal(
 ```
 
 With the future created, we can now kick it off using the service's
-[`spawn_essential_task` method](https://substrate.dev/rustdocs/v2.0.0-rc3/sc_service/struct.Service.html#method.spawn_essential_task).
+[`spawn_essential_task` method](https://substrate.dev/rustdocs/v2.0.0-rc4/sc_service/struct.Service.html#method.spawn_essential_task).
 
 ```rust, ignore
 // we spawn the future on a background thread managed by service.
