@@ -2919,6 +2919,14 @@ to be specified. Unsigned transactions are used when the sender does not need to
 additional logic is written in the code to provide extra data verification. Let's walk through how
 to set up each one.</p>
 <h2><a class="header" href="#signed-transactions" id="signed-transactions">Signed Transactions</a></h2>
+<blockquote>
+<p><strong>Notes</strong>: This example will have account <code>Alice</code> submitting signed transactions to the node in
+off-chain worker, and these transactions have associated fees. If you run the node in development
+mode (with <code>--dev</code> flag) using the default sr25519 crypto signature, <code>Alice</code> will have initial fund
+deposited and this example will run all fine.</p>
+<p>If you are running either not in development mode or switched to another crypto signature, please
+beware to have account <code>Alice</code> setup and be funded to run this example.</p>
+</blockquote>
 <h3><a class="header" href="#setup" id="setup">Setup</a></h3>
 <p>For signed transactions, the first thing you will notice is that we have defined another sub-module
 here:</p>
