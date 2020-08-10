@@ -377,7 +377,7 @@ construct_runtime!(
 		// The Recipe Pallets
 		AddingMachine: adding_machine::{Module, Call, Storage},
 		BasicToken: basic_token::{Module, Call, Storage, Event<T>},
-		Charity: charity::{Module, Call, Storage, Event<T>},
+		Charity: charity::{Module, Call, Storage, Config, Event<T>},
 		CheckMembershipLoose: check_membership_loose::{Module, Call, Event<T>},
 		CheckMembershipTight: check_membership_tight::{Module, Call, Event<T>},
 		ConmpoundingInterest: compounding_interest::{Module, Call, Storage, Event},

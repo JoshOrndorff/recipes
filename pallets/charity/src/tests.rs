@@ -87,15 +87,29 @@ pub fn new_test_ext() -> sp_io::TestExternalities {
 	let mut t = system::GenesisConfig::default()
 		.build_storage::<TestRuntime>()
 		.unwrap();
+
 	balances::GenesisConfig::<TestRuntime> {
 		// Provide some initial balances
 		balances: vec![(1, 13), (2, 11), (3, 1), (4, 3), (5, 19)],
 	}
-	.assimilate_storage(&mut t)
-	.unwrap();
+		.assimilate_storage(&mut t)
+		.unwrap();
+
+	crate::GenesisConfig {}
+		.assimilate_storage::<TestRuntime>(&mut t)
+		.unwrap();
+
 	let mut ext: sp_io::TestExternalities = t.into();
 	ext.execute_with(|| System::set_block_number(1));
 	ext
+}
+
+/// Charity pot minimum balance is set
+#[test]
+fn pot_min_balance_is_set() {
+	new_test_ext().execute_with(|| {
+		assert_eq!(Charity::pot(), Balances::minimum_balance());
+	})
 }
 
 /// Verifying correct behavior of boilerplate
@@ -110,16 +124,19 @@ fn new_test_ext_behaves() {
 fn donations_work() {
 	new_test_ext().execute_with(|| {
 		// User 1 donates 10 of her 13 tokens
-		assert_ok!(Charity::donate(Origin::signed(1), 10));
+		let original = Balances::free_balance(&1);
+		let donation = 10;
+		assert_ok!(Charity::donate(Origin::signed(1), donation));
 
 		// Charity should have 10 tokens
-		assert_eq!(Charity::pot(), 10);
+		let new_pot_total = Balances::minimum_balance() + donation;
+		assert_eq!(Charity::pot(), new_pot_total);
 
 		// Donor should have 3 remaining
-		assert_eq!(Balances::free_balance(&1), 3);
+		assert_eq!(Balances::free_balance(&1), original - donation);
 
 		// Check that the correct event is emitted
-		let expected_event = TestEvent::charity(RawEvent::DonationReceived(1, 10, 10));
+		let expected_event = TestEvent::charity(RawEvent::DonationReceived(1, donation, new_pot_total));
 		assert!(System::events().iter().any(|a| a.event == expected_event));
 	})
 }
@@ -138,13 +155,15 @@ fn cant_donate_too_much() {
 #[test]
 fn imbalances_work() {
 	new_test_ext().execute_with(|| {
-		let imb = balances::NegativeImbalance::new(5);
+		let imb_amt = 5;
+		let imb = balances::NegativeImbalance::new(imb_amt);
 		Charity::on_nonzero_unbalanced(imb);
 
-		assert_eq!(Charity::pot(), 5);
+		let new_pot_total = imb_amt + Balances::minimum_balance();
+		assert_eq!(Charity::pot(), new_pot_total);
 
 		// Check that the correct event is emitted
-		let expected_event = TestEvent::charity(RawEvent::ImbalanceAbsorbed(5, 5));
+		let expected_event = TestEvent::charity(RawEvent::ImbalanceAbsorbed(5, new_pot_total));
 
 		assert!(System::events().iter().any(|a| a.event == expected_event));
 	})
@@ -154,13 +173,16 @@ fn imbalances_work() {
 fn allocating_works() {
 	new_test_ext().execute_with(|| {
 		// Charity acquires 10 tokens from user 1
-		assert_ok!(Charity::donate(Origin::signed(1), 10));
+		let donation = 10;
+		assert_ok!(Charity::donate(Origin::signed(1), donation));
 
 		// Charity allocates 5 tokens to user 2
-		assert_ok!(Charity::allocate(RawOrigin::Root.into(), 2, 5));
+		let alloc = 5;
+		assert_ok!(Charity::allocate(RawOrigin::Root.into(), 2, alloc));
 
 		// Check that the correct event is emitted
-		let expected_event = TestEvent::charity(RawEvent::FundsAllocated(2, 5, 5));
+		let new_pot_total = Balances::minimum_balance() + donation - alloc;
+		let expected_event = TestEvent::charity(RawEvent::FundsAllocated(2, 5, new_pot_total));
 		assert!(System::events().iter().any(|a| a.event == expected_event));
 	})
 }

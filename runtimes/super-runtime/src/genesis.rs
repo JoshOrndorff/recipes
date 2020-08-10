@@ -52,5 +52,6 @@ pub fn testnet_genesis(root_key: AccountId, endowed_accounts: Vec<AccountId>) ->
 				.collect(),
 		}),
 		sudo: Some(SudoConfig { key: root_key }),
+		charity: Some(Default::default()),
 	}
 }
