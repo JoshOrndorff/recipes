@@ -58,6 +58,14 @@ to set up each one.
 
 ## Signed Transactions
 
+> **Notes**: This example will have account `Alice` submitting signed transactions to the node in
+off-chain worker, and these transactions have associated fees. If you run the node in development
+mode (with `--dev` flag) using the default sr25519 crypto signature, `Alice` will have initial fund
+deposited and this example will run all fine.
+>
+> If you are running either not in development mode or switched to another crypto signature, please
+> beware to have account `Alice` setup and be funded to run this example.
+
 ### Setup
 
 For signed transactions, the first thing you will notice is that we have defined another sub-module
