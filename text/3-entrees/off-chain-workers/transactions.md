@@ -23,7 +23,7 @@ cargo build --release --features ocw
 
 ## Life-cycle of Off-chain Worker
 
-Running the `kitchen-node`we see off-chain worker runs after each block generation
+Running the `kitchen-node` we see off-chain worker runs after each block generation
 phase, as shown by `Entering off-chain workers` in the node output message:
 
 ```
