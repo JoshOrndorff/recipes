@@ -82,7 +82,7 @@ pub mod crypto {
 }
 ```
 
-This is the application key is a prefix for the pallet in underlying storage.
+`KEY_TYPE` is the application key prefix for the pallet in underlying storage.
 
 Second, we have added an additional associated type `AuthorityId`.
 
