@@ -8,10 +8,11 @@ This `offchain-demo` pallet is included in the
 [ocw-runtime](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime).
 That runtime can be used in the kitchen node.
 
-In order to utilize the Offchain worker, the node must inject keys into its keystore. This ensures that it is
-enabled with a feature flag, however in order to do this we need to enable the `ocw-runtime` by editing `nodes/kitchen-node/Cargo.toml`. 
+In order to utilize the off-chain worker, the node must inject keys into its keystore. To do so, we
+open the `nodes/kitchen-node/Cargo.toml` file, enable the `ocw-runtime` package and comment out the
+`super-runtime` package.
 
-Then we can build the kitchen node with the following command:
+Then we build the kitchen node with `ocw` feature flag:
 
 ```bash
 # Switch to kitchen-node directory
@@ -51,7 +52,7 @@ logic is here.
 Two kinds of transactions can be sent back on-chain from off-chain workers, **Signed Transactions**
 and **Unsigned Transactions**. Signed transactions are used if the transaction requires the sender
 to be specified. Unsigned transactions are used when the sender does not need to be known and
-additional logic in the code provides additional data verification. 
+additional logic in the code provides additional data verification.
 
 Let's walk through how to set up each one:
 
@@ -100,9 +101,8 @@ This associated type needs to be specified by the runtime
 
 Now if we build the `kitchen-node`, we will see the compiler return with three trait
 bounds that are not satisfied: `Runtime: frame_system::offchain::CreateSignedTransaction`,
-`frame_system::offchain::SigningTypes`, and `frame_system::offchain::SendTransactionTypes`. 
-We learn that when using `SubmitSignedTransaction`, we also need to have our runtime
-implement 
+`frame_system::offchain::SigningTypes`, and `frame_system::offchain::SendTransactionTypes`.
+We also learn that when using `SubmitSignedTransaction`, our runtime need to implement
 [`CreateSignedTransaction` trait](https://substrate.dev/rustdocs/v2.0.0-rc5/frame_system/offchain/trait.CreateSignedTransaction.html).
 So this needs to be implemented to our runtime.
 
@@ -308,9 +308,9 @@ Note that the`ValidTransaction` object has some fields that touch on concepts th
 before:
 
 -   `priority`: Ordering of two transactions, given their dependencies are satisfied.
--   `requires`: List of tags the transaction depends on. 
+-   `requires`: List of tags the transaction depends on.
 -   `provides`: List of tags provided by this transaction. Successfully importing the transaction
-    will enable other transactions that depend on these tags to be included as well. 
+    will enable other transactions that depend on these tags to be included as well.
 -   Both`provides` and
     `requires` tags allow Substrate to build a dependency graph of transactions and import them in
     the right order.
