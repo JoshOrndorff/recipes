@@ -8,12 +8,11 @@ This `offchain-demo` pallet is included in the
 [ocw-runtime](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime).
 That runtime can be used in the kitchen node.
 
-In order to use the Offchain worker, the node must inject some keys into its keystore, and that is
-enabled with a feature flag.
+In order to utilize the off-chain worker, the node must inject keys into its keystore. To do so, we
+open the `nodes/kitchen-node/Cargo.toml` file, enable the `ocw-runtime` package and comment out the
+`super-runtime` package.
 
-First, edit `nodes/kitchen-node/Cargo.toml` to enable the `ocw-runtime`.
-
-Then, build the kitchen node with these commands.
+Then we build the kitchen node with `ocw` feature flag:
 
 ```bash
 # Switch to kitchen-node directory
@@ -25,7 +24,7 @@ cargo build --release --features ocw
 
 ## Life-cycle of Off-chain Worker
 
-Running the `kitchen-node`, you will see the off-chain worker is run after each block generation
+Running the `kitchen-node` we see off-chain worker runs after each block generation
 phase, as shown by `Entering off-chain workers` in the node output message:
 
 ```
@@ -44,34 +43,33 @@ phase, as shown by `Entering off-chain workers` in the node output message:
 ...
 ```
 
-Referring to the code at
+If we refer to the code at
 [`pallets/offchain-demo/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/lib.rs),
 there is an `offchain_worker` function inside `decl_module!`. This is the entry point of the
-off-chain worker that is executed once after each block generation, so we put all the off-chain
-logic here.
+off-chain worker which is executed once per block generation, so all the off-chain
+logic is here.
 
 Two kinds of transactions can be sent back on-chain from off-chain workers, **Signed Transactions**
 and **Unsigned Transactions**. Signed transactions are used if the transaction requires the sender
-to be specified. Unsigned transactions are used when the sender does not need to be known, and
-additional logic is written in the code to provide extra data verification. Let's walk through how
-to set up each one.
+to be specified. Unsigned transactions are used when the sender does not need to be known and
+additional logic in the code provides additional data verification.
+
+Let's walk through how to set each one up:
 
 ## Signed Transactions
 
 > **Notes**: This example will have account `Alice` submitting signed transactions to the node in
-off-chain worker, and these transactions have associated fees. If you run the node in development
-mode (with `--dev` flag) using the default sr25519 crypto signature, `Alice` will have initial fund
-deposited and this example will run all fine.
+> the off-chain worker, and these transactions have associated fees. If we run the node in development
+> mode (with `--dev` flag) using the default sr25519 crypto signature, `Alice` will have initial funds
+> deposited and this example will run all fine.
 >
-> If you are running either not in development mode or switched to another crypto signature, please
-> beware to have account `Alice` setup and be funded to run this example.
+> If this is not done in development mode or switched to another crypto signature, please
+> be aware that `Alice` must be setup and be funded to run this example.
 
 ### Setup
 
-For signed transactions, the first thing you will notice is that we have defined another sub-module
-here:
+For signed transactions, we have to define a crypto signature sub-module:
 
-src:
 [`pallets/offchain-demo/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/lib.rs)
 
 ```rust
@@ -84,7 +82,7 @@ pub mod crypto {
 }
 ```
 
-This is the application key to be used as the prefix for this pallet in underlying storage.
+`KEY_TYPE` is the application key prefix for the pallet in underlying storage.
 
 Second, we have added an additional associated type `AuthorityId`.
 
@@ -98,16 +96,13 @@ pub trait Trait: system::Trait {
 }
 ```
 
-This associated type needs to be specified by the runtime when the runtime is to include this pallet
-(implement this pallet trait).
+This associated type needs to be specified by the runtime when it implements this pallet trait.
 
-Now if we build the `kitchen-node`, we will see the compiler complain that there are three trait
-bounds `Runtime: frame_system::offchain::CreateSignedTransaction`,
-`frame_system::offchain::SigningTypes`, and `frame_system::offchain::SendTransactionTypes` are not
-satisfied. We learn that when using `SubmitSignedTransaction`, we also need to have our runtime
-implement the
+Now if we build the `kitchen-node`, we will see the compiler return with three trait
+bounds that are not satisfied: `Runtime: frame_system::offchain::CreateSignedTransaction`,
+`frame_system::offchain::SigningTypes`, and `frame_system::offchain::SendTransactionTypes`.
+We also learn that when using `SubmitSignedTransaction`, our runtime need to implement
 [`CreateSignedTransaction` trait](https://substrate.dev/rustdocs/v2.0.0-rc5/frame_system/offchain/trait.CreateSignedTransaction.html).
-So let's implement this in our runtime.
 
 src:
 [`runtimes/ocw-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime/src/lib.rs)
@@ -158,13 +153,13 @@ where
 // ...snip
 ```
 
-There is a lot happening in the code. But basically we are:
+The overall goal is to execute the following:
 
--   Signing the `call` and `extra`, also called signed extension, and
--   Making the call(`call`, which includes the call paramters) and passing the sender `address`,
-    signature of the data `signature`, and its signed extension `extra` on-chain as a transaction.
+-   Sign the `call` and `extra`, also called 'signed extension'
+-   Making the call (`call`, which includes the call paramters) and passing the sender `address`,
+    signature of the data `signature`, and ensuring its signed extension `extra` on-chain as a transaction.
 
-`SignedExtra` data type is defined later in the runtime.
+`SignedExtra` data type will be defined later in the runtime.
 
 src:
 [`runtimes/ocw-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime/src/lib.rs)
@@ -233,17 +228,17 @@ We have a function reference to `Call::submit_number_signed(submission)`. This i
 are going to submit back to on-chain, and passing it to
 `T::SubmitSignedTransaction::submit_signed(call)`.
 
-You will notice that we run a for loop in the returned result. This implies that this call may make
-multiple transactions and return multiple results. It is because this call actually signs and sends
+Notice that we run a loop in the returned result. This implies that the call may make
+multiple transactions and return multiple results. The call is both signing and sending
 the transaction with each of the accounts that can be found locally under the application crypto
-(which we defined earlier in `pub mod crypto {...}`). You can view this as the local accounts that
-are managed under this pallet namespace. Right now, we only have one key in the app crypto, so only
+(which we defined earlier in `pub mod crypto {...}`). This can be seen as the local accounts that
+are managed under this pallet namespace. As we only have one key in the app crypto, so only
 one signed transaction is made.
 
-Eventually, the `call` transaction is made on-chain via the `create_transaction` function we defined
+Eventually, the `call` transaction will be made on-chain via the `create_transaction` function we defined
 earlier when we implemented `CreateTransaction` trait in our runtime.
 
-If you are wondering where we insert the local account in the pallet app crypto, it is actually in
+The local account used to sign the transaction is inserted in the pallet app crypto, and lives in
 the outer node's [service](https://substrate.dev/rustdocs/v2.0.0-rc5/sc_service/index.html).
 
 src:
@@ -276,8 +271,8 @@ pub fn new_full(config: Configuration<GenesisConfig>)
 
 ### Setup
 
-By default, unsigned transactions are rejected by the Substrate runtime unless they are explicitly
-allowed. So we need to write the logic to allow unsigned transactions for certain particular
+By default, unsigned transactions are rejected by the runtime unless they are explicitly
+allowed. So we need to write logic to allow unsigned transactions for certain particular
 dispatched functions as follows:
 
 src:
@@ -304,18 +299,17 @@ impl<T: Trait> support::unsigned::ValidateUnsigned for Module<T> {
 }
 ```
 
-We implement `ValidateUnsigned`, and the allowance logic is added inside the `validate_unsigned`
-function. We check if the call is to `Call::submit_number_unsigned` and returns `Ok()` if this is
-the case. Otherwise, `InvalidTransaction::Call`.
+By implementing `ValidateUnsigned`, the allowance logic is added inside the `validate_unsigned`
+function. We verify that if the call is `Call::submit_number_unsigned` we return `Ok()`, otherwise `InvalidTransaction::Call`.
 
-The `ValidTransaction` object has some fields that touch on concepts that we have not discussed
+Note that the`ValidTransaction` object has some fields that touch on concepts that we have not discussed
 before:
 
 -   `priority`: Ordering of two transactions, given their dependencies are satisfied.
--   `requires`: List of tags this transaction depends on. Not shown in the above code as it is not
-    necessary in this case.
+-   `requires`: List of tags the transaction depends on.
 -   `provides`: List of tags provided by this transaction. Successfully importing the transaction
-    will enable other transactions that depend on these tags to be included as well. `provides` and
+    will enable other transactions that depend on these tags to be included as well.
+-   Both`provides` and
     `requires` tags allow Substrate to build a dependency graph of transactions and import them in
     the right order.
 -   `longevity`: Transaction longevity, which describes the minimum number of blocks the transaction
@@ -329,7 +323,7 @@ We are using the
 build up this object.
 
 Finally, to tell the runtime that we have our own `ValidateUnsigned` logic, we also need to pass
-this as a parameter when constructing the runtime.
+this as a parameter when constructing the runtime:
 
 src:
 [`runtimes/ocw-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime/src/lib.rs)
@@ -370,7 +364,7 @@ fn send_unsigned(block_number: T::BlockNumber) -> Result<(), Error<T>> {
 }
 ```
 
-As in signed transactions, we prepare a function reference with its parameters and then call
+As in signed transactions, we prepare a function reference with its parameters and call
 `T::SubmitUnsignedTransaction::submit_unsigned`.
 
 ## Testing
