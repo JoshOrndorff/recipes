@@ -228,7 +228,7 @@ We have a function reference to `Call::submit_number_signed(submission)`. This i
 are going to submit back to on-chain, and passing it to
 `T::SubmitSignedTransaction::submit_signed(call)`.
 
-Notice that we run a loop in the returned result. This implies that a call may make
+Notice that we run a loop in the returned result. This implies that the call may make
 multiple transactions and return multiple results. The call is both signing and sending
 the transaction with each of the accounts that can be found locally under the application crypto
 (which we defined earlier in `pub mod crypto {...}`). This can be seen as the local accounts that
