@@ -1,7 +1,7 @@
 [package]
 name = "reservable-currency"
-version = "2.0.0-rc3"
-authors = ["4meta5"]
+version = "2.0.0-rc4"
+authors = ['Substrate DevHub <https://github.com/substrate-developer-hub>']
 repository = 'https://github.com/substrate-developer-hub/recipes'
 edition = "2018"
 license = "GPL-3.0-or-later"
@@ -14,7 +14,7 @@ categories = [
 	"tutorial",
 	"recipe",
 ]
-compatibility_version = "2.0.0-rc3"
+compatibility_version = "2.0.0-rc4"
 
 [features]
 default = ['std']
@@ -28,11 +28,11 @@ std = [
 
 [dependencies]
 parity-scale-codec = { version = "1.3.0", features = ["derive"], default-features = false }
-frame-support = { version = '2.0.0-rc3', default-features = false }
-frame-system = { version = '2.0.0-rc3', default-features = false }
-sp-runtime = { version = '2.0.0-rc3', default-features = false }
-balances = { package = 'pallet-balances', version = '2.0.0-rc3', default-features = false }
+frame-support = { version = '2.0.0-rc4', default-features = false }
+frame-system = { version = '2.0.0-rc4', default-features = false }
+sp-runtime = { version = '2.0.0-rc4', default-features = false }
+balances = { package = 'pallet-balances', version = '2.0.0-rc4', default-features = false }
 
 [dev-dependencies]
-sp-core = { version = '2.0.0-rc3', default-features = false }
-sp-io = { version = '2.0.0-rc3', default-features = false }
+sp-core = { version = '2.0.0-rc4', default-features = false }
+sp-io = { version = '2.0.0-rc4', default-features = false }

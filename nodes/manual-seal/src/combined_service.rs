@@ -127,7 +127,7 @@ pub fn new_full(config: Configuration) -> Result<impl AbstractService, ServiceEr
 		);
 
 		// we spawn the future on a background thread managed by service.
-		service.spawn_essential_task("manual-seal", authorship_future);
+		service.spawn_essential_task_handle().spawn_blocking("manual-seal", authorship_future);
 	};
 
 	Ok(service)

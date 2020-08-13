@@ -1,6 +1,12 @@
 # Ringbuffer Queue
 
-_[`pallets/ringbuffer-queue`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/ringbuffer-queue)_
+`pallets/ringbuffer-queue`
+[
+	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
+](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fringbuffer-queue%2Fsrc%2Flib.rs)
+[
+	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
+](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/ringbuffer-queue/src/lib.rs)
 
 > Building a transient adapter on top of storage.
 

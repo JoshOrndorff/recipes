@@ -1,7 +1,7 @@
 [package]
 name = "account-set"
-version = "2.0.0-rc3"
-authors = ["Joshy Orndorff"]
+version = "2.0.0-rc4"
+authors = ['Substrate DevHub <https://github.com/substrate-developer-hub>']
 repository = 'https://github.com/substrate-developer-hub/recipes'
 edition = "2018"
 license = "GPL-3.0-or-later"
@@ -13,7 +13,7 @@ categories = [
 	"accounts",
 	"recipe",
 ]
-compatibility_version = "2.0.0-rc3"
+compatibility_version = "2.0.0-rc4"
 
 [features]
 default = ['std']
@@ -22,4 +22,4 @@ std = [
 ]
 
 [dependencies]
-sp-std = { version = '2.0.0-rc3', default-features = false }
+sp-std = { version = '2.0.0-rc4', default-features = false }

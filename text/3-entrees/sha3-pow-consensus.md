@@ -1,10 +1,16 @@
 # Sha3 Proof of Work Algorithms
 
-_[`consensus/sha3pow`](https://github.com/substrate-developer-hub/recipes/tree/master/consensus/sha3pow)_
+`consensus/sha3-pow`
+[
+	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
+](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fconsensus%2Fsha3-pow%2Fsrc%2Flib.rs)
+[
+	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
+](https://github.com/substrate-developer-hub/recipes/tree/master/consensus/sha3-pow/src/lib.rs)
 
 [Proof of Work](https://en.wikipedia.org/wiki/Proof_of_work) is not a single consensus algorithm.
 Rather it is a class of algorithms represented in Substrate by the
-[`PowAlgorithm` trait](https://substrate.dev/rustdocs/v2.0.0-rc5/sc_consensus_pow/trait.PowAlgorithm.html). Before we
+[`PowAlgorithm` trait](https://substrate.dev/rustdocs/v2.0.0-rc4/sc_consensus_pow/trait.PowAlgorithm.html). Before we
 can build a PoW node we must specify a concrete PoW algorithm by implementing this trait. In this
 recipe we specify two concrete PoW algorithms, both of which are based on the
 [sha3 hashing algorithm](https://en.wikipedia.org/wiki/SHA-3).
@@ -152,7 +158,7 @@ blocktime remains constant.
 
 We begin as before by defining a struct that will implement the `PowAlgorithm` trait. Unlike before,
 this struct must hold a reference to the
-[`Client`](https://substrate.dev/rustdocs/v2.0.0-rc5/sc_service/client/struct.Client.html) so it can call the
+[`Client`](https://substrate.dev/rustdocs/v2.0.0-rc4/sc_service/client/struct.Client.html) so it can call the
 appropriate runtime APIs.
 
 ```rust, ignore
@@ -193,7 +199,7 @@ impl<C> Clone for Sha3Algorithm<C> {
 
 As before we implement the `PowAlgorithm` trait for out `Sha3Algorithm`. This time we supply more
 complex trait bounds to ensure that the client the algorithm holds a reference to actually provides
-the [`DifficultyAPI`](https://substrate.dev/rustdocs/v2.0.0-rc5/sp_consensus_pow/trait.DifficultyApi.html) necessary
+the [`DifficultyAPI`](https://substrate.dev/rustdocs/v2.0.0-rc4/sp_consensus_pow/trait.DifficultyApi.html) necessary
 to fetch the PoW difficulty from the runtime.
 
 ```rust, ignore

@@ -1,6 +1,12 @@
 # Tightly- and Loosely-Coupled Pallets
 
-_[pallets/check-membership](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/check-membership)_
+`pallets/check-membership`
+[
+	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
+](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fcheck-membership%2Fsrc%2Flib.rs)
+[
+	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
+](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/check-membership/src/lib.rs)
 
 The `check-membership` crate contains two pallets that solve the same problems in slightly different
 ways. Both pallets implement a single dispatchable function that can only be successfully executed
@@ -115,7 +121,7 @@ pub trait Trait: system::Trait {
 ```
 
 > Many palets throught the ecosystem are coupled to a token through the
-> [`Currency` trait](https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/traits/trait.Currency.html).
+> [`Currency` trait](https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/traits/trait.Currency.html).
 
 Having this associated type means that the loosely coupled variant of the `check-membership` pallet
 can be installed in any runtime that can supply it with a set of accounts to use as an access

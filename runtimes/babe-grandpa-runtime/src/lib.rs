@@ -1,5 +1,7 @@
 //! A Super Runtime. This runtime demonstrates most the recipe pallets in a single super runtime.
 
+#![allow(clippy::unnecessary_mut_passed)]
+
 #![cfg_attr(not(feature = "std"), no_std)]
 // `construct_runtime!` does a lot of recursion and requires us to increase the limit to 256.
 #![recursion_limit = "256"]
@@ -144,6 +146,8 @@ parameter_types! {
 }
 
 impl system::Trait for Runtime {
+	/// The basic call filter to use in dispatchable.
+	type BaseCallFilter = ();
 	/// The identifier used to distinguish between accounts.
 	type AccountId = AccountId;
 	/// The aggregated dispatch type that is available for extrinsics.
@@ -297,6 +301,7 @@ pub type SignedBlock = generic::SignedBlock<Block>;
 pub type BlockId = generic::BlockId<Block>;
 /// The SignedExtension to the basic transaction logic.
 pub type SignedExtra = (
+	system::CheckSpecVersion<Runtime>,
 	system::CheckTxVersion<Runtime>,
 	system::CheckGenesis<Runtime>,
 	system::CheckEra<Runtime>,

@@ -1,6 +1,12 @@
 # Computational Resources and Weights
 
-_[`pallets/weights`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/weights)_
+`pallets/weights`
+[
+	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
+](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fweights%2Fsrc%2Flib.rs)
+[
+	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
+](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/weights/src/lib.rs)
 
 Any computational resources used by a transaction must be accounted for so that appropriate fees can
 be applied, and it is a pallet author's job to ensure that this accounting happens. Substrate
@@ -59,12 +65,12 @@ impl WeighData<(&bool, &u32)> for Conditional {
 ```
 
 In addition to the
-[`WeightData` Trait](https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/weights/trait.WeighData.html), shown
+[`WeightData` Trait](https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/weights/trait.WeighData.html), shown
 above, types that are used to calculate transaction weights must also implement
-[`ClassifyDispatch`](https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/weights/trait.ClassifyDispatch.html),
-and [`PaysFee`](https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/weights/trait.PaysFee.html).
+[`ClassifyDispatch`](https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/weights/trait.ClassifyDispatch.html),
+and [`PaysFee`](https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/weights/trait.PaysFee.html).
 
-```rust,ignore
+```rust, ignore
 impl<T> ClassifyDispatch<T> for Conditional {
     fn classify_dispatch(&self, _: T) -> DispatchClass {
         // Classify all calls as Normal (which is the default)
@@ -73,7 +79,7 @@ impl<T> ClassifyDispatch<T> for Conditional {
 }
 ```
 
-```rust,ignore
+```rust, ignore
 impl PaysFee for Conditional {
     fn pays_fee(&self) -> bool {
         true

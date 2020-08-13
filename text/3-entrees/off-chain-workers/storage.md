@@ -1,6 +1,12 @@
 # Local Storage in Off-chain Workers
 
-_[`pallets/offchain-demo`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo)_
+`pallets/offchain-demo`
+[
+	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
+](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Foffchain-demo%2Fsrc%2Flib.rs)
+[
+	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
+](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/lib.rs)
 
 Remember we mentioned that off-chain workers (short for **ocw** below) cannot write directly to the
 on-chain storage, that is why they have to submit transactions back on-chain to modify the state.
@@ -89,7 +95,7 @@ fn fetch_if_needed() -> Result<(), Error<T>> {
 	//...
 	// off-chain storage can be accessed by off-chain workers from multiple runs, so we want to lock
 	//   it before doing heavy computations and write operations.
-	// ref: https://substrate.dev/rustdocs/v2.0.0-rc5/sp_runtime/offchain/storage_lock/index.html
+	// ref: https://substrate.dev/rustdocs/v2.0.0-rc3/sp_runtime/offchain/storage_lock/index.html
 	//
 	// There are four ways of defining a lock:
 	//   1) `new` - lock with default time and block exipration
@@ -105,7 +111,7 @@ fn fetch_if_needed() -> Result<(), Error<T>> {
 
 	// We try to acquire the lock here. If failed, we know the fetching logic inside is being
 	//   executed by previous run of ocw, so the function just returns.
-	// ref: https://substrate.dev/rustdocs/v2.0.0-rc5/sp_runtime/offchain/storage_lock/struct.StorageLock.html#method.try_lock
+	// ref: https://substrate.dev/rustdocs/v2.0.0-rc3/sp_runtime/offchain/storage_lock/struct.StorageLock.html#method.try_lock
 	if let Ok(_guard) = lock.try_lock() {
 		// fetching logic here ...
 	}
@@ -134,5 +140,5 @@ Finally when the `_guard` variable goes out of scope, the lock is released.
 
 ## Reference
 
--   [`StorageValueRef` API doc](https://substrate.dev/rustdocs/v2.0.0-rc5/sp_runtime/offchain/storage/struct.StorageValueRef.html)
+-   [`StorageValueRef` API doc](https://substrate.dev/rustdocs/v2.0.0-rc4/sp_runtime/offchain/storage/struct.StorageValueRef.html)
 -   [`example-offchain-worker` pallet in Substrate repo](https://github.com/paritytech/substrate/tree/master/frame/example-offchain-worker)

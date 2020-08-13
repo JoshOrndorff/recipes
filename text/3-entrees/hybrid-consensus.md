@@ -1,14 +1,20 @@
 # Hybrid Consensus
 
-_[`nodes/hybrid-consensus`](https://github.com/substrate-developer-hub/recipes/tree/master/nodes/hybrid-consensus)_
+`nodes/hybrid-consensus`
+[
+	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
+](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fnodes%2Fhybrid-consensus%2Fsrc%2Flib.rs)
+[
+	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
+](https://github.com/substrate-developer-hub/recipes/tree/master/nodes/hybrid-consensus/src/lib.rs)
 
 This recipe demonstrates a Substrate-based node that employs hybrid consensus. Specifically, it uses
 [Sha3 Proof of Work](./sha3-pow-consensus.md) to dictate block authoring, and the
-[Grandpa](https://substrate.dev/rustdocs/v2.0.0-rc5/sc_finality_grandpa/index.html) finality gadget to provide
+[Grandpa](https://substrate.dev/rustdocs/v2.0.0-rc4/sc_finality_grandpa/index.html) finality gadget to provide
 [deterministic finality](https://substrate.dev/docs/en/knowledgebase/advanced/consensus#finality). The minimal proof
 of work consensus lives entirely outside of the runtime while the grandpa finality obtains its
 authorities from the runtime via the
-[GrandpaAPI](https://substrate.dev/rustdocs/v2.0.0-rc5/sp_finality_grandpa/trait.GrandpaApi.html). Understanding this
+[GrandpaAPI](https://substrate.dev/rustdocs/v2.0.0-rc4/sp_finality_grandpa/trait.GrandpaApi.html). Understanding this
 recipe requires familiarity with Substrate's
 [block import pipeline](https://substrate.dev/docs/en/knowledgebase/advanced/block-import).
 
@@ -115,7 +121,7 @@ such as transaction processing, gossiping, and peer discovery would be starved f
 
 Grandpa is _not_ CPU intensive, so we will use a standard `async` worker to listen to and cast
 grandpa votes. We begin by creating a grandpa
-[`Config`](https://substrate.dev/rustdocs/v2.0.0-rc5/sc_finality_grandpa/struct.Config.html).
+[`Config`](https://substrate.dev/rustdocs/v2.0.0-rc4/sc_finality_grandpa/struct.Config.html).
 
 ```rust, ignore
 let grandpa_config = sc_finality_grandpa::Config {
@@ -129,7 +135,7 @@ let grandpa_config = sc_finality_grandpa::Config {
 ```
 
 We can then use this config to create an instance of
-[`GrandpaParams`](https://substrate.dev/rustdocs/v2.0.0-rc5/sc_finality_grandpa/struct.GrandpaParams.html).
+[`GrandpaParams`](https://substrate.dev/rustdocs/v2.0.0-rc4/sc_finality_grandpa/struct.GrandpaParams.html).
 
 ```rust, ignore
 let grandpa_config = sc_finality_grandpa::GrandpaParams {
@@ -146,7 +152,7 @@ let grandpa_config = sc_finality_grandpa::GrandpaParams {
 With the parameters established, we can now create and spawn the authorship future.
 
 ```rust, ignore
-service.spawn_essential_task(
+service.spawn_essential_task_handle().spawn_blocking(
 	"grandpa-voter",
 	sc_finality_grandpa::run_grandpa_voter(grandpa_config)?
 );
@@ -171,7 +177,7 @@ sc_finality_grandpa::setup_disabled_grandpa(
 ### Runtime APIs
 
 Grandpa relies on getting its authority sets from the runtime via the
-[GrandpaAPI](https://substrate.dev/rustdocs/v2.0.0-rc5/sp_finality_grandpa/trait.GrandpaApi.html). So trying to build
+[GrandpaAPI](https://substrate.dev/rustdocs/v2.0.0-rc4/sp_finality_grandpa/trait.GrandpaApi.html). So trying to build
 this node with a runtime that does not provide this API will fail to compile. For that reason, we
 have included the dedicated `minimal-grandpa-runtime`.
 
