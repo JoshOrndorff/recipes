@@ -1,6 +1,6 @@
 [package]
 name = "weight-fee-runtime"
-version = "2.0.0-dev"
+version = "2.0.0-rc4"
 authors = ['Substrate DevHub <https://github.com/substrate-developer-hub>']
 repository = 'https://github.com/substrate-developer-hub/recipes'
 edition = "2018"
@@ -16,7 +16,7 @@ categories = [
 	"tutorial",
 	"recipe",
 ]
-compatibility_version = "2.0.0-dev"
+compatibility_version = "2.0.0-rc4"
 
 [dependencies]
 serde = { version = "1.0", optional = true, features = ["derive"] }

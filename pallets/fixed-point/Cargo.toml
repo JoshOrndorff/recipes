@@ -1,6 +1,6 @@
 [package]
 name = "fixed-point"
-version = "2.0.0-dev"
+version = "2.0.0-rc4"
 authors = ['Substrate DevHub <https://github.com/substrate-developer-hub>']
 edition = "2018"
 description = "A pallet that demonstrates using fixed-point arithmetic in Substrate"
@@ -14,7 +14,7 @@ categories = [
 	"recipe",
 	"arithmetic",
 ]
-compatibility_version = "2.0.0-dev"
+compatibility_version = "2.0.0-rc4"
 
 [features]
 default = ['std']

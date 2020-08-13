@@ -1,6 +1,6 @@
 [package]
 name = "single-value"
-version = "2.0.0-dev"
+version = "2.0.0-rc4"
 repository = 'https://github.com/substrate-developer-hub/recipes'
 authors = ['Substrate DevHub <https://github.com/substrate-developer-hub>']
 edition = "2018"
@@ -13,7 +13,7 @@ categories = [
 	"tutorial",
 	"recipe",
 ]
-compatibility_version = "2.0.0-dev"
+compatibility_version = "2.0.0-rc4"
 
 [features]
 default = ['std']

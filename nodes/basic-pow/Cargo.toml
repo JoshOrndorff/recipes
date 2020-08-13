@@ -3,7 +3,7 @@ authors = ['Substrate DevHub <https://github.com/substrate-developer-hub>']
 edition = '2018'
 name = 'basic-pow'
 repository = 'https://github.com/substrate-developer-hub/recipes'
-version = "2.0.0-dev"
+version = "2.0.0-rc4"
 description = 'A Substrate node that demonstrates minimal proof of work consensus'
 license = "GPL-3.0-or-later"
 
@@ -14,7 +14,7 @@ categories = [
 	"tutorial",
 	"recipe",
 ]
-compatibility_version = "2.0.0-dev"
+compatibility_version = "2.0.0-rc4"
 
 [[bin]]
 name = 'basic-pow'
