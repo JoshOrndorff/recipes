@@ -54,7 +54,7 @@ and **Unsigned Transactions**. Signed transactions are used if the transaction r
 to be specified. Unsigned transactions are used when the sender does not need to be known and
 additional logic in the code provides additional data verification.
 
-Let's walk through how to set up each one:
+Let's walk through how to set each one up:
 
 ## Signed Transactions
 
