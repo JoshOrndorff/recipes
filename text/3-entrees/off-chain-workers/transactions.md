@@ -299,8 +299,8 @@ impl<T: Trait> support::unsigned::ValidateUnsigned for Module<T> {
 }
 ```
 
-By implementing `ValidateUnsigned`, and the allowance logic is added inside the `validate_unsigned`
-function. We can verify if the call is to `Call::submit_number_unsigned` and returns `Ok()` otherwise, `InvalidTransaction::Call`.
+By implementing `ValidateUnsigned`, the allowance logic is added inside the `validate_unsigned`
+function. We verify that if the call is `Call::submit_number_unsigned` we return `Ok()`, otherwise `InvalidTransaction::Call`.
 
 Note that the`ValidTransaction` object has some fields that touch on concepts that we have not discussed
 before:
