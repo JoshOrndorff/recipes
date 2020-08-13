@@ -68,7 +68,7 @@ deposited and this example will run all fine.
 
 ### Setup
 
-For signed transactions, we have to define another sub-module src:
+For signed transactions, we have to define a crypto signature sub-module:
 
 [`pallets/offchain-demo/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/lib.rs)
 
