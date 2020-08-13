@@ -2881,10 +2881,10 @@ transactions back on-chain.</p>
 <p>This <code>offchain-demo</code> pallet is included in the
 <a href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime">ocw-runtime</a>.
 That runtime can be used in the kitchen node.</p>
-<p>In order to use the Offchain worker, the node must inject some keys into its keystore, and that is
-enabled with a feature flag.</p>
-<p>First, edit <code>nodes/kitchen-node/Cargo.toml</code> to enable the <code>ocw-runtime</code>.</p>
-<p>Then, build the kitchen node with these commands.</p>
+<p>In order to utilize the off-chain worker, the node must inject keys into its keystore. To do so, we
+open the <code>nodes/kitchen-node/Cargo.toml</code> file, enable the <code>ocw-runtime</code> package and comment out the
+<code>super-runtime</code> package.</p>
+<p>Then we build the kitchen node with <code>ocw</code> feature flag:</p>
 <pre><code class="language-bash"># Switch to kitchen-node directory
 cd nodes/kitchen-node
 
@@ -2892,7 +2892,7 @@ cd nodes/kitchen-node
 cargo build --release --features ocw
 </code></pre>
 <h2><a class="header" href="#life-cycle-of-off-chain-worker" id="life-cycle-of-off-chain-worker">Life-cycle of Off-chain Worker</a></h2>
-<p>Running the <code>kitchen-node</code>, you will see the off-chain worker is run after each block generation
+<p>Running the <code>kitchen-node</code> we see off-chain worker runs after each block generation
 phase, as shown by <code>Entering off-chain workers</code> in the node output message:</p>
 <pre><code>...
 2020-03-14 13:30:36 Starting BABE Authorship worker
@@ -2908,30 +2908,28 @@ phase, as shown by <code>Entering off-chain workers</code> in the node output me
 2020-03-14 13:30:42 off-chain send_signed: acc: 5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY| number: 0
 ...
 </code></pre>
-<p>Referring to the code at
+<p>If we refer to the code at
 <a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/lib.rs"><code>pallets/offchain-demo/src/lib.rs</code></a>,
 there is an <code>offchain_worker</code> function inside <code>decl_module!</code>. This is the entry point of the
-off-chain worker that is executed once after each block generation, so we put all the off-chain
-logic here.</p>
+off-chain worker which is executed once per block generation, so all the off-chain
+logic is here.</p>
 <p>Two kinds of transactions can be sent back on-chain from off-chain workers, <strong>Signed Transactions</strong>
 and <strong>Unsigned Transactions</strong>. Signed transactions are used if the transaction requires the sender
-to be specified. Unsigned transactions are used when the sender does not need to be known, and
-additional logic is written in the code to provide extra data verification. Let's walk through how
-to set up each one.</p>
+to be specified. Unsigned transactions are used when the sender does not need to be known and
+additional logic in the code provides additional data verification.</p>
+<p>Let's walk through how to set each one up:</p>
 <h2><a class="header" href="#signed-transactions" id="signed-transactions">Signed Transactions</a></h2>
 <blockquote>
 <p><strong>Notes</strong>: This example will have account <code>Alice</code> submitting signed transactions to the node in
-off-chain worker, and these transactions have associated fees. If you run the node in development
-mode (with <code>--dev</code> flag) using the default sr25519 crypto signature, <code>Alice</code> will have initial fund
+the off-chain worker, and these transactions have associated fees. If we run the node in development
+mode (with <code>--dev</code> flag) using the default sr25519 crypto signature, <code>Alice</code> will have initial funds
 deposited and this example will run all fine.</p>
-<p>If you are running either not in development mode or switched to another crypto signature, please
-beware to have account <code>Alice</code> setup and be funded to run this example.</p>
+<p>If this is not done in development mode or switched to another crypto signature, please
+be aware that <code>Alice</code> must be setup and be funded to run this example.</p>
 </blockquote>
 <h3><a class="header" href="#setup" id="setup">Setup</a></h3>
-<p>For signed transactions, the first thing you will notice is that we have defined another sub-module
-here:</p>
-<p>src:
-<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/lib.rs"><code>pallets/offchain-demo/src/lib.rs</code></a></p>
+<p>For signed transactions, we have to define a crypto signature sub-module:</p>
+<p><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/lib.rs"><code>pallets/offchain-demo/src/lib.rs</code></a></p>
 <pre><pre class="playpen"><code class="language-rust">
 <span class="boring">#![allow(unused_variables)]
 </span><span class="boring">fn main() {
@@ -2944,7 +2942,7 @@ pub mod crypto {
 }
 <span class="boring">}
 </span></code></pre></pre>
-<p>This is the application key to be used as the prefix for this pallet in underlying storage.</p>
+<p><code>KEY_TYPE</code> is the application key prefix for the pallet in underlying storage.</p>
 <p>Second, we have added an additional associated type <code>AuthorityId</code>.</p>
 <p>src:
 <a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/lib.rs"><code>pallets/offchain-demo/src/lib.rs</code></a></p>
@@ -2957,15 +2955,12 @@ pub mod crypto {
 }
 <span class="boring">}
 </span></code></pre></pre>
-<p>This associated type needs to be specified by the runtime when the runtime is to include this pallet
-(implement this pallet trait).</p>
-<p>Now if we build the <code>kitchen-node</code>, we will see the compiler complain that there are three trait
-bounds <code>Runtime: frame_system::offchain::CreateSignedTransaction</code>,
-<code>frame_system::offchain::SigningTypes</code>, and <code>frame_system::offchain::SendTransactionTypes</code> are not
-satisfied. We learn that when using <code>SubmitSignedTransaction</code>, we also need to have our runtime
-implement the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_system/offchain/trait.CreateSignedTransaction.html"><code>CreateSignedTransaction</code> trait</a>.
-So let's implement this in our runtime.</p>
+<p>This associated type needs to be specified by the runtime when it implements this pallet trait.</p>
+<p>Now if we build the <code>kitchen-node</code>, we will see the compiler return with three trait
+bounds that are not satisfied: <code>Runtime: frame_system::offchain::CreateSignedTransaction</code>,
+<code>frame_system::offchain::SigningTypes</code>, and <code>frame_system::offchain::SendTransactionTypes</code>.
+We also learn that when using <code>SubmitSignedTransaction</code>, our runtime need to implement
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_system/offchain/trait.CreateSignedTransaction.html"><code>CreateSignedTransaction</code> trait</a>.</p>
 <p>src:
 <a href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime/src/lib.rs"><code>runtimes/ocw-runtime/src/lib.rs</code></a></p>
 <pre><pre class="playpen"><code class="language-rust">
@@ -3016,13 +3011,13 @@ where
 // ...snip
 <span class="boring">}
 </span></code></pre></pre>
-<p>There is a lot happening in the code. But basically we are:</p>
+<p>The overall goal is to execute the following:</p>
 <ul>
-<li>Signing the <code>call</code> and <code>extra</code>, also called signed extension, and</li>
-<li>Making the call(<code>call</code>, which includes the call paramters) and passing the sender <code>address</code>,
-signature of the data <code>signature</code>, and its signed extension <code>extra</code> on-chain as a transaction.</li>
+<li>Sign the <code>call</code> and <code>extra</code>, also called 'signed extension'</li>
+<li>Making the call (<code>call</code>, which includes the call paramters) and passing the sender <code>address</code>,
+signature of the data <code>signature</code>, and ensuring its signed extension <code>extra</code> on-chain as a transaction.</li>
 </ul>
-<p><code>SignedExtra</code> data type is defined later in the runtime.</p>
+<p><code>SignedExtra</code> data type will be defined later in the runtime.</p>
 <p>src:
 <a href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime/src/lib.rs"><code>runtimes/ocw-runtime/src/lib.rs</code></a></p>
 <pre><pre class="playpen"><code class="language-rust">
@@ -3090,15 +3085,15 @@ where
 <p>We have a function reference to <code>Call::submit_number_signed(submission)</code>. This is the function we
 are going to submit back to on-chain, and passing it to
 <code>T::SubmitSignedTransaction::submit_signed(call)</code>.</p>
-<p>You will notice that we run a for loop in the returned result. This implies that this call may make
-multiple transactions and return multiple results. It is because this call actually signs and sends
+<p>Notice that we run a loop in the returned result. This implies that the call may make
+multiple transactions and return multiple results. The call is both signing and sending
 the transaction with each of the accounts that can be found locally under the application crypto
-(which we defined earlier in <code>pub mod crypto {...}</code>). You can view this as the local accounts that
-are managed under this pallet namespace. Right now, we only have one key in the app crypto, so only
+(which we defined earlier in <code>pub mod crypto {...}</code>). This can be seen as the local accounts that
+are managed under this pallet namespace. As we only have one key in the app crypto, so only
 one signed transaction is made.</p>
-<p>Eventually, the <code>call</code> transaction is made on-chain via the <code>create_transaction</code> function we defined
+<p>Eventually, the <code>call</code> transaction will be made on-chain via the <code>create_transaction</code> function we defined
 earlier when we implemented <code>CreateTransaction</code> trait in our runtime.</p>
-<p>If you are wondering where we insert the local account in the pallet app crypto, it is actually in
+<p>The local account used to sign the transaction is inserted in the pallet app crypto, and lives in
 the outer node's <a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sc_service/index.html">service</a>.</p>
 <p>src:
 <a href="https://github.com/substrate-developer-hub/recipes/tree/master/nodes/kitchen-node/src/service.rs"><code>nodes/kitchen-node/src/service.rs</code></a></p>
@@ -3129,8 +3124,8 @@ the outer node's <a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sc_service/i
 </span></code></pre></pre>
 <h2><a class="header" href="#unsigned-transactions" id="unsigned-transactions">Unsigned Transactions</a></h2>
 <h3><a class="header" href="#setup-1" id="setup-1">Setup</a></h3>
-<p>By default, unsigned transactions are rejected by the Substrate runtime unless they are explicitly
-allowed. So we need to write the logic to allow unsigned transactions for certain particular
+<p>By default, unsigned transactions are rejected by the runtime unless they are explicitly
+allowed. So we need to write logic to allow unsigned transactions for certain particular
 dispatched functions as follows:</p>
 <p>src:
 <a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/lib.rs"><code>pallets/offchain-demo/src/lib.rs</code></a></p>
@@ -3157,17 +3152,16 @@ dispatched functions as follows:</p>
 }
 <span class="boring">}
 </span></code></pre></pre>
-<p>We implement <code>ValidateUnsigned</code>, and the allowance logic is added inside the <code>validate_unsigned</code>
-function. We check if the call is to <code>Call::submit_number_unsigned</code> and returns <code>Ok()</code> if this is
-the case. Otherwise, <code>InvalidTransaction::Call</code>.</p>
-<p>The <code>ValidTransaction</code> object has some fields that touch on concepts that we have not discussed
+<p>By implementing <code>ValidateUnsigned</code>, the allowance logic is added inside the <code>validate_unsigned</code>
+function. We verify that if the call is <code>Call::submit_number_unsigned</code> we return <code>Ok()</code>, otherwise <code>InvalidTransaction::Call</code>.</p>
+<p>Note that the<code>ValidTransaction</code> object has some fields that touch on concepts that we have not discussed
 before:</p>
 <ul>
 <li><code>priority</code>: Ordering of two transactions, given their dependencies are satisfied.</li>
-<li><code>requires</code>: List of tags this transaction depends on. Not shown in the above code as it is not
-necessary in this case.</li>
+<li><code>requires</code>: List of tags the transaction depends on.</li>
 <li><code>provides</code>: List of tags provided by this transaction. Successfully importing the transaction
-will enable other transactions that depend on these tags to be included as well. <code>provides</code> and
+will enable other transactions that depend on these tags to be included as well.</li>
+<li>Both<code>provides</code> and
 <code>requires</code> tags allow Substrate to build a dependency graph of transactions and import them in
 the right order.</li>
 <li><code>longevity</code>: Transaction longevity, which describes the minimum number of blocks the transaction
@@ -3180,7 +3174,7 @@ the current node, but will never be sent to other peers.</li>
 <a href="https://github.com/rust-unofficial/patterns/blob/master/patterns/builder.md">builder pattern</a> to
 build up this object.</p>
 <p>Finally, to tell the runtime that we have our own <code>ValidateUnsigned</code> logic, we also need to pass
-this as a parameter when constructing the runtime.</p>
+this as a parameter when constructing the runtime:</p>
 <p>src:
 <a href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime/src/lib.rs"><code>runtimes/ocw-runtime/src/lib.rs</code></a></p>
 <pre><pre class="playpen"><code class="language-rust">
@@ -3220,7 +3214,7 @@ this as a parameter when constructing the runtime.</p>
 }
 <span class="boring">}
 </span></code></pre></pre>
-<p>As in signed transactions, we prepare a function reference with its parameters and then call
+<p>As in signed transactions, we prepare a function reference with its parameters and call
 <code>T::SubmitUnsignedTransaction::submit_unsigned</code>.</p>
 <h2><a class="header" href="#testing" id="testing">Testing</a></h2>
 <p>For writing test cases for off-chain worker, refer to our
