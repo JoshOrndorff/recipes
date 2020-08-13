@@ -96,8 +96,7 @@ pub trait Trait: system::Trait {
 }
 ```
 
-This associated type needs to be specified by the runtime
-(implement this pallet trait).
+This associated type needs to be specified by the runtime when it implements this pallet trait.
 
 Now if we build the `kitchen-node`, we will see the compiler return with three trait
 bounds that are not satisfied: `Runtime: frame_system::offchain::CreateSignedTransaction`,
