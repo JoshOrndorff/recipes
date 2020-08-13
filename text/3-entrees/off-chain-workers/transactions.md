@@ -103,7 +103,6 @@ bounds that are not satisfied: `Runtime: frame_system::offchain::CreateSignedTra
 `frame_system::offchain::SigningTypes`, and `frame_system::offchain::SendTransactionTypes`.
 We also learn that when using `SubmitSignedTransaction`, our runtime need to implement
 [`CreateSignedTransaction` trait](https://substrate.dev/rustdocs/v2.0.0-rc5/frame_system/offchain/trait.CreateSignedTransaction.html).
-So this needs to be implemented to our runtime.
 
 src:
 [`runtimes/ocw-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime/src/lib.rs)
