@@ -238,7 +238,7 @@ one signed transaction is made.
 Eventually, the `call` transaction will be made on-chain via the `create_transaction` function we defined
 earlier when we implemented `CreateTransaction` trait in our runtime.
 
-The local account is inserted in the pallet app crypto, and lives in
+The local account used to sign the transaction is inserted in the pallet app crypto, and lives in
 the outer node's [service](https://substrate.dev/rustdocs/v2.0.0-rc5/sc_service/index.html).
 
 src:
