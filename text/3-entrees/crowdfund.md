@@ -9,7 +9,7 @@
 ](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-crowdfund/src/lib.rs)
 This pallet demonstrates a simple on-chain crowdfunding app where participants can pool funds toward
 a common goal. It demonstrates a pallet that controls multiple token accounts, and storing data in
-[child storage](https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/storage/child/index.html).
+[child storage](https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/storage/child/index.html).
 
 ## Basic Usage
 
@@ -23,7 +23,7 @@ dissolves it.
 
 We begin by declaring our configuration trait. In addition to the ubiquitous `Event` type, our
 crowdfund pallet will depend on a notion of
-[`Currency`](https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/traits/trait.Currency.html), and three
+[`Currency`](https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/traits/trait.Currency.html), and three
 [configuration constants](./constants.md).
 
 ```rust, ignore
@@ -102,7 +102,7 @@ decl_storage! {
 ```
 
 This pallet also stores the data about which users have contributed and how many funds they
-contributed in a [child trie](https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/storage/child/index.html). This
+contributed in a [child trie](https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/storage/child/index.html). This
 child trie is not explicitly declared anywhere.
 
 The use of the child trie provides two advantages over using standard storage. First, it allows for
@@ -142,7 +142,7 @@ pub fn crowdfund_kill(index: FundIndex) {
 ```
 
 Because this pallet uses one trie for each active crowdfund, we need to generate a unique
-[`ChildInfo`](https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/storage/child/enum.ChildInfo.html) for each of
+[`ChildInfo`](https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/storage/child/enum.ChildInfo.html) for each of
 them. To ensure that the ids are really unique, we incluce the `FundIndex` in the generation.
 
 ```rust, ignore
@@ -208,6 +208,6 @@ fn dispense(origin, index: FundIndex) {
 ```
 
 This pallet also uses Currency
-[`Imbalance`](https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/traits/trait.Imbalance.html)s as discussed in
+[`Imbalance`](https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/traits/trait.Imbalance.html)s as discussed in
 the [Charity](./charity.md) recipe, to make transfers without incurring transfer fees to the
 crowdfund pallet itself.
