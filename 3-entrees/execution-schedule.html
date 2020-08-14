@@ -1,0 +1,470 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Execution Schedule - Substrate Recipes</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="A Hands-On Cookbook for Aspiring Blockchain Chefs">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="../favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="../favicon.png">
+        
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="../1-prepare-kitchen/index.html"><strong aria-hidden="true">1.</strong> Preparing Your Kitchen</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../1-prepare-kitchen/1-build-node.html"><strong aria-hidden="true">1.1.</strong> Building A Node</a></li><li class="chapter-item expanded "><a href="../1-prepare-kitchen/2-interact-node.html"><strong aria-hidden="true">1.2.</strong> Interacting with a Node</a></li><li class="chapter-item expanded "><a href="../1-prepare-kitchen/3-kitchen-organization.html"><strong aria-hidden="true">1.3.</strong> Kitchen Organization</a></li></ol></li><li class="chapter-item expanded "><a href="../2-appetizers/index.html"><strong aria-hidden="true">2.</strong> Appetizers</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../2-appetizers/1-hello-substrate.html"><strong aria-hidden="true">2.1.</strong> Hello Substrate</a></li><li class="chapter-item expanded "><a href="../2-appetizers/2-storage-values.html"><strong aria-hidden="true">2.2.</strong> Single Value Storage</a></li><li class="chapter-item expanded "><a href="../2-appetizers/3-errors.html"><strong aria-hidden="true">2.3.</strong> Handling Errors</a></li><li class="chapter-item expanded "><a href="../2-appetizers/4-events.html"><strong aria-hidden="true">2.4.</strong> Events Verify Execution</a></li></ol></li><li class="chapter-item expanded "><a href="../3-entrees/index.html"><strong aria-hidden="true">3.</strong> Entrees</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../3-entrees/storage-api/index.html"><strong aria-hidden="true">3.1.</strong> Runtime Storage API</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../3-entrees/storage-api/storage-maps.html"><strong aria-hidden="true">3.1.1.</strong> Storage Maps</a></li><li class="chapter-item expanded "><a href="../3-entrees/storage-api/cache.html"><strong aria-hidden="true">3.1.2.</strong> Cache Locally &gt; Storage Calls</a></li><li class="chapter-item expanded "><a href="../3-entrees/storage-api/vec-set.html"><strong aria-hidden="true">3.1.3.</strong> Using Vectors as Sets</a></li><li class="chapter-item expanded "><a href="../3-entrees/storage-api/map-set.html"><strong aria-hidden="true">3.1.4.</strong> Using Maps as Sets</a></li><li class="chapter-item expanded "><a href="../3-entrees/storage-api/double.html"><strong aria-hidden="true">3.1.5.</strong> Subgroup Removal by Subkey: Double Maps</a></li><li class="chapter-item expanded "><a href="../3-entrees/storage-api/structs.html"><strong aria-hidden="true">3.1.6.</strong> Storing custom structs</a></li><li class="chapter-item expanded "><a href="../3-entrees/storage-api/ringbuffer.html"><strong aria-hidden="true">3.1.7.</strong> Ringbuffer Queue</a></li></ol></li><li class="chapter-item expanded "><a href="../3-entrees/basic-token.html"><strong aria-hidden="true">3.2.</strong> Basic Token</a></li><li class="chapter-item expanded "><a href="../3-entrees/constants.html"><strong aria-hidden="true">3.3.</strong> Configurable Constants</a></li><li class="chapter-item expanded "><a href="../3-entrees/crowdfund.html"><strong aria-hidden="true">3.4.</strong> Simple Crowdfund</a></li><li class="chapter-item expanded "><a href="../3-entrees/instantiable.html"><strong aria-hidden="true">3.5.</strong> Instantiable Pallets</a></li><li class="chapter-item expanded "><a href="../3-entrees/weights.html"><strong aria-hidden="true">3.6.</strong> Weights for Resource Accounting</a></li><li class="chapter-item expanded "><a href="../3-entrees/fees.html"><strong aria-hidden="true">3.7.</strong> Transaction Fees for Economic Security</a></li><li class="chapter-item expanded "><a href="../3-entrees/charity.html"><strong aria-hidden="true">3.8.</strong> Charity and Imbalances</a></li><li class="chapter-item expanded "><a href="../3-entrees/fixed-point.html"><strong aria-hidden="true">3.9.</strong> Fixed Point Arithmetic</a></li><li class="chapter-item expanded "><a href="../3-entrees/off-chain-workers/index.html"><strong aria-hidden="true">3.10.</strong> Off-chain Workers</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../3-entrees/off-chain-workers/transactions.html"><strong aria-hidden="true">3.10.1.</strong> Transactions</a></li><li class="chapter-item expanded "><a href="../3-entrees/off-chain-workers/http-json.html"><strong aria-hidden="true">3.10.2.</strong> HTTP Fetching &amp; JSON Parsing</a></li><li class="chapter-item expanded "><a href="../3-entrees/off-chain-workers/storage.html"><strong aria-hidden="true">3.10.3.</strong> Local Storage</a></li></ol></li><li class="chapter-item expanded "><a href="../3-entrees/runtime-api.html"><strong aria-hidden="true">3.11.</strong> Runtime APIs</a></li><li class="chapter-item expanded "><a href="../3-entrees/custom-rpc.html"><strong aria-hidden="true">3.12.</strong> Custom RPCs</a></li><li class="chapter-item expanded "><a href="../3-entrees/sha3-pow-consensus.html"><strong aria-hidden="true">3.13.</strong> Sha3 Pow Consensus Algorithms</a></li><li class="chapter-item expanded "><a href="../3-entrees/basic-pow.html"><strong aria-hidden="true">3.14.</strong> Basic Proof of Work Node</a></li><li class="chapter-item expanded "><a href="../3-entrees/hybrid-consensus.html"><strong aria-hidden="true">3.15.</strong> Hybrid PoW/PoS Consensus Node</a></li><li class="chapter-item expanded "><a href="../3-entrees/manual-seal.html"><strong aria-hidden="true">3.16.</strong> Manual Seal Consensus</a></li><li class="chapter-item expanded "><a href="../3-entrees/kitchen-node.html"><strong aria-hidden="true">3.17.</strong> Kitchen Node - An reusable instant seal node</a></li><li class="chapter-item expanded "><a href="../3-entrees/babe-grandpa-node.html"><strong aria-hidden="true">3.18.</strong> Babe and Grandpa Node</a></li><li class="chapter-item expanded "><a href="../3-entrees/currency.html"><strong aria-hidden="true">3.19.</strong> Currency Types</a></li><li class="chapter-item expanded "><a href="../3-entrees/randomness.html"><strong aria-hidden="true">3.20.</strong> Generating Randomness</a></li><li class="chapter-item expanded "><a href="../3-entrees/execution-schedule.html" class="active"><strong aria-hidden="true">3.21.</strong> Execution Schedule</a></li><li class="chapter-item expanded "><a href="../3-entrees/pallet-coupling.html"><strong aria-hidden="true">3.22.</strong> Tightly- and Loosely-Coupled Pallets</a></li><li class="chapter-item expanded "><a href="../3-entrees/testing/index.html"><strong aria-hidden="true">3.23.</strong> Testing</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../3-entrees/testing/mock.html"><strong aria-hidden="true">3.23.1.</strong> Basic Test Environments</a></li><li class="chapter-item expanded "><a href="../3-entrees/testing/common.html"><strong aria-hidden="true">3.23.2.</strong> Common Tests</a></li><li class="chapter-item expanded "><a href="../3-entrees/testing/off-chain-workers.html"><strong aria-hidden="true">3.23.3.</strong> Off-chain Worker Test Environment</a></li><li class="chapter-item expanded "><a href="../3-entrees/testing/externalities.html"><strong aria-hidden="true">3.23.4.</strong> Custom Test Environment</a></li></ol></li><li class="chapter-item expanded "><a href="../3-entrees/safemath.html"><strong aria-hidden="true">3.24.</strong> Safe Math</a></li><li class="spacer"></li></ol></li><li class="chapter-item expanded "><a href="../more-resources.html">More Resources</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Substrate Recipes</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#execution-schedule" id="execution-schedule">Execution Schedule</a></h1>
+<p><code>pallets/execution-schedule</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fexecution-schedule%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/execution-schedule/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
+<!-- TODO This content may need updated to match the actual pallet -->
+<p>Blockchain-native mechanisms may use the block number as a proxy for time to schedule task
+execution. Although scheduled task execution through council governance is minimal in this example,
+it is not too hard to imagine tasks taking the form of subscription payments, grant payouts, or any
+other scheduled <em>task</em> execution.</p>
+<p>This pallet demonstrates a permissioned task scheduler, in which members of a
+<code>council: Vec&lt;AccountId&gt;</code> can schedule tasks, which are stored in a vector in the runtime storage
+(<code>decl_storage</code>).</p>
+<p>Members of the <code>council</code> vote on the tasks with <code>SignalQuota</code> voting power which is doled out
+equally to every member every <code>ExecutionFrequency</code> number of blocks.</p>
+<p>Tasks with support are prioritized during execution every <code>ExecutionFrequency</code> number of blocks.
+More specifically, every <code>ExecutionFrequency</code> number of blocks, a maximum of <code>TaskLimit</code> number of
+tasks are executed. The priority of tasks is decided by the signalling of the council members.</p>
+<p>The module's <code>Trait</code>:</p>
+<pre><code class="language-rust ignore">// other type aliases
+pub type PriorityScore = u32;
+
+pub trait Trait: system::Trait {
+    /// Overarching event type
+    type Event: From&lt;Event&lt;Self&gt;&gt; + Into&lt;&lt;Self as system::Trait&gt;::Event&gt;;
+
+    /// Quota for members to signal task priority every ExecutionFrequency
+    type SignalQuota: Get&lt;PriorityScore&gt;;
+
+    /// The frequency of batch executions for tasks (in `on_finalize`)
+    type ExecutionFrequency: Get&lt;Self::BlockNumber&gt;;
+
+    /// The maximum number of tasks that can be approved in an `ExecutionFrequency` period
+    type TaskLimit: Get&lt;PriorityScore&gt;;
+}
+</code></pre>
+<p>The task object is a struct,</p>
+<pre><code class="language-rust ignore">pub type TaskId = Vec&lt;u8&gt;;
+pub type PriorityScore = u32;
+
+pub struct Task&lt;BlockNumber&gt; {
+    id: TaskId,
+    score: PriorityScore,
+    proposed_at: BlockNumber,
+}
+</code></pre>
+<p>The runtime method for proposing a task emits an event with the expected execution time. The
+calculation of the expected execution time was first naively to basically iterate the block number
+from the current block number until it was divisible by <code>T::ExecutionFrequency::get()</code>. While this
+is correct, it is clearly not the most efficient way to find the next block in which tasks are
+executed.</p>
+<blockquote>
+<p>A more complex engine for predicting task execution time may run off-chain instead of in a runtime
+method.</p>
+</blockquote>
+<p>Before adding a runtime method to estimate the <code>execution_time</code>, implement a naive implementation
+that iterates the global <code>BlockNumber</code> until it is divisible by <code>ExecutionFrequency</code> (which implies
+execution in <code>on_finalize</code> in this block).</p>
+<pre><code class="language-rust ignore">fn naive_execution_estimate(now: T::BlockNumber) -&gt; T::BlockNumber {
+    // the frequency with which tasks are batch executed
+    let batch_frequency = T::ExecutionFrequency::get();
+    let mut expected_execution_time = now;
+    loop {
+        // the expected execution time is the next block number divisible by `ExecutionFrequency`
+        if (expected_execution_time % batch_frequency).is_zero() {
+            break;
+        } else {
+            expected_execution_time += 1.into();
+        }
+    }
+    expected_execution_time
+}
+</code></pre>
+<p>This naive implementation unsurprisingly worked...</p>
+<pre><code class="language-rust ignore">#[test]
+fn naive_estimator_works() {
+    // should use quickcheck to cover entire range of checks
+    ExtBuilder::default()
+        .execution_frequency(8)
+        .build()
+        .execute_with(|| {
+            let current_block = 5u64;
+            assert_eq!(
+                ExecutionSchedule::naive_execution_estimate(current_block.into()),
+                8u64.into()
+            );
+            let next_block = 67u64;
+            assert_eq!(
+                ExecutionSchedule::naive_execution_estimate(next_block.into()),
+                72u64.into()
+            );
+        })
+}
+</code></pre>
+<p>...but it is obvious that there is a better way. If execution is scheduled every constant
+<code>ExecutionFrequency</code> number of blocks, then it should be straightforward to calculate the next
+execution block without this slow iterate and check modulus method. My first attempt at a better
+implementation of <code>execution_estimate(n: T::BlockNumber) -&gt; T::BlockNumber</code> was</p>
+<pre><code class="language-rust ignore">fn execution_estimate(n: T::BlockNumber) -&gt; T::BlockNumber {
+        let batch_frequency = T::ExecutionFrequency::get();
+        let miss = n % batch_frequency;
+        (n + miss) - batch_frequency
+    }
+</code></pre>
+<p>The above code failed the <code>estimator_works</code> unit test</p>
+<pre><code class="language-rust ignore">#[test]
+fn estimator_works() {
+    ExtBuilder::default()
+        .execution_frequency(8)
+        .build()
+        .execute_with(|| {
+            assert_eq!(
+                ExecutionSchedule::execution_estimate(current_block.into()),
+                8u64.into()
+            );
+            assert_eq!(
+                ExecutionSchedule::execution_estimate(next_block.into()),
+                72u64.into()
+            );
+        })
+}
+</code></pre>
+<p>The error helped me catch the logic mistake and change it to</p>
+<pre><code class="language-rust ignore">fn execution_estimate(n: T::BlockNumber) -&gt; T::BlockNumber {
+    let batch_frequency = T::ExecutionFrequency::get();
+    let miss = n % batch_frequency;
+    n + (batch_frequency - miss)
+}
+</code></pre>
+<p>This makes more sense. Current block number <code>% T::ExecutionFrequency::get()</code> is, by definition of
+modulus, the number of blocks that the current block is past when tasks were last executed. To
+return the next block at which task execution is scheduled, the estimator adds the difference
+between <code>T::ExecutionFrequency::get()</code> and the modulus. This makes sense AND passes the
+<code>estimators_work()</code> test.</p>
+<h2><a class="header" href="#on_initialize-updates-vote-data-and-round-information" id="on_initialize-updates-vote-data-and-round-information">on_initialize updates vote data and round information</a></h2>
+<p>Each period of task proposals and voting is considered a round, expressed as <code>RoundIndex: u32</code> such
+that the global round is stored in the runtime storage as <code>Era</code>.</p>
+<pre><code class="language-rust ignore">pub type RoundIndex = u32;
+
+decl_storage! {
+    trait Store for Module&lt;T: Trait&gt; as ExecutionSchedule {
+        Era get(fn era): RoundIndex;
+    }
+}
+</code></pre>
+<p>This storage value acts as a global counter of the round, which is also used as the <code>prefix_key</code> of
+a <code>double_map</code> that tracks the member's remaining voting power in the <code>SignalBank</code> runtime storage
+item. This map and the round counter are updated in the <code>on_initialize</code> hook.</p>
+<pre><code class="language-rust ignore">// in on_initialize
+let last_era = &lt;Era&gt;::get();
+&lt;SignalBank&lt;T&gt;&gt;::remove_prefix(&amp;last_era);
+let next_era: RoundIndex = last_era + 1;
+&lt;Era&gt;::put(next_era);
+// see next code back
+</code></pre>
+<p>The <code>SignalBank</code> tracks the signalling power of each member of the <code>council</code>. By using a
+<code>double-map</code> with the prefix as the round number, it is straightforward to perform batch removal of
+state related to signalling in the previous round.</p>
+<pre><code class="language-rust ignore">&lt;SignalBank&lt;T&gt;&gt;::remove_prefix(&amp;last_era);
+</code></pre>
+<p>In practice, this organization of logic uses something like a ring buffer; the <code>on_initialize</code> both
+batch deletes all signalling records from the previous round while, in the same code block, doling
+out an equal amount of voting power to all members for the next round.</p>
+<pre><code class="language-rust ignore">// ...continuation of last code block
+let signal_quota = T::SignalQuota::get();
+&lt;Council&lt;T&gt;&gt;::get().into_iter().for_each(|member| {
+    &lt;SignalBank&lt;T&gt;&gt;::insert(next_era, &amp;member, signal_quota);
+});
+</code></pre>
+<p>The aforementioned ring buffer is maintained in the <code>on_initialize</code> block. The maintenance code is
+kept in an if statement that limits its invocation to blocks <code>x</code> that follow blocks <code>y</code> for which
+<code>y % ExecutionFrequency == 0</code>.</p>
+<p>This is a common way of only exercising expensive batch execution functions every periodic number of
+blocks. Still, the second to last statement is confusing. The first time I encountered the problem,
+I placed the following in the <code>on_initialize</code> if statement that controls the maintenance of the
+<code>SignalBank</code> and <code>Era</code> storage values,</p>
+<pre><code class="language-rust ignore">// in on_initialize(n: T::BlockNumber)
+if (n % (T::ExecutionFrequency + 1.into())).is_zero() {
+    //changing and repopulating of `Era` and `SignalBank`
+}
+</code></pre>
+<p>I only noticed this mistake while testing whether eras progress as expected. Specifically, the
+following test failed</p>
+<pre><code class="language-rust ignore">#[test]
+    fn eras_change_correctly() {
+    ExtBuilder::default()
+        .execution_frequency(2)
+        .build()
+        .execute_with(|| {
+            System::set_block_number(1);
+            run_to_block(13);
+            assert_eq!(ExecutionSchedule::era(), 6);
+            run_to_block(32);
+            assert_eq!(ExecutionSchedule::era(), 16);
+        })
+}
+</code></pre>
+<p>The test failed with an error message claiming that the first <code>assert_eq!</code> left side was 4 which
+does not equal 6. This error message caused me to inspect the if condition, which I realized should
+be changed to (the current implementation),</p>
+<pre><code class="language-rust ignore">// in on_initialize(n: T::BlockNumber)
+if ((n - 1.into()) % T::ExecutionFrequency).is_zero() {
+    //changing and repopulating of `Era` and `SignalBank`
+}
+</code></pre>
+<p>With this change, the <code>eras_change_correctly</code> test passes.</p>
+<h2><a class="header" href="#on_finalize-execution-priority-a-name--prioritya" id="on_finalize-execution-priority-a-name--prioritya">on_finalize execution priority <a name = "priority"></a></a></h2>
+<ul>
+<li>
+<p>this pattern of sorting the tasks in <code>on_finalize</code> is inspired by the <code>scored-pool</code> pallet which
+should be referenced</p>
+</li>
+<li>
+<p>when we schedule and reprioritize elements in this way, order of execution becomes extremely
+important</p>
+</li>
+<li>
+<p>we execute tasks in <code>on_finalize</code> when <code>n % T::ExecutionFrequency == 0</code>. I should ensure that n
+!= 0 as well, but I assume this is the case. The limit is maximum <code>TaskLimit</code>.</p>
+</li>
+<li>
+<p>An improvement would be to also ensure that their is some minimum amount of <code>score</code>. It would be
+nice to write abstractions that have a more native sense of the collective voting power of all
+members</p>
+</li>
+<li>
+<p>this lends itself to a follow up off-chain workers example for how it fits between <code>on_finalize</code>
+of the last block and <code>on_initialize</code> of the next block <code>=&gt;</code> there is this whole
+<code>execution-schedule</code> :p</p>
+</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="../3-entrees/randomness.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="../3-entrees/pallet-coupling.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="../3-entrees/randomness.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="../3-entrees/pallet-coupling.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+        <script type="text/javascript" src="../.analytics/load.js"></script>
+        
+        <script type="text/javascript" src="../.analytics/config.js"></script>
+        
+        <script type="text/javascript" src="../.analytics/klaro.min.js"></script>
+        
+
+        
+
+    </body>
+</html>

@@ -1,0 +1,339 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Generating Randomness - Substrate Recipes</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="A Hands-On Cookbook for Aspiring Blockchain Chefs">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="../favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="../favicon.png">
+        
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="../1-prepare-kitchen/index.html"><strong aria-hidden="true">1.</strong> Preparing Your Kitchen</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../1-prepare-kitchen/1-build-node.html"><strong aria-hidden="true">1.1.</strong> Building A Node</a></li><li class="chapter-item expanded "><a href="../1-prepare-kitchen/2-interact-node.html"><strong aria-hidden="true">1.2.</strong> Interacting with a Node</a></li><li class="chapter-item expanded "><a href="../1-prepare-kitchen/3-kitchen-organization.html"><strong aria-hidden="true">1.3.</strong> Kitchen Organization</a></li></ol></li><li class="chapter-item expanded "><a href="../2-appetizers/index.html"><strong aria-hidden="true">2.</strong> Appetizers</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../2-appetizers/1-hello-substrate.html"><strong aria-hidden="true">2.1.</strong> Hello Substrate</a></li><li class="chapter-item expanded "><a href="../2-appetizers/2-storage-values.html"><strong aria-hidden="true">2.2.</strong> Single Value Storage</a></li><li class="chapter-item expanded "><a href="../2-appetizers/3-errors.html"><strong aria-hidden="true">2.3.</strong> Handling Errors</a></li><li class="chapter-item expanded "><a href="../2-appetizers/4-events.html"><strong aria-hidden="true">2.4.</strong> Events Verify Execution</a></li></ol></li><li class="chapter-item expanded "><a href="../3-entrees/index.html"><strong aria-hidden="true">3.</strong> Entrees</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../3-entrees/storage-api/index.html"><strong aria-hidden="true">3.1.</strong> Runtime Storage API</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../3-entrees/storage-api/storage-maps.html"><strong aria-hidden="true">3.1.1.</strong> Storage Maps</a></li><li class="chapter-item expanded "><a href="../3-entrees/storage-api/cache.html"><strong aria-hidden="true">3.1.2.</strong> Cache Locally &gt; Storage Calls</a></li><li class="chapter-item expanded "><a href="../3-entrees/storage-api/vec-set.html"><strong aria-hidden="true">3.1.3.</strong> Using Vectors as Sets</a></li><li class="chapter-item expanded "><a href="../3-entrees/storage-api/map-set.html"><strong aria-hidden="true">3.1.4.</strong> Using Maps as Sets</a></li><li class="chapter-item expanded "><a href="../3-entrees/storage-api/double.html"><strong aria-hidden="true">3.1.5.</strong> Subgroup Removal by Subkey: Double Maps</a></li><li class="chapter-item expanded "><a href="../3-entrees/storage-api/structs.html"><strong aria-hidden="true">3.1.6.</strong> Storing custom structs</a></li><li class="chapter-item expanded "><a href="../3-entrees/storage-api/ringbuffer.html"><strong aria-hidden="true">3.1.7.</strong> Ringbuffer Queue</a></li></ol></li><li class="chapter-item expanded "><a href="../3-entrees/basic-token.html"><strong aria-hidden="true">3.2.</strong> Basic Token</a></li><li class="chapter-item expanded "><a href="../3-entrees/constants.html"><strong aria-hidden="true">3.3.</strong> Configurable Constants</a></li><li class="chapter-item expanded "><a href="../3-entrees/crowdfund.html"><strong aria-hidden="true">3.4.</strong> Simple Crowdfund</a></li><li class="chapter-item expanded "><a href="../3-entrees/instantiable.html"><strong aria-hidden="true">3.5.</strong> Instantiable Pallets</a></li><li class="chapter-item expanded "><a href="../3-entrees/weights.html"><strong aria-hidden="true">3.6.</strong> Weights for Resource Accounting</a></li><li class="chapter-item expanded "><a href="../3-entrees/fees.html"><strong aria-hidden="true">3.7.</strong> Transaction Fees for Economic Security</a></li><li class="chapter-item expanded "><a href="../3-entrees/charity.html"><strong aria-hidden="true">3.8.</strong> Charity and Imbalances</a></li><li class="chapter-item expanded "><a href="../3-entrees/fixed-point.html"><strong aria-hidden="true">3.9.</strong> Fixed Point Arithmetic</a></li><li class="chapter-item expanded "><a href="../3-entrees/off-chain-workers/index.html"><strong aria-hidden="true">3.10.</strong> Off-chain Workers</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../3-entrees/off-chain-workers/transactions.html"><strong aria-hidden="true">3.10.1.</strong> Transactions</a></li><li class="chapter-item expanded "><a href="../3-entrees/off-chain-workers/http-json.html"><strong aria-hidden="true">3.10.2.</strong> HTTP Fetching &amp; JSON Parsing</a></li><li class="chapter-item expanded "><a href="../3-entrees/off-chain-workers/storage.html"><strong aria-hidden="true">3.10.3.</strong> Local Storage</a></li></ol></li><li class="chapter-item expanded "><a href="../3-entrees/runtime-api.html"><strong aria-hidden="true">3.11.</strong> Runtime APIs</a></li><li class="chapter-item expanded "><a href="../3-entrees/custom-rpc.html"><strong aria-hidden="true">3.12.</strong> Custom RPCs</a></li><li class="chapter-item expanded "><a href="../3-entrees/sha3-pow-consensus.html"><strong aria-hidden="true">3.13.</strong> Sha3 Pow Consensus Algorithms</a></li><li class="chapter-item expanded "><a href="../3-entrees/basic-pow.html"><strong aria-hidden="true">3.14.</strong> Basic Proof of Work Node</a></li><li class="chapter-item expanded "><a href="../3-entrees/hybrid-consensus.html"><strong aria-hidden="true">3.15.</strong> Hybrid PoW/PoS Consensus Node</a></li><li class="chapter-item expanded "><a href="../3-entrees/manual-seal.html"><strong aria-hidden="true">3.16.</strong> Manual Seal Consensus</a></li><li class="chapter-item expanded "><a href="../3-entrees/kitchen-node.html"><strong aria-hidden="true">3.17.</strong> Kitchen Node - An reusable instant seal node</a></li><li class="chapter-item expanded "><a href="../3-entrees/babe-grandpa-node.html"><strong aria-hidden="true">3.18.</strong> Babe and Grandpa Node</a></li><li class="chapter-item expanded "><a href="../3-entrees/currency.html"><strong aria-hidden="true">3.19.</strong> Currency Types</a></li><li class="chapter-item expanded "><a href="../3-entrees/randomness.html" class="active"><strong aria-hidden="true">3.20.</strong> Generating Randomness</a></li><li class="chapter-item expanded "><a href="../3-entrees/execution-schedule.html"><strong aria-hidden="true">3.21.</strong> Execution Schedule</a></li><li class="chapter-item expanded "><a href="../3-entrees/pallet-coupling.html"><strong aria-hidden="true">3.22.</strong> Tightly- and Loosely-Coupled Pallets</a></li><li class="chapter-item expanded "><a href="../3-entrees/testing/index.html"><strong aria-hidden="true">3.23.</strong> Testing</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../3-entrees/testing/mock.html"><strong aria-hidden="true">3.23.1.</strong> Basic Test Environments</a></li><li class="chapter-item expanded "><a href="../3-entrees/testing/common.html"><strong aria-hidden="true">3.23.2.</strong> Common Tests</a></li><li class="chapter-item expanded "><a href="../3-entrees/testing/off-chain-workers.html"><strong aria-hidden="true">3.23.3.</strong> Off-chain Worker Test Environment</a></li><li class="chapter-item expanded "><a href="../3-entrees/testing/externalities.html"><strong aria-hidden="true">3.23.4.</strong> Custom Test Environment</a></li></ol></li><li class="chapter-item expanded "><a href="../3-entrees/safemath.html"><strong aria-hidden="true">3.24.</strong> Safe Math</a></li><li class="spacer"></li></ol></li><li class="chapter-item expanded "><a href="../more-resources.html">More Resources</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Substrate Recipes</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#generating-randomness" id="generating-randomness">Generating Randomness</a></h1>
+<p><code>pallets/randomness</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Frandomness%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/randomness/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
+<p>Randomness is useful in computer programs for everything from gambling, to generating DNA for
+digital kitties, to selecting block authors. Randomness is hard to come by in deterministic
+computers as explained at <a href="https://www.random.org/randomness/">random.org</a>. This is particularly
+true in the context of a blockchain when all the nodes in the network must agree on the state of the
+chain. Some techniques have been developed to address this problem including
+<a href="https://github.com/randao/randao">RanDAO</a> and
+<a href="https://en.wikipedia.org/wiki/Verifiable_random_function">Verifiable Random Functions</a>. Substrate
+abstracts the implementation of a randomness source using the
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/traits/trait.Randomness.html"><code>Randomness</code> trait</a>, and
+provides a few implementations. This recipe will demonstrate using the <code>Randomness</code> trait and two
+concrete implementations.</p>
+<h2><a class="header" href="#disclaimer" id="disclaimer">Disclaimer</a></h2>
+<p>All of the randomness sources described here have limitations on their usefulness and security. This
+recipe shows how to use these randomness sources and makes an effort to explain their trade-offs.
+However, the author of this recipe is a blockchain chef, <strong>not a trained cryptographer</strong>. It is your
+responsibility to understand the security implications of using any of the techniques described in
+this recipe, before putting them to use. When in doubt, consult a trustworthy cryptographer.</p>
+<p>The resources linked at the end of this recipe may be helpful in assessing the security and
+limitations of these randomness sources.</p>
+<h2><a class="header" href="#randomness-trait" id="randomness-trait">Randomness Trait</a></h2>
+<p>The randomness trait provides two methods, <code>random_seed</code>, and <code>random</code>, both of which provide a
+pesudo-random value of the type specified in the traits type parameter.</p>
+<h3><a class="header" href="#random_seed" id="random_seed"><code>random_seed</code></a></h3>
+<p>The <code>random_seed</code> method takes no parameters and returns a random seed which changes once per block.
+If you call this method twice in the same block you will get the same result. This method is
+typically not as useful as its counterpart.</p>
+<h3><a class="header" href="#random" id="random"><code>random</code></a></h3>
+<p>The <code>random</code> method takes a byte array, <code>&amp;[u8]</code>, known as the subject, and uses the subject's bytes
+along with the random seed described in the previous section to calculate a final random value.
+Using a subject in this way allows pallet (or multiple pallets) to seek randomness in the same block
+and get different results. The subject does not add entropy or security to the generation process,
+it merely prevents each call from returning identical values.</p>
+<p>Common values to use for a subject include:</p>
+<ul>
+<li>The block number</li>
+<li>The caller's accountId</li>
+<li>A Nonce</li>
+<li>A pallet-specific identifier</li>
+<li>A tuple containing several of the above</li>
+</ul>
+<p>To bring a randomness source into scope, we include it in our configuration trait with the
+appropriate trait bound. This pallet, being a demo, will use two different sources. Using multiple
+sources is not necessary in practice.</p>
+<pre><code class="language-rust ignore">pub trait Trait: system::Trait {
+	type Event: From&lt;Event&gt; + Into&lt;&lt;Self as system::Trait&gt;::Event&gt;;
+
+	type CollectiveFlipRandomnessSource: Randomness&lt;H256&gt;;
+
+	type BabeRandomnessSource: Randomness&lt;H256&gt;;
+}
+</code></pre>
+<p>We've provided the <code>Output</code> type as <a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sp_core/struct.H256.html"><code>H256</code></a>.</p>
+<h2><a class="header" href="#collective-coin-flipping" id="collective-coin-flipping">Collective Coin Flipping</a></h2>
+<p>Substrate's
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/pallet_randomness_collective_flip/index.html">Randomness Collective Flip pallet</a>
+uses a safe mixing algorithm to generate randomness using the entropy of previous block hashes.
+Because it is dependent on previous blocks, it can take many blocks for the seed to change.</p>
+<p>A naive randomness source based on block hashes would take the hash of the previous block and use it
+as a random seed. Such a technique has the significant disadvantage that the block author can
+preview the random seed, and choose to discard the block choosing a slightly modified block with a
+more desirable hash. This pallet is subject to similar manipulation by the previous 81 block authors
+rather than just the previous 1.</p>
+<p>Calling the randomness source from rust code is straightforward.</p>
+<pre><code class="language-rust ignore">let random_seed = T::CollectiveFlipRandomnessSource::random_seed();
+let random_result = T::CollectiveFlipRandomnessSource::random(&amp;subject);
+</code></pre>
+<p>Although it may <em>seem</em> harmless, <strong>you should not hash the result</strong> of the randomness provided by
+the collective flip pallet. Secure hash functions satisfy the
+<a href="https://en.wikipedia.org/wiki/Avalanche_effect">Avalance effect</a> which means that each bit of input
+is equally likely to affect a given bit of the output. Hashing will negate the low-influence
+property provided by the pallet.</p>
+<h2><a class="header" href="#babe-vrf-output" id="babe-vrf-output">Babe VRF Output</a></h2>
+<p>Substrate's <a href="https://substrate.dev/rustdocs/v2.0.0-rc4/pallet_babe/index.html">Babe pallet</a> which is primarily
+responsible for managing validator rotation in Babe consensus, also collects the VRF outputs that
+Babe validators publish to demonstrate that they are permitted to author a block. These VRF outputs
+can be used to provide a random seed.</p>
+<p>Because we are accessing the randomness via the <code>Randomness</code> trait, the calls look the same as
+before.</p>
+<pre><code class="language-rust ignore">let random_seed = T::BabeRandomnessSource::random_seed();
+let random_result = T::BabeRandomnessSource::random(&amp;subject);
+</code></pre>
+<p>In production networks, Babe VRF output is preferable to Collective Flip. Collective Flip provides
+essentially no real security.</p>
+<h2><a class="header" href="#down-the-rabbit-hole" id="down-the-rabbit-hole">Down the Rabbit Hole</a></h2>
+<p>As mentioned previously, there are many tradeoffs and security concerns to be aware of when using
+these randomness sources. If you'd like to get into the research, here are some jumping off points.</p>
+<ul>
+<li><a href="https://github.com/paritytech/ink/issues/57">https://github.com/paritytech/ink/issues/57</a></li>
+<li><a href="https://wiki.polkadot.network/docs/en/learn-randomness">https://wiki.polkadot.network/docs/en/learn-randomness</a></li>
+</ul>
+<!-- markdown-link-check-disable-next-line -->
+<ul>
+<li><a href="http://www.cse.huji.ac.il/%7Enati/PAPERS/coll_coin_fl.pdf">http://www.cse.huji.ac.il/~nati/PAPERS/coll_coin_fl.pdf</a></li>
+<li><a href="https://eccc.weizmann.ac.il/report/2018/140/">https://eccc.weizmann.ac.il/report/2018/140/</a></li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="../3-entrees/currency.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="../3-entrees/execution-schedule.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="../3-entrees/currency.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="../3-entrees/execution-schedule.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+        <script type="text/javascript" src="../.analytics/load.js"></script>
+        
+        <script type="text/javascript" src="../.analytics/config.js"></script>
+        
+        <script type="text/javascript" src="../.analytics/klaro.min.js"></script>
+        
+
+        
+
+    </body>
+</html>

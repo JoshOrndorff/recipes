@@ -1,0 +1,365 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Cache Locally &gt; Storage Calls - Substrate Recipes</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="A Hands-On Cookbook for Aspiring Blockchain Chefs">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="../../favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="../../favicon.png">
+        
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="../../1-prepare-kitchen/index.html"><strong aria-hidden="true">1.</strong> Preparing Your Kitchen</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../1-prepare-kitchen/1-build-node.html"><strong aria-hidden="true">1.1.</strong> Building A Node</a></li><li class="chapter-item expanded "><a href="../../1-prepare-kitchen/2-interact-node.html"><strong aria-hidden="true">1.2.</strong> Interacting with a Node</a></li><li class="chapter-item expanded "><a href="../../1-prepare-kitchen/3-kitchen-organization.html"><strong aria-hidden="true">1.3.</strong> Kitchen Organization</a></li></ol></li><li class="chapter-item expanded "><a href="../../2-appetizers/index.html"><strong aria-hidden="true">2.</strong> Appetizers</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../2-appetizers/1-hello-substrate.html"><strong aria-hidden="true">2.1.</strong> Hello Substrate</a></li><li class="chapter-item expanded "><a href="../../2-appetizers/2-storage-values.html"><strong aria-hidden="true">2.2.</strong> Single Value Storage</a></li><li class="chapter-item expanded "><a href="../../2-appetizers/3-errors.html"><strong aria-hidden="true">2.3.</strong> Handling Errors</a></li><li class="chapter-item expanded "><a href="../../2-appetizers/4-events.html"><strong aria-hidden="true">2.4.</strong> Events Verify Execution</a></li></ol></li><li class="chapter-item expanded "><a href="../../3-entrees/index.html"><strong aria-hidden="true">3.</strong> Entrees</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../3-entrees/storage-api/index.html"><strong aria-hidden="true">3.1.</strong> Runtime Storage API</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../3-entrees/storage-api/storage-maps.html"><strong aria-hidden="true">3.1.1.</strong> Storage Maps</a></li><li class="chapter-item expanded "><a href="../../3-entrees/storage-api/cache.html" class="active"><strong aria-hidden="true">3.1.2.</strong> Cache Locally &gt; Storage Calls</a></li><li class="chapter-item expanded "><a href="../../3-entrees/storage-api/vec-set.html"><strong aria-hidden="true">3.1.3.</strong> Using Vectors as Sets</a></li><li class="chapter-item expanded "><a href="../../3-entrees/storage-api/map-set.html"><strong aria-hidden="true">3.1.4.</strong> Using Maps as Sets</a></li><li class="chapter-item expanded "><a href="../../3-entrees/storage-api/double.html"><strong aria-hidden="true">3.1.5.</strong> Subgroup Removal by Subkey: Double Maps</a></li><li class="chapter-item expanded "><a href="../../3-entrees/storage-api/structs.html"><strong aria-hidden="true">3.1.6.</strong> Storing custom structs</a></li><li class="chapter-item expanded "><a href="../../3-entrees/storage-api/ringbuffer.html"><strong aria-hidden="true">3.1.7.</strong> Ringbuffer Queue</a></li></ol></li><li class="chapter-item expanded "><a href="../../3-entrees/basic-token.html"><strong aria-hidden="true">3.2.</strong> Basic Token</a></li><li class="chapter-item expanded "><a href="../../3-entrees/constants.html"><strong aria-hidden="true">3.3.</strong> Configurable Constants</a></li><li class="chapter-item expanded "><a href="../../3-entrees/crowdfund.html"><strong aria-hidden="true">3.4.</strong> Simple Crowdfund</a></li><li class="chapter-item expanded "><a href="../../3-entrees/instantiable.html"><strong aria-hidden="true">3.5.</strong> Instantiable Pallets</a></li><li class="chapter-item expanded "><a href="../../3-entrees/weights.html"><strong aria-hidden="true">3.6.</strong> Weights for Resource Accounting</a></li><li class="chapter-item expanded "><a href="../../3-entrees/fees.html"><strong aria-hidden="true">3.7.</strong> Transaction Fees for Economic Security</a></li><li class="chapter-item expanded "><a href="../../3-entrees/charity.html"><strong aria-hidden="true">3.8.</strong> Charity and Imbalances</a></li><li class="chapter-item expanded "><a href="../../3-entrees/fixed-point.html"><strong aria-hidden="true">3.9.</strong> Fixed Point Arithmetic</a></li><li class="chapter-item expanded "><a href="../../3-entrees/off-chain-workers/index.html"><strong aria-hidden="true">3.10.</strong> Off-chain Workers</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../3-entrees/off-chain-workers/transactions.html"><strong aria-hidden="true">3.10.1.</strong> Transactions</a></li><li class="chapter-item expanded "><a href="../../3-entrees/off-chain-workers/http-json.html"><strong aria-hidden="true">3.10.2.</strong> HTTP Fetching &amp; JSON Parsing</a></li><li class="chapter-item expanded "><a href="../../3-entrees/off-chain-workers/storage.html"><strong aria-hidden="true">3.10.3.</strong> Local Storage</a></li></ol></li><li class="chapter-item expanded "><a href="../../3-entrees/runtime-api.html"><strong aria-hidden="true">3.11.</strong> Runtime APIs</a></li><li class="chapter-item expanded "><a href="../../3-entrees/custom-rpc.html"><strong aria-hidden="true">3.12.</strong> Custom RPCs</a></li><li class="chapter-item expanded "><a href="../../3-entrees/sha3-pow-consensus.html"><strong aria-hidden="true">3.13.</strong> Sha3 Pow Consensus Algorithms</a></li><li class="chapter-item expanded "><a href="../../3-entrees/basic-pow.html"><strong aria-hidden="true">3.14.</strong> Basic Proof of Work Node</a></li><li class="chapter-item expanded "><a href="../../3-entrees/hybrid-consensus.html"><strong aria-hidden="true">3.15.</strong> Hybrid PoW/PoS Consensus Node</a></li><li class="chapter-item expanded "><a href="../../3-entrees/manual-seal.html"><strong aria-hidden="true">3.16.</strong> Manual Seal Consensus</a></li><li class="chapter-item expanded "><a href="../../3-entrees/kitchen-node.html"><strong aria-hidden="true">3.17.</strong> Kitchen Node - An reusable instant seal node</a></li><li class="chapter-item expanded "><a href="../../3-entrees/babe-grandpa-node.html"><strong aria-hidden="true">3.18.</strong> Babe and Grandpa Node</a></li><li class="chapter-item expanded "><a href="../../3-entrees/currency.html"><strong aria-hidden="true">3.19.</strong> Currency Types</a></li><li class="chapter-item expanded "><a href="../../3-entrees/randomness.html"><strong aria-hidden="true">3.20.</strong> Generating Randomness</a></li><li class="chapter-item expanded "><a href="../../3-entrees/execution-schedule.html"><strong aria-hidden="true">3.21.</strong> Execution Schedule</a></li><li class="chapter-item expanded "><a href="../../3-entrees/pallet-coupling.html"><strong aria-hidden="true">3.22.</strong> Tightly- and Loosely-Coupled Pallets</a></li><li class="chapter-item expanded "><a href="../../3-entrees/testing/index.html"><strong aria-hidden="true">3.23.</strong> Testing</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../3-entrees/testing/mock.html"><strong aria-hidden="true">3.23.1.</strong> Basic Test Environments</a></li><li class="chapter-item expanded "><a href="../../3-entrees/testing/common.html"><strong aria-hidden="true">3.23.2.</strong> Common Tests</a></li><li class="chapter-item expanded "><a href="../../3-entrees/testing/off-chain-workers.html"><strong aria-hidden="true">3.23.3.</strong> Off-chain Worker Test Environment</a></li><li class="chapter-item expanded "><a href="../../3-entrees/testing/externalities.html"><strong aria-hidden="true">3.23.4.</strong> Custom Test Environment</a></li></ol></li><li class="chapter-item expanded "><a href="../../3-entrees/safemath.html"><strong aria-hidden="true">3.24.</strong> Safe Math</a></li><li class="spacer"></li></ol></li><li class="chapter-item expanded "><a href="../../more-resources.html">More Resources</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Substrate Recipes</h1>
+
+                    <div class="right-buttons">
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#cache-multiple-calls" id="cache-multiple-calls">Cache Multiple Calls</a></h1>
+<p><code>pallets/storage-cache</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fstorage-cache%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/storage-cache/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
+<p>Calls to runtime storage have an associated cost and developers should strive to minimize the number
+of calls.</p>
+<pre><code class="language-rust ignore">decl_storage! {
+	trait Store for Module&lt;T: Trait&gt; as StorageCache {
+		// copy type
+		SomeCopyValue get(fn some_copy_value): u32;
+
+		// clone type
+		KingMember get(fn king_member): T::AccountId;
+		GroupMembers get(fn group_members): Vec&lt;T::AccountId&gt;;
+	}
+}
+</code></pre>
+<h2><a class="header" href="#copy-types" id="copy-types">Copy Types</a></h2>
+<p>For <a href="https://doc.rust-lang.org/std/marker/trait.Copy.html"><code>Copy</code></a> types, it is easy to reuse
+previous storage calls by simply reusing the value, which is automatically cloned upon reuse. In the
+code below, the second call is unnecessary:</p>
+<pre><code class="language-rust ignore">fn increase_value_no_cache(origin, some_val: u32) -&gt; DispatchResult {
+	let _ = ensure_signed(origin)?;
+	let original_call = &lt;SomeCopyValue&gt;::get();
+	let some_calculation = original_call.checked_add(some_val).ok_or(&quot;addition overflowed1&quot;)?;
+	// this next storage call is unnecessary and is wasteful
+	let unnecessary_call = &lt;SomeCopyValue&gt;::get();
+	// should've just used `original_call` here because u32 is copy
+	let another_calculation = some_calculation.checked_add(unnecessary_call).ok_or(&quot;addition overflowed2&quot;)?;
+	&lt;SomeCopyValue&gt;::put(another_calculation);
+	let now = &lt;system::Module&lt;T&gt;&gt;::block_number();
+	Self::deposit_event(RawEvent::InefficientValueChange(another_calculation, now));
+	Ok(())
+}
+</code></pre>
+<p>Instead, the initial call value should be reused. In this example, the <code>SomeCopyValue</code> value is
+<a href="https://doc.rust-lang.org/std/marker/trait.Copy.html"><code>Copy</code></a> so we should prefer the following
+code without the unnecessary second call to storage:</p>
+<pre><code class="language-rust ignore">fn increase_value_w_copy(origin, some_val: u32) -&gt; DispatchResult {
+	let _ = ensure_signed(origin)?;
+	let original_call = &lt;SomeCopyValue&gt;::get();
+	let some_calculation = original_call.checked_add(some_val).ok_or(&quot;addition overflowed1&quot;)?;
+	// uses the original_call because u32 is copy
+	let another_calculation = some_calculation.checked_add(original_call).ok_or(&quot;addition overflowed2&quot;)?;
+	&lt;SomeCopyValue&gt;::put(another_calculation);
+	let now = &lt;system::Module&lt;T&gt;&gt;::block_number();
+	Self::deposit_event(RawEvent::BetterValueChange(another_calculation, now));
+	Ok(())
+}
+</code></pre>
+<h2><a class="header" href="#clone-types" id="clone-types">Clone Types</a></h2>
+<p>If the type was not <code>Copy</code>, but was <a href="https://doc.rust-lang.org/std/clone/trait.Clone.html"><code>Clone</code></a>,
+then it is still better to clone the value in the method than to make another call to runtime
+storage.</p>
+<p>The runtime methods enable the calling account to swap the <code>T::AccountId</code> value in storage if</p>
+<ol>
+<li>the existing storage value is not in <code>GroupMembers</code> AND</li>
+<li>the calling account is in <code>GroupMembers</code></li>
+</ol>
+<p>The first implementation makes a second unnecessary call to runtime storage instead of cloning the
+call for <code>existing_key</code>:</p>
+<pre><code class="language-rust ignore">fn swap_king_no_cache(origin) -&gt; DispatchResult {
+	let new_king = ensure_signed(origin)?;
+	let existing_king = &lt;KingMember&lt;T&gt;&gt;::get();
+
+	// only places a new account if
+	// (1) the existing account is not a member &amp;&amp;
+	// (2) the new account is a member
+	ensure!(!Self::is_member(&amp;existing_king), &quot;current king is a member so maintains priority&quot;);
+	ensure!(Self::is_member(&amp;new_king), &quot;new king is not a member so doesn't get priority&quot;);
+
+	// BAD (unnecessary) storage call
+	let old_king = &lt;KingMember&lt;T&gt;&gt;::get();
+	// place new king
+	&lt;KingMember&lt;T&gt;&gt;::put(new_king.clone());
+
+	Self::deposit_event(RawEvent::InefficientKingSwap(old_king, new_king));
+	Ok(())
+}
+</code></pre>
+<p>If the <code>existing_key</code> is used without a <code>clone</code> in the event emission instead of <code>old_king</code>, then
+the compiler returns the following error</p>
+<pre><code class="language-bash">error[E0382]: use of moved value: `existing_king`
+  --&gt; src/lib.rs:93:63
+   |
+80 |             let existing_king = &lt;KingMember&lt;T&gt;&gt;::get();
+   |                 ------------- move occurs because `existing_king` has type `&lt;T as frame_system::Trait&gt;::AccountId`, which does not implement the `Copy` trait
+...
+85 |             ensure!(!Self::is_member(existing_king), &quot;is a member so maintains priority&quot;);
+   |                                      ------------- value moved here
+...
+93 |             Self::deposit_event(RawEvent::InefficientKingSwap(existing_king, new_king));
+   |                                                               ^^^^^^^^^^^^^ value used here after move
+
+error: aborting due to previous error
+
+For more information about this error, try `rustc --explain E0382`.
+error: Could not compile `storage-cache`.
+
+To learn more, run the command again with --verbose.
+</code></pre>
+<p>Fixing this only requires cloning the original value before it is moved:</p>
+<pre><code class="language-rust ignore">fn swap_king_with_cache(origin) -&gt; DispatchResult {
+	let new_king = ensure_signed(origin)?;
+	let existing_king = &lt;KingMember&lt;T&gt;&gt;::get();
+	// prefer to clone previous call rather than repeat call unnecessarily
+	let old_king = existing_king.clone();
+
+	// only places a new account if
+	// (1) the existing account is not a member &amp;&amp;
+	// (2) the new account is a member
+	ensure!(!Self::is_member(&amp;existing_king), &quot;current king is a member so maintains priority&quot;);
+	ensure!(Self::is_member(&amp;new_king), &quot;new king is not a member so doesn't get priority&quot;);
+
+	// &lt;no (unnecessary) storage call here&gt;
+	// place new king
+	&lt;KingMember&lt;T&gt;&gt;::put(new_king.clone());
+
+	Self::deposit_event(RawEvent::BetterKingSwap(old_king, new_king));
+	Ok(())
+}
+</code></pre>
+<p>Not all types implement <a href="https://doc.rust-lang.org/std/marker/trait.Copy.html"><code>Copy</code></a> or
+<a href="https://doc.rust-lang.org/std/clone/trait.Clone.html"><code>Clone</code></a>, so it is important to discern other
+patterns that minimize and alleviate the cost of calls to storage.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="../../3-entrees/storage-api/storage-maps.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="../../3-entrees/storage-api/vec-set.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="../../3-entrees/storage-api/storage-maps.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="../../3-entrees/storage-api/vec-set.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="../../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="../../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+        <script type="text/javascript" src="../../.analytics/load.js"></script>
+        
+        <script type="text/javascript" src="../../.analytics/config.js"></script>
+        
+        <script type="text/javascript" src="../../.analytics/klaro.min.js"></script>
+        
+
+        
+
+    </body>
+</html>
