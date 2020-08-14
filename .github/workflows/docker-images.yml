@@ -35,7 +35,7 @@ jobs:
       with:
         username: ${{ secrets.DOCKER_USERNAME_1 }}
         password: ${{ secrets.DOCKER_PASSWORD_1 }}
-        dockerfile: nodes/babe-grandpa-node.Dockerfile
+        dockerfile: nodes/babe-grandpa-node/Dockerfile
         repository: joshyorndorff/recipes-babe-grandpa-node
         tags: latest
         add_git_labels: true
