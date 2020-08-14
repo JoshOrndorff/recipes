@@ -4,7 +4,7 @@ FROM debian:stretch-slim
 # To ensure that run the command `cargo build --release -p babe-grandpa-node`
 
 # Copy the node into the image
-COPY babe-grandpa-node .
+COPY target/release/babe-grandpa-node .
 
 # Open default ports. User is responsible for re-mapping these, using
 # host networking, or otherwise resolving their port-related needs.
