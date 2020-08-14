@@ -1,0 +1,407 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Manual Seal Consensus - Substrate Recipes</title>
+        
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="A Hands-On Cookbook for Aspiring Blockchain Chefs">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "light" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div id="sidebar-scrollbox" class="sidebar-scrollbox">
+                <ol class="chapter"><li class="expanded affix "><a href="../introduction.html">Introduction</a></li><li class="expanded "><a href="../1-prepare-kitchen/index.html"><strong aria-hidden="true">1.</strong> Preparing Your Kitchen</a></li><li><ol class="section"><li class="expanded "><a href="../1-prepare-kitchen/1-build-node.html"><strong aria-hidden="true">1.1.</strong> Building A Node</a></li><li class="expanded "><a href="../1-prepare-kitchen/2-interact-node.html"><strong aria-hidden="true">1.2.</strong> Interacting with a Node</a></li><li class="expanded "><a href="../1-prepare-kitchen/3-kitchen-organization.html"><strong aria-hidden="true">1.3.</strong> Kitchen Organization</a></li></ol></li><li class="expanded "><a href="../2-appetizers/index.html"><strong aria-hidden="true">2.</strong> Appetizers</a></li><li><ol class="section"><li class="expanded "><a href="../2-appetizers/1-hello-substrate.html"><strong aria-hidden="true">2.1.</strong> Hello Substrate</a></li><li class="expanded "><a href="../2-appetizers/2-storage-values.html"><strong aria-hidden="true">2.2.</strong> Single Value Storage</a></li><li class="expanded "><a href="../2-appetizers/3-errors.html"><strong aria-hidden="true">2.3.</strong> Handling Errors</a></li><li class="expanded "><a href="../2-appetizers/4-events.html"><strong aria-hidden="true">2.4.</strong> Events Verify Execution</a></li></ol></li><li class="expanded "><a href="../3-entrees/index.html"><strong aria-hidden="true">3.</strong> Entrees</a></li><li><ol class="section"><li class="expanded "><a href="../3-entrees/storage-api/index.html"><strong aria-hidden="true">3.1.</strong> Runtime Storage API</a></li><li><ol class="section"><li class="expanded "><a href="../3-entrees/storage-api/storage-maps.html"><strong aria-hidden="true">3.1.1.</strong> Storage Maps</a></li><li class="expanded "><a href="../3-entrees/storage-api/cache.html"><strong aria-hidden="true">3.1.2.</strong> Cache Locally &gt; Storage Calls</a></li><li class="expanded "><a href="../3-entrees/storage-api/vec-set.html"><strong aria-hidden="true">3.1.3.</strong> Using Vectors as Sets</a></li><li class="expanded "><a href="../3-entrees/storage-api/map-set.html"><strong aria-hidden="true">3.1.4.</strong> Using Maps as Sets</a></li><li class="expanded "><a href="../3-entrees/storage-api/double.html"><strong aria-hidden="true">3.1.5.</strong> Subgroup Removal by Subkey: Double Maps</a></li><li class="expanded "><a href="../3-entrees/storage-api/structs.html"><strong aria-hidden="true">3.1.6.</strong> Storing custom structs</a></li><li class="expanded "><a href="../3-entrees/storage-api/ringbuffer.html"><strong aria-hidden="true">3.1.7.</strong> Ringbuffer Queue</a></li></ol></li><li class="expanded "><a href="../3-entrees/basic-token.html"><strong aria-hidden="true">3.2.</strong> Basic Token</a></li><li class="expanded "><a href="../3-entrees/constants.html"><strong aria-hidden="true">3.3.</strong> Configurable Constants</a></li><li class="expanded "><a href="../3-entrees/crowdfund.html"><strong aria-hidden="true">3.4.</strong> Simple Crowdfund</a></li><li class="expanded "><a href="../3-entrees/instantiable.html"><strong aria-hidden="true">3.5.</strong> Instantiable Pallets</a></li><li class="expanded "><a href="../3-entrees/weights.html"><strong aria-hidden="true">3.6.</strong> Weights for Resource Accounting</a></li><li class="expanded "><a href="../3-entrees/fees.html"><strong aria-hidden="true">3.7.</strong> Transaction Fees for Economic Security</a></li><li class="expanded "><a href="../3-entrees/charity.html"><strong aria-hidden="true">3.8.</strong> Charity and Imbalances</a></li><li class="expanded "><a href="../3-entrees/fixed-point.html"><strong aria-hidden="true">3.9.</strong> Fixed Point Arithmetic</a></li><li class="expanded "><a href="../3-entrees/off-chain-workers/index.html"><strong aria-hidden="true">3.10.</strong> Off-chain Workers</a></li><li><ol class="section"><li class="expanded "><a href="../3-entrees/off-chain-workers/transactions.html"><strong aria-hidden="true">3.10.1.</strong> Transactions</a></li><li class="expanded "><a href="../3-entrees/off-chain-workers/http-json.html"><strong aria-hidden="true">3.10.2.</strong> HTTP Fetching &amp; JSON Parsing</a></li><li class="expanded "><a href="../3-entrees/off-chain-workers/storage.html"><strong aria-hidden="true">3.10.3.</strong> Local Storage</a></li></ol></li><li class="expanded "><a href="../3-entrees/runtime-api.html"><strong aria-hidden="true">3.11.</strong> Runtime APIs</a></li><li class="expanded "><a href="../3-entrees/custom-rpc.html"><strong aria-hidden="true">3.12.</strong> Custom RPCs</a></li><li class="expanded "><a href="../3-entrees/sha3-pow-consensus.html"><strong aria-hidden="true">3.13.</strong> Sha3 Pow Consensus Algorithms</a></li><li class="expanded "><a href="../3-entrees/basic-pow.html"><strong aria-hidden="true">3.14.</strong> Basic Proof of Work Node</a></li><li class="expanded "><a href="../3-entrees/hybrid-consensus.html"><strong aria-hidden="true">3.15.</strong> Hybrid PoW/PoS Consensus Node</a></li><li class="expanded "><a href="../3-entrees/manual-seal.html" class="active"><strong aria-hidden="true">3.16.</strong> Manual Seal Consensus</a></li><li class="expanded "><a href="../3-entrees/kitchen-node.html"><strong aria-hidden="true">3.17.</strong> Kitchen Node - An reusable instant seal node</a></li><li class="expanded "><a href="../3-entrees/babe-grandpa-node.html"><strong aria-hidden="true">3.18.</strong> Babe and Grandpa Node</a></li><li class="expanded "><a href="../3-entrees/currency.html"><strong aria-hidden="true">3.19.</strong> Currency Types</a></li><li class="expanded "><a href="../3-entrees/randomness.html"><strong aria-hidden="true">3.20.</strong> Generating Randomness</a></li><li class="expanded "><a href="../3-entrees/execution-schedule.html"><strong aria-hidden="true">3.21.</strong> Execution Schedule</a></li><li class="expanded "><a href="../3-entrees/pallet-coupling.html"><strong aria-hidden="true">3.22.</strong> Tightly- and Loosely-Coupled Pallets</a></li><li class="expanded "><a href="../3-entrees/testing/index.html"><strong aria-hidden="true">3.23.</strong> Testing</a></li><li><ol class="section"><li class="expanded "><a href="../3-entrees/testing/mock.html"><strong aria-hidden="true">3.23.1.</strong> Basic Test Environments</a></li><li class="expanded "><a href="../3-entrees/testing/common.html"><strong aria-hidden="true">3.23.2.</strong> Common Tests</a></li><li class="expanded "><a href="../3-entrees/testing/off-chain-workers.html"><strong aria-hidden="true">3.23.3.</strong> Off-chain Worker Test Environment</a></li><li class="expanded "><a href="../3-entrees/testing/externalities.html"><strong aria-hidden="true">3.23.4.</strong> Custom Test Environment</a></li></ol></li><li class="expanded "><a href="../3-entrees/safemath.html"><strong aria-hidden="true">3.24.</strong> Safe Math</a></li><li class="spacer"></li></ol></li><li class="expanded "><a href="../more-resources.html">More Resources</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div id="menu-bar-sticky-container">
+                        <div class="left-buttons">
+                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                                <i class="fa fa-paint-brush"></i>
+                            </button>
+                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                                <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            </ul>
+                            
+                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            
+                        </div>
+
+                        <h1 class="menu-title">Substrate Recipes</h1>
+
+                        <div class="right-buttons">
+                            <a href="../print.html" title="Print this book" aria-label="Print this book">
+                                <i id="print-button" class="fa fa-print"></i>
+                            </a>
+                            
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#manual-seal" id="manual-seal">Manual Seal</a></h1>
+<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/nodes/manual-seal"><code>nodes/manual-seal</code></a></em></p>
+<p>This recipe demonstrates a Substrate node using the
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sc_consensus_manual_seal/index.html">Manual Seal consensus</a>. Unlike the
+other consensus engines included with Substrate, manual seal does not create blocks on a regular
+basis. Rather, it waits for an RPC call telling to create a block.</p>
+<h2><a class="header" href="#using-manual-seal" id="using-manual-seal">Using Manual Seal</a></h2>
+<p>Before we explore the code, let's begin by seeing how to use the manual-seal node. Build and start
+the node in the usual way.</p>
+<pre><code class="language-bash">cargo build --release -p manual-seal
+./target/release/manual-seal
+</code></pre>
+<h2><a class="header" href="#manually-sealing-blocks" id="manually-sealing-blocks">Manually Sealing Blocks</a></h2>
+<p>Once your node is running, you will see that it just sits there idly. It will accept transactions to
+the pool, but it will not author blocks on its own. In manual seal, the node does not author a block
+until we explicitly tell it to. We can tell it to author a block by calling the <code>engine_createBlock</code>
+RPC.</p>
+<pre><code class="language-bash">$ curl http://localhost:9933 -H &quot;Content-Type:application/json;charset=utf-8&quot; -d   '{
+     &quot;jsonrpc&quot;:&quot;2.0&quot;,
+      &quot;id&quot;:1,
+      &quot;method&quot;:&quot;engine_createBlock&quot;,
+      &quot;params&quot;: [true, false, null]
+    }'
+</code></pre>
+<p>This call takes three parameters, each of which are worth exploring.</p>
+<h3><a class="header" href="#create-empty" id="create-empty">Create Empty</a></h3>
+<p><code>create_empty</code> is a Boolean value indicating whether empty blocks may be created. Setting
+<code>create-empty</code> to true does not mean that an empty block will necessarily be created. Rather it
+means that the engine should go ahead creating a block even if no transaction are present. If
+transactions are present in the queue, they will be included regardless of <code>create_empty</code>'s value.'</p>
+<h3><a class="header" href="#finalize" id="finalize">Finalize</a></h3>
+<p><code>finalize</code> is a Boolean indicating whether the block (and its ancestors, recursively) should be
+finalized after creation. Manually controlling finality is interesting, but also dangerous. If you
+attempt to author and finalize a block that does not build on the best finalized chain, the block
+will not be imported. If you finalize one block in one node, and a conflicting block in another
+node, you will cause a safety violation when the nodes synchronize.</p>
+<h3><a class="header" href="#parent-hash" id="parent-hash">Parent Hash</a></h3>
+<p><code>parent_hash</code> is an optional hash of a block to use as a parent. To set the parent, use the format
+<code>&quot;0x0e0626477621754200486f323e3858cd5f28fcbe52c69b2581aecb622e384764&quot;</code>. To omit the parent, use
+<code>null</code>. When the parent is omitted the block is built on the current best block. Manually specifying
+the parent is useful for constructing fork scenarios and demonstrating chain reorganizations.</p>
+<h2><a class="header" href="#manually-finalizing-blocks" id="manually-finalizing-blocks">Manually Finalizing Blocks</a></h2>
+<p>In addition to finalizing blocks while creating them, they can be finalized later by using the
+second provided RPC call, <code>engine_finalizeBlock</code>.</p>
+<pre><code class="language-bash">$ curl http://localhost:9933 -H &quot;Content-Type:application/json;charset=utf-8&quot; -d   '{
+     &quot;jsonrpc&quot;:&quot;2.0&quot;,
+      &quot;id&quot;:1,
+      &quot;method&quot;:&quot;engine_finalizeBlock&quot;,
+      &quot;params&quot;: [&quot;0x0e0626477621754200486f323e3858cd5f28fcbe52c69b2581aecb622e384764&quot;, null]
+    }'
+</code></pre>
+<p>The two parameters are:</p>
+<ul>
+<li>The hash of the block to finalize.</li>
+<li>A Justification. TODO what is the justification and why might I want to use it?</li>
+</ul>
+<h2><a class="header" href="#building-the-service" id="building-the-service">Building the Service</a></h2>
+<p>So far we've learned how to use the manual seal node and why it might be useful. Let's now turn our
+attention to how the service is built in the nodes <code>src/service.rs</code> file.</p>
+<h3><a class="header" href="#the-import-queue" id="the-import-queue">The Import Queue</a></h3>
+<p>We begin by creating a manual-seal import queue. This process is identical to creating the import
+queue used in the <a href="./kitchen-node.html">Kitchen Node</a>. It is also similar to, but simpler than, the
+<a href="./basic-pow.html">basic-pow</a> import queue.</p>
+<pre><code class="language-rust ignore">.with_import_queue(|_config, client, _select_chain, _transaction_pool| {
+	Ok(sc_consensus_manual_seal::import_queue::&lt;_, sc_client_db::Backend&lt;_&gt;&gt;(Box::new(client)))
+})?;
+</code></pre>
+<h3><a class="header" href="#what-about-the-light-client" id="what-about-the-light-client">What about the Light Client?</a></h3>
+<p>The light client is not yet supported in this node, but it likely will be in the future (See
+<a href="https://github.com/substrate-developer-hub/recipes/pull/238">issue #238</a>.) Because it will
+typically be used for learning, experimenting, and testing in a single-node environment this
+restriction should not cause many problems.. Instead we mark it as <code>unimplemented!</code>.</p>
+<pre><code class="language-rust ignore">/// Builds a new service for a light client.
+pub fn new_light(_config: Configuration) -&gt; Result&lt;impl AbstractService, ServiceError&gt;
+{
+	unimplemented!(&quot;No light client for manual seal&quot;);
+
+	// This needs to be here or it won't compile.
+	#[allow(unreachable_code)]
+	new_full(_config, false)
+}
+</code></pre>
+<p>Because the return type of this function contains <code>impl AbstractService</code>, Rust's typechecker is
+unable to infer the concrete type. We give it a hand by calling <code>new_full</code> at the end, but don't
+worry, this code will never actually be executed. <code>unimplemented!</code> will panic first.</p>
+<h3><a class="header" href="#the-manual-seal-rpc" id="the-manual-seal-rpc">The Manual Seal RPC</a></h3>
+<p>Because the node runs in manual seal mode, we need to wire up the RPC commands that we explored
+earlier. This process is nearly identical to those described in the
+<a href="./custom-rpc.html">custom rpc recipe</a>.</p>
+<p>As prep work, we make a type alias,</p>
+<pre><code class="language-rust ignore">type RpcExtension = jsonrpc_core::IoHandler&lt;sc_rpc::Metadata&gt;;
+</code></pre>
+<p>Next we create a channel over which the rpc handler and the authorship task can communicate with one
+another. The RPC handler will send messages asking to create or finalize a block and the import
+queue will receive the message and do so.</p>
+<pre><code class="language-rust ignore">// channel for the rpc handler to communicate with the authorship task.
+let (command_sink, commands_stream) = futures::channel::mpsc::channel(1000);
+</code></pre>
+<pre><code class="language-rust ignore">let service = builder
+	// manual-seal relies on receiving sealing requests aka EngineCommands over rpc.
+	.with_rpc_extensions(|_| -&gt; Result&lt;RpcExtension, _&gt; {
+		let mut io = jsonrpc_core::IoHandler::default();
+		io.extend_with(
+			// We provide the rpc handler with the sending end of the channel to allow the rpc
+			// send EngineCommands to the background block authorship task.
+			rpc::ManualSealApi::to_delegate(rpc::ManualSeal::new(command_sink)),
+		);
+		Ok(io)
+	})?
+	.build()?;
+</code></pre>
+<h3><a class="header" href="#the-authorship-task" id="the-authorship-task">The Authorship Task</a></h3>
+<p>As with every authoring engine, manual seal needs to be run as an <code>async</code> authoring tasks. Here we
+provide the receiving end of the channel we created earlier.</p>
+<pre><code class="language-rust ignore">// Background authorship future.
+let authorship_future = manual_seal::run_manual_seal(
+		Box::new(service.client()),
+		proposer,
+		service.client().clone(),
+		service.transaction_pool().pool().clone(),
+		commands_stream,
+		service.select_chain().unwrap(),
+		inherent_data_providers
+	);
+</code></pre>
+<p>With the future created, we can now kick it off using the service's
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sc_service/struct.Service.html#method.spawn_essential_task"><code>spawn_essential_task</code> method</a>.</p>
+<pre><code class="language-rust ignore">// we spawn the future on a background thread managed by service.
+service.spawn_essential_task(&quot;manual-seal&quot;, authorship_future);
+</code></pre>
+<h2><a class="header" href="#combining-instant-seal-with-manual-seal" id="combining-instant-seal-with-manual-seal">Combining Instant Seal with Manual Seal</a></h2>
+<p>It is possible to combine the manual seal of the node we built above with the functionality of the
+<a href="./kitchen-node.html">Kitchen Node's</a> instant seal to get the best of both worlds. This configuration
+may be desirable in development and testing environments. We can use the normal behavior of instant
+seal to create blocks any time a transaction is imported into the pool. On the other hand we can
+move forward in block number by instantly sealing empty blocks. The functionality may be familiar to
+developers of Ethereum smart contracts that have used <code>ganache-cli</code>.</p>
+<h3><a class="header" href="#implementation" id="implementation">Implementation</a></h3>
+<p>In the same directory for the manual seal node is a file called <code>combined_service.rs</code>. This file
+contains modified code of the <code>service.rs</code> file we just looked at in the section above. Some modification have been made. These modifications are
+numbered and begin at line 85 in the source.</p>
+<pre><code class="language-rust ignore">let pool = service.transaction_pool().pool().clone();
+</code></pre>
+<p>The first step is to create an instance of a transaction pool that will be shared between the
+<code>pool_stream</code> which receives events whenever a new transaction is imported and the service builder.</p>
+<pre><code class="language-rust ignore">let pool_stream = pool
+	.validated_pool()
+	.import_notification_stream()
+	.map(|_| {
+		// Every new block create an `EngineCommand` that will seal a new block.
+		rpc::EngineCommand::SealNewBlock {
+			create_empty: false,
+			finalize: false,
+			parent_hash: None,
+			sender: None,
+		}
+	});
+</code></pre>
+<p>Next we implement the instant seal just as it's implemented under the covers in the call to
+<code>run_instant_seal</code>. Namely, we make sure that any new notifications we will submit an RPC
+<code>EngineCommand</code> to seal a new block.</p>
+<pre><code class="language-rust ignore">let combined_stream = futures::stream::select(commands_stream, pool_stream);
+</code></pre>
+<p>We combine the futures using the <code>select</code> utility which will receive events from either one of the
+streams we pass to it. In this case, we're passing all notifications received from the manual seal
+stream and the instant seal stream together.</p>
+<pre><code class="language-rust ignore">let authorship_future = manual_seal::run_manual_seal(
+	Box::new(service.client()),
+	proposer,
+	service.client(), // 4) vvvvv
+	pool,             // &lt;- Use the same pool that we used to get `pool_stream`.
+	combined_stream,  // &lt;- Here we place the combined streams.
+	service.select_chain().unwrap(),
+	inherent_data_providers,
+);
+</code></pre>
+<p>Finally we initialize the <code>authorship_future</code> with the combined streams.</p>
+<p>In order to run this variant of the node you will need to uncomment two lines and rebuild the node.
+In <code>command.rs</code> comment the line that reads <code>use crate::service;</code> and uncomment
+<code>use crate::combined_service as service;</code>. In <code>main.rs</code> comment <code>mod service;</code> and uncomment
+<code>mod combined_service'</code>. Now you can rebuild the node and test out that it will seal blocks using
+the manual method and the instant method together.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="../3-entrees/hybrid-consensus.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="../3-entrees/kitchen-node.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a href="../3-entrees/hybrid-consensus.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="../3-entrees/kitchen-node.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+        
+        
+        <script type="text/javascript">
+            window.playpen_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+        <script type="text/javascript" src="../.analytics/load.js"></script>
+        
+        <script type="text/javascript" src="../.analytics/config.js"></script>
+        
+        <script type="text/javascript" src="../.analytics/klaro.min.js"></script>
+        
+
+        
+
+    </body>
+</html>
