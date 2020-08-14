@@ -1,0 +1,44 @@
+name: Build and Publish Docker Images
+
+on:
+  # TODO consider doing this only when a tag is pushed.
+  push:
+    branches:
+    - master
+  #TODO Remove this, it's just for testing
+  pull_request:
+    branches:
+    - master
+
+jobs:
+  build-publish:
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install toolchain
+      uses: actions-rs/toolchain@v1
+      with:
+        profile: minimal
+        toolchain: nightly-2020-05-07
+        target: wasm32-unknown-unknown
+        override: true
+        default: true
+
+    - name: Build it all
+      run: cargo build --release
+
+    - name: Clean huge target directory
+      run: rm -r target/release/deps target/release/wbuild
+
+    - uses: docker/build-push-action@v1
+      with:
+        username: ${{ secrets.DOCKER_USERNAME_1 }}
+        password: ${{ secrets.DOCKER_PASSWORD_1 }}
+        dockerfile: nodes/babe-grandpa-node.Dockerfile
+        repository: joshyorndorff/recipes-babe-grandpa-node
+        tags: latest
+        add_git_labels: true
+        tag_with_ref: true
+        tag_with_sha: true
+  #TODO all other images here.
