@@ -1,6 +1,12 @@
 # Single Value
 
-_[`pallets/single-value`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/single-value)_
+`pallets/single-value`
+[
+	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
+](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fsingle-value%2Fsrc%2Flib.rs)
+[
+	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
+](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/single-value/src/lib.rs)
 
 Storage is used for data that should be kept between blocks and accessible to future transactions.
 Most runtimes will have many storage values, and together the storage values make up the
@@ -12,7 +18,7 @@ determined by executing all of the blocks in the chain.
 ## Declaring Storage
 
 A pallet's storage items are declared with the
-[`decl_storage!` macro](https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/macro.decl_storage.html).
+[`decl_storage!` macro](https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/macro.decl_storage.html).
 
 ```rust, ignore
 decl_storage! {
@@ -53,7 +59,7 @@ StoredAccount get(fn stored_account): T::AccountId;
 ## Reading and Writing to Storage
 
 Functions used to access a single storage value are defined in the
-[`StorageValue` trait](https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/storage/trait.StorageValue.html). In
+[`StorageValue` trait](https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/storage/trait.StorageValue.html). In
 this pallet, we use the most common method, `put`, but it is worth skimming the other methods so you
 know what is available.
 
@@ -83,7 +89,7 @@ let my_val = Self::stored_value();
 
 In terms of storage, the `set_account` method is quite similar to `set_value`, but it also
 demonstrates how to retreive the `AccountId` of the caller using the
-[`ensure_signed` function](https://substrate.dev/rustdocs/v2.0.0-rc5/frame_system/fn.ensure_signed.html).
+[`ensure_signed` function](https://substrate.dev/rustdocs/v2.0.0-rc4/frame_system/fn.ensure_signed.html).
 
 ```rust, ignore
 fn set_account(origin) -> DispatchResult {
@@ -102,7 +108,7 @@ because `AccountId` is not primitive, we lend a reference to it rather than tran
 ## Constructing the Runtime
 
 We learned about the
-[`construct_runtime!` macro](https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/macro.construct_runtime.html) in
+[`construct_runtime!` macro](https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/macro.construct_runtime.html) in
 the previous section. Because this pallet uses storage items, we must add this to the line in
 construct runtime. In the Super Runtime, we see the additional `Storage` feature.
 

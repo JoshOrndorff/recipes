@@ -1,8 +1,8 @@
 [package]
 name = "babe-grandpa-node"
-version = "2.0.0-rc3"
+version = "2.0.0-rc4"
 edition = "2018"
-authors = ['Joshy Orndorff', '4meta5', 'Jimmy Chu']
+authors = ['Substrate DevHub <https://github.com/substrate-developer-hub>']
 repository = 'https://github.com/substrate-developer-hub/recipes'
 description = 'A Substrate node where consensus authorities are determined by the runtime and passed to the consensus engine via a runtime API.'
 license = "GPL-3.0-or-later"
@@ -15,7 +15,7 @@ categories = [
 	"tutorial",
 	"recipe",
 ]
-compatibility_version = "2.0.0-rc3"
+compatibility_version = "2.0.0-rc4"
 
 [[bin]]
 name = "babe-grandpa-node"
@@ -32,24 +32,24 @@ tokio = "0.1.22"
 exit-future = "0.2.0"
 parking_lot = "0.9.0"
 trie-root = "0.15.2"
-sp-io = '2.0.0-rc3'
-sc-cli = '0.8.0-rc3'
-sc-client-api = '2.0.0-rc3'
-sc-consensus = '0.8.0-rc3'
-sp-core = '2.0.0-rc3'
-sp-runtime = '2.0.0-rc3'
-sc-executor = '0.8.0-rc3'
-sc-service = '0.8.0-rc3'
-sp-inherents = '2.0.0-rc3'
-sc-transaction-pool = '2.0.0-rc3'
-sp-transaction-pool = '2.0.0-rc3'
-sc-network = '0.8.0-rc3'
-sc-consensus-babe = '0.8.0-rc3'
-sp-consensus-babe = '0.8.0-rc3'
-sc-finality-grandpa = '0.8.0-rc3'
-sp-finality-grandpa = '2.0.0-rc3'
-sc-basic-authorship = '0.8.0-rc3'
-sp-consensus = '0.8.0-rc3'
+sp-io = '2.0.0-rc4'
+sc-cli = '0.8.0-rc4'
+sc-client-api = '2.0.0-rc4'
+sc-consensus = '0.8.0-rc4'
+sp-core = '2.0.0-rc4'
+sp-runtime = '2.0.0-rc4'
+sc-executor = '0.8.0-rc4'
+sc-service = '0.8.0-rc4'
+sp-inherents = '2.0.0-rc4'
+sc-transaction-pool = '2.0.0-rc4'
+sp-transaction-pool = '2.0.0-rc4'
+sc-network = '0.8.0-rc4'
+sc-consensus-babe = '0.8.0-rc4'
+sp-consensus-babe = '0.8.0-rc4'
+sc-finality-grandpa = '0.8.0-rc4'
+sp-finality-grandpa = '2.0.0-rc4'
+sc-basic-authorship = '0.8.0-rc4'
+sp-consensus = '0.8.0-rc4'
 
 # This node only works with runtimes that can provide babe and grandpa authorities.
 # No other runtimes that come with the recipes provide these APIs, but the substrate demonstration
@@ -66,7 +66,7 @@ runtime = { package = "babe-grandpa-runtime", path = "../../runtimes/babe-grandp
 
 [build-dependencies]
 vergen = "3.0.4"
-substrate-build-script-utils = '2.0.0-rc3'
+substrate-build-script-utils = '2.0.0-rc4'
 
 [features]
 ocw = []

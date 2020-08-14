@@ -1,8 +1,8 @@
 [package]
 name = "kitchen-node"
-version = "2.0.0-rc3"
+version = "2.0.0-rc4"
 edition = "2018"
-authors = ['Joshy Orndorff', '4meta5', 'Jimmy Chu']
+authors = ['Substrate DevHub <https://github.com/substrate-developer-hub>']
 repository = 'https://github.com/substrate-developer-hub/recipes'
 description = 'An instant-sealing Substrate node. Can be used with most recipe runtimes.'
 license = "GPL-3.0-or-later"
@@ -14,7 +14,7 @@ categories = [
 	"tutorial",
 	"recipe",
 ]
-compatibility_version = "2.0.0-rc3"
+compatibility_version = "2.0.0-rc4"
 
 [[bin]]
 name = "kitchen-node"
@@ -31,22 +31,22 @@ tokio = "0.1.22"
 exit-future = "0.2.0"
 parking_lot = "0.9.0"
 trie-root = "0.15.2"
-sc-basic-authorship = '0.8.0-rc3'
-sc-cli = '0.8.0-rc3'
-sc-client-api = '2.0.0-rc3'
-sc-consensus = '0.8.0-rc3'
-sc-consensus-manual-seal = '0.8.0-rc3'
-sc-executor = '0.8.0-rc3'
-sc-network = '0.8.0-rc3'
-sc-service = '0.8.0-rc3'
-sc-transaction-pool = '2.0.0-rc3'
-sp-consensus = '0.8.0-rc3'
-sp-core = '2.0.0-rc3'
-sp-inherents = '2.0.0-rc3'
-sp-io = '2.0.0-rc3'
-sp-runtime = '2.0.0-rc3'
-sp-timestamp = '2.0.0-rc3'
-sp-transaction-pool = '2.0.0-rc3'
+sc-basic-authorship = '0.8.0-rc4'
+sc-cli = '0.8.0-rc4'
+sc-client-api = '2.0.0-rc4'
+sc-consensus = '0.8.0-rc4'
+sc-consensus-manual-seal = '0.8.0-rc4'
+sc-executor = '0.8.0-rc4'
+sc-network = '0.8.0-rc4'
+sc-service = '0.8.0-rc4'
+sc-transaction-pool = '2.0.0-rc4'
+sp-consensus = '0.8.0-rc4'
+sp-core = '2.0.0-rc4'
+sp-inherents = '2.0.0-rc4'
+sp-io = '2.0.0-rc4'
+sp-runtime = '2.0.0-rc4'
+sp-timestamp = '2.0.0-rc4'
+sp-transaction-pool = '2.0.0-rc4'
 
 # This node is compatible with any of the runtimes below
 # ---
@@ -67,7 +67,7 @@ runtime = { package = "super-runtime", path = "../../runtimes/super-runtime" }
 
 [build-dependencies]
 vergen = "3.0.4"
-substrate-build-script-utils = '2.0.0-rc3'
+substrate-build-script-utils = '2.0.0-rc4'
 
 [features]
 ocw = []

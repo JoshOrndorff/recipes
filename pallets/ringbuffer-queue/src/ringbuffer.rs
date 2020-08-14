@@ -4,7 +4,7 @@
 //! abstracts over storage items and presents them as a FIFO queue.
 //!
 //! Usage Example:
-//! ```rust,ignore
+//! ```rust, ignore
 //! use ringbuffer::{RingBufferTrait, RingBufferTransient};
 //!
 //! // Trait object that we will be interacting with.
@@ -225,6 +225,7 @@ mod tests {
 	}
 
 	impl system::Trait for Test {
+		type BaseCallFilter = ();
 		type Origin = Origin;
 		type Call = ();
 		type Index = u64;

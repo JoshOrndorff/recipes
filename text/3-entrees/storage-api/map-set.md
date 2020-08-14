@@ -1,6 +1,12 @@
 # Using Maps as Sets
 
-_[`pallets/map-set`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/map-set)_
+`pallets/map-set`
+[
+	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
+](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fmap-set%2Fsrc%2Flib.rs)
+[
+	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
+](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/map-set/src/lib.rs)
 
 A [Set](<https://en.wikipedia.org/wiki/Set_(abstract_data_type)>) is an unordered data structure
 that stores entries without duplicates. Substrate's storage API does not provide a way to declare
@@ -23,7 +29,7 @@ pub const MAX_MEMBERS: u32 = 16;
 ## Storage Item
 
 We will store the members of our set as the keys in one of Substrate's
-[`StorageMap`](https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/storage/trait.StorageMap.html)s. There is also
+[`StorageMap`](https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/storage/trait.StorageMap.html)s. There is also
 a recipe specifically about [using storage maps](./storage-maps.md). The storage map itself does not
 track its size internally, so we introduce a second storage value for this purpose.
 
@@ -114,7 +120,7 @@ may want a `map-set`.
 ### Iteration
 
 Iterating over all items in a `map-set` is achieved by using the
-[`IterableStorageMap` trait](https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/storage/trait.IterableStorageMap.html),
+[`IterableStorageMap` trait](https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/storage/trait.IterableStorageMap.html),
 which iterates `(key, value)` pairs (although in this case, we don't care about the values). Because
 each map entry is stored as an individual trie node, iterating a map set requires a database read
 for each item. Finally, the actual processing of the items will take some time.

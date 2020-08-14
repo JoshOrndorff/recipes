@@ -1,7 +1,20 @@
 # Instantiable Pallets
 
-_[`pallets/last-caller`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/last-caller)_
-_[`pallets/default-instance`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/default-instance)_
+`pallets/last-caller`
+[
+	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
+](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Flast-caller%2Fsrc%2Flib.rs)
+[
+	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
+](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/last-caller/src/lib.rs)
+
+`pallets/default-instance`
+[
+	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
+](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fdefault-instance%2Fsrc%2Flib.rs)
+[
+	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
+](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/default-instance/src/lib.rs)
 
 Instantiable pallets enable multiple instances of the same pallet logic within a single runtime.
 Each instance of the pallet has its own independent storage, and extrinsics must specify which

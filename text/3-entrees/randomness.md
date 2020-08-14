@@ -1,6 +1,12 @@
 # Generating Randomness
 
-_[pallets/randomness](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/randomness/)_
+`pallets/randomness`
+[
+	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
+](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Frandomness%2Fsrc%2Flib.rs)
+[
+	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
+](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/randomness/src/lib.rs)
 
 Randomness is useful in computer programs for everything from gambling, to generating DNA for
 digital kitties, to selecting block authors. Randomness is hard to come by in deterministic
@@ -10,7 +16,7 @@ chain. Some techniques have been developed to address this problem including
 [RanDAO](https://github.com/randao/randao) and
 [Verifiable Random Functions](https://en.wikipedia.org/wiki/Verifiable_random_function). Substrate
 abstracts the implementation of a randomness source using the
-[`Randomness` trait](https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/traits/trait.Randomness.html), and
+[`Randomness` trait](https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/traits/trait.Randomness.html), and
 provides a few implementations. This recipe will demonstrate using the `Randomness` trait and two
 concrete implementations.
 
@@ -66,12 +72,12 @@ pub trait Trait: system::Trait {
 }
 ```
 
-We've provided the `Output` type as [`H256`](https://substrate.dev/rustdocs/v2.0.0-rc5/sp_core/struct.H256.html).
+We've provided the `Output` type as [`H256`](https://substrate.dev/rustdocs/v2.0.0-rc4/sp_core/struct.H256.html).
 
 ## Collective Coin Flipping
 
 Substrate's
-[Randomness Collective Flip pallet](https://substrate.dev/rustdocs/v2.0.0-rc5/pallet_randomness_collective_flip/index.html)
+[Randomness Collective Flip pallet](https://substrate.dev/rustdocs/v2.0.0-rc4/pallet_randomness_collective_flip/index.html)
 uses a safe mixing algorithm to generate randomness using the entropy of previous block hashes.
 Because it is dependent on previous blocks, it can take many blocks for the seed to change.
 
@@ -96,7 +102,7 @@ property provided by the pallet.
 
 ## Babe VRF Output
 
-Substrate's [Babe pallet](https://substrate.dev/rustdocs/v2.0.0-rc5/pallet_babe/index.html) which is primarily
+Substrate's [Babe pallet](https://substrate.dev/rustdocs/v2.0.0-rc4/pallet_babe/index.html) which is primarily
 responsible for managing validator rotation in Babe consensus, also collects the VRF outputs that
 Babe validators publish to demonstrate that they are permitted to author a block. These VRF outputs
 can be used to provide a random seed.

@@ -1,6 +1,12 @@
 # Using Vectors as Sets
 
-_[`pallets/vec-set`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/vec-set)_
+`pallets/vec-set`
+[
+	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
+](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fvec-set%2Fsrc%2Flib.rs)
+[
+	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
+](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/vec-set/src/lib.rs)
 
 A [Set](<https://en.wikipedia.org/wiki/Set_(abstract_data_type)>) is an unordered data structure
 that stores entries without duplicates. Substrate's storage API does not provide a way to declare

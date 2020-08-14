@@ -1,10 +1,16 @@
 # Efficent Subgroup Removal by Subkey: Double Maps
 
-_[`pallets/double-map`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/double-map)_
+`pallets/double-map`
+[
+	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
+](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fdouble-map%2Fsrc%2Flib.rs)
+[
+	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
+](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/double-map/src/lib.rs)
 
 For some runtimes, it may be necessary to remove a subset of values in a key-value mapping. If the
 subset maintain an associated identifier type, this can be done in a clean way with the
-[`double_map`](https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/storage/trait.StorageDoubleMap.html) via the
+[`double_map`](https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/storage/trait.StorageDoubleMap.html) via the
 `remove_prefix` api.
 
 ```rust, ignore

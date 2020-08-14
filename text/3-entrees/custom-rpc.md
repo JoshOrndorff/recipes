@@ -1,7 +1,20 @@
 # Custom RPCs
 
-_[`nodes/rpc-node`](https://github.com/substrate-developer-hub/recipes/tree/master/nodes/rpc-node)_
-_[`runtime/api-runtime`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/api-runtime)_
+`nodes/custom-rpc`
+[
+	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
+](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fnodes%2Fcustom-rpc%2Fsrc%2Flib.rs)
+[
+	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
+](https://github.com/substrate-developer-hub/recipes/tree/master/nodes/custom-rpc/src/lib.rs)
+
+`runtimes/api-runtime`
+[
+	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
+](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fruntimes%2Fapi-runtime%2Fsrc%2Flib.rs)
+[
+	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
+](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/api-runtime/src/lib.rs)
 
 Remote Procedure Calls, or RPCs, are a way for an external program (eg. a frontend) to communicate
 with a Substrate node. They are used for checking storage values, submitting transactions, and
@@ -60,7 +73,7 @@ With our RPC written, we're ready to install it on our node. We begin with a few
 jsonrpc-core = "14.0.3"
 jsonrpc-core-client = "14.0.3"
 jsonrpc-derive = "14.0.3"
-sc-rpc = '2.0.0-rc3'
+sc-rpc = '2.0.0-rc4'
 ```
 
 Next, in our `rpc-node`'s `service.rs` file, we extend the service with our RPC. We've chosen to

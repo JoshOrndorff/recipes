@@ -1,11 +1,11 @@
 [package]
-authors = ['Seun LanLege', 'Joshy Orndorff']
+name = 'manual-seal'
+authors = ['Substrate DevHub <https://github.com/substrate-developer-hub>']
 build = 'build.rs'
 edition = '2018'
-name = 'manual-seal'
 repository = 'https://github.com/paritytech/substrate/'
-version = "2.0.0-rc3"
-description = 'A Substrate-based node that uses the instant-seal and manual-seal consensus engines'
+version = "2.0.0-rc4"
+description = "A Substrate-based node that uses the instant-seal and manual-seal consensus engines"
 license = "GPL-3.0-or-later"
 
 [package.metadata.substrate]
@@ -15,7 +15,7 @@ categories = [
 	"tutorial",
 	"recipe",
 ]
-compatibility_version = "2.0.0-rc3"
+compatibility_version = "2.0.0-rc4"
 
 [[bin]]
 name = 'manual-seal'
@@ -30,23 +30,23 @@ sha3 = "0.8"
 rand = { version = "0.7", features = ["small_rng"] }
 jsonrpc-core = "14.0.5"
 
-sc-consensus = '0.8.0-rc3'
-sc-consensus-manual-seal = '0.8.0-rc3'
-sc-rpc = '2.0.0-rc3'
-sc-client-api = '2.0.0-rc3'
-sp-blockchain =  '2.0.0-rc3'
-sp-timestamp = '2.0.0-rc3'
-sc-basic-authorship = '0.8.0-rc3'
-sc-cli = '0.8.0-rc3'
-sc-executor = '0.8.0-rc3'
-sc-network = '0.8.0-rc3'
-sc-service = '0.8.0-rc3'
-sc-transaction-pool = '2.0.0-rc3'
-sp-consensus = '0.8.0-rc3'
-sp-core = '2.0.0-rc3'
-sp-inherents = '2.0.0-rc3'
-sp-runtime = '2.0.0-rc3'
-sp-transaction-pool = '2.0.0-rc3'
+sc-consensus = '0.8.0-rc4'
+sc-consensus-manual-seal = '0.8.0-rc4'
+sc-rpc = '2.0.0-rc4'
+sc-client-api = '2.0.0-rc4'
+sp-blockchain =  '2.0.0-rc4'
+sp-timestamp = '2.0.0-rc4'
+sc-basic-authorship = '0.8.0-rc4'
+sc-cli = '0.8.0-rc4'
+sc-executor = '0.8.0-rc4'
+sc-network = '0.8.0-rc4'
+sc-service = '0.8.0-rc4'
+sc-transaction-pool = '2.0.0-rc4'
+sp-consensus = '0.8.0-rc4'
+sp-core = '2.0.0-rc4'
+sp-inherents = '2.0.0-rc4'
+sp-runtime = '2.0.0-rc4'
+sp-transaction-pool = '2.0.0-rc4'
 
 # This node is compatible with any of the runtimes below
 # ---
@@ -64,4 +64,4 @@ runtime = { package = "super-runtime", path = "../../runtimes/super-runtime" }
 
 [build-dependencies]
 vergen = '3.0.4'
-substrate-build-script-utils = '2.0.0-rc3'
+substrate-build-script-utils = '2.0.0-rc4'

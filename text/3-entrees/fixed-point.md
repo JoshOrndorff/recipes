@@ -1,7 +1,20 @@
 # Fixed Point Arithmetic
 
-_[`pallets/fixed-point`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/fixed-point)_
-_[`pallets/compounding-interest`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/compounding-interest)_
+`pallets/fixed-point`
+[
+	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
+](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Ffixed-point%2Fsrc%2Flib.rs)
+[
+	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
+](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/fixed-point/src/lib.rs)
+
+`pallets/compounding-interest`
+[
+	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
+](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fcompounding-interest%2Fsrc%2Flib.rs)
+[
+	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
+](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/compounding-interest/src/lib.rs)
 
 When programmers learn to use non-integer numbers in their programs, they are usually taught to use
 [floating point](https://en.wikipedia.org/wiki/Floating-point_arithmetic)s. In blockchain, we use an
@@ -39,13 +52,13 @@ the features of each.
 
 We'll be using the most common approach which takes its fixed point implementation from Substrate
 itself. There are a few fixed-point structs available in Substrate, all of which implement the
-[`PerThing` trait](https://substrate.dev/rustdocs/v2.0.0-rc5/sp_arithmetic/trait.PerThing.html), that cover different
+[`PerThing` trait](https://substrate.dev/rustdocs/v2.0.0-rc4/sp_arithmetic/trait.PerThing.html), that cover different
 amounts of precision. For this accumulator example, we'll use the
-[`PerMill` struct](https://substrate.dev/rustdocs/v2.0.0-rc5/sp_arithmetic/struct.Permill.html) which represents
+[`PerMill` struct](https://substrate.dev/rustdocs/v2.0.0-rc4/sp_arithmetic/struct.Permill.html) which represents
 fractions as parts per million. There are also
-[`Perbill`](https://substrate.dev/rustdocs/v2.0.0-rc5/sp_arithmetic/struct.Perbill.html),
-[`PerCent`](https://substrate.dev/rustdocs/v2.0.0-rc5/sp_arithmetic/struct.Percent.html), and
-[`PerU16`](https://substrate.dev/rustdocs/v2.0.0-rc5/sp_arithmetic/struct.PerU16.html), which all provide the same
+[`Perbill`](https://substrate.dev/rustdocs/v2.0.0-rc4/sp_arithmetic/struct.Perbill.html),
+[`PerCent`](https://substrate.dev/rustdocs/v2.0.0-rc4/sp_arithmetic/struct.Percent.html), and
+[`PerU16`](https://substrate.dev/rustdocs/v2.0.0-rc4/sp_arithmetic/struct.PerU16.html), which all provide the same
 interface (because it comes from the trait). Substrate's fixed-point structs are somewhat unique
 because they represent _only_ fractional parts of numbers. That means they can represent numbers
 between 0 and 1 inclusive, but _not_ numbers with whole parts like 2.718 or 3.14.
@@ -164,7 +177,7 @@ Fixed point is not very complex conceptually. We represent fractional numbers as
 integers, and we decide in advance to consider some of the place values fractional. It's just like
 saying we'll omit the decimal point when talking about money and all agree that "1995" actually
 _means_ 19.95 €. This is exactly how Substrate's
-[Balances pallet](https://substrate.dev/rustdocs/v2.0.0-rc5/pallet_balances/index.html) works, a tradition that's
+[Balances pallet](https://substrate.dev/rustdocs/v2.0.0-rc4/pallet_balances/index.html) works, a tradition that's
 been in blockchain since Bitcon. In our example we will treat 16 bits as integer values, and 16 as
 fractional, just as substrate-fixed's `U16F16` did.
 
@@ -273,7 +286,7 @@ Our first example will look at discrete compounding interest. This is when inter
 fixed interval. In our case, interest will be paid every ten blocks.
 
 For this implementation we've chosen to use Substrate's
-[`Percent` type](https://substrate.dev/rustdocs/v2.0.0-rc5/sp_arithmetic/struct.Percent.html). It works nearly the
+[`Percent` type](https://substrate.dev/rustdocs/v2.0.0-rc4/sp_arithmetic/struct.Percent.html). It works nearly the
 same as `Permill`, but it represents numbers as "parts per hundred" rather than "parts per million".
 We could also have used Substrate-fixed for this implementation, but chose to save it for the next
 example.

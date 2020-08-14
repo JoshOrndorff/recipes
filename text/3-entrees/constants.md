@@ -1,9 +1,15 @@
 # Configurable Pallet Constants
 
-_[`pallets/constant-config`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/constant-config)_
+`pallets/constant-config`
+[
+	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
+](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fconstant-config%2Fsrc%2Flib.rs)
+[
+	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
+](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/constant-config/src/lib.rs)
 
 To declare constant values within a runtime, it is necessary to import the
-[`Get`](https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/traits/trait.Get.html) trait from `frame_support`
+[`Get`](https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/traits/trait.Get.html) trait from `frame_support`
 
 ```rust, ignore
 use frame_support::traits::Get;
@@ -100,7 +106,7 @@ _[custom configuration of externalities](./testing/externalities.md)_
 
 When the pallet is included in a runtime, the runtime developer supplies the value of the constant
 using the
-[`parameter_types!` macro](https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/macro.parameter_types.html). This
+[`parameter_types!` macro](https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/macro.parameter_types.html). This
 pallet is included in the `super-runtime` where we see the following macro invocation and trait
 implementation.
 
