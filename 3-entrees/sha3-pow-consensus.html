@@ -5,13 +5,24 @@
         <meta charset="UTF-8">
         <title>Sha3 Pow Consensus Algorithms - Substrate Recipes</title>
         
+        
+
+
+        <!-- Custom HTML head -->
+        
+
 
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="A Hands-On Cookbook for Aspiring Blockchain Chefs">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
 
+        
+        <link rel="icon" href="../favicon.svg">
+        
+        
         <link rel="shortcut icon" href="../favicon.png">
+        
         <link rel="stylesheet" href="../css/variables.css">
         <link rel="stylesheet" href="../css/general.css">
         <link rel="stylesheet" href="../css/chrome.css">
@@ -19,8 +30,9 @@
 
         <!-- Fonts -->
         <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
-        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+        
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        
 
         <!-- Highlight.js Stylesheets -->
         <link rel="stylesheet" href="../highlight.css">
@@ -36,7 +48,7 @@
         <!-- Provide site root to javascript -->
         <script type="text/javascript">
             var path_to_root = "../";
-            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "light" : "light";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
         </script>
 
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
@@ -80,8 +92,8 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <div id="sidebar-scrollbox" class="sidebar-scrollbox">
-                <ol class="chapter"><li class="expanded affix "><a href="../introduction.html">Introduction</a></li><li class="expanded "><a href="../1-prepare-kitchen/index.html"><strong aria-hidden="true">1.</strong> Preparing Your Kitchen</a></li><li><ol class="section"><li class="expanded "><a href="../1-prepare-kitchen/1-build-node.html"><strong aria-hidden="true">1.1.</strong> Building A Node</a></li><li class="expanded "><a href="../1-prepare-kitchen/2-interact-node.html"><strong aria-hidden="true">1.2.</strong> Interacting with a Node</a></li><li class="expanded "><a href="../1-prepare-kitchen/3-kitchen-organization.html"><strong aria-hidden="true">1.3.</strong> Kitchen Organization</a></li></ol></li><li class="expanded "><a href="../2-appetizers/index.html"><strong aria-hidden="true">2.</strong> Appetizers</a></li><li><ol class="section"><li class="expanded "><a href="../2-appetizers/1-hello-substrate.html"><strong aria-hidden="true">2.1.</strong> Hello Substrate</a></li><li class="expanded "><a href="../2-appetizers/2-storage-values.html"><strong aria-hidden="true">2.2.</strong> Single Value Storage</a></li><li class="expanded "><a href="../2-appetizers/3-errors.html"><strong aria-hidden="true">2.3.</strong> Handling Errors</a></li><li class="expanded "><a href="../2-appetizers/4-events.html"><strong aria-hidden="true">2.4.</strong> Events Verify Execution</a></li></ol></li><li class="expanded "><a href="../3-entrees/index.html"><strong aria-hidden="true">3.</strong> Entrees</a></li><li><ol class="section"><li class="expanded "><a href="../3-entrees/storage-api/index.html"><strong aria-hidden="true">3.1.</strong> Runtime Storage API</a></li><li><ol class="section"><li class="expanded "><a href="../3-entrees/storage-api/storage-maps.html"><strong aria-hidden="true">3.1.1.</strong> Storage Maps</a></li><li class="expanded "><a href="../3-entrees/storage-api/cache.html"><strong aria-hidden="true">3.1.2.</strong> Cache Locally &gt; Storage Calls</a></li><li class="expanded "><a href="../3-entrees/storage-api/vec-set.html"><strong aria-hidden="true">3.1.3.</strong> Using Vectors as Sets</a></li><li class="expanded "><a href="../3-entrees/storage-api/map-set.html"><strong aria-hidden="true">3.1.4.</strong> Using Maps as Sets</a></li><li class="expanded "><a href="../3-entrees/storage-api/double.html"><strong aria-hidden="true">3.1.5.</strong> Subgroup Removal by Subkey: Double Maps</a></li><li class="expanded "><a href="../3-entrees/storage-api/structs.html"><strong aria-hidden="true">3.1.6.</strong> Storing custom structs</a></li><li class="expanded "><a href="../3-entrees/storage-api/ringbuffer.html"><strong aria-hidden="true">3.1.7.</strong> Ringbuffer Queue</a></li></ol></li><li class="expanded "><a href="../3-entrees/basic-token.html"><strong aria-hidden="true">3.2.</strong> Basic Token</a></li><li class="expanded "><a href="../3-entrees/constants.html"><strong aria-hidden="true">3.3.</strong> Configurable Constants</a></li><li class="expanded "><a href="../3-entrees/crowdfund.html"><strong aria-hidden="true">3.4.</strong> Simple Crowdfund</a></li><li class="expanded "><a href="../3-entrees/instantiable.html"><strong aria-hidden="true">3.5.</strong> Instantiable Pallets</a></li><li class="expanded "><a href="../3-entrees/weights.html"><strong aria-hidden="true">3.6.</strong> Weights for Resource Accounting</a></li><li class="expanded "><a href="../3-entrees/fees.html"><strong aria-hidden="true">3.7.</strong> Transaction Fees for Economic Security</a></li><li class="expanded "><a href="../3-entrees/charity.html"><strong aria-hidden="true">3.8.</strong> Charity and Imbalances</a></li><li class="expanded "><a href="../3-entrees/fixed-point.html"><strong aria-hidden="true">3.9.</strong> Fixed Point Arithmetic</a></li><li class="expanded "><a href="../3-entrees/off-chain-workers/index.html"><strong aria-hidden="true">3.10.</strong> Off-chain Workers</a></li><li><ol class="section"><li class="expanded "><a href="../3-entrees/off-chain-workers/transactions.html"><strong aria-hidden="true">3.10.1.</strong> Transactions</a></li><li class="expanded "><a href="../3-entrees/off-chain-workers/http-json.html"><strong aria-hidden="true">3.10.2.</strong> HTTP Fetching &amp; JSON Parsing</a></li><li class="expanded "><a href="../3-entrees/off-chain-workers/storage.html"><strong aria-hidden="true">3.10.3.</strong> Local Storage</a></li></ol></li><li class="expanded "><a href="../3-entrees/runtime-api.html"><strong aria-hidden="true">3.11.</strong> Runtime APIs</a></li><li class="expanded "><a href="../3-entrees/custom-rpc.html"><strong aria-hidden="true">3.12.</strong> Custom RPCs</a></li><li class="expanded "><a href="../3-entrees/sha3-pow-consensus.html" class="active"><strong aria-hidden="true">3.13.</strong> Sha3 Pow Consensus Algorithms</a></li><li class="expanded "><a href="../3-entrees/basic-pow.html"><strong aria-hidden="true">3.14.</strong> Basic Proof of Work Node</a></li><li class="expanded "><a href="../3-entrees/hybrid-consensus.html"><strong aria-hidden="true">3.15.</strong> Hybrid PoW/PoS Consensus Node</a></li><li class="expanded "><a href="../3-entrees/manual-seal.html"><strong aria-hidden="true">3.16.</strong> Manual Seal Consensus</a></li><li class="expanded "><a href="../3-entrees/kitchen-node.html"><strong aria-hidden="true">3.17.</strong> Kitchen Node - An reusable instant seal node</a></li><li class="expanded "><a href="../3-entrees/babe-grandpa-node.html"><strong aria-hidden="true">3.18.</strong> Babe and Grandpa Node</a></li><li class="expanded "><a href="../3-entrees/currency.html"><strong aria-hidden="true">3.19.</strong> Currency Types</a></li><li class="expanded "><a href="../3-entrees/randomness.html"><strong aria-hidden="true">3.20.</strong> Generating Randomness</a></li><li class="expanded "><a href="../3-entrees/execution-schedule.html"><strong aria-hidden="true">3.21.</strong> Execution Schedule</a></li><li class="expanded "><a href="../3-entrees/pallet-coupling.html"><strong aria-hidden="true">3.22.</strong> Tightly- and Loosely-Coupled Pallets</a></li><li class="expanded "><a href="../3-entrees/testing/index.html"><strong aria-hidden="true">3.23.</strong> Testing</a></li><li><ol class="section"><li class="expanded "><a href="../3-entrees/testing/mock.html"><strong aria-hidden="true">3.23.1.</strong> Basic Test Environments</a></li><li class="expanded "><a href="../3-entrees/testing/common.html"><strong aria-hidden="true">3.23.2.</strong> Common Tests</a></li><li class="expanded "><a href="../3-entrees/testing/off-chain-workers.html"><strong aria-hidden="true">3.23.3.</strong> Off-chain Worker Test Environment</a></li><li class="expanded "><a href="../3-entrees/testing/externalities.html"><strong aria-hidden="true">3.23.4.</strong> Custom Test Environment</a></li></ol></li><li class="expanded "><a href="../3-entrees/safemath.html"><strong aria-hidden="true">3.24.</strong> Safe Math</a></li><li class="spacer"></li></ol></li><li class="expanded "><a href="../more-resources.html">More Resources</a></li></ol>
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="../1-prepare-kitchen/index.html"><strong aria-hidden="true">1.</strong> Preparing Your Kitchen</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../1-prepare-kitchen/1-build-node.html"><strong aria-hidden="true">1.1.</strong> Building A Node</a></li><li class="chapter-item expanded "><a href="../1-prepare-kitchen/2-interact-node.html"><strong aria-hidden="true">1.2.</strong> Interacting with a Node</a></li><li class="chapter-item expanded "><a href="../1-prepare-kitchen/3-kitchen-organization.html"><strong aria-hidden="true">1.3.</strong> Kitchen Organization</a></li></ol></li><li class="chapter-item expanded "><a href="../2-appetizers/index.html"><strong aria-hidden="true">2.</strong> Appetizers</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../2-appetizers/1-hello-substrate.html"><strong aria-hidden="true">2.1.</strong> Hello Substrate</a></li><li class="chapter-item expanded "><a href="../2-appetizers/2-storage-values.html"><strong aria-hidden="true">2.2.</strong> Single Value Storage</a></li><li class="chapter-item expanded "><a href="../2-appetizers/3-errors.html"><strong aria-hidden="true">2.3.</strong> Handling Errors</a></li><li class="chapter-item expanded "><a href="../2-appetizers/4-events.html"><strong aria-hidden="true">2.4.</strong> Events Verify Execution</a></li></ol></li><li class="chapter-item expanded "><a href="../3-entrees/index.html"><strong aria-hidden="true">3.</strong> Entrees</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../3-entrees/storage-api/index.html"><strong aria-hidden="true">3.1.</strong> Runtime Storage API</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../3-entrees/storage-api/storage-maps.html"><strong aria-hidden="true">3.1.1.</strong> Storage Maps</a></li><li class="chapter-item expanded "><a href="../3-entrees/storage-api/cache.html"><strong aria-hidden="true">3.1.2.</strong> Cache Locally &gt; Storage Calls</a></li><li class="chapter-item expanded "><a href="../3-entrees/storage-api/vec-set.html"><strong aria-hidden="true">3.1.3.</strong> Using Vectors as Sets</a></li><li class="chapter-item expanded "><a href="../3-entrees/storage-api/map-set.html"><strong aria-hidden="true">3.1.4.</strong> Using Maps as Sets</a></li><li class="chapter-item expanded "><a href="../3-entrees/storage-api/double.html"><strong aria-hidden="true">3.1.5.</strong> Subgroup Removal by Subkey: Double Maps</a></li><li class="chapter-item expanded "><a href="../3-entrees/storage-api/structs.html"><strong aria-hidden="true">3.1.6.</strong> Storing custom structs</a></li><li class="chapter-item expanded "><a href="../3-entrees/storage-api/ringbuffer.html"><strong aria-hidden="true">3.1.7.</strong> Ringbuffer Queue</a></li></ol></li><li class="chapter-item expanded "><a href="../3-entrees/basic-token.html"><strong aria-hidden="true">3.2.</strong> Basic Token</a></li><li class="chapter-item expanded "><a href="../3-entrees/constants.html"><strong aria-hidden="true">3.3.</strong> Configurable Constants</a></li><li class="chapter-item expanded "><a href="../3-entrees/crowdfund.html"><strong aria-hidden="true">3.4.</strong> Simple Crowdfund</a></li><li class="chapter-item expanded "><a href="../3-entrees/instantiable.html"><strong aria-hidden="true">3.5.</strong> Instantiable Pallets</a></li><li class="chapter-item expanded "><a href="../3-entrees/weights.html"><strong aria-hidden="true">3.6.</strong> Weights for Resource Accounting</a></li><li class="chapter-item expanded "><a href="../3-entrees/fees.html"><strong aria-hidden="true">3.7.</strong> Transaction Fees for Economic Security</a></li><li class="chapter-item expanded "><a href="../3-entrees/charity.html"><strong aria-hidden="true">3.8.</strong> Charity and Imbalances</a></li><li class="chapter-item expanded "><a href="../3-entrees/fixed-point.html"><strong aria-hidden="true">3.9.</strong> Fixed Point Arithmetic</a></li><li class="chapter-item expanded "><a href="../3-entrees/off-chain-workers/index.html"><strong aria-hidden="true">3.10.</strong> Off-chain Workers</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../3-entrees/off-chain-workers/transactions.html"><strong aria-hidden="true">3.10.1.</strong> Transactions</a></li><li class="chapter-item expanded "><a href="../3-entrees/off-chain-workers/http-json.html"><strong aria-hidden="true">3.10.2.</strong> HTTP Fetching &amp; JSON Parsing</a></li><li class="chapter-item expanded "><a href="../3-entrees/off-chain-workers/storage.html"><strong aria-hidden="true">3.10.3.</strong> Local Storage</a></li></ol></li><li class="chapter-item expanded "><a href="../3-entrees/runtime-api.html"><strong aria-hidden="true">3.11.</strong> Runtime APIs</a></li><li class="chapter-item expanded "><a href="../3-entrees/custom-rpc.html"><strong aria-hidden="true">3.12.</strong> Custom RPCs</a></li><li class="chapter-item expanded "><a href="../3-entrees/sha3-pow-consensus.html" class="active"><strong aria-hidden="true">3.13.</strong> Sha3 Pow Consensus Algorithms</a></li><li class="chapter-item expanded "><a href="../3-entrees/basic-pow.html"><strong aria-hidden="true">3.14.</strong> Basic Proof of Work Node</a></li><li class="chapter-item expanded "><a href="../3-entrees/hybrid-consensus.html"><strong aria-hidden="true">3.15.</strong> Hybrid PoW/PoS Consensus Node</a></li><li class="chapter-item expanded "><a href="../3-entrees/manual-seal.html"><strong aria-hidden="true">3.16.</strong> Manual Seal Consensus</a></li><li class="chapter-item expanded "><a href="../3-entrees/kitchen-node.html"><strong aria-hidden="true">3.17.</strong> Kitchen Node - An reusable instant seal node</a></li><li class="chapter-item expanded "><a href="../3-entrees/babe-grandpa-node.html"><strong aria-hidden="true">3.18.</strong> Babe and Grandpa Node</a></li><li class="chapter-item expanded "><a href="../3-entrees/currency.html"><strong aria-hidden="true">3.19.</strong> Currency Types</a></li><li class="chapter-item expanded "><a href="../3-entrees/randomness.html"><strong aria-hidden="true">3.20.</strong> Generating Randomness</a></li><li class="chapter-item expanded "><a href="../3-entrees/execution-schedule.html"><strong aria-hidden="true">3.21.</strong> Execution Schedule</a></li><li class="chapter-item expanded "><a href="../3-entrees/pallet-coupling.html"><strong aria-hidden="true">3.22.</strong> Tightly- and Loosely-Coupled Pallets</a></li><li class="chapter-item expanded "><a href="../3-entrees/testing/index.html"><strong aria-hidden="true">3.23.</strong> Testing</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../3-entrees/testing/mock.html"><strong aria-hidden="true">3.23.1.</strong> Basic Test Environments</a></li><li class="chapter-item expanded "><a href="../3-entrees/testing/common.html"><strong aria-hidden="true">3.23.2.</strong> Common Tests</a></li><li class="chapter-item expanded "><a href="../3-entrees/testing/off-chain-workers.html"><strong aria-hidden="true">3.23.3.</strong> Off-chain Worker Test Environment</a></li><li class="chapter-item expanded "><a href="../3-entrees/testing/externalities.html"><strong aria-hidden="true">3.23.4.</strong> Custom Test Environment</a></li></ol></li><li class="chapter-item expanded "><a href="../3-entrees/safemath.html"><strong aria-hidden="true">3.24.</strong> Safe Math</a></li><li class="spacer"></li></ol></li><li class="chapter-item expanded "><a href="../more-resources.html">More Resources</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -90,37 +102,36 @@
 
             <div class="page">
                 
-                <div id="menu-bar" class="menu-bar">
-                    <div id="menu-bar-sticky-container">
-                        <div class="left-buttons">
-                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
-                                <i class="fa fa-bars"></i>
-                            </button>
-                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
-                                <i class="fa fa-paint-brush"></i>
-                            </button>
-                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                                <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
-                            </ul>
-                            
-                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
-                                <i class="fa fa-search"></i>
-                            </button>
-                            
-                        </div>
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
 
-                        <h1 class="menu-title">Substrate Recipes</h1>
+                    <h1 class="menu-title">Substrate Recipes</h1>
 
-                        <div class="right-buttons">
-                            <a href="../print.html" title="Print this book" aria-label="Print this book">
-                                <i id="print-button" class="fa fa-print"></i>
-                            </a>
-                            
-                        </div>
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
                     </div>
                 </div>
 
@@ -149,10 +160,16 @@
                 <div id="content" class="content">
                     <main>
                         <h1><a class="header" href="#sha3-proof-of-work-algorithms" id="sha3-proof-of-work-algorithms">Sha3 Proof of Work Algorithms</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/consensus/sha3pow"><code>consensus/sha3pow</code></a></em></p>
+<p><code>consensus/sha3-pow</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fconsensus%2Fsha3-pow%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/consensus/sha3-pow/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
 <p><a href="https://en.wikipedia.org/wiki/Proof_of_work">Proof of Work</a> is not a single consensus algorithm.
 Rather it is a class of algorithms represented in Substrate by the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sc_consensus_pow/trait.PowAlgorithm.html"><code>PowAlgorithm</code> trait</a>. Before we
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sc_consensus_pow/trait.PowAlgorithm.html"><code>PowAlgorithm</code> trait</a>. Before we
 can build a PoW node we must specify a concrete PoW algorithm by implementing this trait. In this
 recipe we specify two concrete PoW algorithms, both of which are based on the
 <a href="https://en.wikipedia.org/wiki/SHA-3">sha3 hashing algorithm</a>.</p>
@@ -277,7 +294,7 @@ blocktime remains constant.</p>
 <h3><a class="header" href="#defining-the-sha3algorithm-struct" id="defining-the-sha3algorithm-struct">Defining the <code>Sha3Algorithm</code> Struct</a></h3>
 <p>We begin as before by defining a struct that will implement the <code>PowAlgorithm</code> trait. Unlike before,
 this struct must hold a reference to the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sc_service/client/struct.Client.html"><code>Client</code></a> so it can call the
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sc_service/client/struct.Client.html"><code>Client</code></a> so it can call the
 appropriate runtime APIs.</p>
 <pre><code class="language-rust ignore">/// A complete PoW Algorithm that uses Sha3 hashing.
 /// Needs a reference to the client so it can grab the difficulty from the runtime.
@@ -309,7 +326,7 @@ is necessary.</p>
 <h3><a class="header" href="#implementing-the-powalgorithm-trait" id="implementing-the-powalgorithm-trait">Implementing the <code>PowAlgorithm</code> trait</a></h3>
 <p>As before we implement the <code>PowAlgorithm</code> trait for out <code>Sha3Algorithm</code>. This time we supply more
 complex trait bounds to ensure that the client the algorithm holds a reference to actually provides
-the <a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sp_consensus_pow/trait.DifficultyApi.html"><code>DifficultyAPI</code></a> necessary
+the <a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sp_consensus_pow/trait.DifficultyApi.html"><code>DifficultyAPI</code></a> necessary
 to fetch the PoW difficulty from the runtime.</p>
 <pre><code class="language-rust ignore">// Here we implement the general PowAlgorithm trait for our concrete Sha3Algorithm
 impl&lt;B: BlockT&lt;Hash=H256&gt;, C&gt; PowAlgorithm&lt;B&gt; for Sha3Algorithm&lt;C&gt; where
@@ -359,13 +376,13 @@ maps any errors that may have occurred when using the API.</p>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
-                    <a href="../3-entrees/custom-rpc.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../3-entrees/custom-rpc.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
 
                 
-                    <a href="../3-entrees/basic-pow.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="../3-entrees/basic-pow.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 
@@ -378,10 +395,10 @@ maps any errors that may have occurred when using the API.</p>
         
 
         
-        
+
         
         <script type="text/javascript">
-            window.playpen_copyable = true;
+            window.playground_copyable = true;
         </script>
         
 

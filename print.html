@@ -7,13 +7,24 @@
         
         <meta name="robots" content="noindex" />
         
+        
+
+
+        <!-- Custom HTML head -->
+        
+
 
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="A Hands-On Cookbook for Aspiring Blockchain Chefs">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
 
+        
+        <link rel="icon" href="favicon.svg">
+        
+        
         <link rel="shortcut icon" href="favicon.png">
+        
         <link rel="stylesheet" href="css/variables.css">
         <link rel="stylesheet" href="css/general.css">
         <link rel="stylesheet" href="css/chrome.css">
@@ -21,8 +32,9 @@
 
         <!-- Fonts -->
         <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
-        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+        
+        <link rel="stylesheet" href="fonts/fonts.css">
+        
 
         <!-- Highlight.js Stylesheets -->
         <link rel="stylesheet" href="highlight.css">
@@ -38,7 +50,7 @@
         <!-- Provide site root to javascript -->
         <script type="text/javascript">
             var path_to_root = "";
-            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "light" : "light";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
         </script>
 
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
@@ -82,8 +94,8 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <div id="sidebar-scrollbox" class="sidebar-scrollbox">
-                <ol class="chapter"><li class="expanded affix "><a href="introduction.html">Introduction</a></li><li class="expanded "><a href="1-prepare-kitchen/index.html"><strong aria-hidden="true">1.</strong> Preparing Your Kitchen</a></li><li><ol class="section"><li class="expanded "><a href="1-prepare-kitchen/1-build-node.html"><strong aria-hidden="true">1.1.</strong> Building A Node</a></li><li class="expanded "><a href="1-prepare-kitchen/2-interact-node.html"><strong aria-hidden="true">1.2.</strong> Interacting with a Node</a></li><li class="expanded "><a href="1-prepare-kitchen/3-kitchen-organization.html"><strong aria-hidden="true">1.3.</strong> Kitchen Organization</a></li></ol></li><li class="expanded "><a href="2-appetizers/index.html"><strong aria-hidden="true">2.</strong> Appetizers</a></li><li><ol class="section"><li class="expanded "><a href="2-appetizers/1-hello-substrate.html"><strong aria-hidden="true">2.1.</strong> Hello Substrate</a></li><li class="expanded "><a href="2-appetizers/2-storage-values.html"><strong aria-hidden="true">2.2.</strong> Single Value Storage</a></li><li class="expanded "><a href="2-appetizers/3-errors.html"><strong aria-hidden="true">2.3.</strong> Handling Errors</a></li><li class="expanded "><a href="2-appetizers/4-events.html"><strong aria-hidden="true">2.4.</strong> Events Verify Execution</a></li></ol></li><li class="expanded "><a href="3-entrees/index.html"><strong aria-hidden="true">3.</strong> Entrees</a></li><li><ol class="section"><li class="expanded "><a href="3-entrees/storage-api/index.html"><strong aria-hidden="true">3.1.</strong> Runtime Storage API</a></li><li><ol class="section"><li class="expanded "><a href="3-entrees/storage-api/storage-maps.html"><strong aria-hidden="true">3.1.1.</strong> Storage Maps</a></li><li class="expanded "><a href="3-entrees/storage-api/cache.html"><strong aria-hidden="true">3.1.2.</strong> Cache Locally &gt; Storage Calls</a></li><li class="expanded "><a href="3-entrees/storage-api/vec-set.html"><strong aria-hidden="true">3.1.3.</strong> Using Vectors as Sets</a></li><li class="expanded "><a href="3-entrees/storage-api/map-set.html"><strong aria-hidden="true">3.1.4.</strong> Using Maps as Sets</a></li><li class="expanded "><a href="3-entrees/storage-api/double.html"><strong aria-hidden="true">3.1.5.</strong> Subgroup Removal by Subkey: Double Maps</a></li><li class="expanded "><a href="3-entrees/storage-api/structs.html"><strong aria-hidden="true">3.1.6.</strong> Storing custom structs</a></li><li class="expanded "><a href="3-entrees/storage-api/ringbuffer.html"><strong aria-hidden="true">3.1.7.</strong> Ringbuffer Queue</a></li></ol></li><li class="expanded "><a href="3-entrees/basic-token.html"><strong aria-hidden="true">3.2.</strong> Basic Token</a></li><li class="expanded "><a href="3-entrees/constants.html"><strong aria-hidden="true">3.3.</strong> Configurable Constants</a></li><li class="expanded "><a href="3-entrees/crowdfund.html"><strong aria-hidden="true">3.4.</strong> Simple Crowdfund</a></li><li class="expanded "><a href="3-entrees/instantiable.html"><strong aria-hidden="true">3.5.</strong> Instantiable Pallets</a></li><li class="expanded "><a href="3-entrees/weights.html"><strong aria-hidden="true">3.6.</strong> Weights for Resource Accounting</a></li><li class="expanded "><a href="3-entrees/fees.html"><strong aria-hidden="true">3.7.</strong> Transaction Fees for Economic Security</a></li><li class="expanded "><a href="3-entrees/charity.html"><strong aria-hidden="true">3.8.</strong> Charity and Imbalances</a></li><li class="expanded "><a href="3-entrees/fixed-point.html"><strong aria-hidden="true">3.9.</strong> Fixed Point Arithmetic</a></li><li class="expanded "><a href="3-entrees/off-chain-workers/index.html"><strong aria-hidden="true">3.10.</strong> Off-chain Workers</a></li><li><ol class="section"><li class="expanded "><a href="3-entrees/off-chain-workers/transactions.html"><strong aria-hidden="true">3.10.1.</strong> Transactions</a></li><li class="expanded "><a href="3-entrees/off-chain-workers/http-json.html"><strong aria-hidden="true">3.10.2.</strong> HTTP Fetching &amp; JSON Parsing</a></li><li class="expanded "><a href="3-entrees/off-chain-workers/storage.html"><strong aria-hidden="true">3.10.3.</strong> Local Storage</a></li></ol></li><li class="expanded "><a href="3-entrees/runtime-api.html"><strong aria-hidden="true">3.11.</strong> Runtime APIs</a></li><li class="expanded "><a href="3-entrees/custom-rpc.html"><strong aria-hidden="true">3.12.</strong> Custom RPCs</a></li><li class="expanded "><a href="3-entrees/sha3-pow-consensus.html"><strong aria-hidden="true">3.13.</strong> Sha3 Pow Consensus Algorithms</a></li><li class="expanded "><a href="3-entrees/basic-pow.html"><strong aria-hidden="true">3.14.</strong> Basic Proof of Work Node</a></li><li class="expanded "><a href="3-entrees/hybrid-consensus.html"><strong aria-hidden="true">3.15.</strong> Hybrid PoW/PoS Consensus Node</a></li><li class="expanded "><a href="3-entrees/manual-seal.html"><strong aria-hidden="true">3.16.</strong> Manual Seal Consensus</a></li><li class="expanded "><a href="3-entrees/kitchen-node.html"><strong aria-hidden="true">3.17.</strong> Kitchen Node - An reusable instant seal node</a></li><li class="expanded "><a href="3-entrees/babe-grandpa-node.html"><strong aria-hidden="true">3.18.</strong> Babe and Grandpa Node</a></li><li class="expanded "><a href="3-entrees/currency.html"><strong aria-hidden="true">3.19.</strong> Currency Types</a></li><li class="expanded "><a href="3-entrees/randomness.html"><strong aria-hidden="true">3.20.</strong> Generating Randomness</a></li><li class="expanded "><a href="3-entrees/execution-schedule.html"><strong aria-hidden="true">3.21.</strong> Execution Schedule</a></li><li class="expanded "><a href="3-entrees/pallet-coupling.html"><strong aria-hidden="true">3.22.</strong> Tightly- and Loosely-Coupled Pallets</a></li><li class="expanded "><a href="3-entrees/testing/index.html"><strong aria-hidden="true">3.23.</strong> Testing</a></li><li><ol class="section"><li class="expanded "><a href="3-entrees/testing/mock.html"><strong aria-hidden="true">3.23.1.</strong> Basic Test Environments</a></li><li class="expanded "><a href="3-entrees/testing/common.html"><strong aria-hidden="true">3.23.2.</strong> Common Tests</a></li><li class="expanded "><a href="3-entrees/testing/off-chain-workers.html"><strong aria-hidden="true">3.23.3.</strong> Off-chain Worker Test Environment</a></li><li class="expanded "><a href="3-entrees/testing/externalities.html"><strong aria-hidden="true">3.23.4.</strong> Custom Test Environment</a></li></ol></li><li class="expanded "><a href="3-entrees/safemath.html"><strong aria-hidden="true">3.24.</strong> Safe Math</a></li><li class="spacer"></li></ol></li><li class="expanded "><a href="more-resources.html">More Resources</a></li></ol>
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="1-prepare-kitchen/index.html"><strong aria-hidden="true">1.</strong> Preparing Your Kitchen</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="1-prepare-kitchen/1-build-node.html"><strong aria-hidden="true">1.1.</strong> Building A Node</a></li><li class="chapter-item expanded "><a href="1-prepare-kitchen/2-interact-node.html"><strong aria-hidden="true">1.2.</strong> Interacting with a Node</a></li><li class="chapter-item expanded "><a href="1-prepare-kitchen/3-kitchen-organization.html"><strong aria-hidden="true">1.3.</strong> Kitchen Organization</a></li></ol></li><li class="chapter-item expanded "><a href="2-appetizers/index.html"><strong aria-hidden="true">2.</strong> Appetizers</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="2-appetizers/1-hello-substrate.html"><strong aria-hidden="true">2.1.</strong> Hello Substrate</a></li><li class="chapter-item expanded "><a href="2-appetizers/2-storage-values.html"><strong aria-hidden="true">2.2.</strong> Single Value Storage</a></li><li class="chapter-item expanded "><a href="2-appetizers/3-errors.html"><strong aria-hidden="true">2.3.</strong> Handling Errors</a></li><li class="chapter-item expanded "><a href="2-appetizers/4-events.html"><strong aria-hidden="true">2.4.</strong> Events Verify Execution</a></li></ol></li><li class="chapter-item expanded "><a href="3-entrees/index.html"><strong aria-hidden="true">3.</strong> Entrees</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="3-entrees/storage-api/index.html"><strong aria-hidden="true">3.1.</strong> Runtime Storage API</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="3-entrees/storage-api/storage-maps.html"><strong aria-hidden="true">3.1.1.</strong> Storage Maps</a></li><li class="chapter-item expanded "><a href="3-entrees/storage-api/cache.html"><strong aria-hidden="true">3.1.2.</strong> Cache Locally &gt; Storage Calls</a></li><li class="chapter-item expanded "><a href="3-entrees/storage-api/vec-set.html"><strong aria-hidden="true">3.1.3.</strong> Using Vectors as Sets</a></li><li class="chapter-item expanded "><a href="3-entrees/storage-api/map-set.html"><strong aria-hidden="true">3.1.4.</strong> Using Maps as Sets</a></li><li class="chapter-item expanded "><a href="3-entrees/storage-api/double.html"><strong aria-hidden="true">3.1.5.</strong> Subgroup Removal by Subkey: Double Maps</a></li><li class="chapter-item expanded "><a href="3-entrees/storage-api/structs.html"><strong aria-hidden="true">3.1.6.</strong> Storing custom structs</a></li><li class="chapter-item expanded "><a href="3-entrees/storage-api/ringbuffer.html"><strong aria-hidden="true">3.1.7.</strong> Ringbuffer Queue</a></li></ol></li><li class="chapter-item expanded "><a href="3-entrees/basic-token.html"><strong aria-hidden="true">3.2.</strong> Basic Token</a></li><li class="chapter-item expanded "><a href="3-entrees/constants.html"><strong aria-hidden="true">3.3.</strong> Configurable Constants</a></li><li class="chapter-item expanded "><a href="3-entrees/crowdfund.html"><strong aria-hidden="true">3.4.</strong> Simple Crowdfund</a></li><li class="chapter-item expanded "><a href="3-entrees/instantiable.html"><strong aria-hidden="true">3.5.</strong> Instantiable Pallets</a></li><li class="chapter-item expanded "><a href="3-entrees/weights.html"><strong aria-hidden="true">3.6.</strong> Weights for Resource Accounting</a></li><li class="chapter-item expanded "><a href="3-entrees/fees.html"><strong aria-hidden="true">3.7.</strong> Transaction Fees for Economic Security</a></li><li class="chapter-item expanded "><a href="3-entrees/charity.html"><strong aria-hidden="true">3.8.</strong> Charity and Imbalances</a></li><li class="chapter-item expanded "><a href="3-entrees/fixed-point.html"><strong aria-hidden="true">3.9.</strong> Fixed Point Arithmetic</a></li><li class="chapter-item expanded "><a href="3-entrees/off-chain-workers/index.html"><strong aria-hidden="true">3.10.</strong> Off-chain Workers</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="3-entrees/off-chain-workers/transactions.html"><strong aria-hidden="true">3.10.1.</strong> Transactions</a></li><li class="chapter-item expanded "><a href="3-entrees/off-chain-workers/http-json.html"><strong aria-hidden="true">3.10.2.</strong> HTTP Fetching &amp; JSON Parsing</a></li><li class="chapter-item expanded "><a href="3-entrees/off-chain-workers/storage.html"><strong aria-hidden="true">3.10.3.</strong> Local Storage</a></li></ol></li><li class="chapter-item expanded "><a href="3-entrees/runtime-api.html"><strong aria-hidden="true">3.11.</strong> Runtime APIs</a></li><li class="chapter-item expanded "><a href="3-entrees/custom-rpc.html"><strong aria-hidden="true">3.12.</strong> Custom RPCs</a></li><li class="chapter-item expanded "><a href="3-entrees/sha3-pow-consensus.html"><strong aria-hidden="true">3.13.</strong> Sha3 Pow Consensus Algorithms</a></li><li class="chapter-item expanded "><a href="3-entrees/basic-pow.html"><strong aria-hidden="true">3.14.</strong> Basic Proof of Work Node</a></li><li class="chapter-item expanded "><a href="3-entrees/hybrid-consensus.html"><strong aria-hidden="true">3.15.</strong> Hybrid PoW/PoS Consensus Node</a></li><li class="chapter-item expanded "><a href="3-entrees/manual-seal.html"><strong aria-hidden="true">3.16.</strong> Manual Seal Consensus</a></li><li class="chapter-item expanded "><a href="3-entrees/kitchen-node.html"><strong aria-hidden="true">3.17.</strong> Kitchen Node - An reusable instant seal node</a></li><li class="chapter-item expanded "><a href="3-entrees/babe-grandpa-node.html"><strong aria-hidden="true">3.18.</strong> Babe and Grandpa Node</a></li><li class="chapter-item expanded "><a href="3-entrees/currency.html"><strong aria-hidden="true">3.19.</strong> Currency Types</a></li><li class="chapter-item expanded "><a href="3-entrees/randomness.html"><strong aria-hidden="true">3.20.</strong> Generating Randomness</a></li><li class="chapter-item expanded "><a href="3-entrees/execution-schedule.html"><strong aria-hidden="true">3.21.</strong> Execution Schedule</a></li><li class="chapter-item expanded "><a href="3-entrees/pallet-coupling.html"><strong aria-hidden="true">3.22.</strong> Tightly- and Loosely-Coupled Pallets</a></li><li class="chapter-item expanded "><a href="3-entrees/testing/index.html"><strong aria-hidden="true">3.23.</strong> Testing</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="3-entrees/testing/mock.html"><strong aria-hidden="true">3.23.1.</strong> Basic Test Environments</a></li><li class="chapter-item expanded "><a href="3-entrees/testing/common.html"><strong aria-hidden="true">3.23.2.</strong> Common Tests</a></li><li class="chapter-item expanded "><a href="3-entrees/testing/off-chain-workers.html"><strong aria-hidden="true">3.23.3.</strong> Off-chain Worker Test Environment</a></li><li class="chapter-item expanded "><a href="3-entrees/testing/externalities.html"><strong aria-hidden="true">3.23.4.</strong> Custom Test Environment</a></li></ol></li><li class="chapter-item expanded "><a href="3-entrees/safemath.html"><strong aria-hidden="true">3.24.</strong> Safe Math</a></li><li class="spacer"></li></ol></li><li class="chapter-item expanded "><a href="more-resources.html">More Resources</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -92,37 +104,36 @@
 
             <div class="page">
                 
-                <div id="menu-bar" class="menu-bar">
-                    <div id="menu-bar-sticky-container">
-                        <div class="left-buttons">
-                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
-                                <i class="fa fa-bars"></i>
-                            </button>
-                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
-                                <i class="fa fa-paint-brush"></i>
-                            </button>
-                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                                <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
-                            </ul>
-                            
-                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
-                                <i class="fa fa-search"></i>
-                            </button>
-                            
-                        </div>
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
 
-                        <h1 class="menu-title">Substrate Recipes</h1>
+                    <h1 class="menu-title">Substrate Recipes</h1>
 
-                        <div class="right-buttons">
-                            <a href="print.html" title="Print this book" aria-label="Print this book">
-                                <i id="print-button" class="fa fa-print"></i>
-                            </a>
-                            
-                        </div>
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
                     </div>
                 </div>
 
@@ -467,7 +478,13 @@ down, you may skip ahead to the entrees which may be read in any order.</p>
 <li><a href="2-appetizers/./4-events.html">Events</a> - Notifying the offchain world of success</li>
 </ul>
 <h1><a class="header" href="#hello-substrate" id="hello-substrate">Hello Substrate</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/hello-substrate"><code>pallets/hello-substrate</code></a></em></p>
+<p><code>pallets/hello-substrate</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fhello-substrate%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/hello-substrate/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
 <p>The first pallet we'll explore is a simple &quot;hello world&quot; example. This pallet will have one
 dispatchable call that prints a message to the node's output. Because this is our first pallet,
 we'll also explore the structure that every pallet has. This code lives in
@@ -481,8 +498,8 @@ Assembly where the standard library is not available.</p>
 <h2><a class="header" href="#imports" id="imports">Imports</a></h2>
 <p>Next, you'll find imports that come from various parts of the Substrate framework. All pallets will
 import from a few common crates including
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/index.html"><code>frame-support</code></a>, and
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_system/index.html"><code>frame-system</code></a>. Complex pallets will have many
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/index.html"><code>frame-support</code></a>, and
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_system/index.html"><code>frame-system</code></a>. Complex pallets will have many
 imports as we'll see later. The <code>hello-substrate</code> pallet uses these imports.</p>
 <pre><code class="language-rust ignore">use frame_support::{ decl_module, dispatch::DispatchResult, debug };
 use frame_system::{ self as system, ensure_signed };
@@ -504,7 +521,7 @@ although it must still exist.</p>
 &quot;Extrinsic&quot; is Substrate jargon meaning a call from outside of the chain. Most of the time they are
 transactions, and for now it is fine to think of them as transactions. Dispatchable calls are
 defined in the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/macro.decl_module.html"><code>decl_module!</code> macro</a>.</p>
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/macro.decl_module.html"><code>decl_module!</code> macro</a>.</p>
 <pre><code class="language-rust ignore">decl_module! {
 	pub struct Module&lt;T: Trait&gt; for enum Call where origin: T::Origin {
 
@@ -520,7 +537,7 @@ defined in the
 </code></pre>
 <p>As you can see, our <code>hello-substrate</code> pallet has a dispatchable call that takes a single argument,
 called <code>origin</code> which we'll investigate shortly. The call returns a
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/dispatch/type.DispatchResult.html"><code>DispatchResult</code></a> which
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/dispatch/type.DispatchResult.html"><code>DispatchResult</code></a> which
 can be either <code>Ok(())</code> indicating that the call succeeded, or an <code>Err</code> which we'll investigate in
 the <a href="2-appetizers/./3-errors.html">appetizer about errors</a>.</p>
 <h3><a class="header" href="#weight-annotations" id="weight-annotations">Weight Annotations</a></h3>
@@ -545,13 +562,13 @@ the recipes pallets, we will simply use the default weight as we have done here.
 }
 </code></pre>
 <p>This function essentially does three things. First, it uses the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_system/fn.ensure_signed.html"><code>ensure_signed</code> function</a> to ensure
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_system/fn.ensure_signed.html"><code>ensure_signed</code> function</a> to ensure
 that the caller of the function was a regular user who owns a private key. This function also
 returns who that caller was. We store the caller's identity in the <code>caller</code> variable.</p>
 <p>Second, it prints a message and logs the caller. Notice that we aren't using Rust's normal
 <code>println!</code> macro, but rather a special
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sp_runtime/fn.print.html"><code>print</code> function</a> and
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/debug/macro.info.html"><code>debug::info!</code> macro</a>. The reason for
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sp_runtime/fn.print.html"><code>print</code> function</a> and
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/debug/macro.info.html"><code>debug::info!</code> macro</a>. The reason for
 this is explained in the next section.</p>
 <p>Finally, the call returns <code>Ok(())</code> to indicate that the call has succeeded. At a glance it seems
 that there is no way for this call to fail, but this is not quite true. The <code>ensure_signed</code>
@@ -568,11 +585,11 @@ Nonetheless, printing a message from the runtime is useful both for logging info
 for debugging.</p>
 <p><img src="2-appetizers/../img/substrate-architecture.png" alt="Substrate Architecture Diagram" /></p>
 <p>At the top of our pallet, we imported <code>sp_runtime</code>'s
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sp_runtime/fn.print.html"><code>print</code> function</a>. This special function allows
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sp_runtime/fn.print.html"><code>print</code> function</a>. This special function allows
 the runtime to pass a message for printing to the outer part of the node which is not compiled to
 Wasm and does have access to the standard library and can perform regular IO. This function is only
 able to print items that implement the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sp_runtime/traits/trait.Printable.html"><code>Printable</code> trait</a>. Luckily all
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sp_runtime/traits/trait.Printable.html"><code>Printable</code> trait</a>. Luckily all
 the primitive types already implement this trait, and you can implement the trait for your own
 datatypes too.</p>
 <p><strong>Print function note:</strong> To actually see the printed messages, we need to use the flag
@@ -583,7 +600,7 @@ variable's content. The syntax inside the macro is very similar to what regular 
 <code>println!</code> takes.</p>
 <p><strong>Runtime logger note:</strong> When we execute the runtime in native, <code>debug::info!</code> messages are printed.
 However, if we execute the runtime in Wasm, then an additional step to initialise
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/debug/struct.RuntimeLogger.html">RuntimeLogger</a> is required.</p>
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/debug/struct.RuntimeLogger.html">RuntimeLogger</a> is required.</p>
 <h2><a class="header" href="#installing-the-pallet-in-a-runtime" id="installing-the-pallet-in-a-runtime">Installing the Pallet in a Runtime</a></h2>
 <p>In order to actually use a pallet, it must be installed in a Substrate runtime. This particular
 pallet is installed in the <code>super-runtime</code> which you built as part of the kitchen node. To install a
@@ -614,7 +631,7 @@ this pallet's configuration trait is trivial, so is implementing it.</p>
 complex.</p>
 <h3><a class="header" href="#add-it-to-construct_runtime" id="add-it-to-construct_runtime">Add it to <code>construct_runtime!</code></a></h3>
 <p>Finally, we add our pallet to the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/macro.construct_runtime.html"><code>construct_runtime!</code> macro</a>.</p>
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/macro.construct_runtime.html"><code>construct_runtime!</code> macro</a>.</p>
 <pre><code class="language-rust ignore">construct_runtime!(
 	pub enum Runtime where
 		Block = Block,
@@ -641,7 +658,13 @@ message printed to the log of your node. Remember to run the kitchen node with t
 <p>You're now well on your way to becoming a blockchain chef. Let's continue to build our skills with
 another appetizer.</p>
 <h1><a class="header" href="#single-value" id="single-value">Single Value</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/single-value"><code>pallets/single-value</code></a></em></p>
+<p><code>pallets/single-value</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fsingle-value%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/single-value/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
 <p>Storage is used for data that should be kept between blocks and accessible to future transactions.
 Most runtimes will have many storage values, and together the storage values make up the
 blockchain's &quot;state&quot;. The storage values themselves are <em>not</em> stored in the blocks. Instead the
@@ -650,7 +673,7 @@ in a blockchain network to keep track of the current storage. The current state 
 determined by executing all of the blocks in the chain.</p>
 <h2><a class="header" href="#declaring-storage" id="declaring-storage">Declaring Storage</a></h2>
 <p>A pallet's storage items are declared with the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/macro.decl_storage.html"><code>decl_storage!</code> macro</a>.</p>
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/macro.decl_storage.html"><code>decl_storage!</code> macro</a>.</p>
 <pre><code class="language-rust ignore">decl_storage! {
     trait Store for Module&lt;T: Trait&gt; as SingleValue {
         // --snip--
@@ -678,7 +701,7 @@ system pallet. Types like this need to be prefixed with a <code>T::</code> as we
 </code></pre>
 <h2><a class="header" href="#reading-and-writing-to-storage" id="reading-and-writing-to-storage">Reading and Writing to Storage</a></h2>
 <p>Functions used to access a single storage value are defined in the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/storage/trait.StorageValue.html"><code>StorageValue</code> trait</a>. In
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/storage/trait.StorageValue.html"><code>StorageValue</code> trait</a>. In
 this pallet, we use the most common method, <code>put</code>, but it is worth skimming the other methods so you
 know what is available.</p>
 <p>The <code>set_value</code> method demonstrates writing to storage, as well as taking a parameter in our
@@ -700,7 +723,7 @@ let my_val = Self::stored_value();
 <h2><a class="header" href="#storing-the-callers-account" id="storing-the-callers-account">Storing the Callers Account</a></h2>
 <p>In terms of storage, the <code>set_account</code> method is quite similar to <code>set_value</code>, but it also
 demonstrates how to retreive the <code>AccountId</code> of the caller using the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_system/fn.ensure_signed.html"><code>ensure_signed</code> function</a>.</p>
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_system/fn.ensure_signed.html"><code>ensure_signed</code> function</a>.</p>
 <pre><code class="language-rust ignore">fn set_account(origin) -&gt; DispatchResult {
 	let who = ensure_signed(origin)?;
 
@@ -714,7 +737,7 @@ syntax. Notice the <code>&lt;T&gt;</code> attached to the name of the storage va
 because <code>AccountId</code> is not primitive, we lend a reference to it rather than transferring ownership.</p>
 <h2><a class="header" href="#constructing-the-runtime" id="constructing-the-runtime">Constructing the Runtime</a></h2>
 <p>We learned about the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/macro.construct_runtime.html"><code>construct_runtime!</code> macro</a> in
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/macro.construct_runtime.html"><code>construct_runtime!</code> macro</a> in
 the previous section. Because this pallet uses storage items, we must add this to the line in
 construct runtime. In the Super Runtime, we see the additional <code>Storage</code> feature.</p>
 <pre><code class="language-rust ignore">construct_runtime!(
@@ -729,13 +752,19 @@ construct runtime. In the Super Runtime, we see the additional <code>Storage</co
 );
 </code></pre>
 <h1><a class="header" href="#handling-errors" id="handling-errors">Handling Errors</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/adding-machine"><code>pallets/adding-machine</code></a></em></p>
+<p><code>pallets/adding-machine</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fadding-machine%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/adding-machine/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
 <p>As we've mentioned before, in Substrate development it is important to <strong>Verify first, write last</strong>.
 In this recipe, we'll create an adding machine that checks for unlucky numbers (a silly example) as
 well as integer overflow (a serious and realistic example), and throws the appropriate errors.</p>
 <h2><a class="header" href="#declaring-errors" id="declaring-errors">Declaring Errors</a></h2>
 <p>Errors are declared with the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/macro.decl_error.html"><code>decl_error!</code> macro</a>. Although it is
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/macro.decl_error.html"><code>decl_error!</code> macro</a>. Although it is
 optional, it is good practice to write doc comments for each error variant as demonstrated here.</p>
 <pre><code class="language-rust ignore">decl_error! {
 	pub enum Error for Module&lt;T: Trait&gt; {
@@ -749,7 +778,7 @@ optional, it is good practice to write doc comments for each error variant as de
 <h2><a class="header" href="#throwing-errors-in-match-statement" id="throwing-errors-in-match-statement">Throwing Errors in <code>match</code> Statement</a></h2>
 <p>Errors can be thrown in two different ways, both of which are demonstrated in the the <code>add</code>
 dispatchable call. The first is with the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/macro.ensure.html"><code>ensure!</code> macro</a> where the error to throw
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/macro.ensure.html"><code>ensure!</code> macro</a> where the error to throw
 is the second parameter. The second is to throw the error by explicitly returning it.</p>
 <pre><code class="language-rust ignore">fn add(origin, val_to_add: u32) -&gt; DispatchResult {
 	let _ = ensure_signed(origin)?;
@@ -801,8 +830,20 @@ the same spirit.</p>
 <p>Unlike before, adding errors to our pallet does <em>not</em> require a change to the line in
 <code>construct_runtime!</code>. This is just an idiosyncrasy of developing in Substrate.</p>
 <h1><a class="header" href="#using-events" id="using-events">Using Events</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-event"><code>pallets/simple-event</code></a></em>,
-<em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/generic-event"><code>pallets/generic-event</code></a></em></p>
+<p><code>pallets/simple-event</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fsimple-event%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-event/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
+<p><code>pallets/generic-event</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fgeneric-event%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/generic-event/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
 <p>Having a <a href="https://substrate.dev/docs/en/knowledgebase/getting-started/glossary#transaction">transaction</a> included in a
 block does not guarantee that the function executed successfully. As we saw in the previous recipe,
 many calls can cause errors, but the transaction may still be included in a block. To verify that
@@ -834,7 +875,7 @@ recognize this syntax because it is unique to this macro. Just copy it each time
 </code></pre>
 <h2><a class="header" href="#declaring-events" id="declaring-events">Declaring Events</a></h2>
 <p>To declare an event, use the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/macro.decl_event.html"><code>decl_event!</code> macro</a>. Like any rust
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/macro.decl_event.html"><code>decl_event!</code> macro</a>. Like any rust
 enum, Events have names and can optionally carry data with them. The syntax is slightly different
 depending on whether the events carry data of primitive types, or generic types from the pallet's
 configuration trait. These two techniques are demonstrated in the <code>simple-event</code> and <code>generic-event</code>
@@ -902,7 +943,7 @@ of this cookbook, that includes you! The entrees cover a wide variety of topics 
 development, and are meant to be read in <em>any order</em>.</p>
 <h1><a class="header" href="#storage-api" id="storage-api">Storage API</a></h1>
 <p>We've already encountered the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/macro.decl_storage.html"><code>decl_storage!</code> macro</a> in the
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/macro.decl_storage.html"><code>decl_storage!</code> macro</a> in the
 appetizer on <a href="3-entrees/storage-api/../../2-appetizers/2-storage-values.html">storage items</a>. There is a rich storage API in
 Substrate which we will explore in this section.</p>
 <p>For crypto<em>currencies</em>, storage might consist of a mapping between account keys and corresponding
@@ -924,7 +965,13 @@ single value can be stored in runtime storage. In this section, we cover</p>
 <li><a href="3-entrees/storage-api/./ringbuffer.html">transient storage adapters by example of a ringbuffer queue</a></li>
 </ul>
 <h1><a class="header" href="#storage-maps" id="storage-maps">Storage Maps</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-map"><code>pallets/simple-map</code></a></em></p>
+<p><code>pallets/simple-map</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fsimple-map%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-map/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
 <p>In the appetizer on <a href="3-entrees/storage-api/../../2-appetizers/2-storage-values.html">storage values</a> we learned to store a
 single value in blockchain storage to be persisted between blocks. In this recipe, we will see how
 to store a mapping from keys to values, similar to Rust's own
@@ -944,7 +991,7 @@ have:</p>
 <li><code>get(fn simple_map)</code> - the name of a getter function that will return values from the map.</li>
 <li><code>: map hasher(blake2_128_concat)</code> - beginning of the type declaration. This is a map and it will
 use the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/trait.Hashable.html#tymethod.blake2_128_concat"><code>blake2_128_concat</code></a>
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/trait.Hashable.html#tymethod.blake2_128_concat"><code>blake2_128_concat</code></a>
 hasher. More on this below.</li>
 <li><code>T::AccountId =&gt; u32</code> - The specific key and value tyes of the map. This is a map from
 <code>AccountId</code>s to <code>u32</code>s.</li>
@@ -991,11 +1038,17 @@ let entry = &lt;SimpleMap&lt;T&gt;&gt;::take(&amp;user);
 &lt;SimpleMap&lt;T&gt;&gt;::contains_key(&amp;user)
 </code></pre>
 <p>The rest of the API is documented in the rustdocs on the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/storage/trait.StorageMap.html"><code>StorageMap</code> trait</a>. You do
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/storage/trait.StorageMap.html"><code>StorageMap</code> trait</a>. You do
 not need to explicitly <code>use</code> this trait because the <code>decl_storage!</code> macro will do it for you if you
 use a storage map.</p>
 <h1><a class="header" href="#cache-multiple-calls" id="cache-multiple-calls">Cache Multiple Calls</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/storage-cache"><code>pallets/storage-cache</code></a></em></p>
+<p><code>pallets/storage-cache</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fstorage-cache%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/storage-cache/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
 <p>Calls to runtime storage have an associated cost and developers should strive to minimize the number
 of calls.</p>
 <pre><code class="language-rust ignore">decl_storage! {
@@ -1118,7 +1171,13 @@ To learn more, run the command again with --verbose.
 <a href="https://doc.rust-lang.org/std/clone/trait.Clone.html"><code>Clone</code></a>, so it is important to discern other
 patterns that minimize and alleviate the cost of calls to storage.</p>
 <h1><a class="header" href="#using-vectors-as-sets" id="using-vectors-as-sets">Using Vectors as Sets</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/vec-set"><code>pallets/vec-set</code></a></em></p>
+<p><code>pallets/vec-set</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fvec-set%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/vec-set/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
 <p>A <a href="https://en.wikipedia.org/wiki/Set_(abstract_data_type)">Set</a> is an unordered data structure
 that stores entries without duplicates. Substrate's storage API does not provide a way to declare
 sets explicitly, but they can be implemented using either vectors or maps.</p>
@@ -1231,7 +1290,13 @@ which places an upper bound on the computation - this means we can use constant 
 Your set operations should either have a maximum size or a <a href="3-entrees/storage-api/../weights.html">custom weight function</a>
 that captures the computation appropriately.</p>
 <h1><a class="header" href="#using-maps-as-sets" id="using-maps-as-sets">Using Maps as Sets</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/map-set"><code>pallets/map-set</code></a></em></p>
+<p><code>pallets/map-set</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fmap-set%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/map-set/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
 <p>A <a href="https://en.wikipedia.org/wiki/Set_(abstract_data_type)">Set</a> is an unordered data structure
 that stores entries without duplicates. Substrate's storage API does not provide a way to declare
 sets explicitly, but they can be implemented using either vectors or maps.</p>
@@ -1247,7 +1312,7 @@ pub const MAX_MEMBERS: u32 = 16;
 </code></pre>
 <h2><a class="header" href="#storage-item-1" id="storage-item-1">Storage Item</a></h2>
 <p>We will store the members of our set as the keys in one of Substrate's
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/storage/trait.StorageMap.html"><code>StorageMap</code></a>s. There is also
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/storage/trait.StorageMap.html"><code>StorageMap</code></a>s. There is also
 a recipe specifically about <a href="3-entrees/storage-api/./storage-maps.html">using storage maps</a>. The storage map itself does not
 track its size internally, so we introduce a second storage value for this purpose.</p>
 <pre><code class="language-rust ignore">decl_storage! {
@@ -1315,7 +1380,7 @@ performing a membership check. Additions also require encooding the new item.</p
 may want a <code>map-set</code>.</p>
 <h3><a class="header" href="#iteration-1" id="iteration-1">Iteration</a></h3>
 <p>Iterating over all items in a <code>map-set</code> is achieved by using the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/storage/trait.IterableStorageMap.html"><code>IterableStorageMap</code> trait</a>,
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/storage/trait.IterableStorageMap.html"><code>IterableStorageMap</code> trait</a>,
 which iterates <code>(key, value)</code> pairs (although in this case, we don't care about the values). Because
 each map entry is stored as an individual trie node, iterating a map set requires a database read
 for each item. Finally, the actual processing of the items will take some time.</p>
@@ -1330,10 +1395,16 @@ which places an upper bound on the computation - this means we can use constant 
 Your set operations should either have a maximum size or a <a href="3-entrees/storage-api/../weights.html">custom weight function</a>
 that captures the computation appropriately.</p>
 <h1><a class="header" href="#efficent-subgroup-removal-by-subkey-double-maps" id="efficent-subgroup-removal-by-subkey-double-maps">Efficent Subgroup Removal by Subkey: Double Maps</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/double-map"><code>pallets/double-map</code></a></em></p>
+<p><code>pallets/double-map</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fdouble-map%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/double-map/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
 <p>For some runtimes, it may be necessary to remove a subset of values in a key-value mapping. If the
 subset maintain an associated identifier type, this can be done in a clean way with the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/storage/trait.StorageDoubleMap.html"><code>double_map</code></a> via the
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/storage/trait.StorageDoubleMap.html"><code>double_map</code></a> via the
 <code>remove_prefix</code> api.</p>
 <pre><code class="language-rust ignore">pub type GroupIndex = u32; // this is Encode (which is necessary for double_map)
 
@@ -1367,7 +1438,13 @@ allows for efficient removal of all values associated with a specific <code>Grou
 }
 </code></pre>
 <h1><a class="header" href="#using-and-storing-structs" id="using-and-storing-structs">Using and Storing Structs</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/struct-storage"><code>pallets/struct-storage</code></a></em></p>
+<p><code>pallets/struct-storage</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fstruct-storage%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/struct-storage/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
 <p>In Rust, a <code>struct</code>, or structure, is a custom data type that lets you name and package together
 multiple related values that make up a meaningful group. If you’re familiar with an object-oriented
 language, a <code>struct</code> is like an object’s data attributes (read more in
@@ -1447,7 +1524,13 @@ pub struct SuperThing&lt;Hash, Balance&gt; {
 }
 </code></pre>
 <h1><a class="header" href="#ringbuffer-queue" id="ringbuffer-queue">Ringbuffer Queue</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/ringbuffer-queue"><code>pallets/ringbuffer-queue</code></a></em></p>
+<p><code>pallets/ringbuffer-queue</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fringbuffer-queue%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/ringbuffer-queue/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
 <blockquote>
 <p>Building a transient adapter on top of storage.</p>
 </blockquote>
@@ -1675,7 +1758,13 @@ when using dynamic dispatch.</p>
 into it repeatedly with <code>commit</code> happening on <code>drop</code> of the <code>queue</code> object at the end of the
 function. <code>pop</code> works analogously and can of course be intermixed with <code>push</code>es.</p>
 <h1><a class="header" href="#basic-token" id="basic-token">Basic Token</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/basic-token"><code>pallets/basic-token</code></a></em></p>
+<p><code>pallets/basic-token</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fbasic-token%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/basic-token/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
 <p>This recipe demonstrates a simple but functional token in a pallet.</p>
 <h2><a class="header" href="#mapping-accounts-to-balances" id="mapping-accounts-to-balances">Mapping Accounts to Balances</a></h2>
 <p>Mappings are a very powerful primitive. A <em>stateful</em> cryptocurrency might store a mapping between
@@ -1770,9 +1859,15 @@ will simply fail with <code>InsufficientFunds</code>.</p>
 <strong>you must never panic</strong>. To encourage careful thinking about your code, you use the <code>.expect</code>
 method and provide a proof of why the potential panic will never happen.</p>
 <h1><a class="header" href="#configurable-pallet-constants" id="configurable-pallet-constants">Configurable Pallet Constants</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/constant-config"><code>pallets/constant-config</code></a></em></p>
+<p><code>pallets/constant-config</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fconstant-config%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/constant-config/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
 <p>To declare constant values within a runtime, it is necessary to import the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/traits/trait.Get.html"><code>Get</code></a> trait from <code>frame_support</code></p>
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/traits/trait.Get.html"><code>Get</code></a> trait from <code>frame_support</code></p>
 <pre><code class="language-rust ignore">use frame_support::traits::Get;
 </code></pre>
 <p>Configurable constants are declared as associated types in the pallet's configuration trait using
@@ -1848,11 +1943,11 @@ transaction fees).</p>
 <h2><a class="header" href="#supplying-the-constant-value" id="supplying-the-constant-value">Supplying the Constant Value</a></h2>
 <p>When the pallet is included in a runtime, the runtime developer supplies the value of the constant
 using the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/macro.parameter_types.html"><code>parameter_types!</code> macro</a>. This
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/macro.parameter_types.html"><code>parameter_types!</code> macro</a>. This
 pallet is included in the <code>super-runtime</code> where we see the following macro invocation and trait
 implementation.</p>
-<pre><pre class="playpen"><code class="language-rust">
-<span class="boring">#![allow(unused_variables)]
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>parameter_types! {
 	pub const MaxAddend: u32 = 1738;
@@ -1867,10 +1962,16 @@ impl constant_config::Trait for Runtime {
 <span class="boring">}
 </span></code></pre></pre>
 <h1><a class="header" href="#simple-crowdfund" id="simple-crowdfund">Simple Crowdfund</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-crowdfund"><code>pallets/simple-crowdfund</code></a></em></p>
-<p>This pallet demonstrates a simple on-chain crowdfunding app where participants can pool funds toward
+<p><code>pallets/simple-crowdfund</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fsimple-crowdfund%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-crowdfund/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a>
+This pallet demonstrates a simple on-chain crowdfunding app where participants can pool funds toward
 a common goal. It demonstrates a pallet that controls multiple token accounts, and storing data in
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/storage/child/index.html">child storage</a>.</p>
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/storage/child/index.html">child storage</a>.</p>
 <h2><a class="header" href="#basic-usage" id="basic-usage">Basic Usage</a></h2>
 <p>Any user can start a crowdfund by specifying a goal amount for the crowdfund, an end time, and a
 beneficiary who will receive the pooled funds if the goal is reached by the end time. If the fund is
@@ -1880,7 +1981,7 @@ dissolves it.</p>
 <h2><a class="header" href="#configuration-trait-1" id="configuration-trait-1">Configuration Trait</a></h2>
 <p>We begin by declaring our configuration trait. In addition to the ubiquitous <code>Event</code> type, our
 crowdfund pallet will depend on a notion of
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/traits/trait.Currency.html"><code>Currency</code></a>, and three
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/traits/trait.Currency.html"><code>Currency</code></a>, and three
 <a href="3-entrees/./constants.html">configuration constants</a>.</p>
 <pre><code class="language-rust ignore">/// The pallet's configuration trait
 pub trait Trait: system::Trait {
@@ -1945,7 +2046,7 @@ index that tracks the number of funds, and the second is a mapping from index to
 }
 </code></pre>
 <p>This pallet also stores the data about which users have contributed and how many funds they
-contributed in a <a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/storage/child/index.html">child trie</a>. This
+contributed in a <a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/storage/child/index.html">child trie</a>. This
 child trie is not explicitly declared anywhere.</p>
 <p>The use of the child trie provides two advantages over using standard storage. First, it allows for
 removing the entirety of the trie is a single storage write when the fund is dispensed or dissolved.
@@ -1979,7 +2080,7 @@ pub fn crowdfund_kill(index: FundIndex) {
 }
 </code></pre>
 <p>Because this pallet uses one trie for each active crowdfund, we need to generate a unique
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/storage/child/enum.ChildInfo.html"><code>ChildInfo</code></a> for each of
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/storage/child/enum.ChildInfo.html"><code>ChildInfo</code></a> for each of
 them. To ensure that the ids are really unique, we incluce the <code>FundIndex</code> in the generation.</p>
 <pre><code class="language-rust ignore">pub fn id_from_index(index: FundIndex) -&gt; child::ChildInfo {
 	let mut buf = Vec::new();
@@ -2036,12 +2137,24 @@ fn dispense(origin, index: FundIndex) {
 	)?);
 </code></pre>
 <p>This pallet also uses Currency
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/traits/trait.Imbalance.html"><code>Imbalance</code></a>s as discussed in
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/traits/trait.Imbalance.html"><code>Imbalance</code></a>s as discussed in
 the <a href="3-entrees/./charity.html">Charity</a> recipe, to make transfers without incurring transfer fees to the
 crowdfund pallet itself.</p>
 <h1><a class="header" href="#instantiable-pallets" id="instantiable-pallets">Instantiable Pallets</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/last-caller"><code>pallets/last-caller</code></a></em>
-<em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/default-instance"><code>pallets/default-instance</code></a></em></p>
+<p><code>pallets/last-caller</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Flast-caller%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/last-caller/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
+<p><code>pallets/default-instance</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fdefault-instance%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/default-instance/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
 <p>Instantiable pallets enable multiple instances of the same pallet logic within a single runtime.
 Each instance of the pallet has its own independent storage, and extrinsics must specify which
 instance of the pallet they are intended for. These patterns are illustrated in the kitchen in the
@@ -2167,7 +2280,13 @@ node's use of the Collective pallet as an example.</p>
 }
 </code></pre>
 <h1><a class="header" href="#computational-resources-and-weights" id="computational-resources-and-weights">Computational Resources and Weights</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/weights"><code>pallets/weights</code></a></em></p>
+<p><code>pallets/weights</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fweights%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/weights/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
 <p>Any computational resources used by a transaction must be accounted for so that appropriate fees can
 be applied, and it is a pallet author's job to ensure that this accounting happens. Substrate
 provides a mechanism known as transaction weighting to quantify the resources consumed while
@@ -2213,10 +2332,10 @@ impl WeighData&lt;(&amp;bool, &amp;u32)&gt; for Conditional {
 }
 </code></pre>
 <p>In addition to the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/weights/trait.WeighData.html"><code>WeightData</code> Trait</a>, shown
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/weights/trait.WeighData.html"><code>WeightData</code> Trait</a>, shown
 above, types that are used to calculate transaction weights must also implement
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/weights/trait.ClassifyDispatch.html"><code>ClassifyDispatch</code></a>,
-and <a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/weights/trait.PaysFee.html"><code>PaysFee</code></a>.</p>
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/weights/trait.ClassifyDispatch.html"><code>ClassifyDispatch</code></a>,
+and <a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/weights/trait.PaysFee.html"><code>PaysFee</code></a>.</p>
 <pre><code class="language-rust ignore">impl&lt;T&gt; ClassifyDispatch&lt;T&gt; for Conditional {
     fn classify_dispatch(&amp;self, _: T) -&gt; DispatchClass {
         // Classify all calls as Normal (which is the default)
@@ -2242,9 +2361,15 @@ the weight calculation itself is expensive, your chain will be insecure.</p>
 accounting of these resources. To learn how to turn these weights into actual fees charged to
 transactors, continue to the recipe on <a href="3-entrees/./fees.html">Fees</a>.</p>
 <h1><a class="header" href="#transaction-fees" id="transaction-fees">Transaction Fees</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/weight-fee-runtime">runtimes/weight-fee-runtime</a></em></p>
+<p><code>runtimes/weight-fee-runtime</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fruntimes%2Fweight-fee-runtime%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/weight-fee-runtime/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
 <p>Substrate provides the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/pallet_transaction_payment/index.html"><code>transaction_payment</code> pallet</a> for
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/pallet_transaction_payment/index.html"><code>transaction_payment</code> pallet</a> for
 calculating and collecting fees for executing transactions. Fees are broken down into two
 components:</p>
 <ul>
@@ -2261,7 +2386,7 @@ This topic is not (yet) covered further in the recipes.</li>
 </code></pre>
 <h2><a class="header" href="#setting-the-parameters" id="setting-the-parameters">Setting the Parameters</a></h2>
 <p>Each of the parameters described above is set in the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/pallet_transaction_payment/index.html">transaction payment pallet</a>'s
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/pallet_transaction_payment/index.html">transaction payment pallet</a>'s
 configuration trait. For example, the <code>super-runtime</code> sets these parameters as follows.</p>
 <p>src:
 <a href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/super-runtime/src/lib.rs"><code>runtimes/super-runtime/src/lib.rs</code></a></p>
@@ -2280,12 +2405,12 @@ impl transaction_payment::Trait for Runtime {
 <h2><a class="header" href="#1-to-1-conversion" id="1-to-1-conversion">1 to 1 Conversion</a></h2>
 <p>In many cases converting weight to fees one-to-one, as shown above, will suffice and can be
 accomplished with
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/weights/struct.IdentityFee.html"><code>IdentityFee</code></a>. This
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/weights/struct.IdentityFee.html"><code>IdentityFee</code></a>. This
 approach is also taken in the
 <a href="https://github.com/paritytech/substrate/blob/2d39ec2c4aaec1cc0f91fcb91734de8f408dc1b2/bin/node-template/runtime/src/lib.rs#L246">node template</a>.
 It is also possible to provide a type that makes a more complex calculation. Any type that
 implements
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/weights/trait.WeightToFeePolynomial.html"><code>WeightToFeePolynomial</code></a>
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/weights/trait.WeightToFeePolynomial.html"><code>WeightToFeePolynomial</code></a>
 will suffice.</p>
 <h2><a class="header" href="#linear-conversion" id="linear-conversion">Linear Conversion</a></h2>
 <p>Another common way to convert weight to fees is linearly. When converting linearly, the weight is
@@ -2296,7 +2421,7 @@ multiplied by a constant coefficient to determine the fee to charge. This is dem
 </code></pre>
 <p>Then we implement <code>WeightToFeePolynomial</code> for it. When implementing this trait, your main job is to
 return a set of
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/weights/struct.WeightToFeeCoefficient.html"><code>WeightToFeeCoefficient</code></a>s.
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/weights/struct.WeightToFeeCoefficient.html"><code>WeightToFeeCoefficient</code></a>s.
 These coefficients can have integer and fractional parts and be positive or negative. In our
 <code>LinearWeightToFee</code> there is a single integer coefficient supplied by the associated type.</p>
 <pre><code class="language-rust ignore">impl&lt;C&gt; WeightToFeePolynomial for LinearWeightToFee&lt;C&gt;
@@ -2372,10 +2497,10 @@ impl WeightToFeePolynomial for QuadraticWeightToFee {
 <h2><a class="header" href="#collecting-fees" id="collecting-fees">Collecting Fees</a></h2>
 <p>Having calculated the amount of fees due, runtime authors must decide which asset the fees should be
 paid in. A common choice is the use the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/pallet_balances/index.html"><code>Balances</code> pallet</a>, but any type that
-implements the <a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/traits/trait.Currency.html"><code>Currency</code> trait</a>
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/pallet_balances/index.html"><code>Balances</code> pallet</a>, but any type that
+implements the <a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/traits/trait.Currency.html"><code>Currency</code> trait</a>
 can be used. The weight-fee-runtime demonstrates how to use an asset provided by the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/pallet_generic_asset/index.html"><code>Generic Asset</code> pallet</a>.</p>
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/pallet_generic_asset/index.html"><code>Generic Asset</code> pallet</a>.</p>
 <p>src:
 <a href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/weight-fee-runtime/src/lib.rs"><code>runtimes/weight-fee-runtime/src/lib.rs</code></a></p>
 <pre><code class="language-rust ignore">impl transaction_payment::Trait for Runtime {
@@ -2387,7 +2512,13 @@ can be used. The weight-fee-runtime demonstrates how to use an asset provided by
 }
 </code></pre>
 <h1><a class="header" href="#charity" id="charity">Charity</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/charity"><code>pallets/charity</code></a></em></p>
+<p><code>pallets/charity</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fcharity%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/charity/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
 <p>The Charity pallet represents a simple charitable organization that collects funds into a pot that
 it controls, and allocates those funds to the appropriate causes. It demonstrates two useful
 concepts in Substrate development:</p>
@@ -2398,9 +2529,9 @@ concepts in Substrate development:</p>
 <h2><a class="header" href="#instantiate-a-pot" id="instantiate-a-pot">Instantiate a Pot</a></h2>
 <p>Our charity needs an account to hold its funds. Unlike other accounts, it will not be controlled by
 a user's cryptographic key pair, but directly by the pallet. To instantiate such a pool of funds,
-import <a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sp_runtime/struct.ModuleId.html"><code>ModuleId</code></a> and
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sp_runtime/traits/trait.AccountIdConversion.html"><code>AccountIdConversion</code></a>
-from <a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sp_runtime/index.html"><code>sp-runtime</code></a>.</p>
+import <a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sp_runtime/struct.ModuleId.html"><code>ModuleId</code></a> and
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sp_runtime/traits/trait.AccountIdConversion.html"><code>AccountIdConversion</code></a>
+from <a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sp_runtime/index.html"><code>sp-runtime</code></a>.</p>
 <pre><code class="language-rust ignore">use sp-runtime::{ModuleId, traits::AccountIdConversion};
 </code></pre>
 <p>With these imports, a <code>PALLET_ID</code> constant can be generated as an identifier for the pool of funds.
@@ -2440,14 +2571,14 @@ through a standard <code>donate</code> extrinsic which accepts the amount to be 
 </code></pre>
 <h2><a class="header" href="#imbalances" id="imbalances">Imbalances</a></h2>
 <p>The second way the charity can receive funds is by absorbing imbalances created elsewhere in the
-runtime. An <a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/traits/trait.Imbalance.html"><code>Imbalance</code></a> is
+runtime. An <a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/traits/trait.Imbalance.html"><code>Imbalance</code></a> is
 created whenever tokens are burned, or minted. Because our charity wants to <em>collect</em> funds, we are
 specifically interested in
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/pallet_balances/struct.NegativeImbalance.html"><code>NegativeImbalance</code></a>s.
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/pallet_balances/struct.NegativeImbalance.html"><code>NegativeImbalance</code></a>s.
 Negative imbalances are created, for example, when a validator is slashed for violating consensus
 rules, transaction fees are collected, or another pallet burns funds as part of an
 incentive-alignment mechanism. To allow our pallet to absorb these imbalances, we implement the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/traits/trait.OnUnbalanced.html"><code>OnUnbalanced</code> trait</a>.</p>
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/traits/trait.OnUnbalanced.html"><code>OnUnbalanced</code> trait</a>.</p>
 <pre><code class="language-rust ignore">use frame_support::traits::{OnUnbalanced, Imbalance};
 type NegativeImbalanceOf&lt;T&gt; = &lt;&lt;T as Trait&gt;::Currency as Currency&lt;&lt;T as system::Trait&gt;::AccountId&gt;&gt;::NegativeImbalance;
 
@@ -2467,10 +2598,22 @@ impl&lt;T: Trait&gt; OnUnbalanced&lt;NegativeImbalanceOf&lt;T&gt;&gt; for Module
 allocate those funds. Our charity pallet abstracts the governance of where funds will be allocated
 to the rest of the runtime. Funds can be allocated by a root call to the <code>allocate</code> extrinsic. One
 good example of a governance mechanism for such decisions is Substrate's own
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/pallet_democracy/index.html">Democracy pallet</a>.</p>
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/pallet_democracy/index.html">Democracy pallet</a>.</p>
 <h1><a class="header" href="#fixed-point-arithmetic" id="fixed-point-arithmetic">Fixed Point Arithmetic</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/fixed-point"><code>pallets/fixed-point</code></a></em>
-<em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/compounding-interest"><code>pallets/compounding-interest</code></a></em></p>
+<p><code>pallets/fixed-point</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Ffixed-point%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/fixed-point/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
+<p><code>pallets/compounding-interest</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fcompounding-interest%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/compounding-interest/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
 <p>When programmers learn to use non-integer numbers in their programs, they are usually taught to use
 <a href="https://en.wikipedia.org/wiki/Floating-point_arithmetic">floating point</a>s. In blockchain, we use an
 alternative representation of fractional numbers called
@@ -2501,13 +2644,13 @@ the features of each.</p>
 <h3><a class="header" href="#permill-accumulator" id="permill-accumulator">Permill Accumulator</a></h3>
 <p>We'll be using the most common approach which takes its fixed point implementation from Substrate
 itself. There are a few fixed-point structs available in Substrate, all of which implement the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sp_arithmetic/trait.PerThing.html"><code>PerThing</code> trait</a>, that cover different
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sp_arithmetic/trait.PerThing.html"><code>PerThing</code> trait</a>, that cover different
 amounts of precision. For this accumulator example, we'll use the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sp_arithmetic/struct.Permill.html"><code>PerMill</code> struct</a> which represents
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sp_arithmetic/struct.Permill.html"><code>PerMill</code> struct</a> which represents
 fractions as parts per million. There are also
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sp_arithmetic/struct.Perbill.html"><code>Perbill</code></a>,
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sp_arithmetic/struct.Percent.html"><code>PerCent</code></a>, and
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sp_arithmetic/struct.PerU16.html"><code>PerU16</code></a>, which all provide the same
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sp_arithmetic/struct.Perbill.html"><code>Perbill</code></a>,
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sp_arithmetic/struct.Percent.html"><code>PerCent</code></a>, and
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sp_arithmetic/struct.PerU16.html"><code>PerU16</code></a>, which all provide the same
 interface (because it comes from the trait). Substrate's fixed-point structs are somewhat unique
 because they represent <em>only</em> fractional parts of numbers. That means they can represent numbers
 between 0 and 1 inclusive, but <em>not</em> numbers with whole parts like 2.718 or 3.14.</p>
@@ -2607,7 +2750,7 @@ one of the previous two fixed-point types in your real-world applications.</p>
 integers, and we decide in advance to consider some of the place values fractional. It's just like
 saying we'll omit the decimal point when talking about money and all agree that &quot;1995&quot; actually
 <em>means</em> 19.95 €. This is exactly how Substrate's
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/pallet_balances/index.html">Balances pallet</a> works, a tradition that's
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/pallet_balances/index.html">Balances pallet</a> works, a tradition that's
 been in blockchain since Bitcon. In our example we will treat 16 bits as integer values, and 16 as
 fractional, just as substrate-fixed's <code>U16F16</code> did.</p>
 <p>If you're rusty or unfamiliar with place values in the
@@ -2700,7 +2843,7 @@ has been previously paid.</p>
 <p>Our first example will look at discrete compounding interest. This is when interest is paid at a
 fixed interval. In our case, interest will be paid every ten blocks.</p>
 <p>For this implementation we've chosen to use Substrate's
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sp_arithmetic/struct.Percent.html"><code>Percent</code> type</a>. It works nearly the
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sp_arithmetic/struct.Percent.html"><code>Percent</code> type</a>. It works nearly the
 same as <code>Permill</code>, but it represents numbers as &quot;parts per hundred&quot; rather than &quot;parts per million&quot;.
 We could also have used Substrate-fixed for this implementation, but chose to save it for the next
 example.</p>
@@ -2876,7 +3019,13 @@ transactions back on-chain.</p>
 <li><a href="3-entrees/off-chain-workers/./storage.html">Local storage in Off-chain Workers</a></li>
 </ul>
 <h1><a class="header" href="#transactions-in-off-chain-workers" id="transactions-in-off-chain-workers">Transactions in Off-chain Workers</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo"><code>pallets/offchain-demo</code></a></em></p>
+<p><code>pallets/offchain-demo</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Foffchain-demo%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
 <h2><a class="header" href="#compiling-this-pallet" id="compiling-this-pallet">Compiling this Pallet</a></h2>
 <p>This <code>offchain-demo</code> pallet is included in the
 <a href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime">ocw-runtime</a>.
@@ -2930,8 +3079,8 @@ be aware that <code>Alice</code> must be setup and be funded to run this example
 <h3><a class="header" href="#setup" id="setup">Setup</a></h3>
 <p>For signed transactions, we have to define a crypto signature sub-module:</p>
 <p><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/lib.rs"><code>pallets/offchain-demo/src/lib.rs</code></a></p>
-<pre><pre class="playpen"><code class="language-rust">
-<span class="boring">#![allow(unused_variables)]
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>pub const KEY_TYPE: KeyTypeId = KeyTypeId(*b&quot;demo&quot;);
 
@@ -2946,8 +3095,8 @@ pub mod crypto {
 <p>Second, we have added an additional associated type <code>AuthorityId</code>.</p>
 <p>src:
 <a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/lib.rs"><code>pallets/offchain-demo/src/lib.rs</code></a></p>
-<pre><pre class="playpen"><code class="language-rust">
-<span class="boring">#![allow(unused_variables)]
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>pub trait Trait: system::Trait {
 	//...snip
@@ -2960,11 +3109,11 @@ pub mod crypto {
 bounds that are not satisfied: <code>Runtime: frame_system::offchain::CreateSignedTransaction</code>,
 <code>frame_system::offchain::SigningTypes</code>, and <code>frame_system::offchain::SendTransactionTypes</code>.
 We also learn that when using <code>SubmitSignedTransaction</code>, our runtime need to implement
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_system/offchain/trait.CreateSignedTransaction.html"><code>CreateSignedTransaction</code> trait</a>.</p>
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_system/offchain/trait.CreateSignedTransaction.html"><code>CreateSignedTransaction</code> trait</a>.</p>
 <p>src:
 <a href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime/src/lib.rs"><code>runtimes/ocw-runtime/src/lib.rs</code></a></p>
-<pre><pre class="playpen"><code class="language-rust">
-<span class="boring">#![allow(unused_variables)]
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>impl&lt;LocalCall&gt; frame_system::offchain::CreateSignedTransaction&lt;LocalCall&gt; for Runtime
 where
@@ -3020,8 +3169,8 @@ signature of the data <code>signature</code>, and ensuring its signed extension 
 <p><code>SignedExtra</code> data type will be defined later in the runtime.</p>
 <p>src:
 <a href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime/src/lib.rs"><code>runtimes/ocw-runtime/src/lib.rs</code></a></p>
-<pre><pre class="playpen"><code class="language-rust">
-<span class="boring">#![allow(unused_variables)]
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>/// The SignedExtension to the basic transaction logic.
 pub type SignedExtra = (
@@ -3035,8 +3184,8 @@ pub type SignedExtra = (
 <span class="boring">}
 </span></code></pre></pre>
 <p>Next, the remaining two traits are also implemented.</p>
-<pre><pre class="playpen"><code class="language-rust">
-<span class="boring">#![allow(unused_variables)]
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>impl frame_system::offchain::SigningTypes for Runtime {
 	type Public = &lt;Signature as sp_runtime::traits::Verify&gt;::Signer;
@@ -3056,8 +3205,8 @@ where
 <p>A signed transaction is sent with <code>T::SubmitSignedTransaction::submit_signed</code>, as shown below:</p>
 <p>src:
 <a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/lib.rs"><code>pallets/offchain-demo/src/lib.rs</code></a></p>
-<pre><pre class="playpen"><code class="language-rust">
-<span class="boring">#![allow(unused_variables)]
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn send_signed(block_number: T::BlockNumber) -&gt; Result&lt;(), Error&lt;T&gt;&gt; {
 	use system::offchain::SubmitSignedTransaction;
@@ -3094,11 +3243,11 @@ one signed transaction is made.</p>
 <p>Eventually, the <code>call</code> transaction will be made on-chain via the <code>create_transaction</code> function we defined
 earlier when we implemented <code>CreateTransaction</code> trait in our runtime.</p>
 <p>The local account used to sign the transaction is inserted in the pallet app crypto, and lives in
-the outer node's <a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sc_service/index.html">service</a>.</p>
+the outer node's <a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sc_service/index.html">service</a>.</p>
 <p>src:
 <a href="https://github.com/substrate-developer-hub/recipes/tree/master/nodes/kitchen-node/src/service.rs"><code>nodes/kitchen-node/src/service.rs</code></a></p>
-<pre><pre class="playpen"><code class="language-rust">
-<span class="boring">#![allow(unused_variables)]
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>pub fn new_full(config: Configuration&lt;GenesisConfig&gt;)
 	-&gt; Result&lt;impl AbstractService, ServiceError&gt;
@@ -3129,8 +3278,8 @@ allowed. So we need to write logic to allow unsigned transactions for certain pa
 dispatched functions as follows:</p>
 <p>src:
 <a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/lib.rs"><code>pallets/offchain-demo/src/lib.rs</code></a></p>
-<pre><pre class="playpen"><code class="language-rust">
-<span class="boring">#![allow(unused_variables)]
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>impl&lt;T: Trait&gt; support::unsigned::ValidateUnsigned for Module&lt;T&gt; {
 	type Call = Call&lt;T&gt;;
@@ -3177,8 +3326,8 @@ build up this object.</p>
 this as a parameter when constructing the runtime:</p>
 <p>src:
 <a href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime/src/lib.rs"><code>runtimes/ocw-runtime/src/lib.rs</code></a></p>
-<pre><pre class="playpen"><code class="language-rust">
-<span class="boring">#![allow(unused_variables)]
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>construct_runtime!(
 	pub enum Runtime where
@@ -3197,8 +3346,8 @@ this as a parameter when constructing the runtime:</p>
 <code>T::SubmitUnsignedTransaction::submit_unsigned</code> function, as shown in the code.</p>
 <p>src:
 <a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/lib.rs"><code>pallets/offchain-demo/src/lib.rs</code></a></p>
-<pre><pre class="playpen"><code class="language-rust">
-<span class="boring">#![allow(unused_variables)]
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn send_unsigned(block_number: T::BlockNumber) -&gt; Result&lt;(), Error&lt;T&gt;&gt; {
 	use system::offchain::SubmitUnsignedTransaction;
@@ -3220,7 +3369,13 @@ this as a parameter when constructing the runtime:</p>
 <p>For writing test cases for off-chain worker, refer to our
 <a href="3-entrees/off-chain-workers/../testing/off-chain-workers.html">testing section</a>.</p>
 <h1><a class="header" href="#http-fetching-and-json-parsing-in-off-chain-workers" id="http-fetching-and-json-parsing-in-off-chain-workers">HTTP Fetching and JSON Parsing in Off-chain Workers</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo"><code>pallets/offchain-demo</code></a></em></p>
+<p><code>pallets/offchain-demo</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Foffchain-demo%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
 <h2><a class="header" href="#http-fetching" id="http-fetching">HTTP Fetching</a></h2>
 <p>In traditional web app, it is often necessary to communicate with third-party APIs to fetch data
 that the app itself does not contains. But this becomes tricky in blockchain decentralized apps
@@ -3233,8 +3388,8 @@ result back.</p>
 organization <code>substrate-developer-hub</code> via its public API. Then we extract the <code>login</code>, <code>blog</code>, and
 <code>public_repos</code> values out.</p>
 <p>First, include the tools implemented in <code>sp_runtime::offchain</code> at the top.</p>
-<pre><pre class="playpen"><code class="language-rust">
-<span class="boring">#![allow(unused_variables)]
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>use sp_runtime::{
 	offchain as rt_offchain
@@ -3242,8 +3397,8 @@ organization <code>substrate-developer-hub</code> via its public API. Then we ex
 <span class="boring">}
 </span></code></pre></pre>
 <p>We then issue http requests inside the <code>fetch_from_remote()</code> function.</p>
-<pre><pre class="playpen"><code class="language-rust">
-<span class="boring">#![allow(unused_variables)]
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// Initiate an external HTTP GET request. This is using high-level wrappers from `sp_runtime`.
 let request = rt_offchain::http::Request::get(HTTP_REMOTE_REQUEST);
@@ -3251,8 +3406,8 @@ let request = rt_offchain::http::Request::get(HTTP_REMOTE_REQUEST);
 </span></code></pre></pre>
 <p>We should also set a timeout period so the http request does not hold indefinitely. For github API
 usage, we also need to add extra HTTP header information to it. This is how we do it.</p>
-<pre><pre class="playpen"><code class="language-rust">
-<span class="boring">#![allow(unused_variables)]
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>pub const FETCH_TIMEOUT_PERIOD: u64 = 3000; // in milli-seconds
 pub const HTTP_HEADER_USER_AGENT: &amp;str = &quot;my-github-username&quot;;
@@ -3275,8 +3430,8 @@ let pending = request
 the result to come back, and terminate and return if any errors occured.</p>
 <p>Then, We check for the response status code to ensure it is okay with HTTP status code equals
 to 200. Any status code that is non-200 is regarded as error and return.</p>
-<pre><pre class="playpen"><code class="language-rust">
-<span class="boring">#![allow(unused_variables)]
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let response = pending.try_wait(timeout)
 	.map_err(|_| &lt;Error&lt;T&gt;&gt;::HttpFetchingError)?
@@ -3290,8 +3445,8 @@ if response.code != 200 {
 </span></code></pre></pre>
 <p>Finally, get the response back with <code>response.body()</code> iterator. Since we are in a <code>no_std</code>
 environment, we collect them back as a vector of bytes instead of a string and return.</p>
-<pre><pre class="playpen"><code class="language-rust">
-<span class="boring">#![allow(unused_variables)]
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>Ok(response.body().collect::&lt;Vec&lt;u8&gt;&gt;())
 <span class="boring">}
@@ -3326,8 +3481,8 @@ serde_json = { version = &quot;1&quot;, default-features = false, git = &quot;ht
 <p>Then we use the usual <code>serde-derive</code> approach on deserializing. First we define the struct with
 fields we are interested to extract out.</p>
 <p>src: <code>pallets/offchain-demo/src/lib.rs</code></p>
-<pre><pre class="playpen"><code class="language-rust">
-<span class="boring">#![allow(unused_variables)]
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// We use `alt_serde`, and Xanewok-modified `serde_json` so that we can compile the program
 //   with serde(features `std`) and alt_serde(features `no_std`).
@@ -3349,8 +3504,8 @@ struct GithubInfo {
 </span></code></pre></pre>
 <p>By default, <code>serde</code> deserialize JSON string to the datatype <code>String</code>. We want to write our own
 deserializer to convert it to vector of bytes.</p>
-<pre><pre class="playpen"><code class="language-rust">
-<span class="boring">#![allow(unused_variables)]
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>pub fn de_string_to_bytes&lt;'de, D&gt;(de: D) -&gt; Result&lt;Vec&lt;u8&gt;, D::Error&gt;
 where D: Deserializer&lt;'de&gt; {
@@ -3360,8 +3515,8 @@ where D: Deserializer&lt;'de&gt; {
 <span class="boring">}
 </span></code></pre></pre>
 <p>Now the actual deserialization takes place in the <code>Self::fetch_n_parse</code> function.</p>
-<pre><pre class="playpen"><code class="language-rust">
-<span class="boring">#![allow(unused_variables)]
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>/// Fetch from remote and deserialize the JSON to a struct
 fn fetch_n_parse() -&gt; Result&lt;GithubInfo, Error&lt;T&gt;&gt; {
@@ -3381,7 +3536,13 @@ fn fetch_n_parse() -&gt; Result&lt;GithubInfo, Error&lt;T&gt;&gt; {
 <span class="boring">}
 </span></code></pre></pre>
 <h1><a class="header" href="#local-storage-in-off-chain-workers" id="local-storage-in-off-chain-workers">Local Storage in Off-chain Workers</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo"><code>pallets/offchain-demo</code></a></em></p>
+<p><code>pallets/offchain-demo</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Foffchain-demo%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
 <p>Remember we mentioned that off-chain workers (short for <strong>ocw</strong> below) cannot write directly to the
 on-chain storage, that is why they have to submit transactions back on-chain to modify the state.</p>
 <p>Fortunately, there is also a local storage that persist across runs in off-chain workers. Storage is
@@ -3405,8 +3566,8 @@ cache.</p>
 <h2><a class="header" href="#setup-3" id="setup-3">Setup</a></h2>
 <p>First, include the relevant module.</p>
 <p>src: <code>offchain-demo/src/lib.rs</code></p>
-<pre><pre class="playpen"><code class="language-rust">
-<span class="boring">#![allow(unused_variables)]
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>use sp_runtime::{
 	// ...
@@ -3420,8 +3581,8 @@ cache.</p>
 </span></code></pre></pre>
 <p>Then, in the <code>fetch_if_needed()</code> function, we first define a storage reference used by the off-chain
 worker.</p>
-<pre><pre class="playpen"><code class="language-rust">
-<span class="boring">#![allow(unused_variables)]
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn fetch_if_needed() -&gt; Result&lt;(), Error&lt;T&gt;&gt; {
 
@@ -3440,8 +3601,8 @@ would be to prepend our pallet name in front of our storage key.</p>
 demonstrate the <code>mutate</code> function as the usage of the remaining two functions are pretty
 self-explanatory.</p>
 <p>First we fetch to see if github info has been fetched and cached. If yes, we return early.</p>
-<pre><pre class="playpen"><code class="language-rust">
-<span class="boring">#![allow(unused_variables)]
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn fetch_if_needed() -&gt; Result&lt;(), Error&lt;T&gt;&gt; {
 	// ...
@@ -3455,14 +3616,14 @@ self-explanatory.</p>
 <span class="boring">}
 </span></code></pre></pre>
 <p>We then define a lock and try to acquire it before fetching github info.</p>
-<pre><pre class="playpen"><code class="language-rust">
-<span class="boring">#![allow(unused_variables)]
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn fetch_if_needed() -&gt; Result&lt;(), Error&lt;T&gt;&gt; {
 	//...
 	// off-chain storage can be accessed by off-chain workers from multiple runs, so we want to lock
 	//   it before doing heavy computations and write operations.
-	// ref: https://substrate.dev/rustdocs/v2.0.0-rc5/sp_runtime/offchain/storage_lock/index.html
+	// ref: https://substrate.dev/rustdocs/v2.0.0-rc3/sp_runtime/offchain/storage_lock/index.html
 	//
 	// There are four ways of defining a lock:
 	//   1) `new` - lock with default time and block exipration
@@ -3478,7 +3639,7 @@ self-explanatory.</p>
 
 	// We try to acquire the lock here. If failed, we know the fetching logic inside is being
 	//   executed by previous run of ocw, so the function just returns.
-	// ref: https://substrate.dev/rustdocs/v2.0.0-rc5/sp_runtime/offchain/storage_lock/struct.StorageLock.html#method.try_lock
+	// ref: https://substrate.dev/rustdocs/v2.0.0-rc3/sp_runtime/offchain/storage_lock/struct.StorageLock.html#method.try_lock
 	if let Ok(_guard) = lock.try_lock() {
 		// fetching logic here ...
 	}
@@ -3488,8 +3649,8 @@ self-explanatory.</p>
 <span class="boring">}
 </span></code></pre></pre>
 <p>We then perform the fetch after the lock is acquired</p>
-<pre><pre class="playpen"><code class="language-rust">
-<span class="boring">#![allow(unused_variables)]
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn fetch_if_needed() -&gt; Result&lt;(), Error&lt;T&gt;&gt; {
 	// ...
@@ -3507,12 +3668,24 @@ self-explanatory.</p>
 <p>Finally when the <code>_guard</code> variable goes out of scope, the lock is released.</p>
 <h2><a class="header" href="#reference" id="reference">Reference</a></h2>
 <ul>
-<li><a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sp_runtime/offchain/storage/struct.StorageValueRef.html"><code>StorageValueRef</code> API doc</a></li>
+<li><a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sp_runtime/offchain/storage/struct.StorageValueRef.html"><code>StorageValueRef</code> API doc</a></li>
 <li><a href="https://github.com/paritytech/substrate/tree/master/frame/example-offchain-worker"><code>example-offchain-worker</code> pallet in Substrate repo</a></li>
 </ul>
 <h1><a class="header" href="#runtime-apis" id="runtime-apis">Runtime APIs</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/sum-storage"><code>pallets/sum-storage</code></a></em>
-<em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/api-runtime"><code>runtimes/api-runtime</code></a></em></p>
+<p><code>pallets/sum-storage</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fsum-storage%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/sum-storage/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
+<p><code>runtimes/api-runtime</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fruntimes%2Fapi-runtime%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/api-runtime/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
 <p>Each Substrate node contains a runtime. The runtime contains the business logic of the chain. It
 defines what transactions are valid and invalid and determines how the chain's state changes in
 response to transactions. The runtime is compiled to Wasm to facilitate runtime upgrades. The &quot;outer
@@ -3524,8 +3697,8 @@ Runtime API facilitates this kind of communication between the outer node and th
 recipe, we will write our own minimal runtime API.</p>
 <h2><a class="header" href="#our-example" id="our-example">Our Example</a></h2>
 <p>For this example, we will write a pallet called <code>sum-storage</code> with two storage items, both <code>u32</code>s.</p>
-<pre><pre class="playpen"><code class="language-rust">
-<span class="boring">#![allow(unused_variables)]
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>decl_storage! {
 	trait Store for Module&lt;T: Trait&gt; as TemplateModule {
@@ -3540,8 +3713,8 @@ query our two storage values from a front-end. In this example we imagine that t
 interested in knowing the <em>sum</em> of the two values, rather than either individual value. Our runtime
 API will provide a way for the outer node to query the runtime for this sum. Before we define the
 actual runtime API, let's write a public helper function in the pallet to do the summing.</p>
-<pre><pre class="playpen"><code class="language-rust">
-<span class="boring">#![allow(unused_variables)]
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>impl&lt;T: Trait&gt; Module&lt;T&gt; {
 	pub fn get_sum() -&gt; u32 {
@@ -3559,11 +3732,11 @@ but because it defines an API that is closely related to a particular pallet, it
 include the API definition in the pallet's directory.</p>
 <p>The code to define the API is quite simple, and looks almost like any old Rust trait. The one
 addition is that it must be placed in the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sp_api/macro.decl_runtime_apis.html"><code>decl_runtime_apis!</code> macro</a>. This
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sp_api/macro.decl_runtime_apis.html"><code>decl_runtime_apis!</code> macro</a>. This
 macro allows the outer node to query the runtime API at specific blocks. Although this runtime API
 only provides a single function, you may write as many as you like.</p>
-<pre><pre class="playpen"><code class="language-rust">
-<span class="boring">#![allow(unused_variables)]
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>sp_api::decl_runtime_apis! {
 	pub trait SumStorageApi {
@@ -3578,13 +3751,13 @@ This happens in the main runtime aggregation file. In our case we've provided th
 <code>runtimes/api-runtime/src/lib.rs</code>.</p>
 <p>As with defining the API, implementing a runtime API looks similar to implementing any old Rust
 trait with the exception that the implementation must go inside of the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sp_api/macro.impl_runtime_apis.html"><code>impl_runtime_apis!</code> macro</a>. Every
-runtime must use <code>impl_runtime_apis!</code> because the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sp_api/trait.Core.html"><code>Core</code> API</a> is required. We will add an
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sp_api/macro.impl_runtime_apis.html"><code>impl_runtime_apis!</code> macro</a>. Every
+runtime must use <code>iml_runtime_apis!</code> because the
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sp_api/trait.Core.html"><code>Core</code> API</a> is required. We will add an
 implementation for our own API alongside the others in this macro. Our implementation is
 straight-forward as it merely calls the pallet's helper function that we wrote previously.</p>
-<pre><pre class="playpen"><code class="language-rust">
-<span class="boring">#![allow(unused_variables)]
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>impl_runtime_apis! {
   // --snip--
@@ -3601,43 +3774,14 @@ straight-forward as it merely calls the pallet's helper function that we wrote p
 definition. This type parameter is added by the macros along with a few other features. All runtime
 APIs have this type parameter to facilitate querying the runtime at arbitrary blocks. Read more
 about this in the docs for
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sp_api/macro.impl_runtime_apis.html"><code>impl_runtime_apis!</code></a>.</p>
-<p>The type parameters can of course be extended with more, custom types with the only rule being that
-<strong>the type should implement/ be bound by <code>parity_scale_codec::Codec</code></strong>. The following example shows how to make use
-of an extra type parameter in your runtime API.</p>
-<pre><pre class="playpen"><code class="language-rust">
-<span class="boring">#![allow(unused_variables)]
-</span><span class="boring">fn main() {
-</span>sp_api::decl_runtime_apis! {
-	pub trait SumStorageApi&lt;MyTypeA: Codec&gt; {
-		fn get_sum() -&gt; u32;
-		fn do_other(cargo: MyTypeA) -&gt; MyTypeA;
-	}
-}
-<span class="boring">}
-</span></code></pre></pre>
-<p>Note that <strong><code>Block</code></strong> is still added as first parameter to the trait declaration, thus you will need to specify it when using the trait:</p>
-<pre><pre class="playpen"><code class="language-rust">
-<span class="boring">#![allow(unused_variables)]
-</span><span class="boring">fn main() {
-</span>impl_runtime_apis! {
-  // --snip--
-
-  impl sum_storage_rpc_runtime_api::SumStorageApi&lt;Block, MyTypeA&gt; for Runtime {
-		fn get_sum() -&gt; u32 {
-			SumStorage::get_sum()
-		}
-	}
-}
-<span class="boring">}
-</span></code></pre></pre>
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sp_api/macro.impl_runtime_apis.html"><code>impl_runtime_apis!</code></a>.</p>
 <h2><a class="header" href="#calling-the-runtime-api" id="calling-the-runtime-api">Calling the Runtime API</a></h2>
 <p>We've now successfully added a runtime API to our runtime. The outer node can now call this API to
 query the runtime for the sum of two storage values. Given a reference to a
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sc_service/client/struct.Client.html">'client'</a> we can make the call like
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sc_service/client/struct.Client.html">'client'</a> we can make the call like
 this.</p>
-<pre><pre class="playpen"><code class="language-rust">
-<span class="boring">#![allow(unused_variables)]
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let sum_at_block_fifty = client.runtime_api().get_sum(&amp;50);
 <span class="boring">}
@@ -3646,8 +3790,20 @@ this.</p>
 this API in practice, see the recipe on <a href="3-entrees/./custom-rpc.html">custom RPCs</a>, where we connect this
 runtime API to an RPC that can be called by an end user.</p>
 <h1><a class="header" href="#custom-rpcs" id="custom-rpcs">Custom RPCs</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/nodes/rpc-node"><code>nodes/rpc-node</code></a></em>
-<em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/api-runtime"><code>runtime/api-runtime</code></a></em></p>
+<p><code>nodes/custom-rpc</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fnodes%2Fcustom-rpc%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/nodes/custom-rpc/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
+<p><code>runtimes/api-runtime</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fruntimes%2Fapi-runtime%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/api-runtime/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
 <p>Remote Procedure Calls, or RPCs, are a way for an external program (eg. a frontend) to communicate
 with a Substrate node. They are used for checking storage values, submitting transactions, and
 querying the current consensus authorities. Substrate comes with several
@@ -3658,8 +3814,8 @@ calls into a <a href="3-entrees/./runtime-api.html">custom runtime API</a>.</p>
 <p>Every RPC that the node will use must be defined in a trait. We'll begin by defining a simple RPC
 called &quot;silly rpc&quot; which just returns constant integers. A Hello world of sorts. In the
 <code>nodes/rpc-node/src/silly_rpc.rs</code> file, we define a basic rpc as</p>
-<pre><pre class="playpen"><code class="language-rust">
-<span class="boring">#![allow(unused_variables)]
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[rpc]
 pub trait SillyRpc {
@@ -3674,8 +3830,8 @@ pub trait SillyRpc {
 <p>This definition defines two RPC methods called <code>hello_five</code> and <code>hello_seven</code>. Each RPC method must
 take a <code>&amp;self</code> reference and must return a <code>Result</code>. Next, we define a struct that implements this
 trait.</p>
-<pre><pre class="playpen"><code class="language-rust">
-<span class="boring">#![allow(unused_variables)]
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>pub struct Silly;
 
@@ -3691,8 +3847,8 @@ impl SillyRpc for Silly {
 <span class="boring">}
 </span></code></pre></pre>
 <p>Finally, to make the contents of this new file usable, we need to add a line in our <code>main.rs</code>.</p>
-<pre><pre class="playpen"><code class="language-rust">
-<span class="boring">#![allow(unused_variables)]
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>mod silly_rpc;
 <span class="boring">}
@@ -3703,22 +3859,22 @@ impl SillyRpc for Silly {
 <pre><code class="language-toml">jsonrpc-core = &quot;14.0.3&quot;
 jsonrpc-core-client = &quot;14.0.3&quot;
 jsonrpc-derive = &quot;14.0.3&quot;
-sc-rpc = '2.0.0-rc3'
+sc-rpc = '2.0.0-rc4'
 </code></pre>
 <p>Next, in our <code>rpc-node</code>'s <code>service.rs</code> file, we extend the service with our RPC. We've chosen to
 install this RPC for full nodes, so we've included the code in the <code>new_full_start!</code> macro. You
 could also install the RPC on a light client by making the corresponding changes to <code>new_light</code>.</p>
 <p>The first change to this macro is a simple type definition</p>
-<pre><pre class="playpen"><code class="language-rust">
-<span class="boring">#![allow(unused_variables)]
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>type RpcExtension = jsonrpc_core::IoHandler&lt;sc_rpc::Metadata&gt;;
 <span class="boring">}
 </span></code></pre></pre>
 <p>Then, once you've called the service builder, you can extend it with an RPC by using its
 <code>with_rpc_extensions</code> method as follows.</p>
-<pre><pre class="playpen"><code class="language-rust">
-<span class="boring">#![allow(unused_variables)]
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>.with_rpc_extensions(|builder| -&gt; Result&lt;RpcExtension, _&gt; {
 	// Make an io handler to be extended with individual RPCs
@@ -3774,8 +3930,8 @@ than using the <code>mod</code> keyword as we did before, we must include this R
 First, the struct that implements the RPC needs a reference to the <code>client</code>. This is necessary so we
 can actually call into the runtime. Second the struct is generic over the <code>BlockHash</code> type. This is
 because it will call a runtime API, and runtime APIs must always be called at a specific block.</p>
-<pre><pre class="playpen"><code class="language-rust">
-<span class="boring">#![allow(unused_variables)]
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[rpc]
 pub trait SumStorageApi&lt;BlockHash&gt; {
@@ -3803,8 +3959,8 @@ impl&lt;C, M&gt; SumStorage&lt;C, M&gt; {
 <p>The RPC's implementation is also similar to before. The additional syntax here is related to calling
 the runtime at a specific block, as well as ensuring that the runtime we're calling actually has the
 correct runtime API available.</p>
-<pre><pre class="playpen"><code class="language-rust">
-<span class="boring">#![allow(unused_variables)]
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>impl&lt;C, Block&gt; SumStorageApi&lt;&lt;Block as BlockT&gt;::Hash&gt;
 	for SumStorage&lt;C, Block&gt;
@@ -3837,8 +3993,8 @@ where
 <span class="boring">}
 </span></code></pre></pre>
 <p>Finally, to install this RPC on in our service, we expand the existing <code>with_rpc_extensions</code> call to</p>
-<pre><pre class="playpen"><code class="language-rust">
-<span class="boring">#![allow(unused_variables)]
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>.with_rpc_extensions(|builder| -&gt; Result&lt;RpcExtension, _&gt; {
 	// Make an io handler to be extended with individual RPCs
@@ -3882,10 +4038,16 @@ Then call the RPC at an old block and confirm you get the old sum.</p>
 strive to document that project, we have included a snippet of javascript for interacting with these
 custom RPCs in the <code>nodes/rpc-node/js</code> directory.</p>
 <h1><a class="header" href="#sha3-proof-of-work-algorithms" id="sha3-proof-of-work-algorithms">Sha3 Proof of Work Algorithms</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/consensus/sha3pow"><code>consensus/sha3pow</code></a></em></p>
+<p><code>consensus/sha3-pow</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fconsensus%2Fsha3-pow%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/consensus/sha3-pow/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
 <p><a href="https://en.wikipedia.org/wiki/Proof_of_work">Proof of Work</a> is not a single consensus algorithm.
 Rather it is a class of algorithms represented in Substrate by the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sc_consensus_pow/trait.PowAlgorithm.html"><code>PowAlgorithm</code> trait</a>. Before we
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sc_consensus_pow/trait.PowAlgorithm.html"><code>PowAlgorithm</code> trait</a>. Before we
 can build a PoW node we must specify a concrete PoW algorithm by implementing this trait. In this
 recipe we specify two concrete PoW algorithms, both of which are based on the
 <a href="https://en.wikipedia.org/wiki/SHA-3">sha3 hashing algorithm</a>.</p>
@@ -4010,7 +4172,7 @@ blocktime remains constant.</p>
 <h3><a class="header" href="#defining-the-sha3algorithm-struct" id="defining-the-sha3algorithm-struct">Defining the <code>Sha3Algorithm</code> Struct</a></h3>
 <p>We begin as before by defining a struct that will implement the <code>PowAlgorithm</code> trait. Unlike before,
 this struct must hold a reference to the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sc_service/client/struct.Client.html"><code>Client</code></a> so it can call the
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sc_service/client/struct.Client.html"><code>Client</code></a> so it can call the
 appropriate runtime APIs.</p>
 <pre><code class="language-rust ignore">/// A complete PoW Algorithm that uses Sha3 hashing.
 /// Needs a reference to the client so it can grab the difficulty from the runtime.
@@ -4042,7 +4204,7 @@ is necessary.</p>
 <h3><a class="header" href="#implementing-the-powalgorithm-trait" id="implementing-the-powalgorithm-trait">Implementing the <code>PowAlgorithm</code> trait</a></h3>
 <p>As before we implement the <code>PowAlgorithm</code> trait for out <code>Sha3Algorithm</code>. This time we supply more
 complex trait bounds to ensure that the client the algorithm holds a reference to actually provides
-the <a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sp_consensus_pow/trait.DifficultyApi.html"><code>DifficultyAPI</code></a> necessary
+the <a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sp_consensus_pow/trait.DifficultyApi.html"><code>DifficultyAPI</code></a> necessary
 to fetch the PoW difficulty from the runtime.</p>
 <pre><code class="language-rust ignore">// Here we implement the general PowAlgorithm trait for our concrete Sha3Algorithm
 impl&lt;B: BlockT&lt;Hash=H256&gt;, C&gt; PowAlgorithm&lt;B&gt; for Sha3Algorithm&lt;C&gt; where
@@ -4069,18 +4231,24 @@ maps any errors that may have occurred when using the API.</p>
 <h3><a class="header" href="#verify-and-mine" id="verify-and-mine">Verify and Mine</a></h3>
 <p>The <code>verify</code> and <code>mine</code> functions are unchanged from the <code>MinimalSha3Algorithm</code> implementation.</p>
 <h1><a class="header" href="#basic-proof-of-work" id="basic-proof-of-work">Basic Proof of Work</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/nodes/basic-pow"><code>nodes/basic-pow</code></a></em></p>
+<p><code>nodes/basic-pow</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fnodes%2Fbasic-pow%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/nodes/basic-pow/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
 <p>The <code>basic-pow</code> node demonstrates how to wire up a custom consensus engine into the Substrate
 Service. It uses a minimal proof of work consensus engine to reach agreement over the blockchain. It
 will teach us many useful aspects of dealing with consensus and prepare us to understand more
 advanced consensus engines in the future. In particular we will learn about:</p>
 <ul>
 <li>Substrate's
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sp_consensus/block_import/trait.BlockImport.html"><code>BlockImport</code> trait</a></li>
-<li>Substrate's <a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sp_consensus/import_queue/index.html">import pipeline</a></li>
-<li>Structure of a typical <a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sc_service/index.html">Substrate Service</a></li>
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sp_consensus/block_import/trait.BlockImport.html"><code>BlockImport</code> trait</a></li>
+<li>Substrate's <a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sp_consensus/import_queue/index.html">import pipeline</a></li>
+<li>Structure of a typical <a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sc_service/index.html">Substrate Service</a></li>
 <li>Configuration of
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sp_authorship/struct.InherentDataProvider.html"><code>InherentDataProvider</code></a>s</li>
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sp_authorship/struct.InherentDataProvider.html"><code>InherentDataProvider</code></a>s</li>
 </ul>
 <h2><a class="header" href="#the-structure-of-a-node" id="the-structure-of-a-node">The Structure of a Node</a></h2>
 <p>You may remember from the <a href="3-entrees/../2-appetizers/1-hello-substrate.html">hello-substrate recipe</a> that a
@@ -4094,7 +4262,7 @@ with it. But in practice, most consensus engines will require the runtime to pro
 <a href="3-entrees/./runtime-api.html">runtime APIs</a> that affect the engine. For example, Aura and Babe query the
 runtime for the set of validators. A more real-world PoW consensus would query the runtime for the
 block difficulty. Additionally, some runtimes rely on the consensus engine to provide
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sp_runtime/generic/enum.DigestItem.html#variant.PreRuntime">pre-runtime digests</a>.
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sp_runtime/generic/enum.DigestItem.html#variant.PreRuntime">pre-runtime digests</a>.
 For example, runtimes that include the Babe pallet expect a pre-runtime digest containing
 information about the current babe slot.</p>
 <p>In this recipe we will avoid those practical complexities by using the
@@ -4111,7 +4279,7 @@ is demonstrated in the nodes <code>src/service.rs</code> file.</p>
 <p>The particular builder method that is relevant here is
 <a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sc_service/struct.ServiceBuilder.html#method.with_import_queue"><code>with_import_queue</code></a>.
 Here we construct an instance of the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sc_consensus_pow/struct.PowBlockImport.html"><code>PowBlockImport</code> struct</a>,
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sc_consensus_pow/struct.PowBlockImport.html"><code>PowBlockImport</code> struct</a>,
 providing it with references to our client, our <code>MinimalSha3Algorithm</code>, and some other necessary
 data.</p>
 <pre><code class="language-rust ignore">builder
@@ -4142,7 +4310,7 @@ service will use for importing blocks into the client.</p>
 <h3><a class="header" href="#the-block-import-pipeline" id="the-block-import-pipeline">The Block Import Pipeline</a></h3>
 <p>You may have noticed that when we created the <code>PowBlockImport</code> we gave it two separate references to
 the client. The second reference will always be to a client. But the first is interesting. The
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sc_consensus_pow/struct.PowBlockImport.html#method.new">rustdocs tell us</a>
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sc_consensus_pow/struct.PowBlockImport.html#method.new">rustdocs tell us</a>
 that the first parameter is <code>inner: BlockImport&lt;B, Transaction = TransactionFor&lt;C, B&gt;&gt;</code>. Why would a
 block import have a reference to another block import? Because the &quot;block import pipeline&quot; is
 constructed in an onion-like fashion, where one layer of block import wraps the next. Learn more
@@ -4163,11 +4331,11 @@ This object is created in a helper function defined at the beginning of <code>se
 }
 </code></pre>
 <p>Anything that implements the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sp_inherents/trait.ProvideInherentData.html"><code>ProvideInherentData</code> trait</a>
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sp_inherents/trait.ProvideInherentData.html"><code>ProvideInherentData</code> trait</a>
 may be used here. The block authoring logic must supply all inherents that the runtime expects. In
 the case of this basic-pow chain, that is just the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sp_timestamp/trait.TimestampInherentData.html"><code>TimestampInherentData</code></a>
-expected by the <a href="https://substrate.dev/rustdocs/v2.0.0-rc5/pallet_timestamp/index.html">timestamp pallet</a>. In order
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sp_timestamp/trait.TimestampInherentData.html"><code>TimestampInherentData</code></a>
+expected by the <a href="https://substrate.dev/rustdocs/v2.0.0-rc4/pallet_timestamp/index.html">timestamp pallet</a>. In order
 to register other inherents, you would call <code>register_provider</code> multiple times, and map errors
 accordingly.</p>
 <h2><a class="header" href="#mining-1" id="mining-1">Mining</a></h2>
@@ -4208,7 +4376,7 @@ mine with that algorithm. This is our last task in the <code>new_full</code> fun
 <p>We begin by testing whether this node participates in consensus, which is to say we check whether
 the user wants the node to act as a miner. If this node is to be a miner, we gather references to
 various parts of the node that the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sc_consensus_pow/fn.start_mine.html"><code>start_mine</code> function</a> requires, and
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sc_consensus_pow/fn.start_mine.html"><code>start_mine</code> function</a> requires, and
 define that we will attempt 500 rounds of mining for each block before pausing. Finally we call
 <code>start_mine</code>.</p>
 <h2><a class="header" href="#the-light-client" id="the-light-client">The Light Client</a></h2>
@@ -4217,10 +4385,10 @@ define that we will attempt 500 rounds of mining for each block before pausing. 
 to the construction of the full service.</p>
 <p>Instead of using the <code>with_import_queue</code> function we used previously, we use the
 <code>with_import_queue_and_fprb</code> function. FPRB stand for
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sc_network/config/trait.FinalityProofRequestBuilder.html"><code>FinalityProofRequestBuilder</code></a>.
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sc_network/config/trait.FinalityProofRequestBuilder.html"><code>FinalityProofRequestBuilder</code></a>.
 In chains with deterministic finality, light clients must request proofs of finality from full
 nodes. But in our chain, we do not have deterministic finality, so we can use the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sc_network/config/struct.DummyFinalityProofRequestBuilder.html"><code>DummyFinalityProofRequestBuilder</code></a>
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sc_network/config/struct.DummyFinalityProofRequestBuilder.html"><code>DummyFinalityProofRequestBuilder</code></a>
 which does nothing except satisfying Rust's type checker.</p>
 <p>Once the dummy request builder is configured, the <code>BlockImport</code> and import queue are configured
 exactly as they were in the full node.</p>
@@ -4238,14 +4406,20 @@ at 0.</p>
 means a block is never truly finalized and can always be reverted. The further behind the blockchain
 head a block is, the less likely it is going to be reverted.</p>
 <h1><a class="header" href="#hybrid-consensus" id="hybrid-consensus">Hybrid Consensus</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/nodes/hybrid-consensus"><code>nodes/hybrid-consensus</code></a></em></p>
+<p><code>nodes/hybrid-consensus</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fnodes%2Fhybrid-consensus%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/nodes/hybrid-consensus/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
 <p>This recipe demonstrates a Substrate-based node that employs hybrid consensus. Specifically, it uses
 <a href="3-entrees/./sha3-pow-consensus.html">Sha3 Proof of Work</a> to dictate block authoring, and the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sc_finality_grandpa/index.html">Grandpa</a> finality gadget to provide
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sc_finality_grandpa/index.html">Grandpa</a> finality gadget to provide
 <a href="https://substrate.dev/docs/en/knowledgebase/advanced/consensus#finality">deterministic finality</a>. The minimal proof
 of work consensus lives entirely outside of the runtime while the grandpa finality obtains its
 authorities from the runtime via the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sp_finality_grandpa/trait.GrandpaApi.html">GrandpaAPI</a>. Understanding this
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sp_finality_grandpa/trait.GrandpaApi.html">GrandpaAPI</a>. Understanding this
 recipe requires familiarity with Substrate's
 <a href="https://substrate.dev/docs/en/knowledgebase/advanced/block-import">block import pipeline</a>.</p>
 <h2><a class="header" href="#the-block-import-pipeline-1" id="the-block-import-pipeline-1">The Block Import Pipeline</a></h2>
@@ -4326,7 +4500,7 @@ such as transaction processing, gossiping, and peer discovery would be starved f
 <h2><a class="header" href="#spawning-the-grandpa-task" id="spawning-the-grandpa-task">Spawning the Grandpa Task</a></h2>
 <p>Grandpa is <em>not</em> CPU intensive, so we will use a standard <code>async</code> worker to listen to and cast
 grandpa votes. We begin by creating a grandpa
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sc_finality_grandpa/struct.Config.html"><code>Config</code></a>.</p>
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sc_finality_grandpa/struct.Config.html"><code>Config</code></a>.</p>
 <pre><code class="language-rust ignore">let grandpa_config = sc_finality_grandpa::Config {
 	gossip_duration: Duration::from_millis(333),
 	justification_period: 512,
@@ -4337,7 +4511,7 @@ grandpa votes. We begin by creating a grandpa
 };
 </code></pre>
 <p>We can then use this config to create an instance of
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sc_finality_grandpa/struct.GrandpaParams.html"><code>GrandpaParams</code></a>.</p>
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sc_finality_grandpa/struct.GrandpaParams.html"><code>GrandpaParams</code></a>.</p>
 <pre><code class="language-rust ignore">let grandpa_config = sc_finality_grandpa::GrandpaParams {
 	config: grandpa_config,
 	link: grandpa_link,
@@ -4349,7 +4523,7 @@ grandpa votes. We begin by creating a grandpa
 };
 </code></pre>
 <p>With the parameters established, we can now create and spawn the authorship future.</p>
-<pre><code class="language-rust ignore">service.spawn_essential_task(
+<pre><code class="language-rust ignore">service.spawn_essential_task_handle().spawn_blocking(
 	&quot;grandpa-voter&quot;,
 	sc_finality_grandpa::run_grandpa_voter(grandpa_config)?
 );
@@ -4367,16 +4541,22 @@ it may receive (just ignore them).</p>
 <h2><a class="header" href="#constraints-on-the-runtime" id="constraints-on-the-runtime">Constraints on the Runtime</a></h2>
 <h3><a class="header" href="#runtime-apis-1" id="runtime-apis-1">Runtime APIs</a></h3>
 <p>Grandpa relies on getting its authority sets from the runtime via the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sp_finality_grandpa/trait.GrandpaApi.html">GrandpaAPI</a>. So trying to build
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sp_finality_grandpa/trait.GrandpaApi.html">GrandpaAPI</a>. So trying to build
 this node with a runtime that does not provide this API will fail to compile. For that reason, we
 have included the dedicated <code>minimal-grandpa-runtime</code>.</p>
 <p>The opposite is not true, however. A node that does <em>not</em> require grandpa may use the
 <code>minimal-grandpa-runtime</code> successfully. The unused <code>GrandpaAPI</code> will remain as a harmless vestige in
 the runtime.</p>
 <h1><a class="header" href="#manual-seal" id="manual-seal">Manual Seal</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/nodes/manual-seal"><code>nodes/manual-seal</code></a></em></p>
+<p><code>nodes/manual-seal</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fnodes%2Fmanual-seal%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/nodes/manual-seal/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
 <p>This recipe demonstrates a Substrate node using the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sc_consensus_manual_seal/index.html">Manual Seal consensus</a>. Unlike the
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sc_consensus_manual_seal/index.html">Manual Seal consensus</a>. Unlike the
 other consensus engines included with Substrate, manual seal does not create blocks on a regular
 basis. Rather, it waits for an RPC call telling to create a block.</p>
 <h2><a class="header" href="#using-manual-seal" id="using-manual-seal">Using Manual Seal</a></h2>
@@ -4501,7 +4681,7 @@ let authorship_future = manual_seal::run_manual_seal(
 <p>With the future created, we can now kick it off using the service's
 <a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sc_service/struct.Service.html#method.spawn_essential_task"><code>spawn_essential_task</code> method</a>.</p>
 <pre><code class="language-rust ignore">// we spawn the future on a background thread managed by service.
-service.spawn_essential_task(&quot;manual-seal&quot;, authorship_future);
+service.spawn_essential_task_handle().spawn_blocking(&quot;manual-seal&quot;, authorship_future);
 </code></pre>
 <h2><a class="header" href="#combining-instant-seal-with-manual-seal" id="combining-instant-seal-with-manual-seal">Combining Instant Seal with Manual Seal</a></h2>
 <p>It is possible to combine the manual seal of the node we built above with the functionality of the
@@ -4556,10 +4736,16 @@ In <code>command.rs</code> comment the line that reads <code>use crate::service;
 <code>mod combined_service'</code>. Now you can rebuild the node and test out that it will seal blocks using
 the manual method and the instant method together.</p>
 <h1><a class="header" href="#kitchen-node-instant-seal" id="kitchen-node-instant-seal">Kitchen Node (Instant Seal)</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/nodes/kitchen-node"><code>nodes/kitchen-node</code></a></em></p>
+<p><code>nodes/kitchen-node</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fnodes%2Fkitchen-node%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/nodes/kitchen-node/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
 <p>This recipe demonstrates a general purpose Substrate node that supports most of the recipes'
 runtimes, and uses
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sc_consensus_manual_seal/index.html">Instant Seal consensus</a>.</p>
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sc_consensus_manual_seal/index.html">Instant Seal consensus</a>.</p>
 <p>The kitchen node serves as the first point of entry for most aspiring chefs when they first
 encounter the recipes. By default it builds with the super-runtime, but it can be used with most of
 the runtimes in the recipes. Changing the runtime is described below. It features the instant seal
@@ -4588,7 +4774,7 @@ complain if you try to import two crates under the name <code>runtime</code>.</p
 <p>It is worth noting that this node does not work with <em>all</em> of the recipes' runtimes. In particular,
 it is not compatible with the babe-grandpa runtime. That runtime uses the babe pallet which requires
 a node that will include a special
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sp_runtime/enum.DigestItem.html#variant.PreRuntime"><code>PreRuntime</code> <code>DigestItem</code></a>.</p>
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sp_runtime/enum.DigestItem.html#variant.PreRuntime"><code>PreRuntime</code> <code>DigestItem</code></a>.</p>
 <h3><a class="header" href="#building-a-service-with-the-runtime" id="building-a-service-with-the-runtime">Building a Service with the Runtime</a></h3>
 <p>With a runtime of our choosing listed among our dependencies, we can provide the runtime to the
 <a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sc_service/struct.ServiceBuilder.html"><code>ServiceBuilder</code></a>. The
@@ -4596,7 +4782,7 @@ a node that will include a special
 and creating a <a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sc_service/struct.Service.html"><code>Substrate Service</code></a> which
 will manage the communication between them.</p>
 <p>We begin by invoking the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sc_executor/macro.native_executor_instance.html"><code>native_executor_instance!</code> macro</a>.
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sc_executor/macro.native_executor_instance.html"><code>native_executor_instance!</code> macro</a>.
 This creates an executor which is responsible for executing transactions in the runtime and
 determining whether to run the native or Wasm version of the runtime.</p>
 <pre><code class="language-rust_ignore">native_executor_instance!(
@@ -4615,7 +4801,7 @@ in a <a href="https://doc.rust-lang.org/book/ch19-06-macros.html">macro definiti
 <h2><a class="header" href="#instant-seal-consensus" id="instant-seal-consensus">Instant Seal Consensus</a></h2>
 <p>The instant seal consensus engine, and its cousin the manual seal consensus engine, are both
 included in the same
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sc_consensus_manual_seal/index.html"><code>sc-consensus-manual-seal</code> crate</a>.
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sc_consensus_manual_seal/index.html"><code>sc-consensus-manual-seal</code> crate</a>.
 The recipes has a recipe dedicated to using <a href="3-entrees/./manual-seal.html">manual seal</a>. Instant seal is a very
 convenient tool for when you are developing or experimenting with a runtime. The consensus engine
 simply authors a new block whenever a new transaction is available in the queue. This is similar to
@@ -4623,13 +4809,13 @@ simply authors a new block whenever a new transaction is available in the queue.
 without the UI.</p>
 <h3><a class="header" href="#the-cargo-dependencies" id="the-cargo-dependencies">The Cargo Dependencies</a></h3>
 <p>Installing the instant seal engine has three dependencies whereas the runtime had only one.</p>
-<pre><code class="language-toml">sc-consensus = '0.8.0-rc3'
-sc-consensus-manual-seal = '0.8.0-rc3'
-sp-consensus = '0.8.0-rc3'
+<pre><code class="language-toml">sc-consensus = '0.8.0-rc4'
+sc-consensus-manual-seal = '0.8.0-rc4'
+sp-consensus = '0.8.0-rc4'
 </code></pre>
 <h3><a class="header" href="#the-proposer" id="the-proposer">The Proposer</a></h3>
 <p>We begin by creating a
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sc_basic_authorship/struct.Proposer.html"><code>Proposer</code></a> which will be
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sc_basic_authorship/struct.Proposer.html"><code>Proposer</code></a> which will be
 responsible for creating proposing blocks in the chain.</p>
 <pre><code class="language-rust ignore">let proposer = sc_basic_authorship::ProposerFactory::new(
 	service.client().clone(),
@@ -4657,7 +4843,7 @@ in the <a href="3-entrees/./manual-seal.html">Manual Seal Node</a>. It is also s
 </code></pre>
 <p>With the future created, we can now kick it off using the service's
 <a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sc_service/struct.Service.html#method.spawn_essential_task"><code>spawn_essential_task</code> method</a>.</p>
-<pre><code class="language-rust ignore">service.spawn_essential_task(&quot;instant-seal&quot;, authorship_future);
+<pre><code class="language-rust ignore">service.spawn_essential_task_handle().spawn_blocking(&quot;instant-seal&quot;, authorship_future);
 </code></pre>
 <h3><a class="header" href="#what-about-the-light-client-1" id="what-about-the-light-client-1">What about the Light Client?</a></h3>
 <p>The light client is not yet supported in this node, but it likely will be in the future (See
@@ -4675,26 +4861,32 @@ pub fn new_light(_config: Configuration) -&gt; Result&lt;impl AbstractService, S
 }
 </code></pre>
 <h1><a class="header" href="#babe-and-grandpa-node" id="babe-and-grandpa-node">BABE and GRANDPA Node</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/nodes/babe-grandpa-node"><code>nodes/babe-grandpa-node</code></a></em></p>
-<p>The <code>babe-grandpa-node</code> uses the <a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sc_consensus_babe/index.html">BABE</a> Proof
+<p><code>nodes/babe-grandpa-node</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fnodes%2Fbabe-grandpa-node%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/modes/babe-grandpa-node/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
+<p>The <code>babe-grandpa-node</code> uses the <a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sc_consensus_babe/index.html">BABE</a> Proof
 of Authority consensus engine to determine who may author blocks, and the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sc_finality_grandpa/index.html">GRANDPA</a> finality gadget to provide
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sc_finality_grandpa/index.html">GRANDPA</a> finality gadget to provide
 <a href="https://substrate.dev/docs/en/knowledgebase/advanced/consensus#finality">deterministic finality</a> to past blocks.
 This is the same design used in Polkadot. Understanding this recipe requires familiarity with
 Substrate's <a href="https://substrate.dev/docs/en/knowledgebase/advanced/block-import">block import pipeline</a>.</p>
 <p>In this recipe we will learn about:</p>
 <ul>
-<li>The <a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sp_finality_grandpa/trait.GrandpaApi.html">GrandpaAPI</a> runtime API</li>
-<li>The <a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sc_consensus_babe/trait.BabeApi.html">BabeApi</a> runtime API</li>
+<li>The <a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sp_finality_grandpa/trait.GrandpaApi.html">GrandpaAPI</a> runtime API</li>
+<li>The <a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sc_consensus_babe/trait.BabeApi.html">BabeApi</a> runtime API</li>
 <li>The <a href="https://substrate.dev/docs/en/knowledgebase/advanced/block-import">block import pipeline</a></li>
 </ul>
 <h2><a class="header" href="#the-block-import-pipeline-2" id="the-block-import-pipeline-2">The Block Import Pipeline</a></h2>
 <p>The babe-grandpa node's block import pipeline will have three layers. The inner-most layer is the
-Substrate <a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sc_service/client/struct.Client.html"><code>Client</code></a>, as always. We
+Substrate <a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sc_service/client/struct.Client.html"><code>Client</code></a>, as always. We
 will wrap the client with a
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sc_finality_grandpa/struct.GrandpaBlockImport.html"><code>GrandpaBlockImport</code></a>,
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sc_finality_grandpa/struct.GrandpaBlockImport.html"><code>GrandpaBlockImport</code></a>,
 and wrap that with a
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sc_consensus_babe/struct.BabeBlockImport.html"><code>BabeBlockImport</code></a>.</p>
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sc_consensus_babe/struct.BabeBlockImport.html"><code>BabeBlockImport</code></a>.</p>
 <p>We begin by creating the block import for GRANDPA. In addition to the block import itself, we get
 back a <code>grandpa_link</code>. This link is a channel over which the block import can communicate with the
 background task that actually casts GRANDPA votes. The
@@ -4706,7 +4898,7 @@ are beyond the scope of this recipe.</p>
 	)?;
 </code></pre>
 <p>In addition to actual blocks, this same block import will be used to import
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sp_runtime/type.Justification.html"><code>Justifications</code></a>, so we clone it
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sp_runtime/type.Justification.html"><code>Justifications</code></a>, so we clone it
 right after constructing it.</p>
 <pre><code class="language-rust ignore">let justification_import = grandpa_block_import.clone();
 </code></pre>
@@ -4746,7 +4938,7 @@ provider.</p>
 <h2><a class="header" href="#spawning-the-babe-authorship-task" id="spawning-the-babe-authorship-task">Spawning the BABE Authorship Task</a></h2>
 <p>Any node that is acting as an authority and participating in BABE consensus, must run an <code>async</code>
 authorship task. We begin by creating an instance of
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sc_consensus_babe/struct.BabeParams.html"><code>BabeParams</code></a>.</p>
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sc_consensus_babe/struct.BabeParams.html"><code>BabeParams</code></a>.</p>
 <pre><code class="language-rust ignore">let babe_config = sc_consensus_babe::BabeParams {
 	keystore: service.keystore(),
 	client,
@@ -4762,12 +4954,12 @@ authorship task. We begin by creating an instance of
 </code></pre>
 <p>With the parameters established, we can now create and spawn the authorship future.</p>
 <pre><code class="language-rust ignore">let babe = sc_consensus_babe::start_babe(babe_config)?;
-service.spawn_essential_task(&quot;babe&quot;, babe);
+service.spawn_essential_task_handle().spawn_blocking(&quot;babe&quot;, babe);
 </code></pre>
 <h2><a class="header" href="#spawning-the-grandpa-task-1" id="spawning-the-grandpa-task-1">Spawning the GRANDPA Task</a></h2>
 <p>Just as we needed an <code>async</code> worker to author blocks with BABE, we need an <code>async</code> worker to listen
 to and cast GRANDPA votes. Again, we begin by creating an instance of
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sc_finality_grandpa/struct.GrandpaParams.html"><code>GrandpaParams</code></a></p>
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sc_finality_grandpa/struct.GrandpaParams.html"><code>GrandpaParams</code></a></p>
 <pre><code class="language-rust ignore">let grandpa_config = sc_finality_grandpa::GrandpaParams {
 	config: grandpa_config,
 	link: grandpa_link,
@@ -4779,7 +4971,7 @@ to and cast GRANDPA votes. Again, we begin by creating an instance of
 };
 </code></pre>
 <p>With the parameters established, we can now create and spawn the authorship future.</p>
-<pre><code class="language-rust ignore">service.spawn_essential_task(
+<pre><code class="language-rust ignore">service.spawn_essential_task_handle().spawn_blocking(
 	&quot;grandpa-voter&quot;,
 	sc_finality_grandpa::run_grandpa_voter(grandpa_config)?
 );
@@ -4798,28 +4990,46 @@ in the case that the node <em>is</em> an authority in BABE but not GRANDPA.</p>
 <h2><a class="header" href="#constraints-on-the-runtime-1" id="constraints-on-the-runtime-1">Constraints on the Runtime</a></h2>
 <h3><a class="header" href="#runtime-apis-2" id="runtime-apis-2">Runtime APIs</a></h3>
 <p>Both BABE and GRANDPA rely on getting their authority sets from the runtime via the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sc_consensus_babe/trait.BabeApi.html">BabeAPI</a> and the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sp_finality_grandpa/trait.GrandpaApi.html">GrandpaAPI</a>. So trying to build
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sc_consensus_babe/trait.BabeApi.html">BabeAPI</a> and the
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sp_finality_grandpa/trait.GrandpaApi.html">GrandpaAPI</a>. So trying to build
 this node with a runtime that does not provide these APIs will fail to compile.</p>
 <h3><a class="header" href="#pre-runtime-digests" id="pre-runtime-digests">Pre-Runtime Digests</a></h3>
 <p>Just as we cannot use this node with a runtime that does not provide the appropriate runtime APIs,
 we also cannot use a runtime designed for this node with different consensus engines.</p>
 <p>Because BABE is a slot-based consensus engine, it must inform the runtime which slot each block was
 intended for. To do this, it uses a technique known as a pre-runtime digest. It has two kinds,
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sc_consensus_babe/struct.PrimaryPreDigest.html"><code>PrimaryPreDigest</code></a> and
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sc_consensus_babe/struct.SecondaryPlainPreDigest.html"><code>SecondaryPlainPreDigest</code></a>.
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sc_consensus_babe/struct.PrimaryPreDigest.html"><code>PrimaryPreDigest</code></a> and
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sc_consensus_babe/struct.SecondaryPlainPreDigest.html"><code>SecondaryPlainPreDigest</code></a>.
 The BABE authorship task automatically inserts these digest items in each block it authors.</p>
 <p>Because the runtime needs to interpret these pre-runtime digests, they are not optional. That means
 runtimes that expect the pre-digests cannot be used, unmodified, in nodes that don't provide the
 pre-digests. Unlike other runtimes in the Recipes where runtimes can be freely swapped between
 nodes, the babe-grandpa-runtime can only be used in a node that is actually running BABE</p>
 <h1><a class="header" href="#currency-types" id="currency-types">Currency Types</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/lockable-currency"><code>pallets/lockable-currency</code></a>,
-<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/reservable-currency"><code>pallets/reservable-currency</code></a>,
-<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/currency-imbalances"><code>pallets/currency-imbalances</code></a></em></p>
+<p><code>pallets/lockable-currency</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Flockable-currency%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/lockable-currency/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
+<p><code>pallets/reservable-currency</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Freservable-currency%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/reservable-currency/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
+<p><code>pallets/currency-imbalances</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fcurrency-imbalances%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/currency-imbalances/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
 <h2><a class="header" href="#just-plain-currency" id="just-plain-currency">Just Plain Currency</a></h2>
 <p>To use a balance type in the runtime, import the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/traits/trait.Currency.html"><code>Currency</code></a> trait from
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/traits/trait.Currency.html"><code>Currency</code></a> trait from
 <code>frame_support</code>.</p>
 <pre><code class="language-rust ignore">use support::traits::Currency;
 </code></pre>
@@ -4832,7 +5042,7 @@ configuration trait.</p>
 }
 </code></pre>
 <p>Defining an associated type with this trait bound allows this pallet to access the provided methods
-of <a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/traits/trait.Currency.html"><code>Currency</code></a>. For example, it
+of <a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/traits/trait.Currency.html"><code>Currency</code></a>. For example, it
 is straightforward to check the total issuance of the system:</p>
 <pre><code class="language-rust ignore">// in decl_module block
 T::Currency::total_issuance();
@@ -4842,14 +5052,14 @@ T::Currency::total_issuance();
 </code></pre>
 <p>This new <code>BalanceOf&lt;T&gt;</code> type satisfies the type constraints of <code>Self::Balance</code> for the provided
 methods of <code>Currency</code>. This means that this type can be used for
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/traits/trait.Currency.html#tymethod.transfer">transfer</a>,
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/traits/trait.Currency.html#tymethod.deposit_into_existing">minting</a>,
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/traits/trait.Currency.html#tymethod.transfer">transfer</a>,
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/traits/trait.Currency.html#tymethod.deposit_into_existing">minting</a>,
 and much more.</p>
 <h2><a class="header" href="#reservable-currency" id="reservable-currency">Reservable Currency</a></h2>
-<p>Substrate's <a href="https://substrate.dev/rustdocs/v2.0.0-rc5/pallet_treasury/index.html">Treasury pallet</a> uses the
+<p>Substrate's <a href="https://substrate.dev/rustdocs/v2.0.0-rc4/pallet_treasury/index.html">Treasury pallet</a> uses the
 <code>Currency</code> type for bonding spending proposals. To reserve and unreserve funds for bonding,
 <code>treasury</code> uses the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/traits/trait.ReservableCurrency.html"><code>ReservableCurrency</code></a>
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/traits/trait.ReservableCurrency.html"><code>ReservableCurrency</code></a>
 trait. The import and associated type declaration follow convention</p>
 <pre><code class="language-rust ignore">use frame_support::traits::{Currency, ReservableCurrency};
 
@@ -4884,15 +5094,15 @@ respectively</p>
 }
 </code></pre>
 <h2><a class="header" href="#lockable-currency" id="lockable-currency">Lockable Currency</a></h2>
-<p>Substrate's <a href="https://substrate.dev/rustdocs/v2.0.0-rc5/pallet_staking/index.html">Staking pallet</a> similarly uses
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/traits/trait.LockableCurrency.html"><code>LockableCurrency</code></a>
+<p>Substrate's <a href="https://substrate.dev/rustdocs/v2.0.0-rc4/pallet_staking/index.html">Staking pallet</a> similarly uses
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/traits/trait.LockableCurrency.html"><code>LockableCurrency</code></a>
 trait for more nuanced handling of capital locking based on time increments. This type can be very
 useful in the context of economic systems that enforce accountability by collateralizing fungible
 resources. Import this trait in the usual way</p>
 <pre><code class="language-rust ignore">use frame_support::traits::{LockIdentifier, LockableCurrency}
 </code></pre>
 <p>To use <code>LockableCurrency</code>, it is necessary to define a
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/traits/type.LockIdentifier.html"><code>LockIdentifier</code></a>.</p>
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/traits/type.LockIdentifier.html"><code>LockIdentifier</code></a>.</p>
 <pre><code class="language-rust ignore">const EXAMPLE_ID: LockIdentifier = *b&quot;example &quot;;
 </code></pre>
 <p>By using this <code>EXAMPLE_ID</code>, it is straightforward to define logic within the runtime to schedule
@@ -4913,11 +5123,11 @@ locking, unlocking, and extending existing locks.</p>
 </code></pre>
 <h2><a class="header" href="#imbalances-1" id="imbalances-1">Imbalances</a></h2>
 <p>Functions that alter balances return an object of the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/traits/trait.Imbalance.html"><code>Imbalance</code></a> type to express
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/traits/trait.Imbalance.html"><code>Imbalance</code></a> type to express
 how much account balances have been altered in aggregate. This is useful in the context of state
 transitions that adjust the total supply of the <code>Currency</code> type in question.</p>
 <p>To manage this supply adjustment, the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/traits/trait.OnUnbalanced.html"><code>OnUnbalanced</code></a> handler is
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/traits/trait.OnUnbalanced.html"><code>OnUnbalanced</code></a> handler is
 often used. An example might look something like</p>
 <pre><code class="language-rust ignore">pub fn reward_funds(origin, to_reward: T::AccountId, reward: BalanceOf&lt;T&gt;) {
 	let _ = ensure_signed(origin)?;
@@ -4938,7 +5148,13 @@ underlying transactional system. Likewise, it is convenient to be able to take a
 <a href="https://blog.rust-lang.org/2015/05/11/traits.html">flexible trait system</a> when building systems
 intended to rethink how we exchange information and value 🚀</p>
 <h1><a class="header" href="#generating-randomness" id="generating-randomness">Generating Randomness</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/randomness/">pallets/randomness</a></em></p>
+<p><code>pallets/randomness</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Frandomness%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/randomness/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
 <p>Randomness is useful in computer programs for everything from gambling, to generating DNA for
 digital kitties, to selecting block authors. Randomness is hard to come by in deterministic
 computers as explained at <a href="https://www.random.org/randomness/">random.org</a>. This is particularly
@@ -4947,7 +5163,7 @@ chain. Some techniques have been developed to address this problem including
 <a href="https://github.com/randao/randao">RanDAO</a> and
 <a href="https://en.wikipedia.org/wiki/Verifiable_random_function">Verifiable Random Functions</a>. Substrate
 abstracts the implementation of a randomness source using the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/traits/trait.Randomness.html"><code>Randomness</code> trait</a>, and
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/traits/trait.Randomness.html"><code>Randomness</code> trait</a>, and
 provides a few implementations. This recipe will demonstrate using the <code>Randomness</code> trait and two
 concrete implementations.</p>
 <h2><a class="header" href="#disclaimer" id="disclaimer">Disclaimer</a></h2>
@@ -4990,10 +5206,10 @@ sources is not necessary in practice.</p>
 	type BabeRandomnessSource: Randomness&lt;H256&gt;;
 }
 </code></pre>
-<p>We've provided the <code>Output</code> type as <a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sp_core/struct.H256.html"><code>H256</code></a>.</p>
+<p>We've provided the <code>Output</code> type as <a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sp_core/struct.H256.html"><code>H256</code></a>.</p>
 <h2><a class="header" href="#collective-coin-flipping" id="collective-coin-flipping">Collective Coin Flipping</a></h2>
 <p>Substrate's
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/pallet_randomness_collective_flip/index.html">Randomness Collective Flip pallet</a>
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/pallet_randomness_collective_flip/index.html">Randomness Collective Flip pallet</a>
 uses a safe mixing algorithm to generate randomness using the entropy of previous block hashes.
 Because it is dependent on previous blocks, it can take many blocks for the seed to change.</p>
 <p>A naive randomness source based on block hashes would take the hash of the previous block and use it
@@ -5011,7 +5227,7 @@ the collective flip pallet. Secure hash functions satisfy the
 is equally likely to affect a given bit of the output. Hashing will negate the low-influence
 property provided by the pallet.</p>
 <h2><a class="header" href="#babe-vrf-output" id="babe-vrf-output">Babe VRF Output</a></h2>
-<p>Substrate's <a href="https://substrate.dev/rustdocs/v2.0.0-rc5/pallet_babe/index.html">Babe pallet</a> which is primarily
+<p>Substrate's <a href="https://substrate.dev/rustdocs/v2.0.0-rc4/pallet_babe/index.html">Babe pallet</a> which is primarily
 responsible for managing validator rotation in Babe consensus, also collects the VRF outputs that
 Babe validators publish to demonstrate that they are permitted to author a block. These VRF outputs
 can be used to provide a random seed.</p>
@@ -5035,7 +5251,13 @@ these randomness sources. If you'd like to get into the research, here are some 
 <li><a href="https://eccc.weizmann.ac.il/report/2018/140/">https://eccc.weizmann.ac.il/report/2018/140/</a></li>
 </ul>
 <h1><a class="header" href="#execution-schedule" id="execution-schedule">Execution Schedule</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/execution-schedule"><code>pallets/execution-schedule</code></a></em></p>
+<p><code>pallets/execution-schedule</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fexecution-schedule%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/execution-schedule/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
 <!-- TODO This content may need updated to match the actual pallet -->
 <p>Blockchain-native mechanisms may use the block number as a proxy for time to schedule task
 execution. Although scheduled task execution through council governance is minimal in this example,
@@ -5263,7 +5485,13 @@ of the last block and <code>on_initialize</code> of the next block <code>=&gt;</
 </li>
 </ul>
 <h1><a class="header" href="#tightly--and-loosely-coupled-pallets" id="tightly--and-loosely-coupled-pallets">Tightly- and Loosely-Coupled Pallets</a></h1>
-<p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/check-membership">pallets/check-membership</a></em></p>
+<p><code>pallets/check-membership</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fcheck-membership%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/check-membership/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
 <p>The <code>check-membership</code> crate contains two pallets that solve the same problems in slightly different
 ways. Both pallets implement a single dispatchable function that can only be successfully executed
 by callers who are members of an
@@ -5350,7 +5578,7 @@ supplied type implements the necessary behavior by specifying a trait bound.</p>
 </code></pre>
 <blockquote>
 <p>Many palets throught the ecosystem are coupled to a token through the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/traits/trait.Currency.html"><code>Currency</code> trait</a>.</p>
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/traits/trait.Currency.html"><code>Currency</code> trait</a>.</p>
 </blockquote>
 <p>Having this associated type means that the loosely coupled variant of the <code>check-membership</code> pallet
 can be installed in any runtime that can supply it with a set of accounts to use as an access
@@ -5541,7 +5769,7 @@ pub type TestPallet = Module&lt;TestRuntime&gt;;
 </code></pre>
 <p>With this, it is possible to use this type in the unit tests. For example, the block number can be
 set with
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_system/struct.Module.html#method.set_block_number"><code>set_block_number</code></a></p>
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_system/struct.Module.html#method.set_block_number"><code>set_block_number</code></a></p>
 <pre><code class="language-rust ignore">#[test]
 fn add_emits_correct_event() {
 	// ExtBuilder syntax is explained further below
@@ -5622,7 +5850,7 @@ the <code>council</code>. This is expressed in the <code>decl_module</code> bloc
 }
 </code></pre>
 <p>To use <code>new_test_ext</code> in a runtime test, we call the method and call
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sp_state_machine/struct.TestExternalities.html#method.execute_with"><code>execute_with</code></a>
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sp_state_machine/struct.TestExternalities.html#method.execute_with"><code>execute_with</code></a>
 on the returned <code>runtime_io::TestExternalities</code></p>
 <pre><code class="language-rust ignore">#[test]
 fn fake_test() {
@@ -5644,8 +5872,8 @@ structure. This fosters multiple levels of configuration depending on if the tes
 default instance of the environment or a more specific edge case configuration. The latter is
 explored in more detail in <a href="3-entrees/testing/./externalities.html">Custom Test Environment</a>.</p>
 <p>Like <code>new_test_ext</code>, the <code>build()</code> method on the <code>ExtBuilder</code> object returns an instance of
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sp_state_machine/struct.TestExternalities.html"><code>TestExternalities</code></a>.
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sp_externalities/index.html">Externalities</a> are an abstraction that allows
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sp_state_machine/struct.TestExternalities.html"><code>TestExternalities</code></a>.
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sp_externalities/index.html">Externalities</a> are an abstraction that allows
 the runtime to access features of the outer node such as storage or offchain workers.</p>
 <p>In this case, create a mock storage from the default genesis configuration.</p>
 <pre><code class="language-rust ignore">impl ExtBuilder {
@@ -5665,7 +5893,7 @@ fn fake_test_example() {
 </code></pre>
 <p>While testing in this environment, runtimes that require signed extrinsics (i.e. take <code>origin</code> as a
 parameter) will require transactions coming from an <code>Origin</code>. This requires importing the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/macro.impl_outer_origin.html"><code>impl_outer_origin</code></a> macro
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/macro.impl_outer_origin.html"><code>impl_outer_origin</code></a> macro
 from <code>support</code></p>
 <pre><code class="language-rust ignore">use support::{impl_outer_origin};
 
@@ -5690,7 +5918,7 @@ and not all tests.</p>
 <p>Note that the input to <code>Origin::signed</code> is the <code>system::Trait</code>'s <code>AccountId</code> type which was set to
 <code>u64</code> for the <code>TestRuntime</code> implementation. In theory, this could be set to some other type as long
 as it conforms to the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_system/trait.Trait.html#associatedtype.AccountId">trait bound</a>,</p>
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_system/trait.Trait.html#associatedtype.AccountId">trait bound</a>,</p>
 <pre><code class="language-rust ignore">pub trait Trait: 'static + Eq + Clone {
 	//...
 	type AccountId: Parameter + Member + MaybeSerializeDeserialize + Debug + MaybeDisplay + Ord + Default;
@@ -5700,8 +5928,8 @@ as it conforms to the
 <h3><a class="header" href="#setting-for-testing-event-emittances" id="setting-for-testing-event-emittances">Setting for Testing Event Emittances</a></h3>
 <p>Events are not emitted on block 0. So when testing for whether events are emitted, we manually set
 the block number in the test environment from 0 to 1 like so:</p>
-<pre><pre class="playpen"><code class="language-rust">
-<span class="boring">#![allow(unused_variables)]
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>impl ExtBuilder {
 	pub fn build() -&gt; TestExternalities {
@@ -5798,7 +6026,7 @@ fn set_value_works() {
 </code></pre>
 <h3><a class="header" href="#expected-events-are-emitted-a-name--eventsa" id="expected-events-are-emitted-a-name--eventsa">Expected Events are Emitted <a name = "events"></a></a></h3>
 <p>The common way of testing expected event emission behavior requires importing <code>support</code>'s
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/macro.impl_outer_event.html"><code>impl_outer_event!</code></a> macro</p>
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/macro.impl_outer_event.html"><code>impl_outer_event!</code></a> macro</p>
 <pre><code class="language-rust ignore">use support::impl_outer_event;
 </code></pre>
 <p>The <code>TestEvent</code> enum imports and uses the pallet's <code>Event</code> enum. The new local pallet,
@@ -5819,7 +6047,7 @@ impl Trait for TestRuntime {
 }
 </code></pre>
 <p>Testing the correct emission of events compares constructions of expected events with the entries in
-the <a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_system/struct.Module.html#method.events"><code>System::events</code></a>
+the <a href="https://substrate.dev/rustdocs/v2.0.0-rc4/frame_system/struct.Module.html#method.events"><code>System::events</code></a>
 vector of <code>EventRecord</code>s. In
 <a href="https://github.com/substrate-developer-hub/recipes/tree/master//pallets/adding-machine"><code>pallets/adding-machine</code></a>,</p>
 <pre><code class="language-rust ignore">#[test]
@@ -5884,8 +6112,8 @@ set up the mock for <code>SubmitTransaction</code>, and implement the <code>Crea
 runtime.</p>
 <p>src:
 <a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/tests.rs"><code>pallets/offchain-demo/src/tests.rs</code></a></p>
-<pre><pre class="playpen"><code class="language-rust">
-<span class="boring">#![allow(unused_variables)]
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>type TestExtrinsic = TestXt&lt;Call&lt;TestRuntime&gt;, ()&gt;;
 type SubmitTransaction = system::offchain::TransactionSubmitter&lt;
@@ -5926,8 +6154,8 @@ also need to return references to the transaction pool state and off-chain state
 inspection.</p>
 <p>src:
 <a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/tests.rs"><code>pallets/offchain-demo/src/tests.rs</code></a></p>
-<pre><pre class="playpen"><code class="language-rust">
-<span class="boring">#![allow(unused_variables)]
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>pub struct ExtBuilder;
 
@@ -5972,8 +6200,8 @@ test case. This way we keep our tests more robust.</p>
 <p>This is how we write our test cases.</p>
 <p>src:
 <a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/tests.rs"><code>pallets/offchain-demo/src/tests.rs</code></a></p>
-<pre><pre class="playpen"><code class="language-rust">
-<span class="boring">#![allow(unused_variables)]
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[test]
 fn offchain_send_signed_tx() {
@@ -6071,7 +6299,7 @@ allows each instance of <code>ExtBuilder</code> to set the constant parameters f
 </code></pre>
 <p>To allow for separate copies of the constant objects to be used in each thread, the variables
 assigned as constants are declared as
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/thread_local/index.html"><code>thread_local!</code></a>,</p>
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/thread_local/index.html"><code>thread_local!</code></a>,</p>
 <pre><code class="language-rust ignore">thread_local! {
     static SIGNAL_QUOTA: RefCell&lt;u32&gt; = RefCell::new(0);
     static EXECUTION_FREQUENCY: RefCell&lt;u64&gt; = RefCell::new(0);
@@ -6144,11 +6372,11 @@ periodically reset the <code>SignalBank</code> and increment the <code>Era</code
 see <code>balances/mock.rs</code> and <code>contract/tests.rs</code>.</p>
 <h1><a class="header" href="#safe-math" id="safe-math">Safe Math</a></h1>
 <p>We can use the <code>checked</code> traits in
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sp_runtime/traits/index.html">substrate-primitives</a> to protect against
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sp_runtime/traits/index.html">substrate-primitives</a> to protect against
 <a href="https://medium.com/@taabishm2/integer-overflow-underflow-and-floating-point-imprecision-6ba869a99033">overflow/underflow</a>
 when incrementing/decrementing objects in our runtime. To follow the
 <a href="https://shawntabrizi.com/substrate-collectables-workshop/#/2/tracking-all-kitties?id=checking-for-overflowunderflow">Substrate collectable tutorial example</a>,
-use <a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sp_runtime/traits/trait.CheckedAdd.html"><code>checked_add()</code></a> to safely
+use <a href="https://substrate.dev/rustdocs/v2.0.0-rc4/sp_runtime/traits/trait.CheckedAdd.html"><code>checked_add()</code></a> to safely
 handle the possibility of overflow when incremementing a global counter. <em>Note that this check is
 similar to <a href="https://ethereumdev.io/safemath-protect-overflows/"><code>SafeMath</code></a> in Solidity</em>.</p>
 <pre><code class="language-rust ignore">use runtime_primitives::traits::CheckedAdd;
@@ -6277,10 +6505,10 @@ built.</li>
         
 
         
-        
+
         
         <script type="text/javascript">
-            window.playpen_copyable = true;
+            window.playground_copyable = true;
         </script>
         
 
