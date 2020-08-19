@@ -171,6 +171,8 @@ impl system::Trait for Runtime {
 	type OnKilledAccount = ();
 	/// The data to be stored in an account.
 	type AccountData = balances::AccountData<Balance>;
+	/// Weight information for the extrinsics of this pallet.
+	type SystemWeightInfo = ();
 }
 
 parameter_types! {
@@ -182,6 +184,7 @@ impl timestamp::Trait for Runtime {
 	type Moment = u64;
 	type OnTimestampSet = ();
 	type MinimumPeriod = MinimumPeriod;
+	type WeightInfo = ();
 }
 
 parameter_types! {
@@ -198,6 +201,7 @@ impl balances::Trait for Runtime {
 	type DustRemoval = ();
 	type ExistentialDeposit = ExistentialDeposit;
 	type AccountStore = System;
+	type WeightInfo = ();
 }
 
 impl sudo::Trait for Runtime {
