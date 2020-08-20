@@ -2,7 +2,7 @@
 
 use std::sync::Arc;
 
-use runtime::{opaque::Block, AccountId, Hash, Index};
+use runtime::{opaque::Block, Hash};
 use sp_api::ProvideRuntimeApi;
 use sp_blockchain::{Error as BlockChainError, HeaderMetadata, HeaderBackend};
 use sp_block_builder::BlockBuilder;
@@ -23,6 +23,9 @@ pub struct FullDeps<C, P> {
 	pub command_sink: Sender<EngineCommand<Hash>>,
 }
 
+/// A IO handler that uses all Full RPC extensions.
+pub type IoHandler = jsonrpc_core::IoHandler<sc_rpc::Metadata>;
+
 /// Instantiate all full RPC extensions.
 pub fn create_full<C, P>(
 	deps: FullDeps<C, P>,
@@ -33,19 +36,9 @@ pub fn create_full<C, P>(
 	C::Api: BlockBuilder<Block>,
 	P: TransactionPool + 'static,
 {
-	use substrate_frame_rpc_system::{FullSystem, SystemApi};
 
 	let mut io = jsonrpc_core::IoHandler::default();
-	let FullDeps {
-		client,
-		pool,
-		deny_unsafe,
-		command_sink,
-	} = deps;
-
-	// io.extend_with(
-	// 	SystemApi::to_delegate(FullSystem::new(client.clone(), pool, deny_unsafe))
-	// );
+	let FullDeps { command_sink, .. } = deps;
 
 	io.extend_with(
 		// We provide the rpc handler with the sending end of the channel to allow the rpc

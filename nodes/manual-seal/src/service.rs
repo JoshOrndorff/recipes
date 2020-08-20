@@ -31,7 +31,7 @@ pub fn new_full_params(config: Configuration) -> Result<(
 		Block, FullClient,
 		BasicQueue<Block, TransactionFor<FullClient, Block>>,
 		sc_transaction_pool::FullPool<Block, FullClient>,
-		(), FullBackend,
+		crate::rpc::IoHandler, FullBackend,
 	>,
 	FullSelectChain,
 	sp_inherents::InherentDataProviders,
@@ -72,12 +72,13 @@ pub fn new_full_params(config: Configuration) -> Result<(
 	let rpc_extensions_builder = {
 		let client = client.clone();
 		let pool = transaction_pool.clone();
+		let command_sink = command_sink.clone();
 		Box::new(move |deny_unsafe| {
 			let deps = crate::rpc::FullDeps {
 				client: client.clone(),
 				pool: pool.clone(),
 				deny_unsafe,
-				command_sink,
+				command_sink: command_sink.clone(),
 			};
 
 			crate::rpc::create_full(deps)
