@@ -1,9 +1,8 @@
 //! Service and ServiceFactory implementation. Specialized wrapper over substrate service.
 
 use runtime::{self, opaque::Block, RuntimeApi};
-use sc_client_api::ExecutorProvider;
+use sc_client_api::{ExecutorProvider, RemoteBackend };
 use sc_executor::native_executor_instance;
-use sc_client_api::RemoteBackend;
 pub use sc_executor::NativeExecutor;
 use sc_network::config::DummyFinalityProofRequestBuilder;
 use sc_service::{error::Error as ServiceError, Configuration, ServiceComponents, TaskManager};

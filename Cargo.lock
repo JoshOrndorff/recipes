@@ -2137,6 +2137,7 @@ dependencies = [
  "sc-service",
  "sc-transaction-pool",
  "sha3pow",
+ "sp-api",
  "sp-consensus",
  "sp-consensus-pow",
  "sp-core",

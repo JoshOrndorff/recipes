@@ -53,6 +53,7 @@ sc-consensus = '0.8.0-rc4'
 sc-consensus-pow = '0.8.0-rc4'
 sp-consensus-pow = '0.8.0-rc4'
 sha3pow = { path = '../../consensus/sha3pow' }
+sp-api = '2.0.0-rc5'
 
 runtime = { package = "minimal-grandpa-runtime", path = "../../runtimes/minimal-grandpa-runtime"}
 
