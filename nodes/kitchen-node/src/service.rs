@@ -104,9 +104,6 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
 		)
 	};
 
-	// let builder = new_full_start!(config);
-	// let service = builder.build_full()?;
-
 	// Initialize seed for signing transaction using off-chain workers
 	#[cfg(feature = "ocw")]
 	{

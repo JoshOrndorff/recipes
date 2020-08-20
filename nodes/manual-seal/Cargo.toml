@@ -30,11 +30,13 @@ sha3 = "0.8"
 rand = { version = "0.7", features = ["small_rng"] }
 jsonrpc-core = "14.0.5"
 
+sp-block-builder = '2.0.0-rc5'
+sp-blockchain = '2.0.0-rc5'
 sc-consensus = '0.8.0-rc4'
 sc-consensus-manual-seal = '0.8.0-rc4'
 sc-rpc = '2.0.0-rc5'
+sc-rpc-api = '0.8.0-rc5'
 sc-client-api = '2.0.0-rc5'
-sp-blockchain =  '2.0.0-rc5'
 sp-timestamp = '2.0.0-rc5'
 sc-basic-authorship = '0.8.0-rc4'
 sc-cli = '0.8.0-rc4'
@@ -47,6 +49,8 @@ sp-core = '2.0.0-rc5'
 sp-inherents = '2.0.0-rc5'
 sp-runtime = '2.0.0-rc5'
 sp-transaction-pool = '2.0.0-rc5'
+sp-api = '2.0.0-rc5'
+substrate-frame-rpc-system = '2.0.0-rc5'
 
 # This node is compatible with any of the runtimes below
 # ---
