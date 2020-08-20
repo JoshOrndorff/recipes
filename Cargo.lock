@@ -523,6 +523,7 @@ dependencies = [
  "sc-transaction-pool",
  "sha3",
  "sha3pow",
+ "sp-api",
  "sp-blockchain",
  "sp-consensus",
  "sp-consensus-pow",

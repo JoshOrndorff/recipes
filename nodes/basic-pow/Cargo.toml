@@ -45,6 +45,7 @@ sp-inherents = '2.0.0-rc5'
 sp-runtime = '2.0.0-rc5'
 sp-transaction-pool = '2.0.0-rc5'
 sha3pow = { path = '../../consensus/sha3pow' }
+sp-api = '2.0.0-rc5'
 
 # This node is compatible with any of the runtimes below
 # ---

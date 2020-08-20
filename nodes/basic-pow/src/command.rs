@@ -1,35 +1,33 @@
 use crate::chain_spec;
 use crate::cli::Cli;
 use crate::service;
-use sc_cli::SubstrateCli;
+use sc_cli::{SubstrateCli, RuntimeVersion, Role, ChainSpec};
+use sc_service::ServiceParams;
+use crate::service::new_full_params;
 
 impl SubstrateCli for Cli {
-	fn impl_name() -> &'static str {
-		"Basic PoW Node"
+	fn impl_name() -> String {
+		"Basic PoW Node".into()
 	}
 
-	fn impl_version() -> &'static str {
-		env!("SUBSTRATE_CLI_IMPL_VERSION")
+	fn impl_version() -> String {
+		env!("SUBSTRATE_CLI_IMPL_VERSION").into()
 	}
 
-	fn description() -> &'static str {
-		env!("CARGO_PKG_DESCRIPTION")
+	fn description() -> String {
+		env!("CARGO_PKG_DESCRIPTION").into()
 	}
 
-	fn author() -> &'static str {
-		env!("CARGO_PKG_AUTHORS")
+	fn author() -> String {
+		env!("CARGO_PKG_AUTHORS").into()
 	}
 
-	fn support_url() -> &'static str {
-		"https://github.com/substrate-developer-hub/recipes/issues"
+	fn support_url() -> String {
+		"https://github.com/substrate-developer-hub/recipes/issues".into()
 	}
 
 	fn copyright_start_year() -> i32 {
 		2019
-	}
-
-	fn executable_name() -> &'static str {
-		env!("CARGO_PKG_NAME")
 	}
 
 	fn load_spec(&self, id: &str) -> Result<Box<dyn sc_service::ChainSpec>, String> {
@@ -41,6 +39,10 @@ impl SubstrateCli for Cli {
 			)?),
 		})
 	}
+
+	fn native_runtime_version(_: &Box<dyn ChainSpec>) -> &'static RuntimeVersion {
+		&runtime::VERSION
+	}
 }
 
 /// Parse and run command line arguments
@@ -50,11 +52,18 @@ pub fn run() -> sc_cli::Result<()> {
 	match &cli.subcommand {
 		Some(subcommand) => {
 			let runner = cli.create_runner(subcommand)?;
-			runner.run_subcommand(subcommand, |config| Ok(new_full_start!(config).0))
+			runner.run_subcommand(subcommand, |config| {
+				let (ServiceParams { client, backend, task_manager, import_queue, .. }, ..)
+					= new_full_params(config)?;
+				Ok((client, backend, import_queue, task_manager))
+			})
 		}
 		None => {
 			let runner = cli.create_runner(&cli.run)?;
-			runner.run_node(service::new_light, service::new_full, runtime::VERSION)
+			runner.run_node_until_exit(|config| match config.role {
+				Role::Light => service::new_light(config),
+				_ => service::new_full(config),
+			})
 		}
 	}
 }
