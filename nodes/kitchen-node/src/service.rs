@@ -2,7 +2,7 @@
 
 use sc_executor::native_executor_instance;
 pub use sc_executor::NativeExecutor;
-use sc_client_api::{ExecutorProvider, RemoteBackend};
+use sc_client_api::RemoteBackend;
 use sc_network::config::DummyFinalityProofRequestBuilder;
 use sc_service::{error::Error as ServiceError, Configuration, ServiceComponents, TaskManager};
 use sp_inherents::InherentDataProviders;
@@ -88,21 +88,17 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
 	let (params, select_chain, inherent_data_providers) = new_full_params(config)?;
 
 	let (
-		is_authority, force_authoring, name, enable_grandpa, prometheus_registry,
-		client, transaction_pool, keystore,
+		is_authority, prometheus_registry, client, transaction_pool
 	) = {
 		let sc_service::ServiceParams {
-			config, client, transaction_pool, keystore, ..
+			config, client, transaction_pool, ..
 		} = &params;
 
 		(
 			config.role.is_authority(),
-			config.force_authoring,
-			config.network.node_name.clone(),
-			!config.disable_grandpa,
 			config.prometheus_registry().cloned(),
-
-			client.clone(), transaction_pool.clone(), keystore.clone(),
+			client.clone(),
+			transaction_pool.clone(),
 		)
 	};
 
@@ -124,9 +120,7 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
 		}
 	}
 
-	let ServiceComponents {
-		task_manager, network, telemetry_on_connect_sinks, ..
-	 } = sc_service::build(params)?;
+	let ServiceComponents { task_manager, .. } = sc_service::build(params)?;
 
 	if is_authority {
 		let proposer = sc_basic_authorship::ProposerFactory::new(
@@ -171,9 +165,11 @@ pub fn new_light(config: Configuration) -> Result<TaskManager, ServiceError> {
 		config.prometheus_registry(),
 	);
 
+	let fprb = Box::new(DummyFinalityProofRequestBuilder::default()) as Box<_>;
+
 	sc_service::build(sc_service::ServiceParams {
 		block_announce_validator_builder: None,
-		finality_proof_request_builder: None,
+		finality_proof_request_builder: Some(fprb),
 		finality_proof_provider: None,
 		on_demand: Some(on_demand),
 		remote_blockchain: Some(backend.remote_blockchain()),
