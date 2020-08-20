@@ -2,15 +2,15 @@
 
 use runtime::{self, opaque::Block, RuntimeApi};
 use sc_client_api::ExecutorProvider;
-use sc_consensus::LongestChain;
 use sc_executor::native_executor_instance;
+use sc_client_api::RemoteBackend;
 pub use sc_executor::NativeExecutor;
 use sc_network::config::DummyFinalityProofRequestBuilder;
 use sc_service::{error::Error as ServiceError, Configuration, ServiceComponents, TaskManager};
 use sha3pow::MinimalSha3Algorithm;
 use sp_inherents::InherentDataProviders;
 use std::sync::Arc;
-use sp_consensus::{import_queue::BasicQueue, BlockImport};
+use sp_consensus::import_queue::BasicQueue;
 use sp_api::TransactionFor;
 
 // Our native executor instance.
@@ -46,7 +46,7 @@ pub fn new_full_params(config: Configuration) -> Result<(
 	>,
 	FullSelectChain,
 	sp_inherents::InherentDataProviders,
-	sc_consensus_pow::PowBlockImport<Block>,
+	sc_consensus_pow::PowBlockImport<Block, Arc<FullClient>, FullClient, FullSelectChain, MinimalSha3Algorithm>,
 ), ServiceError> {
 	let inherent_data_providers = build_inherent_data_providers()?;
 
@@ -72,7 +72,7 @@ pub fn new_full_params(config: Configuration) -> Result<(
 		client.clone(),
 		sha3pow::MinimalSha3Algorithm,
 		0, // check inherents starting at block 0
-		Some(select_chain),
+		Some(select_chain.clone()),
 		inherent_data_providers.clone(),
 	);
 
@@ -179,7 +179,7 @@ pub fn new_light(config: Configuration) -> Result<TaskManager, ServiceError> {
 		client.clone(),
 		sha3pow::MinimalSha3Algorithm,
 		0, // check inherents starting at block 0
-		select_chain,
+		Some(select_chain),
 		inherent_data_providers.clone(),
 	);
 
@@ -189,7 +189,7 @@ pub fn new_light(config: Configuration) -> Result<TaskManager, ServiceError> {
 		None,
 		sha3pow::MinimalSha3Algorithm,
 		inherent_data_providers.clone(),
-		task_manager.spawn_handle(),
+		&task_manager.spawn_handle(),
 		config.prometheus_registry(),
 	)?;
 
