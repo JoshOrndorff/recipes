@@ -148,7 +148,7 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
 	if is_authority {
 		let proposer = sc_basic_authorship::ProposerFactory::new(
 			client.clone(),
-			transaction_pool.clone(),
+			transaction_pool,
 			prometheus_registry.as_ref(),
 		);
 
@@ -200,7 +200,7 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
 		let grandpa_config = sc_finality_grandpa::GrandpaParams {
 			config: grandpa_config,
 			link: grandpa_link,
-			network: network,
+			network,
 			inherent_data_providers,
 			telemetry_on_connect: Some(telemetry_on_connect_sinks.on_connect_stream()),
 			voting_rule: sc_finality_grandpa::VotingRulesBuilder::default().build(),
