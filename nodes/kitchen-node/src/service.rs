@@ -2,6 +2,7 @@
 
 use sc_executor::native_executor_instance;
 pub use sc_executor::NativeExecutor;
+use sc_client_api::{ExecutorProvider, RemoteBackend};
 use sc_network::config::DummyFinalityProofRequestBuilder;
 use sc_service::{error::Error as ServiceError, Configuration, ServiceComponents, TaskManager};
 use sp_inherents::InherentDataProviders;
@@ -76,42 +77,15 @@ pub fn new_full_params(config: Configuration) -> Result<(
 	))
 }
 
-// macro_rules! new_full_start {
-// 	($config:expr) => {{
-// 		let builder = sc_service::ServiceBuilder::new_full::<
-// 			runtime::opaque::Block,
-// 			runtime::RuntimeApi,
-// 			crate::service::Executor,
-// 		>($config)?
-// 		.with_select_chain(|_config, backend| Ok(sc_consensus::LongestChain::new(backend.clone())))?
-// 		.with_transaction_pool(|builder| {
-// 			let pool_api = sc_transaction_pool::FullChainApi::new(builder.client().clone());
-// 			Ok(sc_transaction_pool::BasicPool::new(
-// 				builder.config().transaction_pool.clone(),
-// 				std::sync::Arc::new(pool_api),
-// 				builder.prometheus_registry(),
-// 			))
-// 		})?
-// 		.with_import_queue(
-// 			|_config, client, _select_chain, _transaction_pool, spawn_task_handle, registry| {
-// 				Ok(sc_consensus_manual_seal::import_queue(
-// 					Box::new(client),
-// 					spawn_task_handle,
-// 					registry,
-// 				))
-// 			},
-// 		)?;
-//
-// 		builder
-// 		}};
-// }
-
 /// Builds a new service for a full client.
 pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
-	let (
-		params, select_chain, inherent_data_providers,
-		block_import, grandpa_link,
-	) = new_full_params(config)?;
+
+	// This variable is only used when ocw feature is enabled.
+	// Suppress the warning when ocw feature is not enabled.
+	#[allow(unused_variables)]
+	let dev_seed = config.dev_key_seed.clone();
+
+	let (params, select_chain, inherent_data_providers) = new_full_params(config)?;
 
 	let (
 		is_authority, force_authoring, name, enable_grandpa, prometheus_registry,
@@ -131,11 +105,6 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
 			client.clone(), transaction_pool.clone(), keystore.clone(),
 		)
 	};
-
-	// This variable is only used when ocw feature is enabled.
-	// Suppress the warning when ocw feature is not enabled.
-	#[allow(unused_variables)]
-	let dev_seed = config.dev_key_seed.clone();
 
 	// let builder = new_full_start!(config);
 	// let service = builder.build_full()?;
@@ -162,7 +131,7 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
 	if is_authority {
 		let proposer = sc_basic_authorship::ProposerFactory::new(
 			client.clone(),
-			transaction_pool,
+			transaction_pool.clone(),
 			prometheus_registry.as_ref(),
 		);
 
@@ -171,8 +140,7 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
 			proposer,
 			client.clone(),
 			transaction_pool.pool().clone(),
-			select_chain
-				.ok_or(ServiceError::SelectChainRequired)?,
+			select_chain,
 			inherent_data_providers,
 		);
 
@@ -198,8 +166,8 @@ pub fn new_light(config: Configuration) -> Result<TaskManager, ServiceError> {
 	);
 
 	let import_queue = sc_consensus_manual_seal::import_queue(
-		Box::new(client),
-		&task_manager.spawn_handle,
+		Box::new(client.clone()),
+		&task_manager.spawn_handle(),
 		config.prometheus_registry(),
 	);
 
