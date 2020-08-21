@@ -23,19 +23,21 @@ native_executor_instance!(
 type FullClient = sc_service::TFullClient<Block, RuntimeApi, Executor>;
 type FullBackend = sc_service::TFullBackend<Block>;
 type FullSelectChain = sc_consensus::LongestChain<FullBackend, Block>;
+type OurServiceParams = sc_service::ServiceParams<
+	Block, FullClient,
+	BasicQueue<Block, TransactionFor<FullClient, Block>>,
+	sc_transaction_pool::FullPool<Block, FullClient>,
+	crate::rpc::IoHandler, FullBackend,
+>;
+type EngineCommandReceiver = Receiver<EngineCommand<Hash>>;
 
 /// Returns most parts of a service. Not enough to run a full chain,
 /// But enough to perform chain operations like purge-chain
 pub fn new_full_params(config: Configuration) -> Result<(
-	sc_service::ServiceParams<
-		Block, FullClient,
-		BasicQueue<Block, TransactionFor<FullClient, Block>>,
-		sc_transaction_pool::FullPool<Block, FullClient>,
-		crate::rpc::IoHandler, FullBackend,
-	>,
+	OurServiceParams,
 	FullSelectChain,
 	sp_inherents::InherentDataProviders,
-	Receiver<EngineCommand<Hash>>,
+	EngineCommandReceiver,
 ), ServiceError> {
 	let inherent_data_providers = InherentDataProviders::new();
 	inherent_data_providers

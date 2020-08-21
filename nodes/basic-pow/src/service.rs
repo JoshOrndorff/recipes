@@ -22,6 +22,13 @@ native_executor_instance!(
 type FullClient = sc_service::TFullClient<Block, RuntimeApi, Executor>;
 type FullBackend = sc_service::TFullBackend<Block>;
 type FullSelectChain = sc_consensus::LongestChain<FullBackend, Block>;
+type OurServiceParams = sc_service::ServiceParams<
+	Block, FullClient,
+	BasicQueue<Block, TransactionFor<FullClient, Block>>,
+	sc_transaction_pool::FullPool<Block, FullClient>,
+	(), FullBackend,
+>;
+type OurBlockImport = sc_consensus_pow::PowBlockImport<Block, Arc<FullClient>, FullClient, FullSelectChain, MinimalSha3Algorithm>;
 
 pub fn build_inherent_data_providers() -> Result<InherentDataProviders, ServiceError> {
 	let providers = InherentDataProviders::new();
@@ -37,15 +44,10 @@ pub fn build_inherent_data_providers() -> Result<InherentDataProviders, ServiceE
 /// Returns most parts of a service. Not enough to run a full chain,
 /// But enough to perform chain operations like purge-chain
 pub fn new_full_params(config: Configuration) -> Result<(
-	sc_service::ServiceParams<
-		Block, FullClient,
-		BasicQueue<Block, TransactionFor<FullClient, Block>>,
-		sc_transaction_pool::FullPool<Block, FullClient>,
-		(), FullBackend,
-	>,
+	OurServiceParams,
 	FullSelectChain,
 	sp_inherents::InherentDataProviders,
-	sc_consensus_pow::PowBlockImport<Block, Arc<FullClient>, FullClient, FullSelectChain, MinimalSha3Algorithm>,
+	OurBlockImport,
 ), ServiceError> {
 	let inherent_data_providers = build_inherent_data_providers()?;
 
