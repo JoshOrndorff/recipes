@@ -92,7 +92,7 @@ pub fn new_full_params(config: Configuration) -> Result<(
 		finality_proof_request_builder: None,
 		finality_proof_provider: None,
 		on_demand: None,
-		remote_blockchain: Some(backend.remote_blockchain()),
+		remote_blockchain: None,
 	};
 
 	Ok((
