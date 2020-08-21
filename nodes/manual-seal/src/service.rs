@@ -72,7 +72,7 @@ pub fn new_full_params(config: Configuration) -> Result<(
 	let rpc_extensions_builder = {
 		let client = client.clone();
 		let pool = transaction_pool.clone();
-		let command_sink = command_sink.clone();
+		let command_sink = command_sink;
 		Box::new(move |deny_unsafe| {
 			let deps = crate::rpc::FullDeps {
 				client: client.clone(),
@@ -133,7 +133,7 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
 		let authorship_future = sc_consensus_manual_seal::run_manual_seal(
 			Box::new(client.clone()),
 			proposer,
-			client.clone(),
+			client,
 			transaction_pool.pool().clone(),
 			commands_stream,
 			select_chain,

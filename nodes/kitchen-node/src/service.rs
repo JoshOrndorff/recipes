@@ -131,7 +131,7 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
 		let authorship_future = sc_consensus_manual_seal::run_instant_seal(
 			Box::new(client.clone()),
 			proposer,
-			client.clone(),
+			client,
 			transaction_pool.pool().clone(),
 			select_chain,
 			inherent_data_providers,

@@ -125,7 +125,7 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
 	if is_authority {
 		let proposer = sc_basic_authorship::ProposerFactory::new(
 			client.clone(),
-			transaction_pool.clone(),
+			transaction_pool,
 			prometheus_registry.as_ref(),
 		);
 
@@ -183,11 +183,11 @@ pub fn new_light(config: Configuration) -> Result<TaskManager, ServiceError> {
 	);
 
 	let import_queue = sc_consensus_pow::import_queue(
-		Box::new(pow_block_import.clone()),
+		Box::new(pow_block_import),
 		None,
 		None,
 		sha3pow::MinimalSha3Algorithm,
-		inherent_data_providers.clone(),
+		inherent_data_providers,
 		&task_manager.spawn_handle(),
 		config.prometheus_registry(),
 	)?;
