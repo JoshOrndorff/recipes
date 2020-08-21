@@ -3,12 +3,14 @@
 //! A pallet that implements a storage set on top of a storage map and demonstrates performance
 //! tradeoffs when using vec sets.
 
-use frame_support::{decl_error, decl_event, decl_module, decl_storage, dispatch::DispatchResult, ensure};
-use frame_system::{self as system, ensure_signed};
-use frame_support::storage::IterableStorageMap;
-use sp_std::prelude::*;
-use sp_std::collections::btree_set::BTreeSet;
 use account_set::AccountSet;
+use frame_support::storage::IterableStorageMap;
+use frame_support::{
+	decl_error, decl_event, decl_module, decl_storage, dispatch::DispatchResult, ensure,
+};
+use frame_system::{self as system, ensure_signed};
+use sp_std::collections::btree_set::BTreeSet;
+use sp_std::prelude::*;
 
 #[cfg(test)]
 mod tests;
@@ -22,11 +24,8 @@ pub trait Trait: system::Trait {
 
 decl_storage! {
 	trait Store for Module<T: Trait> as VecMap {
-		// The set of all members. The bool value is a workaround and will always be
-		// `true`. It would be nicer to map to `()`, but `()` is encoded as 0 bytes. The
-		// underlying storage cannot distinguish between keys with 0-byte values and keys
-		// not present in the map.
-		Members get(fn members): map hasher(blake2_128_concat) T::AccountId => bool;
+		//Currently we map to '()' because '()' is not encoded anymore as 0 bytes and the underlying storage
+		Members get(fn members): map hasher(blake2_128_concat) T::AccountId => ();
 		// The total number of members stored in the map.
 		// Because the map does not store its size internally, we must store it separately
 		MemberCount: u32;
@@ -76,7 +75,7 @@ decl_module! {
 			ensure!(!Members::<T>::contains_key(&new_member), Error::<T>::AlreadyMember);
 
 			// Insert the new member and emit the event
-			Members::<T>::insert(&new_member, true);
+			Members::<T>::insert(&new_member, ());
 			MemberCount::put(member_count + 1); // overflow check not necessary because of maximum
 			Self::deposit_event(RawEvent::MemberAdded(new_member));
 			Ok(())
@@ -102,8 +101,7 @@ impl<T: Trait> AccountSet for Module<T> {
 	type AccountId = T::AccountId;
 
 	fn accounts() -> BTreeSet<T::AccountId> {
-		<Members::<T> as IterableStorageMap<T::AccountId, bool>>
-			::iter()
+		<Members<T> as IterableStorageMap<T::AccountId, ()>>::iter()
 			.map(|(acct, _)| acct)
 			.collect::<BTreeSet<_>>()
 	}
