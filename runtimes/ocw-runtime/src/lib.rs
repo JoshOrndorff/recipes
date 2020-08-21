@@ -1,8 +1,6 @@
 //! This runtime demonstrates how to configure signed and unsigned transaction handlers to be used
 //!   by off-chain worker in its including pallets.
 
-#![allow(clippy::unnecessary_mut_passed)]
-
 #![cfg_attr(not(feature = "std"), no_std)]
 // `construct_runtime!` does a lot of recursion and requires us to increase the limit to 256.
 #![recursion_limit = "256"]
