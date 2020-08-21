@@ -37,7 +37,7 @@ track its size internally, so we introduce a second storage value for this purpo
 decl_storage! {
 	trait Store for Module<T: Trait> as VecMap {
 		// The set of all members.
-		Members get(fn members): map hasher(blake2_128_concat) T::AccountId => bool;
+		Members get(fn members): map hasher(blake2_128_concat) T::AccountId => ();
 		// The total number of members stored in the map.
 		// Because the map does not store its size, we must store it separately
 		MemberCount: u32;
@@ -45,8 +45,7 @@ decl_storage! {
 }
 ```
 
-As the code comment says, we will not associate any meaning with the _value_ stored in the map; we
-only care about the keys. As a convention, the value will always be `true`.
+The _value_ stored in the map is `()` because we only care about the keys.
 
 ## Adding Members
 
@@ -67,7 +66,7 @@ fn add_member(origin) -> DispatchResult {
 	ensure!(!Members::<T>::contains_key(&new_member), Error::<T>::AlreadyMember);
 
 	// Insert the new member and emit the event
-	Members::<T>::insert(&new_member, true);
+	Members::<T>::insert(&new_member, ());
 	MemberCount::put(member_count + 1); // overflow check not necessary because of maximum
 	Self::deposit_event(RawEvent::MemberAdded(new_member));
 	Ok(())
