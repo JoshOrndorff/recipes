@@ -8,6 +8,7 @@ mod service;
 mod cli;
 mod command;
 mod silly_rpc;
+mod rpc;
 
 fn main() -> sc_cli::Result<()> {
 	command::run()
