@@ -1,12 +1,15 @@
 //! Service and ServiceFactory implementation. Specialized wrapper over substrate service.
 
-use sc_consensus::LongestChain;
 use sc_executor::native_executor_instance;
 pub use sc_executor::NativeExecutor;
+use sc_client_api::RemoteBackend;
 use sc_network::config::DummyFinalityProofRequestBuilder;
-use sc_service::{error::Error as ServiceError, AbstractService, Configuration, ServiceBuilder};
+use sc_service::{error::Error as ServiceError, Configuration, ServiceComponents, TaskManager};
 use sp_inherents::InherentDataProviders;
 use std::sync::Arc;
+use runtime::{self, opaque::Block, RuntimeApi};
+use sp_consensus::import_queue::BasicQueue;
+use sp_api::TransactionFor;
 
 // Our native executor instance.
 native_executor_instance!(
@@ -15,59 +18,92 @@ native_executor_instance!(
 	runtime::native_version,
 );
 
-/// Starts a `ServiceBuilder` for a full service.
-///
-/// Use this macro if you don't actually need the full service, but just the builder in order to
-/// be able to perform chain operations.
-macro_rules! new_full_start {
-	($config:expr) => {{
-		let builder = sc_service::ServiceBuilder::new_full::<
-			runtime::opaque::Block,
-			runtime::RuntimeApi,
-			crate::service::Executor,
-		>($config)?
-		.with_select_chain(|_config, backend| Ok(sc_consensus::LongestChain::new(backend.clone())))?
-		.with_transaction_pool(|builder| {
-			let pool_api = sc_transaction_pool::FullChainApi::new(builder.client().clone());
-			Ok(sc_transaction_pool::BasicPool::new(
-				builder.config().transaction_pool.clone(),
-				std::sync::Arc::new(pool_api),
-				builder.prometheus_registry(),
-			))
-		})?
-		.with_import_queue(
-			|_config, client, _select_chain, _transaction_pool, spawn_task_handle, registry| {
-				Ok(sc_consensus_manual_seal::import_queue(
-					Box::new(client),
-					spawn_task_handle,
-					registry,
-				))
-			},
-		)?;
+type FullClient = sc_service::TFullClient<Block, RuntimeApi, Executor>;
+type FullBackend = sc_service::TFullBackend<Block>;
+type FullSelectChain = sc_consensus::LongestChain<FullBackend, Block>;
+type OurServiceParams = sc_service::ServiceParams<
+	Block, FullClient,
+	BasicQueue<Block, TransactionFor<FullClient, Block>>,
+	sc_transaction_pool::FullPool<Block, FullClient>,
+	(), FullBackend,
+>;
 
-		builder
-		}};
-}
-
-/// Builds a new service for a full client.
-pub fn new_full(config: Configuration) -> Result<impl AbstractService, ServiceError> {
-	let is_authority = config.role.is_authority();
-
-	// This variable is only used when ocw feature is enabled.
-	// Suppress the warning when ocw feature is not enabled.
-	#[allow(unused_variables)]
-	let dev_seed = config.dev_key_seed.clone();
-
-	// This isn't great. It includes the timestamp inherent in all blocks
-	// regardless of runtime.
+/// Returns most parts of a service. Not enough to run a full chain,
+/// But enough to perform chain operations like purge-chain
+pub fn new_full_params(config: Configuration) -> Result<(
+	OurServiceParams,
+	FullSelectChain,
+	sp_inherents::InherentDataProviders,
+), ServiceError> {
 	let inherent_data_providers = InherentDataProviders::new();
 	inherent_data_providers
 		.register_provider(sp_timestamp::InherentDataProvider)
 		.map_err(Into::into)
 		.map_err(sp_consensus::error::Error::InherentData)?;
 
-	let builder = new_full_start!(config);
-	let service = builder.build_full()?;
+	let (client, backend, keystore, task_manager) =
+		sc_service::new_full_parts::<Block, RuntimeApi, Executor>(&config)?;
+	let client = Arc::new(client);
+
+	let select_chain = sc_consensus::LongestChain::new(backend.clone());
+
+	let pool_api = sc_transaction_pool::FullChainApi::new(
+		client.clone(), config.prometheus_registry(),
+	);
+	let transaction_pool = sc_transaction_pool::BasicPool::new_full(
+		config.transaction_pool.clone(),
+		std::sync::Arc::new(pool_api),
+		config.prometheus_registry(),
+		task_manager.spawn_handle(),
+		client.clone(),
+	);
+
+	let import_queue = sc_consensus_manual_seal::import_queue(
+		Box::new(client.clone()),
+		&task_manager.spawn_handle(),
+		config.prometheus_registry(),
+	);
+
+	let params = sc_service::ServiceParams {
+		backend, client, import_queue, keystore, task_manager, transaction_pool,
+		config,
+		block_announce_validator_builder: None,
+		finality_proof_request_builder: None,
+		finality_proof_provider: None,
+		on_demand: None,
+		remote_blockchain: None,
+		rpc_extensions_builder: Box::new(|_| ()),
+	};
+
+	Ok((
+		params, select_chain, inherent_data_providers,
+	))
+}
+
+/// Builds a new service for a full client.
+pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
+
+	// This variable is only used when ocw feature is enabled.
+	// Suppress the warning when ocw feature is not enabled.
+	#[allow(unused_variables)]
+	let dev_seed = config.dev_key_seed.clone();
+
+	let (params, select_chain, inherent_data_providers) = new_full_params(config)?;
+
+	let (
+		is_authority, prometheus_registry, client, transaction_pool
+	) = {
+		let sc_service::ServiceParams {
+			config, client, transaction_pool, ..
+		} = &params;
+
+		(
+			config.role.is_authority(),
+			config.prometheus_registry().cloned(),
+			client.clone(),
+			transaction_pool.clone(),
+		)
+	};
 
 	// Initialize seed for signing transaction using off-chain workers
 	#[cfg(feature = "ocw")]
@@ -84,67 +120,61 @@ pub fn new_full(config: Configuration) -> Result<impl AbstractService, ServiceEr
 		}
 	}
 
+	let ServiceComponents { task_manager, .. } = sc_service::build(params)?;
+
 	if is_authority {
 		let proposer = sc_basic_authorship::ProposerFactory::new(
-			service.client(),
-			service.transaction_pool(),
-			service.prometheus_registry().as_ref(),
+			client.clone(),
+			transaction_pool.clone(),
+			prometheus_registry.as_ref(),
 		);
 
 		let authorship_future = sc_consensus_manual_seal::run_instant_seal(
-			Box::new(service.client()),
+			Box::new(client.clone()),
 			proposer,
-			service.client(),
-			service.transaction_pool().pool().clone(),
-			service
-				.select_chain()
-				.ok_or(ServiceError::SelectChainRequired)?,
+			client,
+			transaction_pool.pool().clone(),
+			select_chain,
 			inherent_data_providers,
 		);
 
-		service.spawn_essential_task_handle().spawn_blocking("instant-seal", authorship_future);
+		task_manager.spawn_essential_handle().spawn_blocking("instant-seal", authorship_future);
 	};
 
-	Ok(service)
+	Ok(task_manager)
 }
 
 /// Builds a new service for a light client.
-pub fn new_light(config: Configuration) -> Result<impl AbstractService, ServiceError> {
-	ServiceBuilder::new_light::<runtime::opaque::Block, runtime::RuntimeApi, Executor>(config)?
-		.with_select_chain(|_config, backend| Ok(LongestChain::new(backend.clone())))?
-		.with_transaction_pool(|builder| {
-			let fetcher = builder.fetcher()
-				.ok_or_else(|| "Trying to start light transaction pool without active fetcher")?;
-			let pool_api = sc_transaction_pool::LightChainApi::new(builder.client().clone(), fetcher);
-			let pool = sc_transaction_pool::BasicPool::with_revalidation_type(
-				builder.config().transaction_pool.clone(),
-				Arc::new(pool_api),
-				builder.prometheus_registry(),
-				sc_transaction_pool::RevalidationType::Light,
-			);
-			Ok(pool)
-		})?
-		.with_import_queue_and_fprb(
-			|_config,
-			 client,
-			 _backend,
-			 _fetcher,
-			 _select_chain,
-			 _tx_pool,
-			 spawn_task_handle,
-			 registry| {
-				let finality_proof_request_builder =
-					Box::new(DummyFinalityProofRequestBuilder::default()) as Box<_>;
+pub fn new_light(config: Configuration) -> Result<TaskManager, ServiceError> {
+	let (client, backend, keystore, task_manager, on_demand) =
+		sc_service::new_light_parts::<Block, RuntimeApi, Executor>(&config)?;
 
-				let import_queue = sc_consensus_manual_seal::import_queue(
-					Box::new(client),
-					spawn_task_handle,
-					registry,
-				);
+	let transaction_pool_api = Arc::new(sc_transaction_pool::LightChainApi::new(
+		client.clone(), on_demand.clone(),
+	));
+	let transaction_pool = sc_transaction_pool::BasicPool::new_light(
+		config.transaction_pool.clone(),
+		transaction_pool_api,
+		config.prometheus_registry(),
+		task_manager.spawn_handle(),
+	);
 
-				Ok((import_queue, finality_proof_request_builder))
-			},
-		)?
-		.with_finality_proof_provider(|_client, _backend| Ok(Arc::new(()) as _))?
-		.build_light()
+	let import_queue = sc_consensus_manual_seal::import_queue(
+		Box::new(client.clone()),
+		&task_manager.spawn_handle(),
+		config.prometheus_registry(),
+	);
+
+	let fprb = Box::new(DummyFinalityProofRequestBuilder::default()) as Box<_>;
+
+	sc_service::build(sc_service::ServiceParams {
+		block_announce_validator_builder: None,
+		finality_proof_request_builder: Some(fprb),
+		finality_proof_provider: None,
+		on_demand: Some(on_demand),
+		remote_blockchain: Some(backend.remote_blockchain()),
+		rpc_extensions_builder: Box::new(|_| ()),
+		transaction_pool: Arc::new(transaction_pool),
+		config, client, import_queue, keystore, backend, task_manager
+	 }).map(|ServiceComponents { task_manager, .. }| task_manager)
 }

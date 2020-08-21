@@ -7,14 +7,6 @@
   },
   "U16F16": "[u8; 4]",
   "GroupIndex": "u32",
-  "TaskId": "Vec<u8>",
-  "PriorityScore": "u32",
-  "RoundIndex": "u32",
-  "Task": {
-    "id": "TaskId",
-    "score": "PriorityScore",
-    "proposed_at": "BlockNumber"
-  },
   "ValueStruct": {
     "integer": "i32",
     "boolean": "bool"

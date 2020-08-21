@@ -13,20 +13,13 @@ use sp_std::vec::Vec;
 mod tests;
 
 /// The pallet's configuration trait.
-/// This trait includes two randomness sources. In production you will only ever need one. This pallet
-/// includes both merely to demonstrate both.
 pub trait Trait: system::Trait {
 	type Event: From<Event> + Into<<Self as system::Trait>::Event>;
 
-	/// Connection to Collective Flip pallet. Typically the type would be called something like
-	/// `RandomnessSource` but because we are using two sources in this pallet, we will name
-	/// them explicitly
-	type CollectiveFlipRandomnessSource: Randomness<H256>;
-
-	/// Connection to Babe pallet. Typically the type would be called something like
-	/// `RandomnessSource` but because we are using two sources in this pallet, we will name
-	/// them explicitly
-	type BabeRandomnessSource: Randomness<H256>;
+	/// The pallet doesn't know what the source of randomness is; it can be anything that
+	/// implements the trait. When installing this pallet in a runtime, you
+	/// must make sure to give it a randomness source that suits its needs.
+	type RandomnessSource: Randomness<H256>;
 }
 
 decl_storage! {
@@ -42,33 +35,17 @@ decl_module! {
 
 		/// Grab a random seed and random value from the randomness collective flip pallet
 		#[weight = 10_000]
-		fn call_collective_flip(origin) -> DispatchResult {
+		fn consume_randomness(origin) -> DispatchResult {
 			let _ = ensure_signed(origin)?;
 
 			// Using a subject is recommended to prevent accidental re-use of the seed
 			// (This does not add security or entropy)
 			let subject = Self::encode_and_update_nonce();
 
-			let random_seed = T::CollectiveFlipRandomnessSource::random_seed();
-			let random_result = T::CollectiveFlipRandomnessSource::random(&subject);
+			let random_seed = T::RandomnessSource::random_seed();
+			let random_result = T::RandomnessSource::random(&subject);
 
-			Self::deposit_event(Event::CollectiveFlip(random_seed, random_result));
-			Ok(())
-		}
-
-		/// Grab a random seed and random value from the babe pallet
-		#[weight = 10_000]
-		fn call_babe_vrf(origin) -> DispatchResult {
-			let _ = ensure_signed(origin)?;
-
-			// Using a subject is recommended to prevent accidental re-use of the seed
-			// (This does not add security or entropy)
-			let subject = Self::encode_and_update_nonce();
-
-			let random_seed = T::BabeRandomnessSource::random_seed();
-			let random_result = T::BabeRandomnessSource::random(&subject);
-
-			Self::deposit_event(Event::BabeVRF(random_seed, random_result));
+			Self::deposit_event(Event::RandomnessConsumed(random_seed, random_result));
 			Ok(())
 		}
 	}
@@ -76,10 +53,8 @@ decl_module! {
 
 decl_event!(
 	pub enum Event {
-		/// Randomness taken from Collective Flip. First element is raw seed, second is using nonce.
-		CollectiveFlip(H256, H256),
-		/// Randomness taken from Babe VRF Outputs. First element is raw seed, second is using nonce.
-		BabeVRF(H256, H256),
+		/// First element is raw seed, second is using nonce.
+		RandomnessConsumed(H256, H256),
 	}
 );
 

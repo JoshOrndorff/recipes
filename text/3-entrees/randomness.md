@@ -16,7 +16,7 @@ chain. Some techniques have been developed to address this problem including
 [RanDAO](https://github.com/randao/randao) and
 [Verifiable Random Functions](https://en.wikipedia.org/wiki/Verifiable_random_function). Substrate
 abstracts the implementation of a randomness source using the
-[`Randomness` trait](https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/traits/trait.Randomness.html), and
+[`Randomness` trait](https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/traits/trait.Randomness.html), and
 provides a few implementations. This recipe will demonstrate using the `Randomness` trait and two
 concrete implementations.
 
@@ -66,18 +66,38 @@ sources is not necessary in practice.
 pub trait Trait: system::Trait {
 	type Event: From<Event> + Into<<Self as system::Trait>::Event>;
 
-	type CollectiveFlipRandomnessSource: Randomness<H256>;
-
-	type BabeRandomnessSource: Randomness<H256>;
+	type RandomnessSource: Randomness<H256>;
 }
 ```
 
-We've provided the `Output` type as [`H256`](https://substrate.dev/rustdocs/v2.0.0-rc4/sp_core/struct.H256.html).
+We've provided the `Output` type as [`H256`](https://substrate.dev/rustdocs/v2.0.0-rc5/sp_core/struct.H256.html).
+
+## Consuming Randomness
+
+Calling the randomness source from Rust code is straightforward. Our `consume_randomness` extrinsic
+demonstrates consuming the raw random seed as well as a context-augmented random value. Try submitting the same extrinsic twice in the same block. The raw seed should be the same each time.
+
+```rust, ignore
+fn consume_randomness(origin) -> DispatchResult {
+	let _ = ensure_signed(origin)?;
+
+	// Using a subject is recommended to prevent accidental re-use of the seed
+	// (This does not add security or entropy)
+	let subject = Self::encode_and_update_nonce();
+
+	let random_seed = T::RandomnessSource::random_seed();
+	let random_result = T::RandomnessSource::random(&subject);
+
+	Self::deposit_event(Event::RandomnessConsumed(random_seed, random_result));
+	Ok(())
+}
+}
+```
 
 ## Collective Coin Flipping
 
 Substrate's
-[Randomness Collective Flip pallet](https://substrate.dev/rustdocs/v2.0.0-rc4/pallet_randomness_collective_flip/index.html)
+[Randomness Collective Flip pallet](https://substrate.dev/rustdocs/v2.0.0-rc5/pallet_randomness_collective_flip/index.html)
 uses a safe mixing algorithm to generate randomness using the entropy of previous block hashes.
 Because it is dependent on previous blocks, it can take many blocks for the seed to change.
 
@@ -87,13 +107,6 @@ preview the random seed, and choose to discard the block choosing a slightly mod
 more desirable hash. This pallet is subject to similar manipulation by the previous 81 block authors
 rather than just the previous 1.
 
-Calling the randomness source from rust code is straightforward.
-
-```rust, ignore
-let random_seed = T::CollectiveFlipRandomnessSource::random_seed();
-let random_result = T::CollectiveFlipRandomnessSource::random(&subject);
-```
-
 Although it may _seem_ harmless, **you should not hash the result** of the randomness provided by
 the collective flip pallet. Secure hash functions satisfy the
 [Avalance effect](https://en.wikipedia.org/wiki/Avalanche_effect) which means that each bit of input
@@ -102,7 +115,7 @@ property provided by the pallet.
 
 ## Babe VRF Output
 
-Substrate's [Babe pallet](https://substrate.dev/rustdocs/v2.0.0-rc4/pallet_babe/index.html) which is primarily
+Substrate's [Babe pallet](https://substrate.dev/rustdocs/v2.0.0-rc5/pallet_babe/index.html) which is primarily
 responsible for managing validator rotation in Babe consensus, also collects the VRF outputs that
 Babe validators publish to demonstrate that they are permitted to author a block. These VRF outputs
 can be used to provide a random seed.

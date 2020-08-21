@@ -240,10 +240,3 @@ where
 		Ok(None)
 	}
 }
-
-#[test]
-fn clone_works() {
-	let client = Arc::new(());
-	let algo1 = Sha3Algorithm::<()>::new(client);
-	let algo2 = algo1.clone();
-}

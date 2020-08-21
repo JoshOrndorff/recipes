@@ -153,8 +153,8 @@ RPC or Consensus would be conceptually similar to changing its runtime.
 Substrate Developer Hub offers tutorials that go into more depth about writing pallets and including
 them in runtimes. If you desire, you may read them as well.
 
--   [Creating an External Pallet](https://substrate.dev/docs/en/tutorials/create-a-pallet/)
--   [Adding a Pallet to Your Runtime Tutorial](https://substrate.dev/docs/en/tutorials/add-a-pallet-to-your-runtime/)
+-   [Create an Pallet](https://substrate.dev/docs/en/tutorials/create-a-pallet/)
+-   [Add a Pallet to Your Runtime](https://substrate.dev/docs/en/tutorials/add-a-pallet/)
 
 # Let's Get Cooking!
 

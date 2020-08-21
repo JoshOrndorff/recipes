@@ -2,8 +2,6 @@
 //!
 //! This runtime demonstrates most of the recipe pallets in a single super runtime.
 
-#![allow(clippy::unnecessary_mut_passed)]
-
 #![cfg_attr(not(feature = "std"), no_std)]
 // `construct_runtime!` does a lot of recursion and requires us to increase the limit to 256.
 #![recursion_limit = "256"]
@@ -180,6 +178,8 @@ impl system::Trait for Runtime {
 	type OnKilledAccount = ();
 	/// The data to be stored in an account.
 	type AccountData = balances::AccountData<Balance>;
+	/// Weight information for the extrinsics of this pallet.
+	type SystemWeightInfo = ();
 }
 
 parameter_types! {
@@ -191,6 +191,7 @@ impl timestamp::Trait for Runtime {
 	type Moment = u64;
 	type OnTimestampSet = ();
 	type MinimumPeriod = MinimumPeriod;
+	type WeightInfo = ();
 }
 
 parameter_types! {
@@ -207,6 +208,7 @@ impl balances::Trait for Runtime {
 	type DustRemoval = ();
 	type ExistentialDeposit = ExistentialDeposit;
 	type AccountStore = System;
+	type WeightInfo = ();
 }
 
 parameter_types! {
@@ -281,19 +283,6 @@ impl double_map::Trait for Runtime {
 	type Event = Event;
 }
 
-parameter_types! {
-	pub const ExecutionFrequency: u32 = 10;
-	pub const SignalQuota: u32 = 1000;
-	pub const TaskLimit: u32 = 10;
-}
-
-impl execution_schedule::Trait for Runtime {
-	type Event = Event;
-	type ExecutionFrequency = ExecutionFrequency;
-	type SignalQuota = SignalQuota;
-	type TaskLimit = TaskLimit;
-}
-
 impl fixed_point::Trait for Runtime {
 	type Event = Event;
 }
@@ -323,9 +312,7 @@ impl ringbuffer_queue::Trait for Runtime {
 
 impl randomness::Trait for Runtime {
 	type Event = Event;
-	type CollectiveFlipRandomnessSource = RandomnessCollectiveFlip;
-	//TODO Refactor this recipe to only take one randomness source like a normal pallet would.
-	type BabeRandomnessSource = RandomnessCollectiveFlip;
+	type RandomnessSource = RandomnessCollectiveFlip;
 }
 
 parameter_types! {
@@ -389,7 +376,6 @@ construct_runtime!(
 		DefaultInstance1: default_instance::{Module, Call, Storage, Event<T>},
 		DefaultInstance2: default_instance::<Instance2>::{Module, Call, Storage, Event<T>},
 		DoubleMap: double_map::{Module, Call, Storage, Event<T>},
-		ExecutionSchedule: execution_schedule::{Module, Call, Storage, Event<T>},
 		FixedPoint: fixed_point::{Module, Call, Storage, Event},
 		HelloSubstrate: hello_substrate::{Module, Call},
 		GenericEvent: generic_event::{Module, Call, Event<T>},

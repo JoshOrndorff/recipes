@@ -152,7 +152,7 @@ pub type TestPallet = Module<TestRuntime>;
 
 With this, it is possible to use this type in the unit tests. For example, the block number can be
 set with
-[`set_block_number`](https://substrate.dev/rustdocs/v2.0.0-rc4/frame_system/struct.Module.html#method.set_block_number)
+[`set_block_number`](https://substrate.dev/rustdocs/v2.0.0-rc5/frame_system/struct.Module.html#method.set_block_number)
 
 ```rust, ignore
 #[test]
@@ -251,7 +251,7 @@ add_extra_genesis {
 ```
 
 To use `new_test_ext` in a runtime test, we call the method and call
-[`execute_with`](https://substrate.dev/rustdocs/v2.0.0-rc4/sp_state_machine/struct.TestExternalities.html#method.execute_with)
+[`execute_with`](https://substrate.dev/rustdocs/v2.0.0-rc5/sp_state_machine/struct.TestExternalities.html#method.execute_with)
 on the returned `runtime_io::TestExternalities`
 
 ```rust, ignore
@@ -283,8 +283,8 @@ default instance of the environment or a more specific edge case configuration. 
 explored in more detail in [Custom Test Environment](./externalities.md).
 
 Like `new_test_ext`, the `build()` method on the `ExtBuilder` object returns an instance of
-[`TestExternalities`](https://substrate.dev/rustdocs/v2.0.0-rc4/sp_state_machine/struct.TestExternalities.html).
-[Externalities](https://substrate.dev/rustdocs/v2.0.0-rc4/sp_externalities/index.html) are an abstraction that allows
+[`TestExternalities`](https://substrate.dev/rustdocs/v2.0.0-rc5/sp_state_machine/struct.TestExternalities.html).
+[Externalities](https://substrate.dev/rustdocs/v2.0.0-rc5/sp_externalities/index.html) are an abstraction that allows
 the runtime to access features of the outer node such as storage or offchain workers.
 
 In this case, create a mock storage from the default genesis configuration.
@@ -311,7 +311,7 @@ fn fake_test_example() {
 
 While testing in this environment, runtimes that require signed extrinsics (i.e. take `origin` as a
 parameter) will require transactions coming from an `Origin`. This requires importing the
-[`impl_outer_origin`](https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/macro.impl_outer_origin.html) macro
+[`impl_outer_origin`](https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/macro.impl_outer_origin.html) macro
 from `support`
 
 ```rust, ignore
@@ -343,7 +343,7 @@ and not all tests.
 Note that the input to `Origin::signed` is the `system::Trait`'s `AccountId` type which was set to
 `u64` for the `TestRuntime` implementation. In theory, this could be set to some other type as long
 as it conforms to the
-[trait bound](https://substrate.dev/rustdocs/v2.0.0-rc4/frame_system/trait.Trait.html#associatedtype.AccountId),
+[trait bound](https://substrate.dev/rustdocs/v2.0.0-rc5/frame_system/trait.Trait.html#associatedtype.AccountId),
 
 ```rust, ignore
 pub trait Trait: 'static + Eq + Clone {

@@ -65,10 +65,10 @@ impl WeighData<(&bool, &u32)> for Conditional {
 ```
 
 In addition to the
-[`WeightData` Trait](https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/weights/trait.WeighData.html), shown
+[`WeightData` Trait](https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/weights/trait.WeighData.html), shown
 above, types that are used to calculate transaction weights must also implement
-[`ClassifyDispatch`](https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/weights/trait.ClassifyDispatch.html),
-and [`PaysFee`](https://substrate.dev/rustdocs/v2.0.0-rc4/frame_support/weights/trait.PaysFee.html).
+[`ClassifyDispatch`](https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/weights/trait.ClassifyDispatch.html),
+and [`PaysFee`](https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/weights/trait.PaysFee.html).
 
 ```rust, ignore
 impl<T> ClassifyDispatch<T> for Conditional {

@@ -7,6 +7,6 @@
   "license": "GPL-3.0-or-later",
   "private": false,
   "dependencies": {
-    "@polkadot/api": "^1.12.1"
+    "@polkadot/api": "^1.30.0-beta.1"
   }
 }
