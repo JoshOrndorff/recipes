@@ -1212,20 +1212,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7f14646a9e0430150a87951622ba9675472b68e384b7701b8423b30560805c7a"
 
 [[package]]
-name = "execution-schedule"
-version = "2.0.0-rc5"
-dependencies = [
- "frame-support",
- "frame-system",
- "parity-scale-codec",
- "rand 0.7.3",
- "sp-core",
- "sp-io",
- "sp-runtime",
- "sp-std",
-]
-
-[[package]]
 name = "exit-future"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -6770,7 +6756,6 @@ dependencies = [
  "constant-config",
  "default-instance",
  "double-map",
- "execution-schedule",
  "fixed-point",
  "frame-executive",
  "frame-support",

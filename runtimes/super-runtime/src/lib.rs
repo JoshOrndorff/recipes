@@ -283,19 +283,6 @@ impl double_map::Trait for Runtime {
 	type Event = Event;
 }
 
-parameter_types! {
-	pub const ExecutionFrequency: u32 = 10;
-	pub const SignalQuota: u32 = 1000;
-	pub const TaskLimit: u32 = 10;
-}
-
-impl execution_schedule::Trait for Runtime {
-	type Event = Event;
-	type ExecutionFrequency = ExecutionFrequency;
-	type SignalQuota = SignalQuota;
-	type TaskLimit = TaskLimit;
-}
-
 impl fixed_point::Trait for Runtime {
 	type Event = Event;
 }
@@ -389,7 +376,6 @@ construct_runtime!(
 		DefaultInstance1: default_instance::{Module, Call, Storage, Event<T>},
 		DefaultInstance2: default_instance::<Instance2>::{Module, Call, Storage, Event<T>},
 		DoubleMap: double_map::{Module, Call, Storage, Event<T>},
-		ExecutionSchedule: execution_schedule::{Module, Call, Storage, Event<T>},
 		FixedPoint: fixed_point::{Module, Call, Storage, Event},
 		HelloSubstrate: hello_substrate::{Module, Call},
 		GenericEvent: generic_event::{Module, Call, Event<T>},

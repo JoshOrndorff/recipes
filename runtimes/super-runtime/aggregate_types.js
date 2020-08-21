@@ -15,7 +15,6 @@ const pallets = [
   "constant-config",
   "default-instance",
   "double-map",
-  "execution-schedule",
   "fixed-point",
   "generic-event",
   "hello-substrate",

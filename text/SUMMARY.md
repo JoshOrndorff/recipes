@@ -40,7 +40,6 @@
 	- [Kitchen Node - An reusable instant seal node](./3-entrees/kitchen-node.md)
 	- [Currency Types](./3-entrees/currency.md)
 	- [Generating Randomness](./3-entrees/randomness.md)
-	- [Execution Schedule](./3-entrees/execution-schedule.md)
 	- [Tightly- and Loosely-Coupled Pallets](./3-entrees/pallet-coupling.md)
 	- [Testing](./3-entrees/testing/index.md)
 		- [Basic Test Environments](./3-entrees/testing/mock.md)
