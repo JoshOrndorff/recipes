@@ -36,7 +36,6 @@ members = [
 	"nodes/basic-pow",
 	"nodes/hybrid-consensus",
 	"nodes/kitchen-node",
-	"nodes/manual-seal",
 	"nodes/rpc-node",
 	"consensus/sha3pow",
 	"traits/account-set",
