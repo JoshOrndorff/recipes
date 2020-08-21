@@ -3538,30 +3538,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "pallet-babe"
-version = "2.0.0-rc5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "afbe77fbce124865444671ede029d6a2aea24c6271ef68cfae6b01cd9daaaeae"
-dependencies = [
- "frame-support",
- "frame-system",
- "pallet-authorship",
- "pallet-session",
- "pallet-timestamp",
- "parity-scale-codec",
- "sp-application-crypto",
- "sp-consensus-babe",
- "sp-consensus-vrf",
- "sp-inherents",
- "sp-io",
- "sp-runtime",
- "sp-session",
- "sp-staking",
- "sp-std",
- "sp-timestamp",
-]
-
-[[package]]
 name = "pallet-balances"
 version = "2.0.0-rc5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4469,7 +4445,6 @@ version = "2.0.0-rc5"
 dependencies = [
  "frame-support",
  "frame-system",
- "pallet-babe",
  "pallet-randomness-collective-flip",
  "pallet-timestamp",
  "parity-scale-codec",
@@ -6119,25 +6094,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "sp-consensus-babe"
-version = "0.8.0-rc5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7999df4cf735dea081b251d8067605df250ca01fc2276421b60766f141e213d3"
-dependencies = [
- "merlin",
- "parity-scale-codec",
- "sp-api",
- "sp-application-crypto",
- "sp-consensus-slots",
- "sp-consensus-vrf",
- "sp-core",
- "sp-inherents",
- "sp-runtime",
- "sp-std",
- "sp-timestamp",
-]
-
-[[package]]
 name = "sp-consensus-pow"
 version = "0.8.0-rc5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -6145,29 +6101,6 @@ checksum = "4a66e783fb5a76dfababad4507982a6c82af060540511c649bf4b8474e30ecae"
 dependencies = [
  "parity-scale-codec",
  "sp-api",
- "sp-core",
- "sp-runtime",
- "sp-std",
-]
-
-[[package]]
-name = "sp-consensus-slots"
-version = "0.8.0-rc5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0b05c7a32821d596f7b4c37002943bca649d632a85dddb865e45877ca56a12cb"
-dependencies = [
- "parity-scale-codec",
- "sp-runtime",
-]
-
-[[package]]
-name = "sp-consensus-vrf"
-version = "0.8.0-rc5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "35cd3dfeb4551089968e7fdf6128cf1c5123fc5c065060ce01ccfa398458cf2b"
-dependencies = [
- "parity-scale-codec",
- "schnorrkel",
  "sp-core",
  "sp-runtime",
  "sp-std",

@@ -68,6 +68,7 @@ impl system::Trait for TestRuntime {
 	type AccountData = ();
 	type OnNewAccount = ();
 	type OnKilledAccount = ();
+	type SystemWeightInfo = ();
 }
 
 // --- mocking offchain-demo trait

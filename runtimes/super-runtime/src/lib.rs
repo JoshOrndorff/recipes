@@ -325,9 +325,7 @@ impl ringbuffer_queue::Trait for Runtime {
 
 impl randomness::Trait for Runtime {
 	type Event = Event;
-	type CollectiveFlipRandomnessSource = RandomnessCollectiveFlip;
-	//TODO Refactor this recipe to only take one randomness source like a normal pallet would.
-	type BabeRandomnessSource = RandomnessCollectiveFlip;
+	type RandomnessSource = RandomnessCollectiveFlip;
 }
 
 parameter_types! {

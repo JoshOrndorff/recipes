@@ -48,6 +48,7 @@ impl system::Trait for TestRuntime {
 	type AccountData = ();
 	type OnNewAccount = ();
 	type OnKilledAccount = ();
+	type SystemWeightInfo = ();
 }
 
 mod simple_map {

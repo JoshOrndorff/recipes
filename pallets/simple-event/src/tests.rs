@@ -7,7 +7,7 @@ use sp_runtime::{
 	traits::{BlakeTwo256, IdentityLookup},
 	Perbill,
 };
-use system::{EventRecord, Phase};
+use frame_system::{EventRecord, Phase};
 
 impl_outer_origin! {
 	pub enum Origin for TestRuntime {}
@@ -24,7 +24,7 @@ parameter_types! {
 }
 
 // The TestRuntime implements two pallet/frame traits: system, and simple_event
-impl system::Trait for TestRuntime {
+impl frame_system::Trait for TestRuntime {
 	type BaseCallFilter = ();
 	type Origin = Origin;
 	type Index = u64;
@@ -49,6 +49,7 @@ impl system::Trait for TestRuntime {
 	type AccountData = ();
 	type OnNewAccount = ();
 	type OnKilledAccount = ();
+	type SystemWeightInfo = ();
 }
 
 mod simple_event {
@@ -58,7 +59,7 @@ mod simple_event {
 impl_outer_event! {
 	pub enum TestEvent for TestRuntime {
 		simple_event,
-		system<T>,
+		frame_system<T>,
 	}
 }
 
@@ -66,14 +67,14 @@ impl Trait for TestRuntime {
 	type Event = TestEvent;
 }
 
-pub type System = system::Module<TestRuntime>;
+pub type System = frame_system::Module<TestRuntime>;
 pub type SimpleEvent = Module<TestRuntime>;
 
 pub struct ExtBuilder;
 
 impl ExtBuilder {
 	pub fn build() -> TestExternalities {
-		let storage = system::GenesisConfig::default()
+		let storage = frame_system::GenesisConfig::default()
 			.build_storage::<TestRuntime>()
 			.unwrap();
 		let mut ext = TestExternalities::from(storage);

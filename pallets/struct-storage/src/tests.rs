@@ -61,6 +61,7 @@ impl system::Trait for TestRuntime {
 	type AccountData = balances::AccountData<u64>;
 	type OnNewAccount = ();
 	type OnKilledAccount = ();
+	type SystemWeightInfo = ();
 }
 // note: very unrealistic for most test envs
 parameter_types! {
@@ -74,6 +75,7 @@ impl balances::Trait for TestRuntime {
 	type DustRemoval = ();
 	type ExistentialDeposit = ExistentialDeposit;
 	type AccountStore = system::Module<TestRuntime>;
+	type WeightInfo = ();
 }
 
 mod struct_storage {
