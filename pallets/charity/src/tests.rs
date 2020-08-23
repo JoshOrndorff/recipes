@@ -93,8 +93,8 @@ pub fn new_test_ext() -> sp_io::TestExternalities {
 		// Provide some initial balances
 		balances: vec![(1, 13), (2, 11), (3, 1), (4, 3), (5, 19)],
 	}
-		.assimilate_storage(&mut t)
-		.unwrap();
+	.assimilate_storage(&mut t)
+	.unwrap();
 
 	crate::GenesisConfig {}
 		.assimilate_storage::<TestRuntime>(&mut t)
@@ -137,7 +137,8 @@ fn donations_work() {
 		assert_eq!(Balances::free_balance(&1), original - donation);
 
 		// Check that the correct event is emitted
-		let expected_event = TestEvent::charity(RawEvent::DonationReceived(1, donation, new_pot_total));
+		let expected_event =
+			TestEvent::charity(RawEvent::DonationReceived(1, donation, new_pot_total));
 		assert!(System::events().iter().any(|a| a.event == expected_event));
 	})
 }
