@@ -57,9 +57,9 @@ impl Trait for TestRuntime {}
 pub type System = system::Module<TestRuntime>;
 pub type HelloSubstrate = Module<TestRuntime>;
 
-pub struct ExtBuilder;
+struct ExternalityBuilder;
 
-impl ExtBuilder {
+impl ExternalityBuilder {
 	pub fn build() -> TestExternalities {
 		let storage = system::GenesisConfig::default()
 			.build_storage::<TestRuntime>()
@@ -72,14 +72,14 @@ impl ExtBuilder {
 
 #[test]
 fn say_hello_works() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		assert_ok!(HelloSubstrate::say_hello(Origin::signed(1)));
 	})
 }
 
 #[test]
 fn say_hello_no_root() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		assert_noop!(
 			HelloSubstrate::say_hello(RawOrigin::Root.into()),
 			DispatchError::BadOrigin

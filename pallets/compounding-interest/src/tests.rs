@@ -71,9 +71,9 @@ impl Trait for TestRuntime {
 pub type System = system::Module<TestRuntime>;
 pub type FixedPoint = Module<TestRuntime>;
 
-pub struct ExtBuilder;
+struct ExternalityBuilder;
 
-impl ExtBuilder {
+impl ExternalityBuilder {
 	pub fn build() -> TestExternalities {
 		let storage = system::GenesisConfig::default()
 			.build_storage::<TestRuntime>()
@@ -86,7 +86,7 @@ impl ExtBuilder {
 
 #[test]
 fn deposit_withdraw_discrete_works() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		// Deposit 10 tokens
 		assert_ok!(FixedPoint::deposit_discrete(Origin::signed(1), 10));
 
@@ -117,7 +117,7 @@ fn deposit_withdraw_discrete_works() {
 
 #[test]
 fn discrete_interest_works() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		// Deposit 100 tokens
 		assert_ok!(FixedPoint::deposit_discrete(Origin::signed(1), 100));
 

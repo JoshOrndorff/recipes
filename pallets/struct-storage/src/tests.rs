@@ -97,9 +97,9 @@ impl Trait for TestRuntime {
 pub type System = system::Module<TestRuntime>;
 pub type StructStorage = Module<TestRuntime>;
 
-pub struct ExtBuilder;
+struct ExternalityBuilder;
 
-impl ExtBuilder {
+impl ExternalityBuilder {
 	pub fn build() -> TestExternalities {
 		let storage = system::GenesisConfig::default()
 			.build_storage::<TestRuntime>()
@@ -112,7 +112,7 @@ impl ExtBuilder {
 
 #[test]
 fn insert_inner_works() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		// prepare hash
 		let data = H256::from_low_u64_be(16);
 		// insert inner thing
@@ -142,7 +142,7 @@ fn insert_inner_works() {
 
 #[test]
 fn insert_super_thing_with_existing_works() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		// prepare hash
 		let data = H256::from_low_u64_be(16);
 		// insert inner first (tested in direct test above)
@@ -187,7 +187,7 @@ fn insert_super_thing_with_existing_works() {
 
 #[test]
 fn insert_super_with_new_inner_works() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		// prepare hash
 		let data = H256::from_low_u64_be(16);
 		// insert super with new inner

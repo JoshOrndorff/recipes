@@ -57,9 +57,9 @@ impl Trait for TestRuntime {}
 
 pub type SingleValue = Module<TestRuntime>;
 
-pub struct ExtBuilder;
+struct ExternalityBuilder;
 
-impl ExtBuilder {
+impl ExternalityBuilder {
 	pub fn build() -> TestExternalities {
 		let storage = system::GenesisConfig::default()
 			.build_storage::<TestRuntime>()
@@ -70,7 +70,7 @@ impl ExtBuilder {
 
 #[test]
 fn set_value_works() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		assert_ok!(SingleValue::set_value(Origin::signed(1), 10));
 
 		assert_eq!(SingleValue::stored_value(), 10);
@@ -81,7 +81,7 @@ fn set_value_works() {
 
 #[test]
 fn set_value_no_root() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		assert_noop!(
 			SingleValue::set_value(RawOrigin::Root.into(), 10),
 			DispatchError::BadOrigin
@@ -91,7 +91,7 @@ fn set_value_no_root() {
 
 #[test]
 fn set_account_works() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		assert_ok!(SingleValue::set_account(Origin::signed(1)));
 
 		assert_eq!(SingleValue::stored_account(), 1)
@@ -100,7 +100,7 @@ fn set_account_works() {
 
 #[test]
 fn set_account_no_root() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		assert_noop!(
 			SingleValue::set_account(RawOrigin::Root.into()),
 			DispatchError::BadOrigin

@@ -119,9 +119,9 @@ where
 pub type System = system::Module<TestRuntime>;
 pub type OffchainDemo = Module<TestRuntime>;
 
-pub struct ExtBuilder;
+struct ExternalityBuilder;
 
-impl ExtBuilder {
+impl ExternalityBuilder {
 	pub fn build() -> (
 		TestExternalities,
 		Arc<RwLock<PoolState>>,
@@ -153,7 +153,7 @@ impl ExtBuilder {
 
 #[test]
 fn submit_number_signed_works() {
-	let (mut t, _, _) = ExtBuilder::build();
+	let (mut t, _, _) = ExternalityBuilder::build();
 	t.execute_with(|| {
 		// call submit_number_signed
 		let num = 32;
@@ -182,7 +182,7 @@ fn submit_number_signed_works() {
 
 #[test]
 fn offchain_send_signed_tx() {
-	let (mut t, pool_state, _offchain_state) = ExtBuilder::build();
+	let (mut t, pool_state, _offchain_state) = ExternalityBuilder::build();
 
 	t.execute_with(|| {
 		// when
@@ -199,7 +199,7 @@ fn offchain_send_signed_tx() {
 
 #[test]
 fn offchain_send_unsigned_tx() {
-	let (mut t, pool_state, _offchain_state) = ExtBuilder::build();
+	let (mut t, pool_state, _offchain_state) = ExternalityBuilder::build();
 
 	t.execute_with(|| {
 		// when

@@ -68,9 +68,9 @@ impl Trait for TestRuntime {
 pub type System = system::Module<TestRuntime>;
 pub type DoubleMap = Module<TestRuntime>;
 
-pub struct ExtBuilder;
+struct ExternalityBuilder;
 
-impl ExtBuilder {
+impl ExternalityBuilder {
 	pub fn build() -> TestExternalities {
 		let storage = system::GenesisConfig::default()
 			.build_storage::<TestRuntime>()
@@ -83,7 +83,7 @@ impl ExtBuilder {
 
 #[test]
 fn join_all_members_works() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		assert_ok!(DoubleMap::join_all_members(Origin::signed(1)));
 		// correct panic upon existing member trying to join
 		assert_noop!(
@@ -101,7 +101,7 @@ fn join_all_members_works() {
 
 #[test]
 fn group_join_works() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		// expected panic
 		assert_noop!(
 			DoubleMap::join_a_group(Origin::signed(1), 3, 5),
@@ -123,7 +123,7 @@ fn group_join_works() {
 
 #[test]
 fn remove_member_works() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		// action: user 1 joins
 		assert_ok!(DoubleMap::join_all_members(Origin::signed(1)));
 		// action: user 1 joins group 3 with score 5
@@ -143,7 +143,7 @@ fn remove_member_works() {
 
 #[test]
 fn remove_group_score_works() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		assert_ok!(DoubleMap::join_all_members(Origin::signed(1)));
 		assert_ok!(DoubleMap::join_all_members(Origin::signed(2)));
 		assert_ok!(DoubleMap::join_all_members(Origin::signed(3)));

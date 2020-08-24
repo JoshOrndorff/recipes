@@ -77,9 +77,9 @@ impl Trait for TestRuntime {
 pub type System = system::Module<TestRuntime>;
 pub type ConstantConfig = Module<TestRuntime>;
 
-pub struct ExtBuilder;
+struct ExternalityBuilder;
 
-impl ExtBuilder {
+impl ExternalityBuilder {
 	pub fn build() -> TestExternalities {
 		let storage = system::GenesisConfig::default()
 			.build_storage::<TestRuntime>()
@@ -92,7 +92,7 @@ impl ExtBuilder {
 
 #[test]
 fn max_added_exceeded_errs() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		assert_err!(
 			ConstantConfig::add_value(Origin::signed(1), 101),
 			"value must be <= maximum add amount constant"
@@ -102,7 +102,7 @@ fn max_added_exceeded_errs() {
 
 #[test]
 fn overflow_checked() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		let test_num: u32 = u32::max_value() - 99;
 		assert_ok!(ConstantConfig::set_value(Origin::signed(1), test_num));
 
@@ -115,7 +115,7 @@ fn overflow_checked() {
 
 #[test]
 fn add_value_works() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		assert_ok!(ConstantConfig::set_value(Origin::signed(1), 10));
 
 		assert_ok!(ConstantConfig::add_value(Origin::signed(2), 100));
@@ -134,7 +134,7 @@ fn add_value_works() {
 
 #[test]
 fn on_finalize_clears() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		System::set_block_number(5);
 		assert_ok!(ConstantConfig::set_value(Origin::signed(1), 10));
 

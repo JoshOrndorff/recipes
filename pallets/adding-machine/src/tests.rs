@@ -54,9 +54,9 @@ impl Trait for TestRuntime {}
 
 pub type AddingMachine = Module<TestRuntime>;
 
-pub struct ExtBuilder;
+struct ExternalityBuilder;
 
-impl ExtBuilder {
+impl ExternalityBuilder {
 	pub fn build() -> TestExternalities {
 		let storage = system::GenesisConfig::default()
 			.build_storage::<TestRuntime>()
@@ -67,7 +67,7 @@ impl ExtBuilder {
 
 #[test]
 fn add_works() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		assert_ok!(AddingMachine::add(Origin::signed(1), 7));
 		assert_ok!(AddingMachine::add(Origin::signed(1), 7));
 
@@ -77,7 +77,7 @@ fn add_works() {
 
 #[test]
 fn reset_works() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		assert_ok!(AddingMachine::add(Origin::signed(1), 5));
 		assert_ok!(AddingMachine::reset(Origin::signed(1)));
 		assert_eq!(AddingMachine::sum(), 0);
@@ -86,7 +86,7 @@ fn reset_works() {
 
 #[test]
 fn overflow_fails() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		assert_ok!(AddingMachine::add(Origin::signed(1), 5));
 		assert_noop!(
 			AddingMachine::add(Origin::signed(3), u32::max_value()),
@@ -97,7 +97,7 @@ fn overflow_fails() {
 
 #[test]
 fn unlucky_fails() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		assert_noop!(
 			AddingMachine::add(Origin::signed(3), 13),
 			Error::<TestRuntime>::UnluckyThirteen

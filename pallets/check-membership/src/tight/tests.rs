@@ -74,9 +74,9 @@ pub type System = system::Module<TestRuntime>;
 pub type VecSet = vec_set::Module<TestRuntime>;
 pub type CheckMembership = Module<TestRuntime>;
 
-pub struct ExtBuilder;
+struct ExternalityBuilder;
 
-impl ExtBuilder {
+impl ExternalityBuilder {
 	pub fn build() -> TestExternalities {
 		let storage = system::GenesisConfig::default()
 			.build_storage::<TestRuntime>()
@@ -89,7 +89,7 @@ impl ExtBuilder {
 
 #[test]
 fn members_can_call() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		assert_ok!(VecSet::add_member(Origin::signed(1)));
 
 		assert_ok!(CheckMembership::check_membership(Origin::signed(1)));
@@ -101,7 +101,7 @@ fn members_can_call() {
 
 #[test]
 fn non_members_cant_call() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		assert_noop!(
 			CheckMembership::check_membership(Origin::signed(1)),
 			Error::<TestRuntime>::NotAMember

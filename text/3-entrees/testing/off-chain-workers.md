@@ -56,9 +56,9 @@ src:
 [`pallets/offchain-demo/src/tests.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/tests.rs)
 
 ```rust
-pub struct ExtBuilder;
+struct ExternalityBuilder;
 
-impl ExtBuilder {
+impl ExternalityBuilder {
 	pub fn build() -> (TestExternalities, Arc<RwLock<PoolState>>, Arc<RwLock<OffchainState>>) {
 		const PHRASE: &str = "expire stage crawl shell boss any story swamp skull yellow bamboo copy";
 
@@ -106,7 +106,7 @@ src:
 ```rust
 #[test]
 fn offchain_send_signed_tx() {
-	let (mut t, pool_state, offchain_state) = ExtBuilder::build();
+	let (mut t, pool_state, offchain_state) = ExternalityBuilder::build();
 
 	t.execute_with(|| {
 		// when

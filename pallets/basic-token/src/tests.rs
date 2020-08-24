@@ -56,9 +56,9 @@ impl Trait for TestRuntime {
 
 pub type BasicToken = Module<TestRuntime>;
 
-pub struct ExtBuilder;
+struct ExternalityBuilder;
 
-impl ExtBuilder {
+impl ExternalityBuilder {
 	pub fn build() -> TestExternalities {
 		let storage = system::GenesisConfig::default()
 			.build_storage::<TestRuntime>()
@@ -69,7 +69,7 @@ impl ExtBuilder {
 
 #[test]
 fn init_works() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		assert_ok!(BasicToken::init(Origin::signed(1)));
 		assert_eq!(BasicToken::get_balance(1), 21000000);
 	})
@@ -77,7 +77,7 @@ fn init_works() {
 
 #[test]
 fn cant_double_init() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		assert_ok!(BasicToken::init(Origin::signed(1)));
 		assert_noop!(
 			BasicToken::init(Origin::signed(1)),
@@ -88,7 +88,7 @@ fn cant_double_init() {
 
 #[test]
 fn transfer_works() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		assert_ok!(BasicToken::init(Origin::signed(1)));
 
 		// Transfer 100 tokens from user 1 to user 2
@@ -101,7 +101,7 @@ fn transfer_works() {
 
 #[test]
 fn cant_spend_more_than_you_have() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		assert_ok!(BasicToken::init(Origin::signed(1)));
 		assert_noop!(
 			BasicToken::transfer(Origin::signed(1), 2, 21000001),

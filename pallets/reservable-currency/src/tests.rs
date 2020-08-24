@@ -85,7 +85,7 @@ pub type System = system::Module<TestRuntime>;
 pub type Balances = balances::Module<TestRuntime>;
 pub type ReservableCurrency = Module<TestRuntime>;
 
-// An alternative to `ExtBuilder` which includes custom configuration
+// An alternative to `ExternalityBuilder` which includes custom configuration
 pub fn new_test_ext() -> sp_io::TestExternalities {
 	let mut t = system::GenesisConfig::default()
 		.build_storage::<TestRuntime>()

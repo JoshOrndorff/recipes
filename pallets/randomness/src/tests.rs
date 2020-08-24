@@ -70,9 +70,9 @@ pub type System = system::Module<TestRuntime>;
 pub type Randomness = Module<TestRuntime>;
 pub type CollectiveFlip = pallet_randomness_collective_flip::Module<TestRuntime>;
 
-pub struct ExtBuilder;
+struct ExternalityBuilder;
 
-impl ExtBuilder {
+impl ExternalityBuilder {
 	pub fn build() -> sp_io::TestExternalities {
 		let storage = system::GenesisConfig::default()
 			.build_storage::<TestRuntime>()
@@ -85,7 +85,7 @@ impl ExtBuilder {
 
 #[test]
 fn generate_works() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		assert_ok!(Randomness::consume_randomness(Origin::signed(1)));
 
 		// Check for the event

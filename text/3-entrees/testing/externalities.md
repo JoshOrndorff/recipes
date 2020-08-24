@@ -1,7 +1,7 @@
 # Custom Test Environment
 
 [`execution-schedule`](../execution-schedule.md)'s configuration trait has three
-[configurable constants](../constants.md). For this mock runtime, the `ExtBuilder` defines setters
+[configurable constants](../constants.md). For this mock runtime, the `ExternalityBuilder` defines setters
 to enable the `TestExternalities` instance for each unit test to configure the local test runtime
 environment with different value assignments. For context, the `Trait` for `execution-schedule`,
 
@@ -24,7 +24,7 @@ pub trait Trait: system::Trait {
 }
 ```
 
-The mock runtime environment extends the [previously discussed](./mock.md) `ExtBuilder` pattern with
+The mock runtime environment extends the [previously discussed](./mock.md) `ExternalityBuilder` pattern with
 fields for each configurable constant and a default implementation.
 
 > This completes the [builder](https://youtu.be/geovSK3wMB8?t=729) pattern by defining a default
@@ -32,12 +32,12 @@ fields for each configurable constant and a default implementation.
 > overwrite the values for each field.
 
 ```rust, ignore
-pub struct ExtBuilder {
+pub struct ExternalityBuilder {
     signal_quota: u32,
     execution_frequency: u64,
     task_limit: u32,
 }
-impl Default for ExtBuilder {
+impl Default for ExternalityBuilder {
     fn default() -> Self {
         Self {
             signal_quota: 100u32,
@@ -48,11 +48,11 @@ impl Default for ExtBuilder {
 }
 ```
 
-The setter methods for each configurable constant are defined in the `ExtBuilder` methods. This
-allows each instance of `ExtBuilder` to set the constant parameters for the unit test in question.
+The setter methods for each configurable constant are defined in the `ExternalityBuilder` methods. This
+allows each instance of `ExternalityBuilder` to set the constant parameters for the unit test in question.
 
 ```rust, ignore
-impl ExtBuilder {
+impl ExternalityBuilder {
     pub fn signal_quota(mut self, signal_quota: u32) -> Self {
         self.signal_quota = signal_quota;
         self
@@ -107,11 +107,11 @@ impl Get<u32> for TaskLimit {
 }
 ```
 
-The build method on `ExtBuilder` sets the associated constants before building the default storage
+The build method on `ExternalityBuilder` sets the associated constants before building the default storage
 configuration.
 
 ```rust, ignore
-impl ExtBuilder {
+impl ExternalityBuilder {
     // setters
     pub fn set_associated_consts(&self) {
         SIGNAL_QUOTA.with(|v| *v.borrow_mut() = self.signal_quota);
@@ -127,7 +127,7 @@ To build the default test environment, the syntax looks like
 ```rust, ignore
 #[test]
 fn fake_test() {
-    ExtBuilder::default()
+    ExternalityBuilder::default()
         .build()
         .execute_with(|| {
             // testing logic and checks
@@ -137,12 +137,12 @@ fn fake_test() {
 
 To configure a test environment in which the `execution_frequency` is set to `2`, the
 `eras_change_correctly` test invokes the `execution_frequency` setter declared in as a method on
-`ExtBuilder`,
+`ExternalityBuilder`,
 
 ```rust, ignore
 #[test]
 fn fake_test2() {
-    ExtBuilder::default()
+    ExternalityBuilder::default()
         .execution_frequency(2)
         .build()
         .execute_with(|| {

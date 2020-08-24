@@ -157,8 +157,8 @@ set with
 ```rust, ignore
 #[test]
 fn add_emits_correct_event() {
-	// ExtBuilder syntax is explained further below
-	ExtBuilder::build().execute_with(|| {
+	// ExternalityBuilder syntax is explained further below
+	ExternalityBuilder::build().execute_with(|| {
 		System::set_block_number(2);
 		// some assert statements and HelloSubstrate calls
 	}
@@ -189,7 +189,7 @@ patterns are presented below. The latter is generally favored for reasons discus
 
 -   [`new_test_ext`](#newext) - consolidates all the logic for building the environment to a single
     public method, but isn't relatively configurable (i.e. uses one set of pallet constants)
--   [`ExtBuilder`](#extbuilder) - define methods on the unit struct `ExtBuilder` to facilitate a
+-   [`ExternalityBuilder`](#ExternalityBuilder) - define methods on the unit struct `ExternalityBuilder` to facilitate a
     flexible environment for tests (i.e. can reconfigure pallet constants in every test if
     necessary)
 
@@ -266,23 +266,23 @@ fn fake_test() {
 `execute_with` executes all logic expressed in the closure within the configured runtime test
 environment specified in `new_test_ext`
 
-## ExtBuilder <a name = "extbuilder"></a>
+## ExternalityBuilder <a name = "ExternalityBuilder"></a>
 
 _[`pallets/struct-storage`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/struct-storage)_
 
 Another approach providing for a more flexible runtime test environment, instantiates a unit struct
-`ExtBuilder`,
+`ExternalityBuilder`,
 
 ```rust, ignore
-pub struct ExtBuilder;
+struct ExternalityBuilder;
 ```
 
-The behavior for constructing the test environment is contained the methods on the `ExtBuilder` unit
+The behavior for constructing the test environment is contained the methods on the `ExternalityBuilder` unit
 structure. This fosters multiple levels of configuration depending on if the test requires a common
 default instance of the environment or a more specific edge case configuration. The latter is
 explored in more detail in [Custom Test Environment](./externalities.md).
 
-Like `new_test_ext`, the `build()` method on the `ExtBuilder` object returns an instance of
+Like `new_test_ext`, the `build()` method on the `ExternalityBuilder` object returns an instance of
 [`TestExternalities`](https://substrate.dev/rustdocs/v2.0.0-rc5/sp_state_machine/struct.TestExternalities.html).
 [Externalities](https://substrate.dev/rustdocs/v2.0.0-rc5/sp_externalities/index.html) are an abstraction that allows
 the runtime to access features of the outer node such as storage or offchain workers.
@@ -290,7 +290,7 @@ the runtime to access features of the outer node such as storage or offchain wor
 In this case, create a mock storage from the default genesis configuration.
 
 ```rust, ignore
-impl ExtBuilder {
+impl ExternalityBuilder {
 	pub fn build() -> runtime_io::TestExternalities {
 		let mut storage = system::GenesisConfig::default().build_storage::<TestRuntime>().unwrap();
 		runtime_io::TestExternalities::from(storage)
@@ -303,7 +303,7 @@ which calls some methods to create a test environment,
 ```rust, ignore
 #[test]
 fn fake_test_example() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		// ...test conditions...
 	})
 }
@@ -330,7 +330,7 @@ but this looks like
 ```rust, ignore
 #[test]
 fn last_value_updates() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		HelloSubstrate::set_value(Origin::signed(1), 10u64);
 		// some assert statements
 	})
@@ -359,7 +359,7 @@ Events are not emitted on block 0. So when testing for whether events are emitte
 the block number in the test environment from 0 to 1 like so:
 
 ```rust
-impl ExtBuilder {
+impl ExternalityBuilder {
 	pub fn build() -> TestExternalities {
 		let storage = system::GenesisConfig::default().build_storage::<TestRuntime>().unwrap();
 		let mut ext = TestExternalities::from(storage);

@@ -44,7 +44,7 @@ The test below verifies that the expected error is thrown for a specific case of
 ```rust, ignore
 #[test]
 fn overflow_fails() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		assert_err!(
 			AddingMachine::add(Origin::signed(3), u32::max_value(), 1),
 			"Addition overflowed"
@@ -80,7 +80,7 @@ use crate::*;
 
 #[test]
 fn set_value_works() {
-  ExtBuilder::build().execute_with(|| {
+  ExternalityBuilder::build().execute_with(|| {
     assert_ok!(SingleValue::set_value(Origin::signed(1), 10));
     assert_eq!(SingleValue::stored_value(), 10);
     // Another way of accessing the storage. This pattern is needed if it is a more complexed data
@@ -138,7 +138,7 @@ vector of `EventRecord`s. In
 ```rust, ignore
 #[test]
 fn add_emits_correct_event() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		AddingMachine::add(Origin::signed(1), 6, 9);
 
 		assert_eq!(
@@ -182,7 +182,7 @@ In
 ```rust, ignore
 #[test]
 fn last_value_updates() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		HelloSubstrate::set_value(Origin::signed(1), 10u64);
 		// some assert checks
 

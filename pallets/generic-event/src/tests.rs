@@ -68,9 +68,9 @@ impl Trait for TestRuntime {
 pub type System = system::Module<TestRuntime>;
 pub type GenericEvent = Module<TestRuntime>;
 
-pub struct ExtBuilder;
+struct ExternalityBuilder;
 
-impl ExtBuilder {
+impl ExternalityBuilder {
 	pub fn build() -> TestExternalities {
 		let storage = system::GenesisConfig::default()
 			.build_storage::<TestRuntime>()
@@ -83,7 +83,7 @@ impl ExtBuilder {
 
 #[test]
 fn test() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		assert_ok!(GenericEvent::do_something(Origin::signed(1), 32));
 
 		// construct event that should be emitted in the method call directly above
