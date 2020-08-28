@@ -230,8 +230,6 @@ impl sudo::Trait for Runtime {
 
 // ---------------------- Recipe Pallet Configurations ----------------------
 
-impl adding_machine::Trait for Runtime {}
-
 impl basic_token::Trait for Runtime {
 	type Event = Event;
 }
@@ -337,8 +335,6 @@ impl simple_map::Trait for Runtime {
 	type Event = Event;
 }
 
-impl single_value::Trait for Runtime {}
-
 impl storage_cache::Trait for Runtime {
 	type Event = Event;
 }
@@ -366,7 +362,6 @@ construct_runtime!(
 		Sudo: sudo::{Module, Call, Config<T>, Storage, Event<T>},
 		TransactionPayment: transaction_payment::{Module, Storage},
 		// The Recipe Pallets
-		AddingMachine: adding_machine::{Module, Call, Storage},
 		BasicToken: basic_token::{Module, Call, Storage, Event<T>},
 		Charity: charity::{Module, Call, Storage, Config, Event<T>},
 		CheckMembershipLoose: check_membership_loose::{Module, Call, Event<T>},
@@ -387,7 +382,6 @@ construct_runtime!(
 		SimpleCrowdfund: simple_crowdfund::{Module, Call, Storage, Event<T>},
 		SimpleEvent: simple_event::{Module, Call, Event},
 		SimpleMap: simple_map::{Module, Call, Storage, Event<T>},
-		SingleValue: single_value::{Module, Call, Storage},
 		StorageCache: storage_cache::{Module, Call, Storage, Event<T>},
 		StructStorage: struct_storage::{Module, Call, Storage, Event<T>},
 		VecSet: vec_set::{Module, Call, Storage, Event<T>},
