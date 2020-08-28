@@ -1,7 +1,7 @@
 use crate::*;
 use balances;
 use frame_support::{assert_err, assert_ok, impl_outer_event, impl_outer_origin, parameter_types};
-use frame_system::{self as system, RawOrigin};
+use frame_system::{self as system, EventRecord, Phase, RawOrigin};
 use sp_core::H256;
 use sp_io;
 use sp_runtime::{
@@ -95,8 +95,8 @@ pub fn new_test_ext() -> sp_io::TestExternalities {
 		// Provide some initial balances
 		balances: vec![(1, 13), (2, 11), (3, 1), (4, 3), (5, 19)],
 	}
-		.assimilate_storage(&mut t)
-		.unwrap();
+	.assimilate_storage(&mut t)
+	.unwrap();
 
 	crate::GenesisConfig {}
 		.assimilate_storage::<TestRuntime>(&mut t)
@@ -139,7 +139,18 @@ fn donations_work() {
 		assert_eq!(Balances::free_balance(&1), original - donation);
 
 		// Check that the correct event is emitted
-		let expected_event = TestEvent::charity(RawEvent::DonationReceived(1, donation, new_pot_total));
+		let expected_event =
+			TestEvent::charity(RawEvent::DonationReceived(1, donation, new_pot_total));
+
+		// testing if the the event come in the correct order
+		assert_eq!(
+			System::events()[1],
+			EventRecord {
+				phase: Phase::Initialization,
+				event: TestEvent::charity(RawEvent::DonationReceived(1, donation, new_pot_total)),
+				topics: vec![],
+			},
+		);
 		assert!(System::events().iter().any(|a| a.event == expected_event));
 	})
 }
@@ -168,6 +179,16 @@ fn imbalances_work() {
 		// Check that the correct event is emitted
 		let expected_event = TestEvent::charity(RawEvent::ImbalanceAbsorbed(5, new_pot_total));
 
+		// testing if the the event come in the correct order
+		assert_eq!(
+			System::events()[0],
+			EventRecord {
+				phase: Phase::Initialization,
+				event: TestEvent::charity(RawEvent::ImbalanceAbsorbed(5, new_pot_total)),
+				topics: vec![],
+			},
+		);
+
 		assert!(System::events().iter().any(|a| a.event == expected_event));
 	})
 }
@@ -186,6 +207,17 @@ fn allocating_works() {
 		// Check that the correct event is emitted
 		let new_pot_total = Balances::minimum_balance() + donation - alloc;
 		let expected_event = TestEvent::charity(RawEvent::FundsAllocated(2, 5, new_pot_total));
+
+		// testing if the the event come in the correct order
+		assert_eq!(
+			System::events()[3],
+			EventRecord {
+				phase: Phase::Initialization,
+				event: TestEvent::charity(RawEvent::FundsAllocated(2, 5, new_pot_total)),
+				topics: vec![],
+			},
+		);
+
 		assert!(System::events().iter().any(|a| a.event == expected_event));
 	})
 }
