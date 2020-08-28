@@ -27,7 +27,7 @@ blocks, handling [rpc requests](./custom-rpc.md), and reaching consensus. And a 
 responsible for the business logic of the chain. This architecture diagram illustrates the
 distinction.
 
-![Substrate Architecture Diagram](../img/substrate-architecture.png)
+![Substrate Architecture Diagram](img/substrate-architecture.png)
 
 In principle, the consensus engine (part of the outer node) is agnostic to the runtime that is used
 with it. But in practice, most consensus engines will require the runtime to provide certain
