@@ -14,11 +14,11 @@ will teach us many useful aspects of dealing with consensus and prepare us to un
 advanced consensus engines in the future. In particular we will learn about:
 
 -   Substrate's
-    [`BlockImport` trait](https://substrate.dev/rustdocs/v2.0.0-rc5/sp_consensus/block_import/trait.BlockImport.html)
--   Substrate's [import pipeline](https://substrate.dev/rustdocs/v2.0.0-rc5/sp_consensus/import_queue/index.html)
--   Structure of a typical [Substrate Service](https://substrate.dev/rustdocs/v2.0.0-rc5/sc_service/index.html)
+    [`BlockImport` trait](https://substrate.dev/rustdocs/v2.0.0-rc6/sp_consensus/block_import/trait.BlockImport.html)
+-   Substrate's [import pipeline](https://substrate.dev/rustdocs/v2.0.0-rc6/sp_consensus/import_queue/index.html)
+-   Structure of a typical [Substrate Service](https://substrate.dev/rustdocs/v2.0.0-rc6/sc_service/index.html)
 -   Configuration of
-    [`InherentDataProvider`](https://substrate.dev/rustdocs/v2.0.0-rc5/sp_authorship/struct.InherentDataProvider.html)s
+    [`InherentDataProvider`](https://substrate.dev/rustdocs/v2.0.0-rc6/sp_authorship/struct.InherentDataProvider.html)s
 
 ## The Structure of a Node
 
@@ -34,7 +34,7 @@ with it. But in practice, most consensus engines will require the runtime to pro
 [runtime APIs](./runtime-api.md) that affect the engine. For example, Aura and Babe query the
 runtime for the set of validators. A more real-world PoW consensus would query the runtime for the
 block difficulty. Additionally, some runtimes rely on the consensus engine to provide
-[pre-runtime digests](https://substrate.dev/rustdocs/v2.0.0-rc5/sp_runtime/generic/enum.DigestItem.html#variant.PreRuntime).
+[pre-runtime digests](https://substrate.dev/rustdocs/v2.0.0-rc6/sp_runtime/generic/enum.DigestItem.html#variant.PreRuntime).
 For example, runtimes that include the Babe pallet expect a pre-runtime digest containing
 information about the current babe slot.
 
@@ -52,7 +52,7 @@ takes many parameters, so in each node, it is put together in a dedicated `src/s
 The particular part of the service that is relevant here is
 [`ImportQueue`](https://substrate.dev/rustdocs/v2.0.0-rc6/sc_service/trait.ImportQueue.html).
 Here we construct an instance of the
-[`PowBlockImport` struct](https://substrate.dev/rustdocs/v2.0.0-rc5/sc_consensus_pow/struct.PowBlockImport.html),
+[`PowBlockImport` struct](https://substrate.dev/rustdocs/v2.0.0-rc6/sc_consensus_pow/struct.PowBlockImport.html),
 providing it with references to our client, our `MinimalSha3Algorithm`, and some other necessary
 data.
 
@@ -84,7 +84,7 @@ service will use for importing blocks into the client.
 
 You may have noticed that when we created the `PowBlockImport` we gave it two separate references to
 the client. The second reference will always be to a client. But the first is interesting. The
-[rustdocs tell us](https://substrate.dev/rustdocs/v2.0.0-rc5/sc_consensus_pow/struct.PowBlockImport.html#method.new)
+[rustdocs tell us](https://substrate.dev/rustdocs/v2.0.0-rc6/sc_consensus_pow/struct.PowBlockImport.html#method.new)
 that the first parameter is `inner: BlockImport<B, Transaction = TransactionFor<C, B>>`. Why would a
 block import have a reference to another block import? Because the "block import pipeline" is
 constructed in an onion-like fashion, where one layer of block import wraps the next. Learn more
@@ -110,11 +110,11 @@ pub fn build_inherent_data_providers() -> Result<InherentDataProviders, ServiceE
 ```
 
 Anything that implements the
-[`ProvideInherentData` trait](https://substrate.dev/rustdocs/v2.0.0-rc5/sp_inherents/trait.ProvideInherentData.html)
+[`ProvideInherentData` trait](https://substrate.dev/rustdocs/v2.0.0-rc6/sp_inherents/trait.ProvideInherentData.html)
 may be used here. The block authoring logic must supply all inherents that the runtime expects. In
 the case of this basic-pow chain, that is just the
-[`TimestampInherentData`](https://substrate.dev/rustdocs/v2.0.0-rc5/sp_timestamp/trait.TimestampInherentData.html)
-expected by the [timestamp pallet](https://substrate.dev/rustdocs/v2.0.0-rc5/pallet_timestamp/index.html). In order
+[`TimestampInherentData`](https://substrate.dev/rustdocs/v2.0.0-rc6/sp_timestamp/trait.TimestampInherentData.html)
+expected by the [timestamp pallet](https://substrate.dev/rustdocs/v2.0.0-rc6/pallet_timestamp/index.html). In order
 to register other inherents, you would call `register_provider` multiple times, and map errors
 accordingly.
 
@@ -157,7 +157,7 @@ if is_authority {
 We begin by testing whether this node participates in consensus, which is to say we check whether
 the user wants the node to act as a miner. If this node is to be a miner, we gather references to
 various parts of the node that the
-[`start_mine` function](https://substrate.dev/rustdocs/v2.0.0-rc5/sc_consensus_pow/fn.start_mine.html) requires, and
+[`start_mine` function](https://substrate.dev/rustdocs/v2.0.0-rc6/sc_consensus_pow/fn.start_mine.html) requires, and
 define that we will attempt 500 rounds of mining for each block before pausing. Finally we call
 `start_mine`.
 

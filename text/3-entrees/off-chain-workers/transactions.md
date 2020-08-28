@@ -108,7 +108,7 @@ Now if we build the `kitchen-node`, we will see the compiler return with three t
 bounds that are not satisfied: `Runtime: frame_system::offchain::CreateSignedTransaction`,
 `frame_system::offchain::SigningTypes`, and `frame_system::offchain::SendTransactionTypes`.
 We also learn that when using `SubmitSignedTransaction`, our runtime need to implement
-[`CreateSignedTransaction` trait](https://substrate.dev/rustdocs/v2.0.0-rc5/frame_system/offchain/trait.CreateSignedTransaction.html).
+[`CreateSignedTransaction` trait](https://substrate.dev/rustdocs/v2.0.0-rc6/frame_system/offchain/trait.CreateSignedTransaction.html).
 
 src:
 [`runtimes/ocw-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime/src/lib.rs)
@@ -245,7 +245,7 @@ Eventually, the `call` transaction will be made on-chain via the `create_transac
 earlier when we implemented `CreateTransaction` trait in our runtime.
 
 The local account used to sign the transaction is inserted in the pallet app crypto, and lives in
-the outer node's [service](https://substrate.dev/rustdocs/v2.0.0-rc5/sc_service/index.html).
+the outer node's [service](https://substrate.dev/rustdocs/v2.0.0-rc6/sc_service/index.html).
 
 src:
 [`nodes/kitchen-node/src/service.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/nodes/kitchen-node/src/service.rs)
