@@ -14,8 +14,7 @@ provides a mechanism known as transaction weighting to quantify the resources co
 executing a transaction.
 
 _Indeed, mispriced EVM operations have shown how operations that underestimate cost can provide
-economic DOS attack vectors: [Onwards; Underpriced EVM Operations](https://www.parity.io/onwards/),
-[Under-Priced DOS Attacks on Ethereum](https://www4.comp.polyu.edu.hk/~csxluo/DoSEVM.pdf)_
+economic DOS attack vectors: [Onwards; Underpriced EVM Operations](https://www.parity.io/onwards/)_
 
 ## Assigning Transaction Weights
 
