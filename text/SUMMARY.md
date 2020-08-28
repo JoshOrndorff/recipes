@@ -3,6 +3,7 @@
 [Introduction](./introduction.md)
 
 - [Pallets](./pallets-intro.md)
+	- [Printing to the Node Log](./runtime-printing.md)
 	- [Emitting Events](./events.md)
 	- [Storage Maps](./storage-maps.md)
 	- [Cache Locally > Storage Calls](./cache.md)
