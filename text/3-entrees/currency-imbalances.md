@@ -15,6 +15,7 @@ In this pallet a specific amount of funds will be slashed from an account and
 award a specific amount of funds to said specific account.
 
 Slash funds:
+```rust, ignore
 pub fn slash_funds(origin, to_punish: T::AccountId, collateral: BalanceOf<T>) {
             let _ = ensure_signed(origin)?;
 
@@ -24,9 +25,11 @@ pub fn slash_funds(origin, to_punish: T::AccountId, collateral: BalanceOf<T>) {
             let now = <system::Module<T>>::block_number();
             Self::deposit_event(RawEvent::SlashFunds(to_punish, collateral, now));
         }
+```
 
 
 Reward funds:
+```rust, ignore
    pub fn reward_funds(origin, to_reward: T::AccountId, reward: BalanceOf<T>) {
             let _ = ensure_signed(origin)?;
 
@@ -39,4 +42,4 @@ Reward funds:
             let now = <system::Module<T>>::block_number();
             Self::deposit_event(RawEvent::RewardFunds(to_reward, reward, now));
         }
-
+```
