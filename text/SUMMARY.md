@@ -26,6 +26,7 @@
 	- [Weights for Resource Accounting](./3-entrees/weights.md)
 	- [Transaction Fees for Economic Security](./3-entrees/fees.md)
 	- [Charity and Imbalances](./3-entrees/charity.md)
+	- [Currency and Imbalances](./3-entrees/currency-imbalances.md)
 	- [Fixed Point Arithmetic](./3-entrees/fixed-point.md)
 	- [Off-chain Workers](./3-entrees/off-chain-workers/index.md)
 		- [Transactions](./3-entrees/off-chain-workers/transactions.md)
