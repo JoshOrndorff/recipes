@@ -45,6 +45,25 @@ pub fn new_full_params(config: Configuration) -> Result<(
 		sc_service::new_full_parts::<Block, RuntimeApi, Executor>(&config)?;
 	let client = Arc::new(client);
 
+	// This variable is only used when ocw feature is enabled.
+	// Suppress the warning when ocw feature is not enabled.
+	#[allow(unused_variables)]
+	let dev_seed = config.dev_key_seed.clone();
+
+	// Initialize seed for signing transaction using off-chain workers
+	#[cfg(feature = "ocw")]
+	{
+		if let Some(seed) = dev_seed {
+			keystore
+				.write()
+				.insert_ephemeral_from_seed_by_type::<runtime::offchain_demo::crypto::Pair>(
+					&seed,
+					runtime::offchain_demo::KEY_TYPE,
+				)
+				.expect("Dev Seed should always succeed.");
+		}
+	}
+
 	let select_chain = sc_consensus::LongestChain::new(backend.clone());
 
 	let pool_api = sc_transaction_pool::FullChainApi::new(
@@ -83,11 +102,6 @@ pub fn new_full_params(config: Configuration) -> Result<(
 /// Builds a new service for a full client.
 pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
 
-	// This variable is only used when ocw feature is enabled.
-	// Suppress the warning when ocw feature is not enabled.
-	#[allow(unused_variables)]
-	let dev_seed = config.dev_key_seed.clone();
-
 	let (params, select_chain, inherent_data_providers) = new_full_params(config)?;
 
 	let (
@@ -104,21 +118,6 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
 			transaction_pool.clone(),
 		)
 	};
-
-	// Initialize seed for signing transaction using off-chain workers
-	#[cfg(feature = "ocw")]
-	{
-		if let Some(seed) = dev_seed {
-			service
-				.keystore()
-				.write()
-				.insert_ephemeral_from_seed_by_type::<runtime::offchain_demo::crypto::Pair>(
-					&seed,
-					runtime::offchain_demo::KEY_TYPE,
-				)
-				.expect("Dev Seed should always succeed.");
-		}
-	}
 
 	let ServiceComponents { task_manager, .. } = sc_service::build(params)?;
 
