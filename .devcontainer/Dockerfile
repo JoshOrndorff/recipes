@@ -1,4 +1,4 @@
-FROM paritytech/substrate-playground-template-base:sha-ac4bc53
+FROM paritytech/substrate-playground-template-base:sha-0793587
 
 ADD . .
 

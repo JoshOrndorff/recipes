@@ -1,7 +1,6 @@
 # Summary
 
 [Introduction](./introduction.md)
-
 - [Pallets](./pallets-intro.md)
 	- [Printing to the Node Log](./runtime-printing.md)
 	- [Emitting Events](./events.md)
@@ -24,6 +23,7 @@
 		- [HTTP Fetching & JSON Parsing](./off-chain-workers/http-json.md)
 		- [Local Storage](./off-chain-workers/storage.md)
 	- [Currency Types](./currency.md)
+	- [Currency and Imbalances](./currency-imbalances.md)
 	- [Generating Randomness](./randomness.md)
 	- [Tightly- and Loosely-Coupled Pallets](./pallet-coupling.md)
 - [Runtimes](./runtimes-intro.md)
