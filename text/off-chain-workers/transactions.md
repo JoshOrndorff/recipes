@@ -372,8 +372,3 @@ fn send_unsigned(block_number: T::BlockNumber) -> Result<(), Error<T>> {
 
 As in signed transactions, we prepare a function reference with its parameters and call
 `T::SubmitUnsignedTransaction::submit_unsigned`.
-
-## Testing
-
-For writing test cases for off-chain worker, refer to our
-[testing section](../testing/off-chain-workers.md).

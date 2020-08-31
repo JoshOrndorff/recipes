@@ -1,6 +1,5 @@
 [workspace]
 members = [
-	"pallets/adding-machine",
 	"pallets/basic-token",
 	"pallets/charity",
 	"pallets/check-membership",
@@ -22,7 +21,6 @@ members = [
 	"pallets/simple-crowdfund",
 	"pallets/simple-event",
 	"pallets/simple-map",
-	"pallets/single-value",
 	"pallets/storage-cache",
 	"pallets/struct-storage",
 	"pallets/sum-storage",
