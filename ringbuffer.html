@@ -1,0 +1,470 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Ringbuffer Queue - Substrate Recipes</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="A Hands-On Cookbook for Aspiring Blockchain Chefs">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="favicon.png">
+        
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="pallets-intro.html"><strong aria-hidden="true">1.</strong> Pallets</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="runtime-printing.html"><strong aria-hidden="true">1.1.</strong> Printing to the Node Log</a></li><li class="chapter-item expanded "><a href="events.html"><strong aria-hidden="true">1.2.</strong> Emitting Events</a></li><li class="chapter-item expanded "><a href="storage-maps.html"><strong aria-hidden="true">1.3.</strong> Storage Maps</a></li><li class="chapter-item expanded "><a href="cache.html"><strong aria-hidden="true">1.4.</strong> Cache Locally &gt; Storage Calls</a></li><li class="chapter-item expanded "><a href="vec-set.html"><strong aria-hidden="true">1.5.</strong> Using Vectors as Sets</a></li><li class="chapter-item expanded "><a href="map-set.html"><strong aria-hidden="true">1.6.</strong> Using Maps as Sets</a></li><li class="chapter-item expanded "><a href="double.html"><strong aria-hidden="true">1.7.</strong> Subgroup Removal by Subkey: Double Maps</a></li><li class="chapter-item expanded "><a href="structs.html"><strong aria-hidden="true">1.8.</strong> Storing custom structs</a></li><li class="chapter-item expanded "><a href="ringbuffer.html" class="active"><strong aria-hidden="true">1.9.</strong> Ringbuffer Queue</a></li><li class="chapter-item expanded "><a href="basic-token.html"><strong aria-hidden="true">1.10.</strong> Basic Token</a></li><li class="chapter-item expanded "><a href="constants.html"><strong aria-hidden="true">1.11.</strong> Configurable Constants</a></li><li class="chapter-item expanded "><a href="crowdfund.html"><strong aria-hidden="true">1.12.</strong> Simple Crowdfund</a></li><li class="chapter-item expanded "><a href="instantiable.html"><strong aria-hidden="true">1.13.</strong> Instantiable Pallets</a></li><li class="chapter-item expanded "><a href="weights.html"><strong aria-hidden="true">1.14.</strong> Weights for Resource Accounting</a></li><li class="chapter-item expanded "><a href="charity.html"><strong aria-hidden="true">1.15.</strong> Charity and Imbalances</a></li><li class="chapter-item expanded "><a href="fixed-point.html"><strong aria-hidden="true">1.16.</strong> Fixed Point Arithmetic</a></li><li class="chapter-item expanded "><a href="off-chain-workers/index.html"><strong aria-hidden="true">1.17.</strong> Off-chain Workers</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="off-chain-workers/transactions.html"><strong aria-hidden="true">1.17.1.</strong> Transactions</a></li><li class="chapter-item expanded "><a href="off-chain-workers/http-json.html"><strong aria-hidden="true">1.17.2.</strong> HTTP Fetching &amp; JSON Parsing</a></li><li class="chapter-item expanded "><a href="off-chain-workers/storage.html"><strong aria-hidden="true">1.17.3.</strong> Local Storage</a></li></ol></li><li class="chapter-item expanded "><a href="currency.html"><strong aria-hidden="true">1.18.</strong> Currency Types</a></li><li class="chapter-item expanded "><a href="currency-imbalances.html"><strong aria-hidden="true">1.19.</strong> Currency and Imbalances</a></li><li class="chapter-item expanded "><a href="randomness.html"><strong aria-hidden="true">1.20.</strong> Generating Randomness</a></li><li class="chapter-item expanded "><a href="pallet-coupling.html"><strong aria-hidden="true">1.21.</strong> Tightly- and Loosely-Coupled Pallets</a></li></ol></li><li class="chapter-item expanded "><a href="runtimes-intro.html"><strong aria-hidden="true">2.</strong> Runtimes</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="runtime-api.html"><strong aria-hidden="true">2.1.</strong> Runtime APIs</a></li><li class="chapter-item expanded "><a href="fees.html"><strong aria-hidden="true">2.2.</strong> Transaction Fees for Economic Security</a></li></ol></li><li class="chapter-item expanded "><a href="consensus-intro.html"><strong aria-hidden="true">3.</strong> Consensus</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="sha3-pow-consensus.html"><strong aria-hidden="true">3.1.</strong> Sha3 Pow Consensus Algorithms</a></li></ol></li><li class="chapter-item expanded "><a href="nodes-intro.html"><strong aria-hidden="true">4.</strong> Nodes</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="kitchen-node.html"><strong aria-hidden="true">4.1.</strong> Kitchen Node - An reusable instant seal node</a></li><li class="chapter-item expanded "><a href="custom-rpc.html"><strong aria-hidden="true">4.2.</strong> Custom RPCs</a></li><li class="chapter-item expanded "><a href="basic-pow.html"><strong aria-hidden="true">4.3.</strong> Basic Proof of Work Node</a></li><li class="chapter-item expanded "><a href="hybrid-consensus.html"><strong aria-hidden="true">4.4.</strong> Hybrid PoW/PoS Consensus Node</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Substrate Recipes</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#ringbuffer-queue" id="ringbuffer-queue">Ringbuffer Queue</a></h1>
+<p><code>pallets/ringbuffer-queue</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fringbuffer-queue%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/ringbuffer-queue/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
+<blockquote>
+<p>Building a transient adapter on top of storage.</p>
+</blockquote>
+<p>This pallet provides a trait and implementation for a
+<a href="https://en.wikipedia.org/wiki/Circular_buffer">ringbuffer</a> that abstracts over storage items and
+presents them as a <a href="https://en.wikipedia.org/wiki/FIFO_(computing_and_electronics)">FIFO</a> queue.</p>
+<p>When building more sophisticated pallets you might notice a need for more complex data structures
+stored in storage. This recipe shows how to build a transient storage adapter by walking through the
+implementation of a ringbuffer FIFO queue. The adapter in this recipe manages a queue that is
+persisted as a <code>StorageMap</code> and a <code>(start, end)</code> range in storage.</p>
+<p>The
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/ringbuffer-queue/src/lib.rs"><code>ringbuffer-queue/src/lib.rs</code></a>
+file contains the <a href="#usage">usage</a> of the transient storage adapter while
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/ringbuffer-queue/src/ringbuffer.rs"><code>ringbuffer-queue/src/ringbuffer.rs</code></a>
+contains the implementation.</p>
+<h2><a class="header" href="#defining-the-ringbuffer-trait-a-name--traita" id="defining-the-ringbuffer-trait-a-name--traita">Defining the RingBuffer Trait <a name = "trait"></a></a></h2>
+<p>First we define the queue interface we want to use:</p>
+<pre><code class="language-rust ignore">pub trait RingBufferTrait&lt;Item&gt;
+where
+	Item: Codec + EncodeLike,
+{
+	/// Store all changes made in the underlying storage.
+	fn commit(&amp;self);
+	/// Push an item onto the end of the queue.
+	fn push(&amp;mut self, i: Item);
+	/// Pop an item from the start of the queue.
+	fn pop(&amp;mut self) -&gt; Option&lt;Item&gt;;
+	/// Return whether the queue is empty.
+	fn is_empty(&amp;self) -&gt; bool;
+}
+</code></pre>
+<p>It defines the usual <code>push</code>, <code>pop</code> and <code>is_empty</code> functions we expect from a queue as well as a
+<code>commit</code> function that will be used to sync the changes made to the underlying storage.</p>
+<h2><a class="header" href="#specifying-the-ringbuffer-transient-a-name--transienta" id="specifying-the-ringbuffer-transient-a-name--transienta">Specifying the RingBuffer Transient <a name = "transient"></a></a></h2>
+<p>Now we want to add an implementation of the trait. We will be storing the start and end of the
+ringbuffer separately from the actual items and will thus need to store these in our struct:</p>
+<pre><code class="language-rust ignore">pub struct RingBufferTransient&lt;Index&gt;
+where
+	Index: Codec + EncodeLike + Eq + Copy,
+{
+	start: Index,
+	end: Index,
+}
+</code></pre>
+<h3><a class="header" href="#defining-the-storage-interface" id="defining-the-storage-interface">Defining the Storage Interface</a></h3>
+<p>In order to access the underlying storage we will also need to include the bounds (we will call the
+type <code>B</code>) and the item storage (whose type will be <code>M</code>). In order to specify the constraints on the
+storage map (<code>M</code>) we will also need to specify the <code>Item</code> type. This results in the following struct
+definition:</p>
+<pre><code class="language-rust ignore">pub struct RingBufferTransient&lt;Item, B, M, Index&gt;
+where
+	Item: Codec + EncodeLike,
+	B: StorageValue&lt;(Index, Index), Query = (Index, Index)&gt;,
+	M: StorageMap&lt;Index, Item, Query = Item&gt;,
+	Index: Codec + EncodeLike + Eq + Copy,
+{
+	start: Index,
+	end: Index,
+	_phantom: PhantomData&lt;(Item, B, M)&gt;,
+}
+</code></pre>
+<p>The bounds <code>B</code> will be a <code>StorageValue</code> storing a tuple of indices <code>(Index, Index)</code>. The item
+storage will be a <code>StorageMap</code> mapping from our <code>Index</code> type to the <code>Item</code> type. We specify the
+associated <code>Query</code> type for both of them to help with type inference (because the value returned can
+be different from the stored representation).</p>
+<p>The <a href="https://docs.rs/parity-scale-codec/1.3.0/parity_scale_codec/trait.Codec.html"><code>Codec</code></a> and
+<a href="https://docs.rs/parity-scale-codec/1.3.0/parity_scale_codec/trait.EncodeLike.html"><code>EncodeLike</code></a>
+type constraints make sure that both items and indices can be stored in storage.</p>
+<p>We need the <a href="https://doc.rust-lang.org/std/marker/struct.PhantomData.html"><code>PhantomData</code></a> in order
+to &quot;hold on to&quot; the types during the lifetime of the transient object.</p>
+<h3><a class="header" href="#the-complete-type" id="the-complete-type">The Complete Type</a></h3>
+<p>There are two more alterations we will make to our struct to make it work well:</p>
+<pre><code class="language-rust ignore">type DefaultIdx = u16;
+pub struct RingBufferTransient&lt;Item, B, M, Index = DefaultIdx&gt;
+where
+	Item: Codec + EncodeLike,
+	B: StorageValue&lt;(Index, Index), Query = (Index, Index)&gt;,
+	M: StorageMap&lt;Index, Item, Query = Item&gt;,
+	Index: Codec + EncodeLike + Eq + WrappingOps + From&lt;u8&gt; + Copy,
+{
+	start: Index,
+	end: Index,
+	_phantom: PhantomData&lt;(Item, B, M)&gt;,
+}
+</code></pre>
+<p>We specify a default type for <code>Index</code> and define it as <code>u16</code> to allow for 65536 entries in the
+ringbuffer per default. We also add the <code>WrappingOps</code> and <code>From&lt;u8&gt;</code> type bounds to enable the kind
+of operations we need in our implementation. More details in the <a href="#implementation">implementation</a>
+section, especially in the <a href="#wrapping_ops"><code>WrappingOps</code></a> subsection.</p>
+<h2><a class="header" href="#implementation-of-the-ringbuffer-a-name--implementationa" id="implementation-of-the-ringbuffer-a-name--implementationa">Implementation of the RingBuffer <a name = "implementation"></a></a></h2>
+<p>Now that we have the type definition for <code>RingBufferTransient</code> we need to write the implementation.</p>
+<h3><a class="header" href="#instantiating-the-transient" id="instantiating-the-transient">Instantiating the Transient</a></h3>
+<p>First we need to specify how to create a new instance by providing a <code>new</code> function:</p>
+<pre><code class="language-rust ignore">impl&lt;Item, B, M, Index&gt; RingBufferTransient&lt;Item, B, M, Index&gt;
+where // ... same where clause as the type, elided here
+{
+	pub fn new() -&gt; RingBufferTransient&lt;Item, B, M, Index&gt; {
+		let (start, end) = B::get();
+		RingBufferTransient {
+			start, end, _phantom: PhantomData,
+		}
+	}
+}
+</code></pre>
+<p>Here we access the bounds stored in storage to initialize the transient.</p>
+<blockquote>
+<p><strong>Aside</strong>: Of course we could also provide a <code>with_bounds</code> function that takes the bounds as a
+parameter. Feel free to add that function as an exercise.</p>
+</blockquote>
+<blockquote>
+<p><strong>Second Aside</strong>: This <code>B::get()</code> is one of the reasons for specifying the <code>Query</code> associated type
+on the <code>StorageValue</code> type constraint.</p>
+</blockquote>
+<h3><a class="header" href="#implementing-the-ringbuffertrait" id="implementing-the-ringbuffertrait">Implementing the <code>RingBufferTrait</code></a></h3>
+<p>We will now implement the <code>RingBufferTrait</code>:</p>
+<pre><code class="language-rust ignore">impl&lt;Item, B, M, Index&gt; RingBufferTrait&lt;Item&gt; for RingBufferTransient&lt;Item, B, M, Index&gt;
+where // same as the struct definition
+	Item: Codec + EncodeLike,
+	B: StorageValue&lt;(Index, Index), Query = (Index, Index)&gt;,
+	M: StorageMap&lt;Index, Item, Query = Item&gt;,
+	Index: Codec + EncodeLike + Eq + WrappingOps + From&lt;u8&gt; + Copy,
+{
+	fn commit(&amp;self) {
+		B::put((self.start, self.end));
+	}
+</code></pre>
+<p><code>commit</code> just consists of putting the potentially changed bounds into storage. You will notice that
+we don't update the bounds' storage when changing them in the other functions.</p>
+<pre><code class="language-rust ignore">	fn is_empty(&amp;self) -&gt; bool {
+		self.start == self.end
+	}
+</code></pre>
+<p>The <code>is_empty</code> function just checks whether the start and end bounds have the same value to
+determine whether the queue is empty, thus avoiding expensive storage accesses. This means we need
+to uphold the corresponding invariant in the other (notably the <code>push</code>) functions.</p>
+<pre><code class="language-rust ignore">	fn push(&amp;mut self, item: Item) {
+		M::insert(self.end, item);
+		// this will intentionally overflow and wrap around when bonds_end
+		// reaches `Index::max_value` because we want a ringbuffer.
+		let next_index = self.end.wrapping_add(1.into());
+		if next_index == self.start {
+			// queue presents as empty but is not
+			// --&gt; overwrite the oldest item in the FIFO ringbuffer
+			self.start = self.start.wrapping_add(1.into());
+		}
+		self.end = next_index;
+	}
+</code></pre>
+<p>In the <code>push</code> function, we insert the pushed <code>item</code> into the map and calculate the new bounds by
+using the <code>wrapping_add</code> function. This way our ringbuffer will wrap around when reaching
+<code>max_value</code> of the <code>Index</code> type. This is why we need the <code>WrappingOps</code> type trait for <code>Index</code>.</p>
+<p>The <code>if</code> is necessary because we need to keep the invariant that <code>start == end</code> means that the queue
+is empty, otherwise we would need to keep track of this state separately. We thus &quot;toss away&quot; the
+oldest item in the queue if a new item is pushed into a full queue by incrementing the start index.</p>
+<blockquote>
+<h5><a class="header" href="#note-the-wrappingops-trait-a-name--wrapping_opsa" id="note-the-wrappingops-trait-a-name--wrapping_opsa">Note: The <code>WrappingOps</code> Trait <a name = "wrapping_ops"></a></a></h5>
+<p>The ringbuffer should be agnostic to the concrete <code>Index</code> type used. In order to decrement and
+increment the start and end index, though, any concrete type needs to implement <code>wrapping_add</code> and
+<code>wrapping_sub</code>. Because <code>std</code> does not provide such a trait, we need another way to require this
+behavior. We just implement our own trait <code>WrappingOps</code> for the types we
+want to support (<code>u8</code>, <code>u16</code>, <code>u32</code> and <code>u64</code>).</p>
+</blockquote>
+<p>The last function we implement is <code>pop</code>:</p>
+<pre><code class="language-rust ignore">	fn pop(&amp;mut self) -&gt; Option&lt;Item&gt; {
+		if self.is_empty() {
+			return None;
+		}
+		let item = M::take(self.start);
+		self.start = self.start.wrapping_add(1.into());
+
+		item.into()
+	}
+</code></pre>
+<p>We can return <code>None</code> on <code>is_empty</code> because we are upholding the invariant. If the queue is not empty
+we <code>take</code> the value at <code>self.start</code> from storage, i.e. the first value is removed from storage and
+passed to us. We then increment <code>self.start</code> to point to the new first item of the queue, again
+using the <code>wrapping_add</code> to get the ringbuffer behavior.</p>
+<h3><a class="header" href="#implementing-drop" id="implementing-drop">Implementing Drop</a></h3>
+<p>In order to make the usage more ergonomic and to avoid synchronization errors (where the storage map
+diverges from the bounds) we also implement the
+<a href="https://doc.rust-lang.org/std/ops/trait.Drop.html"><code>Drop</code> trait</a>:</p>
+<pre><code class="language-rust ignore">impl&lt;Item, B, M, Index&gt; Drop for RingBufferTransient&lt;Item, B, M, Index&gt;
+where // ... same where clause elided
+{
+	fn drop(&amp;mut self) {
+		&lt;Self as RingBufferTrait&lt;Item&gt;&gt;::commit(self);
+	}
+}
+</code></pre>
+<p>On <code>drop</code>, we <code>commit</code> the bounds to storage. With this implementation of <code>Drop</code>, <code>commit</code> is called
+when our transient goes out of scope, making sure that the storage state is consistent for the next
+call to the using pallet.</p>
+<h2><a class="header" href="#typical-usage-a-name--usagea" id="typical-usage-a-name--usagea">Typical Usage <a name = "usage"></a></a></h2>
+<p>The
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/ringbuffer-queue/src/lib.rs"><code>lib.rs</code></a>
+file of the pallet shows typical usage of the transient.</p>
+<pre><code class="language-rust ignore">impl&lt;T: Trait&gt; Module&lt;T&gt; {
+	fn queue_transient() -&gt; Box&lt;dyn RingBufferTrait&lt;ValueStruct&gt;&gt; {
+		Box::new(RingBufferTransient::&lt;
+			ValueStruct,
+			&lt;Self as Store&gt;::BufferRange,
+			&lt;Self as Store&gt;::BufferMap,
+			BufferIndex,
+		&gt;::new())
+	}
+}
+</code></pre>
+<p>First we define a constructor function (<code>queue_transient</code>) so we don't have to specify the types
+every time we want to access the transient. This function constructs a ringbuffer transient and
+returns it as a boxed trait object. See the Rust book's section on
+<a href="https://doc.rust-lang.org/book/ch17-02-trait-objects.html#trait-objects-perform-dynamic-dispatch">trait objects</a>
+for an explanation of why we need a boxed trait object (defined with the syntax <code>dyn TraitName</code>)
+when using dynamic dispatch.</p>
+<p>The <code>add_multiple</code> function shows the actual typical usage of our transient:</p>
+<pre><code class="language-rust ignore">pub fn add_multiple(origin, integers: Vec&lt;i32&gt;, boolean: bool) -&gt; DispatchResult {
+	let _user = ensure_signed(origin)?;
+	let mut queue = Self::queue_transient();
+	for integer in integers {
+		queue.push(ValueStruct{ integer, boolean });
+	}
+	Ok(())
+} // commit happens on drop
+</code></pre>
+<p>Here we use the <code>queue_transient</code> function defined above to get a <code>queue</code> object. We then <code>push</code>
+into it repeatedly with <code>commit</code> happening on <code>drop</code> of the <code>queue</code> object at the end of the
+function. <code>pop</code> works analogously and can of course be intermixed with <code>push</code>es.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="structs.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="basic-token.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="structs.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="basic-token.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+        <script type="text/javascript" src=".analytics/load.js"></script>
+        
+        <script type="text/javascript" src=".analytics/config.js"></script>
+        
+        <script type="text/javascript" src=".analytics/klaro.min.js"></script>
+        
+
+        
+
+    </body>
+</html>

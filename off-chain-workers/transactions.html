@@ -1,0 +1,583 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Transactions - Substrate Recipes</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="A Hands-On Cookbook for Aspiring Blockchain Chefs">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="../favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="../favicon.png">
+        
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="../pallets-intro.html"><strong aria-hidden="true">1.</strong> Pallets</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../runtime-printing.html"><strong aria-hidden="true">1.1.</strong> Printing to the Node Log</a></li><li class="chapter-item expanded "><a href="../events.html"><strong aria-hidden="true">1.2.</strong> Emitting Events</a></li><li class="chapter-item expanded "><a href="../storage-maps.html"><strong aria-hidden="true">1.3.</strong> Storage Maps</a></li><li class="chapter-item expanded "><a href="../cache.html"><strong aria-hidden="true">1.4.</strong> Cache Locally &gt; Storage Calls</a></li><li class="chapter-item expanded "><a href="../vec-set.html"><strong aria-hidden="true">1.5.</strong> Using Vectors as Sets</a></li><li class="chapter-item expanded "><a href="../map-set.html"><strong aria-hidden="true">1.6.</strong> Using Maps as Sets</a></li><li class="chapter-item expanded "><a href="../double.html"><strong aria-hidden="true">1.7.</strong> Subgroup Removal by Subkey: Double Maps</a></li><li class="chapter-item expanded "><a href="../structs.html"><strong aria-hidden="true">1.8.</strong> Storing custom structs</a></li><li class="chapter-item expanded "><a href="../ringbuffer.html"><strong aria-hidden="true">1.9.</strong> Ringbuffer Queue</a></li><li class="chapter-item expanded "><a href="../basic-token.html"><strong aria-hidden="true">1.10.</strong> Basic Token</a></li><li class="chapter-item expanded "><a href="../constants.html"><strong aria-hidden="true">1.11.</strong> Configurable Constants</a></li><li class="chapter-item expanded "><a href="../crowdfund.html"><strong aria-hidden="true">1.12.</strong> Simple Crowdfund</a></li><li class="chapter-item expanded "><a href="../instantiable.html"><strong aria-hidden="true">1.13.</strong> Instantiable Pallets</a></li><li class="chapter-item expanded "><a href="../weights.html"><strong aria-hidden="true">1.14.</strong> Weights for Resource Accounting</a></li><li class="chapter-item expanded "><a href="../charity.html"><strong aria-hidden="true">1.15.</strong> Charity and Imbalances</a></li><li class="chapter-item expanded "><a href="../fixed-point.html"><strong aria-hidden="true">1.16.</strong> Fixed Point Arithmetic</a></li><li class="chapter-item expanded "><a href="../off-chain-workers/index.html"><strong aria-hidden="true">1.17.</strong> Off-chain Workers</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../off-chain-workers/transactions.html" class="active"><strong aria-hidden="true">1.17.1.</strong> Transactions</a></li><li class="chapter-item expanded "><a href="../off-chain-workers/http-json.html"><strong aria-hidden="true">1.17.2.</strong> HTTP Fetching &amp; JSON Parsing</a></li><li class="chapter-item expanded "><a href="../off-chain-workers/storage.html"><strong aria-hidden="true">1.17.3.</strong> Local Storage</a></li></ol></li><li class="chapter-item expanded "><a href="../currency.html"><strong aria-hidden="true">1.18.</strong> Currency Types</a></li><li class="chapter-item expanded "><a href="../currency-imbalances.html"><strong aria-hidden="true">1.19.</strong> Currency and Imbalances</a></li><li class="chapter-item expanded "><a href="../randomness.html"><strong aria-hidden="true">1.20.</strong> Generating Randomness</a></li><li class="chapter-item expanded "><a href="../pallet-coupling.html"><strong aria-hidden="true">1.21.</strong> Tightly- and Loosely-Coupled Pallets</a></li></ol></li><li class="chapter-item expanded "><a href="../runtimes-intro.html"><strong aria-hidden="true">2.</strong> Runtimes</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../runtime-api.html"><strong aria-hidden="true">2.1.</strong> Runtime APIs</a></li><li class="chapter-item expanded "><a href="../fees.html"><strong aria-hidden="true">2.2.</strong> Transaction Fees for Economic Security</a></li></ol></li><li class="chapter-item expanded "><a href="../consensus-intro.html"><strong aria-hidden="true">3.</strong> Consensus</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../sha3-pow-consensus.html"><strong aria-hidden="true">3.1.</strong> Sha3 Pow Consensus Algorithms</a></li></ol></li><li class="chapter-item expanded "><a href="../nodes-intro.html"><strong aria-hidden="true">4.</strong> Nodes</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../kitchen-node.html"><strong aria-hidden="true">4.1.</strong> Kitchen Node - An reusable instant seal node</a></li><li class="chapter-item expanded "><a href="../custom-rpc.html"><strong aria-hidden="true">4.2.</strong> Custom RPCs</a></li><li class="chapter-item expanded "><a href="../basic-pow.html"><strong aria-hidden="true">4.3.</strong> Basic Proof of Work Node</a></li><li class="chapter-item expanded "><a href="../hybrid-consensus.html"><strong aria-hidden="true">4.4.</strong> Hybrid PoW/PoS Consensus Node</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Substrate Recipes</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#transactions-in-off-chain-workers" id="transactions-in-off-chain-workers">Transactions in Off-chain Workers</a></h1>
+<p><code>pallets/offchain-demo</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Foffchain-demo%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
+<h2><a class="header" href="#compiling-this-pallet" id="compiling-this-pallet">Compiling this Pallet</a></h2>
+<p>This <code>offchain-demo</code> pallet is included in the
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime">ocw-runtime</a>.
+That runtime can be used in the kitchen node.</p>
+<p>In order to utilize the off-chain worker, the node must inject keys into its keystore. To do so, we
+open the <code>nodes/kitchen-node/Cargo.toml</code> file, enable the <code>ocw-runtime</code> package and comment out the
+<code>super-runtime</code> package.</p>
+<p>Then we build the kitchen node with <code>ocw</code> feature flag:</p>
+<pre><code class="language-bash"># Switch to kitchen-node directory
+cd nodes/kitchen-node
+
+# Compile with OCW feature
+cargo build --release --features ocw
+</code></pre>
+<h2><a class="header" href="#life-cycle-of-off-chain-worker" id="life-cycle-of-off-chain-worker">Life-cycle of Off-chain Worker</a></h2>
+<p>Running the <code>kitchen-node</code> we see off-chain worker runs after each block generation
+phase, as shown by <code>Entering off-chain workers</code> in the node output message:</p>
+<pre><code>...
+2020-03-14 13:30:36 Starting BABE Authorship worker
+2020-03-14 13:30:36 Prometheus server started at 127.0.0.1:9615
+2020-03-14 13:30:41 Idle (0 peers), best: #0 (0x2658…9a5b), finalized #0 (0x2658…9a5b), ⬇ 0 ⬆ 0
+2020-03-14 13:30:42 Starting consensus session on top of parent 0x26582455e63448e8dafe1e70f04d7d74d39358c6b71c306eb7013e2c54069a5b
+2020-03-14 13:30:42 Prepared block for proposing at 1 [hash: 0xdc7a76fc89c45a3f318e29df06cbdb097cc3094112b204f10e1e84e0799eba88; parent_hash: 0x2658…9a5b; extrinsics (1): [0xf572…63c0]]
+2020-03-14 13:30:42 Pre-sealed block for proposal at 1. Hash now 0x3558accae1325a2ae5569512b8542e90ae11b4f0de6834ba901eb03b97a680aa, previously 0xdc7a76fc89c45a3f318e29df06cbdb097cc3094112b204f10e1e84e0799eba88.
+2020-03-14 13:30:42 New epoch 0 launching at block 0x3558…80aa (block slot 264027307 &gt;= start slot 264027307).
+2020-03-14 13:30:42 Next epoch starts at slot 264027407
+2020-03-14 13:30:42 Imported #1 (0x3558…80aa)
+2020-03-14 13:30:42 Entering off-chain workers
+2020-03-14 13:30:42 off-chain send_signed: acc: 5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY| number: 0
+...
+</code></pre>
+<p>If we refer to the code at
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/lib.rs"><code>pallets/offchain-demo/src/lib.rs</code></a>,
+there is an <code>offchain_worker</code> function inside <code>decl_module!</code>. This is the entry point of the
+off-chain worker which is executed once per block generation, so all the off-chain
+logic is here.</p>
+<p>Two kinds of transactions can be sent back on-chain from off-chain workers, <strong>Signed Transactions</strong>
+and <strong>Unsigned Transactions</strong>. Signed transactions are used if the transaction requires the sender
+to be specified. Unsigned transactions are used when the sender does not need to be known and
+additional logic in the code provides additional data verification.</p>
+<p>Let's walk through how to set each one up:</p>
+<h2><a class="header" href="#signed-transactions" id="signed-transactions">Signed Transactions</a></h2>
+<blockquote>
+<p><strong>Notes</strong>: This example will have account <code>Alice</code> submitting signed transactions to the node in
+the off-chain worker, and these transactions have associated fees. If we run the node in development
+mode (with <code>--dev</code> flag) using the default sr25519 crypto signature, <code>Alice</code> will have initial funds
+deposited and this example will run all fine.</p>
+<p>If this is not done in development mode or switched to another crypto signature, please
+be aware that <code>Alice</code> must be setup and be funded to run this example.</p>
+</blockquote>
+<h3><a class="header" href="#setup" id="setup">Setup</a></h3>
+<p>For signed transactions, we have to define a crypto signature sub-module:</p>
+<p><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/lib.rs"><code>pallets/offchain-demo/src/lib.rs</code></a></p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub const KEY_TYPE: KeyTypeId = KeyTypeId(*b&quot;demo&quot;);
+
+pub mod crypto {
+	use crate::KEY_TYPE;
+	use sp_runtime::app_crypto::{app_crypto, sr25519};
+	app_crypto!(sr25519, KEY_TYPE);
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p><code>KEY_TYPE</code> is the application key prefix for the pallet in underlying storage.</p>
+<p>Second, we have added an additional associated type <code>AuthorityId</code>.</p>
+<p>src:
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/lib.rs"><code>pallets/offchain-demo/src/lib.rs</code></a></p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub trait Trait: system::Trait {
+	//...snip
+	type AuthorityId: AppCrypto&lt;Self::Public, Self::Signature&gt;;
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>This associated type needs to be specified by the runtime when it implements this pallet trait.</p>
+<p>Now if we build the <code>kitchen-node</code>, we will see the compiler return with three trait
+bounds that are not satisfied: <code>Runtime: frame_system::offchain::CreateSignedTransaction</code>,
+<code>frame_system::offchain::SigningTypes</code>, and <code>frame_system::offchain::SendTransactionTypes</code>.
+We also learn that when using <code>SubmitSignedTransaction</code>, our runtime need to implement
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_system/offchain/trait.CreateSignedTransaction.html"><code>CreateSignedTransaction</code> trait</a>.</p>
+<p>src:
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime/src/lib.rs"><code>runtimes/ocw-runtime/src/lib.rs</code></a></p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl&lt;LocalCall&gt; frame_system::offchain::CreateSignedTransaction&lt;LocalCall&gt; for Runtime
+where
+	Call: From&lt;LocalCall&gt;,
+{
+	fn create_transaction&lt;C: frame_system::offchain::AppCrypto&lt;Self::Public, Self::Signature&gt;&gt;(
+		call: Call,
+		public: &lt;Signature as sp_runtime::traits::Verify&gt;::Signer,
+		account: AccountId,
+		index: Index,
+	) -&gt; Option&lt;(
+		Call,
+		&lt;UncheckedExtrinsic as sp_runtime::traits::Extrinsic&gt;::SignaturePayload,
+	)&gt; {
+		let period = BlockHashCount::get() as u64;
+		let current_block = System::block_number()
+			.saturated_into::&lt;u64&gt;()
+			.saturating_sub(1);
+		let tip = 0;
+		let extra: SignedExtra = (
+			frame_system::CheckTxVersion::&lt;Runtime&gt;::new(),
+			frame_system::CheckGenesis::&lt;Runtime&gt;::new(),
+			frame_system::CheckEra::&lt;Runtime&gt;::from(generic::Era::mortal(period, current_block)),
+			frame_system::CheckNonce::&lt;Runtime&gt;::from(index),
+			frame_system::CheckWeight::&lt;Runtime&gt;::new(),
+			pallet_transaction_payment::ChargeTransactionPayment::&lt;Runtime&gt;::from(tip),
+		);
+
+		#[cfg_attr(not(feature = &quot;std&quot;), allow(unused_variables))]
+		let raw_payload = SignedPayload::new(call, extra)
+			.map_err(|e| {
+				debug::native::warn!(&quot;SignedPayload error: {:?}&quot;, e);
+			})
+			.ok()?;
+
+		let signature = raw_payload.using_encoded(|payload| C::sign(payload, public))?;
+
+		let address = account;
+		let (call, extra, _) = raw_payload.deconstruct();
+		Some((call, (address, signature, extra)))
+	}
+}
+
+// ...snip
+<span class="boring">}
+</span></code></pre></pre>
+<p>The overall goal is to execute the following:</p>
+<ul>
+<li>Sign the <code>call</code> and <code>extra</code>, also called 'signed extension'</li>
+<li>Making the call (<code>call</code>, which includes the call paramters) and passing the sender <code>address</code>,
+signature of the data <code>signature</code>, and ensuring its signed extension <code>extra</code> on-chain as a transaction.</li>
+</ul>
+<p><code>SignedExtra</code> data type will be defined later in the runtime.</p>
+<p>src:
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime/src/lib.rs"><code>runtimes/ocw-runtime/src/lib.rs</code></a></p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>/// The SignedExtension to the basic transaction logic.
+pub type SignedExtra = (
+	system::CheckTxVersion&lt;Runtime&gt;,
+	system::CheckGenesis&lt;Runtime&gt;,
+	system::CheckEra&lt;Runtime&gt;,
+	system::CheckNonce&lt;Runtime&gt;,
+	system::CheckWeight&lt;Runtime&gt;,
+	transaction_payment::ChargeTransactionPayment&lt;Runtime&gt;,
+);
+<span class="boring">}
+</span></code></pre></pre>
+<p>Next, the remaining two traits are also implemented.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl frame_system::offchain::SigningTypes for Runtime {
+	type Public = &lt;Signature as sp_runtime::traits::Verify&gt;::Signer;
+	type Signature = Signature;
+}
+
+impl&lt;C&gt; frame_system::offchain::SendTransactionTypes&lt;C&gt; for Runtime
+where
+	Call: From&lt;C&gt;,
+{
+	type OverarchingCall = Call;
+	type Extrinsic = UncheckedExtrinsic;
+}
+<span class="boring">}
+</span></code></pre></pre>
+<h3><a class="header" href="#sending-signed-transactions" id="sending-signed-transactions">Sending Signed Transactions</a></h3>
+<p>A signed transaction is sent with <code>T::SubmitSignedTransaction::submit_signed</code>, as shown below:</p>
+<p>src:
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/lib.rs"><code>pallets/offchain-demo/src/lib.rs</code></a></p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn send_signed(block_number: T::BlockNumber) -&gt; Result&lt;(), Error&lt;T&gt;&gt; {
+	use system::offchain::SubmitSignedTransaction;
+	//..snip
+
+	let submission: u64 = block_number.try_into().ok().unwrap() as u64;
+	let call = Call::submit_number_signed(submission);
+
+	// Using `SubmitSignedTransaction` associated type we create and submit a transaction
+	//   representing the call, we've just created.
+	let results = T::SubmitSignedTransaction::submit_signed(call);
+	for (acc, res) in &amp;results {
+		match res {
+			Ok(()) =&gt; { debug::native::info!(&quot;off-chain send_signed: acc: {}| number: {}&quot;, acc, submission); },
+			Err(e) =&gt; {
+				debug::native::error!(&quot;[{:?}] Failed to submit signed tx: {:?}&quot;, acc, e);
+				return Err(&lt;Error&lt;T&gt;&gt;::SendSignedError);
+			}
+		};
+	}
+	Ok(())
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>We have a function reference to <code>Call::submit_number_signed(submission)</code>. This is the function we
+are going to submit back to on-chain, and passing it to
+<code>T::SubmitSignedTransaction::submit_signed(call)</code>.</p>
+<p>Notice that we run a loop in the returned result. This implies that the call may make
+multiple transactions and return multiple results. The call is both signing and sending
+the transaction with each of the accounts that can be found locally under the application crypto
+(which we defined earlier in <code>pub mod crypto {...}</code>). This can be seen as the local accounts that
+are managed under this pallet namespace. As we only have one key in the app crypto, so only
+one signed transaction is made.</p>
+<p>Eventually, the <code>call</code> transaction will be made on-chain via the <code>create_transaction</code> function we defined
+earlier when we implemented <code>CreateTransaction</code> trait in our runtime.</p>
+<p>The local account used to sign the transaction is inserted in the pallet app crypto, and lives in
+the outer node's <a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sc_service/index.html">service</a>.</p>
+<p>src:
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/nodes/kitchen-node/src/service.rs"><code>nodes/kitchen-node/src/service.rs</code></a></p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub fn new_full(config: Configuration&lt;GenesisConfig&gt;)
+	-&gt; Result&lt;impl AbstractService, ServiceError&gt;
+{
+	// ...snip
+	let dev_seed = config.dev_key_seed.clone();
+
+	// ...snip
+	// Initialize seed for signing transaction using off-chain workers
+	if let Some(seed) = dev_seed {
+		service
+			.keystore()
+			.write()
+			.insert_ephemeral_from_seed_by_type::&lt;runtime::offchain_demo::crypto::Pair&gt;(
+				&amp;seed,
+				runtime::offchain_demo::KEY_TYPE,
+			)
+			.expect(&quot;Dev Seed should always succeed.&quot;);
+	}
+	// ...snip
+}
+<span class="boring">}
+</span></code></pre></pre>
+<h2><a class="header" href="#unsigned-transactions" id="unsigned-transactions">Unsigned Transactions</a></h2>
+<h3><a class="header" href="#setup-1" id="setup-1">Setup</a></h3>
+<p>By default, unsigned transactions are rejected by the runtime unless they are explicitly
+allowed. So we need to write logic to allow unsigned transactions for certain particular
+dispatched functions as follows:</p>
+<p>src:
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/lib.rs"><code>pallets/offchain-demo/src/lib.rs</code></a></p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl&lt;T: Trait&gt; support::unsigned::ValidateUnsigned for Module&lt;T&gt; {
+	type Call = Call&lt;T&gt;;
+
+	fn validate_unsigned(_source: TransactionSource, call: &amp;Self::Call) -&gt; TransactionValidity {
+		if let Call::submit_number_unsigned(number) = call {
+			debug::native::info!(&quot;off-chain send_unsigned: number: {}&quot;, number);
+
+			ValidTransaction::with_tag_prefix(&quot;offchain-demo&quot;)
+				.priority(T::UnsignedPriority::get())
+				.and_provides([b&quot;submit_number_unsigned&quot;])
+				.longevity(3)
+				.propagate(true)
+				.build()
+		} else {
+			InvalidTransaction::Call.into()
+		}
+	}
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>By implementing <code>ValidateUnsigned</code>, the allowance logic is added inside the <code>validate_unsigned</code>
+function. We verify that if the call is <code>Call::submit_number_unsigned</code> we return <code>Ok()</code>, otherwise <code>InvalidTransaction::Call</code>.</p>
+<p>Note that the<code>ValidTransaction</code> object has some fields that touch on concepts that we have not discussed
+before:</p>
+<ul>
+<li><code>priority</code>: Ordering of two transactions, given their dependencies are satisfied.</li>
+<li><code>requires</code>: List of tags the transaction depends on.</li>
+<li><code>provides</code>: List of tags provided by this transaction. Successfully importing the transaction
+will enable other transactions that depend on these tags to be included as well.</li>
+<li>Both<code>provides</code> and
+<code>requires</code> tags allow Substrate to build a dependency graph of transactions and import them in
+the right order.</li>
+<li><code>longevity</code>: Transaction longevity, which describes the minimum number of blocks the transaction
+is valid for. After this period the transaction should be removed from the pool or revalidated.</li>
+<li><code>propagate</code>: Indication if the transaction should be propagated to other peers. By setting to
+<code>false</code> the transaction will still be considered for inclusion in blocks that are authored on
+the current node, but will never be sent to other peers.</li>
+</ul>
+<p>We are using the
+<a href="https://github.com/rust-unofficial/patterns/blob/master/patterns/builder.md">builder pattern</a> to
+build up this object.</p>
+<p>Finally, to tell the runtime that we have our own <code>ValidateUnsigned</code> logic, we also need to pass
+this as a parameter when constructing the runtime:</p>
+<p>src:
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime/src/lib.rs"><code>runtimes/ocw-runtime/src/lib.rs</code></a></p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>construct_runtime!(
+	pub enum Runtime where
+		Block = Block,
+		NodeBlock = opaque::Block,
+		UncheckedExtrinsic = UncheckedExtrinsic
+	{
+		//...snip
+		OffchainDemo: offchain_demo::{Module, Call, Storage, Event&lt;T&gt;, ValidateUnsigned},
+	}
+);
+<span class="boring">}
+</span></code></pre></pre>
+<h3><a class="header" href="#sending-unsigned-transactions" id="sending-unsigned-transactions">Sending Unsigned Transactions</a></h3>
+<p>We can now make an unsigned transaction from offchain worker with the
+<code>T::SubmitUnsignedTransaction::submit_unsigned</code> function, as shown in the code.</p>
+<p>src:
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/lib.rs"><code>pallets/offchain-demo/src/lib.rs</code></a></p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn send_unsigned(block_number: T::BlockNumber) -&gt; Result&lt;(), Error&lt;T&gt;&gt; {
+	use system::offchain::SubmitUnsignedTransaction;
+
+	let submission: u64 = block_number.try_into().ok().unwrap() as u64;
+	// the `block_number` param should be unique within each block generation phase
+	let call = Call::submit_number_unsigned(block_number, submission);
+
+	T::SubmitUnsignedTransaction::submit_unsigned(call).map_err(|e| {
+		debug::native::error!(&quot;Failed to submit unsigned tx: {:?}&quot;, e);
+		&lt;Error&lt;T&gt;&gt;::SendUnsignedError
+	})
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>As in signed transactions, we prepare a function reference with its parameters and call
+<code>T::SubmitUnsignedTransaction::submit_unsigned</code>.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="../off-chain-workers/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="../off-chain-workers/http-json.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="../off-chain-workers/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="../off-chain-workers/http-json.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+        <script type="text/javascript" src="../.analytics/load.js"></script>
+        
+        <script type="text/javascript" src="../.analytics/config.js"></script>
+        
+        <script type="text/javascript" src="../.analytics/klaro.min.js"></script>
+        
+
+        
+
+    </body>
+</html>

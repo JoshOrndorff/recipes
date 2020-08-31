@@ -1,0 +1,312 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Storage Maps - Substrate Recipes</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="A Hands-On Cookbook for Aspiring Blockchain Chefs">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="favicon.png">
+        
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="pallets-intro.html"><strong aria-hidden="true">1.</strong> Pallets</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="runtime-printing.html"><strong aria-hidden="true">1.1.</strong> Printing to the Node Log</a></li><li class="chapter-item expanded "><a href="events.html"><strong aria-hidden="true">1.2.</strong> Emitting Events</a></li><li class="chapter-item expanded "><a href="storage-maps.html" class="active"><strong aria-hidden="true">1.3.</strong> Storage Maps</a></li><li class="chapter-item expanded "><a href="cache.html"><strong aria-hidden="true">1.4.</strong> Cache Locally &gt; Storage Calls</a></li><li class="chapter-item expanded "><a href="vec-set.html"><strong aria-hidden="true">1.5.</strong> Using Vectors as Sets</a></li><li class="chapter-item expanded "><a href="map-set.html"><strong aria-hidden="true">1.6.</strong> Using Maps as Sets</a></li><li class="chapter-item expanded "><a href="double.html"><strong aria-hidden="true">1.7.</strong> Subgroup Removal by Subkey: Double Maps</a></li><li class="chapter-item expanded "><a href="structs.html"><strong aria-hidden="true">1.8.</strong> Storing custom structs</a></li><li class="chapter-item expanded "><a href="ringbuffer.html"><strong aria-hidden="true">1.9.</strong> Ringbuffer Queue</a></li><li class="chapter-item expanded "><a href="basic-token.html"><strong aria-hidden="true">1.10.</strong> Basic Token</a></li><li class="chapter-item expanded "><a href="constants.html"><strong aria-hidden="true">1.11.</strong> Configurable Constants</a></li><li class="chapter-item expanded "><a href="crowdfund.html"><strong aria-hidden="true">1.12.</strong> Simple Crowdfund</a></li><li class="chapter-item expanded "><a href="instantiable.html"><strong aria-hidden="true">1.13.</strong> Instantiable Pallets</a></li><li class="chapter-item expanded "><a href="weights.html"><strong aria-hidden="true">1.14.</strong> Weights for Resource Accounting</a></li><li class="chapter-item expanded "><a href="charity.html"><strong aria-hidden="true">1.15.</strong> Charity and Imbalances</a></li><li class="chapter-item expanded "><a href="fixed-point.html"><strong aria-hidden="true">1.16.</strong> Fixed Point Arithmetic</a></li><li class="chapter-item expanded "><a href="off-chain-workers/index.html"><strong aria-hidden="true">1.17.</strong> Off-chain Workers</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="off-chain-workers/transactions.html"><strong aria-hidden="true">1.17.1.</strong> Transactions</a></li><li class="chapter-item expanded "><a href="off-chain-workers/http-json.html"><strong aria-hidden="true">1.17.2.</strong> HTTP Fetching &amp; JSON Parsing</a></li><li class="chapter-item expanded "><a href="off-chain-workers/storage.html"><strong aria-hidden="true">1.17.3.</strong> Local Storage</a></li></ol></li><li class="chapter-item expanded "><a href="currency.html"><strong aria-hidden="true">1.18.</strong> Currency Types</a></li><li class="chapter-item expanded "><a href="currency-imbalances.html"><strong aria-hidden="true">1.19.</strong> Currency and Imbalances</a></li><li class="chapter-item expanded "><a href="randomness.html"><strong aria-hidden="true">1.20.</strong> Generating Randomness</a></li><li class="chapter-item expanded "><a href="pallet-coupling.html"><strong aria-hidden="true">1.21.</strong> Tightly- and Loosely-Coupled Pallets</a></li></ol></li><li class="chapter-item expanded "><a href="runtimes-intro.html"><strong aria-hidden="true">2.</strong> Runtimes</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="runtime-api.html"><strong aria-hidden="true">2.1.</strong> Runtime APIs</a></li><li class="chapter-item expanded "><a href="fees.html"><strong aria-hidden="true">2.2.</strong> Transaction Fees for Economic Security</a></li></ol></li><li class="chapter-item expanded "><a href="consensus-intro.html"><strong aria-hidden="true">3.</strong> Consensus</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="sha3-pow-consensus.html"><strong aria-hidden="true">3.1.</strong> Sha3 Pow Consensus Algorithms</a></li></ol></li><li class="chapter-item expanded "><a href="nodes-intro.html"><strong aria-hidden="true">4.</strong> Nodes</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="kitchen-node.html"><strong aria-hidden="true">4.1.</strong> Kitchen Node - An reusable instant seal node</a></li><li class="chapter-item expanded "><a href="custom-rpc.html"><strong aria-hidden="true">4.2.</strong> Custom RPCs</a></li><li class="chapter-item expanded "><a href="basic-pow.html"><strong aria-hidden="true">4.3.</strong> Basic Proof of Work Node</a></li><li class="chapter-item expanded "><a href="hybrid-consensus.html"><strong aria-hidden="true">4.4.</strong> Hybrid PoW/PoS Consensus Node</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Substrate Recipes</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#storage-maps" id="storage-maps">Storage Maps</a></h1>
+<p><code>pallets/simple-map</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fsimple-map%2Fsrc%2Flib.rs">
+<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
+</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-map/src/lib.rs">
+<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
+</a></p>
+<p>In this recipe, we will see how
+to store a mapping from keys to values, similar to Rust's own
+<a href="https://doc.rust-lang.org/std/collections/struct.HashMap.html"><code>HashMap</code></a>.</p>
+<h2><a class="header" href="#declaring-a-storagemap" id="declaring-a-storagemap">Declaring a <code>StorageMap</code></a></h2>
+<p>We declare a single storage map with the following syntax.</p>
+<pre><code class="language-rust ignore">decl_storage! {
+	trait Store for Module&lt;T: Trait&gt; as SimpleMap {
+		SimpleMap get(fn simple_map): map hasher(blake2_128_concat) T::AccountId =&gt; u32;
+	}
+}
+</code></pre>
+<p>Much of this should look familiar to you from storage values. Reading the line from left to right we
+have:</p>
+<ul>
+<li><code>SimpleMap</code> - the name of the storage map</li>
+<li><code>get(fn simple_map)</code> - the name of a getter function that will return values from the map.</li>
+<li><code>: map hasher(blake2_128_concat)</code> - beginning of the type declaration. This is a map and it will
+use the
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/trait.Hashable.html#tymethod.blake2_128_concat"><code>blake2_128_concat</code></a>
+hasher. More on this below.</li>
+<li><code>T::AccountId =&gt; u32</code> - The specific key and value tyes of the map. This is a map from
+<code>AccountId</code>s to <code>u32</code>s.</li>
+</ul>
+<h2><a class="header" href="#choosing-a-hasher" id="choosing-a-hasher">Choosing a Hasher</a></h2>
+<p>Although the syntax above is complex, most of it should be straightforward if you've understood the
+recipe on storage values. The last unfamiliar piece of writing a storage map is choosing which
+hasher to use. In general you should choose one of the three following hashers. The choice of hasher
+will affect the performance and security of your chain. If you don't want to think much about this,
+just choose <code>blake2_128_concat</code> and skip to the next section.</p>
+<h3><a class="header" href="#blake2_128_concat" id="blake2_128_concat"><code>blake2_128_concat</code></a></h3>
+<p>This is a cryptographically secure hash function, and is always safe to use. It is reasonably
+efficient, and will keep your storage tree balanced. You <em>must</em> choose this hasher if users of your
+chain have the ability to affect the storage keys. In this pallet, the keys are <code>AccountId</code>s. At
+first it may <em>seem</em> that the user doesn't affect the <code>AccountId</code>, but in reality a malicious user
+can generate thousands of accounts and use the one that will affect the chain's storage tree in the
+way the attacker likes. For this reason, we have chosen to use the <code>blake2_128_concat</code> hasher.</p>
+<h3><a class="header" href="#twox_64_concat" id="twox_64_concat"><code>twox_64_concat</code></a></h3>
+<p>This hasher is <em>not</em> cryptographically secure, but is more efficient than blake2. Thus it represents
+trading security for performance. You should <em>not</em> use this hasher if chain users can affect the
+storage keys. However, it is perfectly safe to use this hasher to gain performance in scenarios
+where the users do not control the keys. For example, if the keys in your map are sequentially
+increasing indices and users cannot cause the indices to rapidly increase, then this is a perfectly
+reasonable choice.</p>
+<h3><a class="header" href="#identity" id="identity"><code>identity</code></a></h3>
+<p>The <code>identity</code> &quot;hasher&quot; is really not a hasher at all, but merely an
+<a href="https://en.wikipedia.org/wiki/Identity_function">identity function</a> that returns the same value it
+receives. This hasher is only an option when the key type in your storage map is <em>already</em> a hash,
+and is not controllable by the user. If you're in doubt whether the user can influence the key just
+use blake2.</p>
+<h2><a class="header" href="#the-storage-map-api" id="the-storage-map-api">The Storage Map API</a></h2>
+<p>This pallet demonstrated some of the most common methods available in a storage map including
+<code>insert</code>, <code>get</code>, <code>take</code>, and <code>contains_key</code>.</p>
+<pre><code class="language-rust ignore">// Insert
+&lt;SimpleMap&lt;T&gt;&gt;::insert(&amp;user, entry);
+
+// Get
+let entry = &lt;SimpleMap&lt;T&gt;&gt;::get(account);
+
+// Take
+let entry = &lt;SimpleMap&lt;T&gt;&gt;::take(&amp;user);
+
+// Contains Key
+&lt;SimpleMap&lt;T&gt;&gt;::contains_key(&amp;user)
+</code></pre>
+<p>The rest of the API is documented in the rustdocs on the
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/storage/trait.StorageMap.html"><code>StorageMap</code> trait</a>. You do
+not need to explicitly <code>use</code> this trait because the <code>decl_storage!</code> macro will do it for you if you
+use a storage map.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="events.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="cache.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="events.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="cache.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+        <script type="text/javascript" src=".analytics/load.js"></script>
+        
+        <script type="text/javascript" src=".analytics/config.js"></script>
+        
+        <script type="text/javascript" src=".analytics/klaro.min.js"></script>
+        
+
+        
+
+    </body>
+</html>
