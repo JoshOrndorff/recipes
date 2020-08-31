@@ -84,7 +84,7 @@ can be either `Ok(())` indicating that the call succeeded, or an `Err` which is 
 Right before the `hello-substrate` function, we see the line `#[weight = 10_000]`. This line
 attaches a default weight to the call. Ultimately weights affect the fees a user will have to pay to
 call the function. Weights are a very interesting aspect of developing with Substrate, but they too
-shall be covered later in the section on [Weights](./weights.md). For now, and for may of
+shall be covered later in the section on [Weights](./weights.md). For now, and for many of
 the recipes pallets, we will simply use the default weight as we have done here.
 
 ## Inside a Dispatchable Call
