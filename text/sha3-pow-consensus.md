@@ -70,6 +70,7 @@ fn verify(
 	&self,
 	_parent: &BlockId<B>,
 	pre_hash: &H256,
+	_pre_digest: Option<&[u8]>,
 	seal: &RawSeal,
 	difficulty: Self::Difficulty
 ) -> Result<bool, Error<B>> {
@@ -108,6 +109,7 @@ fn mine(
 	&self,
 	_parent: &BlockId<B>,
 	pre_hash: &H256,
+	_pre_digest: Option<&[u8]>,
 	difficulty: Self::Difficulty,
 	round: u32 // The number of nonces to try during this call
 ) -> Result<Option<RawSeal>, Error<B>> {
