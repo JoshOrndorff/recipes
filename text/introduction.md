@@ -8,6 +8,10 @@ complete working code as well as a detailed writeup explaining the code.
 
 ## How to Use This Book
 
+You can read this book in any particular order. If you have a certain topic you want to dive into, or
+ know the subject/keyword to look for, please use the search button (the small magnifier on top
+left) to search for the subject. The list is organized roughly in order of increasing complexity.
+
 You can't learn to build blockchains by reading alone. As you work through the recipes, practice compiling, testing, and hacking on each Recipes. Play with
 the code, extract patterns, and apply them to a problem that you want to solve!
 
@@ -23,7 +27,7 @@ can seek help in several ways:
 
 -   Ask a question on [Stack Overflow](https://stackoverflow.com/questions/tagged/substrate)
 -   Ask a question in the
-    [Substrate Technical Riot channel](https://riot.im/app/#/room/#substrate-technical:matrix.org)
+    [Substrate Technical Element channel](https://app.element.io/#/room/!HzySYSaIhtyWrwiwEV:matrix.org)
 -   Open a [new issue](https://github.com/substrate-developer-hub/recipes/issues/new) against this
     repository
 
@@ -32,9 +36,9 @@ can seek help in several ways:
 Each recipe targets a specific aspect of Substrate development and explains the details of that aspect. In all recipes some basic familiarity with Substrate development and a working Rust environment are assumed. Generally speaking you should meet the following prerequisites:
 
 - Have a working Substrate development environment. There are excellent docs on [setting up a Substrate development environment](https://substrate.dev/docs/en/knowledgebase/getting-started/).
-- Understand the first seven chapters of [The Rust Book](https://doc.rust-lang.org/book/index.html). Rather than learning Rust _before_ you learn Substrate, consider learning Rust _as_
+- Understand the first ten chapters of [The Rust Book](https://doc.rust-lang.org/book/index.html). Rather than learning Rust _before_ you learn Substrate, consider learning Rust _as_
 you learn Substrate.
-- Complete the first few [Official Substrate Tutorials](https://substrate.dev/en/tutorials)
+- Complete the first few [Official Substrate Tutorials](https://substrate.dev/en/tutorials).
 
 ## Structure of a Substrate Node
 
@@ -56,51 +60,51 @@ typically contain several such pallets. The kitchen node you built previously fo
 
 ## The Directories in our Kitchen
 
-There are five primary directories in this repository. If you haven't already, you should clone it now.
+If you haven't already, you should clone it now. There are five primary directories in this repository.
 
--   **Text**: Source of [the book](https://substrate.dev/recipes) written in markdown. This is what
-    you're reading right now.
--   **Pallets**: Pallets for use in FRAME-based runtimes.
--   **Runtimes**: Runtimes for use in Substrate nodes.
 -   **Consensus**: Consensus engines for use in Substrate nodes.
 -   **Nodes**: Complete Substrate nodes ready to run.
+-   **Pallets**: Pallets for use in FRAME-based runtimes.
+-   **Runtimes**: Runtimes for use in Substrate nodes.
+-   **Text**: Source of [the book](https://substrate.dev/recipes) written in markdown. This is what
+    you're reading right now.
 
 Exploring those directories reveals a tree that looks like this
 
 ```
 recipes
 |
-+-- text
-|
 +-- consensus
   |
-  +-- shaw3pow
+  +-- manual-seal
+  |
+  +-- sha3pow
 |
 +-- nodes
 	|
-	+-- kitchen-node    <-- You built this previously
+	+-- basic-pow
+	|
+	+-- ...
 	|
 	+-- rpc-node
+|
++-- pallets
+	|
+	+-- basic-token
+	|
+	+ ...
+	|
+	+-- weights
 |
 +-- runtimes
 	|
 	+-- api-runtime
 	|
-	+-- super-runtime    <-- You built this too (it is part of the kitchen-node)
+	+ ...
 	|
 	+-- weight-fee-runtime
-	|
-	+ ...
 |
-+-- pallets
-	|
-	+-- adding-machine    <-- You built this too (it is part of super-runtime)
-	|
-	+-- basic-token        <-- You built this too (it is part of super-runtime)
-	|
-	+ ...
-	|
-	+-- weights
++-- text
 ```
 
 ## Inside the Kitchen Node
