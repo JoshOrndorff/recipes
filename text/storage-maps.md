@@ -8,8 +8,7 @@
 	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
 ](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-map/src/lib.rs)
 
-In the appetizer on [storage values](../../2-appetizers/2-storage-values.md) we learned to store a
-single value in blockchain storage to be persisted between blocks. In this recipe, we will see how
+In this recipe, we will see how
 to store a mapping from keys to values, similar to Rust's own
 [`HashMap`](https://doc.rust-lang.org/std/collections/struct.HashMap.html).
 

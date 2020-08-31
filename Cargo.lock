@@ -18,18 +18,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "adding-machine"
-version = "2.0.0-rc5"
-dependencies = [
- "frame-support",
- "frame-system",
- "parity-scale-codec",
- "sp-core",
- "sp-io",
- "sp-runtime",
-]
-
-[[package]]
 name = "addr2line"
 version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -5762,18 +5750,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "single-value"
-version = "2.0.0-rc5"
-dependencies = [
- "frame-support",
- "frame-system",
- "parity-scale-codec",
- "sp-core",
- "sp-io",
- "sp-runtime",
-]
-
-[[package]]
 name = "slab"
 version = "0.4.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -6677,7 +6653,6 @@ dependencies = [
 name = "super-runtime"
 version = "2.0.0-rc5"
 dependencies = [
- "adding-machine",
  "basic-token",
  "charity",
  "check-membership",
@@ -6705,7 +6680,6 @@ dependencies = [
  "simple-crowdfund",
  "simple-event",
  "simple-map",
- "single-value",
  "sp-api",
  "sp-block-builder",
  "sp-core",

@@ -8,10 +8,8 @@
 	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
 ](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/hello-substrate/src/lib.rs)
 
-The first pallet we'll explore is a simple "hello world" example. This pallet will have one
-dispatchable call that prints a message to the node's output. Because this is our first pallet,
-we'll also explore the structure that every pallet has. This code lives in
-`pallets/hello-substrate/src/lib.rs`.
+This pallet has one
+dispatchable call that prints a message to the node's output. Printing to the node log is not common for runtimes, but can be quite useful when debugging and as a "hello world" example. Because this is the first pallet in the recipes, we'll also take a look at the general structure of a pallet.
 
 ## No Std
 
@@ -29,7 +27,7 @@ Next, you'll find imports that come from various parts of the Substrate framewor
 import from a few common crates including
 [`frame-support`](https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/index.html), and
 [`frame-system`](https://substrate.dev/rustdocs/v2.0.0-rc5/frame_system/index.html). Complex pallets will have many
-imports as we'll see later. The `hello-substrate` pallet uses these imports.
+imports. The `hello-substrate` pallet uses these imports.
 
 ```rust, ignore
 use frame_support::{ decl_module, dispatch::DispatchResult, debug };
@@ -39,14 +37,13 @@ use sp_runtime::print;
 
 ## Tests
 
-Next we see a reference to the tests module. This pallet has tests written in a separate file called
-`tests.rs`. We will not discuss the tests further at this point, but they are covered in the
-[Testing section](../3-entrees/testing/index.md) of the book.
+Next we see a reference to the tests module. This pallet, as with most recipes pallets, has tests written in a separate file called
+`tests.rs`.
 
 ## Configuration Trait
 
 Next, each pallet has a configuration trait which is called `Trait`. The configuration trait can be
-used to access features from other pallets, or [constants](../3-entrees/constants.md) that affect
+used to access features from other pallets, or [constants](./constants.md) that affect
 the pallet's behavior. This pallet is simple enough that our configuration trait can remain empty,
 although it must still exist.
 
@@ -78,17 +75,16 @@ decl_module! {
 ```
 
 As you can see, our `hello-substrate` pallet has a dispatchable call that takes a single argument,
-called `origin` which we'll investigate shortly. The call returns a
+called `origin`. The call returns a
 [`DispatchResult`](https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/dispatch/type.DispatchResult.html) which
-can be either `Ok(())` indicating that the call succeeded, or an `Err` which we'll investigate in
-the [appetizer about errors](./3-errors.md).
+can be either `Ok(())` indicating that the call succeeded, or an `Err` which is demonstrated in most other recipes pallets.
 
 ### Weight Annotations
 
 Right before the `hello-substrate` function, we see the line `#[weight = 10_000]`. This line
 attaches a default weight to the call. Ultimately weights affect the fees a user will have to pay to
 call the function. Weights are a very interesting aspect of developing with Substrate, but they too
-shall be covered later in the section on [Weights](../3-entrees/weights.md). For now, and for many of
+shall be covered later in the section on [Weights](./weights.md). For now, and for many of
 the recipes pallets, we will simply use the default weight as we have done here.
 
 ## Inside a Dispatchable Call
@@ -137,7 +133,7 @@ encourage you to modify the code to try using `println!` and confirm that it wil
 Nonetheless, printing a message from the runtime is useful both for logging information, and also
 for debugging.
 
-![Substrate Architecture Diagram](../img/substrate-architecture.png)
+![Substrate Architecture Diagram](./img/substrate-architecture.png)
 
 At the top of our pallet, we imported `sp_runtime`'s
 [`print` function](https://substrate.dev/rustdocs/v2.0.0-rc5/sp_runtime/fn.print.html). This special function allows
@@ -159,82 +155,3 @@ variable's content. The syntax inside the macro is very similar to what regular 
 **Runtime logger note:** When we execute the runtime in native, `debug::info!` messages are printed.
 However, if we execute the runtime in Wasm, then an additional step to initialise
 [RuntimeLogger](https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/debug/struct.RuntimeLogger.html) is required.
-
-## Installing the Pallet in a Runtime
-
-In order to actually use a pallet, it must be installed in a Substrate runtime. This particular
-pallet is installed in the `super-runtime` which you built as part of the kitchen node. To install a
-pallet in a runtime, you must do three things.
-
-### Depend on the Pallet
-
-First we must include the pallet in our runtime's `Cargo.toml` file. In the case of the
-super-runtime, this file is at `runtimes/super-runtime/Cargo.toml`.
-
-```toml
-[dependencies]
-# --snip--
-hello-substrate = { path = "../../pallets/hello-substrate", default-features = false }
-```
-
-Because the runtime is compiled to both native and Wasm, we must ensure that our pallet is built to
-the correct target as well. At the bottom of the `Cargo.toml` file, we see this.
-
-```toml
-[features]
-default = ["std"]
-std = [
-	# --snip--
-	"hello-substrate/std",
-]
-```
-
-### Implement its Configuration Trait
-
-Next we must implement the pallet's configuration trait. This happens in the runtime's main `lib.rs`
-file. In the case of the super-runtime, this file is at `runtimes/super-runtime/src/lib.rs`. Because
-this pallet's configuration trait is trivial, so is implementing it.
-
-```rust ignore
-impl hello_substrate::Trait for Runtime {}
-```
-
-You can see the other pallets' trait implementations in the surrounding lines. Most of them are more
-complex.
-
-### Add it to `construct_runtime!`
-
-Finally, we add our pallet to the
-[`construct_runtime!` macro](https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/macro.construct_runtime.html).
-
-```rust, ignore
-construct_runtime!(
-	pub enum Runtime where
-		Block = Block,
-		NodeBlock = opaque::Block,
-		UncheckedExtrinsic = UncheckedExtrinsic
-	{
-		// --snip--
-		HelloSubstrate: hello_substrate::{Module, Call},
-	}
-);
-```
-
-This macro does the heavy lifting of composing each individual pallet into a single usable runtime.
-Let's explain the syntax for each line. Each Pallet listed in the macro needs several pieces of
-information.
-
-First is a convenient name to give to this pallet. We've chosen `HelloSubstrate`. It is common to
-choose the same name as the pallet itself except when there is
-[more than one instance](../3-entrees/instantiable.md). Next is the name of the crate that the
-pallet lives in. And finally there is a list of features the pallet provides. All pallets require
-`Module`. Our pallet also provides dispatchable calls, so it requires `Call`.
-
-## Try it Out
-
-If you haven't already, try interacting with the pallet using the Apps UI. You should see your
-message printed to the log of your node. Remember to run the kitchen node with the correct flags:
-`./target/release/kitchen-node --dev -lruntime=debug`
-
-You're now well on your way to becoming a blockchain chef. Let's continue to build our skills with
-another appetizer.

@@ -85,7 +85,7 @@ pub trait Trait: system::Trait + vec_set::Trait {
 > This pallet, and all pallets, are tightly coupled to `frame_system`.
 
 Supplying this trait bound means that the tightly coupled variant of `check-membership` pallet can
-only be installed in a runtime that also has the [`vec-set` pallet](./storage-api/vec-set.md)
+only be installed in a runtime that also has the [`vec-set` pallet](./vec-set.md)
 installed. We also see the tight coupling in the pallet's `Cargo.toml` file, where `vec-set` is
 listed by name.
 
@@ -120,7 +120,7 @@ pub trait Trait: system::Trait {
 }
 ```
 
-> Many palets throught the ecosystem are coupled to a token through the
+> Many pallets throughout the ecosystem are coupled to a token through the
 > [`Currency` trait](https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/traits/trait.Currency.html).
 
 Having this associated type means that the loosely coupled variant of the `check-membership` pallet

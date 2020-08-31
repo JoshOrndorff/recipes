@@ -27,7 +27,6 @@ transaction-payment = { package = 'pallet-transaction-payment', version = '2.0.0
 timestamp = { package = 'pallet-timestamp', version = '2.0.0-rc5', default-features = false }
 
 # Recipe Pallets
-adding-machine = { path = "../../pallets/adding-machine", default-features = false }
 basic-token = { path = "../../pallets/basic-token", default-features = false }
 charity = { path = "../../pallets/charity", default-features = false }
 check-membership = { path = "../../pallets/check-membership", default-features = false }
@@ -45,7 +44,6 @@ randomness = { path = "../../pallets/randomness", default-features = false }
 simple-crowdfund = { path = "../../pallets/simple-crowdfund", default-features = false}
 simple-event = { path = "../../pallets/simple-event", default-features = false }
 simple-map = { path = "../../pallets/simple-map", default-features = false }
-single-value = { path = "../../pallets/single-value", default-features = false }
 storage-cache = { path = "../../pallets/storage-cache", default-features = false }
 struct-storage = { path = "../../pallets/struct-storage", default-features = false }
 vec-set = { path = "../../pallets/vec-set", default-features = false }
@@ -101,7 +99,6 @@ std = [
 	"transaction-payment/std",
 
 	# Recipes pallets
-	"adding-machine/std",
 	"basic-token/std",
 	"charity/std",
 	"check-membership/std",
@@ -119,7 +116,6 @@ std = [
 	"simple-crowdfund/std",
 	"simple-event/std",
 	"simple-map/std",
-	"single-value/std",
 	"storage-cache/std",
 	"struct-storage/std",
 	"vec-set/std",

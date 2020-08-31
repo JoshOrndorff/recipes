@@ -39,7 +39,7 @@ decl_storage! {
 ```
 
 Because users can influence the keys in our storage map, we've chosen the `blake2_128_concat` hasher
-as described in the recipe on [storage maps](storage-api/storage-maps.md)s.
+as described in the recipe on [storage maps](./storage-maps.md)s.
 
 ## Events and Errors
 
