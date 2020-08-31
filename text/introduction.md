@@ -10,9 +10,7 @@ complete working code as well as a detailed writeup explaining the code.
 
 You can read this book in any particular order. If you have a certain topic you want to dive into, or
  know the subject/keyword to look for, please use the search button (the small magnifier on top
-left) to search for the subject. Otherwise, you could also follow the order we listed on the left,
-starting from the foundational knowledge of Substrate and getting more advanced. Some of the later
-topics will assume you have a good grasp of previous topics.
+left) to search for the subject. The list is organized roughly in order of increasing complexity.
 
 You can't learn to build blockchains by reading alone. As you work through the recipes, practice compiling, testing, and hacking on each Recipes. Play with
 the code, extract patterns, and apply them to a problem that you want to solve!
