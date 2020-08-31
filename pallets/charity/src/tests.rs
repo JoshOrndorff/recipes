@@ -204,21 +204,32 @@ fn allocating_works() {
 		let alloc = 5;
 		assert_ok!(Charity::allocate(RawOrigin::Root.into(), 2, alloc));
 
-		// Check that the correct event is emitted
-		let new_pot_total = Balances::minimum_balance() + donation - alloc;
-		let expected_event = TestEvent::charity(RawEvent::FundsAllocated(2, 5, new_pot_total));
-
 		// testing if the the event come in the correct order
 		assert_eq!(
-			System::events()[3],
-			EventRecord {
-				phase: Phase::Initialization,
-				event: TestEvent::charity(RawEvent::FundsAllocated(2, 5, new_pot_total)),
-				topics: vec![],
-			},
+			System::events(),
+			vec![
+				EventRecord {
+					phase: Phase::Initialization,
+					event: TestEvent::balances(balances::RawEvent::Transfer(1, 8241983431855337325, 10)),
+					topics: vec![],
+				},
+				EventRecord {
+					phase: Phase::Initialization,
+					event: TestEvent::charity(RawEvent::DonationReceived(1, 10, 11)),
+					topics: vec![],
+				},
+				EventRecord {
+					phase: Phase::Initialization,
+					event: TestEvent::balances(balances::RawEvent::Transfer(8241983431855337325, 2, 5)),
+					topics: vec![],
+				},
+				EventRecord {
+					phase: Phase::Initialization,
+					event: TestEvent::charity(RawEvent::FundsAllocated(2, 5, 6)),
+					topics: vec![],
+				},
+			]
 		);
-
-		assert!(System::events().iter().any(|a| a.event == expected_event));
 	})
 }
 //TODO What if we try to allocate more funds than we have
