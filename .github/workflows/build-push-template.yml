@@ -13,7 +13,7 @@ jobs:
     - name: Trigger playground inclusion
       uses: peter-evans/repository-dispatch@v1
       with:
-        token: ${{ secrets.REPO_ACCESS_TOKEN }}
+        token: ${{ secrets.PLAYGROUND_ACCESS_TOKEN }}
         repository: paritytech/substrate-playground
         event-type: template-updated
         client-payload: '{"id": "recipes"}'
