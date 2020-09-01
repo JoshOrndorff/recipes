@@ -12,6 +12,7 @@ on:
 
 jobs:
   build-publish:
+    if: ${{ github.repository == 'substrate-developer-hub/recipes' }}
     runs-on: ubuntu-18.04
     steps:
     - uses: actions/checkout@v2
