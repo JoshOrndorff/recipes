@@ -23,9 +23,6 @@ pub struct FullDeps<C, P> {
 	pub command_sink: Sender<EngineCommand<Hash>>,
 }
 
-/// A IO handler that uses all Full RPC extensions.
-pub type IoHandler = jsonrpc_core::IoHandler<sc_rpc::Metadata>;
-
 /// Instantiate all full RPC extensions.
 pub fn create_full<C, P>(
 	deps: FullDeps<C, P>,

@@ -28,10 +28,11 @@ type FullSelectChain = sc_consensus::LongestChain<FullBackend, Block>;
 pub fn new_partial(config: &Configuration) -> Result<
 	PartialComponents<
 		FullClient, FullBackend, FullSelectChain,
-	BasicQueue<Block, TransactionFor<FullClient, Block>>,
-	sc_transaction_pool::FullPool<Block, FullClient>,
-	(),
->, ServiceError> {
+		BasicQueue<Block, TransactionFor<FullClient, Block>>,
+		sc_transaction_pool::FullPool<Block, FullClient>,
+		(),
+	>,
+ServiceError> {
 	let inherent_data_providers = InherentDataProviders::new();
 	inherent_data_providers
 		.register_provider(sp_timestamp::InherentDataProvider)
