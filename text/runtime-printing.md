@@ -154,4 +154,4 @@ variable's content. The syntax inside the macro is very similar to what regular 
 
 **Runtime logger note:** When we execute the runtime in native, `debug::info!` messages are printed.
 However, if we execute the runtime in Wasm, then an additional step to initialise
-[RuntimeLogger](https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/debug/struct.RuntimeLogger.html) is required.
+[RuntimeLogger](https://substrate.dev/rustdocs/v2.0.0-rc6/frame_support/debug/struct.RuntimeLogger.html) is required.
