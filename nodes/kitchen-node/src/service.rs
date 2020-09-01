@@ -24,6 +24,7 @@ type FullSelectChain = sc_consensus::LongestChain<FullBackend, Block>;
 
 /// Returns most parts of a service. Not enough to run a full chain,
 /// But enough to perform chain operations like purge-chain
+#[allow(clippy::type_complexity)]
 pub fn new_partial(config: &Configuration) -> Result<
 	PartialComponents<
 		FullClient, FullBackend, FullSelectChain,
@@ -114,12 +115,12 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
 	let telemetry_connection_sinks = sc_service::TelemetryConnectionSinks::default();
 
 	sc_service::spawn_tasks(sc_service::SpawnTasksParams {
-		network: network.clone(),
+		network,
 		client: client.clone(),
-		keystore: keystore.clone(),
+		keystore,
 		task_manager: &mut task_manager,
 		transaction_pool: transaction_pool.clone(),
-		telemetry_connection_sinks: telemetry_connection_sinks.clone(),
+		telemetry_connection_sinks,
 		rpc_extensions_builder: Box::new(|_, _| ()),
 		on_demand: None,
 		remote_blockchain: None,
