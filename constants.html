@@ -168,7 +168,7 @@
 <img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
 </a></p>
 <p>To declare constant values within a runtime, it is necessary to import the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/traits/trait.Get.html"><code>Get</code></a> trait from <code>frame_support</code></p>
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc6/frame_support/traits/trait.Get.html"><code>Get</code></a> trait from <code>frame_support</code></p>
 <pre><code class="language-rust ignore">use frame_support::traits::Get;
 </code></pre>
 <p>Configurable constants are declared as associated types in the pallet's configuration trait using
@@ -242,7 +242,7 @@ transaction fees).</p>
 <h2><a class="header" href="#supplying-the-constant-value" id="supplying-the-constant-value">Supplying the Constant Value</a></h2>
 <p>When the pallet is included in a runtime, the runtime developer supplies the value of the constant
 using the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/macro.parameter_types.html"><code>parameter_types!</code> macro</a>. This
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc6/frame_support/macro.parameter_types.html"><code>parameter_types!</code> macro</a>. This
 pallet is included in the <code>super-runtime</code> where we see the following macro invocation and trait
 implementation.</p>
 <pre><pre class="playground"><code class="language-rust">

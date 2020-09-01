@@ -169,11 +169,11 @@
 </a></p>
 <p>This recipe demonstrates a Substrate-based node that employs hybrid consensus. Specifically, it uses
 <a href="./sha3-pow-consensus.html">Sha3 Proof of Work</a> to dictate block authoring, and the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sc_finality_grandpa/index.html">Grandpa</a> finality gadget to provide
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc6/sc_finality_grandpa/index.html">Grandpa</a> finality gadget to provide
 <a href="https://substrate.dev/docs/en/knowledgebase/advanced/consensus#finality">deterministic finality</a>. The minimal proof
 of work consensus lives entirely outside of the runtime while the grandpa finality obtains its
 authorities from the runtime via the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sp_finality_grandpa/trait.GrandpaApi.html">GrandpaAPI</a>. Understanding this
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc6/sp_finality_grandpa/trait.GrandpaApi.html">GrandpaAPI</a>. Understanding this
 recipe requires familiarity with Substrate's
 <a href="https://substrate.dev/docs/en/knowledgebase/advanced/block-import">block import pipeline</a>.</p>
 <h2><a class="header" href="#the-block-import-pipeline" id="the-block-import-pipeline">The Block Import Pipeline</a></h2>
@@ -251,7 +251,7 @@ such as transaction processing, gossiping, and peer discovery would be starved f
 <h2><a class="header" href="#spawning-the-grandpa-task" id="spawning-the-grandpa-task">Spawning the Grandpa Task</a></h2>
 <p>Grandpa is <em>not</em> CPU intensive, so we will use a standard <code>async</code> worker to listen to and cast
 grandpa votes. We begin by creating a grandpa
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sc_finality_grandpa/struct.Config.html"><code>Config</code></a>.</p>
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc6/sc_finality_grandpa/struct.Config.html"><code>Config</code></a>.</p>
 <pre><code class="language-rust ignore">let grandpa_config = sc_finality_grandpa::Config {
 	gossip_duration: Duration::from_millis(333),
 	justification_period: 512,
@@ -262,7 +262,7 @@ grandpa votes. We begin by creating a grandpa
 };
 </code></pre>
 <p>We can then use this config to create an instance of
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sc_finality_grandpa/struct.GrandpaParams.html"><code>GrandpaParams</code></a>.</p>
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc6/sc_finality_grandpa/struct.GrandpaParams.html"><code>GrandpaParams</code></a>.</p>
 <pre><code class="language-rust ignore">let grandpa_config = sc_finality_grandpa::GrandpaParams {
 	config: grandpa_config,
 	link: grandpa_link,
@@ -293,7 +293,7 @@ it may receive (just ignore them).</p>
 <h2><a class="header" href="#constraints-on-the-runtime" id="constraints-on-the-runtime">Constraints on the Runtime</a></h2>
 <h3><a class="header" href="#runtime-apis" id="runtime-apis">Runtime APIs</a></h3>
 <p>Grandpa relies on getting its authority sets from the runtime via the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sp_finality_grandpa/trait.GrandpaApi.html">GrandpaAPI</a>. So trying to build
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc6/sp_finality_grandpa/trait.GrandpaApi.html">GrandpaAPI</a>. So trying to build
 this node with a runtime that does not provide this API will fail to compile. For that reason, we
 have included the dedicated <code>minimal-grandpa-runtime</code>.</p>
 <p>The opposite is not true, however. A node that does <em>not</em> require grandpa may use the

@@ -211,10 +211,10 @@ impl WeighData&lt;(&amp;bool, &amp;u32)&gt; for Conditional {
 }
 </code></pre>
 <p>In addition to the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/weights/trait.WeighData.html"><code>WeightData</code> Trait</a>, shown
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc6/frame_support/weights/trait.WeighData.html"><code>WeightData</code> Trait</a>, shown
 above, types that are used to calculate transaction weights must also implement
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/weights/trait.ClassifyDispatch.html"><code>ClassifyDispatch</code></a>,
-and <a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/weights/trait.PaysFee.html"><code>PaysFee</code></a>.</p>
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc6/frame_support/weights/trait.ClassifyDispatch.html"><code>ClassifyDispatch</code></a>,
+and <a href="https://substrate.dev/rustdocs/v2.0.0-rc6/frame_support/weights/trait.PaysFee.html"><code>PaysFee</code></a>.</p>
 <pre><code class="language-rust ignore">impl&lt;T&gt; ClassifyDispatch&lt;T&gt; for Conditional {
     fn classify_dispatch(&amp;self, _: T) -&gt; DispatchClass {
         // Classify all calls as Normal (which is the default)

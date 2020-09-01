@@ -185,7 +185,7 @@ have:</p>
 <li><code>get(fn simple_map)</code> - the name of a getter function that will return values from the map.</li>
 <li><code>: map hasher(blake2_128_concat)</code> - beginning of the type declaration. This is a map and it will
 use the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/trait.Hashable.html#tymethod.blake2_128_concat"><code>blake2_128_concat</code></a>
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc6/frame_support/trait.Hashable.html#tymethod.blake2_128_concat"><code>blake2_128_concat</code></a>
 hasher. More on this below.</li>
 <li><code>T::AccountId =&gt; u32</code> - The specific key and value tyes of the map. This is a map from
 <code>AccountId</code>s to <code>u32</code>s.</li>
@@ -232,7 +232,7 @@ let entry = &lt;SimpleMap&lt;T&gt;&gt;::take(&amp;user);
 &lt;SimpleMap&lt;T&gt;&gt;::contains_key(&amp;user)
 </code></pre>
 <p>The rest of the API is documented in the rustdocs on the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_support/storage/trait.StorageMap.html"><code>StorageMap</code> trait</a>. You do
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc6/frame_support/storage/trait.StorageMap.html"><code>StorageMap</code> trait</a>. You do
 not need to explicitly <code>use</code> this trait because the <code>decl_storage!</code> macro will do it for you if you
 use a storage map.</p>
 

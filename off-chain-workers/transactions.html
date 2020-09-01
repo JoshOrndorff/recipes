@@ -250,7 +250,7 @@ pub mod crypto {
 bounds that are not satisfied: <code>Runtime: frame_system::offchain::CreateSignedTransaction</code>,
 <code>frame_system::offchain::SigningTypes</code>, and <code>frame_system::offchain::SendTransactionTypes</code>.
 We also learn that when using <code>SubmitSignedTransaction</code>, our runtime need to implement
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc5/frame_system/offchain/trait.CreateSignedTransaction.html"><code>CreateSignedTransaction</code> trait</a>.</p>
+<a href="https://substrate.dev/rustdocs/v2.0.0-rc6/frame_system/offchain/trait.CreateSignedTransaction.html"><code>CreateSignedTransaction</code> trait</a>.</p>
 <p>src:
 <a href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime/src/lib.rs"><code>runtimes/ocw-runtime/src/lib.rs</code></a></p>
 <pre><pre class="playground"><code class="language-rust">
@@ -384,7 +384,7 @@ one signed transaction is made.</p>
 <p>Eventually, the <code>call</code> transaction will be made on-chain via the <code>create_transaction</code> function we defined
 earlier when we implemented <code>CreateTransaction</code> trait in our runtime.</p>
 <p>The local account used to sign the transaction is inserted in the pallet app crypto, and lives in
-the outer node's <a href="https://substrate.dev/rustdocs/v2.0.0-rc5/sc_service/index.html">service</a>.</p>
+the outer node's <a href="https://substrate.dev/rustdocs/v2.0.0-rc6/sc_service/index.html">service</a>.</p>
 <p>src:
 <a href="https://github.com/substrate-developer-hub/recipes/tree/master/nodes/kitchen-node/src/service.rs"><code>nodes/kitchen-node/src/service.rs</code></a></p>
 <pre><pre class="playground"><code class="language-rust">
