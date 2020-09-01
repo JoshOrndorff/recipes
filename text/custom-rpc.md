@@ -105,7 +105,7 @@ With our RPC written, we're ready to extend our `IoHandler` with it. We begin wi
 jsonrpc-core = "14.0.3"
 jsonrpc-core-client = "14.0.3"
 jsonrpc-derive = "14.0.3"
-sc-rpc = '2.0.0-rc5'
+sc-rpc = '2.0.0-rc6'
 ```
 
 Now we're ready to write the `create_full` function we referenced from our service. The function is quoted in its entirety below. You ca see we add the
