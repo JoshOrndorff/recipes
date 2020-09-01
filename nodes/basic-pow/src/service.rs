@@ -49,7 +49,7 @@ ServiceError> {
 
 	let (client, backend, keystore, task_manager) =
 		sc_service::new_full_parts::<Block, RuntimeApi, Executor>(&config)?;
-	let client : std::sync::Arc<_> = Arc::new(client);
+	let client = Arc::new(client);
 
 	let select_chain = sc_consensus::LongestChain::new(backend.clone());
 
