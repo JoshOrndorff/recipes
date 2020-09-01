@@ -1,8 +1,6 @@
 //! A Super Runtime. This runtime demonstrates all the recipes in the kitchen
 //! in a single super runtime.
 
-#![allow(clippy::unnecessary_mut_passed)]
-
 #![cfg_attr(not(feature = "std"), no_std)]
 // `construct_runtime!` does a lot of recursion and requires us to increase the limit to 256.
 #![recursion_limit = "256"]
@@ -185,6 +183,8 @@ impl system::Trait for Runtime {
 	type OnKilledAccount = ();
 	/// The data to be stored in an account.
 	type AccountData = balances::AccountData<Balance>;
+	/// Weight information for the extrinsics of this pallet.
+	type SystemWeightInfo = ();
 }
 
 impl grandpa::Trait for Runtime {
@@ -209,6 +209,7 @@ impl timestamp::Trait for Runtime {
 	type Moment = u64;
 	type OnTimestampSet = ();
 	type MinimumPeriod = MinimumPeriod;
+	type WeightInfo = ();
 }
 
 parameter_types! {
@@ -225,6 +226,7 @@ impl balances::Trait for Runtime {
 	type DustRemoval = ();
 	type ExistentialDeposit = ExistentialDeposit;
 	type AccountStore = System;
+	type WeightInfo = ();
 }
 
 impl sudo::Trait for Runtime {
@@ -354,23 +356,25 @@ impl_runtime_apis! {
 			Grandpa::grandpa_authorities()
 		}
 
-		fn submit_report_equivocation_extrinsic(
-			_equivocation_proof: sp_finality_grandpa::EquivocationProof<
+		fn submit_report_equivocation_unsigned_extrinsic(
+			equivocation_proof: sp_finality_grandpa::EquivocationProof<
 				<Block as BlockT>::Hash,
 				NumberFor<Block>,
 			>,
-			_key_owner_proof: sp_finality_grandpa::OpaqueKeyOwnershipProof,
+			key_owner_proof: sp_finality_grandpa::OpaqueKeyOwnershipProof,
 		) -> Option<()> {
-			None
+			let key_owner_proof = key_owner_proof.decode()?;
+
+			Grandpa::submit_unsigned_equivocation_report(
+				equivocation_proof,
+				key_owner_proof,
+			)
 		}
 
 		fn generate_key_ownership_proof(
 			_set_id: sp_finality_grandpa::SetId,
 			_authority_id: GrandpaId,
 		) -> Option<sp_finality_grandpa::OpaqueKeyOwnershipProof> {
-			// NOTE: this is the only implementation possible since we've
-			// defined our key owner proof type as a bottom type (i.e. a type
-			// with no values).
 			None
 		}
 	}

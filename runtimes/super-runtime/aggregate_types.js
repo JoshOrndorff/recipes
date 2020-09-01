@@ -7,7 +7,6 @@ const fs = require('fs');
 // Does not include system pallets because Apps already supports them.
 // Redundant with construct_runtime!
 const pallets = [
-  "adding-machine",
   "basic-token",
   "charity",
   "check-membership",
@@ -15,7 +14,6 @@ const pallets = [
   "constant-config",
   "default-instance",
   "double-map",
-  "execution-schedule",
   "fixed-point",
   "generic-event",
   "hello-substrate",
@@ -27,7 +25,6 @@ const pallets = [
   "simple-crowdfund",
   "simple-event",
   "simple-map",
-  "single-value",
   "storage-cache",
   "struct-storage",
   "vec-set",
