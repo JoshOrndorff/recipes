@@ -177,7 +177,8 @@ pub fn new_light(config: Configuration) -> Result<TaskManager, ServiceError> {
 
 	let select_chain = sc_consensus::LongestChain::new(backend.clone());
 	let inherent_data_providers = build_inherent_data_providers()?;
-	let can_author_with =
+	// FixMe #375
+	let _can_author_with =
 		sp_consensus::CanAuthorWithNativeVersion::new(client.executor().clone());
 
 	let pow_block_import = sc_consensus_pow::PowBlockImport::new(
@@ -187,9 +188,8 @@ pub fn new_light(config: Configuration) -> Result<TaskManager, ServiceError> {
 		0, // check inherents starting at block 0
 		Some(select_chain),
 		inherent_data_providers.clone(),
-		// TODO what should I Really use here? This compiles, but the `can_author_with` from line 179 doesn't??
+		// FixMe #375
 		sp_consensus::AlwaysCanAuthor,
-		// can_author_with,
 	);
 
 	let import_queue = sc_consensus_pow::import_queue(
