@@ -72,12 +72,11 @@ pub type AccountId = <<Signature as Verify>::Signer as IdentifyAccount>::Account
 /// to even the core datastructures.
 pub mod opaque {
 	use super::*;
-	pub use sp_runtime::OpaqueExtrinsic;
 
 	/// Opaque block header type.
 	pub type Header = generic::Header<BlockNumber, BlakeTwo256>;
 	/// Opaque block type.
-	pub type Block = generic::Block<Header, OpaqueExtrinsic>;
+	pub type Block = generic::Block<Header, FramelessTransaction>;
 }
 
 /// This runtime version.
@@ -130,21 +129,23 @@ pub type Block = generic::Block<Header, FramelessTransaction>;
 pub const BOOLEAN_KEY: [u8; 7] = *b"boolean";
 pub const HEADER_KEY: [u8; 6] = *b"header";
 
+type Nonce = u8;
+
 /// The Extrinsic type for this runtime. Currently extrinsics are unsigned.
 #[cfg_attr(feature = "std", derive(Serialize, Deserialize, parity_util_mem::MallocSizeOf))]
 #[derive(Encode, Decode, Debug, PartialEq, Eq, Clone)]
 pub enum FramelessTransaction {
-	Set,
-	Clear,
-	Toggle,
+	Set(Nonce),
+	Clear(Nonce),
+	Toggle(Nonce),
 }
 
 impl Extrinsic for FramelessTransaction {
-	type Call = ();
+	type Call = FramelessTransaction;
 	type SignaturePayload = ();
 
-	fn new(_call: Self::Call, _signed_data: Option<Self::SignaturePayload>) -> Option<Self> {
-		Some(Self::Toggle)
+	fn new(call: Self::Call, _signed_data: Option<Self::SignaturePayload>) -> Option<Self> {
+		Some(call)
 	}
 }
 
@@ -165,17 +166,7 @@ impl_runtime_apis! {
 			Self::initialize_block(&block.header);
 
 			for transaction in block.extrinsics {
-				let previous_state = sp_io::storage::get(&BOOLEAN_KEY)
-					.map(|bytes| <bool as Decode>::decode(&mut &*bytes).unwrap_or(false))
-					.unwrap_or(false);
-
-				let next_state = match (previous_state, transaction) {
-					(_, FramelessTransaction::Set) => true,
-					(_, FramelessTransaction::Clear) => false,
-					(prev_state, FramelessTransaction::Toggle) => !prev_state,
-				};
-
-				sp_io::storage::set(&BOOLEAN_KEY, &next_state.encode());
+				self::apply_extrinsic(transaction);
 			}
 
 			//TODO is this necessary? What method is it even calling?
@@ -204,9 +195,9 @@ impl_runtime_apis! {
 				.unwrap_or(false);
 
 			let next_state = match (previous_state, extrinsic) {
-				(_, FramelessTransaction::Set) => true,
-				(_, FramelessTransaction::Clear) => false,
-				(prev_state, FramelessTransaction::Toggle) => !prev_state,
+				(_, FramelessTransaction::Set(_)) => true,
+				(_, FramelessTransaction::Clear(_)) => false,
+				(prev_state, FramelessTransaction::Toggle(_)) => !prev_state,
 			};
 
 			sp_io::storage::set(&BOOLEAN_KEY, &next_state.encode());
