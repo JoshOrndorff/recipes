@@ -1,22 +1,15 @@
 # Transactions in Off-chain Workers
 
 `pallets/offchain-demo`
-[
-	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
-](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Foffchain-demo%2Fsrc%2Flib.rs)
-[
-	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
-](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/lib.rs)
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Foffchain-demo%2Fsrc%2Flib.rs" target="_blank">![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)</a>
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/lib.rs" target="_blank">![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)</a>
 
 ## Compiling this Pallet
 
 This `offchain-demo` pallet is included in the
 [ocw-runtime](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime).
-That runtime can be used in the kitchen node.
-
-In order to utilize the off-chain worker, the node must inject keys into its keystore. To do so, we
-open the `nodes/kitchen-node/Cargo.toml` file, enable the `ocw-runtime` package and comment out the
-`super-runtime` package.
+In order to use this runtime in the kitchen node, we open the `nodes/kitchen-node/Cargo.toml` file,
+enable the `ocw-runtime` package and comment out the `super-runtime` package.
 
 Then we build the kitchen node with `ocw` feature flag:
 
@@ -28,49 +21,85 @@ cd nodes/kitchen-node
 cargo build --release --features ocw
 ```
 
+With this feature flag, an account key is also injected into the Substrate node keystore.
+
+[`nodes/kitchen-node/src/service.rs`](https://github.com/substrate-developer-hub/recipes/blob/master/nodes/kitchen-node/src/service.rs)
+
+```rust
+// Initialize seed for signing transaction using off-chain workers
+#[cfg(feature = "ocw")]
+{
+	keystore.write().insert_ephemeral_from_seed_by_type::<runtime::offchain_demo::crypto::Pair>(
+		"//Alice", runtime::offchain_demo::KEY_TYPE
+	).expect("Creating key with account Alice should succeed.");
+}
+```
+
 ## Life-cycle of Off-chain Worker
 
-Running the `kitchen-node` we see off-chain worker runs after each block generation
-phase, as shown by `Entering off-chain workers` in the node output message:
+Running the `kitchen-node` you will see log messages similar to the following and realize nothing
+much is special:
 
 ```
-...
-2020-03-14 13:30:36 Starting BABE Authorship worker
-2020-03-14 13:30:36 Prometheus server started at 127.0.0.1:9615
-2020-03-14 13:30:41 Idle (0 peers), best: #0 (0x2658…9a5b), finalized #0 (0x2658…9a5b), ⬇ 0 ⬆ 0
-2020-03-14 13:30:42 Starting consensus session on top of parent 0x26582455e63448e8dafe1e70f04d7d74d39358c6b71c306eb7013e2c54069a5b
-2020-03-14 13:30:42 Prepared block for proposing at 1 [hash: 0xdc7a76fc89c45a3f318e29df06cbdb097cc3094112b204f10e1e84e0799eba88; parent_hash: 0x2658…9a5b; extrinsics (1): [0xf572…63c0]]
-2020-03-14 13:30:42 Pre-sealed block for proposal at 1. Hash now 0x3558accae1325a2ae5569512b8542e90ae11b4f0de6834ba901eb03b97a680aa, previously 0xdc7a76fc89c45a3f318e29df06cbdb097cc3094112b204f10e1e84e0799eba88.
-2020-03-14 13:30:42 New epoch 0 launching at block 0x3558…80aa (block slot 264027307 >= start slot 264027307).
-2020-03-14 13:30:42 Next epoch starts at slot 264027407
-2020-03-14 13:30:42 Imported #1 (0x3558…80aa)
-2020-03-14 13:30:42 Entering off-chain workers
-2020-03-14 13:30:42 off-chain send_signed: acc: 5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY| number: 0
+2020-09-01 23:43:38 Running in --dev mode, RPC CORS has been disabled.
+2020-09-01 23:43:38 Kitchen Node
+2020-09-01 23:43:38 ✌️  version 2.0.0-rc5-unknown-x86_64-linux-gnu
+2020-09-01 23:43:38 ❤️  by Substrate DevHub <https://github.com/substrate-developer-hub>, 2019-2020
+2020-09-01 23:43:38 📋 Chain specification: Development
+2020-09-01 23:43:38 🏷  Node name: pastoral-competition-7996
+2020-09-01 23:43:38 👤 Role: AUTHORITY
+2020-09-01 23:43:38 💾 Database: RocksDb at /home/jimmychu/.local/share/kitchen-node/chains/dev/db
+2020-09-01 23:43:38 ⛓  Native runtime: ocw-runtime-1 (ocw-runtime-1.tx1.au1)
+2020-09-01 23:43:39 🔨 Initializing Genesis block/state (state: 0x67aa…4a19, header-hash: 0xc5f0…45a2)
+2020-09-01 23:43:40 📦 Highest known block at #0
+2020-09-01 23:43:40 Using default protocol ID "sup" because none is configured in the chain specs
+2020-09-01 23:43:40 🏷  Local node identity is: 12D3KooWC8iNnJqM64qiurVSA3mRFGE4LPj99QPVtUE6whyxFAJy (legacy representation: QmZPmiuc4DAmM7Fo6GdChmxF4pTaDc8brgUKVXLhxKjq62)
+2020-09-01 23:43:40 〽️ Prometheus server started at 127.0.0.1:9615
+2020-09-01 23:43:45 💤 Idle (0 peers), best: #0 (0xc5f0…45a2), finalized #0 (0xc5f0…45a2), ⬇ 0 ⬆ 0
+2020-09-01 23:43:50 💤 Idle (0 peers), best: #0 (0xc5f0…45a2), finalized #0 (0xc5f0…45a2), ⬇ 0 ⬆ 0
 ...
 ```
 
-If we refer to the code at
+This is because currently off-chain worker is run after a block is imported. Our kitchen node is
+configured to use [instant-seal consensus](/kitchen-node.md), so we need to send a transaction to
+trigger a block to be imported.
+
+Once a transaction is sent, such as using [Polkadot-JS App](https://polkadot.js.org/apps) to
+perform a balance transfer, the following more interesting logs are shown.
+
+```
+2020-09-01 23:55:31 Instant Seal success: CreatedBlock { hash: 0xbbc4f7c4c2a8012857a4cda27747369ff6b5c19892d12f508051bb9af8cf3791, aux: ImportedAux { header_only: false, clear_justification_requests: false, needs_justification: false, bad_justification: false, needs_finality_proof: false, is_new_best: true } }
+2020-09-01 23:55:31 ✨ Imported #1 (0xbbc4…3791)
+2020-09-01 23:55:31 Entering off-chain workers
+2020-09-01 23:55:31 🙌 Starting consensus session on top of parent 0xbbc4f7c4c2a8012857a4cda27747369ff6b5c19892d12f508051bb9af8cf3791
+2020-09-01 23:55:31 off-chain send_signed: acc: d43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d (5GrwvaEF...)| number: 0
+2020-09-01 23:55:31 submit_number_signed: 0
+2020-09-01 23:55:31 Current average of numbers is: 0
+...
+```
+
+Let's take a deeper look at what's happening here. Referring to the code at
 [`pallets/offchain-demo/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/lib.rs),
-there is an `offchain_worker` function inside `decl_module!`. This is the entry point of the
-off-chain worker which is executed once per block generation, so all the off-chain
-logic is here.
+there is an `fn offchain_worker()` function inside `decl_module!`. This is the entry point of the
+off-chain worker logic which is executed once per block import.
 
-Two kinds of transactions can be sent back on-chain from off-chain workers, **Signed Transactions**
-and **Unsigned Transactions**. Signed transactions are used if the transaction requires the sender
-to be specified. Unsigned transactions are used when the sender does not need to be known and
-additional logic in the code provides additional data verification.
+As off-chain workers, by definition, run computation off-chain, they cannot alter the block state. In
+order to do so, they need to send transactions back on-chain. Three kinds of transaction can be sent
+here, **signed transactions**, **unsigned transactions**, and **unsigned transactions with signed payload**.
 
-Let's walk through how to set each one up:
+- Signed transactions are used if the transaction requires the sender to be specified.
+- Unsigned transactions are used when the sender does not need to be known.
+- Unsigned transactions with signed payload are used, [TK]
+
+We will walk through each of them in the following.
 
 ## Signed Transactions
 
 > **Notes**: This example will have account `Alice` submitting signed transactions to the node in
-> the off-chain worker, and these transactions have associated fees. If we run the node in development
-> mode (with `--dev` flag) using the default sr25519 crypto signature, `Alice` will have initial funds
-> deposited and this example will run all fine.
->
-> If this is not done in development mode or switched to another crypto signature, please
-> be aware that `Alice` must be setup and be funded to run this example.
+> the off-chain worker, and these transactions have associated fees. If you run the node in development
+> mode (with `--dev` flag) using the default sr25519 crypto signature, `Alice` will have sufficient funds
+> initialized in the chain and this example will run fine. Otherwise, please be aware `Alice` account
+> must be funded to run this example.
 
 ### Setup
 
@@ -84,27 +113,27 @@ pub const KEY_TYPE: KeyTypeId = KeyTypeId(*b"demo");
 pub mod crypto {
 	use crate::KEY_TYPE;
 	use sp_runtime::app_crypto::{app_crypto, sr25519};
+	// -- snip --
 	app_crypto!(sr25519, KEY_TYPE);
 }
 ```
 
-`KEY_TYPE` is the application key prefix for the pallet in underlying storage.
+`KEY_TYPE` is the application key prefix for the pallet in the underlying storage. This is to be used for signing transactions.
 
-Second, we have added an additional associated type `AuthorityId`.
+Second, we have our pallet configration trait be additionally bounded by `CreateSignedTransaction` and add an additional associated type `AuthorityId`. This tell the runtime that this pallet can create signed transactions.
 
 src:
 [`pallets/offchain-demo/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/lib.rs)
 
 ```rust
-pub trait Trait: system::Trait {
-	//...snip
+pub trait Trait: system::Trait + CreateSignedTransaction<Call<Self>> {
+	/// The identifier type for an offchain worker.
 	type AuthorityId: AppCrypto<Self::Public, Self::Signature>;
+	// -- snip --
 }
 ```
 
-This associated type needs to be specified by the runtime when it implements this pallet trait.
-
-Now if we build the `kitchen-node`, we will see the compiler return with three trait
+Now if we [build the `kitchen-node`](#compiling-this-pallet), we will see the compiler return with three trait
 bounds that are not satisfied: `Runtime: frame_system::offchain::CreateSignedTransaction`,
 `frame_system::offchain::SigningTypes`, and `frame_system::offchain::SendTransactionTypes`.
 We also learn that when using `SubmitSignedTransaction`, our runtime need to implement
