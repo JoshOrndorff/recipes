@@ -1,6 +1,6 @@
 [package]
 name = "hybrid-consensus"
-version = "2.0.0-rc5"
+version = "2.0.0-rc6"
 edition = "2018"
 authors = ['Substrate DevHub <https://github.com/substrate-developer-hub>']
 repository = 'https://github.com/substrate-developer-hub/recipes'
@@ -16,7 +16,7 @@ categories = [
 	"tutorial",
 	"recipe",
 ]
-compatibility_version = "2.0.0-rc5"
+compatibility_version = "2.0.0-rc6"
 
 [[bin]]
 name = "hybrid-consensus"
@@ -33,31 +33,31 @@ tokio = "0.1.22"
 exit-future = "0.2.0"
 parking_lot = "0.9.0"
 trie-root = "0.15.2"
-sp-io = '2.0.0-rc5'
+sp-io = '2.0.0-rc6'
 sc-cli = '0.8.0-rc4'
-sc-client-api = '2.0.0-rc5'
-sp-core = '2.0.0-rc5'
-sp-runtime = '2.0.0-rc5'
+sc-client-api = '2.0.0-rc6'
+sp-core = '2.0.0-rc6'
+sp-runtime = '2.0.0-rc6'
 sc-executor = '0.8.0-rc4'
 sc-service = '0.8.0-rc4'
-sp-inherents = '2.0.0-rc5'
-sp-timestamp = '2.0.0-rc5'
-sc-transaction-pool = '2.0.0-rc5'
-sp-transaction-pool = '2.0.0-rc5'
+sp-inherents = '2.0.0-rc6'
+sp-timestamp = '2.0.0-rc6'
+sc-transaction-pool = '2.0.0-rc6'
+sp-transaction-pool = '2.0.0-rc6'
 sc-network = '0.8.0-rc4'
 sc-finality-grandpa = '0.8.0-rc4'
-sp-finality-grandpa = '2.0.0-rc5'
+sp-finality-grandpa = '2.0.0-rc6'
 sc-basic-authorship = '0.8.0-rc4'
 sp-consensus = '0.8.0-rc4'
 sc-consensus = '0.8.0-rc4'
 sc-consensus-pow = '0.8.0-rc4'
 sp-consensus-pow = '0.8.0-rc4'
 sha3pow = { path = '../../consensus/sha3pow' }
-sp-api = '2.0.0-rc5'
+sp-api = '2.0.0-rc6'
 
 runtime = { package = "minimal-grandpa-runtime", path = "../../runtimes/minimal-grandpa-runtime"}
 
 
 [build-dependencies]
 vergen = "3.0.4"
-substrate-build-script-utils = '2.0.0-rc5'
+substrate-build-script-utils = '2.0.0-rc6'

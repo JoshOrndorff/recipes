@@ -263,7 +263,7 @@ impl<T: Trait> Module<T> {
 		// We will likely want to use `mutate` to access
 		// the storage comprehensively.
 		//
-		// Ref: https://substrate.dev/rustdocs/v2.0.0-rc5/sp_runtime/offchain/storage/struct.StorageValueRef.html
+		// Ref: https://substrate.dev/rustdocs/v2.0.0-rc6/sp_runtime/offchain/storage/struct.StorageValueRef.html
 		if let Some(Some(gh_info)) = s_info.get::<GithubInfo>() {
 			// gh-info has already been fetched. Return early.
 			debug::info!("cached gh-info: {:?}", gh_info);
@@ -338,7 +338,7 @@ impl<T: Trait> Module<T> {
 		// By default, the http request is async from the runtime perspective. So we are asking the
 		//   runtime to wait here.
 		// The returning value here is a `Result` of `Result`, so we are unwrapping it twice by two `?`
-		//   ref: https://substrate.dev/rustdocs/v2.0.0-rc5/sp_runtime/offchain/http/struct.PendingRequest.html#method.try_wait
+		//   ref: https://substrate.dev/rustdocs/v2.0.0-rc6/sp_runtime/offchain/http/struct.PendingRequest.html#method.try_wait
 		let response = pending
 			.try_wait(timeout)
 			.map_err(|_| <Error<T>>::HttpFetchingError)?

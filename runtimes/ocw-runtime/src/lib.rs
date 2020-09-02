@@ -182,7 +182,7 @@ impl frame_system::Trait for Runtime {
 }
 
 parameter_types! {
-	pub const MinimumPeriod: u64 = 1000;
+	pub const MinimumPeriod: u64 = 1;
 }
 
 impl pallet_timestamp::Trait for Runtime {

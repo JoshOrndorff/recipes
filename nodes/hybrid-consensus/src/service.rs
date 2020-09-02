@@ -5,9 +5,9 @@ use sc_client_api::{ExecutorProvider, RemoteBackend };
 use sc_executor::native_executor_instance;
 pub use sc_executor::NativeExecutor;
 use sc_finality_grandpa::{
-	self, FinalityProofProvider as GrandpaFinalityProofProvider, StorageAndProofProvider, GrandpaBlockImport,
+	self, FinalityProofProvider as GrandpaFinalityProofProvider, GrandpaBlockImport,
 };
-use sc_service::{error::Error as ServiceError, Configuration, ServiceComponents, TaskManager};
+use sc_service::{error::Error as ServiceError, Configuration, PartialComponents, TaskManager};
 use sha3pow::MinimalSha3Algorithm;
 use sp_inherents::InherentDataProviders;
 use std::sync::Arc;
@@ -25,20 +25,6 @@ native_executor_instance!(
 type FullClient = sc_service::TFullClient<Block, RuntimeApi, Executor>;
 type FullBackend = sc_service::TFullBackend<Block>;
 type FullSelectChain = sc_consensus::LongestChain<FullBackend, Block>;
-type OurServiceParams = sc_service::ServiceParams<
-	Block, FullClient,
-	BasicQueue<Block, TransactionFor<FullClient, Block>>,
-	sc_transaction_pool::FullPool<Block, FullClient>,
-	(), FullBackend,
->;
-type OurBlockImport = sc_consensus_pow::PowBlockImport<
-	Block,
-	GrandpaBlockImport<FullBackend, Block, FullClient, FullSelectChain>,
-	FullClient,
-	FullSelectChain,
-	MinimalSha3Algorithm,
->;
-type GrandpaLink = sc_finality_grandpa::LinkHalf<Block, FullClient, FullSelectChain>;
 
 pub fn build_inherent_data_providers() -> Result<InherentDataProviders, ServiceError> {
 	let providers = InherentDataProviders::new();
@@ -53,13 +39,18 @@ pub fn build_inherent_data_providers() -> Result<InherentDataProviders, ServiceE
 
 /// Returns most parts of a service. Not enough to run a full chain,
 /// But enough to perform chain operations like purge-chain
-pub fn new_full_params(config: Configuration) -> Result<(
-	OurServiceParams,
-	FullSelectChain,
-	sp_inherents::InherentDataProviders,
-	OurBlockImport,
-	GrandpaLink,
-), ServiceError> {
+#[allow(clippy::type_complexity)]
+pub fn new_partial(config: &Configuration) -> Result<
+	PartialComponents<
+		FullClient, FullBackend, FullSelectChain,
+		BasicQueue<Block, TransactionFor<FullClient, Block>>,
+		sc_transaction_pool::FullPool<Block, FullClient>,
+		(
+			sc_consensus_pow::PowBlockImport<Block, GrandpaBlockImport<FullBackend, Block, FullClient, FullSelectChain>, FullClient, FullSelectChain, MinimalSha3Algorithm, impl sp_consensus::CanAuthorWith<Block>>,
+			sc_finality_grandpa::LinkHalf<Block, FullClient, FullSelectChain>
+		)
+	>,
+ServiceError> {
 	let inherent_data_providers = build_inherent_data_providers()?;
 
 	let (client, backend, keystore, task_manager) =
@@ -68,12 +59,8 @@ pub fn new_full_params(config: Configuration) -> Result<(
 
 	let select_chain = sc_consensus::LongestChain::new(backend.clone());
 
-	let pool_api = sc_transaction_pool::FullChainApi::new(
-		client.clone(), config.prometheus_registry(),
-	);
 	let transaction_pool = sc_transaction_pool::BasicPool::new_full(
 		config.transaction_pool.clone(),
-		std::sync::Arc::new(pool_api),
 		config.prometheus_registry(),
 		task_manager.spawn_handle(),
 		client.clone(),
@@ -85,6 +72,9 @@ pub fn new_full_params(config: Configuration) -> Result<(
 		select_chain.clone(),
 	)?;
 
+	let can_author_with =
+			sp_consensus::CanAuthorWithNativeVersion::new(client.executor().clone());
+
 	let pow_block_import = sc_consensus_pow::PowBlockImport::new(
 		grandpa_block_import,
 		client.clone(),
@@ -92,6 +82,7 @@ pub fn new_full_params(config: Configuration) -> Result<(
 		0, // check inherents starting at block 0
 		Some(select_chain.clone()),
 		inherent_data_providers.clone(),
+		can_author_with,
 	);
 
 	let import_queue = sc_consensus_pow::import_queue(
@@ -104,55 +95,60 @@ pub fn new_full_params(config: Configuration) -> Result<(
 		config.prometheus_registry(),
 	)?;
 
-	let provider = client.clone() as Arc<dyn StorageAndProofProvider<_, _>>;
-	let finality_proof_provider =
-		Arc::new(GrandpaFinalityProofProvider::new(backend.clone(), provider));
-
-	let params = sc_service::ServiceParams {
-		backend, client, import_queue, keystore, task_manager, transaction_pool,
-		config,
-		block_announce_validator_builder: None,
-		finality_proof_request_builder: None,
-		finality_proof_provider: Some(finality_proof_provider),
-		on_demand: None,
-		remote_blockchain: None,
-		rpc_extensions_builder: Box::new(|_| ()),
-	};
-
-	Ok((
-		params, select_chain, inherent_data_providers, pow_block_import, grandpa_link,
-	))
+	Ok(PartialComponents {
+		client, backend, import_queue, keystore, task_manager, transaction_pool,
+		select_chain, inherent_data_providers,
+		other: (pow_block_import, grandpa_link),
+	})
 }
 
 /// Builds a new service for a full client.
 pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
-	let (
-		params, select_chain, inherent_data_providers,
-		block_import, grandpa_link,
-	) = new_full_params(config)?;
+	let sc_service::PartialComponents {
+		client, backend, mut task_manager, import_queue, keystore, select_chain, transaction_pool,
+		inherent_data_providers,
+		other: (pow_block_import, grandpa_link),
+	} = new_partial(&config)?;
 
-	let (
-		is_authority, is_network_authority, name, enable_grandpa, prometheus_registry,
-		client, transaction_pool, keystore,
-	) = {
-		let sc_service::ServiceParams {
-			config, client, transaction_pool, keystore, ..
-		} = &params;
+	let finality_proof_provider =
+		GrandpaFinalityProofProvider::new_for_service(backend.clone(), client.clone());
 
-		(
-			config.role.is_authority(),
-			config.role.is_network_authority(),
-			config.network.node_name.clone(),
-			!config.disable_grandpa,
-			config.prometheus_registry().cloned(),
+	let (network, network_status_sinks, system_rpc_tx, network_starter) =
+		sc_service::build_network(sc_service::BuildNetworkParams {
+			config: &config,
+			client: client.clone(),
+			transaction_pool: transaction_pool.clone(),
+			spawn_handle: task_manager.spawn_handle(),
+			import_queue,
+			on_demand: None,
+			block_announce_validator_builder: None,
+			finality_proof_request_builder: None,
+			finality_proof_provider: Some(finality_proof_provider),
+		})?;
 
-			client.clone(), transaction_pool.clone(), keystore.clone(),
-		)
-	};
+	if config.offchain_worker.enabled {
+		sc_service::build_offchain_workers(
+			&config, backend.clone(), task_manager.spawn_handle(), client.clone(), network.clone(),
+		);
+	}
 
-	let ServiceComponents {
-		task_manager, network, telemetry_on_connect_sinks, ..
-	 } = sc_service::build(params)?;
+	let is_authority = config.role.is_authority();
+	let prometheus_registry = config.prometheus_registry().cloned();
+	let enable_grandpa = !config.disable_grandpa;
+	let telemetry_connection_sinks = sc_service::TelemetryConnectionSinks::default();
+
+	sc_service::spawn_tasks(sc_service::SpawnTasksParams {
+		network: network.clone(),
+		client: client.clone(),
+		keystore: keystore.clone(),
+		task_manager: &mut task_manager,
+		transaction_pool: transaction_pool.clone(),
+		telemetry_connection_sinks: sc_service::TelemetryConnectionSinks::default(),
+		rpc_extensions_builder: Box::new(|_, _| ()),
+		on_demand: None,
+		remote_blockchain: None,
+		backend, network_status_sinks, system_rpc_tx, config,
+	})?;
 
 	if is_authority {
 		let proposer = sc_basic_authorship::ProposerFactory::new(
@@ -168,7 +164,7 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
 			sp_consensus::CanAuthorWithNativeVersion::new(client.executor().clone());
 
 		sc_consensus_pow::start_mine(
-			Box::new(block_import),
+			Box::new(pow_block_import),
 			client.clone(),
 			MinimalSha3Algorithm,
 			proposer,
@@ -193,10 +189,10 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
 	let grandpa_config = sc_finality_grandpa::Config {
 		gossip_duration: Duration::from_millis(333),
 		justification_period: 512,
-		name: Some(name),
+		name: None,
 		observer_enabled: false,
 		keystore,
-		is_authority: is_network_authority,
+		is_authority,
 	};
 
 	if enable_grandpa {
@@ -211,7 +207,7 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
 			link: grandpa_link,
 			network,
 			inherent_data_providers,
-			telemetry_on_connect: Some(telemetry_on_connect_sinks.on_connect_stream()),
+			telemetry_on_connect: Some(telemetry_connection_sinks.on_connect_stream()),
 			voting_rule: sc_finality_grandpa::VotingRulesBuilder::default().build(),
 			prometheus_registry,
 			shared_voter_state: sc_finality_grandpa::SharedVoterState::empty(),
@@ -231,6 +227,7 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
 		)?;
 	}
 
+	network_starter.start_network();
 	Ok(task_manager)
 }
 
@@ -238,18 +235,16 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
 pub fn new_light(config: Configuration) -> Result<TaskManager, ServiceError> {
 	let inherent_data_providers = build_inherent_data_providers()?;
 
-	let (client, backend, keystore, task_manager, on_demand) =
+	let (client, backend, keystore, mut task_manager, on_demand) =
 		sc_service::new_light_parts::<Block, RuntimeApi, Executor>(&config)?;
 
-	let transaction_pool_api = Arc::new(sc_transaction_pool::LightChainApi::new(
-		client.clone(), on_demand.clone(),
-	));
-	let transaction_pool = sc_transaction_pool::BasicPool::new_light(
+	let transaction_pool = Arc::new(sc_transaction_pool::BasicPool::new_light(
 		config.transaction_pool.clone(),
-		transaction_pool_api,
 		config.prometheus_registry(),
 		task_manager.spawn_handle(),
-	);
+		client.clone(),
+		on_demand.clone(),
+	));
 
 	let select_chain = sc_consensus::LongestChain::new(backend.clone());
 
@@ -260,6 +255,9 @@ pub fn new_light(config: Configuration) -> Result<TaskManager, ServiceError> {
 
 	let finality_proof_import = grandpa_block_import.clone();
 	let fprb = finality_proof_import.create_finality_proof_request_builder();
+	// FixMe #375
+	let _can_author_with =
+		sp_consensus::CanAuthorWithNativeVersion::new(client.executor().clone());
 
 	let pow_block_import = sc_consensus_pow::PowBlockImport::new(
 		grandpa_block_import,
@@ -268,6 +266,8 @@ pub fn new_light(config: Configuration) -> Result<TaskManager, ServiceError> {
 		0, // check inherents starting at block 0
 		Some(select_chain),
 		inherent_data_providers.clone(),
+		// FixMe #375
+		sp_consensus::AlwaysCanAuthor,
 	);
 
 	let import_queue = sc_consensus_pow::import_queue(
@@ -280,14 +280,42 @@ pub fn new_light(config: Configuration) -> Result<TaskManager, ServiceError> {
 		config.prometheus_registry(),
 	)?;
 
-	sc_service::build(sc_service::ServiceParams {
-		block_announce_validator_builder: None,
-		finality_proof_request_builder: Some(fprb),
-		finality_proof_provider: None,
-		on_demand: Some(on_demand),
+	let (network, network_status_sinks, system_rpc_tx, network_starter) =
+		sc_service::build_network(sc_service::BuildNetworkParams {
+			config: &config,
+			client: client.clone(),
+			transaction_pool: transaction_pool.clone(),
+			spawn_handle: task_manager.spawn_handle(),
+			import_queue,
+			on_demand: Some(on_demand.clone()),
+			block_announce_validator_builder: None,
+			finality_proof_request_builder: Some(fprb),
+			finality_proof_provider: None,
+		})?;
+
+	if config.offchain_worker.enabled {
+		sc_service::build_offchain_workers(
+			&config, backend.clone(), task_manager.spawn_handle(), client.clone(), network.clone(),
+		);
+	}
+
+	sc_service::spawn_tasks(sc_service::SpawnTasksParams {
 		remote_blockchain: Some(backend.remote_blockchain()),
-		rpc_extensions_builder: Box::new(|_| ()),
-		transaction_pool: Arc::new(transaction_pool),
-		config, client, import_queue, keystore, backend, task_manager
-	 }).map(|ServiceComponents { task_manager, .. }| task_manager)
+		transaction_pool,
+		task_manager: &mut task_manager,
+		on_demand: Some(on_demand),
+		rpc_extensions_builder: Box::new(|_, _| ()),
+		telemetry_connection_sinks: sc_service::TelemetryConnectionSinks::default(),
+		config,
+		client,
+		keystore,
+		backend,
+		network,
+		network_status_sinks,
+		system_rpc_tx,
+	 })?;
+
+	 network_starter.start_network();
+
+	 Ok(task_manager)
 }
