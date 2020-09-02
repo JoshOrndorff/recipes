@@ -46,8 +46,8 @@ ServiceError> {
 	// Initialize seed for signing transaction using off-chain workers
 	#[cfg(feature = "ocw")]
 	{
-		keystore.write().insert_ephemeral_from_seed_by_type::<runtime::offchain_demo::crypto::Pair>(
-			"//Alice", runtime::offchain_demo::KEY_TYPE
+		keystore.write().insert_ephemeral_from_seed_by_type::<runtime::ocw_demo::crypto::Pair>(
+			"//Alice", runtime::ocw_demo::KEY_TYPE
 		).expect("Creating key with account Alice should succeed.");
 	}
 

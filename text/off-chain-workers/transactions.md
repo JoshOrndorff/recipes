@@ -23,6 +23,7 @@ cargo build --release --features ocw
 
 With this feature flag, an account key is also injected into the Substrate node keystore.
 
+src:
 [`nodes/kitchen-node/src/service.rs`](https://github.com/substrate-developer-hub/recipes/blob/master/nodes/kitchen-node/src/service.rs)
 
 ```rust
@@ -41,22 +42,21 @@ Running the `kitchen-node` you will see log messages similar to the following an
 much is special:
 
 ```
-2020-09-01 23:43:38 Running in --dev mode, RPC CORS has been disabled.
-2020-09-01 23:43:38 Kitchen Node
-2020-09-01 23:43:38 ✌️  version 2.0.0-rc5-unknown-x86_64-linux-gnu
-2020-09-01 23:43:38 ❤️  by Substrate DevHub <https://github.com/substrate-developer-hub>, 2019-2020
-2020-09-01 23:43:38 📋 Chain specification: Development
-2020-09-01 23:43:38 🏷  Node name: pastoral-competition-7996
-2020-09-01 23:43:38 👤 Role: AUTHORITY
-2020-09-01 23:43:38 💾 Database: RocksDb at /home/jimmychu/.local/share/kitchen-node/chains/dev/db
-2020-09-01 23:43:38 ⛓  Native runtime: ocw-runtime-1 (ocw-runtime-1.tx1.au1)
-2020-09-01 23:43:39 🔨 Initializing Genesis block/state (state: 0x67aa…4a19, header-hash: 0xc5f0…45a2)
-2020-09-01 23:43:40 📦 Highest known block at #0
-2020-09-01 23:43:40 Using default protocol ID "sup" because none is configured in the chain specs
-2020-09-01 23:43:40 🏷  Local node identity is: 12D3KooWC8iNnJqM64qiurVSA3mRFGE4LPj99QPVtUE6whyxFAJy (legacy representation: QmZPmiuc4DAmM7Fo6GdChmxF4pTaDc8brgUKVXLhxKjq62)
-2020-09-01 23:43:40 〽️ Prometheus server started at 127.0.0.1:9615
-2020-09-01 23:43:45 💤 Idle (0 peers), best: #0 (0xc5f0…45a2), finalized #0 (0xc5f0…45a2), ⬇ 0 ⬆ 0
-2020-09-01 23:43:50 💤 Idle (0 peers), best: #0 (0xc5f0…45a2), finalized #0 (0xc5f0…45a2), ⬇ 0 ⬆ 0
+2020-09-02 11:09:33.780 main WARN sc_cli::commands::run_cmd  Running in --dev mode, RPC CORS has been disabled.
+2020-09-02 11:09:33.780 main INFO sc_cli::runner  Kitchen Node
+2020-09-02 11:09:33.781 main INFO sc_cli::runner  ✌️  version 2.0.0-rc6-unknown-x86_64-linux-gnu
+2020-09-02 11:09:33.781 main INFO sc_cli::runner  ❤️  by Substrate DevHub <https://github.com/substrate-developer-hub>, 2019-2020
+2020-09-02 11:09:33.781 main INFO sc_cli::runner  📋 Chain specification: Development
+2020-09-02 11:09:33.781 main INFO sc_cli::runner  🏷  Node name: precious-angle-3060
+2020-09-02 11:09:33.781 main INFO sc_cli::runner  👤 Role: AUTHORITY
+2020-09-02 11:09:33.781 main INFO sc_cli::runner  💾 Database: RocksDb at /home/jimmychu/.local/share/kitchen-node/chains/dev/db
+2020-09-02 11:09:33.781 main INFO sc_cli::runner  ⛓  Native runtime: ocw-runtime-1 (ocw-runtime-1.tx1.au1)
+2020-09-02 11:09:34.881 main INFO sc_service::client::client  🔨 Initializing Genesis block/state (state: 0x2b24…4bf9, header-hash: 0xde55…8fed)
+2020-09-02 11:09:35.081 main WARN sc_service::builder  Using default protocol ID "sup" because none is configured in the chain specs
+2020-09-02 11:09:35.083 main INFO sub-libp2p  🏷  Local node identity is: 12D3KooWC8iNnJqM64qiurVSA3mRFGE4LPj99QPVtUE6whyxFAJy (legacy representation: QmZPmiuc4DAmM7Fo6GdChmxF4pTaDc8brgUKVXLhxKjq62)
+2020-09-02 11:09:35.517 main INFO sc_service::builder  📦 Highest known block at #0
+2020-09-02 11:09:35.519 tokio-runtime-worker INFO substrate_prometheus_endpoint::known_os  〽️ Prometheus server started at 127.0.0.1:9615
+2020-09-02 11:09:40.527 tokio-runtime-worker INFO substrate  💤 Idle (0 peers), best: #0 (0xde55…8fed), finalized #0 (0xde55…8fed), ⬇ 0 ⬆ 0
 ...
 ```
 
@@ -105,6 +105,7 @@ We will walk through each of them in the following.
 
 For signed transactions, we have to define a crypto signature sub-module:
 
+src:
 [`pallets/offchain-demo/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/lib.rs)
 
 ```rust
@@ -133,11 +134,9 @@ pub trait Trait: system::Trait + CreateSignedTransaction<Call<Self>> {
 }
 ```
 
-Now if we [build the `kitchen-node`](#compiling-this-pallet), we will see the compiler return with three trait
-bounds that are not satisfied: `Runtime: frame_system::offchain::CreateSignedTransaction`,
-`frame_system::offchain::SigningTypes`, and `frame_system::offchain::SendTransactionTypes`.
-We also learn that when using `SubmitSignedTransaction`, our runtime need to implement
-[`CreateSignedTransaction` trait](https://substrate.dev/rustdocs/v2.0.0-rc6/frame_system/offchain/trait.CreateSignedTransaction.html).
+Now if we [build the `kitchen-node`](#compiling-this-pallet), we will see compiler errors saying three trait
+bounds are not satisfied: `Runtime: frame_system::offchain::CreateSignedTransaction`,
+`frame_system::offchain::SigningTypes`, and `frame_system::offchain::SendTransactionTypes`. So let's implement these traits in our runtime.
 
 src:
 [`runtimes/ocw-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime/src/lib.rs)
@@ -184,17 +183,15 @@ where
 		Some((call, (address, signature, extra)))
 	}
 }
-
-// ...snip
 ```
 
-The overall goal is to execute the following:
+The overall goal is to perform the following:
 
--   Sign the `call` and `extra`, also called 'signed extension'
--   Making the call (`call`, which includes the call paramters) and passing the sender `address`,
-    signature of the data `signature`, and ensuring its signed extension `extra` on-chain as a transaction.
+- Signing the on-chain `call` and `extra` payload of the call. This together is called the signature.
+- Finally returning the on-chain `call`, the account/address making the signature, the signature
+itself, and the `extra` payload.
 
-`SignedExtra` data type will be defined later in the runtime.
+The `SignedExtra` data type used above is defined later in our runtime.
 
 src:
 [`runtimes/ocw-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime/src/lib.rs)
@@ -202,16 +199,20 @@ src:
 ```rust
 /// The SignedExtension to the basic transaction logic.
 pub type SignedExtra = (
-	system::CheckTxVersion<Runtime>,
-	system::CheckGenesis<Runtime>,
-	system::CheckEra<Runtime>,
-	system::CheckNonce<Runtime>,
-	system::CheckWeight<Runtime>,
-	transaction_payment::ChargeTransactionPayment<Runtime>,
+	frame_system::CheckSpecVersion<Runtime>,
+	frame_system::CheckTxVersion<Runtime>,
+	frame_system::CheckGenesis<Runtime>,
+	frame_system::CheckEra<Runtime>,
+	frame_system::CheckNonce<Runtime>,
+	frame_system::CheckWeight<Runtime>,
+	pallet_transaction_payment::ChargeTransactionPayment<Runtime>,
 );
 ```
 
-Next, the remaining two traits are also implemented.
+Next the remaining two traits are also implemented by specifying the concrete types of their respective trait associated types.
+
+src:
+[`runtimes/ocw-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime/src/lib.rs)
 
 ```rust
 impl frame_system::offchain::SigningTypes for Runtime {
@@ -228,30 +229,44 @@ where
 }
 ```
 
+By now, we have completed the setup of implementing the necessary trait bounds for our runtime to
+create signed transactions.
+
 ### Sending Signed Transactions
 
-A signed transaction is sent with `T::SubmitSignedTransaction::submit_signed`, as shown below:
+A signed transaction is sent with `frame_system::offchain::SendSignedTransaction::send_signed_transaction`, as shown below:
 
 src:
 [`pallets/offchain-demo/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/lib.rs)
 
 ```rust
-fn send_signed(block_number: T::BlockNumber) -> Result<(), Error<T>> {
-	use system::offchain::SubmitSignedTransaction;
-	//..snip
+fn signed_submit_number(block_number: T::BlockNumber) -> Result<(), Error<T>> {
+	let signer = Signer::<T, T::AuthorityId>::all_accounts();
 
-	let submission: u64 = block_number.try_into().ok().unwrap() as u64;
-	let call = Call::submit_number_signed(submission);
+	// -- snip --
 
 	// Using `SubmitSignedTransaction` associated type we create and submit a transaction
-	//   representing the call, we've just created.
-	let results = T::SubmitSignedTransaction::submit_signed(call);
+	// representing the call, we've just created.
+	// Submit signed will return a vector of results for all accounts that were found in the
+	// local keystore with expected `KEY_TYPE`.
+	let submission: u64 = block_number.try_into().ok().unwrap() as u64;
+	let results = signer.send_signed_transaction(|_acct| {
+		// We are just submitting the current block number back on-chain
+		Call::submit_number_signed(submission)
+	});
+
 	for (acc, res) in &results {
 		match res {
-			Ok(()) => { debug::native::info!("off-chain send_signed: acc: {}| number: {}", acc, submission); },
+			Ok(()) => {
+				debug::native::info!(
+					"off-chain send_signed: acc: {:?}| number: {}",
+					acc.id,
+					submission
+				);
+			}
 			Err(e) => {
-				debug::native::error!("[{:?}] Failed to submit signed tx: {:?}", acc, e);
-				return Err(<Error<T>>::SendSignedError);
+				debug::error!("[{:?}] Failed in signed_submit_number: {:?}", acc.id, e);
+				return Err(<Error<T>>::SignedSubmitNumberError);
 			}
 		};
 	}
@@ -259,48 +274,11 @@ fn send_signed(block_number: T::BlockNumber) -> Result<(), Error<T>> {
 }
 ```
 
-We have a function reference to `Call::submit_number_signed(submission)`. This is the function we
-are going to submit back to on-chain, and passing it to
-`T::SubmitSignedTransaction::submit_signed(call)`.
+On the above code, we first retrieve a signer. Then we send a signed transaction on-chain by calling `send_signed_transaction` with a closure returning the on-chain call, `Call::submit_number_signed(submission)`.
 
-Notice that we run a loop in the returned result. This implies that the call may make
-multiple transactions and return multiple results. The call is both signing and sending
-the transaction with each of the accounts that can be found locally under the application crypto
-(which we defined earlier in `pub mod crypto {...}`). This can be seen as the local accounts that
-are managed under this pallet namespace. As we only have one key in the app crypto, so only
-one signed transaction is made.
+Notice that we run a loop in the returned result, meaning we are expecting the above call may make multiple transactions and return multiple results. This is because `send_signed_transaction` send transactions with each of the accounts found under the application crypto (which we defined earlier in `pub mod crypto {...}`). Right now we only have one key in the app crypto, so only one signed transaction is made.
 
-Eventually, the `call` transaction will be made on-chain via the `create_transaction` function we defined
-earlier when we implemented `CreateTransaction` trait in our runtime.
-
-The local account used to sign the transaction is inserted in the pallet app crypto, and lives in
-the outer node's [service](https://substrate.dev/rustdocs/v2.0.0-rc6/sc_service/index.html).
-
-src:
-[`nodes/kitchen-node/src/service.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/nodes/kitchen-node/src/service.rs)
-
-```rust
-pub fn new_full(config: Configuration<GenesisConfig>)
-	-> Result<impl AbstractService, ServiceError>
-{
-	// ...snip
-	let dev_seed = config.dev_key_seed.clone();
-
-	// ...snip
-	// Initialize seed for signing transaction using off-chain workers
-	if let Some(seed) = dev_seed {
-		service
-			.keystore()
-			.write()
-			.insert_ephemeral_from_seed_by_type::<runtime::offchain_demo::crypto::Pair>(
-				&seed,
-				runtime::offchain_demo::KEY_TYPE,
-			)
-			.expect("Dev Seed should always succeed.");
-	}
-	// ...snip
-}
-```
+Eventually, the `call` transaction will be made on-chain via the `frame_system::offchain::CreateSignedTransaction::create_transaction` function we defined in our runtime.
 
 ## Unsigned Transactions
 

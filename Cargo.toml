@@ -14,7 +14,7 @@ members = [
 	"pallets/last-caller",
 	"pallets/lockable-currency",
 	"pallets/map-set",
-	"pallets/offchain-demo",
+	"pallets/ocw-demo",
 	"pallets/randomness",
 	"pallets/reservable-currency",
 	"pallets/ringbuffer-queue",

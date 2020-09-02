@@ -1,5 +1,5 @@
 [package]
-name = "offchain-demo"
+name = "ocw-demo"
 version = "2.0.0-rc6"
 authors = ['Substrate DevHub <https://github.com/substrate-developer-hub>']
 edition = "2018"

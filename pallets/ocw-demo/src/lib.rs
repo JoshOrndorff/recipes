@@ -29,8 +29,10 @@ use sp_runtime::{
 		ValidTransaction,
 	},
 };
-use sp_std::prelude::*;
-use sp_std::str;
+use sp_std::{
+	prelude::*, str,
+	collections::vec_deque::VecDeque,
+};
 
 // We use `alt_serde`, and Xanewok-modified `serde_json` so that we can compile the program
 //   with serde(features `std`) and alt_serde(features `no_std`).
@@ -133,19 +135,10 @@ pub trait Trait: system::Trait + CreateSignedTransaction<Call<Self>> {
 	type UnsignedPriority: Get<TransactionPriority>;
 }
 
-// Custom data type
-#[derive(Debug)]
-enum TransactionType {
-	SignedSubmitNumber,
-	UnsignedSubmitNumber,
-	HttpFetching,
-	None,
-}
-
 decl_storage! {
 	trait Store for Module<T: Trait> as Example {
-		/// A vector of recently submitted numbers. Should be bounded
-		Numbers get(fn numbers): Vec<u64>;
+		/// A vector of recently submitted numbers. Bounded by NUM_VEC_LEN
+		Numbers get(fn numbers): VecDeque<u64>;
 	}
 }
 
@@ -162,13 +155,18 @@ decl_event!(
 
 decl_error! {
 	pub enum Error for Module<T: Trait> {
+		// Error returned when not sure which ocw function to executed
+		UnknownOffchainMux,
+
 		// Error returned when making signed transactions in off-chain worker
-		SignedSubmitNumberError,
+		NoLocalAcctForSignedTx,
+		OffchainSignedTxError,
+
 		// Error returned when making unsigned transactions in off-chain worker
-		UnsignedSubmitNumberError,
-		// Error returned when making remote http fetching
+		OffchainUnsignedTxError,
+
+		// Error returned when fetching github info
 		HttpFetchingError,
-		// Error returned when gh-info has already been fetched
 		AlreadyFetched,
 	}
 }
@@ -181,75 +179,58 @@ decl_module! {
 		pub fn submit_number_signed(origin, number: u64) -> DispatchResult {
 			debug::info!("submit_number_signed: {:?}", number);
 			let who = ensure_signed(origin)?;
-			Self::append_or_replace_number(Some(who), number)
+			Self::append_or_replace_number(number);
+
+			Self::deposit_event(RawEvent::NewNumber(Some(who), number));
+			Ok(())
 		}
 
 		#[weight = 0]
 		pub fn submit_number_unsigned(origin, number: u64) -> DispatchResult {
 			debug::info!("submit_number_unsigned: {:?}", number);
 			let _ = ensure_none(origin)?;
-			Self::append_or_replace_number(None, number)
+			Self::append_or_replace_number(number);
+
+			Self::deposit_event(RawEvent::NewNumber(None, number));
+			Ok(())
 		}
 
 		fn offchain_worker(block_number: T::BlockNumber) {
-			debug::info!("Entering off-chain workers");
+			debug::info!("Entering off-chain worker");
 
-			let result = match Self::choose_tx_type(block_number) {
-				TransactionType::SignedSubmitNumber => Self::signed_submit_number(block_number),
-				TransactionType::UnsignedSubmitNumber => Self::unsigned_submit_number(block_number),
-				TransactionType::HttpFetching => Self::fetch_if_needed(),
-				TransactionType::None => Ok(())
+			const TRANSACTION_TYPES: usize = 3;
+			let result = match block_number.try_into()
+				.map_or(TRANSACTION_TYPES, |bn| bn % TRANSACTION_TYPES)
+			{
+				0 => Self::offchain_signed_tx(block_number),
+				1 => Self::offchain_unsigned_tx(block_number),
+				2 => Self::fetch_github_info(),
+				_ => Err(Error::<T>::UnknownOffchainMux),
 			};
 
-			if let Err(e) = result { debug::error!("Error: {:?}", e); }
+			if let Err(e) = result {
+				debug::error!("offchain_worker error: {:?}", e);
+			}
 		}
 	}
 }
 
 impl<T: Trait> Module<T> {
-	/// Add a new number to the list.
-	fn append_or_replace_number(who: Option<T::AccountId>, number: u64) -> DispatchResult {
+	/// Add or append a new number to the list.
+	fn append_or_replace_number(number: u64) {
 		Numbers::mutate(|numbers| {
-			// Append or replace logic. The `numbers` vector is at most `NUM_VEC_LEN` long.
-			let num_len = numbers.len();
-
-			if num_len < NUM_VEC_LEN {
-				numbers.push(number);
-			} else {
-				numbers[num_len % NUM_VEC_LEN] = number;
+			if numbers.len() == NUM_VEC_LEN {
+				let _ = numbers.pop_front();
 			}
-
-			// displaying the average
-			let num_len = numbers.len();
-			let average = match num_len {
-				0 => 0,
-				_ => numbers.iter().sum::<u64>() / (num_len as u64),
-			};
-
-			debug::info!("Current average of numbers is: {}", average);
+			numbers.push_back(number);
+			debug::info!("Number vector: {:?}", numbers);
 		});
-
-		// Raise the NewNumber event
-		Self::deposit_event(RawEvent::NewNumber(who, number));
-		Ok(())
-	}
-
-	fn choose_tx_type(block_number: T::BlockNumber) -> TransactionType {
-		// Decide what type of transaction to send based on block number.
-		// The offchain worker will send each block a single type of transaction back to the chain.
-		// First a signed transaction, then an unsigned transaction, then an http fetch and json parsing.
-		match block_number.try_into().ok().unwrap() % 3 {
-			0 => TransactionType::SignedSubmitNumber,
-			1 => TransactionType::UnsignedSubmitNumber,
-			2 => TransactionType::HttpFetching,
-			_ => TransactionType::None,
-		}
 	}
 
 	/// Check if we have fetched github info before. If yes, we can use the cached version
 	///   stored in off-chain worker storage `storage`. If not, we fetch the remote info and
 	///   write the info into the storage for future retrieval.
-	fn fetch_if_needed() -> Result<(), Error<T>> {
+	fn fetch_github_info() -> Result<(), Error<T>> {
 		// Create a reference to Local Storage value.
 		// Since the local storage is common for all offchain workers, it's a good practice
 		// to prepend our entry with the pallet name.
@@ -353,50 +334,44 @@ impl<T: Trait> Module<T> {
 		Ok(response.body().collect::<Vec<u8>>())
 	}
 
-	fn signed_submit_number(block_number: T::BlockNumber) -> Result<(), Error<T>> {
-		let signer = Signer::<T, T::AuthorityId>::all_accounts();
+	fn offchain_signed_tx(block_number: T::BlockNumber) -> Result<(), Error<T>> {
+		let signer = Signer::<T, T::AuthorityId>::any_account();
 		if !signer.can_sign() {
 			debug::error!("No local account available");
-			return Err(<Error<T>>::SignedSubmitNumberError);
+			return Err(<Error<T>>::NoLocalAcctForSignedTx);
 		}
 
-		// Using `SubmitSignedTransaction` associated type we create and submit a transaction
-		// representing the call, we've just created.
-		// Submit signed will return a vector of results for all accounts that were found in the
-		// local keystore with expected `KEY_TYPE`.
-		let submission: u64 = block_number.try_into().ok().unwrap() as u64;
-		let results = signer.send_signed_transaction(|_acct| {
-			// We are just submitting the current block number back on-chain
+		let submission: u64 = block_number.try_into().unwrap_or(0) as u64;
+		// We are just submitting the current block number back on-chain
+		let result = signer.send_signed_transaction(|_acct|
 			Call::submit_number_signed(submission)
-		});
+		);
 
-		for (acc, res) in &results {
-			match res {
-				Ok(()) => {
-					debug::native::info!(
-						"off-chain send_signed: acc: {:?}| number: {}",
-						acc.id,
-						submission
-					);
-				}
-				Err(e) => {
-					debug::error!("[{:?}] Failed in signed_submit_number: {:?}", acc.id, e);
-					return Err(<Error<T>>::SignedSubmitNumberError);
-				}
-			};
+		// Display error if the signed tx fails.
+		if let Some((acc, res)) = result {
+			if let Err(_) = res {
+				debug::error!("failure: offchain_signed_tx: tx sent: {:?}", acc.id);
+				return Err(<Error<T>>::OffchainSignedTxError);
+			}
+			// Transaction is sent successfully
+			return Ok(());
 		}
-		Ok(())
+
+		// tx is not even sent, so we return error.
+		debug::error!("failure: offchain_signed_tx: tx not sent");
+		Err(<Error<T>>::OffchainSignedTxError)
 	}
 
-	fn unsigned_submit_number(block_number: T::BlockNumber) -> Result<(), Error<T>> {
-		let submission: u64 = block_number.try_into().ok().unwrap() as u64;
+	fn offchain_unsigned_tx(block_number: T::BlockNumber) -> Result<(), Error<T>> {
+		let submission: u64 = block_number.try_into().unwrap_or(0) as u64;
 		// Submitting the current block number back on-chain.
 		let call = Call::submit_number_unsigned(submission);
 
-		SubmitTransaction::<T, Call<T>>::submit_unsigned_transaction(call.into()).map_err(|e| {
-			debug::error!("Failed in unsigned_submit_number: {:?}", e);
-			<Error<T>>::UnsignedSubmitNumberError
-		})
+		SubmitTransaction::<T, Call<T>>::submit_unsigned_transaction(call.into())
+			.map_err(|e| {
+				debug::error!("Failed in offchain_unsigned_tx: {:?}", e);
+				<Error<T>>::OffchainUnsignedTxError
+			})
 	}
 }
 
@@ -406,9 +381,7 @@ impl<T: Trait> frame_support::unsigned::ValidateUnsigned for Module<T> {
 	fn validate_unsigned(_source: TransactionSource, call: &Self::Call) -> TransactionValidity {
 		#[allow(unused_variables)]
 		if let Call::submit_number_unsigned(number) = call {
-			debug::native::info!("off-chain send_unsigned: number: {}", number);
-
-			ValidTransaction::with_tag_prefix("offchain-demo")
+			ValidTransaction::with_tag_prefix("ocw-demo")
 				.priority(T::UnsignedPriority::get())
 				.and_provides([b"submit_number_unsigned"])
 				.longevity(3)

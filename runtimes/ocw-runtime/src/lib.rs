@@ -72,7 +72,7 @@ pub type Hash = H256;
 /// Digest item type.
 pub type DigestItem = generic::DigestItem<Hash>;
 
-pub use offchain_demo;
+pub use ocw_demo;
 
 /// Opaque types. These are used by the CLI to instantiate machinery that don't need to know
 /// the specifics of the runtime. They can then be made to be agnostic over specific formats
@@ -237,8 +237,8 @@ parameter_types! {
 	pub const UnsignedPriority: u64 = 100;
 }
 
-impl offchain_demo::Trait for Runtime {
-	type AuthorityId = offchain_demo::crypto::TestAuthId;
+impl ocw_demo::Trait for Runtime {
+	type AuthorityId = ocw_demo::crypto::TestAuthId;
 	type Call = Call;
 	type Event = Event;
 	type UnsignedPriority = UnsignedPriority;
@@ -315,7 +315,7 @@ construct_runtime!(
 		Sudo: pallet_sudo::{Module, Call, Config<T>, Storage, Event<T>},
 		TransactionPayment: pallet_transaction_payment::{Module, Storage},
 		// The Recipe Pallets
-		OffchainDemo: offchain_demo::{Module, Call, Storage, Event<T>, ValidateUnsigned},
+		OcwDemo: ocw_demo::{Module, Call, Storage, Event<T>, ValidateUnsigned},
 	}
 );
 
