@@ -31,6 +31,7 @@ use sp_version::NativeVersion;
 use sp_version::RuntimeVersion;
 
 // A few exports that help ease life for downstream crates.
+pub use pallet_balances::Call as BalancesCall;
 pub use frame_support::{
 	construct_runtime, debug, parameter_types,
 	traits::Randomness,
@@ -40,11 +41,11 @@ pub use frame_support::{
 	},
 	StorageValue,
 };
-pub use pallet_balances::Call as BalancesCall;
-pub use pallet_timestamp::Call as TimestampCall;
+
 #[cfg(any(feature = "std", test))]
 pub use sp_runtime::BuildStorage;
 pub use sp_runtime::{Perbill, Permill};
+pub use pallet_timestamp::Call as TimestampCall;
 
 /// An index to a block.
 pub type BlockNumber = u32;
@@ -233,15 +234,10 @@ impl pallet_sudo::Trait for Runtime {
 ///   inside `create_transaction` function.
 pub type SignedPayload = generic::SignedPayload<Call, SignedExtra>;
 
-parameter_types! {
-	pub const UnsignedPriority: u64 = 100;
-}
-
 impl ocw_demo::Trait for Runtime {
 	type AuthorityId = ocw_demo::crypto::TestAuthId;
 	type Call = Call;
 	type Event = Event;
-	type UnsignedPriority = UnsignedPriority;
 }
 
 impl<LocalCall> frame_system::offchain::CreateSignedTransaction<LocalCall> for Runtime
