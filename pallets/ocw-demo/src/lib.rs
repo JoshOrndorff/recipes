@@ -184,7 +184,6 @@ decl_error! {
 
 		// Error returned when fetching github info
 		HttpFetchingError,
-		AlreadyFetched,
 	}
 }
 
@@ -301,14 +300,13 @@ impl<T: Trait> Module<T> {
 		//   4) `with_block_and_time_deadline` - lock with custom time and block expiration
 		// Here we choose the most custom one for demonstration purpose.
 		let mut lock = StorageLock::<BlockAndTime<Self>>::with_block_and_time_deadline(
-			b"offchain-demo::lock",
-			LOCK_BLOCK_EXPIRATION,
+			b"offchain-demo::lock", LOCK_BLOCK_EXPIRATION,
 			rt_offchain::Duration::from_millis(LOCK_TIMEOUT_EXPIRATION)
 		);
 
 		// We try to acquire the lock here. If failed, we know the `fetch_n_parse` part inside is being
 		//   executed by previous run of ocw, so the function just returns.
-		// ref: https://substrate.dev/rustdocs/v2.0.0-rc3/sp_runtime/offchain/storage_lock/struct.StorageLock.html#method.try_lock
+		// ref: https://substrate.dev/rustdocs/v2.0.0-rc6/sp_runtime/offchain/storage_lock/struct.StorageLock.html#method.try_lock
 		if let Ok(_guard) = lock.try_lock() {
 			match Self::fetch_n_parse() {
 				Ok(gh_info) => { s_info.set(&gh_info); }

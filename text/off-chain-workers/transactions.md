@@ -62,12 +62,13 @@ Running the `kitchen-node` you will see log messages similar to the following:
 First, pay attention the line `⛓  Native runtime: ocw-runtime-1 (ocw-runtime-1.tx1.au1)`
 to ensure we are running the kitchen-node with the `ocw-runtime`.
 
-Other than that, you will realized the chain is just sitting idled. This is because currently off-chain worker is only run after a block is imported. Our kitchen node is
-configured to use [instant-seal consensus](/kitchen-node.md), meaning that we need to send a transaction to
-trigger a block to be imported.
+Other than that, you will realized the chain is just sitting idled. This is because currently off-chain
+worker is only run after a block is imported. Our kitchen node is configured to use
+[instant-seal consensus](/kitchen-node.md), meaning that we need to send a transaction to trigger a
+block to be imported.
 
-Once a transaction is sent, such as using [Polkadot-JS App](https://polkadot.js.org/apps?rpc=ws://localhost:9944) to
-perform a balance transfer, the following more interesting logs are shown.
+Once a transaction is sent, such as using [Polkadot-JS App](https://polkadot.js.org/apps?rpc=ws://localhost:9944)
+to perform a balance transfer, the following more interesting logs are shown.
 
 ```
 2020-09-03 23:47:24.656 tokio-runtime-worker INFO sc_consensus_manual_seal::rpc  Instant Seal success: CreatedBlock { hash: 0x02f2fd8e06bd8138040813f18c4b2df41404c289c3418142f613ae5c72abe6ce, aux: ImportedAux { header_only: false, clear_justification_requests: false, needs_justification: false, bad_justification: false, needs_finality_proof: false, is_new_best: true } }
@@ -83,13 +84,16 @@ Let's take a deeper look at what's happening here. Referring to the code at
 there is an `fn offchain_worker()` function inside `decl_module!`. This is the entry point of the
 off-chain worker logic which is executed once per block import.
 
-As off-chain workers, by definition, run computation off-chain, they cannot alter the block state directly. In
-order to do so, they need to send transactions back on-chain. Three kinds of transaction can be sent
-here, **signed transactions**, **unsigned transactions**, and **unsigned transactions with signed payload**.
+As off-chain workers, by definition, run computation off-chain, they cannot alter the block state
+directly. In order to do so, they need to send transactions back on-chain. Three kinds of transaction
+can be sent here, **signed transactions**, **unsigned transactions**, and **unsigned transactions
+with signed payload**.
 
-- [Signed transactions](#signed-transactions) are used if the transaction requires the sender to be specified.
+- [Signed transactions](#signed-transactions) are used if the transaction requires the sender to be
+specified.
 - [Unsigned transactions](#unsigned-transactions) are used when the sender does not need to be known.
-- [Unsigned transactions with signed payloads](#unsigned-transactions-with-signed-payloads) are used, [TK]
+- [Unsigned transactions with signed payloads](#unsigned-transactions-with-signed-payloads) are used
+if the transaction requires the sender to be specified but the sender account not be charged for the transaction fee.
 
 We will walk through each of them in the following.
 
@@ -119,9 +123,12 @@ pub mod crypto {
 }
 ```
 
-`KEY_TYPE` is the application key prefix for the pallet in the underlying storage. This is to be used for signing transactions.
+`KEY_TYPE` is the application key prefix for the pallet in the underlying storage. This is to be used
+for signing transactions.
 
-Second, we have our pallet configration trait be additionally bounded by `CreateSignedTransaction` and add an additional associated type `AuthorityId`. This tell the runtime that this pallet can create signed transactions.
+Second, we have our pallet configration trait be additionally bounded by `CreateSignedTransaction`
+and add an additional associated type `AuthorityId`. This tell the runtime that this pallet can
+create signed transactions.
 
 src:
 [`pallets/ocw-demo/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/ocw-demo/src/lib.rs)
@@ -134,9 +141,10 @@ pub trait Trait: system::Trait + CreateSignedTransaction<Call<Self>> {
 }
 ```
 
-Now if we [build the `kitchen-node`](#compiling-this-pallet), we will see compiler errors saying three trait
-bounds are not satisfied: `Runtime: frame_system::offchain::CreateSignedTransaction`,
-`frame_system::offchain::SigningTypes`, and `frame_system::offchain::SendTransactionTypes`. So let's implement these traits in our runtime.
+Now if we [build the `kitchen-node`](#compiling-this-pallet), we will see compiler errors saying
+three trait bounds are not satisfied: `Runtime: frame_system::offchain::CreateSignedTransaction`,
+`frame_system::offchain::SigningTypes`, and `frame_system::offchain::SendTransactionTypes`. So let's
+implement these traits in our runtime.
 
 src:
 [`runtimes/ocw-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime/src/lib.rs)
@@ -209,7 +217,8 @@ pub type SignedExtra = (
 );
 ```
 
-Next the remaining two traits are also implemented by specifying the concrete types of their respective trait associated types.
+Next the remaining two traits are also implemented by specifying the concrete types of their respective
+trait associated types.
 
 src:
 [`runtimes/ocw-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/ocw-runtime/src/lib.rs)
@@ -234,7 +243,8 @@ create signed transactions.
 
 ### Sending Signed Transactions
 
-A signed transaction is sent with `frame_system::offchain::SendSignedTransaction::send_signed_transaction`, as shown below:
+A signed transaction is sent with `frame_system::offchain::SendSignedTransaction::send_signed_transaction`,
+as shown below:
 
 src:
 [`pallets/ocw-demo/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/ocw-demo/src/lib.rs)
@@ -275,16 +285,20 @@ fn offchain_signed_tx(block_number: T::BlockNumber) -> Result<(), Error<T>> {
 }
 ```
 
-On the above code, we first retrieve a signer. Then we send a signed transaction on-chain by calling `send_signed_transaction` with a closure returning the on-chain call, `Call::submit_number_signed(submission)`.
+On the above code, we first retrieve a signer. Then we send a signed transaction on-chain by calling
+`send_signed_transaction` with a closure returning the on-chain call,
+`Call::submit_number_signed(submission)`.
 
-Then we use the signer to send signed transaction, and the result is in the type of `Option<(Account<T>, Result<(), ()>)>`.
-So we handle each of the following cases:
+Then we use the signer to send signed transaction, and the result is in the type of
+`Option<(Account<T>, Result<(), ()>)>`. So we handle each of the following cases:
 
 - `None`: when no account is available for sending transaction
 - `Some((account, Err(())))`: when an error occured when sending the transaction
 - `Some((account, Ok(())))`: when transaction is successfully sent
 
-Eventually, the `call` transaction is made on-chain via the `frame_system::offchain::CreateSignedTransaction::create_transaction` function we defined in our runtime.
+Eventually, the `call` transaction is made on-chain via the
+`frame_system::offchain::CreateSignedTransaction::create_transaction` function we defined in our
+runtime.
 
 ## Unsigned Transactions
 
@@ -325,9 +339,9 @@ The `ValidTransaction` object contain some fields we have not seen before:
 
 - `priority`: determine the ordering of two transactions, given their dependencies are satisfied.
 - `requires`: contain a list of tags the transaction depends on.
-- `provides`: contain a list of tags provided by this transaction. Successfully importing the transaction
-  will enable other transactions that depend on these tags be included. Both`provides` and
-  `requires` tags allow Substrate to build a dependency graph of transactions and import them in
+- `provides`: contain a list of tags provided by this transaction. Successfully importing the
+	transaction will enable other transactions that depend on these tags be included. Both`provides`
+  and `requires` tags allow Substrate to build a dependency graph of transactions and import them in
   the right order.
 - `longevity`: this transaction longevity describes the minimum number of blocks the transaction
   has to be valid for. After this period the transaction should be removed from the pool or revalidated.
@@ -382,7 +396,12 @@ As in signed transactions, we prepare a function reference with its parameters a
 
 ## Unsigned Transactions with Signed Payloads
 
-[TK: why using unsigned transaction with signed payloads?]
+With this type of transaction, we need to first specify a signer, sign the transaction, and then send
+it back on-chain as unsigned transaction. The main difference with signed transactions is that the signer
+account will not be charged for the transaction fee. This is not the case for signed transaction normally.
+
+But this could potentially be an attack vector who want to disrupt the network, so extra precaution
+should be added as to what counted as a valid (unsigned) transaction.
 
 Since we are still sending unsigned transactions, we need to add extra code to validate them. [See above](#setup-1).
 
@@ -421,7 +440,9 @@ fn offchain_unsigned_tx_signed_payload(block_number: T::BlockNumber) -> Result<(
 }
 ```
 
-What is unique here is that [`send_unsigned_transaction` function](https://substrate.dev/rustdocs/v2.0.0-rc6/frame_system/offchain/trait.SendUnsignedTransaction.html#tymethod.send_unsigned_transaction) take two closures. The first closure we return a `SignedPayload` object, and the second closure returning a on-chain call to be made.
+What is unique here is that
+[`send_unsigned_transaction` function](https://substrate.dev/rustdocs/v2.0.0-rc6/frame_system/offchain/trait.SendUnsignedTransaction.html#tymethod.send_unsigned_transaction) take two closures. The first
+closure we return a `SignedPayload` object, and the second closure returning a on-chain call to be made.
 
 We have defined our `SignedPayload` object earlier in the pallet.
 
@@ -444,4 +465,5 @@ impl <T: SigningTypes> SignedPayload<T> for Payload<T::Public> {
 
 ## Conclusion
 
-By now, you should be able to code your own off-chain workers that send signed transactions, unsigned transactions, and unsigned transactions with signed payloads back on chain.
+By now, you should be able to code your own off-chain workers that send signed transactions, unsigned
+transactions, and unsigned transactions with signed payloads back on chain.
