@@ -271,7 +271,7 @@ fn offchain_signed_tx(block_number: T::BlockNumber) -> Result<(), Error<T>> {
 
 	// Display error if the signed tx fails.
 	if let Some((acc, res)) = result {
-		if let Err(_) = res {
+		if res.is_err() {
 			debug::error!("failure: offchain_signed_tx: tx sent: {:?}", acc.id);
 			return Err(<Error<T>>::OffchainSignedTxError);
 		}
