@@ -19,7 +19,7 @@ use sp_runtime::{
 	Perbill,
 };
 
-use crate as offchain_demo;
+use crate as ocw_demo;
 
 impl_outer_origin! {
 	pub enum Origin for TestRuntime where system = system {}
@@ -28,7 +28,7 @@ impl_outer_origin! {
 impl_outer_event! {
 	pub enum TestEvent for TestRuntime {
 		system<T>,
-		offchain_demo<T>,
+		ocw_demo<T>,
 	}
 }
 
@@ -83,7 +83,6 @@ impl Trait for TestRuntime {
 	type AuthorityId = crypto::TestAuthId;
 	type Call = Call<TestRuntime>;
 	type Event = TestEvent;
-	type UnsignedPriority = UnsignedPriority;
 }
 
 impl<LocalCall> system::offchain::CreateSignedTransaction<LocalCall> for TestRuntime
@@ -117,7 +116,7 @@ where
 }
 
 pub type System = system::Module<TestRuntime>;
-pub type OffchainDemo = Module<TestRuntime>;
+pub type OcwDemo = Module<TestRuntime>;
 
 pub struct ExtBuilder;
 
@@ -158,7 +157,7 @@ fn submit_number_signed_works() {
 		// call submit_number_signed
 		let num = 32;
 		let acct: <TestRuntime as system::Trait>::AccountId = Default::default();
-		assert_ok!(OffchainDemo::submit_number_signed(
+		assert_ok!(OcwDemo::submit_number_signed(
 			Origin::signed(acct),
 			num
 		));
@@ -167,11 +166,11 @@ fn submit_number_signed_works() {
 		// An event is emitted
 		assert!(System::events()
 			.iter()
-			.any(|er| er.event == TestEvent::offchain_demo(RawEvent::NewNumber(Some(acct), num))));
+			.any(|er| er.event == TestEvent::ocw_demo(RawEvent::NewNumber(Some(acct), num))));
 
 		// Insert another number
 		let num2 = num * 2;
-		assert_ok!(OffchainDemo::submit_number_signed(
+		assert_ok!(OcwDemo::submit_number_signed(
 			Origin::signed(acct),
 			num2
 		));
@@ -181,14 +180,15 @@ fn submit_number_signed_works() {
 }
 
 #[test]
-fn offchain_send_signed_tx() {
+fn test_offchain_signed_tx() {
 	let (mut t, pool_state, _offchain_state) = ExtBuilder::build();
 
 	t.execute_with(|| {
-		// when
+		// Setup
 		let num = 32;
-		OffchainDemo::signed_submit_number(num).unwrap();
-		// then
+		OcwDemo::offchain_signed_tx(num).unwrap();
+
+		// Verify
 		let tx = pool_state.write().transactions.pop().unwrap();
 		assert!(pool_state.read().transactions.is_empty());
 		let tx = TestExtrinsic::decode(&mut &*tx).unwrap();
@@ -198,13 +198,13 @@ fn offchain_send_signed_tx() {
 }
 
 #[test]
-fn offchain_send_unsigned_tx() {
+fn test_offchain_unsigned_tx() {
 	let (mut t, pool_state, _offchain_state) = ExtBuilder::build();
 
 	t.execute_with(|| {
 		// when
 		let num = 32;
-		OffchainDemo::unsigned_submit_number(num).unwrap();
+		OcwDemo::offchain_unsigned_tx(num).unwrap();
 		// then
 		let tx = pool_state.write().transactions.pop().unwrap();
 		assert!(pool_state.read().transactions.is_empty());
