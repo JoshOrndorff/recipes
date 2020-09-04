@@ -64,7 +64,7 @@ to ensure we are running the kitchen-node with the `ocw-runtime`.
 
 Other than that, you will realized the chain is just sitting idled. This is because currently off-chain
 worker is only run after a block is imported. Our kitchen node is configured to use
-[instant-seal consensus](/kitchen-node.md), meaning that we need to send a transaction to trigger a
+[instant-seal consensus](../kitchen-node.md), meaning that we need to send a transaction to trigger a
 block to be imported.
 
 Once a transaction is sent, such as using [Polkadot-JS App](https://polkadot.js.org/apps?rpc=ws://localhost:9944)
