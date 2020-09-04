@@ -142,16 +142,10 @@ fn donations_work() {
 		let expected_event =
 			TestEvent::charity(RawEvent::DonationReceived(1, donation, new_pot_total));
 
-		// testing if the the event come in the correct order
 		assert_eq!(
-			System::events()[1],
-			EventRecord {
-				phase: Phase::Initialization,
-				event: TestEvent::charity(RawEvent::DonationReceived(1, donation, new_pot_total)),
-				topics: vec![],
-			},
+			System::events()[1].event,
+			expected_event,
 		);
-		assert!(System::events().iter().any(|a| a.event == expected_event));
 	})
 }
 
@@ -176,9 +170,6 @@ fn imbalances_work() {
 		let new_pot_total = imb_amt + Balances::minimum_balance();
 		assert_eq!(Charity::pot(), new_pot_total);
 
-		// Check that the correct event is emitted
-		let expected_event = TestEvent::charity(RawEvent::ImbalanceAbsorbed(5, new_pot_total));
-
 		// testing if the the event come in the correct order
 		assert_eq!(
 			System::events()[0],
@@ -188,8 +179,6 @@ fn imbalances_work() {
 				topics: vec![],
 			},
 		);
-
-		assert!(System::events().iter().any(|a| a.event == expected_event));
 	})
 }
 
@@ -204,32 +193,20 @@ fn allocating_works() {
 		let alloc = 5;
 		assert_ok!(Charity::allocate(RawOrigin::Root.into(), 2, alloc));
 
-		// testing if the the event come in the correct order
-		assert_eq!(
-			System::events(),
-			vec![
-				EventRecord {
-					phase: Phase::Initialization,
-					event: TestEvent::balances(balances::RawEvent::Transfer(1, 8241983431855337325, 10)),
-					topics: vec![],
-				},
-				EventRecord {
-					phase: Phase::Initialization,
-					event: TestEvent::charity(RawEvent::DonationReceived(1, 10, 11)),
-					topics: vec![],
-				},
-				EventRecord {
-					phase: Phase::Initialization,
-					event: TestEvent::balances(balances::RawEvent::Transfer(8241983431855337325, 2, 5)),
-					topics: vec![],
-				},
-				EventRecord {
-					phase: Phase::Initialization,
-					event: TestEvent::charity(RawEvent::FundsAllocated(2, 5, 6)),
-					topics: vec![],
-				},
-			]
-		);
+		// Test that the expected events were emitted
+		let our_events = System::events()
+			.into_iter().map(|r| r.event)
+			.filter_map(|e| {
+				if let TestEvent::charity(inner) = e { Some(inner) } else { None }
+			})
+			.collect::<Vec<_>>();
+
+		let expected_events = 	vec![
+			RawEvent::DonationReceived(1, 10, 11),
+			RawEvent::FundsAllocated(2, 5, 6),
+		];
+
+		assert_eq!(our_events, expected_events);
 	})
 }
 //TODO What if we try to allocate more funds than we have
