@@ -426,7 +426,7 @@ fn offchain_unsigned_tx_signed_payload(block_number: T::BlockNumber) -> Result<(
 	//   - `Some((account, Err(())))`: error occured when sending the transaction
 	if let Some((_, res)) = signer.send_unsigned_transaction(
 		|acct| Payload { number, public: acct.public.clone() },
-		|payload, signature| Call::submit_number_unsigned_with_signed_payload(payload, signature)
+		Call::submit_number_unsigned_with_signed_payload
 	) {
 		return res.map_err(|_| {
 			debug::error!("Failed in offchain_unsigned_tx_signed_payload");
@@ -441,8 +441,8 @@ fn offchain_unsigned_tx_signed_payload(block_number: T::BlockNumber) -> Result<(
 ```
 
 What is unique here is that
-[`send_unsigned_transaction` function](https://substrate.dev/rustdocs/v2.0.0-rc6/frame_system/offchain/trait.SendUnsignedTransaction.html#tymethod.send_unsigned_transaction) take two closures. The first
-closure we return a `SignedPayload` object, and the second closure returning a on-chain call to be made.
+[`send_unsigned_transaction` function](https://substrate.dev/rustdocs/v2.0.0-rc6/frame_system/offchain/trait.SendUnsignedTransaction.html#tymethod.send_unsigned_transaction) takes two functions. The first, expressed as a closure,
+returns a `SignedPayload` object, and the second returns an on-chain call to be made.
 
 We have defined our `SignedPayload` object earlier in the pallet.
 
