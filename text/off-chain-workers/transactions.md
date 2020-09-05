@@ -64,7 +64,7 @@ to ensure we are running the kitchen-node with the `ocw-runtime`.
 
 Other than that, you will realized the chain is just sitting idled. This is because currently off-chain
 worker is only run after a block is imported. Our kitchen node is configured to use
-[instant-seal consensus](/kitchen-node.md), meaning that we need to send a transaction to trigger a
+[instant-seal consensus](../kitchen-node.md), meaning that we need to send a transaction to trigger a
 block to be imported.
 
 Once a transaction is sent, such as using [Polkadot-JS App](https://polkadot.js.org/apps?rpc=ws://localhost:9944)
@@ -271,7 +271,7 @@ fn offchain_signed_tx(block_number: T::BlockNumber) -> Result<(), Error<T>> {
 
 	// Display error if the signed tx fails.
 	if let Some((acc, res)) = result {
-		if let Err(_) = res {
+		if res.is_err() {
 			debug::error!("failure: offchain_signed_tx: tx sent: {:?}", acc.id);
 			return Err(<Error<T>>::OffchainSignedTxError);
 		}
@@ -426,7 +426,7 @@ fn offchain_unsigned_tx_signed_payload(block_number: T::BlockNumber) -> Result<(
 	//   - `Some((account, Err(())))`: error occured when sending the transaction
 	if let Some((_, res)) = signer.send_unsigned_transaction(
 		|acct| Payload { number, public: acct.public.clone() },
-		|payload, signature| Call::submit_number_unsigned_with_signed_payload(payload, signature)
+		Call::submit_number_unsigned_with_signed_payload
 	) {
 		return res.map_err(|_| {
 			debug::error!("Failed in offchain_unsigned_tx_signed_payload");
@@ -441,8 +441,8 @@ fn offchain_unsigned_tx_signed_payload(block_number: T::BlockNumber) -> Result<(
 ```
 
 What is unique here is that
-[`send_unsigned_transaction` function](https://substrate.dev/rustdocs/v2.0.0-rc6/frame_system/offchain/trait.SendUnsignedTransaction.html#tymethod.send_unsigned_transaction) take two closures. The first
-closure we return a `SignedPayload` object, and the second closure returning a on-chain call to be made.
+[`send_unsigned_transaction` function](https://substrate.dev/rustdocs/v2.0.0-rc6/frame_system/offchain/trait.SendUnsignedTransaction.html#tymethod.send_unsigned_transaction) takes two functions. The first, expressed as a closure,
+returns a `SignedPayload` object, and the second returns an on-chain call to be made.
 
 We have defined our `SignedPayload` object earlier in the pallet.
 

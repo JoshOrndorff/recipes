@@ -392,7 +392,7 @@ impl<T: Trait> Module<T> {
 
 		// Display error if the signed tx fails.
 		if let Some((acc, res)) = result {
-			if let Err(_) = res {
+			if res.is_err() {
 				debug::error!("failure: offchain_signed_tx: tx sent: {:?}", acc.id);
 				return Err(<Error<T>>::OffchainSignedTxError);
 			}
@@ -431,7 +431,7 @@ impl<T: Trait> Module<T> {
 		//   - `Some((account, Err(())))`: error occured when sending the transaction
 		if let Some((_, res)) = signer.send_unsigned_transaction(
 			|acct| Payload { number, public: acct.public.clone() },
-			|payload, signature| Call::submit_number_unsigned_with_signed_payload(payload, signature)
+			Call::submit_number_unsigned_with_signed_payload
 		) {
 			return res.map_err(|_| {
 				debug::error!("Failed in offchain_unsigned_tx_signed_payload");
