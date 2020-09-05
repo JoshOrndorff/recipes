@@ -400,8 +400,8 @@ With this type of transaction, we need to first specify a signer, sign the trans
 it back on-chain as unsigned transaction. The main difference with signed transactions is that the signer
 account will not be charged for the transaction fee. This is not the case for signed transaction normally.
 
-But this could potentially be an attack vector who want to disrupt the network, so extra precaution
-should be added as to what counted as a valid (unsigned) transaction.
+But this could potentially be an attack vector, so extra precaution should be added as to what counted
+as a valid (unsigned) transaction.
 
 Since we are still sending unsigned transactions, we need to add extra code to validate them. [See above](#setup-1).
 
