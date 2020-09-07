@@ -1,8 +1,8 @@
 //! This runtime demonstrates how to configure signed and unsigned transaction handlers to be used
-//!   by off-chain worker in its including pallets.
+//!   by off-chain worker in the including pallets.
 
 #![cfg_attr(not(feature = "std"), no_std)]
-// `construct_runtime!` does a lot of recursion and requires us to increase the limit to 256.
+// `construct_runtime!` does many recursions and requires us to increase the limit to 256.
 #![recursion_limit = "256"]
 
 // Make the WASM binary available.
@@ -30,7 +30,8 @@ use sp_std::prelude::*;
 use sp_version::NativeVersion;
 use sp_version::RuntimeVersion;
 
-// A few exports that help ease life for downstream crates.
+// A few exports that assist downstream crates.
+pub use pallet_balances::Call as BalancesCall;
 pub use frame_support::{
 	construct_runtime, debug, parameter_types,
 	traits::Randomness,
@@ -40,11 +41,11 @@ pub use frame_support::{
 	},
 	StorageValue,
 };
-pub use pallet_balances::Call as BalancesCall;
-pub use pallet_timestamp::Call as TimestampCall;
+
 #[cfg(any(feature = "std", test))]
 pub use sp_runtime::BuildStorage;
 pub use sp_runtime::{Perbill, Permill};
+pub use pallet_timestamp::Call as TimestampCall;
 
 /// An index to a block.
 pub type BlockNumber = u32;
@@ -52,7 +53,7 @@ pub type BlockNumber = u32;
 /// Alias to 512-bit hash when used in the context of a transaction signature on the chain.
 pub type Signature = MultiSignature;
 
-/// Some way of identifying an account on the chain. We intentionally make it equivalent
+/// A way to identify an account on the chain. We intentionally make it equivalent
 /// to the public key of our transaction signing scheme.
 pub type AccountId = <<Signature as Verify>::Signer as IdentifyAccount>::AccountId;
 
@@ -72,11 +73,11 @@ pub type Hash = H256;
 /// Digest item type.
 pub type DigestItem = generic::DigestItem<Hash>;
 
-pub use offchain_demo;
+pub use ocw_demo;
 
 /// Opaque types. These are used by the CLI to instantiate machinery that don't need to know
-/// the specifics of the runtime. They can then be made to be agnostic over specific formats
-/// of data like extrinsics, allowing for them to continue syncing the network through upgrades
+/// the specifics of the runtime. They can be made agnostic over specific formats
+/// of data like extrinsics. Thus allowing them to continue syncing the network through upgrades
 /// to even the core datastructures.
 pub mod opaque {
 	use super::*;
@@ -145,13 +146,13 @@ impl frame_system::Trait for Runtime {
 	type Event = Event;
 	/// The ubiquitous origin type.
 	type Origin = Origin;
-	/// Maximum number of block number to block hash mappings to keep (oldest pruned first).
+	/// Maximum number of block numbers to block hash maps to keep with the oldest pruned first.
 	type BlockHashCount = BlockHashCount;
 	/// Maximum weight of each block. With a default weight system of 1byte == 1weight, 4mb is ok.
 	type MaximumBlockWeight = MaximumBlockWeight;
-	/// The weight of database operations that the runtime can invoke.
+	/// The weight of the database operations that the runtime can invoke.
 	type DbWeight = RocksDbWeight;
-	/// The weight of the overhead invoked on the block import process, independent of the
+	/// The weight of the overhead invoked on the block import process. This is independent of the
 	/// extrinsics included in that block.
 	type BlockExecutionWeight = BlockExecutionWeight;
 	/// The base weight of any extrinsic processed by the runtime, independent of the
@@ -233,15 +234,10 @@ impl pallet_sudo::Trait for Runtime {
 ///   inside `create_transaction` function.
 pub type SignedPayload = generic::SignedPayload<Call, SignedExtra>;
 
-parameter_types! {
-	pub const UnsignedPriority: u64 = 100;
-}
-
-impl offchain_demo::Trait for Runtime {
-	type AuthorityId = offchain_demo::crypto::TestAuthId;
+impl ocw_demo::Trait for Runtime {
+	type AuthorityId = ocw_demo::crypto::TestAuthId;
 	type Call = Call;
 	type Event = Event;
-	type UnsignedPriority = UnsignedPriority;
 }
 
 impl<LocalCall> frame_system::offchain::CreateSignedTransaction<LocalCall> for Runtime
@@ -315,7 +311,7 @@ construct_runtime!(
 		Sudo: pallet_sudo::{Module, Call, Config<T>, Storage, Event<T>},
 		TransactionPayment: pallet_transaction_payment::{Module, Storage},
 		// The Recipe Pallets
-		OffchainDemo: offchain_demo::{Module, Call, Storage, Event<T>, ValidateUnsigned},
+		OcwDemo: ocw_demo::{Module, Call, Storage, Event<T>, ValidateUnsigned},
 	}
 );
 
@@ -325,7 +321,7 @@ pub type Address = AccountId;
 pub type Header = generic::Header<BlockNumber, BlakeTwo256>;
 /// Block type as expected by this runtime.
 pub type Block = generic::Block<Header, UncheckedExtrinsic>;
-/// A Block signed with a Justification
+/// A Block signed with a justification
 pub type SignedBlock = generic::SignedBlock<Block>;
 /// BlockId type as expected by this runtime.
 pub type BlockId = generic::BlockId<Block>;

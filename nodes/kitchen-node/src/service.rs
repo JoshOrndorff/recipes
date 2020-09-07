@@ -43,23 +43,12 @@ ServiceError> {
 		sc_service::new_full_parts::<Block, RuntimeApi, Executor>(&config)?;
 	let client = Arc::new(client);
 
-	// This variable is only used when ocw feature is enabled.
-	// Suppress the warning when ocw feature is not enabled.
-	#[allow(unused_variables)]
-	let dev_seed = config.dev_key_seed.clone();
-
 	// Initialize seed for signing transaction using off-chain workers
 	#[cfg(feature = "ocw")]
 	{
-		if let Some(seed) = dev_seed {
-			keystore
-				.write()
-				.insert_ephemeral_from_seed_by_type::<runtime::offchain_demo::crypto::Pair>(
-					&seed,
-					runtime::offchain_demo::KEY_TYPE,
-				)
-				.expect("Dev Seed should always succeed.");
-		}
+		keystore.write().insert_ephemeral_from_seed_by_type::<runtime::ocw_demo::crypto::Pair>(
+			"//Alice", runtime::ocw_demo::KEY_TYPE
+		).expect("Creating key with account Alice should succeed.");
 	}
 
 	let select_chain = sc_consensus::LongestChain::new(backend.clone());

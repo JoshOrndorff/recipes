@@ -3707,13 +3707,29 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1ab52be62400ca80aa00285d25253d7f7c437b7375c4de678f5405d3afe82ca5"
 
 [[package]]
+name = "ocw-demo"
+version = "2.0.0-rc6"
+dependencies = [
+ "alt_serde",
+ "frame-support",
+ "frame-system",
+ "parity-scale-codec",
+ "parking_lot 0.10.2",
+ "serde_json 1.0.44",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
+]
+
+[[package]]
 name = "ocw-runtime"
 version = "2.0.0-rc6"
 dependencies = [
  "frame-executive",
  "frame-support",
  "frame-system",
- "offchain-demo",
+ "ocw-demo",
  "pallet-balances",
  "pallet-indices",
  "pallet-randomness-collective-flip",
@@ -3734,22 +3750,6 @@ dependencies = [
  "sp-transaction-pool",
  "sp-version",
  "substrate-wasm-builder-runner",
-]
-
-[[package]]
-name = "offchain-demo"
-version = "2.0.0-rc6"
-dependencies = [
- "alt_serde",
- "frame-support",
- "frame-system",
- "parity-scale-codec",
- "parking_lot 0.10.2",
- "serde_json 1.0.44",
- "sp-core",
- "sp-io",
- "sp-runtime",
- "sp-std",
 ]
 
 [[package]]

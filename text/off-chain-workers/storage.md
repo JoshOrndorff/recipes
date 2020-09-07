@@ -1,27 +1,25 @@
 # Local Storage in Off-chain Workers
 
-`pallets/offchain-demo`
+`pallets/ocw-demo`
 [
 	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
-](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Foffchain-demo%2Fsrc%2Flib.rs)
+](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%ocw-demo%2Fsrc%2Flib.rs)
 [
 	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
-](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/lib.rs)
+](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/ocw-demo/src/lib.rs)
 
-Remember we mentioned that off-chain workers (short for **ocw** below) cannot write directly to the
-on-chain storage, that is why they have to submit transactions back on-chain to modify the state.
+Remember we mentioned that off-chain workers (or **ocw** for short) cannot write directly to the
+blockchain state? This is why they have to submit transactions back on-chain. Fortunately, there is
+also local storage that persist across runs in off-chain workers. Storage is only local to off-chain
+workers and is not passed within the blockchain network.
 
-Fortunately, there is also a local storage that persist across runs in off-chain workers. Storage is
-local within off-chain workers and not passed within network. Storage of off-chain workers is
-persisted across runs of off-chain workers and blockchain re-organizations.
-
-Off-chain workers are asynchronously run at the end of block import. Since ocws are not limited by how long
-they run, at any single instance there could be multiple ocws running, being initiated by previous
+Off-chain workers are asynchronously run at the end of block import. Since ocws are not limited by how
+long they run, at any single instance there could be multiple ocws running, being initiated by previous
 block imports. See diagram below.
 
 ![More than one off-chain workers at a single instance](../img/multiple-ocws.png)
 
-The storage has a similar API usage as on-chain storage items with `get`, `set`, and `mutate`. `mutate` is
+The storage has a similar API as their on-chain counterpart with `get`, `set`, and `mutate`. `mutate` is
 using a [`compare-and-set`](https://en.wikipedia.org/wiki/Compare-and-swap) pattern. It compares the
 contents of a memory location with a given value and, only if they are the same, modifies the
 contents of that memory location to a new given value. This is done as a single atomic operation.
@@ -30,33 +28,16 @@ value had been updated by another thread in the meantime, the write would fail.
 
 In this recipe, we will add a cache and lock over our previous
 [http fetching example](./http-json.md). If the cached value existed, we will return using the
-cached value. Otherwise we acquire the lock and then fetch from github public API and save it to the
-cache.
+cached value. Otherwise we acquire the lock, fetch from github public API, and save it to the cahce.
 
 ## Setup
 
-First, include the relevant module.
-
-src: `offchain-demo/src/lib.rs`
-
-```rust
-use sp_runtime::{
-	// ...
-	offchain::{
-		storage::StorageValueRef,
-		storage_lock::{StorageLock, BlockAndTime},
-	},
-	// ...
-}
-```
-
-Then, in the `fetch_if_needed()` function, we first define a storage reference used by the off-chain
+In the `fetch_if_needed()` function, we first define a storage reference used by the off-chain
 worker.
 
 ```rust
-fn fetch_if_needed() -> Result<(), Error<T>> {
-
-	// Start off by creating a reference to Local Storage value.
+fn fetch_github_info() -> Result<(), Error<T>> {
+	// Create a reference to Local Storage value.
 	// Since the local storage is common for all offchain workers, it's a good practice
 	// to prepend our entry with the pallet name.
 	let s_info = StorageValueRef::persistent(b"offchain-demo::gh-info");
@@ -64,7 +45,7 @@ fn fetch_if_needed() -> Result<(), Error<T>> {
 }
 ```
 
-We passed in a key as our storage key. As storage keys are namespaced globally, a good practice
+We pass in a key as our storage key. As storage keys are namespaced globally, a good practice
 would be to prepend our pallet name in front of our storage key.
 
 ## Access
@@ -73,10 +54,10 @@ Once we have the storage reference, we can access the storage via `get`, `set`, 
 demonstrate the `mutate` function as the usage of the remaining two functions are pretty
 self-explanatory.
 
-First we fetch to see if github info has been fetched and cached. If yes, we return early.
+We first check if the github info has been fetched and cached.
 
 ```rust
-fn fetch_if_needed() -> Result<(), Error<T>> {
+fn fetch_github_info() -> Result<(), Error<T>> {
 	// ...
 	if let Some(Some(gh_info)) = s_info.get::<GithubInfo>() {
 		// gh-info has already been fetched. Return early.
