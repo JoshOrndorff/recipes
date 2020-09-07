@@ -82,9 +82,9 @@ without the UI.
 Installing the instant seal engine has three dependencies whereas the runtime had only one.
 
 ```toml
-sc-consensus = '0.8.0-rc4'
-sc-consensus-manual-seal = '0.8.0-rc4'
-sp-consensus = '0.8.0-rc4'
+sc-consensus = '0.8.0-rc6'
+sc-consensus-manual-seal = '0.8.0-rc6'
+sp-consensus = '0.8.0-rc6'
 ```
 
 ### The Import Queue
