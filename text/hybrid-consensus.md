@@ -3,10 +3,10 @@
 `nodes/hybrid-consensus`
 [
 	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
-](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fnodes%2Fhybrid-consensus%2Fsrc%2Flib.rs)
+](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fnodes%2Fhybrid-consensus%2Fsrc%2Fservice.rs)
 [
 	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
-](https://github.com/substrate-developer-hub/recipes/tree/master/nodes/hybrid-consensus/src/lib.rs)
+](https://github.com/substrate-developer-hub/recipes/tree/master/nodes/hybrid-consensus/src/service.rs)
 
 This recipe demonstrates a Substrate-based node that employs hybrid consensus. Specifically, it uses
 [Sha3 Proof of Work](./sha3-pow-consensus.md) to dictate block authoring, and the
