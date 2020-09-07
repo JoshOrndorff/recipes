@@ -221,9 +221,9 @@ simply authors a new block whenever a new transaction is available in the queue.
 without the UI.</p>
 <h3><a class="header" href="#the-cargo-dependencies" id="the-cargo-dependencies">The Cargo Dependencies</a></h3>
 <p>Installing the instant seal engine has three dependencies whereas the runtime had only one.</p>
-<pre><code class="language-toml">sc-consensus = '0.8.0-rc4'
-sc-consensus-manual-seal = '0.8.0-rc4'
-sp-consensus = '0.8.0-rc4'
+<pre><code class="language-toml">sc-consensus = '0.8.0-rc6'
+sc-consensus-manual-seal = '0.8.0-rc6'
+sp-consensus = '0.8.0-rc6'
 </code></pre>
 <h3><a class="header" href="#the-import-queue" id="the-import-queue">The Import Queue</a></h3>
 <p>We begin in <code>new_partial</code> by creating a manual-seal import queue. Both instant seal and manual seal use the same import queue. This process is similar to, but simpler than, the
