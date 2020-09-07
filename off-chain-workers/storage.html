@@ -160,23 +160,22 @@
                 <div id="content" class="content">
                     <main>
                         <h1><a class="header" href="#local-storage-in-off-chain-workers" id="local-storage-in-off-chain-workers">Local Storage in Off-chain Workers</a></h1>
-<p><code>pallets/offchain-demo</code>
-<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Foffchain-demo%2Fsrc%2Flib.rs">
+<p><code>pallets/ocw-demo</code>
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%ocw-demo%2Fsrc%2Flib.rs">
 <img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
 </a>
-<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/lib.rs">
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/ocw-demo/src/lib.rs">
 <img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
 </a></p>
-<p>Remember we mentioned that off-chain workers (short for <strong>ocw</strong> below) cannot write directly to the
-on-chain storage, that is why they have to submit transactions back on-chain to modify the state.</p>
-<p>Fortunately, there is also a local storage that persist across runs in off-chain workers. Storage is
-local within off-chain workers and not passed within network. Storage of off-chain workers is
-persisted across runs of off-chain workers and blockchain re-organizations.</p>
-<p>Off-chain workers are asynchronously run at the end of block import. Since ocws are not limited by how long
-they run, at any single instance there could be multiple ocws running, being initiated by previous
+<p>Remember we mentioned that off-chain workers (or <strong>ocw</strong> for short) cannot write directly to the
+blockchain state? This is why they have to submit transactions back on-chain. Fortunately, there is
+also local storage that persist across runs in off-chain workers. Storage is only local to off-chain
+workers and is not passed within the blockchain network.</p>
+<p>Off-chain workers are asynchronously run at the end of block import. Since ocws are not limited by how
+long they run, at any single instance there could be multiple ocws running, being initiated by previous
 block imports. See diagram below.</p>
 <p><img src="../img/multiple-ocws.png" alt="More than one off-chain workers at a single instance" /></p>
-<p>The storage has a similar API usage as on-chain storage items with <code>get</code>, <code>set</code>, and <code>mutate</code>. <code>mutate</code> is
+<p>The storage has a similar API as their on-chain counterpart with <code>get</code>, <code>set</code>, and <code>mutate</code>. <code>mutate</code> is
 using a <a href="https://en.wikipedia.org/wiki/Compare-and-swap"><code>compare-and-set</code></a> pattern. It compares the
 contents of a memory location with a given value and, only if they are the same, modifies the
 contents of that memory location to a new given value. This is done as a single atomic operation.
@@ -184,32 +183,15 @@ The atomicity guarantees that the new value is calculated based on up-to-date in
 value had been updated by another thread in the meantime, the write would fail.</p>
 <p>In this recipe, we will add a cache and lock over our previous
 <a href="./http-json.html">http fetching example</a>. If the cached value existed, we will return using the
-cached value. Otherwise we acquire the lock and then fetch from github public API and save it to the
-cache.</p>
+cached value. Otherwise we acquire the lock, fetch from github public API, and save it to the cahce.</p>
 <h2><a class="header" href="#setup" id="setup">Setup</a></h2>
-<p>First, include the relevant module.</p>
-<p>src: <code>offchain-demo/src/lib.rs</code></p>
-<pre><pre class="playground"><code class="language-rust">
-<span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>use sp_runtime::{
-	// ...
-	offchain::{
-		storage::StorageValueRef,
-		storage_lock::{StorageLock, BlockAndTime},
-	},
-	// ...
-}
-<span class="boring">}
-</span></code></pre></pre>
-<p>Then, in the <code>fetch_if_needed()</code> function, we first define a storage reference used by the off-chain
+<p>In the <code>fetch_if_needed()</code> function, we first define a storage reference used by the off-chain
 worker.</p>
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn fetch_if_needed() -&gt; Result&lt;(), Error&lt;T&gt;&gt; {
-
-	// Start off by creating a reference to Local Storage value.
+</span>fn fetch_github_info() -&gt; Result&lt;(), Error&lt;T&gt;&gt; {
+	// Create a reference to Local Storage value.
 	// Since the local storage is common for all offchain workers, it's a good practice
 	// to prepend our entry with the pallet name.
 	let s_info = StorageValueRef::persistent(b&quot;offchain-demo::gh-info&quot;);
@@ -217,17 +199,17 @@ worker.</p>
 }
 <span class="boring">}
 </span></code></pre></pre>
-<p>We passed in a key as our storage key. As storage keys are namespaced globally, a good practice
+<p>We pass in a key as our storage key. As storage keys are namespaced globally, a good practice
 would be to prepend our pallet name in front of our storage key.</p>
 <h2><a class="header" href="#access" id="access">Access</a></h2>
 <p>Once we have the storage reference, we can access the storage via <code>get</code>, <code>set</code>, and <code>mutate</code>. Let's
 demonstrate the <code>mutate</code> function as the usage of the remaining two functions are pretty
 self-explanatory.</p>
-<p>First we fetch to see if github info has been fetched and cached. If yes, we return early.</p>
+<p>We first check if the github info has been fetched and cached.</p>
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn fetch_if_needed() -&gt; Result&lt;(), Error&lt;T&gt;&gt; {
+</span>fn fetch_github_info() -&gt; Result&lt;(), Error&lt;T&gt;&gt; {
 	// ...
 	if let Some(Some(gh_info)) = s_info.get::&lt;GithubInfo&gt;() {
 		// gh-info has already been fetched. Return early.
