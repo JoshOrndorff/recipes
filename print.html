@@ -4005,10 +4005,10 @@ maps any errors that may have occurred when using the API.</p>
 <p>The &quot;outer node&quot; is the part of a Substrate chain that is not in the runtime. It handles networking, gossip, transaction queueing, and consensus. Learn about it in this section of the cookbook.</p>
 <h1><a class="header" href="#kitchen-node-instant-seal" id="kitchen-node-instant-seal">Kitchen Node (Instant Seal)</a></h1>
 <p><code>nodes/kitchen-node</code>
-<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fnodes%2Fkitchen-node%2Fsrc%2Flib.rs">
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fnodes%2Fkitchen-node%2Fsrc%2Fservice.rs">
 <img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
 </a>
-<a href="https://github.com/substrate-developer-hub/recipes/tree/master/nodes/kitchen-node/src/lib.rs">
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/nodes/kitchen-node/src/service.rs">
 <img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
 </a></p>
 <p>This recipe demonstrates a general purpose Substrate node that supports most of the recipes'
@@ -4106,10 +4106,10 @@ responsible for creating proposing blocks in the chain.</p>
 <p>The instant seal consensus engine used in this node is built on top of a similar manual seal engine. Manual seal listens for commands to come over the RPC instructing it to author blocks. To see this engine in use, check out the <a href="./custom-rpc.html">RPC node recipe</a>.</p>
 <h1><a class="header" href="#custom-rpcs" id="custom-rpcs">Custom RPCs</a></h1>
 <p><code>nodes/custom-rpc</code>
-<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fnodes%2Frpc-node%2Fsrc%2Flib.rs">
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fnodes%2Frpc-node%2Fsrc%2Fservice.rs">
 <img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
 </a>
-<a href="https://github.com/substrate-developer-hub/recipes/tree/master/nodes/rpc-node/src/lib.rs">
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/nodes/rpc-node/src/service.rs">
 <img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
 </a></p>
 <p><code>runtimes/api-runtime</code>
@@ -4418,10 +4418,10 @@ second provided RPC call, <code>engine_finalizeBlock</code>.</p>
 </ul>
 <h1><a class="header" href="#basic-proof-of-work" id="basic-proof-of-work">Basic Proof of Work</a></h1>
 <p><code>nodes/basic-pow</code>
-<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fnodes%2Fbasic-pow%2Fsrc%2Flib.rs">
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fnodes%2Fbasic-pow%2Fsrc%2Fservice.rs">
 <img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
 </a>
-<a href="https://github.com/substrate-developer-hub/recipes/tree/master/nodes/basic-pow/src/lib.rs">
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/nodes/basic-pow/src/service.rs">
 <img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
 </a></p>
 <p>The <code>basic-pow</code> node demonstrates how to wire up a custom consensus engine into the Substrate
@@ -4573,10 +4573,10 @@ means a block is never truly finalized and can always be reverted. The further b
 head a block is, the less likely it is going to be reverted.</p>
 <h1><a class="header" href="#hybrid-consensus" id="hybrid-consensus">Hybrid Consensus</a></h1>
 <p><code>nodes/hybrid-consensus</code>
-<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fnodes%2Fhybrid-consensus%2Fsrc%2Flib.rs">
+<a href="https://playground-staging.substrate.dev/?deploy=recipes&amp;files=%2Fhome%2Fsubstrate%2Fworkspace%2Fnodes%2Fhybrid-consensus%2Fsrc%2Fservice.rs">
 <img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt="Try on playground" />
 </a>
-<a href="https://github.com/substrate-developer-hub/recipes/tree/master/nodes/hybrid-consensus/src/lib.rs">
+<a href="https://github.com/substrate-developer-hub/recipes/tree/master/nodes/hybrid-consensus/src/service.rs">
 <img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt="View on GitHub" />
 </a></p>
 <p>This recipe demonstrates a Substrate-based node that employs hybrid consensus. Specifically, it uses
