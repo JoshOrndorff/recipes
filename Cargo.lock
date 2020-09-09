@@ -1388,9 +1388,9 @@ checksum = "4bd3bdaaf0a72155260a1c098989b60db1cbb22d6a628e64f16237aa4da93cc7"
 
 [[package]]
 name = "fdlimit"
-version = "0.1.4"
+version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0da54a593b34c71b889ee45f5b5bb900c74148c5f7f8c6a9479ee7899f69603c"
+checksum = "47bc6e222b8349b2bd0acb85a1d16d22852376b3ceed2a7f09c2692c3d8a78d0"
 dependencies = [
  "libc",
 ]
@@ -1465,8 +1465,7 @@ checksum = "3f9eec918d3f24069decb9af1554cad7c880e2da24a9afd88aca000531ab82c1"
 [[package]]
 name = "fork-tree"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d12a63160eac0a00a1dba821291465e7c4bdaeee489af2912dc3d4513a9d1c34"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "parity-scale-codec",
 ]
@@ -1474,8 +1473,7 @@ dependencies = [
 [[package]]
 name = "frame-benchmarking"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d7d92ab79f0c46fe4347d5073a0e331d935ca8d8bde0d001c8938900716685c3"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -1493,8 +1491,7 @@ dependencies = [
 [[package]]
 name = "frame-executive"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c7a0cd96943af326c968548906a3968d573c7c6ddfa645c4bd2ed8168c1b6c68"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -1509,8 +1506,7 @@ dependencies = [
 [[package]]
 name = "frame-metadata"
 version = "11.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "69b82bf25442501c9455fc60090d606e5a36cc6e6953a7afee87fcab4fe2865b"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "parity-scale-codec",
  "serde",
@@ -1521,8 +1517,7 @@ dependencies = [
 [[package]]
 name = "frame-support"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "611cb2bafdb3aa6d77e35153ddf3da26203481b294959e00491e5ba6609ef3a1"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "bitmask",
  "frame-metadata",
@@ -1547,8 +1542,7 @@ dependencies = [
 [[package]]
 name = "frame-support-procedural"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "961165a915c5a0bcbb3976791c4e857639d773474336f9484aee21dfb2268b66"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "frame-support-procedural-tools",
  "proc-macro2 1.0.19",
@@ -1559,8 +1553,7 @@ dependencies = [
 [[package]]
 name = "frame-support-procedural-tools"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4855863432cfb36407e2f18cd1e189cf70ee3259ed137409e6076fa8fd9bc92b"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "frame-support-procedural-tools-derive",
  "proc-macro-crate",
@@ -1572,8 +1565,7 @@ dependencies = [
 [[package]]
 name = "frame-support-procedural-tools-derive"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8e41f45abe08fa7bb27c38ed4141bdb24dfe9604b024726cfc931b12303de9a2"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "proc-macro2 1.0.19",
  "quote 1.0.7",
@@ -1583,8 +1575,7 @@ dependencies = [
 [[package]]
 name = "frame-system"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "646ced951522d31f4bda819a2c87ea7feac3abcb1b35fba38b1ecc52fc661e75"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "frame-support",
  "impl-trait-for-tuples",
@@ -2067,22 +2058,15 @@ checksum = "644f9158b2f133fd50f5fb3242878846d9eb792e445c893805ff0e3824006e35"
 
 [[package]]
 name = "hex-literal"
-version = "0.2.1"
+version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "961de220ec9a91af2e1e5bd80d02109155695e516771762381ef8581317066e0"
-dependencies = [
- "hex-literal-impl",
- "proc-macro-hack",
-]
+checksum = "5af1f635ef1bc545d78392b136bfe1c9809e029023c84a3638a864a10b8819c8"
 
 [[package]]
-name = "hex-literal-impl"
-version = "0.2.2"
+name = "hex_fmt"
+version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "853f769599eb31de176303197b7ba4973299c38c7a7604a6bc88c3eef05b9b46"
-dependencies = [
- "proc-macro-hack",
-]
+checksum = "b07f60793ff0a4d9cef0f18e63b5357e06209987153a64648c972c1e5aff336f"
 
 [[package]]
 name = "hmac"
@@ -2305,15 +2289,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1be51a921b067b0eaca2fad532d9400041561aa922221cc65f95a85641c6bf53"
 dependencies = [
  "parity-scale-codec",
-]
-
-[[package]]
-name = "impl-serde"
-version = "0.2.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "58e3cae7e99c7ff5a995da2cf78dd0a5383740eda71d98cf7b1910c301ac69b8"
-dependencies = [
- "serde",
 ]
 
 [[package]]
@@ -2701,10 +2676,11 @@ checksum = "c7d73b3f436185384286bd8098d17ec07c9a7d2388a6599f824d8502b529702a"
 
 [[package]]
 name = "libp2p"
-version = "0.22.0"
+version = "0.24.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0306a49ee6a89468f96089906f36b0eef82c988dcfc8acf3e2dcd6ad1c859f85"
+checksum = "76c101edbb9c06955fd4085b77d2abc31cf3650134d77068b35c44967756ada8"
 dependencies = [
+ "atomic",
  "bytes 0.5.6",
  "futures 0.3.5",
  "lazy_static",
@@ -2718,7 +2694,7 @@ dependencies = [
  "libp2p-kad",
  "libp2p-mdns",
  "libp2p-mplex",
- "libp2p-noise 0.21.0",
+ "libp2p-noise",
  "libp2p-ping",
  "libp2p-plaintext",
  "libp2p-pnet",
@@ -2739,42 +2715,10 @@ dependencies = [
 ]
 
 [[package]]
-name = "libp2p"
-version = "0.23.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b1ebb6c031584a5af181fe3a1e4b074af5d0b1a3b31663200f0251f4bcff6b5c"
-dependencies = [
- "atomic",
- "bytes 0.5.6",
- "futures 0.3.5",
- "lazy_static",
- "libp2p-core",
- "libp2p-core-derive",
- "libp2p-dns",
- "libp2p-identify",
- "libp2p-kad",
- "libp2p-mdns",
- "libp2p-mplex",
- "libp2p-noise 0.22.0",
- "libp2p-ping",
- "libp2p-swarm",
- "libp2p-tcp",
- "libp2p-wasm-ext",
- "libp2p-websocket",
- "libp2p-yamux",
- "multihash",
- "parity-multiaddr",
- "parking_lot 0.10.2",
- "pin-project",
- "smallvec 1.4.2",
- "wasm-timer",
-]
-
-[[package]]
 name = "libp2p-core"
-version = "0.20.1"
+version = "0.21.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6a694fd76d7c33a45a0e6e1525e9b9b5d11127c9c94e560ac0f8abba54ed80af"
+checksum = "17cea54ea4a846a7c47e4347db0fc7a4129dcb0fb57f07f57e473820edbfcbde"
 dependencies = [
  "asn1_der",
  "bs58",
@@ -2816,9 +2760,9 @@ dependencies = [
 
 [[package]]
 name = "libp2p-deflate"
-version = "0.20.0"
+version = "0.21.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "abeff37fa533fead23fc71b14ed0a2aced36c0c65c3d0078aff07821fb71029e"
+checksum = "bc6174d6addc9cc5fd84af7099480774035dd1a7cdf48dd31b23dea45cf57638"
 dependencies = [
  "flate2",
  "futures 0.3.5",
@@ -2827,9 +2771,9 @@ dependencies = [
 
 [[package]]
 name = "libp2p-dns"
-version = "0.20.0"
+version = "0.21.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f751924b6b98e350005e0b87a822beb246792a3fb878c684e088f866158120ac"
+checksum = "fce8769cfe677a567d2677dc02a9e5be27a24acf1ff78a59cef425caae009a6a"
 dependencies = [
  "futures 0.3.5",
  "libp2p-core",
@@ -2838,9 +2782,9 @@ dependencies = [
 
 [[package]]
 name = "libp2p-floodsub"
-version = "0.20.0"
+version = "0.21.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "02d4f310a02441b681075037ffb41649ee8836619559311b801ef3d5cdbe14cf"
+checksum = "2f2342965ac7ea4b85f4df5288089796421f9297ba4020dc9692f4ef728590dc"
 dependencies = [
  "cuckoofilter",
  "fnv",
@@ -2855,9 +2799,9 @@ dependencies = [
 
 [[package]]
 name = "libp2p-gossipsub"
-version = "0.20.0"
+version = "0.21.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a70f76b6c53ae9c97c234498c799802e43f91766bcf4a2a1f94f9339617d713b"
+checksum = "0828b4f0c76c2edc68da574e391ce981bac5316d65785cddfe8c273d4c9bd4bb"
 dependencies = [
  "base64 0.11.0",
  "byteorder 1.3.4",
@@ -2865,10 +2809,11 @@ dependencies = [
  "fnv",
  "futures 0.3.5",
  "futures_codec",
+ "hex_fmt",
  "libp2p-core",
  "libp2p-swarm",
  "log",
- "lru",
+ "lru_time_cache",
  "prost",
  "prost-build",
  "rand 0.7.3",
@@ -2880,9 +2825,9 @@ dependencies = [
 
 [[package]]
 name = "libp2p-identify"
-version = "0.20.0"
+version = "0.21.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "912c00a7bf67e0e765daf0cc37e08f675ea26aba3d6d1fbfaee81f19a4c23049"
+checksum = "41efcb5b521b65d2c45432a244ce6427cdd3649228cd192f397d1fa67682aef2"
 dependencies = [
  "futures 0.3.5",
  "libp2p-core",
@@ -2896,9 +2841,9 @@ dependencies = [
 
 [[package]]
 name = "libp2p-kad"
-version = "0.21.0"
+version = "0.22.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "44ed3a4c8111c570ab2bffb30c6353178d7603ce3787e3c5f2493c8d3d16d1f0"
+checksum = "ca9b4ccc868863317af3f65eb241811ceadd971d133183040140f5496037e0ae"
 dependencies = [
  "arrayvec 0.5.1",
  "bytes 0.5.6",
@@ -2923,9 +2868,9 @@ dependencies = [
 
 [[package]]
 name = "libp2p-mdns"
-version = "0.20.0"
+version = "0.21.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cd004c668160fd922f7268b2cd1e4550ff69165d9c744e9eb5770086eb753d02"
+checksum = "d4fe5614c2c5af74ef5870aad0fce73c9e4707716c4ee7cdf06cf9a0376d3815"
 dependencies = [
  "async-std",
  "data-encoding",
@@ -2945,9 +2890,9 @@ dependencies = [
 
 [[package]]
 name = "libp2p-mplex"
-version = "0.20.0"
+version = "0.21.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "14ae0ffacd30f073f96cd518b2c9cd2cb18ac27c3d136a4b23cf1af99f33e541"
+checksum = "df9e79541e71590846f773efce1b6d0538804992ee54ff2f407e05d63a9ddc23"
 dependencies = [
  "bytes 0.5.6",
  "fnv",
@@ -2961,31 +2906,9 @@ dependencies = [
 
 [[package]]
 name = "libp2p-noise"
-version = "0.21.0"
+version = "0.23.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8f353f8966bbaaf7456535fffd3f366f153148773a0cf04b2ec3860955cb720e"
-dependencies = [
- "bytes 0.5.6",
- "curve25519-dalek 2.1.0",
- "futures 0.3.5",
- "lazy_static",
- "libp2p-core",
- "log",
- "prost",
- "prost-build",
- "rand 0.7.3",
- "sha2 0.8.2",
- "snow",
- "static_assertions",
- "x25519-dalek",
- "zeroize",
-]
-
-[[package]]
-name = "libp2p-noise"
-version = "0.22.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1e594f2de0c23c2b7ad14802c991a2e68e95315c6a6c7715e53801506f20135d"
+checksum = "0beba6459d06153f5f8e23da3df1d2183798b1f457c7c9468ff99760bcbcc60b"
 dependencies = [
  "bytes 0.5.6",
  "curve25519-dalek 2.1.0",
@@ -3005,9 +2928,9 @@ dependencies = [
 
 [[package]]
 name = "libp2p-ping"
-version = "0.20.0"
+version = "0.21.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "70130cf130e4ba6dc177366e72dd9f86f9e3588fa1a0c4145247e676f16affad"
+checksum = "670261ef938567b614746b078e049b03b55617538a8d415071c518f97532d043"
 dependencies = [
  "futures 0.3.5",
  "libp2p-core",
@@ -3020,9 +2943,9 @@ dependencies = [
 
 [[package]]
 name = "libp2p-plaintext"
-version = "0.20.0"
+version = "0.21.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "53f0308a97f6fdd37a2bc388070e471c3ce9d92aa45c99d75c87c2dc5d5cac96"
+checksum = "b3a61dfd53d1264ddff1206e4827193efaa72bab27782dfcd63c0dec120a1875"
 dependencies = [
  "bytes 0.5.6",
  "futures 0.3.5",
@@ -3052,23 +2975,26 @@ dependencies = [
 
 [[package]]
 name = "libp2p-request-response"
-version = "0.1.1"
+version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6f48682b48a96545a323edd150c1d64fc1e250240bba02866e9f902e3dc032a9"
+checksum = "4af0de0e56a11d46c5191a61019733b5618dc955c0a36f82866bb6d5d81a7f8f"
 dependencies = [
  "async-trait",
  "futures 0.3.5",
  "libp2p-core",
  "libp2p-swarm",
+ "log",
+ "lru 0.6.0",
+ "rand 0.7.3",
  "smallvec 1.4.2",
  "wasm-timer",
 ]
 
 [[package]]
 name = "libp2p-secio"
-version = "0.20.0"
+version = "0.21.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5ff43513c383f7cdab2736eb98465fc4c5dd5d1988df89749dc8a68950349d56"
+checksum = "a04b320cc0394554e8d0adca21f4efd9f8c2da4930211d92e411a19a4dfd769e"
 dependencies = [
  "aes-ctr",
  "ctr",
@@ -3096,9 +3022,9 @@ dependencies = [
 
 [[package]]
 name = "libp2p-swarm"
-version = "0.20.1"
+version = "0.21.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f88d5e2a090a2aadf042cd33484e2f015c6dab212567406a59deece5dedbd133"
+checksum = "57e4a7e64156e9d1a2daae36b5d791f057b9c53c9364a8e75f7f9848b54f9d68"
 dependencies = [
  "futures 0.3.5",
  "libp2p-core",
@@ -3111,9 +3037,9 @@ dependencies = [
 
 [[package]]
 name = "libp2p-tcp"
-version = "0.20.0"
+version = "0.21.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9b1fa2bbad054020cb875546a577a66a65a5bf42eff55ed5265f92ffee3cc052"
+checksum = "f0f65400ccfbbf9a356733bceca6c519c9db0deb5fbcc0b81f89837c4cd53997"
 dependencies = [
  "async-std",
  "futures 0.3.5",
@@ -3127,9 +3053,9 @@ dependencies = [
 
 [[package]]
 name = "libp2p-uds"
-version = "0.20.0"
+version = "0.21.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b9db9fce9e3588c3118475d9ca761c5c133b639a624a7341e2a61e4b28c376b8"
+checksum = "95bc8b0ca1dda4cccb1bb156d47a32e45cfa447ef18f737209f014a63f94a4a2"
 dependencies = [
  "async-std",
  "futures 0.3.5",
@@ -3139,9 +3065,9 @@ dependencies = [
 
 [[package]]
 name = "libp2p-wasm-ext"
-version = "0.20.1"
+version = "0.21.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0feb99e32fea20ffb1bbf56a6fb2614bff7325ff44a515728385170b3420d2c3"
+checksum = "0f2f7b06d80d036ac5763a811185b7fe6951ad71c00544b17cc378a9069bb7c2"
 dependencies = [
  "futures 0.3.5",
  "js-sys",
@@ -3153,9 +3079,9 @@ dependencies = [
 
 [[package]]
 name = "libp2p-websocket"
-version = "0.21.1"
+version = "0.22.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "046a5201f6e471f22b22b394e4d084269ed1e28cf7300f7b49874385db84c7bd"
+checksum = "a5b350db65cf0a7c83a539a596ea261caae1552c0df2245df0f916ed2fd04572"
 dependencies = [
  "async-tls",
  "either",
@@ -3173,9 +3099,9 @@ dependencies = [
 
 [[package]]
 name = "libp2p-yamux"
-version = "0.20.0"
+version = "0.21.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "46ae9bf2f7d8a4be9c7e9b61df9de9dc1bd66419d669098f22f81f8d9571029a"
+checksum = "b3969ead4ce530efb6f304623924245caf410f3b0b0139bd7007f205933788aa"
 dependencies = [
  "futures 0.3.5",
  "libp2p-core",
@@ -3305,6 +3231,21 @@ checksum = "0609345ddee5badacf857d4f547e0e5a2e987db77085c24cd887f73573a04237"
 dependencies = [
  "hashbrown 0.6.3",
 ]
+
+[[package]]
+name = "lru"
+version = "0.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "111b945ac72ec09eb7bc62a0fbdc3cc6e80555a7245f52a69d3921a75b53b153"
+dependencies = [
+ "hashbrown 0.8.2",
+]
+
+[[package]]
+name = "lru_time_cache"
+version = "0.10.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "adb241df5c4caeb888755363fc95f8a896618dc0d435e9e775f7930cb099beab"
 
 [[package]]
 name = "map-set"
@@ -3800,8 +3741,7 @@ dependencies = [
 [[package]]
 name = "pallet-authorship"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5fdb8508be1e72614b2606837a3fba0b027510f14aba3c8a9c7de4afa86065fd"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -3816,8 +3756,7 @@ dependencies = [
 [[package]]
 name = "pallet-balances"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ec78c836f1481626270edfa445c612ba8e3aa6601f418f31a9aa815ae3ab6584"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "frame-benchmarking",
  "frame-support",
@@ -3831,8 +3770,7 @@ dependencies = [
 [[package]]
 name = "pallet-finality-tracker"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "25af0e96ea661bd4cf5022e3f77469be78a8eaf287d93c5b1f44248ebf79efd5"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -3848,8 +3786,7 @@ dependencies = [
 [[package]]
 name = "pallet-generic-asset"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "89d933e3b6c10aff59980a27c08605b354cc252b87e23b374a484c0099deafcd"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -3862,8 +3799,7 @@ dependencies = [
 [[package]]
 name = "pallet-grandpa"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "87d9fede55423af51a23dbdc833b0d724d1c256c74ed77806a8cf2848c0cfec1"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "frame-benchmarking",
  "frame-support",
@@ -3885,8 +3821,7 @@ dependencies = [
 [[package]]
 name = "pallet-indices"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f04c289c77ea2258f27f2460683cd3151562e95b3dc8bbb1fa5a7c446f941b6c"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -3902,8 +3837,7 @@ dependencies = [
 [[package]]
 name = "pallet-randomness-collective-flip"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "65bfcc654b88d8e5e726bd617b14567210152d33da5c1acf661d3c4d90fd11d2"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -3916,8 +3850,7 @@ dependencies = [
 [[package]]
 name = "pallet-session"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fd352daf0e6d775b07edf90162e0af68875cc9d2d6c31bb401a120e718f016e3"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -3937,8 +3870,7 @@ dependencies = [
 [[package]]
 name = "pallet-sudo"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b925ea02f36e558d0ff08becce040b11ddf319701fe5125935fd98ea6ab16bee"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -3952,8 +3884,7 @@ dependencies = [
 [[package]]
 name = "pallet-timestamp"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c8678ecd7743bc05eae24ac0c115b9c2893fdeee0a880fbd6263ee4c56ead2ce"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "frame-benchmarking",
  "frame-support",
@@ -3970,8 +3901,7 @@ dependencies = [
 [[package]]
 name = "pallet-transaction-payment"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "90468edc32e247eb6c34b4f075c9a1da6ffdc289be9e51241a7748502e1e2f89"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -3988,8 +3918,7 @@ dependencies = [
 [[package]]
 name = "pallet-transaction-payment-rpc-runtime-api"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c09ab6ee960dcd6dc06cf4e549bbbafc1ab5dcef5a6d491a14b8fbdcf8ddfe04"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "frame-support",
  "parity-scale-codec",
@@ -4372,7 +4301,7 @@ checksum = "c55c21c64d0eaa4d7ed885d959ef2d62d9e488c27c0e02d9aa5ce6c877b7d5f8"
 dependencies = [
  "fixed-hash",
  "impl-codec",
- "impl-serde 0.3.1",
+ "impl-serde",
  "uint",
 ]
 
@@ -4441,14 +4370,15 @@ dependencies = [
 
 [[package]]
 name = "prometheus"
-version = "0.9.0"
+version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dd0ced56dee39a6e960c15c74dc48849d614586db2eaada6497477af7c7811cd"
+checksum = "30d70cf4412832bcac9cffe27906f4a66e450d323525e977168c70d1b36120ae"
 dependencies = [
  "cfg-if",
  "fnv",
  "lazy_static",
- "spin",
+ "parking_lot 0.11.0",
+ "regex",
  "thiserror",
 ]
 
@@ -5110,8 +5040,7 @@ dependencies = [
 [[package]]
 name = "sc-basic-authorship"
 version = "0.8.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8a46695a66db86ce460cffd11a6aec080e00502e9372facd26b2b3517e0fb95f"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "futures 0.3.5",
  "futures-timer 3.0.2",
@@ -5135,8 +5064,7 @@ dependencies = [
 [[package]]
 name = "sc-block-builder"
 version = "0.8.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "82383c69e2f293e6cd3b3e5ad3665b5d61a700a4478a31e0cbdcffdea10951a9"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "parity-scale-codec",
  "sc-client-api",
@@ -5153,10 +5081,10 @@ dependencies = [
 [[package]]
 name = "sc-chain-spec"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0c6a3b2b731b95934560c5368769ba0450b372a0db04d5d80ab91a85d5be6d88"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "impl-trait-for-tuples",
+ "parity-scale-codec",
  "sc-chain-spec-derive",
  "sc-network",
  "sc-telemetry",
@@ -5170,8 +5098,7 @@ dependencies = [
 [[package]]
 name = "sc-chain-spec-derive"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a7fd27254a972011700e661644588c836f8cf47bd5e4692e55590fcf31c7a86d"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "proc-macro-crate",
  "proc-macro2 1.0.19",
@@ -5182,8 +5109,7 @@ dependencies = [
 [[package]]
 name = "sc-cli"
 version = "0.8.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "efa4f8b84f28478c4e3ae2e96857b289a0fd892884520d2c484ceefcd8aa959f"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "ansi_term 0.12.1",
  "atty",
@@ -5195,7 +5121,7 @@ dependencies = [
  "futures 0.3.5",
  "hex",
  "lazy_static",
- "libp2p 0.22.0",
+ "libp2p",
  "log",
  "names",
  "nix",
@@ -5230,8 +5156,7 @@ dependencies = [
 [[package]]
 name = "sc-client-api"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f6ad0e67083f458010898ba79c6863ce841c8d55b3c8c507f9a8afae7a15a251"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "derive_more 0.99.9",
  "fnv",
@@ -5267,8 +5192,7 @@ dependencies = [
 [[package]]
 name = "sc-client-db"
 version = "0.8.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1073163402675b042550121a2e1cb7db98d51849abc3ebc871fd36e707ed0871"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "blake2-rfc",
  "hash-db",
@@ -5298,8 +5222,7 @@ dependencies = [
 [[package]]
 name = "sc-consensus"
 version = "0.8.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "badd279fbfa94188cb49446eb9a4112fc7d3212f20faea3a8a00662341243f50"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "sc-client-api",
  "sp-blockchain",
@@ -5310,8 +5233,7 @@ dependencies = [
 [[package]]
 name = "sc-consensus-manual-seal"
 version = "0.8.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c91975f31c30b3d54a704a5b3d1e954b0d0008d40a3602ee2eefe1c2da86ee78"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "assert_matches",
  "derive_more 0.99.9",
@@ -5331,13 +5253,13 @@ dependencies = [
  "sp-runtime",
  "sp-transaction-pool",
  "substrate-prometheus-endpoint",
+ "tokio 0.2.22",
 ]
 
 [[package]]
 name = "sc-consensus-pow"
 version = "0.8.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "660ac58a1fe308b7044a25a3ab48cb1f060514cc73640d0807c1cd204efd3e92"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "derive_more 0.99.9",
  "futures 0.3.5",
@@ -5359,8 +5281,7 @@ dependencies = [
 [[package]]
 name = "sc-executor"
 version = "0.8.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "99435a9edd886f5f30be5d8ab0b328b9d1bd06e0949896640cc6311b3c2bd58d"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "derive_more 0.99.9",
  "lazy_static",
@@ -5387,8 +5308,7 @@ dependencies = [
 [[package]]
 name = "sc-executor-common"
 version = "0.8.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6ff18805f4cdfb46dbaab60765a87d3e3c25ae17032e4b2b807f7844f85ec5f9"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "derive_more 0.99.9",
  "log",
@@ -5405,8 +5325,7 @@ dependencies = [
 [[package]]
 name = "sc-executor-wasmi"
 version = "0.8.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ec579a2de5717d393971b53f7db23b41da1f5da63b175b6e2c14e8e2c373a9b8"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "log",
  "parity-scale-codec",
@@ -5421,8 +5340,7 @@ dependencies = [
 [[package]]
 name = "sc-finality-grandpa"
 version = "0.8.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4f7511cbb2978ac3513e7ba33983398f322e235cab662bbf7661a5bd3fcadfea"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "derive_more 0.99.9",
  "finality-grandpa",
@@ -5459,8 +5377,7 @@ dependencies = [
 [[package]]
 name = "sc-informant"
 version = "0.8.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "698b29fd10438f00eaa393ec725ae33b6e19162471c429ea69236d766bf3292e"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "ansi_term 0.12.1",
  "futures 0.3.5",
@@ -5478,8 +5395,7 @@ dependencies = [
 [[package]]
 name = "sc-keystore"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "528afd2d984ab1bc4667fb60b5d2fbd685bf286145f630be7bc8cdbff8d1858f"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "derive_more 0.99.9",
  "hex",
@@ -5495,8 +5411,7 @@ dependencies = [
 [[package]]
 name = "sc-light"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2703ff0aff2636c45b0249cc144ee7f131b97d239f6696fc545ba16e295a1386"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "hash-db",
  "lazy_static",
@@ -5515,10 +5430,10 @@ dependencies = [
 [[package]]
 name = "sc-network"
 version = "0.8.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "94cc74f4df8b0ab2c71d177c7bb1994fc3719276b8d9051b386d123d2f328ac9"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "async-std",
+ "async-trait",
  "bitflags",
  "bs58",
  "bytes 0.5.6",
@@ -5532,11 +5447,11 @@ dependencies = [
  "futures_codec",
  "hex",
  "ip_network",
- "libp2p 0.23.0",
+ "libp2p",
  "linked-hash-map",
  "linked_hash_set",
  "log",
- "lru",
+ "lru 0.4.3",
  "nohash-hasher",
  "parity-scale-codec",
  "parking_lot 0.10.2",
@@ -5569,14 +5484,13 @@ dependencies = [
 [[package]]
 name = "sc-network-gossip"
 version = "0.8.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "33fd39e7a5216f2d06569c0a341945191b3e15d51aebf77542429f36db5759ba"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "futures 0.3.5",
  "futures-timer 3.0.2",
- "libp2p 0.23.0",
+ "libp2p",
  "log",
- "lru",
+ "lru 0.4.3",
  "sc-network",
  "sp-runtime",
  "wasm-timer",
@@ -5585,8 +5499,7 @@ dependencies = [
 [[package]]
 name = "sc-offchain"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "afdeeeb906e69fed938acfd4772295f7007ee7c253425359889a61916e1e2c43"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "bytes 0.5.6",
  "fnv",
@@ -5613,11 +5526,10 @@ dependencies = [
 [[package]]
 name = "sc-peerset"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a6cd0f82759563667f55b43bc3242fe0822516919a639b1deb3501d6600a2a52"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "futures 0.3.5",
- "libp2p 0.23.0",
+ "libp2p",
  "log",
  "serde_json 1.0.57",
  "sp-utils",
@@ -5627,8 +5539,7 @@ dependencies = [
 [[package]]
 name = "sc-proposer-metrics"
 version = "0.8.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5c5fcf2e03848137feb140c3e718f1787ec2a41dfc11ec77eebc73e22e3fb579"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "log",
  "substrate-prometheus-endpoint",
@@ -5637,8 +5548,7 @@ dependencies = [
 [[package]]
 name = "sc-rpc"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b5e6de8c678e509abd67706c46110f47d7f17f8c86d2ae03c2d34dd1bf0af1ee"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "futures 0.3.5",
  "hash-db",
@@ -5670,8 +5580,7 @@ dependencies = [
 [[package]]
 name = "sc-rpc-api"
 version = "0.8.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9eee9cecea38a2052d41bc9f62a68ece2cb7a9f1b29c156bb49d77de1e7cb95a"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "derive_more 0.99.9",
  "futures 0.3.5",
@@ -5695,8 +5604,7 @@ dependencies = [
 [[package]]
 name = "sc-rpc-server"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e5f45d489660ccfc6ab172c6b00520dcfa1468d6abaa8cd599521df25b7af0b6"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "jsonrpc-core",
  "jsonrpc-http-server",
@@ -5712,8 +5620,7 @@ dependencies = [
 [[package]]
 name = "sc-service"
 version = "0.8.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4bb40d43fed89449bac132f2d6e3a477bb8df1053797d8bb30d22f6a2db56816"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "derive_more 0.99.9",
  "directories",
@@ -5774,8 +5681,7 @@ dependencies = [
 [[package]]
 name = "sc-state-db"
 version = "0.8.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "24c85bf121dc25232c82cd5aa905084a14e7aadbd650bc9a3334894728026369"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "log",
  "parity-scale-codec",
@@ -5789,12 +5695,11 @@ dependencies = [
 [[package]]
 name = "sc-telemetry"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "690fb181755b30db7112f086ab815fdcb0ef273b703fc50d89e8e9930fb76ac3"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "futures 0.3.5",
  "futures-timer 3.0.2",
- "libp2p 0.23.0",
+ "libp2p",
  "log",
  "parking_lot 0.10.2",
  "pin-project",
@@ -5811,8 +5716,7 @@ dependencies = [
 [[package]]
 name = "sc-tracing"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e01e6f4e38e0d0daf42df5abf7b908c248314fdf7a5ca2a87356bdfcce2d2fc8"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "erased-serde",
  "log",
@@ -5830,8 +5734,7 @@ dependencies = [
 [[package]]
 name = "sc-transaction-graph"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9a4b349262cc33587bd53de7331f7ccd8bd2f29b7da1d0fab6e426cf6246559b"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "derive_more 0.99.9",
  "futures 0.3.5",
@@ -5852,8 +5755,7 @@ dependencies = [
 [[package]]
 name = "sc-transaction-pool"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6a885d3dda5239eb7c8c49b2beb3ff3cfaf771418450a302c0fb143ba6b242b8"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "derive_more 0.99.9",
  "futures 0.3.5",
@@ -6305,8 +6207,7 @@ dependencies = [
 [[package]]
 name = "sp-allocator"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "16378a5000d98a01b87fa8a40a5bf02cc483545cbae8125c456954330eee78e4"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "derive_more 0.99.9",
  "log",
@@ -6318,8 +6219,7 @@ dependencies = [
 [[package]]
 name = "sp-api"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7467f7e20ded41f54cffec173588419dc9c3efb7fb1e73a4541a66774545f9cb"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "hash-db",
  "parity-scale-codec",
@@ -6334,8 +6234,7 @@ dependencies = [
 [[package]]
 name = "sp-api-proc-macro"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "da136f7fbc99517e5f6f16401110a16240f99d2fbff738b8666b0b10a1d638c7"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "blake2-rfc",
  "proc-macro-crate",
@@ -6347,8 +6246,7 @@ dependencies = [
 [[package]]
 name = "sp-application-crypto"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f33508e0f9c96186eae2c73482ae02b463cb85fd80d42dc48d7b5cf778aad6ba"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "parity-scale-codec",
  "serde",
@@ -6360,8 +6258,7 @@ dependencies = [
 [[package]]
 name = "sp-arithmetic"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6f861e78b2de65df52d855ff668a00890160ab66afa25e8203f4240152e89085"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "integer-sqrt",
  "num-traits",
@@ -6374,8 +6271,7 @@ dependencies = [
 [[package]]
 name = "sp-authorship"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "23e57577889c29682da19110e3a30d14c8afcaac3df1cd8de7a9ac09583b3fab"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "parity-scale-codec",
  "sp-inherents",
@@ -6386,8 +6282,7 @@ dependencies = [
 [[package]]
 name = "sp-block-builder"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6439b15294ed4eec9a2c330c7c834e2af2118cedd20db7f8be33bd2949c03800"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "parity-scale-codec",
  "sp-api",
@@ -6399,12 +6294,11 @@ dependencies = [
 [[package]]
 name = "sp-blockchain"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3f79c60117f539ee7a9c585722268f6b2b12999390f2c6ec53269977c10eae9c"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "derive_more 0.99.9",
  "log",
- "lru",
+ "lru 0.4.3",
  "parity-scale-codec",
  "parking_lot 0.10.2",
  "sp-block-builder",
@@ -6417,8 +6311,7 @@ dependencies = [
 [[package]]
 name = "sp-chain-spec"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2f9eb83a5f50c95172e462843184f8a3d55798b58a68f31c46054fff1ec16b19"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "serde",
  "serde_json 1.0.57",
@@ -6427,13 +6320,12 @@ dependencies = [
 [[package]]
 name = "sp-consensus"
 version = "0.8.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "24512668d65ee6026dd7e2fdfb18ea1aaeee0f59415a4abf969b67c2f968229d"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "derive_more 0.99.9",
  "futures 0.3.5",
  "futures-timer 3.0.2",
- "libp2p 0.23.0",
+ "libp2p",
  "log",
  "parity-scale-codec",
  "parking_lot 0.10.2",
@@ -6454,8 +6346,7 @@ dependencies = [
 [[package]]
 name = "sp-consensus-pow"
 version = "0.8.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1b5d379efbe898e988980f46c1ff3c5774ce5f70150a39389285e60cbdaab989"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "parity-scale-codec",
  "sp-api",
@@ -6467,8 +6358,7 @@ dependencies = [
 [[package]]
 name = "sp-core"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "146765f2e906030c2d7fba4a685390407d5d0595b7e46716b2bcd6c7ac744579"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "base58",
  "blake2-rfc",
@@ -6480,7 +6370,7 @@ dependencies = [
  "hash-db",
  "hash256-std-hasher",
  "hex",
- "impl-serde 0.3.1",
+ "impl-serde",
  "lazy_static",
  "libsecp256k1",
  "log",
@@ -6512,8 +6402,7 @@ dependencies = [
 [[package]]
 name = "sp-database"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "23faeb4e1c660ddaa0c06ba2a0d51697e0eda10c7d9568005c3bafeff65f3027"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "kvdb",
  "parking_lot 0.10.2",
@@ -6522,8 +6411,7 @@ dependencies = [
 [[package]]
 name = "sp-debug-derive"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8fc56e04bc64020aa6c1a35fb74991ab8d2aa46ffc0b133145103d8b6304f195"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "proc-macro2 1.0.19",
  "quote 1.0.7",
@@ -6533,8 +6421,7 @@ dependencies = [
 [[package]]
 name = "sp-externalities"
 version = "0.8.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "62ff5c062c4c36814d8aa21031b3fc7a16816db879965a910b98f49c6d80914e"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "environmental",
  "parity-scale-codec",
@@ -6545,8 +6432,7 @@ dependencies = [
 [[package]]
 name = "sp-finality-grandpa"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "823dfc3119fad75fc200408a3b85a0b05961aed0257e5d8ba23f8f2d03993cdb"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "finality-grandpa",
  "log",
@@ -6562,8 +6448,7 @@ dependencies = [
 [[package]]
 name = "sp-finality-tracker"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4633e4857d88d8981c4d76a1b04a2a1a0c032d08245b6006a6c8d3f3f0da6df8"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "parity-scale-codec",
  "sp-inherents",
@@ -6573,8 +6458,7 @@ dependencies = [
 [[package]]
 name = "sp-inherents"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3a0c71c49638e89a2aa252d291625528d67a6efee6df0ffb88cbae32f3ca878e"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "derive_more 0.99.9",
  "parity-scale-codec",
@@ -6586,8 +6470,7 @@ dependencies = [
 [[package]]
 name = "sp-io"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3668b7ee3720ffbea89308832f04cee067c8d40a06f9ced818d890cb2aae112f"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "futures 0.3.5",
  "hash-db",
@@ -6608,8 +6491,7 @@ dependencies = [
 [[package]]
 name = "sp-keyring"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "99472908ac61a50b9973c492e277db3295ba2314294c2e36e8dd41842fae6fc5"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "lazy_static",
  "sp-core",
@@ -6620,8 +6502,7 @@ dependencies = [
 [[package]]
 name = "sp-offchain"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f39724817f34c7311202eee09bdf3190f0c2f2f3852e1d228053227d44863217"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "sp-api",
  "sp-core",
@@ -6631,8 +6512,7 @@ dependencies = [
 [[package]]
 name = "sp-panic-handler"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "56a3e76c47eca218aa86c8a02942c62d71fb47b01feb1fc38d8297f93929a35e"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "backtrace",
  "log",
@@ -6641,8 +6521,7 @@ dependencies = [
 [[package]]
 name = "sp-rpc"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7f5c07f1dbfb9a50a1beaedaa9d2909758d25c94a591bfbd0a400b328fc7b22e"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "serde",
  "sp-core",
@@ -6651,8 +6530,7 @@ dependencies = [
 [[package]]
 name = "sp-runtime"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8fb489c671d0dc1ec00f83550e259cc75ab5c25d0d41b901c7a35cda99da7964"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "either",
  "hash256-std-hasher",
@@ -6674,8 +6552,7 @@ dependencies = [
 [[package]]
 name = "sp-runtime-interface"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3b63b4b5e0fd1488b545d908003cd8129c88c066af361f9b6483ac7c97d8f6c1"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "parity-scale-codec",
  "primitive-types",
@@ -6691,8 +6568,7 @@ dependencies = [
 [[package]]
 name = "sp-runtime-interface-proc-macro"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "21c3ed5a0258faaa1370859bfdacf27d798f4205161a68289555eb1a1a6a4e41"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "Inflector",
  "proc-macro-crate",
@@ -6704,8 +6580,7 @@ dependencies = [
 [[package]]
 name = "sp-serializer"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b99a01e4c61cabad1e383f014e559b1390f5f98c43ccdd0492c0fc195f4a4047"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "serde",
  "serde_json 1.0.57",
@@ -6714,8 +6589,7 @@ dependencies = [
 [[package]]
 name = "sp-session"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8b571809d807be2244393de7ee5003e5b6f53187897d2302d988b38481bb4421"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "parity-scale-codec",
  "sp-api",
@@ -6728,8 +6602,7 @@ dependencies = [
 [[package]]
 name = "sp-staking"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3ab31cfa1734a9548ebe4b87d10bcf658f835ee3b0c8f08f89f46eb7013f81a9"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "parity-scale-codec",
  "sp-runtime",
@@ -6739,8 +6612,7 @@ dependencies = [
 [[package]]
 name = "sp-state-machine"
 version = "0.8.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5f1d76c8c207b644ed9cabeeeb9eead95c72691db9e357fe56ab19285b36b2b4"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "hash-db",
  "itertools 0.9.0",
@@ -6761,16 +6633,14 @@ dependencies = [
 [[package]]
 name = "sp-std"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dd69654cdd9fa179dad52811220356dc2991f70b3b93e77c27f4e317d58c059b"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 
 [[package]]
 name = "sp-storage"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5c0dba5526e0a1d2acc3d969cdcdf89f4e0395a1a6e807f5aa517ef15bf0e710"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
- "impl-serde 0.2.3",
+ "impl-serde",
  "parity-scale-codec",
  "ref-cast",
  "serde",
@@ -6781,8 +6651,7 @@ dependencies = [
 [[package]]
 name = "sp-timestamp"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c59b7c9ea91411e7d18be5009ac38775843778edde563d791a4ba40fecaec4de"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "impl-trait-for-tuples",
  "parity-scale-codec",
@@ -6796,8 +6665,7 @@ dependencies = [
 [[package]]
 name = "sp-tracing"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "50a43072c8a66b1f6cfec0bee7f3f2aa7866869317b5f430e8a2743551b77c4d"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "log",
  "rental",
@@ -6807,8 +6675,7 @@ dependencies = [
 [[package]]
 name = "sp-transaction-pool"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6748dbe5c6420dceb48ddabda8ba2ba80e1ef184f32c207ef2f9cb87e56a4ebd"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "derive_more 0.99.9",
  "futures 0.3.5",
@@ -6823,8 +6690,7 @@ dependencies = [
 [[package]]
 name = "sp-trie"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "36b27498caf2238d68df9ed9a8bf326622142119328ae41b17cafc36c6acafab"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "hash-db",
  "memory-db",
@@ -6838,8 +6704,7 @@ dependencies = [
 [[package]]
 name = "sp-utils"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d45813274bd799a0e77d55f4ac225a59af1b4363142ca41bb38e29f699a76a81"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "futures 0.3.5",
  "futures-core",
@@ -6851,10 +6716,9 @@ dependencies = [
 [[package]]
 name = "sp-version"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3d075c051dc9dc75685c484463729d50d21930aa9068f652734598f8a882f6e0"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
- "impl-serde 0.2.3",
+ "impl-serde",
  "parity-scale-codec",
  "serde",
  "sp-runtime",
@@ -6864,8 +6728,7 @@ dependencies = [
 [[package]]
 name = "sp-wasm-interface"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "eeb0c2a1c2bdbbd67c1b8f20a9c85606122e7227b67cf5cd9faf3df2f454a66b"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "impl-trait-for-tuples",
  "parity-scale-codec",
@@ -7020,8 +6883,7 @@ dependencies = [
 [[package]]
 name = "substrate-build-script-utils"
 version = "2.0.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0bf0107b85ed2f59e42d015274a3816ba3bd5b0f01a69818bc04d3ea94a242e3"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "platforms",
 ]
@@ -7038,8 +6900,7 @@ dependencies = [
 [[package]]
 name = "substrate-prometheus-endpoint"
 version = "0.8.0-rc6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fcccc8b56f8590db1f1e6acc8674187eb856ef42d7f93f3326e1fdbc10389f37"
+source = "git+https://github.com/paritytech/substrate.git?branch=jimmy/instant-seal-heartbeat#9062bbcbec50b71e198865c9df168d75e903169c"
 dependencies = [
  "async-std",
  "derive_more 0.99.9",
@@ -7343,11 +7204,13 @@ dependencies = [
  "libc",
  "memchr",
  "mio",
+ "mio-named-pipes",
  "mio-uds",
  "num_cpus",
  "pin-project-lite",
  "signal-hook-registry",
  "slab",
+ "tokio-macros",
  "winapi 0.3.9",
 ]
 
@@ -7424,6 +7287,17 @@ dependencies = [
  "bytes 0.4.12",
  "futures 0.1.29",
  "log",
+]
+
+[[package]]
+name = "tokio-macros"
+version = "0.2.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f0c3acc6aa564495a0f2e1d59fab677cd7f81a19994cfc7f3ad0e64301560389"
+dependencies = [
+ "proc-macro2 1.0.19",
+ "quote 1.0.7",
+ "syn 1.0.39",
 ]
 
 [[package]]

@@ -22,4 +22,4 @@ std = [
 ]
 
 [dependencies]
-sp-std = { version = '2.0.0-rc6', default-features = false }
+sp-std = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat', default-features = false }

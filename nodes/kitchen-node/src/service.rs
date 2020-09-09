@@ -124,6 +124,12 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
 			prometheus_registry.as_ref(),
 		);
 
+		let heartbeat_options = sc_consensus_manual_seal::HeartbeatOptions {
+			min_blocktime: 1,
+			max_blocktime: 10,
+			finalize: false,
+		};
+
 		let authorship_future = sc_consensus_manual_seal::run_instant_seal(
 			Box::new(client.clone()),
 			proposer,
@@ -131,6 +137,8 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
 			transaction_pool.pool().clone(),
 			select_chain,
 			inherent_data_providers,
+			false, //finalize
+			Some(heartbeat_options),
 		);
 
 		task_manager.spawn_essential_handle().spawn_blocking("instant-seal", authorship_future);

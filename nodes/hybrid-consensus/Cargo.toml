@@ -33,31 +33,31 @@ tokio = "0.1.22"
 exit-future = "0.2.0"
 parking_lot = "0.9.0"
 trie-root = "0.15.2"
-sp-io = '2.0.0-rc6'
-sc-cli = '0.8.0-rc6'
-sc-client-api = '2.0.0-rc6'
-sp-core = '2.0.0-rc6'
-sp-runtime = '2.0.0-rc6'
-sc-executor = '0.8.0-rc6'
-sc-service = '0.8.0-rc6'
-sp-inherents = '2.0.0-rc6'
-sp-timestamp = '2.0.0-rc6'
-sc-transaction-pool = '2.0.0-rc6'
-sp-transaction-pool = '2.0.0-rc6'
-sc-network = '0.8.0-rc6'
-sc-finality-grandpa = '0.8.0-rc6'
-sp-finality-grandpa = '2.0.0-rc6'
-sc-basic-authorship = '0.8.0-rc6'
-sp-consensus = '0.8.0-rc6'
-sc-consensus = '0.8.0-rc6'
-sc-consensus-pow = '0.8.0-rc6'
-sp-consensus-pow = '0.8.0-rc6'
+sp-io = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat' }
+sc-cli = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat' }
+sc-client-api = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat' }
+sp-core = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat' }
+sp-runtime = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat' }
+sc-executor = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat' }
+sc-service = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat' }
+sp-inherents = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat' }
+sp-timestamp = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat' }
+sc-transaction-pool = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat' }
+sp-transaction-pool = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat' }
+sc-network = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat' }
+sc-finality-grandpa = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat' }
+sp-finality-grandpa = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat' }
+sc-basic-authorship = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat' }
+sp-consensus = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat' }
+sc-consensus = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat' }
+sc-consensus-pow = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat' }
+sp-consensus-pow = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat' }
 sha3pow = { path = '../../consensus/sha3pow' }
-sp-api = '2.0.0-rc6'
+sp-api = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat' }
 
 runtime = { package = "minimal-grandpa-runtime", path = "../../runtimes/minimal-grandpa-runtime"}
 
 
 [build-dependencies]
 vergen = "3.0.4"
-substrate-build-script-utils = '2.0.0-rc6'
+substrate-build-script-utils = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat' }

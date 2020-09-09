@@ -82,9 +82,9 @@ without the UI.
 Installing the instant seal engine has three dependencies whereas the runtime had only one.
 
 ```toml
-sc-consensus = '0.8.0-rc6'
-sc-consensus-manual-seal = '0.8.0-rc6'
-sp-consensus = '0.8.0-rc6'
+sc-consensus = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat' }
+sc-consensus-manual-seal = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat' }
+sp-consensus = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat' }
 ```
 
 ### The Import Queue
