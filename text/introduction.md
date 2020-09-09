@@ -17,7 +17,7 @@ the code, extract patterns, and apply them to a problem that you want to solve!
 
 If you haven't already, you should probably clone this repository right now.
 ```bash
-git clone git@github.com:substrate-developer-hub/recipes.git
+git clone https://github.com/substrate-developer-hub/recipes.git
 ```
 
 ## Getting Help
