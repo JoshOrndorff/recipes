@@ -201,7 +201,7 @@ impl grandpa::Trait for Runtime {
 }
 
 parameter_types! {
-	pub const MinimumPeriod: u64 = 1_000;
+	pub const MinimumPeriod: u64 = 1;
 }
 
 impl timestamp::Trait for Runtime {
