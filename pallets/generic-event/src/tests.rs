@@ -90,6 +90,9 @@ fn test() {
 		let expected_event = TestEvent::generic_event(RawEvent::EmitInput(1, 32));
 
 		// iterate through array of `EventRecord`s
-		assert!(System::events().iter().any(|a| a.event == expected_event));
+		assert_eq!(
+			System::events()[0].event,
+			expected_event,
+		);
 	})
 }
