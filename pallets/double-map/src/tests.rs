@@ -93,7 +93,11 @@ fn join_all_members_works() {
 
 		// correct event emission
 		let expected_event = TestEvent::double_map(RawEvent::NewMember(1));
-		assert!(System::events().iter().any(|a| a.event == expected_event));
+	
+		assert_eq!(
+			System::events()[0].event,
+			expected_event,
+		);
 		// correct storage changes
 		assert_eq!(DoubleMap::all_members(), vec![1]);
 	})
@@ -113,7 +117,11 @@ fn group_join_works() {
 
 		// correct event emission
 		let expected_event = TestEvent::double_map(RawEvent::MemberJoinsGroup(1, 3, 5));
-		assert!(System::events().iter().any(|a| a.event == expected_event));
+
+		assert_eq!(
+			System::events()[1].event,
+			expected_event,
+		);
 
 		// correct storage changes
 		assert_eq!(DoubleMap::group_membership(1), 3);
@@ -133,7 +141,11 @@ fn remove_member_works() {
 
 		// check: correct event emitted
 		let expected_event = TestEvent::double_map(RawEvent::RemoveMember(1));
-		assert!(System::events().iter().any(|a| a.event == expected_event));
+
+		assert_eq!(
+			System::events()[2].event,
+			expected_event,
+		);
 
 		// check: user 1 should no longer belongs to group 3
 		assert!(!<GroupMembership<TestRuntime>>::contains_key(1));
@@ -165,7 +177,11 @@ fn remove_group_score_works() {
 
 		// correct event emitted
 		let expected_event = TestEvent::double_map(RawEvent::RemoveGroup(3));
-		assert!(System::events().iter().any(|a| a.event == expected_event));
+
+		assert_eq!(
+			System::events()[6].event,
+			expected_event,
+		);
 
 		// check: user 1, 2, 3 should no longer in the group
 		assert!(!<MemberScore<TestRuntime>>::contains_key(3, 1));
