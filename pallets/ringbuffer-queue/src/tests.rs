@@ -69,9 +69,9 @@ impl Trait for TestRuntime {
 pub type System = system::Module<TestRuntime>;
 pub type RingBuffer = Module<TestRuntime>;
 
-pub struct ExtBuilder;
+struct ExternalityBuilder;
 
-impl ExtBuilder {
+impl ExternalityBuilder {
 	pub fn build() -> TestExternalities {
 		let storage = system::GenesisConfig::default()
 			.build_storage::<TestRuntime>()
@@ -84,7 +84,7 @@ impl ExtBuilder {
 
 #[test]
 fn add_to_queue_works() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		assert_ok!(RingBuffer::add_to_queue(Origin::signed(1), 1, true));
 		assert_eq!(
 			RingBuffer::get_value(0),
@@ -99,7 +99,7 @@ fn add_to_queue_works() {
 
 #[test]
 fn add_multiple_works() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		assert_ok!(RingBuffer::add_multiple(
 			Origin::signed(1),
 			vec![1, 2, 3],
@@ -118,7 +118,7 @@ fn add_multiple_works() {
 
 #[test]
 fn pop_works() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		assert_ok!(RingBuffer::add_to_queue(Origin::signed(1), 1, true));
 		assert_eq!(
 			RingBuffer::get_value(0),
@@ -134,6 +134,9 @@ fn pop_works() {
 
 		let expected_event = TestEvent::ringbuffer(RawEvent::Popped(1, true));
 
-		assert!(System::events().iter().any(|a| a.event == expected_event));
+		assert_eq!(
+			System::events()[0].event,
+			expected_event,
+		);
 	})
 }

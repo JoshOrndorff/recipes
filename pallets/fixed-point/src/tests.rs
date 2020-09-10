@@ -71,9 +71,9 @@ impl Trait for TestRuntime {
 pub type System = system::Module<TestRuntime>;
 pub type FixedPoint = Module<TestRuntime>;
 
-pub struct ExtBuilder;
+struct ExternalityBuilder;
 
-impl ExtBuilder {
+impl ExternalityBuilder {
 	pub fn build() -> TestExternalities {
 		let storage = system::GenesisConfig::default()
 			.build_storage::<TestRuntime>()
@@ -86,7 +86,7 @@ impl ExtBuilder {
 
 #[test]
 fn all_accumulators_start_at_one() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		assert_eq!(FixedPoint::manual_value(), 1 << 16);
 		assert_eq!(FixedPoint::permill_value(), Permill::one());
 		assert_eq!(FixedPoint::fixed_value(), 1);
@@ -95,7 +95,7 @@ fn all_accumulators_start_at_one() {
 
 #[test]
 fn manual_impl_works() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		// Setup some constants
 		let one: u32 = 1 << 16;
 		let half: u32 = one / 2;
@@ -134,7 +134,7 @@ fn manual_impl_works() {
 
 #[test]
 fn manual_impl_overflows() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		// Although 2^17 is able to fit in a u32, we're using our u32s in a weird way where
 		// only the first 16 bits represent integer positions, and the remaining 16 bits
 		// represent fractional positions. 2^17 cannot fit in the 16 available integer
@@ -156,7 +156,7 @@ fn manual_impl_overflows() {
 
 #[test]
 fn permill_impl_works() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		// Setup some constants
 		let half = Permill::from_percent(50);
 		let quarter = Permill::from_percent(25);
@@ -198,7 +198,7 @@ fn permill_impl_works() {
 
 #[test]
 fn fixed_impl_works() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		// Setup some constants
 		let one = U16F16::from_num(1);
 		let half = one / 2;
@@ -237,7 +237,7 @@ fn fixed_impl_works() {
 
 #[test]
 fn fixed_impl_overflows() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		// U16F16 has 16 bits of integer storage, so just like with our manual
 		// implementation, a value of 2 ^ 17 will cause overflow.
 

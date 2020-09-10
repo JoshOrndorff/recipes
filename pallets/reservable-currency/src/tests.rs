@@ -85,7 +85,7 @@ pub type System = system::Module<TestRuntime>;
 pub type Balances = balances::Module<TestRuntime>;
 pub type ReservableCurrency = Module<TestRuntime>;
 
-// An alternative to `ExtBuilder` which includes custom configuration
+// An alternative to `ExternalityBuilder` which includes custom configuration
 pub fn new_test_ext() -> sp_io::TestExternalities {
 	let mut t = system::GenesisConfig::default()
 		.build_storage::<TestRuntime>()
@@ -116,7 +116,11 @@ fn new_test_ext_reserve_funds() {
 		assert_ok!(ReservableCurrency::reserve_funds(Origin::signed(1), 5000));
 		// Test and see if we received a LockFunds event
 		let expected_event = TestEvent::reservable_currency(RawEvent::LockFunds(1, 5000, 1));
-		assert!(System::events().iter().any(|a| a.event == expected_event));
+
+		assert_eq!(
+			System::events()[1].event,
+			expected_event,
+		);
 		// Test and see if (1, 5000) holds
 		assert_eq!(Balances::free_balance(&1), 5000);
 		// Make sure that our 5000 is actually reserved

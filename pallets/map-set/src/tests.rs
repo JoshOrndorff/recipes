@@ -68,9 +68,9 @@ impl Trait for TestRuntime {
 pub type System = system::Module<TestRuntime>;
 pub type MapSet = Module<TestRuntime>;
 
-pub struct ExtBuilder;
+struct ExternalityBuilder;
 
-impl ExtBuilder {
+impl ExternalityBuilder {
 	pub fn build() -> TestExternalities {
 		let storage = system::GenesisConfig::default()
 			.build_storage::<TestRuntime>()
@@ -83,11 +83,15 @@ impl ExtBuilder {
 
 #[test]
 fn add_member_works() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		assert_ok!(MapSet::add_member(Origin::signed(1)));
 
 		let expected_event = TestEvent::vec_set(RawEvent::MemberAdded(1));
-		assert!(System::events().iter().any(|a| a.event == expected_event));
+
+		assert_eq!(
+			System::events()[0].event,
+			expected_event,
+		);
 
 		assert!(<Members<TestRuntime>>::contains_key(1));
 	})
@@ -95,7 +99,7 @@ fn add_member_works() {
 
 #[test]
 fn cant_add_duplicate_members() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		assert_ok!(MapSet::add_member(Origin::signed(1)));
 
 		assert_noop!(
@@ -107,7 +111,7 @@ fn cant_add_duplicate_members() {
 
 #[test]
 fn cant_exceed_max_members() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		// Add 16 members, reaching the max
 		for i in 0..16 {
 			assert_ok!(MapSet::add_member(Origin::signed(i)));
@@ -123,13 +127,17 @@ fn cant_exceed_max_members() {
 
 #[test]
 fn remove_member_works() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		assert_ok!(MapSet::add_member(Origin::signed(1)));
 		assert_ok!(MapSet::remove_member(Origin::signed(1)));
 
 		// check correct event emission
 		let expected_event = TestEvent::vec_set(RawEvent::MemberRemoved(1));
-		assert!(System::events().iter().any(|a| a.event == expected_event));
+
+		assert_eq!(
+			System::events()[1].event,
+			expected_event,
+		);
 
 		// check storage changes
 		assert!(!<Members<TestRuntime>>::contains_key(1));
@@ -138,7 +146,7 @@ fn remove_member_works() {
 
 #[test]
 fn remove_member_handles_errors() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		// 2 is NOT previously added as a member
 		assert_noop!(
 			MapSet::remove_member(Origin::signed(2)),

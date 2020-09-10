@@ -70,9 +70,9 @@ impl Trait for TestRuntime {
 pub type System = frame_system::Module<TestRuntime>;
 pub type SimpleEvent = Module<TestRuntime>;
 
-pub struct ExtBuilder;
+struct ExternalityBuilder;
 
-impl ExtBuilder {
+impl ExternalityBuilder {
 	pub fn build() -> TestExternalities {
 		let storage = frame_system::GenesisConfig::default()
 			.build_storage::<TestRuntime>()
@@ -85,7 +85,7 @@ impl ExtBuilder {
 
 #[test]
 fn test() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		assert_ok!(SimpleEvent::do_something(Origin::signed(1), 32));
 
 		assert_eq!(

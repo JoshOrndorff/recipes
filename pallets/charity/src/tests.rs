@@ -1,7 +1,7 @@
 use crate::*;
 use balances;
 use frame_support::{assert_err, assert_ok, impl_outer_event, impl_outer_origin, parameter_types};
-use frame_system::{self as system, RawOrigin};
+use frame_system::{self as system, EventRecord, Phase, RawOrigin};
 use sp_core::H256;
 use sp_io;
 use sp_runtime::{
@@ -85,7 +85,7 @@ pub type System = system::Module<TestRuntime>;
 pub type Balances = balances::Module<TestRuntime>;
 pub type Charity = Module<TestRuntime>;
 
-// An alternative to `ExtBuilder` which includes custom configuration
+// An alternative to `ExternalityBuilder` which includes custom configuration
 pub fn new_test_ext() -> sp_io::TestExternalities {
 	let mut t = system::GenesisConfig::default()
 		.build_storage::<TestRuntime>()
@@ -95,8 +95,8 @@ pub fn new_test_ext() -> sp_io::TestExternalities {
 		// Provide some initial balances
 		balances: vec![(1, 13), (2, 11), (3, 1), (4, 3), (5, 19)],
 	}
-		.assimilate_storage(&mut t)
-		.unwrap();
+	.assimilate_storage(&mut t)
+	.unwrap();
 
 	crate::GenesisConfig {}
 		.assimilate_storage::<TestRuntime>(&mut t)
@@ -139,8 +139,13 @@ fn donations_work() {
 		assert_eq!(Balances::free_balance(&1), original - donation);
 
 		// Check that the correct event is emitted
-		let expected_event = TestEvent::charity(RawEvent::DonationReceived(1, donation, new_pot_total));
-		assert!(System::events().iter().any(|a| a.event == expected_event));
+		let expected_event =
+			TestEvent::charity(RawEvent::DonationReceived(1, donation, new_pot_total));
+
+		assert_eq!(
+			System::events()[1].event,
+			expected_event,
+		);
 	})
 }
 
@@ -165,10 +170,15 @@ fn imbalances_work() {
 		let new_pot_total = imb_amt + Balances::minimum_balance();
 		assert_eq!(Charity::pot(), new_pot_total);
 
-		// Check that the correct event is emitted
-		let expected_event = TestEvent::charity(RawEvent::ImbalanceAbsorbed(5, new_pot_total));
-
-		assert!(System::events().iter().any(|a| a.event == expected_event));
+		// testing if the the event come in the correct order
+		assert_eq!(
+			System::events()[0],
+			EventRecord {
+				phase: Phase::Initialization,
+				event: TestEvent::charity(RawEvent::ImbalanceAbsorbed(5, new_pot_total)),
+				topics: vec![],
+			},
+		);
 	})
 }
 
@@ -183,10 +193,20 @@ fn allocating_works() {
 		let alloc = 5;
 		assert_ok!(Charity::allocate(RawOrigin::Root.into(), 2, alloc));
 
-		// Check that the correct event is emitted
-		let new_pot_total = Balances::minimum_balance() + donation - alloc;
-		let expected_event = TestEvent::charity(RawEvent::FundsAllocated(2, 5, new_pot_total));
-		assert!(System::events().iter().any(|a| a.event == expected_event));
+		// Test that the expected events were emitted
+		let our_events = System::events()
+			.into_iter().map(|r| r.event)
+			.filter_map(|e| {
+				if let TestEvent::charity(inner) = e { Some(inner) } else { None }
+			})
+			.collect::<Vec<_>>();
+
+		let expected_events = 	vec![
+			RawEvent::DonationReceived(1, 10, 11),
+			RawEvent::FundsAllocated(2, 5, 6),
+		];
+
+		assert_eq!(our_events, expected_events);
 	})
 }
 //TODO What if we try to allocate more funds than we have

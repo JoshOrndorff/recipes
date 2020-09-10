@@ -68,9 +68,9 @@ impl Trait for TestRuntime {
 pub type System = system::Module<TestRuntime>;
 pub type DoubleMap = Module<TestRuntime>;
 
-pub struct ExtBuilder;
+struct ExternalityBuilder;
 
-impl ExtBuilder {
+impl ExternalityBuilder {
 	pub fn build() -> TestExternalities {
 		let storage = system::GenesisConfig::default()
 			.build_storage::<TestRuntime>()
@@ -83,7 +83,7 @@ impl ExtBuilder {
 
 #[test]
 fn join_all_members_works() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		assert_ok!(DoubleMap::join_all_members(Origin::signed(1)));
 		// correct panic upon existing member trying to join
 		assert_noop!(
@@ -93,7 +93,11 @@ fn join_all_members_works() {
 
 		// correct event emission
 		let expected_event = TestEvent::double_map(RawEvent::NewMember(1));
-		assert!(System::events().iter().any(|a| a.event == expected_event));
+	
+		assert_eq!(
+			System::events()[0].event,
+			expected_event,
+		);
 		// correct storage changes
 		assert_eq!(DoubleMap::all_members(), vec![1]);
 	})
@@ -101,7 +105,7 @@ fn join_all_members_works() {
 
 #[test]
 fn group_join_works() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		// expected panic
 		assert_noop!(
 			DoubleMap::join_a_group(Origin::signed(1), 3, 5),
@@ -113,7 +117,11 @@ fn group_join_works() {
 
 		// correct event emission
 		let expected_event = TestEvent::double_map(RawEvent::MemberJoinsGroup(1, 3, 5));
-		assert!(System::events().iter().any(|a| a.event == expected_event));
+
+		assert_eq!(
+			System::events()[1].event,
+			expected_event,
+		);
 
 		// correct storage changes
 		assert_eq!(DoubleMap::group_membership(1), 3);
@@ -123,7 +131,7 @@ fn group_join_works() {
 
 #[test]
 fn remove_member_works() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		// action: user 1 joins
 		assert_ok!(DoubleMap::join_all_members(Origin::signed(1)));
 		// action: user 1 joins group 3 with score 5
@@ -133,7 +141,11 @@ fn remove_member_works() {
 
 		// check: correct event emitted
 		let expected_event = TestEvent::double_map(RawEvent::RemoveMember(1));
-		assert!(System::events().iter().any(|a| a.event == expected_event));
+
+		assert_eq!(
+			System::events()[2].event,
+			expected_event,
+		);
 
 		// check: user 1 should no longer belongs to group 3
 		assert!(!<GroupMembership<TestRuntime>>::contains_key(1));
@@ -143,7 +155,7 @@ fn remove_member_works() {
 
 #[test]
 fn remove_group_score_works() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		assert_ok!(DoubleMap::join_all_members(Origin::signed(1)));
 		assert_ok!(DoubleMap::join_all_members(Origin::signed(2)));
 		assert_ok!(DoubleMap::join_all_members(Origin::signed(3)));
@@ -165,7 +177,11 @@ fn remove_group_score_works() {
 
 		// correct event emitted
 		let expected_event = TestEvent::double_map(RawEvent::RemoveGroup(3));
-		assert!(System::events().iter().any(|a| a.event == expected_event));
+
+		assert_eq!(
+			System::events()[6].event,
+			expected_event,
+		);
 
 		// check: user 1, 2, 3 should no longer in the group
 		assert!(!<MemberScore<TestRuntime>>::contains_key(3, 1));

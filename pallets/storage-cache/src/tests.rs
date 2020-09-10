@@ -68,9 +68,9 @@ impl Trait for TestRuntime {
 pub type System = system::Module<TestRuntime>;
 pub type StorageCache = Module<TestRuntime>;
 
-pub struct ExtBuilder;
+struct ExternalityBuilder;
 
-impl ExtBuilder {
+impl ExternalityBuilder {
 	pub fn build() -> sp_io::TestExternalities {
 		let storage = system::GenesisConfig::default()
 			.build_storage::<TestRuntime>()
@@ -83,7 +83,7 @@ impl ExtBuilder {
 
 #[test]
 fn init_storage() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		assert_ok!(StorageCache::set_copy(Origin::signed(1), 10));
 		assert_eq!(StorageCache::some_copy_value(), 10);
 
@@ -101,7 +101,7 @@ fn init_storage() {
 
 #[test]
 fn increase_value_errs_on_overflow() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		let num1: u32 = u32::max_value() - 9;
 		assert_ok!(StorageCache::set_copy(Origin::signed(1), num1));
 		// test first overflow panic for both methods
@@ -130,7 +130,7 @@ fn increase_value_errs_on_overflow() {
 
 #[test]
 fn increase_value_works() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		System::set_block_number(5);
 		assert_ok!(StorageCache::set_copy(Origin::signed(1), 25));
 		assert_ok!(StorageCache::increase_value_no_cache(Origin::signed(1), 10));
@@ -153,7 +153,7 @@ fn increase_value_works() {
 
 #[test]
 fn swap_king_errs_as_intended() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		assert_ok!(StorageCache::mock_add_member(Origin::signed(1)));
 		assert_ok!(StorageCache::set_king(Origin::signed(1)));
 		assert_err!(
@@ -179,7 +179,7 @@ fn swap_king_errs_as_intended() {
 
 #[test]
 fn swap_king_works() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		assert_ok!(StorageCache::mock_add_member(Origin::signed(2)));
 		assert_ok!(StorageCache::mock_add_member(Origin::signed(3)));
 
@@ -195,7 +195,11 @@ fn swap_king_works() {
 		assert_ok!(StorageCache::swap_king_with_cache(Origin::signed(3)));
 
 		let expected_event = TestEvent::storage_cache(RawEvent::BetterKingSwap(1, 3));
-		assert!(System::events().iter().any(|a| a.event == expected_event));
+
+		assert_eq!(
+			System::events()[1].event,
+			expected_event,
+		);
 
 		assert_eq!(StorageCache::king_member(), 3);
 	})
