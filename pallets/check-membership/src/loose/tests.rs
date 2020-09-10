@@ -96,7 +96,11 @@ fn members_can_call() {
 		assert_ok!(CheckMembership::check_membership(Origin::signed(1)));
 
 		let expected_event = TestEvent::check_membership(RawEvent::IsAMember(1));
-		assert!(System::events().iter().any(|a| a.event == expected_event));
+
+		assert_eq!(
+			System::events()[1].event,
+			expected_event,
+		);
 	})
 }
 
