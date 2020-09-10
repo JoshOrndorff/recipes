@@ -87,7 +87,11 @@ fn add_member_works() {
 		assert_ok!(MapSet::add_member(Origin::signed(1)));
 
 		let expected_event = TestEvent::vec_set(RawEvent::MemberAdded(1));
-		assert!(System::events().iter().any(|a| a.event == expected_event));
+
+		assert_eq!(
+			System::events()[0].event,
+			expected_event,
+		);
 
 		assert!(<Members<TestRuntime>>::contains_key(1));
 	})
@@ -129,7 +133,11 @@ fn remove_member_works() {
 
 		// check correct event emission
 		let expected_event = TestEvent::vec_set(RawEvent::MemberRemoved(1));
-		assert!(System::events().iter().any(|a| a.event == expected_event));
+
+		assert_eq!(
+			System::events()[1].event,
+			expected_event,
+		);
 
 		// check storage changes
 		assert!(!<Members<TestRuntime>>::contains_key(1));
