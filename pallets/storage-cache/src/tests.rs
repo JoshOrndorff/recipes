@@ -195,7 +195,11 @@ fn swap_king_works() {
 		assert_ok!(StorageCache::swap_king_with_cache(Origin::signed(3)));
 
 		let expected_event = TestEvent::storage_cache(RawEvent::BetterKingSwap(1, 3));
-		assert!(System::events().iter().any(|a| a.event == expected_event));
+
+		assert_eq!(
+			System::events()[1].event,
+			expected_event,
+		);
 
 		assert_eq!(StorageCache::king_member(), 3);
 	})
