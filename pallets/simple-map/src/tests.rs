@@ -89,7 +89,10 @@ fn set_works() {
 
 		let expected_event = TestEvent::simple_map(RawEvent::EntrySet(1, 19));
 
-		assert!(System::events().iter().any(|a| a.event == expected_event));
+		assert_eq!(
+			System::events()[0].event,
+			expected_event,
+		);
 	})
 }
 
@@ -110,7 +113,11 @@ fn get_works() {
 		assert_ok!(SimpleMap::get_single_entry(Origin::signed(1), 2));
 
 		let expected_event = TestEvent::simple_map(RawEvent::EntryGot(1, 19));
-		assert!(System::events().iter().any(|a| a.event == expected_event));
+
+		assert_eq!(
+			System::events()[1].event,
+			expected_event,
+		);
 
 		// Ensure storage is still set
 		assert_eq!(SimpleMap::simple_map(2), 19);
@@ -134,7 +141,11 @@ fn take_works() {
 		assert_ok!(SimpleMap::take_single_entry(Origin::signed(2)));
 
 		let expected_event = TestEvent::simple_map(RawEvent::EntryTaken(2, 19));
-		assert!(System::events().iter().any(|a| a.event == expected_event));
+	
+		assert_eq!(
+			System::events()[1].event,
+			expected_event,
+		);
 
 		// Assert storage has returned to default value (zero)
 		assert_eq!(SimpleMap::simple_map(2), 0);
@@ -149,6 +160,9 @@ fn increase_works() {
 
 		let expected_event = TestEvent::simple_map(RawEvent::EntryIncreased(2, 19, 21));
 
-		assert!(System::events().iter().any(|a| a.event == expected_event));
+		assert_eq!(
+			System::events()[1].event,
+			expected_event,
+		);
 	})
 }
