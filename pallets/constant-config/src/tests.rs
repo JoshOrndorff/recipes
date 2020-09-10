@@ -116,34 +116,50 @@ fn overflow_checked() {
 #[test]
 fn add_value_works() {
 	ExternalityBuilder::build().execute_with(|| {
+		
 		assert_ok!(ConstantConfig::set_value(Origin::signed(1), 10));
 
 		assert_ok!(ConstantConfig::add_value(Origin::signed(2), 100));
-		let expected_event1 = TestEvent::constant_config(Event::Added(10, 100, 110));
-		assert!(System::events().iter().any(|a| a.event == expected_event1));
 
 		assert_ok!(ConstantConfig::add_value(Origin::signed(3), 100));
-		let expected_event2 = TestEvent::constant_config(Event::Added(110, 100, 210));
-		assert!(System::events().iter().any(|a| a.event == expected_event2));
 
 		assert_ok!(ConstantConfig::add_value(Origin::signed(4), 100));
-		let expected_event3 = TestEvent::constant_config(Event::Added(210, 100, 310));
-		assert!(System::events().iter().any(|a| a.event == expected_event3));
+		
+		//Test that the expected events were emitted
+		let our_events = System::events()
+		.into_iter().map(|r| r.event)
+		.filter_map(|e| {
+			if let TestEvent::constant_config(inner) = e { Some(inner) } else { None }
+		})
+		.collect::<Vec<_>>();
+
+		let expected_events = vec![
+			Event::Added(10, 100, 110),
+			Event::Added(110, 100, 210),
+			Event::Added(210, 100, 310),
+	];
+	
+	assert_eq!(our_events, expected_events);
+
 	})
 }
 
-#[test]
-fn on_finalize_clears() {
-	ExternalityBuilder::build().execute_with(|| {
-		System::set_block_number(5);
-		assert_ok!(ConstantConfig::set_value(Origin::signed(1), 10));
+	#[test]
+	fn on_finalize_clears() {
+		ExternalityBuilder::build().execute_with(|| {
+			System::set_block_number(5);
+			assert_ok!(ConstantConfig::set_value(Origin::signed(1), 10));
 
-		assert_ok!(ConstantConfig::add_value(Origin::signed(2), 100));
+			assert_ok!(ConstantConfig::add_value(Origin::signed(2), 100));
 
-		ConstantConfig::on_finalize(10);
-		let expected_event = TestEvent::constant_config(Event::Cleared(110));
-		assert!(System::events().iter().any(|a| a.event == expected_event));
-
-		assert_eq!(ConstantConfig::single_value(), 0);
+			ConstantConfig::on_finalize(10);
+			let expected_event = TestEvent::constant_config(Event::Cleared(110));
+			
+			assert_eq!(
+				System::events()[1].event,
+				expected_event,
+			);
+		
+			assert_eq!(ConstantConfig::single_value(), 0);
 	})
 }
