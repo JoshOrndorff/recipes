@@ -87,7 +87,11 @@ fn add_member_works() {
 		assert_ok!(VecSet::add_member(Origin::signed(1)));
 
 		let expected_event = TestEvent::vec_set(RawEvent::MemberAdded(1));
-		assert!(System::events().iter().any(|a| a.event == expected_event));
+
+		assert_eq!(
+			System::events()[0].event,
+			expected_event,
+		);
 
 		assert_eq!(VecSet::members(), vec![1]);
 	})
