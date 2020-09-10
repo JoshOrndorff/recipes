@@ -134,6 +134,9 @@ fn pop_works() {
 
 		let expected_event = TestEvent::ringbuffer(RawEvent::Popped(1, true));
 
-		assert!(System::events().iter().any(|a| a.event == expected_event));
+		assert_eq!(
+			System::events()[0].event,
+			expected_event,
+		);
 	})
 }
