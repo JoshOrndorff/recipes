@@ -8,7 +8,10 @@ use sp_blockchain::{Error as BlockChainError, HeaderMetadata, HeaderBackend};
 use sp_block_builder::BlockBuilder;
 pub use sc_rpc_api::DenyUnsafe;
 use sp_transaction_pool::TransactionPool;
-use sc_consensus_manual_seal::{EngineCommand, rpc::{ManualSeal, ManualSealApi}};
+use sc_consensus_manual_seal::{
+	manual_seal_rpc::{ManualSeal, ManualSealApi, CreateBlockCommand},
+	manual_finality_rpc::{ManualFinality, ManualFinalityApi, FinalizeBlockCommand},
+};
 use futures::channel::mpsc::Sender;
 
 /// Full client dependencies.
@@ -20,7 +23,9 @@ pub struct FullDeps<C, P> {
 	/// Whether to deny unsafe calls
 	pub deny_unsafe: DenyUnsafe,
 	/// A command stream to send authoring commands to manual seal consensus engine
-	pub command_sink: Sender<EngineCommand<Hash>>,
+	pub authorship_sink: Sender<CreateBlockCommand<Hash>>,
+	/// A command stream to send finalization commands to manual finality engine
+	pub finality_sink: Sender<FinalizeBlockCommand<Hash>>
 }
 
 /// Instantiate all full RPC extensions.
@@ -37,7 +42,7 @@ pub fn create_full<C, P>(
 {
 
 	let mut io = jsonrpc_core::IoHandler::default();
-	let FullDeps { command_sink, client, .. } = deps;
+	let FullDeps { client, authorship_sink, finality_sink, .. } = deps;
 
 	// Add a silly RPC that returns constant values
 	io.extend_with(crate::silly_rpc::SillyRpc::to_delegate(
@@ -50,11 +55,18 @@ pub fn create_full<C, P>(
 		sum_storage_rpc::SumStorage::new(client),
 	));
 
-	// The final RPC extension receives commands for the manual seal consensus engine.
+	// This RPC extension receives commands for the manual seal consensus engine.
 	io.extend_with(
 		// We provide the rpc handler with the sending end of the channel to allow the rpc
-		// send EngineCommands to the background block authorship task.
-		ManualSealApi::to_delegate(ManualSeal::new(command_sink)),
+		// send `CreateBlockCommand`s to the background block authorship task.
+		ManualSealApi::to_delegate(ManualSeal::new(authorship_sink)),
+	);
+
+	// This RPC extension receives commands for the manual finality engine.
+	io.extend_with(
+		// We provide the rpc handler with the sending end of the channel to allow the rpc
+		// send `FinalizeBlockCommands` to the background finality task.
+		ManualFinalityApi::to_delegate(ManualFinality::new(finality_sink)),
 	);
 
 	io

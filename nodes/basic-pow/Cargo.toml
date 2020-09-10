@@ -27,25 +27,25 @@ structopt = '0.3.8'
 parity-scale-codec = '1.3.0'
 sha3 = "0.8"
 rand = { version = "0.7", features = ["small_rng"] }
-sc-consensus = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat' }
-sc-consensus-pow = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat' }
-sp-consensus-pow = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat' }
-sc-client-api = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat' }
-sp-blockchain = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat' }
-sp-timestamp = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat' }
-sc-basic-authorship = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat' }
-sc-cli = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat' }
-sc-executor = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat' }
-sc-network = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat' }
-sc-service = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat' }
-sc-transaction-pool = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat' }
-sp-consensus = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat' }
-sp-core = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat' }
-sp-inherents = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat' }
-sp-runtime = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat' }
-sp-transaction-pool = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat' }
+sc-consensus = { git = 'https://github.com/paritytech/substrate.git', branch = 'joshy-split-manual-seal-finality' }
+sc-consensus-pow = { git = 'https://github.com/paritytech/substrate.git', branch = 'joshy-split-manual-seal-finality' }
+sp-consensus-pow = { git = 'https://github.com/paritytech/substrate.git', branch = 'joshy-split-manual-seal-finality' }
+sc-client-api = { git = 'https://github.com/paritytech/substrate.git', branch = 'joshy-split-manual-seal-finality' }
+sp-blockchain = { git = 'https://github.com/paritytech/substrate.git', branch = 'joshy-split-manual-seal-finality' }
+sp-timestamp = { git = 'https://github.com/paritytech/substrate.git', branch = 'joshy-split-manual-seal-finality' }
+sc-basic-authorship = { git = 'https://github.com/paritytech/substrate.git', branch = 'joshy-split-manual-seal-finality' }
+sc-cli = { git = 'https://github.com/paritytech/substrate.git', branch = 'joshy-split-manual-seal-finality' }
+sc-executor = { git = 'https://github.com/paritytech/substrate.git', branch = 'joshy-split-manual-seal-finality' }
+sc-network = { git = 'https://github.com/paritytech/substrate.git', branch = 'joshy-split-manual-seal-finality' }
+sc-service = { git = 'https://github.com/paritytech/substrate.git', branch = 'joshy-split-manual-seal-finality' }
+sc-transaction-pool = { git = 'https://github.com/paritytech/substrate.git', branch = 'joshy-split-manual-seal-finality' }
+sp-consensus = { git = 'https://github.com/paritytech/substrate.git', branch = 'joshy-split-manual-seal-finality' }
+sp-core = { git = 'https://github.com/paritytech/substrate.git', branch = 'joshy-split-manual-seal-finality' }
+sp-inherents = { git = 'https://github.com/paritytech/substrate.git', branch = 'joshy-split-manual-seal-finality' }
+sp-runtime = { git = 'https://github.com/paritytech/substrate.git', branch = 'joshy-split-manual-seal-finality' }
+sp-transaction-pool = { git = 'https://github.com/paritytech/substrate.git', branch = 'joshy-split-manual-seal-finality' }
 sha3pow = { path = '../../consensus/sha3pow' }
-sp-api = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat' }
+sp-api = { git = 'https://github.com/paritytech/substrate.git', branch = 'joshy-split-manual-seal-finality' }
 
 # This node is compatible with any of the runtimes below
 # ---
@@ -61,4 +61,4 @@ runtime = { package = "super-runtime", path = "../../runtimes/super-runtime" }
 
 [build-dependencies]
 vergen = '3.0.4'
-substrate-build-script-utils = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat' }
+substrate-build-script-utils = { git = 'https://github.com/paritytech/substrate.git', branch = 'joshy-split-manual-seal-finality' }

@@ -22,4 +22,4 @@ std = [
 ]
 
 [dependencies]
-sp-std = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat', default-features = false }
+sp-std = { git = 'https://github.com/paritytech/substrate.git', branch = 'joshy-split-manual-seal-finality', default-features = false }

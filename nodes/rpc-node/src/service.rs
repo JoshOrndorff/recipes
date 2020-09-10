@@ -10,6 +10,7 @@ use std::sync::Arc;
 use runtime::{self, opaque::Block, RuntimeApi};
 use sp_consensus::import_queue::BasicQueue;
 use sp_api::TransactionFor;
+use sc_consensus_manual_seal::{ManualSealParams, ManualFinalityParams, run_manual_seal, run_manual_finality};
 
 // Our native executor instance.
 native_executor_instance!(
@@ -96,8 +97,9 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
 	let prometheus_registry = config.prometheus_registry().cloned();
 	let telemetry_connection_sinks = sc_service::TelemetryConnectionSinks::default();
 
-	// Channel for the rpc handler to communicate with the authorship task.
-	let (command_sink, commands_stream) = futures::channel::mpsc::channel(1000);
+	// Channels for the rpc handlers to communicate with the authorship and finality tasks.
+	let (authorship_sink, authorship_stream) = futures::channel::mpsc::channel(1000);
+	let (finality_sink, finality_stream) = futures::channel::mpsc::channel(1000);
 
 	let rpc_extensions_builder = {
 		let client = client.clone();
@@ -107,7 +109,8 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
 				client: client.clone(),
 				pool: pool.clone(),
 				deny_unsafe,
-				command_sink: command_sink.clone(),
+				authorship_sink: authorship_sink.clone(),
+				finality_sink: finality_sink.clone(),
 			};
 
 			crate::rpc::create_full(deps)
@@ -135,18 +138,31 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
 		);
 
 		// Background authorship future.
-		let authorship_future = sc_consensus_manual_seal::run_manual_seal(
-			Box::new(client.clone()),
-			proposer,
-			client,
-			transaction_pool.pool().clone(),
-			commands_stream,
-			select_chain,
-			inherent_data_providers,
+		let authorship_future = run_manual_seal(
+			ManualSealParams{
+				block_import: client.clone(),
+				env: proposer,
+				client: client.clone(),
+				pool: transaction_pool.pool().clone(),
+				commands_stream: authorship_stream,
+				select_chain,
+				consensus_data_provider: None,
+				inherent_data_providers,
+			}
 		);
 
-		// we spawn the future on a background thread managed by service.
+		// Background finality future.
+		let finality_future = run_manual_finality(
+			ManualFinalityParams{
+				client,
+				commands_stream: finality_stream,
+				_phantom: Default::default(),
+			}
+		);
+
+		// we spawn the futures in the background.
 		task_manager.spawn_essential_handle().spawn_blocking("manual-seal", authorship_future);
+		task_manager.spawn_essential_handle().spawn_blocking("manual-finality", finality_future);
 	};
 
 	network_starter.start_network();

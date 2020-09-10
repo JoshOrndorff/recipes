@@ -6,7 +6,7 @@ edition = "2018"
 license = "GPL-3.0-or-later"
 
 [dependencies]
-sp-api = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat', default-features = false}
+sp-api = { git = 'https://github.com/paritytech/substrate.git', branch = 'joshy-split-manual-seal-finality', default-features = false}
 
 [dev-dependencies]
 serde_json = "1.0.41"

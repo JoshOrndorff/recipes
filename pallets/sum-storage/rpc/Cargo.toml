@@ -12,10 +12,10 @@ jsonrpc-core-client = "14.0.3"
 jsonrpc-derive = "14.0.3"
 serde = { version = "1.0.101", features = ["derive"], optional = true }
 
-sp-rpc = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat', default-features = false}
-sp-runtime = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat', default-features = false}
-sp-blockchain = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat', default-features = false}
-sp-api = { git = 'https://github.com/paritytech/substrate.git', branch = 'jimmy/instant-seal-heartbeat', default-features = false }
+sp-rpc = { git = 'https://github.com/paritytech/substrate.git', branch = 'joshy-split-manual-seal-finality', default-features = false}
+sp-runtime = { git = 'https://github.com/paritytech/substrate.git', branch = 'joshy-split-manual-seal-finality', default-features = false}
+sp-blockchain = { git = 'https://github.com/paritytech/substrate.git', branch = 'joshy-split-manual-seal-finality', default-features = false}
+sp-api = { git = 'https://github.com/paritytech/substrate.git', branch = 'joshy-split-manual-seal-finality', default-features = false }
 
 sum-storage-runtime-api = { version = "2.0.0", path = "../runtime-api", default-features = false }
 
