@@ -76,7 +76,7 @@ impl ExternalityBuilder {
 	pub fn build() -> sp_io::TestExternalities {
 		let storage = system::GenesisConfig::default()
 			.build_storage::<TestRuntime>()
-			.expect();
+			.expect("test text");
 		let mut ext = sp_io::TestExternalities::from(storage);
 		ext.execute_with(|| System::set_block_number(1));
 		ext

@@ -89,13 +89,13 @@ pub type ReservableCurrency = Module<TestRuntime>;
 pub fn new_test_ext() -> sp_io::TestExternalities {
 	let mut t = system::GenesisConfig::default()
 		.build_storage::<TestRuntime>()
-		.expect();
+		.expect("test text");
 	balances::GenesisConfig::<TestRuntime> {
 		// Provide some initial balances
 		balances: vec![(1, 10000), (2, 11000), (3, 12000), (4, 13000), (5, 14000)],
 	}
 	.assimilate_storage(&mut t)
-	.expect();
+	.expect("test text");
 	let mut ext: sp_io::TestExternalities = t.into();
 	ext.execute_with(|| System::set_block_number(1));
 	ext
