@@ -261,7 +261,7 @@ mod tests {
 	fn new_test_ext() -> sp_io::TestExternalities {
 		let storage = system::GenesisConfig::default()
 			.build_storage::<Test>()
-			.unwrap();
+			.expect();
 		storage.into()
 	}
 
