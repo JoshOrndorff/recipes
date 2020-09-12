@@ -3006,7 +3006,7 @@ fn fetch_n_parse() -&gt; Result&lt;GithubInfo, Error&lt;T&gt;&gt; {
 		.map_err(|_| &lt;Error&lt;T&gt;&gt;::HttpFetchingError)?;
 
 	// Deserializing JSON to struct, thanks to `serde` and `serde_derive`
-	let gh_info: GithubInfo = serde_json::from_str(&amp;resp_str).expect();
+	let gh_info: GithubInfo = serde_json::from_str(&amp;resp_str).unwrap();
 	Ok(gh_info)
 }
 <span class="boring">}
