@@ -60,7 +60,7 @@ type TemplateModule = Module<Test>;
 fn new_test_ext() -> sp_io::TestExternalities {
 	system::GenesisConfig::default()
 		.build_storage::<Test>()
-		.unwrap()
+		.expect("test text")
 		.into()
 }
 
