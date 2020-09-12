@@ -89,18 +89,18 @@ pub type Charity = Module<TestRuntime>;
 pub fn new_test_ext() -> sp_io::TestExternalities {
 	let mut t = system::GenesisConfig::default()
 		.build_storage::<TestRuntime>()
-		.expect("test text");
+		.unwrap();
 
 	balances::GenesisConfig::<TestRuntime> {
 		// Provide some initial balances
 		balances: vec![(1, 13), (2, 11), (3, 1), (4, 3), (5, 19)],
 	}
 	.assimilate_storage(&mut t)
-	.expect("test text");
+	.unwrap();
 
 	crate::GenesisConfig {}
 		.assimilate_storage::<TestRuntime>(&mut t)
-		.expect("test text");
+		.unwrap();
 
 	let mut ext: sp_io::TestExternalities = t.into();
 	ext.execute_with(|| System::set_block_number(1));

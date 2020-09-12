@@ -62,7 +62,7 @@ impl ExternalityBuilder {
 	pub fn build() -> TestExternalities {
 		let storage = system::GenesisConfig::default()
 			.build_storage::<TestRuntime>()
-			.expect("test text");
+			.unwrap();
 		TestExternalities::from(storage)
 	}
 }
