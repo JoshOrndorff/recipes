@@ -135,11 +135,11 @@ impl ExternalityBuilder {
 		keystore
 			.write()
 			.sr25519_generate_new(KEY_TYPE, Some(&format!("{}/hunter1", PHRASE)))
-			.expect("test text");
+			.unwrap();
 
 		let storage = system::GenesisConfig::default()
 			.build_storage::<TestRuntime>()
-			.expect("test text");
+			.unwrap();
 
 		let mut t = TestExternalities::from(storage);
 		t.register_extension(OffchainExt::new(offchain));
@@ -186,13 +186,13 @@ fn test_offchain_signed_tx() {
 	t.execute_with(|| {
 		// Setup
 		let num = 32;
-		OcwDemo::offchain_signed_tx(num).expect("test text");
+		OcwDemo::offchain_signed_tx(num).unwrap();
 
 		// Verify
-		let tx = pool_state.write().transactions.pop().expect("test text");
+		let tx = pool_state.write().transactions.pop().unwrap();
 		assert!(pool_state.read().transactions.is_empty());
-		let tx = TestExtrinsic::decode(&mut &*tx).expect("test text");
-		assert_eq!(tx.signature.expect("test text").0, 0);
+		let tx = TestExtrinsic::decode(&mut &*tx).unwrap();
+		assert_eq!(tx.signature.unwrap().0, 0);
 		assert_eq!(tx.call, Call::submit_number_signed(num));
 	});
 }
@@ -204,11 +204,11 @@ fn test_offchain_unsigned_tx() {
 	t.execute_with(|| {
 		// when
 		let num = 32;
-		OcwDemo::offchain_unsigned_tx(num).expect("test text");
+		OcwDemo::offchain_unsigned_tx(num).unwrap();
 		// then
-		let tx = pool_state.write().transactions.pop().expect("test text");
+		let tx = pool_state.write().transactions.pop().unwrap();
 		assert!(pool_state.read().transactions.is_empty());
-		let tx = TestExtrinsic::decode(&mut &*tx).expect("test text");
+		let tx = TestExtrinsic::decode(&mut &*tx).unwrap();
 		assert_eq!(tx.signature, None);
 		assert_eq!(tx.call, Call::submit_number_unsigned(num));
 	});

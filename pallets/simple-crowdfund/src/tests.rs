@@ -102,12 +102,12 @@ use balances::Error as BalancesError;
 fn new_test_ext() -> sp_io::TestExternalities {
 	let mut t = system::GenesisConfig::default()
 		.build_storage::<Test>()
-		.expect("test text");
+		.unwrap();
 	balances::GenesisConfig::<Test> {
 		balances: vec![(1, 1000), (2, 2000), (3, 3000), (4, 4000)],
 	}
 	.assimilate_storage(&mut t)
-	.expect("test text");
+	.unwrap();
 	t.into()
 }
 
@@ -186,7 +186,7 @@ fn contribute_works() {
 		// Contributions appear in free balance of crowdfund
 		assert_eq!(Balances::free_balance(Crowdfund::fund_account_id(0)), 50);
 		// Last contribution time recorded
-		assert_eq!(Crowdfund::funds(0).expect("test text").raised, 49);
+		assert_eq!(Crowdfund::funds(0).unwrap().raised, 49);
 	});
 }
 
