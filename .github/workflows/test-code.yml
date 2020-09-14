@@ -3,44 +3,73 @@ name: Test Code
 on:
   pull_request:
     branches:
-    - master
+      - master
   push:
     branches:
-    - master
+      - master
+    paths-ignore:
+      - 'README.md'
 
 jobs:
   test-code:
-    runs-on: ubuntu-18.04
+    name:                          Clippy, Check, Test
+    strategy:
+          matrix:
+            toolchain:
+              - stable
+              - nightly
+    runs-on:                       ubuntu-latest
+    container:
+      image:                       paritytech/ci-linux:production
+      volumes:
+        - /cache:/cache
+    env:
+      RUST_BACKTRACE:              full
+      SCCACHE_REDIS:               redis://172.17.0.1/0
+      SCCACHE_IDLE_TIMEOUT:        0
+      CMAKE_C_COMPILER_LAUNCHER:   sccache
+      CMAKE_CXX_COMPILER_LAUNCHER: sccache
 
     steps:
-    - name: Checkout Code
-      uses: actions/checkout@v2
+      - name:                      Cancel Previous Runs
+        uses:                      styfle/cancel-workflow-action@0.4.1
+        with:
+          access_token:            ${{ github.token }}
 
-      # Steps taken from https://github.com/actions/cache/blob/master/examples.md#rust---cargo
-    - name: Cache cargo registry
-      uses: actions/cache@v2
-      with:
-        path: |
-          ~/.cargo/registry
-          ~/.cargo/git
-          target
-        key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+      - name:                      Checkout sources & submodules
+        uses:                      actions/checkout@master
+        with:
+          fetch-depth:             5
+          submodules:              recursive
+      
+      - name:                      Configure CARGO_HOME & CARGO_TARGET_DIR
+        run:                       ./.github/workflows/ci-cache.sh "${{ github.head_ref }}" "${{ matrix.toolchain }}"
+      
+      - name:                      Cache checking
+        if:                        github.event_name == 'pull_request' && github.event.action == 'opened' || github.event.action == 'reopened'
+        continue-on-error:         true
+        shell:                     bash
+        run:                       |
+            echo "Copy cache from master";
+            apt update&&apt install rsync -y;
+            rsync -aq /cache/${{ matrix.toolchain }}/ $CARGO_TARGET_DIR/ || true;
+      
+      - name:                      Sccache stats
+        shell:                     bash
+        run:                       sccache --show-stats
+      
+      - name:                      Checking rust-${{ matrix.toolchain }}
+        uses:                      actions-rs/cargo@master
+        with:
+          command:                 check
+          toolchain:               ${{ matrix.toolchain }}
+          args:                    --all  --verbose
 
-    - name: Install toolchain
-      uses: actions-rs/toolchain@v1
-      with:
-        profile: minimal
-        toolchain: nightly-2020-05-07
-        components: rustfmt, clippy
-        target: wasm32-unknown-unknown
-        override: true
-        default: true
+      - name: Run clippy
+        run: cargo +nightly-2020-05-07 clippy -- -D warnings
 
-    - name: Run clippy
-      run: cargo +nightly-2020-05-07 clippy -- -D warnings
+      - name: Check Kitchen
+        run: cargo check --all
 
-    - name: Check Kitchen
-      run: cargo check --all
-
-    - name: Test Kitchen
-      run: cargo test --all
+      - name: Test Kitchen
+        run: cargo test --all
