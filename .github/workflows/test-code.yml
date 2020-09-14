@@ -25,7 +25,7 @@ jobs:
         - /cache:/cache
     env:
       RUST_BACKTRACE:              full
-      SCCACHE_REDIS:               redis://172.17.0.1/0
+      SCCACHE_DIR:                 /cache/$HEAD_REF/$TOOLCHAIN/sccache
       SCCACHE_IDLE_TIMEOUT:        0
       CMAKE_C_COMPILER_LAUNCHER:   sccache
       CMAKE_CXX_COMPILER_LAUNCHER: sccache
@@ -57,19 +57,24 @@ jobs:
       - name:                      Sccache stats
         shell:                     bash
         run:                       sccache --show-stats
+
+      - name:                      Run ${{ matrix.toolchain }} clippy
+        uses:                      actions-rs/cargo@master
+        with:
+          command:                 clippy
+          toolchain:               ${{ matrix.toolchain }}
+          args:                    -- -D warnings
       
-      - name:                      Checking rust-${{ matrix.toolchain }}
+      - name:                      Checking Kitchen ${{ matrix.toolchain }}
         uses:                      actions-rs/cargo@master
         with:
           command:                 check
           toolchain:               ${{ matrix.toolchain }}
           args:                    --all  --verbose
 
-      - name: Run clippy
-        run: cargo +nightly-2020-05-07 clippy -- -D warnings
-
-      - name: Check Kitchen
-        run: cargo check --all
-
-      - name: Test Kitchen
-        run: cargo test --all
+      - name:                      Test Kitchen ${{ matrix.toolchain }}
+        uses:                      actions-rs/cargo@master
+        with:
+          command:                 test
+          toolchain:               ${{ matrix.toolchain }}
+          run:                     --all --verbose
