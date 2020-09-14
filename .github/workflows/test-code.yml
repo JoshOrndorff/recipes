@@ -22,7 +22,7 @@ jobs:
     container:
       image:                       paritytech/ci-linux:production
       volumes:
-        - ~/cache:/cache
+        - /home/runner/cache:/cache
     env:
       RUST_BACKTRACE:              full
       SCCACHE_IDLE_TIMEOUT:        0
