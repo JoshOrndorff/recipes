@@ -75,9 +75,7 @@ jobs:
           echo "CARGO_TARGET_DIR:"
           ls $CARGO_TARGET_DIR
           echo "/cache:"
-          ls /cache
-          echo "/home/runner/cache/:"
-          ls /home/runner/cache
+          ls /cache/ci_cache
 
 ## Test stage
 
