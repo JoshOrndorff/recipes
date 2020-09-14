@@ -63,6 +63,9 @@ jobs:
           # $CARGO_HOME
           key:                     ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
           # key:                     ${{ runner.os }}-cargo-${{ github.head_ref }}
+          restore-keys:            |
+            Linux-cargo-${{ github.head_ref }}
+            Linux-cargo-
       
       - name:                      Cache stats
         shell:                     bash
