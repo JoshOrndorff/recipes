@@ -59,9 +59,8 @@ jobs:
         run:                       sccache --show-stats
 
       - name:                      Install nightly clippy
+        if:                        matrix.toolchain == 'nightly'
         shell:                     bash
-        with:
-          toolchain:               nightly
         run:                       |
           rustup component add clippy --toolchain nightly-x86_64-unknown-linux-gnu
 
