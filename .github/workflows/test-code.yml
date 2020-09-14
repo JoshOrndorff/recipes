@@ -65,6 +65,7 @@ jobs:
           rustup component add clippy --toolchain nightly-x86_64-unknown-linux-gnu
 
       - name:                      Run nightly clippy
+        if:                        matrix.toolchain == 'nightly'
         uses:                      actions-rs/cargo@master
         with:
           command:                 clippy
@@ -72,15 +73,15 @@ jobs:
           args:                    -- -D warnings
       
       - name:                      Checking Kitchen stable
+        if:                        matrix.toolchain == 'stable'
         uses:                      actions-rs/cargo@master
         with:
           command:                 check
-          toolchain:               stable
           args:                    --all  --verbose
 
       - name:                      Test Kitchen stable
+        if:                        matrix.toolchain == 'stable'
         uses:                      actions-rs/cargo@master
         with:
           command:                 test
-          toolchain:               stable
           run:                     --all --verbose
