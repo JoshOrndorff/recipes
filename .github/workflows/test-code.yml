@@ -14,10 +14,10 @@ jobs:
   test-code:
     name:                          Clippy, Check, Test
     strategy:
-          matrix:
-            toolchain:
-              - stable
-              - nightly
+      matrix:
+        toolchain:
+          - stable
+          - nightly
     runs-on:                       ubuntu-latest
     container:
       image:                       paritytech/ci-linux:production
@@ -31,7 +31,7 @@ jobs:
       CMAKE_CXX_COMPILER_LAUNCHER: sccache
 
     steps:
-      - name:                      Cancel Previous Runs
+      - name:                      Cancel previous runs
         uses:                      styfle/cancel-workflow-action@0.4.1
         with:
           access_token:            ${{ github.token }}
@@ -45,7 +45,7 @@ jobs:
       - name:                      Configure CARGO_HOME & CARGO_TARGET_DIR
         run:                       ./.github/workflows/ci-cache.sh "${{ github.head_ref }}" "${{ matrix.toolchain }}"
       
-      - name:                      Cache checking
+      - name:                      Check cache
         if:                        github.event_name == 'pull_request' && github.event.action == 'opened' || github.event.action == 'reopened'
         continue-on-error:         true
         shell:                     bash
@@ -58,28 +58,30 @@ jobs:
         shell:                     bash
         run:                       sccache --show-stats
 
-      - name:                      Install ${{ matrix.toolchain }} clippy
+      - name:                      Install nightly clippy
         shell:                     bash
+        with:
+          toolchain:               nightly
         run:                       |
-          rustup component add clippy --toolchain ${{ matrix.toolchain }}-x86_64-unknown-linux-gnu
+          rustup component add clippy --toolchain nightly-x86_64-unknown-linux-gnu
 
-      - name:                      Run ${{ matrix.toolchain }} clippy
+      - name:                      Run nightly clippy
         uses:                      actions-rs/cargo@master
         with:
           command:                 clippy
-          toolchain:               ${{ matrix.toolchain }}
+          toolchain:               nightly
           args:                    -- -D warnings
       
-      - name:                      Checking Kitchen ${{ matrix.toolchain }}
+      - name:                      Checking Kitchen stable
         uses:                      actions-rs/cargo@master
         with:
           command:                 check
-          toolchain:               ${{ matrix.toolchain }}
+          toolchain:               stable
           args:                    --all  --verbose
 
-      - name:                      Test Kitchen ${{ matrix.toolchain }}
+      - name:                      Test Kitchen stable
         uses:                      actions-rs/cargo@master
         with:
           command:                 test
-          toolchain:               ${{ matrix.toolchain }}
+          toolchain:               stable
           run:                     --all --verbose
