@@ -26,6 +26,7 @@ jobs:
     env:
       RUST_BACKTRACE:              full
       SCCACHE_IDLE_TIMEOUT:        0
+      SCCACHE_DIR:                 /cache/${{ github.head_ref }}/${{ matrix.toolchain }}/sccache
       CMAKE_C_COMPILER_LAUNCHER:   sccache
       CMAKE_CXX_COMPILER_LAUNCHER: sccache
 
