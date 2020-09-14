@@ -53,6 +53,12 @@ jobs:
             echo "Copy cache from master";
             apt update&&apt install rsync -y;
             rsync -aq /cache/${{ matrix.toolchain }}/ $CARGO_TARGET_DIR/ || true;
+
+      - name:                      Cache CARGO_HOME, CARGO_TARGET_DIR, SCCACHE_DIR
+        uses:                      actions/cache@v2
+        with:
+          path:                    $CARGO_HOME
+          key:                     ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       
       - name:                      Sccache stats
         shell:                     bash
@@ -64,9 +70,10 @@ jobs:
         if:                        matrix.toolchain == 'nightly'
         shell:                     bash
         run:                       |
-          echo $CARGO_HOME
-          echo $CARGO_TARGET_DIR
-          git status
+          ls $CARGO_HOME
+          ls $CARGO_TARGET_DIR
+          ls $SCCACHE_DIR
+          git branch
           rustup component add clippy --toolchain nightly-x86_64-unknown-linux-gnu
 
       - name:                      Run nightly clippy
