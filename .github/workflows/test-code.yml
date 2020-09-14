@@ -58,7 +58,8 @@ jobs:
         uses:                      actions/cache@v2
         with:
           path:                    $CARGO_HOME
-          key:                     ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          # key:                     ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          key:                     ${{ runner.os }}-cargo-${{ hashFiles('$CARGO_TARGET_DIR/check_nightly_rust') }}
       
       - name:                      Sccache stats
         shell:                     bash

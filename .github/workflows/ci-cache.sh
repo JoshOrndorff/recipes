@@ -17,8 +17,8 @@ mkdir -p $CARGO_TARGET_DIR;
 
 echo "Current Rust nightly version:";
 rustc +nightly --version;
-echo "Cached Rust nightly version:";
 
+echo "Cached Rust nightly version:";
 if [ ! -f $CARGO_TARGET_DIR/check_nightly_rust ]; then
     echo "" > $CARGO_TARGET_DIR/check_nightly_rust;
 fi
