@@ -57,25 +57,34 @@ jobs:
       - name:                      Cache CARGO_HOME, CARGO_TARGET_DIR, SCCACHE_DIR
         uses:                      actions/cache@v2
         with:
-          path:                    $CARGO_HOME
+          path:                    |
+            /cache/${{ github.head_ref }}/${{ matrix.toolchain }}
+            /home/runner/cache/${{ github.head_ref }}/${{ matrix.toolchain }}
+            # $CARGO_HOME
           # key:                     ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
           key:                     ${{ runner.os }}-cargo-${{ hashFiles('$CARGO_TARGET_DIR/check_nightly_rust') }}
       
-      - name:                      Sccache stats
+      - name:                      Cache stats
         shell:                     bash
-        run:                       sccache --show-stats
+        run:                       |
+          sccache --show-stats
+          echo "SCCACHE_DIR:"
+          ls $SCCACHE_DIR
+          echo "CARGO_HOME:"
+          ls $CARGO_HOME
+          echo "CARGO_TARGET_DIR:"
+          ls $CARGO_TARGET_DIR
+          echo "/cache:"
+          ls /cache
+          echo "/home/runner/cache/:"
+          ls /home/runner/cache
 
 ## Test stage
 
       - name:                      Install nightly clippy
         if:                        matrix.toolchain == 'nightly'
         shell:                     bash
-        run:                       |
-          ls $CARGO_HOME
-          ls $CARGO_TARGET_DIR
-          ls $SCCACHE_DIR
-          git branch
-          rustup component add clippy --toolchain nightly-x86_64-unknown-linux-gnu
+        run:                       rustup component add clippy --toolchain nightly-x86_64-unknown-linux-gnu
 
       - name:                      Run nightly clippy
         if:                        matrix.toolchain == 'nightly'
