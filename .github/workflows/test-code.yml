@@ -58,6 +58,11 @@ jobs:
         shell:                     bash
         run:                       sccache --show-stats
 
+      - name:                      Install ${{ matrix.toolchain }} clippy
+        shell:                     bash
+        run:                       |
+          rustup component add clippy --toolchain ${{ matrix.toolchain }}-x86_64-unknown-linux-gnu
+
       - name:                      Run ${{ matrix.toolchain }} clippy
         uses:                      actions-rs/cargo@master
         with:
