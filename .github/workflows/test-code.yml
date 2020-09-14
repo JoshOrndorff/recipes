@@ -59,7 +59,7 @@ jobs:
         with:
           path:                    |
             /cache/${{ github.head_ref }}/${{ matrix.toolchain }}
-            /home/runner/cache/${{ github.head_ref }}/${{ matrix.toolchain }}
+          # /home/runner/cache/${{ github.head_ref }}/${{ matrix.toolchain }}
           # $CARGO_HOME
           # key:                     ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
           key:                     ${{ runner.os }}-cargo-${{ github.head_ref }}
