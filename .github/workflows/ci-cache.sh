@@ -11,6 +11,7 @@ SCCACHE_DIR=/cache/$HEAD_REF/$TOOLCHAIN/sccache
 
 echo "::set-env name=CARGO_HOME::$CARGO_HOME"
 echo "::set-env name=CARGO_TARGET_DIR::$CARGO_TARGET_DIR"
+echo "::set-env name=SCCACHE_DIR::$SCCACHE_DIR"
 
 mkdir -p $CARGO_TARGET_DIR;
 
