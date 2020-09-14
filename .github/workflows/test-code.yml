@@ -60,22 +60,25 @@ jobs:
           path:                    |
             /cache/${{ github.head_ref }}/${{ matrix.toolchain }}
             /home/runner/cache/${{ github.head_ref }}/${{ matrix.toolchain }}
-            # $CARGO_HOME
+          # $CARGO_HOME
           # key:                     ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-          key:                     ${{ runner.os }}-cargo-${{ hashFiles('$CARGO_TARGET_DIR/check_nightly_rust') }}
+          key:                     ${{ runner.os }}-cargo-${{ github.head_ref }}
       
       - name:                      Cache stats
         shell:                     bash
         run:                       |
           sccache --show-stats
           echo "SCCACHE_DIR:"
+          echo $SCCACHE_DIR
           ls $SCCACHE_DIR
           echo "CARGO_HOME:"
+          echo $CARGO_HOME
           ls $CARGO_HOME
           echo "CARGO_TARGET_DIR:"
+          echo $CARGO_TARGET_DIR
           ls $CARGO_TARGET_DIR
-          echo "/cache:"
-          ls /cache/ci_cache
+          echo "/cache/${{ github.head_ref }}/${{ matrix.toolchain }}:"
+          ls /cache/${{ github.head_ref }}/${{ matrix.toolchain }}
 
 ## Test stage
 
