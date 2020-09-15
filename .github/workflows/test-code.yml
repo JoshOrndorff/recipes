@@ -54,27 +54,16 @@ jobs:
         with:
           path:                    |
             /github/home/cache/${{ github.head_ref }}/${{ matrix.toolchain }}
-          key:                     ${{ runner.os }}-cargo-${{ github.head_ref }}-${{ hashFiles('**/Cargo.lock') }}
+          key:                     ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
           restore-keys:            |
-            Linux-cargo-${{ github.head_ref }}
-            Linux-cargo-master
-            Linux-cargo-
+            ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+            ${{ runner.os }}-cargo-
       
       - name:                      Cache stats
         shell:                     bash
         run:                       |
           sccache --show-stats
-          echo "SCCACHE_DIR:"
-          echo $SCCACHE_DIR
-          ls $SCCACHE_DIR || true
-          echo "CARGO_HOME:"
-          echo $CARGO_HOME
-          ls $CARGO_HOME || true
-          echo "CARGO_TARGET_DIR:"
-          echo $CARGO_TARGET_DIR
-          ls $CARGO_TARGET_DIR || true
-          echo "/github/home/cache/${{ github.head_ref }}/${{ matrix.toolchain }}/sccache:"
-          ls /github/home/cache/${{ github.head_ref }}/${{ matrix.toolchain }}/sccache || true
+          du -sh /github/home/cache/${{ github.head_ref }}/${{ matrix.toolchain }}/*
 
 ## Test stage
 
