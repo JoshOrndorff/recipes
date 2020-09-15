@@ -13,15 +13,20 @@ on:
 jobs:
   test-code:
     name:                          Clippy, Check, Test
+    strategy:
+      matrix:
+        toolchain:
+          - stable
+          - nightly
     runs-on:                       ubuntu-latest
     container:
       image:                       paritytech/ci-linux:e79b7a7e-20200827
     env:
       RUST_BACKTRACE:              full
       CARGO_INCREMENTAL:           0
-      CARGO_HOME:                  /github/home/cache/${{ github.head_ref }}/cargo
-      CARGO_TARGET_DIR:            /github/home/cache/${{ github.head_ref }}/target
-      SCCACHE_DIR:                 /github/home/cache/${{ github.head_ref }}/sccache
+      CARGO_HOME:                  /github/home/cache/${{ github.head_ref }}/${{ matrix.toolchain }}/cargo
+      CARGO_TARGET_DIR:            /github/home/cache/${{ github.head_ref }}/${{ matrix.toolchain }}/target
+      SCCACHE_DIR:                 /github/home/cache/${{ github.head_ref }}/${{ matrix.toolchain }}/sccache
       SCCACHE_IDLE_TIMEOUT:        0
       CMAKE_C_COMPILER_LAUNCHER:   sccache
       CMAKE_CXX_COMPILER_LAUNCHER: sccache
@@ -48,7 +53,7 @@ jobs:
         uses:                      actions/cache@v2
         with:
           path:                    |
-            /github/home/cache/${{ github.head_ref }}
+            /github/home/cache/${{ github.head_ref }}/${{ matrix.toolchain }}
           key:                     ${{ runner.os }}-cargo-${{ github.head_ref }}-${{ hashFiles('**/Cargo.lock') }}
           restore-keys:            |
             Linux-cargo-${{ github.head_ref }}
@@ -68,16 +73,18 @@ jobs:
           echo "CARGO_TARGET_DIR:"
           echo $CARGO_TARGET_DIR
           ls $CARGO_TARGET_DIR || true
-          echo "/github/home/cache/${{ github.head_ref }}/sccache:"
-          ls /github/home/cache/${{ github.head_ref }}/sccache || true
+          echo "/github/home/cache/${{ github.head_ref }}/${{ matrix.toolchain }}/sccache:"
+          ls /github/home/cache/${{ github.head_ref }}/${{ matrix.toolchain }}/sccache || true
 
 ## Test stage
 
       - name:                      Install nightly clippy
+        if:                        matrix.toolchain == 'nightly'
         shell:                     bash
         run:                       rustup component add clippy --toolchain nightly-x86_64-unknown-linux-gnu
 
       - name:                      Run nightly clippy
+        if:                        matrix.toolchain == 'nightly'
         uses:                      actions-rs/cargo@master
         with:
           command:                 clippy
@@ -85,12 +92,14 @@ jobs:
           args:                    -- -D warnings
       
       - name:                      Checking Kitchen stable
+        if:                        matrix.toolchain == 'stable'
         uses:                      actions-rs/cargo@master
         with:
           command:                 check
           args:                    --all  --verbose
 
       - name:                      Test Kitchen stable
+        if:                        matrix.toolchain == 'stable'
         uses:                      actions-rs/cargo@master
         with:
           command:                 test
