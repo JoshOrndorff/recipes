@@ -13,19 +13,13 @@ on:
 jobs:
   test-code:
     name:                          Clippy, Check, Test
-    strategy:
-      matrix:
-        toolchain:
-          - stable
-          - nightly
-    runs-on:                       ubuntu-latest
-    container:
-      image:                       paritytech/ci-linux:production
+    runs-on:                       ubuntu-18.04
     env:
       RUST_BACKTRACE:              full
-      CARGO_HOME:                  /cache/${{ github.head_ref }}/${{ matrix.toolchain }}/cargo
-      CARGO_TARGET_DIR:            /cache/${{ github.head_ref }}/${{ matrix.toolchain }}/target
-      SCCACHE_DIR:                 /cache/${{ github.head_ref }}/${{ matrix.toolchain }}/sccache
+      CARGO_INCREMENTAL:           0
+      CARGO_HOME:                  /github/home/cache/${{ github.head_ref }}/cargo
+      CARGO_TARGET_DIR:            /github/home/cache/${{ github.head_ref }}/target
+      SCCACHE_DIR:                 /github/home/cache/${{ github.head_ref }}/sccache
       SCCACHE_IDLE_TIMEOUT:        0
       CMAKE_C_COMPILER_LAUNCHER:   sccache
       CMAKE_CXX_COMPILER_LAUNCHER: sccache
@@ -37,7 +31,7 @@ jobs:
           access_token:            ${{ github.token }}
 
       - name:                      Checkout sources & submodules
-        uses:                      actions/checkout@master
+        uses:                      actions/checkout@v2
         with:
           fetch-depth:             5
           submodules:              recursive
@@ -46,7 +40,7 @@ jobs:
         uses:                      actions/cache@v2
         with:
           path:                    |
-            /cache/${{ github.head_ref }}/${{ matrix.toolchain }}
+            /github/home/cache/${{ github.head_ref }}
           key:                     ${{ runner.os }}-cargo-${{ github.head_ref }}-${{ hashFiles('**/Cargo.lock') }}
           restore-keys:            |
             Linux-cargo-${{ github.head_ref }}
@@ -66,18 +60,22 @@ jobs:
           echo "CARGO_TARGET_DIR:"
           echo $CARGO_TARGET_DIR
           ls $CARGO_TARGET_DIR || true
-          echo "/cache/${{ github.head_ref }}/${{ matrix.toolchain }}/sccache:"
-          ls /cache/${{ github.head_ref }}/${{ matrix.toolchain }}/sccache
+          echo "/github/home/cache/${{ github.head_ref }}/sccache:"
+          ls /github/home/cache/${{ github.head_ref }}/sccache || true
 
 ## Test stage
 
-      - name:                      Install nightly clippy
-        if:                        matrix.toolchain == 'nightly'
-        shell:                     bash
-        run:                       rustup component add clippy --toolchain nightly-x86_64-unknown-linux-gnu
+      - name: Install toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: nightly-2020-08-24
+          components: rustfmt, clippy
+          target: wasm32-unknown-unknown
+          override: true
+          default: true
 
       - name:                      Run nightly clippy
-        if:                        matrix.toolchain == 'nightly'
         uses:                      actions-rs/cargo@master
         with:
           command:                 clippy
@@ -85,14 +83,12 @@ jobs:
           args:                    -- -D warnings
       
       - name:                      Checking Kitchen stable
-        if:                        matrix.toolchain == 'stable'
         uses:                      actions-rs/cargo@master
         with:
           command:                 check
           args:                    --all  --verbose
 
       - name:                      Test Kitchen stable
-        if:                        matrix.toolchain == 'stable'
         uses:                      actions-rs/cargo@master
         with:
           command:                 test
