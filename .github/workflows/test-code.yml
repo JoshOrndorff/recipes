@@ -13,7 +13,9 @@ on:
 jobs:
   test-code:
     name:                          Clippy, Check, Test
-    runs-on:                       ubuntu-18.04
+    runs-on:                       ubuntu-latest
+    container:
+      image:                       paritytech/ci-linux:e79b7a7e-20200827
     env:
       RUST_BACKTRACE:              full
       CARGO_INCREMENTAL:           0
@@ -65,15 +67,10 @@ jobs:
 
 ## Test stage
 
-      - name: Install toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: nightly-2020-08-24
-          components: rustfmt, clippy
-          target: wasm32-unknown-unknown
-          override: true
-          default: true
+      - name:                      Install nightly clippy
+        if:                        matrix.toolchain == 'nightly'
+        shell:                     bash
+        run:                       rustup component add clippy --toolchain nightly-x86_64-unknown-linux-gnu
 
       - name:                      Run nightly clippy
         uses:                      actions-rs/cargo@master
