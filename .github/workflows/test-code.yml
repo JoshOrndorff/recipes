@@ -59,13 +59,13 @@ jobs:
           sccache --show-stats
           echo "SCCACHE_DIR:"
           echo $SCCACHE_DIR
-          ls $SCCACHE_DIR
+          ls $SCCACHE_DIR || true
           echo "CARGO_HOME:"
           echo $CARGO_HOME
-          ls $CARGO_HOME
+          ls $CARGO_HOME || true
           echo "CARGO_TARGET_DIR:"
           echo $CARGO_TARGET_DIR
-          ls $CARGO_TARGET_DIR
+          ls $CARGO_TARGET_DIR || true
           echo "/cache/${{ github.head_ref }}/${{ matrix.toolchain }}/sccache:"
           ls /cache/${{ github.head_ref }}/${{ matrix.toolchain }}/sccache
 
