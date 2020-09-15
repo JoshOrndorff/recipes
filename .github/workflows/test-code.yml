@@ -32,6 +32,12 @@ jobs:
         with:
           access_token:            ${{ github.token }}
 
+      - name:                      Rust version
+        shell:                     bash
+        run:                       |
+          rustup show
+          rustup +nightly show
+
       - name:                      Checkout sources & submodules
         uses:                      actions/checkout@v2
         with:
