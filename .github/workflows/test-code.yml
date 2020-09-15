@@ -21,12 +21,12 @@ jobs:
     runs-on:                       ubuntu-latest
     container:
       image:                       paritytech/ci-linux:production
-      volumes:
-        - /home/runner/cache:/cache
     env:
       RUST_BACKTRACE:              full
-      SCCACHE_IDLE_TIMEOUT:        0
+      CARGO_HOME:                  /cache/${{ github.head_ref }}/${{ matrix.toolchain }}/cargo
+      CARGO_TARGET_DIR:            /cache/${{ github.head_ref }}/${{ matrix.toolchain }}/target
       SCCACHE_DIR:                 /cache/${{ github.head_ref }}/${{ matrix.toolchain }}/sccache
+      SCCACHE_IDLE_TIMEOUT:        0
       CMAKE_C_COMPILER_LAUNCHER:   sccache
       CMAKE_CXX_COMPILER_LAUNCHER: sccache
 
@@ -41,30 +41,16 @@ jobs:
         with:
           fetch-depth:             5
           submodules:              recursive
-      
-      - name:                      Configure CARGO_HOME & CARGO_TARGET_DIR
-        run:                       ./.github/workflows/ci-cache.sh "${{ github.head_ref }}" "${{ matrix.toolchain }}"
-      
-      - name:                      Check cache
-        if:                        github.event_name == 'pull_request' && github.event.action == 'opened' || github.event.action == 'reopened'
-        continue-on-error:         true
-        shell:                     bash
-        run:                       |
-            echo "Copy cache from master";
-            apt update&&apt install rsync -y;
-            rsync -aq /cache/${{ matrix.toolchain }}/ $CARGO_TARGET_DIR/ || true;
 
       - name:                      Cache CARGO_HOME, CARGO_TARGET_DIR, SCCACHE_DIR
         uses:                      actions/cache@v2
         with:
           path:                    |
             /cache/${{ github.head_ref }}/${{ matrix.toolchain }}
-          # /home/runner/cache/${{ github.head_ref }}/${{ matrix.toolchain }}
-          # $CARGO_HOME
-          key:                     ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-          # key:                     ${{ runner.os }}-cargo-${{ github.head_ref }}
+          key:                     ${{ runner.os }}-cargo-${{ github.head_ref }}-${{ hashFiles('**/Cargo.lock') }}
           restore-keys:            |
             Linux-cargo-${{ github.head_ref }}
+            Linux-cargo-master
             Linux-cargo-
       
       - name:                      Cache stats
@@ -80,8 +66,8 @@ jobs:
           echo "CARGO_TARGET_DIR:"
           echo $CARGO_TARGET_DIR
           ls $CARGO_TARGET_DIR
-          echo "/cache/${{ github.head_ref }}/${{ matrix.toolchain }}:"
-          ls /cache/${{ github.head_ref }}/${{ matrix.toolchain }}
+          echo "/cache/${{ github.head_ref }}/${{ matrix.toolchain }}/sccache:"
+          ls /cache/${{ github.head_ref }}/${{ matrix.toolchain }}/sccache
 
 ## Test stage
 
@@ -110,4 +96,4 @@ jobs:
         uses:                      actions-rs/cargo@master
         with:
           command:                 test
-          args:                     --all --verbose
+          args:                    --all --verbose
