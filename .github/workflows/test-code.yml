@@ -3,44 +3,93 @@ name: Test Code
 on:
   pull_request:
     branches:
-    - master
+      - master
   push:
     branches:
-    - master
+      - master
+    paths-ignore:
+      - 'README.md'
 
 jobs:
   test-code:
-    runs-on: ubuntu-18.04
+    name:                          Clippy, Check, Test
+    strategy:
+      matrix:
+        toolchain:
+          - stable
+          - nightly
+    runs-on:                       ubuntu-latest
+    container:
+      image:                       paritytech/ci-linux:e79b7a7e-20200827
+    env:
+      RUST_BACKTRACE:              full
+      CARGO_INCREMENTAL:           0
+      CARGO_HOME:                  /github/home/cache/${{ github.head_ref }}/${{ matrix.toolchain }}/cargo
+      CARGO_TARGET_DIR:            /github/home/cache/${{ github.head_ref }}/${{ matrix.toolchain }}/target
+      SCCACHE_DIR:                 /github/home/cache/${{ github.head_ref }}/${{ matrix.toolchain }}/sccache
+      SCCACHE_IDLE_TIMEOUT:        0
+      CMAKE_C_COMPILER_LAUNCHER:   sccache
+      CMAKE_CXX_COMPILER_LAUNCHER: sccache
 
     steps:
-    - name: Checkout Code
-      uses: actions/checkout@v2
+      - name:                      Cancel previous runs
+        uses:                      styfle/cancel-workflow-action@0.4.1
+        with:
+          access_token:            ${{ github.token }}
 
-      # Steps taken from https://github.com/actions/cache/blob/master/examples.md#rust---cargo
-    - name: Cache cargo registry
-      uses: actions/cache@v2
-      with:
-        path: |
-          ~/.cargo/registry
-          ~/.cargo/git
-          target
-        key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+      - name:                      Rust version
+        shell:                     bash
+        run:                       |
+          rustup show
+          rustup +nightly show
 
-    - name: Install toolchain
-      uses: actions-rs/toolchain@v1
-      with:
-        profile: minimal
-        toolchain: nightly-2020-05-07
-        components: rustfmt, clippy
-        target: wasm32-unknown-unknown
-        override: true
-        default: true
+      - name:                      Checkout sources & submodules
+        uses:                      actions/checkout@v2
+        with:
+          fetch-depth:             5
+          submodules:              recursive
 
-    - name: Run clippy
-      run: cargo +nightly-2020-05-07 clippy -- -D warnings
+      - name:                      Cache CARGO_HOME, CARGO_TARGET_DIR, SCCACHE_DIR
+        uses:                      actions/cache@v2
+        with:
+          path:                    |
+            /github/home/cache/${{ github.head_ref }}/${{ matrix.toolchain }}
+          key:                     ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys:            |
+            ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+            ${{ runner.os }}-cargo-
+      
+      - name:                      Cache stats
+        shell:                     bash
+        run:                       |
+          sccache --show-stats
+          du -sh /github/home/cache/${{ github.head_ref }}/${{ matrix.toolchain }}/*
 
-    - name: Check Kitchen
-      run: cargo check --all
+## Test stage
 
-    - name: Test Kitchen
-      run: cargo test --all
+      - name:                      Install nightly clippy
+        if:                        matrix.toolchain == 'nightly'
+        shell:                     bash
+        run:                       rustup component add clippy --toolchain nightly-x86_64-unknown-linux-gnu
+
+      - name:                      Run nightly clippy
+        if:                        matrix.toolchain == 'nightly'
+        uses:                      actions-rs/cargo@master
+        with:
+          command:                 clippy
+          toolchain:               nightly
+          args:                    -- -D warnings
+      
+      - name:                      Checking Kitchen stable
+        if:                        matrix.toolchain == 'stable'
+        uses:                      actions-rs/cargo@master
+        with:
+          command:                 check
+          args:                    --all  --verbose
+
+      - name:                      Test Kitchen stable
+        if:                        matrix.toolchain == 'stable'
+        uses:                      actions-rs/cargo@master
+        with:
+          command:                 test
+          args:                    --all --verbose
