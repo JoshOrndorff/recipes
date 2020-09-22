@@ -30,7 +30,7 @@ blocks. Learn more about the [block import pipeline](https://substrate.dev/docs/
 We begin by creating the block import for grandpa. In addition to the block import itself, we get
 back a `grandpa_link`. This link is a channel over which the block import can communicate with the
 background task that actually casts grandpa votes. The
-[details of the grandpa protocol](https://research.web3.foundation/en/latest/polkadot/GRANDPA.html)
+[details of the grandpa protocol](https://research.web3.foundation/en/latest/polkadot/finality.html)
 are beyond the scope of this recipe.
 
 ```rust, ignore
