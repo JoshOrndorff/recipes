@@ -49,13 +49,6 @@ $ mdbook build
 The output will be in the `book` subdirectory. To check it out, open up `book/index.html` in
 a web browser.
 
-
-To run the tests within `rust` code blocks _within the book itself_:
-
-```bash
-$ mdbook test
-```
-
 ## License
 
 The Substrate Recipes are [GPL 3.0 Licensed](LICENSE) It is open source and
