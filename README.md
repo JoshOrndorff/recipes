@@ -50,6 +50,8 @@ a web browser, or to serve the book locally, type:
 $ mdbook serve
 ```
 
+The default address to view the book will be located at http://localhost:3000 .
+
 ## License
 
 The Substrate Recipes are [GPL 3.0 Licensed](LICENSE) It is open source and
