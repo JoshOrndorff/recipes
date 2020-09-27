@@ -37,9 +37,6 @@ rust-lang/rust uses in [this file][rust-mdbook]. To get it:
 ```bash
 $ cargo install mdbook --vers [version-num]
 ```
-To run the book locally, type:
-
-mdbook serve
 To build the book, type:
 
 ```bash
@@ -47,7 +44,11 @@ $ mdbook build
 ```
 
 The output will be in the `book` subdirectory. To check it out, open up `book/index.html` in
-a web browser.
+a web browser, or to serve the book locally, type:
+
+```bash
+$ mdbook serve
+```
 
 ## License
 
