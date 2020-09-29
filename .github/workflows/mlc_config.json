@@ -7,7 +7,7 @@
       "pattern": "^https://github.com/substrate-developer-hub/recipes/tree/master"
     },
     {
-      "pattern": "^https://localhost"
-    },
+      "pattern": "^http://localhost"
+    }
   ]
 }
