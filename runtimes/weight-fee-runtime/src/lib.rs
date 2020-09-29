@@ -44,7 +44,7 @@ use sp_version::RuntimeVersion;
 #[allow(unused_imports)]
 use frame_support::weights::IdentityFee;
 #[allow(unused_imports)]
-use generic_asset::{AssetCurrency, AssetIdProvider, SpendingAssetCurrency};
+use assets::{AssetCurrency, AssetIdProvider, SpendingAssetCurrency};
 
 // A few exports that help ease life for downstream crates.
 pub use balances::Call as BalancesCall;
@@ -216,7 +216,7 @@ impl balances::Trait for Runtime {
 	type WeightInfo = ();
 }
 
-impl generic_asset::Trait for Runtime {
+impl assets::Trait for Runtime {
 	/// The type for recording an account's balance.
 	type Balance = Balance;
 	type AssetId = u32;
@@ -314,7 +314,7 @@ impl transaction_payment::Trait for Runtime {
 	type Currency = Balances; // The balances pallet (The most common choice)
 						  // type Currency = FixedGenericAsset<Self>; // A generic asset whose ID is hard-coded above.
 						  //type Currency = SpendingAssetCurrency<Self>; // A generic asset whose ID is stored in the
-						  // generic_asset pallet's runtime storage
+						  // asset pallet's runtime storage
 
 	// What to do when fees are paid. () means take no additional actions.
 	type OnTransactionPayment = ();
@@ -344,7 +344,7 @@ construct_runtime!(
 		System: system::{Module, Call, Storage, Config, Event<T>},
 		Timestamp: timestamp::{Module, Call, Storage, Inherent},
 		Balances: balances::{Module, Call, Storage, Config<T>, Event<T>},
-		GenericAsset: generic_asset::{Module, Call, Storage, Config<T>, Event<T>},
+		Assets: assets::{Module, Call, Storage, Config<T>, Event<T>},
 		RandomnessCollectiveFlip: randomness_collective_flip::{Module, Call, Storage},
 		Sudo: sudo::{Module, Call, Config<T>, Storage, Event<T>},
 		TransactionPayment: transaction_payment::{Module, Storage},

@@ -52,7 +52,7 @@ pub fn testnet_genesis(root_key: AccountId, endowed_accounts: Vec<AccountId>) ->
 				.map(|k| (k, 1 << 60))
 				.collect(),
 		}),
-		generic_asset: Some(GenericAssetConfig {
+		assets: Some(GenericAssetConfig {
 			assets: vec![13, 1],
 			initial_balance: 10u128.pow(18 + 9), // 1 billion token with 18 decimals
 			endowed_accounts: endowed_accounts
