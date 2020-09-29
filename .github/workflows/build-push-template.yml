@@ -4,6 +4,7 @@ on:
   push:
     branches:
     - master
+    - test-ci # always want to including test-ci for testing gh-action
 
 jobs:
   build-push-template:

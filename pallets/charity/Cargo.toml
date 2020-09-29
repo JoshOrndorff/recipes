@@ -19,11 +19,11 @@ compatibility_version = "2.0.0-rc6"
 [features]
 default = ['std']
 std = [
-    'parity-scale-codec/std',
-    'frame-support/std',
-    'frame-system/std',
-    'balances/std',
-    'sp-runtime/std',
+	'parity-scale-codec/std',
+	'frame-support/std',
+	'frame-system/std',
+	'balances/std',
+	'sp-runtime/std',
 ]
 
 [dependencies]

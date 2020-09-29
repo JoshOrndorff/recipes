@@ -7,10 +7,11 @@ on:
   push:
     branches:
     - master
+    - test-ci # always want to including test-ci for testing gh-action
 
 jobs:
   markdown-link-check:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     steps:
     - uses: actions/checkout@v2
     - uses: gaurav-nelson/github-action-markdown-link-check@v1
