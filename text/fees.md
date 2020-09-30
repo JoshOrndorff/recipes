@@ -164,8 +164,7 @@ Having calculated the amount of fees due, runtime authors must decide which asse
 paid in. A common choice is the use the
 [`Balances` pallet](https://substrate.dev/rustdocs/v2.0.0-rc6/pallet_balances/index.html), but any type that
 implements the [`Currency` trait](https://substrate.dev/rustdocs/v2.0.0-rc6/frame_support/traits/trait.Currency.html)
-can be used. The weight-fee-runtime demonstrates how to use an asset provided by the
-[`Generic Asset` pallet](https://substrate.dev/rustdocs/v2.0.0-rc6/pallet_generic_asset/index.html).
+can be used.
 
 src:
 [`runtimes/weight-fee-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/weight-fee-runtime/src/lib.rs)

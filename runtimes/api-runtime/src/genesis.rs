@@ -45,7 +45,7 @@ pub fn testnet_genesis(root_key: AccountId, endowed_accounts: Vec<AccountId>) ->
 			changes_trie_config: Default::default(),
 		}),
 		pallet_balances: Some(BalancesConfig {
-			pallet_balances: endowed_accounts
+			balances: endowed_accounts
 				.iter()
 				.cloned()
 				.map(|k| (k, 1 << 60))

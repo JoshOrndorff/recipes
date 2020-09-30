@@ -894,7 +894,7 @@ dependencies = [
 
 [[package]]
 name = "constant-config"
-version = "2.0.0-rc6"
+version = "2.0.0"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -1056,7 +1056,7 @@ dependencies = [
 
 [[package]]
 name = "currency-imbalances"
-version = "2.0.0-rc6"
+version = "2.0.0"
 dependencies = [
  "frame-support",
  "frame-system",
