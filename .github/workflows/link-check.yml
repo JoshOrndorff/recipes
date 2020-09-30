@@ -7,13 +7,17 @@ on:
   push:
     branches:
     - master
+    - test-ci # always want to including test-ci for testing gh-action
 
 jobs:
   markdown-link-check:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@master
     - uses: gaurav-nelson/github-action-markdown-link-check@v1
       with:
+        # links that are okay (http status returns 200) will not be shown
         use-quiet-mode: 'yes'
+        # showing the details on links returning error
+        use-verbose-mode: 'yes'
         config-file: '.github/workflows/mlc_config.json'

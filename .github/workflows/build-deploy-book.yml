@@ -4,6 +4,7 @@ on:
   push:
     branches:
     - master
+    # Do not include test-ci, as it deploy mdbook to production
 
 jobs:
   build-deploy-book:

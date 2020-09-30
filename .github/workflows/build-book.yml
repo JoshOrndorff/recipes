@@ -4,6 +4,9 @@ on:
   pull_request:
     branches:
     - master
+  push:
+    branches:
+    - test-ci # always want to including test-ci for testing gh-action
 
 jobs:
   build-book:
@@ -14,8 +17,7 @@ jobs:
     - name: Setup mdBook
       uses: peaceiris/actions-mdbook@v1
       with:
-        mdbook-version: '0.3.7'
-        # mdbook-version: 'latest'
+        mdbook-version: 'latest'
 
     - name: Build Book
       run: mdbook build
