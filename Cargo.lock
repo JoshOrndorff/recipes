@@ -1100,7 +1100,7 @@ checksum = "d4d0e2d24e5ee3b23a01de38eefdcd978907890701f08ffffd4cb457ca4ee8d6"
 
 [[package]]
 name = "default-instance"
-version = "2.0.0-rc6"
+version = "2.0.0"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -1186,7 +1186,7 @@ dependencies = [
 
 [[package]]
 name = "double-map"
-version = "2.0.0-rc6"
+version = "2.0.0"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -1368,7 +1368,7 @@ dependencies = [
 
 [[package]]
 name = "fixed-point"
-version = "2.0.0-rc6"
+version = "2.0.0"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -1802,7 +1802,7 @@ dependencies = [
 
 [[package]]
 name = "generic-event"
-version = "2.0.0-rc6"
+version = "2.0.0"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -1985,7 +1985,7 @@ dependencies = [
 
 [[package]]
 name = "hello-substrate"
-version = "2.0.0-rc6"
+version = "2.0.0"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -2638,7 +2638,7 @@ dependencies = [
 
 [[package]]
 name = "last-caller"
-version = "2.0.0-rc6"
+version = "2.0.0"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -3185,7 +3185,7 @@ dependencies = [
 
 [[package]]
 name = "lockable-currency"
-version = "2.0.0-rc6"
+version = "2.0.0"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -3230,7 +3230,7 @@ checksum = "adb241df5c4caeb888755363fc95f8a896618dc0d435e9e775f7930cb099beab"
 
 [[package]]
 name = "map-set"
-version = "2.0.0-rc6"
+version = "2.0.0"
 dependencies = [
  "account-set",
  "frame-support",
@@ -3650,7 +3650,7 @@ checksum = "1ab52be62400ca80aa00285d25253d7f7c437b7375c4de678f5405d3afe82ca5"
 
 [[package]]
 name = "ocw-demo"
-version = "2.0.0-rc6"
+version = "2.0.0"
 dependencies = [
  "alt_serde",
  "frame-support",
@@ -4705,7 +4705,7 @@ dependencies = [
 
 [[package]]
 name = "randomness"
-version = "2.0.0-rc6"
+version = "2.0.0"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -4834,7 +4834,7 @@ dependencies = [
 
 [[package]]
 name = "reservable-currency"
-version = "2.0.0-rc6"
+version = "2.0.0"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -4868,7 +4868,7 @@ dependencies = [
 
 [[package]]
 name = "ringbuffer-queue"
-version = "2.0.0-rc6"
+version = "2.0.0"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -6175,6 +6175,7 @@ dependencies = [
  "sc-consensus-pow",
  "sha3 0.8.2",
  "sp-api",
+ "sp-consensus-pow",
  "sp-core",
  "sp-runtime",
 ]
@@ -6212,7 +6213,7 @@ checksum = "29f060a7d147e33490ec10da418795238fd7545bba241504d6b31a409f2e6210"
 
 [[package]]
 name = "simple-crowdfund"
-version = "2.0.0-rc6"
+version = "2.0.0"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -6227,7 +6228,7 @@ dependencies = [
 
 [[package]]
 name = "simple-event"
-version = "2.0.0-rc6"
+version = "2.0.0"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -6239,7 +6240,7 @@ dependencies = [
 
 [[package]]
 name = "simple-map"
-version = "2.0.0-rc6"
+version = "2.0.0"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -7008,7 +7009,7 @@ dependencies = [
 
 [[package]]
 name = "storage-cache"
-version = "2.0.0-rc6"
+version = "2.0.0"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -7054,7 +7055,7 @@ checksum = "8ea5119cdb4c55b55d432abb513a0429384878c15dde60cc77b1c99de1a95a6a"
 
 [[package]]
 name = "struct-storage"
-version = "2.0.0-rc6"
+version = "2.0.0"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -7176,7 +7177,7 @@ checksum = "502d53007c02d7605a05df1c1a73ee436952781653da5d0bf57ad608f66932c1"
 
 [[package]]
 name = "sum-storage"
-version = "2.0.0-rc6"
+version = "2.0.0"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -7974,7 +7975,7 @@ checksum = "8cb18268690309760d59ee1a9b21132c126ba384f374c59a94db4bc03adeb561"
 
 [[package]]
 name = "vec-set"
-version = "2.0.0-rc6"
+version = "2.0.0"
 dependencies = [
  "account-set",
  "frame-support",
@@ -8229,7 +8230,7 @@ dependencies = [
 
 [[package]]
 name = "weights"
-version = "2.0.0-rc6"
+version = "2.0.0"
 dependencies = [
  "frame-support",
  "frame-system",

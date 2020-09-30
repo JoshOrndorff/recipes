@@ -23,5 +23,6 @@ sha3 = "0.8"
 
 sc-consensus-pow = '0.8.0'
 sp-api = '2.0.0'
+sp-consensus-pow = '0.8.0'
 sp-core = '2.0.0'
 sp-runtime = '2.0.0'
