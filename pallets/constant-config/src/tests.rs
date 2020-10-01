@@ -46,7 +46,7 @@ impl system::Trait for TestRuntime {
 	type MaximumBlockLength = MaximumBlockLength;
 	type AvailableBlockRatio = AvailableBlockRatio;
 	type Version = ();
-	type ModuleToIndex = ();
+	type PalletInfo = ();
 	type AccountData = ();
 	type OnNewAccount = ();
 	type OnKilledAccount = ();
@@ -116,7 +116,7 @@ fn overflow_checked() {
 #[test]
 fn add_value_works() {
 	ExternalityBuilder::build().execute_with(|| {
-		
+
 		assert_ok!(ConstantConfig::set_value(Origin::signed(1), 10));
 
 		assert_ok!(ConstantConfig::add_value(Origin::signed(2), 100));
@@ -124,7 +124,7 @@ fn add_value_works() {
 		assert_ok!(ConstantConfig::add_value(Origin::signed(3), 100));
 
 		assert_ok!(ConstantConfig::add_value(Origin::signed(4), 100));
-		
+
 		//Test that the expected events were emitted
 		let our_events = System::events()
 		.into_iter().map(|r| r.event)
@@ -138,7 +138,7 @@ fn add_value_works() {
 			Event::Added(110, 100, 210),
 			Event::Added(210, 100, 310),
 	];
-	
+
 	assert_eq!(our_events, expected_events);
 
 	})
@@ -154,12 +154,12 @@ fn add_value_works() {
 
 			ConstantConfig::on_finalize(10);
 			let expected_event = TestEvent::constant_config(Event::Cleared(110));
-			
+
 			assert_eq!(
 				System::events()[1].event,
 				expected_event,
 			);
-		
+
 			assert_eq!(ConstantConfig::single_value(), 0);
 	})
 }

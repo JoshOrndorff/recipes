@@ -48,7 +48,7 @@ impl system::Trait for TestRuntime {
 	type MaximumBlockLength = MaximumBlockLength;
 	type AvailableBlockRatio = AvailableBlockRatio;
 	type Version = ();
-	type ModuleToIndex = ();
+	type PalletInfo = ();
 	type AccountData = balances::AccountData<u64>;
 	type OnNewAccount = ();
 	type OnKilledAccount = ();
@@ -57,6 +57,7 @@ impl system::Trait for TestRuntime {
 
 impl balances::Trait for TestRuntime {
 	type Balance = u64;
+	type MaxLocks = ();
 	type Event = TestEvent;
 	type DustRemoval = ();
 	type ExistentialDeposit = ExistentialDeposit;
