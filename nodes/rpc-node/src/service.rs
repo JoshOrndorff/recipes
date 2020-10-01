@@ -1,8 +1,9 @@
 //! Service and ServiceFactory implementation. Specialized wrapper over substrate service.
 
-use sc_executor::native_executor_instance;
 pub use sc_executor::NativeExecutor;
+use sc_consensus_manual_seal::ManualSealParams;
 use sc_client_api::RemoteBackend;
+use sc_executor::native_executor_instance;
 use sc_network::config::DummyFinalityProofRequestBuilder;
 use sc_service::{error::Error as ServiceError, Configuration, PartialComponents, TaskManager};
 use sp_inherents::InherentDataProviders;
@@ -136,13 +137,16 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
 
 		// Background authorship future.
 		let authorship_future = sc_consensus_manual_seal::run_manual_seal(
-			Box::new(client.clone()),
-			proposer,
-			client,
-			transaction_pool.pool().clone(),
-			commands_stream,
-			select_chain,
-			inherent_data_providers,
+			ManualSealParams {
+				block_import: client.clone(),
+				env: proposer,
+				client,
+				pool: transaction_pool.pool().clone(),
+				commands_stream,
+				select_chain,
+				inherent_data_providers,
+				consensus_data_provider: None,
+			}
 		);
 
 		// we spawn the future on a background thread managed by service.

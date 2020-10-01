@@ -254,7 +254,7 @@ fn offchain_signed_tx(block_number: T::BlockNumber) -> Result<(), Error<T>> {
 	// We retrieve a signer and check if it is valid.
 	//   Since this pallet only has one key in the keystore. We use `any_account()1 to
 	//   retrieve it. If there are multiple keys and we want to pinpoint it, `with_filter()` can be chained,
-	//   ref: https://substrate.dev/rustdocs/v2.0.0-rc6/frame_system/offchain/struct.Signer.html
+	//   ref: https://substrate.dev/rustdocs/v2.0.0/frame_system/offchain/struct.Signer.html
 	let signer = Signer::<T, T::AuthorityId>::any_account();
 
 	// Translating the current block number to number and submit it on-chain
@@ -333,7 +333,7 @@ impl<T: Trait> frame_support::unsigned::ValidateUnsigned for Module<T> {
 
 We implement the `ValidateUnsigned` trait for `Module`, and add the allowance logic inside the
 `validate_unsigned` function. We verify that if the call is `Call::submit_number_unsigned` we return
-a [`ValidTransaction`](https://substrate.dev/rustdocs/v2.0.0-rc6/sp_runtime/transaction_validity/struct.ValidTransaction.html) object using the [builder pattern](https://github.com/rust-unofficial/patterns/blob/master/patterns/builder.md).
+a [`ValidTransaction`](https://substrate.dev/rustdocs/v2.0.0/sp_runtime/transaction_validity/struct.ValidTransaction.html) object using the [builder pattern](https://github.com/rust-unofficial/patterns/blob/master/patterns/builder.md).
 
 The `ValidTransaction` object contain some fields we have not seen before:
 
@@ -382,7 +382,7 @@ fn offchain_unsigned_tx(block_number: T::BlockNumber) -> Result<(), Error<T>> {
 	let call = Call::submit_number_unsigned(number);
 
 	// `submit_unsigned_transaction` returns a type of `Result<(), ()>`
-	//   ref: https://substrate.dev/rustdocs/v2.0.0-rc6/frame_system/offchain/struct.SubmitTransaction.html#method.submit_unsigned_transaction
+	//   ref: https://substrate.dev/rustdocs/v2.0.0/frame_system/offchain/struct.SubmitTransaction.html#method.submit_unsigned_transaction
 	SubmitTransaction::<T, Call<T>>::submit_unsigned_transaction(call.into())
 		.map_err(|_| {
 			debug::error!("Failed in offchain_unsigned_tx");
@@ -392,7 +392,7 @@ fn offchain_unsigned_tx(block_number: T::BlockNumber) -> Result<(), Error<T>> {
 ```
 
 As in signed transactions, we prepare a function reference with its parameters and call
-[`frame_system::offchain::SubmitTransaction::submit_unsigned_transaction`](https://substrate.dev/rustdocs/v2.0.0-rc6/frame_system/offchain/struct.SubmitTransaction.html#method.submit_unsigned_transaction).
+[`frame_system::offchain::SubmitTransaction::submit_unsigned_transaction`](https://substrate.dev/rustdocs/v2.0.0/frame_system/offchain/struct.SubmitTransaction.html#method.submit_unsigned_transaction).
 
 ## Unsigned Transactions with Signed Payloads
 
@@ -441,7 +441,7 @@ fn offchain_unsigned_tx_signed_payload(block_number: T::BlockNumber) -> Result<(
 ```
 
 What is unique here is that
-[`send_unsigned_transaction` function](https://substrate.dev/rustdocs/v2.0.0-rc6/frame_system/offchain/trait.SendUnsignedTransaction.html#tymethod.send_unsigned_transaction) takes two functions. The first, expressed as a closure,
+[`send_unsigned_transaction` function](https://substrate.dev/rustdocs/v2.0.0/frame_system/offchain/trait.SendUnsignedTransaction.html#tymethod.send_unsigned_transaction) takes two functions. The first, expressed as a closure,
 returns a `SignedPayload` object, and the second returns an on-chain call to be made.
 
 We have defined our `SignedPayload` object earlier in the pallet.

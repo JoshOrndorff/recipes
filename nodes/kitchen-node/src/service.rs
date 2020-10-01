@@ -9,6 +9,7 @@ use sp_inherents::InherentDataProviders;
 use std::sync::Arc;
 use runtime::{self, opaque::Block, RuntimeApi};
 use sp_consensus::import_queue::BasicQueue;
+use sc_consensus_manual_seal::InstantSealParams;
 use sp_api::TransactionFor;
 
 // Our native executor instance.
@@ -125,19 +126,21 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
 		);
 
 		let authorship_future = sc_consensus_manual_seal::run_instant_seal(
-			Box::new(client.clone()),
-			proposer,
-			client,
-			transaction_pool.pool().clone(),
-			select_chain,
-			inherent_data_providers,
+			InstantSealParams {
+				block_import: client.clone(),
+				env: proposer,
+				client,
+				pool: transaction_pool.pool().clone(),
+				select_chain,
+				consensus_data_provider: None,
+				inherent_data_providers,
+			}
 		);
 
 		task_manager.spawn_essential_handle().spawn_blocking("instant-seal", authorship_future);
 	};
 
 	network_starter.start_network();
-
 	Ok(task_manager)
 }
 

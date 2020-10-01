@@ -1,4 +1,4 @@
-use wasm_builder_runner::WasmBuilder;
+use substrate_wasm_builder_runner::WasmBuilder;
 
 fn main() {
 	WasmBuilder::new()

@@ -120,5 +120,5 @@ Finally when the `_guard` variable goes out of scope, the lock is released.
 
 ## Reference
 
--   [`StorageValueRef` API doc](https://substrate.dev/rustdocs/v2.0.0-rc6/sp_runtime/offchain/storage/struct.StorageValueRef.html)
+-   [`StorageValueRef` API doc](https://substrate.dev/rustdocs/v2.0.0/sp_runtime/offchain/storage/struct.StorageValueRef.html)
 -   [`example-offchain-worker` pallet in Substrate repo](https://github.com/paritytech/substrate/tree/master/frame/example-offchain-worker)

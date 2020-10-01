@@ -57,7 +57,7 @@ impl system::Trait for TestRuntime {
 	type MaximumBlockLength = MaximumBlockLength;
 	type AvailableBlockRatio = AvailableBlockRatio;
 	type Version = ();
-	type ModuleToIndex = ();
+	type PalletInfo = ();
 	type AccountData = balances::AccountData<u64>;
 	type OnNewAccount = ();
 	type OnKilledAccount = ();
@@ -71,6 +71,7 @@ parameter_types! {
 }
 impl balances::Trait for TestRuntime {
 	type Balance = u64;
+	type MaxLocks = ();
 	type Event = TestEvent;
 	type DustRemoval = ();
 	type ExistentialDeposit = ExistentialDeposit;
@@ -136,7 +137,7 @@ fn insert_inner_works() {
 
 		// check events emitted match expectations
 		let expected_event = TestEvent::struct_storage(RawEvent::NewInnerThing(3u32, data, 7u64));
-	
+
 		assert_eq!(
 			System::events()[0].event,
 			expected_event,
@@ -185,7 +186,7 @@ fn insert_super_thing_with_existing_works() {
 			data,
 			7u64.into(),
 		));
-		
+
 		assert_eq!(
 			System::events()[1].event,
 			expected_event,
@@ -240,7 +241,7 @@ fn insert_super_with_new_inner_works() {
 				7u64.into(),
 			),
 		];
-		
+
 		assert_eq!(our_events, expected_events);
 
 	})

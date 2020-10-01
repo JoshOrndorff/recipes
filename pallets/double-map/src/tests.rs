@@ -43,7 +43,7 @@ impl system::Trait for TestRuntime {
 	type MaximumBlockLength = MaximumBlockLength;
 	type AvailableBlockRatio = AvailableBlockRatio;
 	type Version = ();
-	type ModuleToIndex = ();
+	type PalletInfo = ();
 	type AccountData = ();
 	type OnNewAccount = ();
 	type OnKilledAccount = ();
@@ -93,7 +93,7 @@ fn join_all_members_works() {
 
 		// correct event emission
 		let expected_event = TestEvent::double_map(RawEvent::NewMember(1));
-	
+
 		assert_eq!(
 			System::events()[0].event,
 			expected_event,

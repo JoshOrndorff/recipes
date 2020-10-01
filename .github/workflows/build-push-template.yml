@@ -3,7 +3,8 @@ name: Build and Push Playground Image
 on:
   push:
     branches:
-    - master
+    # Temporarily disabled, to be fix.
+    # - master
     - test-ci # always want to including test-ci for testing gh-action
 
 jobs:

@@ -282,7 +282,7 @@ impl<T: Trait> Module<T> {
 		// We will likely want to use `mutate` to access
 		// the storage comprehensively.
 		//
-		// Ref: https://substrate.dev/rustdocs/v2.0.0-rc6/sp_runtime/offchain/storage/struct.StorageValueRef.html
+		// Ref: https://substrate.dev/rustdocs/v2.0.0/sp_runtime/offchain/storage/struct.StorageValueRef.html
 		if let Some(Some(gh_info)) = s_info.get::<GithubInfo>() {
 			// gh-info has already been fetched. Return early.
 			debug::info!("cached gh-info: {:?}", gh_info);
@@ -306,7 +306,7 @@ impl<T: Trait> Module<T> {
 
 		// We try to acquire the lock here. If failed, we know the `fetch_n_parse` part inside is being
 		//   executed by previous run of ocw, so the function just returns.
-		// ref: https://substrate.dev/rustdocs/v2.0.0-rc6/sp_runtime/offchain/storage_lock/struct.StorageLock.html#method.try_lock
+		// ref: https://substrate.dev/rustdocs/v2.0.0/sp_runtime/offchain/storage_lock/struct.StorageLock.html#method.try_lock
 		if let Ok(_guard) = lock.try_lock() {
 			match Self::fetch_n_parse() {
 				Ok(gh_info) => { s_info.set(&gh_info); }
@@ -356,7 +356,7 @@ impl<T: Trait> Module<T> {
 		// By default, the http request is async from the runtime perspective. So we are asking the
 		//   runtime to wait here.
 		// The returning value here is a `Result` of `Result`, so we are unwrapping it twice by two `?`
-		//   ref: https://substrate.dev/rustdocs/v2.0.0-rc6/sp_runtime/offchain/http/struct.PendingRequest.html#method.try_wait
+		//   ref: https://substrate.dev/rustdocs/v2.0.0/sp_runtime/offchain/http/struct.PendingRequest.html#method.try_wait
 		let response = pending
 			.try_wait(timeout)
 			.map_err(|_| <Error<T>>::HttpFetchingError)?
@@ -375,7 +375,7 @@ impl<T: Trait> Module<T> {
 		// We retrieve a signer and check if it is valid.
 		//   Since this pallet only has one key in the keystore. We use `any_account()1 to
 		//   retrieve it. If there are multiple keys and we want to pinpoint it, `with_filter()` can be chained,
-		//   ref: https://substrate.dev/rustdocs/v2.0.0-rc6/frame_system/offchain/struct.Signer.html
+		//   ref: https://substrate.dev/rustdocs/v2.0.0/frame_system/offchain/struct.Signer.html
 		let signer = Signer::<T, T::AuthorityId>::any_account();
 
 		// Translating the current block number to number and submit it on-chain
@@ -410,7 +410,7 @@ impl<T: Trait> Module<T> {
 		let call = Call::submit_number_unsigned(number);
 
 		// `submit_unsigned_transaction` returns a type of `Result<(), ()>`
-		//   ref: https://substrate.dev/rustdocs/v2.0.0-rc6/frame_system/offchain/struct.SubmitTransaction.html#method.submit_unsigned_transaction
+		//   ref: https://substrate.dev/rustdocs/v2.0.0/frame_system/offchain/struct.SubmitTransaction.html#method.submit_unsigned_transaction
 		SubmitTransaction::<T, Call<T>>::submit_unsigned_transaction(call.into())
 			.map_err(|_| {
 				debug::error!("Failed in offchain_unsigned_tx");

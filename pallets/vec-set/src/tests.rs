@@ -43,7 +43,7 @@ impl system::Trait for TestRuntime {
 	type MaximumBlockLength = MaximumBlockLength;
 	type AvailableBlockRatio = AvailableBlockRatio;
 	type Version = ();
-	type ModuleToIndex = ();
+	type PalletInfo = ();
 	type AccountData = ();
 	type OnNewAccount = ();
 	type OnKilledAccount = ();
@@ -136,7 +136,7 @@ fn remove_member_works() {
 		assert!(System::events().iter().any(|a| a.event == expected_event));
 
 		// check storage changes
-		assert_eq!(VecSet::members(), vec![]);
+		assert_eq!(VecSet::members(), Vec::<u64>::new());
 	})
 }
 

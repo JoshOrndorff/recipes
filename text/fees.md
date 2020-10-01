@@ -9,7 +9,7 @@
 ](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/weight-fee-runtime/src/lib.rs)
 
 Substrate provides the
-[`transaction_payment` pallet](https://substrate.dev/rustdocs/v2.0.0-rc6/pallet_transaction_payment/index.html) for
+[`transaction_payment` pallet](https://substrate.dev/rustdocs/v2.0.0/pallet_transaction_payment/index.html) for
 calculating and collecting fees for executing transactions. Fees are broken down into two
 components:
 
@@ -29,7 +29,7 @@ total_fee = transaction_length * length_fee + weight_to_fee(total_weight)
 ## Setting the Parameters
 
 Each of the parameters described above is set in the
-[transaction payment pallet](https://substrate.dev/rustdocs/v2.0.0-rc6/pallet_transaction_payment/index.html)'s
+[transaction payment pallet](https://substrate.dev/rustdocs/v2.0.0/pallet_transaction_payment/index.html)'s
 configuration trait. For example, the `super-runtime` sets these parameters as follows.
 
 src:
@@ -53,12 +53,12 @@ impl transaction_payment::Trait for Runtime {
 
 In many cases converting weight to fees one-to-one, as shown above, will suffice and can be
 accomplished with
-[`IdentityFee`](https://substrate.dev/rustdocs/v2.0.0-rc6/frame_support/weights/struct.IdentityFee.html). This
+[`IdentityFee`](https://substrate.dev/rustdocs/v2.0.0/frame_support/weights/struct.IdentityFee.html). This
 approach is also taken in the
 [node template](https://github.com/paritytech/substrate/blob/2d39ec2c4aaec1cc0f91fcb91734de8f408dc1b2/bin/node-template/runtime/src/lib.rs#L246).
 It is also possible to provide a type that makes a more complex calculation. Any type that
 implements
-[`WeightToFeePolynomial`](https://substrate.dev/rustdocs/v2.0.0-rc6/frame_support/weights/trait.WeightToFeePolynomial.html)
+[`WeightToFeePolynomial`](https://substrate.dev/rustdocs/v2.0.0/frame_support/weights/trait.WeightToFeePolynomial.html)
 will suffice.
 
 ## Linear Conversion
@@ -75,7 +75,7 @@ pub struct LinearWeightToFee<C>(sp_std::marker::PhantomData<C>);
 
 Then we implement `WeightToFeePolynomial` for it. When implementing this trait, your main job is to
 return a set of
-[`WeightToFeeCoefficient`](https://substrate.dev/rustdocs/v2.0.0-rc6/frame_support/weights/struct.WeightToFeeCoefficient.html)s.
+[`WeightToFeeCoefficient`](https://substrate.dev/rustdocs/v2.0.0/frame_support/weights/struct.WeightToFeeCoefficient.html)s.
 These coefficients can have integer and fractional parts and be positive or negative. In our
 `LinearWeightToFee` there is a single integer coefficient supplied by the associated type.
 
@@ -162,10 +162,9 @@ impl WeightToFeePolynomial for QuadraticWeightToFee {
 
 Having calculated the amount of fees due, runtime authors must decide which asset the fees should be
 paid in. A common choice is the use the
-[`Balances` pallet](https://substrate.dev/rustdocs/v2.0.0-rc6/pallet_balances/index.html), but any type that
-implements the [`Currency` trait](https://substrate.dev/rustdocs/v2.0.0-rc6/frame_support/traits/trait.Currency.html)
-can be used. The weight-fee-runtime demonstrates how to use an asset provided by the
-[`Generic Asset` pallet](https://substrate.dev/rustdocs/v2.0.0-rc6/pallet_generic_asset/index.html).
+[`Balances` pallet](https://substrate.dev/rustdocs/v2.0.0/pallet_balances/index.html), but any type that
+implements the [`Currency` trait](https://substrate.dev/rustdocs/v2.0.0/frame_support/traits/trait.Currency.html)
+can be used.
 
 src:
 [`runtimes/weight-fee-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/weight-fee-runtime/src/lib.rs)

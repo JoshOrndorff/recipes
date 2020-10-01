@@ -44,7 +44,7 @@ impl system::Trait for TestRuntime {
 	type MaximumBlockLength = MaximumBlockLength;
 	type AvailableBlockRatio = AvailableBlockRatio;
 	type Version = ();
-	type ModuleToIndex = ();
+	type PalletInfo = ();
 	type AccountData = ();
 	type OnNewAccount = ();
 	type OnKilledAccount = ();
@@ -141,7 +141,7 @@ fn take_works() {
 		assert_ok!(SimpleMap::take_single_entry(Origin::signed(2)));
 
 		let expected_event = TestEvent::simple_map(RawEvent::EntryTaken(2, 19));
-	
+
 		assert_eq!(
 			System::events()[1].event,
 			expected_event,

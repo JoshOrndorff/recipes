@@ -121,7 +121,7 @@ pub trait Trait: system::Trait {
 ```
 
 > Many pallets throughout the ecosystem are coupled to a token through the
-> [`Currency` trait](https://substrate.dev/rustdocs/v2.0.0-rc6/frame_support/traits/trait.Currency.html).
+> [`Currency` trait](https://substrate.dev/rustdocs/v2.0.0/frame_support/traits/trait.Currency.html).
 
 Having this associated type means that the loosely coupled variant of the `check-membership` pallet
 can be installed in any runtime that can supply it with a set of accounts to use as an access

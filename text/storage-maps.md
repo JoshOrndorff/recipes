@@ -31,7 +31,7 @@ have:
 -   `get(fn simple_map)` - the name of a getter function that will return values from the map.
 -   `: map hasher(blake2_128_concat)` - beginning of the type declaration. This is a map and it will
     use the
-    [`blake2_128_concat`](https://substrate.dev/rustdocs/v2.0.0-rc6/frame_support/trait.Hashable.html#tymethod.blake2_128_concat)
+    [`blake2_128_concat`](https://substrate.dev/rustdocs/v2.0.0/frame_support/trait.Hashable.html#tymethod.blake2_128_concat)
     hasher. More on this below.
 -   `T::AccountId => u32` - The specific key and value tyes of the map. This is a map from
     `AccountId`s to `u32`s.
@@ -90,6 +90,6 @@ let entry = <SimpleMap<T>>::take(&user);
 ```
 
 The rest of the API is documented in the rustdocs on the
-[`StorageMap` trait](https://substrate.dev/rustdocs/v2.0.0-rc6/frame_support/storage/trait.StorageMap.html). You do
+[`StorageMap` trait](https://substrate.dev/rustdocs/v2.0.0/frame_support/storage/trait.StorageMap.html). You do
 not need to explicitly `use` this trait because the `decl_storage!` macro will do it for you if you
 use a storage map.

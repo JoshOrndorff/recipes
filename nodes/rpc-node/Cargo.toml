@@ -1,11 +1,11 @@
 [package]
 name = 'rpc-node'
-authors = ['Substrate DevHub <https://github.com/substrate-developer-hub>']
-build = 'build.rs'
+version = "2.0.0"
 edition = '2018'
-version = "2.0.0-rc6"
+authors = ['Substrate DevHub <https://github.com/substrate-developer-hub>']
 repository = 'https://github.com/substrate-developer-hub/recipes'
 description = "A Substrate node that demonstrates a custom RPC endpoint"
+build = 'build.rs'
 license = "GPL-3.0-or-later"
 
 [package.metadata.substrate]
@@ -16,52 +16,57 @@ categories = [
 	"Instant Seal",
 	"recipe",
 ]
-compatibility_version = "2.0.0-rc6"
+compatibility_version = "2.0.0"
 
 [[bin]]
 name = 'rpc-node'
 path = 'src/main.rs'
 
 [dependencies]
+ctrlc = { features = ['termination'], version = '3.1.3' }
 futures = '0.3.1'
+futures01 = { package = 'futures', version = '0.1.29'}
+jsonrpc-core = "15.0"
+jsonrpc-core-client = "15.0"
+jsonrpc-derive = "15.0"
 log = '0.4.8'
 parking_lot = '0.9.0'
+structopt = "0.3.8"
 tokio = '0.1.22'
 trie-root = '0.15.2'
-structopt = "0.3.8"
-jsonrpc-core = "14.0.3"
-jsonrpc-core-client = "14.0.3"
-jsonrpc-derive = "14.0.3"
-ctrlc = { features = ['termination'], version = '3.1.3' }
-futures01 = { package = 'futures', version = '0.1.29'}
-sc-rpc = '2.0.0-rc6'
-sc-rpc-api = '0.8.0-rc6'
-sc-client-api = '2.0.0-rc6'
-sum-storage-rpc = { path = "../../pallets/sum-storage/rpc" }
-sum-storage-runtime-api = { path = "../../pallets/sum-storage/runtime-api" }
-sc-basic-authorship = '0.8.0-rc6'
-sc-cli = '0.8.0-rc6'
-sc-consensus = '0.8.0-rc6'
-sc-consensus-manual-seal = '0.8.0-rc6'
-sc-executor = '0.8.0-rc6'
-sc-network = '0.8.0-rc6'
-sc-service = '0.8.0-rc6'
-sc-transaction-pool = '2.0.0-rc6'
-sp-block-builder = '2.0.0-rc6'
-sp-blockchain = '2.0.0-rc6'
-sp-consensus = '0.8.0-rc6'
-sp-core = '2.0.0-rc6'
-sp-inherents = '2.0.0-rc6'
-sp-io = '2.0.0-rc6'
-sp-runtime = '2.0.0-rc6'
-sp-timestamp = '2.0.0-rc6'
-sp-transaction-pool = '2.0.0-rc6'
-sp-api = '2.0.0-rc6'
+
+# Substrate packages
+
+sc-basic-authorship = '0.8.0'
+sc-cli = '0.8.0'
+sc-client-api = '2.0.0'
+sc-consensus = '0.8.0'
+sc-consensus-manual-seal = '0.8.0'
+sc-executor = '0.8.0'
+sc-network = '0.8.0'
+sc-rpc = '2.0.0'
+sc-rpc-api = '0.8.0'
+sc-service = '0.8.0'
+sc-transaction-pool = '2.0.0'
+sp-api = '2.0.0'
+sp-block-builder = '2.0.0'
+sp-blockchain = '2.0.0'
+sp-consensus = '0.8.0'
+sp-core = '2.0.0'
+sp-inherents = '2.0.0'
+sp-io = '2.0.0'
+sp-runtime = '2.0.0'
+sp-timestamp = '2.0.0'
+sp-transaction-pool = '2.0.0'
+
+# local packages
 
 # RPC Node only works with Runtime's that provide the sum-storage-runtime-api
 # That means it only works with the api-runtime
 runtime = { package = "api-runtime", path = "../../runtimes/api-runtime" }
+sum-storage-rpc = { path = "../../pallets/sum-storage/rpc" }
+sum-storage-runtime-api = { path = "../../pallets/sum-storage/runtime-api" }
 
 [build-dependencies]
+substrate-build-script-utils = '2.0.0'
 vergen = '3.0.4'
-substrate-build-script-utils = '2.0.0-rc6'
