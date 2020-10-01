@@ -180,7 +180,7 @@ querying the current consensus authorities. Substrate comes with several
 <a href="https://polkadot.js.org/api/substrate/rpc.html">default RPCs</a>. In many cases it is useful to add
 custom RPCs to your node. In this recipe, we will add three custom RPCs to our node. The first is trivial, the second calls into a <a href="./runtime-api.html">custom runtime API</a>, and the third interfaces with consensus.</p>
 <h2><a class="header" href="#the-rpc-extensions-builder" id="the-rpc-extensions-builder">The RPC Extensions Builder</a></h2>
-<p>In order to connect custom RPCs you must provide an function known as an &quot;RPC extension builder&quot;. This function takes a parameter for whether the node should deny unsafe RPC calls, and returns an <a href="https://docs.rs/jsonrpc-core/14.2.0/jsonrpc_core/struct.IoHandler.html">IoHandler</a> that the node needs to create a json RPC.</p>
+<p>In order to connect custom RPCs you must provide an function known as an &quot;RPC extension builder&quot;. This function takes a parameter for whether the node should deny unsafe RPC calls, and returns an <a href="https://docs.rs/jsonrpc-core/15.0.0/jsonrpc_core/struct.IoHandler.html">IoHandler</a> that the node needs to create a json RPC.</p>
 <pre><code class="language-rust ignore">let rpc_extensions_builder = {
 	let client = client.clone();
 	let pool = transaction_pool.clone();
@@ -251,10 +251,10 @@ impl SillyRpc for Silly {
 <h3><a class="header" href="#including-the-silly-rpc" id="including-the-silly-rpc">Including the Silly RPC</a></h3>
 <p>With our RPC written, we're ready to extend our <code>IoHandler</code> with it. We begin with a few dependencies in our
 <code>rpc-node</code>'s <code>Cargo.toml</code>.</p>
-<pre><code class="language-toml">jsonrpc-core = &quot;14.0.3&quot;
-jsonrpc-core-client = &quot;14.0.3&quot;
-jsonrpc-derive = &quot;14.0.3&quot;
-sc-rpc = '2.0.0-rc6'
+<pre><code class="language-toml">jsonrpc-core = &quot;15.0&quot;
+jsonrpc-core-client = &quot;15.0&quot;
+jsonrpc-derive = &quot;15.0&quot;
+sc-rpc = '2.0.0'
 </code></pre>
 <p>Now we're ready to write the <code>create_full</code> function we referenced from our service. The function is quoted in its entirety below. You ca see we add the</p>
 <pre><code class="language-rust ignore">pub fn create_full&lt;C, P&gt;(
@@ -417,9 +417,9 @@ Then call the RPC at an old block and confirm you get the old sum.</p>
 strive to document that project, we have included a snippet of javascript for interacting with these first two
 custom RPCs in the <code>nodes/rpc-node/js</code> directory.</p>
 <h2><a class="header" href="#the-manual-seal-rpc" id="the-manual-seal-rpc">The Manual Seal RPC</a></h2>
-<p>Our third and final example RPC will interact with consensus. Specifically, it will tell the consensus engine when to author and finalize blocks. The API for this RPC if defined in Substrate in the <a href="https://substrate.dev/rustdocs/v2.0.0-rc6/sc_consensus_manual_seal/rpc/trait.ManualSealApi.html"><code>ManualSealApi</code> Trait</a>.</p>
+<p>Our third and final example RPC will interact with consensus. Specifically, it will tell the consensus engine when to author and finalize blocks. The API for this RPC if defined in Substrate in the <a href="https://substrate.dev/rustdocs/v2.0.0/sc_consensus_manual_seal/rpc/trait.ManualSealApi.html"><code>ManualSealApi</code> Trait</a>.</p>
 <h3><a class="header" href="#installing-the-manual-seal-rpc" id="installing-the-manual-seal-rpc">Installing the Manual Seal RPC</a></h3>
-<p>The previous RPC needed a reference to the <code>client</code> to call into the runtime. Likewise, this RPC needs a command stream to send messages to the actual consensus engine. This recipe does not cover installing the manual seal engine, but it is nearly identical to the <a href="https://substrate.dev/rustdocs/v2.0.0-rc6/sc_consensus_manual_seal/fn.run_instant_seal.html">instant seal engine</a> used in the <a href="./kitchen-node.html">Kitchen Node</a>.</p>
+<p>The previous RPC needed a reference to the <code>client</code> to call into the runtime. Likewise, this RPC needs a command stream to send messages to the actual consensus engine. This recipe does not cover installing the manual seal engine, but it is nearly identical to the <a href="https://substrate.dev/rustdocs/v2.0.0/sc_consensus_manual_seal/fn.run_instant_seal.html">instant seal engine</a> used in the <a href="./kitchen-node.html">Kitchen Node</a>.</p>
 <p>To install the RPC endpoint, we do exactly as we have before, and extend the <code>create_full</code> function in <code>rpc.rs</code></p>
 <pre><code class="language-rust ignore">io.extend_with(
 	// We provide the rpc handler with the sending end of the channel to allow the rpc

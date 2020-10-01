@@ -173,11 +173,11 @@ will teach us many useful aspects of dealing with consensus and prepare us to un
 advanced consensus engines in the future. In particular we will learn about:</p>
 <ul>
 <li>Substrate's
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc6/sp_consensus/block_import/trait.BlockImport.html"><code>BlockImport</code> trait</a></li>
-<li>Substrate's <a href="https://substrate.dev/rustdocs/v2.0.0-rc6/sp_consensus/import_queue/index.html">import pipeline</a></li>
-<li>Structure of a typical <a href="https://substrate.dev/rustdocs/v2.0.0-rc6/sc_service/index.html">Substrate Service</a></li>
+<a href="https://substrate.dev/rustdocs/v2.0.0/sp_consensus/block_import/trait.BlockImport.html"><code>BlockImport</code> trait</a></li>
+<li>Substrate's <a href="https://substrate.dev/rustdocs/v2.0.0/sp_consensus/import_queue/index.html">import pipeline</a></li>
+<li>Structure of a typical <a href="https://substrate.dev/rustdocs/v2.0.0/sc_service/index.html">Substrate Service</a></li>
 <li>Configuration of
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc6/sp_authorship/struct.InherentDataProvider.html"><code>InherentDataProvider</code></a>s</li>
+<a href="https://substrate.dev/rustdocs/v2.0.0/sp_authorship/struct.InherentDataProvider.html"><code>InherentDataProvider</code></a>s</li>
 </ul>
 <h2><a class="header" href="#the-structure-of-a-node" id="the-structure-of-a-node">The Structure of a Node</a></h2>
 <p>A Substrate node has two parts. An outer part that is responsible for gossiping transactions and
@@ -190,7 +190,7 @@ with it. But in practice, most consensus engines will require the runtime to pro
 <a href="./runtime-api.html">runtime APIs</a> that affect the engine. For example, Aura and Babe query the
 runtime for the set of validators. A more real-world PoW consensus would query the runtime for the
 block difficulty. Additionally, some runtimes rely on the consensus engine to provide
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc6/sp_runtime/generic/enum.DigestItem.html#variant.PreRuntime">pre-runtime digests</a>.
+<a href="https://substrate.dev/rustdocs/v2.0.0/sp_runtime/generic/enum.DigestItem.html#variant.PreRuntime">pre-runtime digests</a>.
 For example, runtimes that include the Babe pallet expect a pre-runtime digest containing
 information about the current babe slot.</p>
 <p>In this recipe we will avoid those practical complexities by using the
@@ -198,13 +198,13 @@ information about the current babe slot.</p>
 <code>pow-runtime</code> which are truly isolated from each other. The contents of the runtime should be
 familiar, and will not be discussed here.</p>
 <h2><a class="header" href="#the-substrate-service" id="the-substrate-service">The Substrate Service</a></h2>
-<p>The <a href="https://substrate.dev/rustdocs/v2.0.0-rc6/sc_service/index.html">Substrate Service</a> is the main
+<p>The <a href="https://substrate.dev/rustdocs/v2.0.0/sc_service/index.html">Substrate Service</a> is the main
 coordinator of the various parts of a Substrate node, including consensus. The service is large and
 takes many parameters, so in each node, it is put together in a dedicated <code>src/service.rs</code> file.</p>
 <p>The particular part of the service that is relevant here is
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc6/sc_service/trait.ImportQueue.html"><code>ImportQueue</code></a>.
+<a href="https://substrate.dev/rustdocs/v2.0.0/sc_service/trait.ImportQueue.html"><code>ImportQueue</code></a>.
 Here we construct an instance of the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc6/sc_consensus_pow/struct.PowBlockImport.html"><code>PowBlockImport</code> struct</a>,
+<a href="https://substrate.dev/rustdocs/v2.0.0/sc_consensus_pow/struct.PowBlockImport.html"><code>PowBlockImport</code> struct</a>,
 providing it with references to our client, our <code>MinimalSha3Algorithm</code>, and some other necessary
 data.</p>
 <pre><code class="language-rust ignore">let pow_block_import = sc_consensus_pow::PowBlockImport::new(
@@ -231,7 +231,7 @@ service will use for importing blocks into the client.</p>
 <h3><a class="header" href="#the-block-import-pipeline" id="the-block-import-pipeline">The Block Import Pipeline</a></h3>
 <p>You may have noticed that when we created the <code>PowBlockImport</code> we gave it two separate references to
 the client. The second reference will always be to a client. But the first is interesting. The
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc6/sc_consensus_pow/struct.PowBlockImport.html#method.new">rustdocs tell us</a>
+<a href="https://substrate.dev/rustdocs/v2.0.0/sc_consensus_pow/struct.PowBlockImport.html#method.new">rustdocs tell us</a>
 that the first parameter is <code>inner: BlockImport&lt;B, Transaction = TransactionFor&lt;C, B&gt;&gt;</code>. Why would a
 block import have a reference to another block import? Because the &quot;block import pipeline&quot; is
 constructed in an onion-like fashion, where one layer of block import wraps the next. Learn more
@@ -252,11 +252,11 @@ This object is created in a helper function defined at the beginning of <code>se
 }
 </code></pre>
 <p>Anything that implements the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc6/sp_inherents/trait.ProvideInherentData.html"><code>ProvideInherentData</code> trait</a>
+<a href="https://substrate.dev/rustdocs/v2.0.0/sp_inherents/trait.ProvideInherentData.html"><code>ProvideInherentData</code> trait</a>
 may be used here. The block authoring logic must supply all inherents that the runtime expects. In
 the case of this basic-pow chain, that is just the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc6/sp_timestamp/trait.TimestampInherentData.html"><code>TimestampInherentData</code></a>
-expected by the <a href="https://substrate.dev/rustdocs/v2.0.0-rc6/pallet_timestamp/index.html">timestamp pallet</a>. In order
+<a href="https://substrate.dev/rustdocs/v2.0.0/sp_timestamp/trait.TimestampInherentData.html"><code>TimestampInherentData</code></a>
+expected by the <a href="https://substrate.dev/rustdocs/v2.0.0/pallet_timestamp/index.html">timestamp pallet</a>. In order
 to register other inherents, you would call <code>register_provider</code> multiple times, and map errors
 accordingly.</p>
 <h2><a class="header" href="#mining" id="mining">Mining</a></h2>
@@ -294,7 +294,7 @@ mine with that algorithm. This is our last task in the <code>new_full</code> fun
 <p>We begin by testing whether this node participates in consensus, which is to say we check whether
 the user wants the node to act as a miner. If this node is to be a miner, we gather references to
 various parts of the node that the
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc6/sc_consensus_pow/fn.start_mine.html"><code>start_mine</code> function</a> requires, and
+<a href="https://substrate.dev/rustdocs/v2.0.0/sc_consensus_pow/fn.start_mine.html"><code>start_mine</code> function</a> requires, and
 define that we will attempt 500 rounds of mining for each block before pausing. Finally we call
 <code>start_mine</code>.</p>
 <h2><a class="header" href="#the-light-client" id="the-light-client">The Light Client</a></h2>

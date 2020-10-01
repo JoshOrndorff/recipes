@@ -393,7 +393,7 @@ as shown below:</p>
 	// We retrieve a signer and check if it is valid.
 	//   Since this pallet only has one key in the keystore. We use `any_account()1 to
 	//   retrieve it. If there are multiple keys and we want to pinpoint it, `with_filter()` can be chained,
-	//   ref: https://substrate.dev/rustdocs/v2.0.0-rc6/frame_system/offchain/struct.Signer.html
+	//   ref: https://substrate.dev/rustdocs/v2.0.0/frame_system/offchain/struct.Signer.html
 	let signer = Signer::&lt;T, T::AuthorityId&gt;::any_account();
 
 	// Translating the current block number to number and submit it on-chain
@@ -468,7 +468,7 @@ allowed. So we write the logic to allow unsigned transactions to be validated:</
 </span></code></pre></pre>
 <p>We implement the <code>ValidateUnsigned</code> trait for <code>Module</code>, and add the allowance logic inside the
 <code>validate_unsigned</code> function. We verify that if the call is <code>Call::submit_number_unsigned</code> we return
-a <a href="https://substrate.dev/rustdocs/v2.0.0-rc6/sp_runtime/transaction_validity/struct.ValidTransaction.html"><code>ValidTransaction</code></a> object using the <a href="https://github.com/rust-unofficial/patterns/blob/master/patterns/builder.md">builder pattern</a>.</p>
+a <a href="https://substrate.dev/rustdocs/v2.0.0/sp_runtime/transaction_validity/struct.ValidTransaction.html"><code>ValidTransaction</code></a> object using the <a href="https://github.com/rust-unofficial/patterns/blob/master/patterns/builder.md">builder pattern</a>.</p>
 <p>The <code>ValidTransaction</code> object contain some fields we have not seen before:</p>
 <ul>
 <li><code>priority</code>: determine the ordering of two transactions, given their dependencies are satisfied.</li>
@@ -515,7 +515,7 @@ this as a parameter when constructing the runtime:</p>
 	let call = Call::submit_number_unsigned(number);
 
 	// `submit_unsigned_transaction` returns a type of `Result&lt;(), ()&gt;`
-	//   ref: https://substrate.dev/rustdocs/v2.0.0-rc6/frame_system/offchain/struct.SubmitTransaction.html#method.submit_unsigned_transaction
+	//   ref: https://substrate.dev/rustdocs/v2.0.0/frame_system/offchain/struct.SubmitTransaction.html#method.submit_unsigned_transaction
 	SubmitTransaction::&lt;T, Call&lt;T&gt;&gt;::submit_unsigned_transaction(call.into())
 		.map_err(|_| {
 			debug::error!(&quot;Failed in offchain_unsigned_tx&quot;);
@@ -525,7 +525,7 @@ this as a parameter when constructing the runtime:</p>
 <span class="boring">}
 </span></code></pre></pre>
 <p>As in signed transactions, we prepare a function reference with its parameters and call
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc6/frame_system/offchain/struct.SubmitTransaction.html#method.submit_unsigned_transaction"><code>frame_system::offchain::SubmitTransaction::submit_unsigned_transaction</code></a>.</p>
+<a href="https://substrate.dev/rustdocs/v2.0.0/frame_system/offchain/struct.SubmitTransaction.html#method.submit_unsigned_transaction"><code>frame_system::offchain::SubmitTransaction::submit_unsigned_transaction</code></a>.</p>
 <h2><a class="header" href="#unsigned-transactions-with-signed-payloads" id="unsigned-transactions-with-signed-payloads">Unsigned Transactions with Signed Payloads</a></h2>
 <p>With this type of transaction, we need to first specify a signer, sign the transaction, and then send
 it back on-chain as unsigned transaction. The main difference with signed transactions is that the signer
@@ -568,7 +568,7 @@ as a valid (unsigned) transaction.</p>
 <span class="boring">}
 </span></code></pre></pre>
 <p>What is unique here is that
-<a href="https://substrate.dev/rustdocs/v2.0.0-rc6/frame_system/offchain/trait.SendUnsignedTransaction.html#tymethod.send_unsigned_transaction"><code>send_unsigned_transaction</code> function</a> takes two functions. The first, expressed as a closure,
+<a href="https://substrate.dev/rustdocs/v2.0.0/frame_system/offchain/trait.SendUnsignedTransaction.html#tymethod.send_unsigned_transaction"><code>send_unsigned_transaction</code> function</a> takes two functions. The first, expressed as a closure,
 returns a <code>SignedPayload</code> object, and the second returns an on-chain call to be made.</p>
 <p>We have defined our <code>SignedPayload</code> object earlier in the pallet.</p>
 <p>src:
