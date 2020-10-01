@@ -7,18 +7,19 @@ on:
   push:
     branches:
       - master
+      - test-ci # always want to including test-ci for testing gh-action
     paths-ignore:
       - 'README.md'
 
 jobs:
   test-code:
-    name:                          Clippy, Check, Test
+    name: Clippy, Check, Test
     strategy:
       matrix:
         toolchain:
           - stable
           - nightly
-    runs-on:                       ubuntu-latest
+    runs-on:                       ubuntu-18.04
     container:
       image:                       paritytech/ci-linux:e79b7a7e-20200827
     env:
@@ -58,14 +59,14 @@ jobs:
           restore-keys:            |
             ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
             ${{ runner.os }}-cargo-
-      
+
       - name:                      Cache stats
         shell:                     bash
         run:                       |
           sccache --show-stats
           du -sh /github/home/cache/${{ github.head_ref }}/${{ matrix.toolchain }}/*
 
-## Test stage
+      ## --- Test stage ---
 
       - name:                      Install nightly clippy
         if:                        matrix.toolchain == 'nightly'
@@ -79,13 +80,6 @@ jobs:
           command:                 clippy
           toolchain:               nightly
           args:                    -- -D warnings
-      
-      - name:                      Checking Kitchen stable
-        if:                        matrix.toolchain == 'stable'
-        uses:                      actions-rs/cargo@master
-        with:
-          command:                 check
-          args:                    --all  --verbose
 
       - name:                      Test Kitchen stable
         if:                        matrix.toolchain == 'stable'
