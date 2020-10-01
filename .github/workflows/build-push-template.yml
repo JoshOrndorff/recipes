@@ -3,7 +3,8 @@ name: Build and Push Playground Image
 on:
   push:
     branches:
-    - master
+    # Temporarily disabled, to be fix.
+    # - master
     - test-ci # always want to including test-ci for testing gh-action
 
 jobs:
@@ -11,13 +12,10 @@ jobs:
     if: ${{ github.repository == 'substrate-developer-hub/recipes' }}
     runs-on: ubuntu-18.04
     steps:
-    # - name: Trigger playground inclusion
-    #   uses: peter-evans/repository-dispatch@v1
-    #   with:
-    #     token: ${{ secrets.PLAYGROUND_ACCESS_TOKEN }}
-    #     repository: paritytech/substrate-playground
-    #     event-type: template-updated
-    #     client-payload: '{"id": "recipes"}'
-      - name: Skip
-        shell: bash
-        run: echo "This step is temporarily skipped."
+    - name: Trigger playground inclusion
+      uses: peter-evans/repository-dispatch@v1
+      with:
+        token: ${{ secrets.PLAYGROUND_ACCESS_TOKEN }}
+        repository: paritytech/substrate-playground
+        event-type: template-updated
+        client-payload: '{"id": "recipes"}'

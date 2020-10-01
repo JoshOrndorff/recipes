@@ -13,12 +13,11 @@ on:
 
 jobs:
   test-code:
-    name: Clippy, Check, Test
+    name: Test
     strategy:
       matrix:
         toolchain:
           - stable
-          - nightly
     runs-on:                       ubuntu-18.04
     container:
       image:                       paritytech/ci-linux:e79b7a7e-20200827
@@ -42,7 +41,6 @@ jobs:
         shell:                     bash
         run:                       |
           rustup show
-          rustup +nightly show
 
       - name:                      Checkout sources & submodules
         uses:                      actions/checkout@v2
@@ -68,21 +66,7 @@ jobs:
 
       ## --- Test stage ---
 
-      - name:                      Install nightly clippy
-        if:                        matrix.toolchain == 'nightly'
-        shell:                     bash
-        run:                       rustup component add clippy --toolchain nightly-x86_64-unknown-linux-gnu
-
-      - name:                      Run nightly clippy
-        if:                        matrix.toolchain == 'nightly'
-        uses:                      actions-rs/cargo@master
-        with:
-          command:                 clippy
-          toolchain:               nightly
-          args:                    -- -D warnings
-
-      - name:                      Test Kitchen stable
-        if:                        matrix.toolchain == 'stable'
+      - name:                      Run all recipes tests
         uses:                      actions-rs/cargo@master
         with:
           command:                 test
