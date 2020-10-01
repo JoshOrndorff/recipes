@@ -80,7 +80,7 @@ ServiceError> {
 		client.clone(),
 		sha3pow::MinimalSha3Algorithm,
 		0, // check inherents starting at block 0
-		Some(select_chain.clone()),
+		select_chain.clone(),
 		inherent_data_providers.clone(),
 		can_author_with,
 	);
@@ -157,25 +157,35 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
 			prometheus_registry.as_ref(),
 		);
 
-		// The number of rounds of mining to try in a single call
-		let rounds = 500;
-
 		let can_author_with =
 			sp_consensus::CanAuthorWithNativeVersion::new(client.executor().clone());
 
-		sc_consensus_pow::start_mine(
-			Box::new(pow_block_import),
-			client.clone(),
-			MinimalSha3Algorithm,
-			proposer,
-			None, // TODO Do I need some grandpa preruntime digests?
-			rounds,
-			network.clone(),
-			std::time::Duration::new(2, 0),
-			Some(select_chain),
-			inherent_data_providers.clone(),
-			can_author_with,
+		// Parameter details:
+		//   https://substrate.dev/rustdocs/v2.0.0/sc_consensus_pow/fn.start_mining_worker.html
+		// Also refer to kulupu config:
+		//   https://github.com/kulupu/kulupu/blob/master/src/service.rs
+		let (_worker, worker_task) = sc_consensus_pow::start_mining_worker(
+			Box::new(pow_block_import), // block_import: BoxBlockImport
+			client.clone(),             // client: Arc<C>
+
+			// Choosing not to supply a select_chain means we will use the client's
+			//   possibly-outdated metadata when fetching the block to mine on.
+			select_chain,               // select_chain: S
+			MinimalSha3Algorithm,       // algorithm: Algorithm
+			proposer,                   // env: E
+			network.clone(),            // sync_oracle: SO
+			None,                       // pre_runtime: Option<Vec<u8>>
+			inherent_data_providers.clone(), // inherent_data_providers: InherentDataProviders
+
+			// time to wait for a new block before starting to mine a new one
+			Duration::from_secs(10),    // timeout: Duration
+
+			// how long to take to actually build the block (i.e. executing extrinsics)
+			Duration::from_secs(10),    // build_time: Duration
+			can_author_with,            // can_author_with: CAW
 		);
+
+		task_manager.spawn_essential_handle().spawn_blocking("pow", worker_task);
 	}
 
 	// if the node isn't actively participating in consensus then it doesn't
@@ -264,9 +274,8 @@ pub fn new_light(config: Configuration) -> Result<TaskManager, ServiceError> {
 		client.clone(),
 		MinimalSha3Algorithm,
 		0, // check inherents starting at block 0
-		Some(select_chain),
+		select_chain,
 		inherent_data_providers.clone(),
-		// FixMe #375
 		sp_consensus::AlwaysCanAuthor,
 	);
 

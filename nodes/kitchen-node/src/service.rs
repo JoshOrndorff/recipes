@@ -9,7 +9,7 @@ use sp_inherents::InherentDataProviders;
 use std::sync::Arc;
 use runtime::{self, opaque::Block, RuntimeApi};
 use sp_consensus::import_queue::BasicQueue;
-use sc_consensus_manual_seal::{InstantSealParams};
+use sc_consensus_manual_seal::InstantSealParams;
 use sp_api::TransactionFor;
 
 // Our native executor instance.

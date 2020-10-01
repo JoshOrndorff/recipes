@@ -111,6 +111,12 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
 			finality_proof_provider: None,
 		})?;
 
+	if config.offchain_worker.enabled {
+		sc_service::build_offchain_workers(
+			&config, backend.clone(), task_manager.spawn_handle(), client.clone(), network.clone(),
+		);
+	}
+
 	let is_authority = config.role.is_authority();
 	let prometheus_registry = config.prometheus_registry().cloned();
 	let telemetry_connection_sinks = sc_service::TelemetryConnectionSinks::default();

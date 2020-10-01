@@ -14,7 +14,7 @@ categories = [
 	"tutorial",
 	"recipe",
 ]
-compatibility_version = "2.0.0-rc6"
+compatibility_version = "2.0.0"
 
 [[bin]]
 name = "kitchen-node"
@@ -72,7 +72,7 @@ runtime = { package = "super-runtime", path = "../../runtimes/super-runtime" }
 # ---
 
 [build-dependencies]
-substrate-build-script-utils = '2.0.0-rc6'
+substrate-build-script-utils = '2.0.0'
 vergen = "3.0.4"
 
 [features]
