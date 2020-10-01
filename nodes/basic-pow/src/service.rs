@@ -138,24 +138,32 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
 		let can_author_with =
 			sp_consensus::CanAuthorWithNativeVersion::new(client.executor().clone());
 
-		// Parameter details: https://substrate.dev/rustdocs/v2.0.0/sc_consensus_pow/fn.start_mining_worker.html
-		let (worker, future) = sc_consensus_pow::start_mining_worker(
-			Box::new(pow_block_import),	// block_import: BoxBlockImport
-			client,											// client: Arc<C>
+		// Parameter details:
+		//   https://substrate.dev/rustdocs/v2.0.0/sc_consensus_pow/fn.start_mining_worker.html
+		// Also refer to kulupu config:
+		//   https://github.com/kulupu/kulupu/blob/master/src/service.rs
+		let (_worker, worker_task) = sc_consensus_pow::start_mining_worker(
+			Box::new(pow_block_import), // block_import: BoxBlockImport
+			client,                     // client: Arc<C>
+
 			// Choosing not to supply a select_chain means we will use the client's
 			//   possibly-outdated metadata when fetching the block to mine on.
-			select_chain,								// select_chain: S
-			MinimalSha3Algorithm,				// algorithm: Algorithm
-			proposer,										// env: E
-      network.clone(),						// sync_oracle: SO
-			None, 											// pre_runtime: Option<Vec<u8>>
-			inherent_data_providers,		// inherent_data_providers: InherentDataProviders
-			Duration::from_secs(5),			// timeout: Duration[Q: what is this for?]
-			Duration::from_secs(10),		// build_time: Duration[Q: what is this for?]
-			can_author_with,						// can_author_with: CAW
+			select_chain,               // select_chain: S
+			MinimalSha3Algorithm,       // algorithm: Algorithm
+			proposer,                   // env: E
+			network.clone(),            // sync_oracle: SO
+			None,                       // pre_runtime: Option<Vec<u8>>
+			inherent_data_providers,    // inherent_data_providers: InherentDataProviders
+
+			// time to wait for a new block before starting to mine a new one
+			Duration::from_secs(10),    // timeout: Duration
+
+			// how long to take to actually build the block (i.e. executing extrinsics)
+			Duration::from_secs(10),    // build_time: Duration
+			can_author_with,            // can_author_with: CAW
 		);
 
-		// Q: where should I poll the future getting above?
+		task_manager.spawn_essential_handle().spawn_blocking("pow", worker_task);
 	}
 
 	network_starter.start_network();
