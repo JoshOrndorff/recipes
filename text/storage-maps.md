@@ -33,7 +33,7 @@ have:
     use the
     [`blake2_128_concat`](https://substrate.dev/rustdocs/v2.0.0/frame_support/trait.Hashable.html#tymethod.blake2_128_concat)
     hasher. More on this below.
--   `T::AccountId => u32` - The specific key and value tyes of the map. This is a map from
+-   `T::AccountId => u32` - The specific key and value types of the map. This is a map from
     `AccountId`s to `u32`s.
 
 ## Choosing a Hasher
