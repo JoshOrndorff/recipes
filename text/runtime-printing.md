@@ -153,7 +153,7 @@ variable's content. The syntax inside the macro is very similar to what regular 
 `println!` takes.
 
 You can specify the logger target with 
-```
+```rust, ignore
 debug::debug!(target: "mytarget", "called by {:?}", sender);
 ```
 Now you can filter logs with
