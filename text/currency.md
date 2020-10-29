@@ -31,7 +31,7 @@ To use a balance type in the runtime, import the
 `frame_support`.
 
 ```rust, ignore
-use support::traits::Currency;
+use frame_support::traits::Currency;
 ```
 
 The `Currency` trait provides an abstraction over a
