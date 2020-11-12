@@ -10,6 +10,8 @@ pub use sc_rpc_api::DenyUnsafe;
 use sp_transaction_pool::TransactionPool;
 use sc_consensus_manual_seal::{EngineCommand, rpc::{ManualSeal, ManualSealApi}};
 use futures::channel::mpsc::Sender;
+use sc_client_api::backend::{StorageProvider, Backend, StateBackend};
+use sp_runtime::traits::BlakeTwo256;
 
 /// Full client dependencies.
 pub struct FullDeps<C, P> {
@@ -24,14 +26,17 @@ pub struct FullDeps<C, P> {
 }
 
 /// Instantiate all full RPC extensions.
-pub fn create_full<C, P>(
+pub fn create_full<C, BE, P>(
 	deps: FullDeps<C, P>,
 ) -> jsonrpc_core::IoHandler<sc_rpc::Metadata> where
 	C: ProvideRuntimeApi<Block>,
+	C: StorageProvider<Block, BE>,
 	C: HeaderBackend<Block> + HeaderMetadata<Block, Error=BlockChainError> + 'static,
 	C: Send + Sync + 'static,
 	C::Api: BlockBuilder<Block>,
 	C::Api: sum_storage_runtime_api::SumStorageApi<Block>,
+	BE: Backend<Block> + 'static,
+	BE::State: StateBackend<BlakeTwo256>,
 	P: TransactionPool + 'static,
 {
 	let mut io = jsonrpc_core::IoHandler::default();
@@ -44,8 +49,13 @@ pub fn create_full<C, P>(
 
 	// Add a second RPC extension
 	// Because this one calls a Runtime API it needs a reference to the client.
+	// io.extend_with(
+	// 	sum_storage_rpc::SumStorageApi::to_delegate(sum_storage_rpc::SumStorage::new(client))
+	// );
+
+	// Add the optimized sum storage RPC handler.
 	io.extend_with(
-		sum_storage_rpc::SumStorageApi::to_delegate(sum_storage_rpc::SumStorage::new(client))
+		sum_storage_rpc::SumStorageApi::to_delegate(sum_storage_rpc::SumStorageOptimizedV1::new(client))
 	);
 
 	// The final RPC extension receives commands for the manual seal consensus engine.

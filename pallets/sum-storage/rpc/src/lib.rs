@@ -9,7 +9,7 @@ use std::sync::Arc;
 use sum_storage_runtime_api::SumStorageApi as SumStorageRuntimeApi;
 use sc_client_api::backend::{StorageProvider, Backend, StateBackend};
 use sp_io::hashing::twox_128;
-use sp_storage::{StorageKey, StorageData};
+use sp_storage::StorageKey;
 use codec::Decode;
 
 #[rpc]
