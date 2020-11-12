@@ -18,7 +18,7 @@ pub trait Trait: system::Trait {
 }
 
 decl_storage! {
-	trait Store for Module<T: Trait> as TemplateModule {
+	trait Store for Module<T: Trait> as SumStorage {
 		Thing1 get(fn thing1): u32;
 		Thing2 get(fn thing2): u32;
 	}
