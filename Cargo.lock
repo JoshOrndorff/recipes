@@ -7141,6 +7141,7 @@ dependencies = [
  "sp-rpc",
  "sp-runtime",
  "sp-storage",
+ "sum-storage",
  "sum-storage-runtime-api",
 ]
 

@@ -11,6 +11,8 @@ use sc_client_api::backend::{StorageProvider, Backend, StateBackend};
 use sp_io::hashing::twox_128;
 use sp_storage::StorageKey;
 use codec::Decode;
+use sum_storage::SumStorageSchema;
+use sp_storage::StorageData;
 
 #[rpc]
 pub trait SumStorageApi<BlockHash> {
@@ -167,6 +169,7 @@ where
 /// A struct that implements the `SumStorageApi` by using hardcoded storage keys and the
 /// state backend.
 pub struct SumStorageOptimizedWithFallback<C, BE, Block> {
+	client: Arc<C>,
 	// Todo this needs to accept different types afaik. This attempt didn't work
 	// optimized: Box<dyn SumStorageApi<Block>>,
 	optimized: SumStorageOptimizedV1<C, BE, Block>,
@@ -178,6 +181,7 @@ impl<C, BE, Block> SumStorageOptimizedWithFallback<C, BE, Block> {
 	/// Create new `SumStorage` instance with the given reference to the client.
 	pub fn new(client: Arc<C>) -> Self {
 		Self {
+			client: client.clone(),
 			optimized: SumStorageOptimizedV1::new(client.clone()),
 			fallback: SumStorage::new(client),
 			_marker: Default::default(),
@@ -196,15 +200,30 @@ where
 	BE: Backend<Block> + 'static,
 	BE::State: StateBackend<BlakeTwo256>,
 {
-	fn get_sum(&self, at: Option<<Block as BlockT>::Hash>) -> Result<u32> {
-		// Check whether we can use the optimised handler
-		let can_use_optimized = true; //For now, hardcoded. Obviously this needs to be detected via versioning storage
+	fn get_sum(&self, maybe_at: Option<<Block as BlockT>::Hash>) -> Result<u32> {
+		// If the block hash is not supplied assume the best block.
+		let at = BlockId::hash(maybe_at.unwrap_or_else(||
+			self.client.info().best_hash));
 
-		if can_use_optimized {
-			self.optimized.get_sum(at)
+		// Grab the on-chain schema
+		let schema: SumStorageSchema = match self.client.storage(
+			&at,
+			&StorageKey(storage_prefix_build(b"SumStorage", b"StorageSchema"))
+		) {
+			Ok(Some(bytes)) => Decode::decode(&mut &bytes.0[..]).ok().unwrap_or(SumStorageSchema::Undefined),
+			_ => SumStorageSchema::Undefined,
+		};
+
+		// This simple handler has only a single optimisation. It can be used if the schema stored on-chain
+		// is V1. To make this generally useful we will need to match or lookup what handler to use based
+		// on the schema version stored on chain
+		if let SumStorageSchema::V1 = schema {
+			// Here we pass the same option for a block that we got in even thogu hwe have already processed that data once.
+			// This is another clue (along with the sized stuff) that there should be a different inner trait.
+			self.optimized.get_sum(maybe_at)
 		}
 		else {
-			self.fallback.get_sum(at)
+			self.fallback.get_sum(maybe_at)
 		}
 	}
 }

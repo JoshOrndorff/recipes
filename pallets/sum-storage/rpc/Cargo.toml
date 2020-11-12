@@ -27,3 +27,4 @@ sc-client-api = '2.0.0'
 # local packages
 
 sum-storage-runtime-api = { version = "2.0.0", path = "../runtime-api" }
+sum-storage = { path = ".." }
