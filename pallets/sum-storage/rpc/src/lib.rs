@@ -19,14 +19,12 @@ pub trait SumStorageApi<BlockHash> {
 }
 
 /// A struct that implements the `SumStorageApi`.
-pub struct SumStorage<C, M> {
-	// If you have more generics, no need to SumStorage<C, M, N, P, ...>
-	// just use a tuple like SumStorage<C, (M, N, P, ...)>
+pub struct SumStorage<C, Block> {
 	client: Arc<C>,
-	_marker: std::marker::PhantomData<M>,
+	_marker: std::marker::PhantomData<Block>,
 }
 
-impl<C, M> SumStorage<C, M> {
+impl<C, Block> SumStorage<C, Block> {
 	/// Create new `SumStorage` instance with the given reference to the client.
 	pub fn new(client: Arc<C>) -> Self {
 		Self {
@@ -84,15 +82,14 @@ fn storage_prefix_build(module: &[u8], storage: &[u8]) -> Vec<u8> {
 	[twox_128(module), twox_128(storage)].concat().to_vec()
 }
 
-/// A struct that implements the `SumStorageApi`.
-pub struct SumStorageOptimizedV1<C, BE, M> {
-	// If you have more generics, no need to SumStorage<C, M, N, P, ...>
-	// just use a tuple like SumStorage<C, (M, N, P, ...)>
+/// A struct that implements the `SumStorageApi` by using hardcoded storage keys and the
+/// state backend.
+pub struct SumStorageOptimizedV1<C, BE, Block> {
 	client: Arc<C>,
-	_marker: std::marker::PhantomData<(BE, M)>,
+	_marker: std::marker::PhantomData<(BE, Block)>,
 }
 
-impl<C, BE, M> SumStorageOptimizedV1<C, BE, M> {
+impl<C, BE, Block> SumStorageOptimizedV1<C, BE, Block> {
 	/// Create new `SumStorage` instance with the given reference to the client.
 	pub fn new(client: Arc<C>) -> Self {
 		Self {
@@ -158,5 +155,56 @@ where
 
 		// Return sum
 		Ok(thing1 + thing2)
+	}
+}
+
+
+
+
+
+
+
+/// A struct that implements the `SumStorageApi` by using hardcoded storage keys and the
+/// state backend.
+pub struct SumStorageOptimizedWithFallback<C, BE, Block> {
+	// Todo this needs to accept different types afaik. This attempt didn't work
+	// optimized: Box<dyn SumStorageApi<Block>>,
+	optimized: SumStorageOptimizedV1<C, BE, Block>,
+	fallback: SumStorage<C, Block>,
+	_marker: std::marker::PhantomData<BE>,
+}
+
+impl<C, BE, Block> SumStorageOptimizedWithFallback<C, BE, Block> {
+	/// Create new `SumStorage` instance with the given reference to the client.
+	pub fn new(client: Arc<C>) -> Self {
+		Self {
+			optimized: SumStorageOptimizedV1::new(client.clone()),
+			fallback: SumStorage::new(client),
+			_marker: Default::default(),
+		}
+	}
+}
+
+impl<C, BE, Block> SumStorageApi<<Block as BlockT>::Hash> for SumStorageOptimizedWithFallback<C, BE, Block>
+where
+	Block: BlockT,
+	C: Send + Sync + 'static,
+	C: StorageProvider<Block, BE>,
+	C: HeaderBackend<Block>,
+	C: ProvideRuntimeApi<Block>,
+	C::Api: SumStorageRuntimeApi<Block>,
+	BE: Backend<Block> + 'static,
+	BE::State: StateBackend<BlakeTwo256>,
+{
+	fn get_sum(&self, at: Option<<Block as BlockT>::Hash>) -> Result<u32> {
+		// Check whether we can use the optimised handler
+		let can_use_optimized = true; //For now, hardcoded. Obviously this needs to be detected via versioning storage
+
+		if can_use_optimized {
+			self.optimized.get_sum(at)
+		}
+		else {
+			self.fallback.get_sum(at)
+		}
 	}
 }

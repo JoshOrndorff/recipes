@@ -55,7 +55,7 @@ pub fn create_full<C, BE, P>(
 
 	// Add the optimized sum storage RPC handler.
 	io.extend_with(
-		sum_storage_rpc::SumStorageApi::to_delegate(sum_storage_rpc::SumStorageOptimizedV1::new(client))
+		sum_storage_rpc::SumStorageApi::to_delegate(sum_storage_rpc::SumStorageOptimizedWithFallback::new(client))
 	);
 
 	// The final RPC extension receives commands for the manual seal consensus engine.
