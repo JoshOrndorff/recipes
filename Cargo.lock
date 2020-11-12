@@ -7133,11 +7133,14 @@ dependencies = [
  "jsonrpc-core-client",
  "jsonrpc-derive",
  "parity-scale-codec",
+ "sc-client-api",
  "serde",
  "sp-api",
  "sp-blockchain",
+ "sp-io",
  "sp-rpc",
  "sp-runtime",
+ "sp-storage",
  "sum-storage-runtime-api",
 ]
 
