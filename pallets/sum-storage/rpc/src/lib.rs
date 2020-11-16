@@ -6,6 +6,7 @@ use sp_api::ProvideRuntimeApi;
 use sp_blockchain::HeaderBackend;
 use sp_runtime::{generic::BlockId, traits::{BlakeTwo256, Block as BlockT}};
 use std::sync::Arc;
+use std::collections::BTreeMap;
 use sum_storage_runtime_api::SumStorageApi as SumStorageRuntimeApi;
 use sc_client_api::backend::{StorageProvider, Backend, StateBackend};
 use sp_io::hashing::twox_128;
@@ -161,9 +162,7 @@ where
 /// state backend.
 pub struct SumStorageOptimizedWithFallback<C, BE, Block: BlockT> {
 	client: Arc<C>,
-	// Todo this needs to accept different types afaik. This attempt didn't work
-	optimized: Box<dyn SumStorageApiHelper<Block> + Send + Sync>,
-	// optimized: SumStorageOptimizedV1<C, BE, Block>,
+	optimized: BTreeMap<SumStorageSchema, Box<dyn SumStorageApiHelper<Block> + Send + Sync>>,
 	fallback: SumStorage<C, Block>,
 	_marker: std::marker::PhantomData<BE>,
 }
@@ -180,9 +179,15 @@ impl<C, BE, Block> SumStorageOptimizedWithFallback<C, BE, Block>
 		BE::State: StateBackend<BlakeTwo256>,
 {
 	pub fn new(client: Arc<C>) -> Self {
+		// This long-ass type annotation is, aparently, necessary to make it compile
+		let mut optimized: BTreeMap<_, Box<dyn SumStorageApiHelper<_> + Send + Sync>> = BTreeMap::new();
+		optimized.insert(
+			SumStorageSchema::V1,
+			Box::new(SumStorageOptimizedV1::new(client.clone()))
+		);
 		Self {
 			client: client.clone(),
-			optimized: Box::new(SumStorageOptimizedV1::new(client.clone())),
+			optimized,
 			fallback: SumStorage::new(client),
 			_marker: Default::default(),
 		}
@@ -205,7 +210,7 @@ where
 		let at = BlockId::hash(maybe_at.unwrap_or_else(||
 			self.client.info().best_hash));
 
-		// Grab the on-chain schema
+		// Grab the on-chain schema version
 		let schema: SumStorageSchema = match self.client.storage(
 			&at,
 			&StorageKey(storage_prefix_build(b"SumStorage", b"StorageSchema"))
@@ -214,11 +219,10 @@ where
 			_ => SumStorageSchema::Undefined,
 		};
 
-		// This simple handler has only a single optimisation. It can be used if the schema stored on-chain
-		// is V1. To make this generally useful we will need to match or lookup what handler to use based
-		// on the schema version stored on chain
-		if let SumStorageSchema::V1 = schema {
-			self.optimized.get_sum(at)
+		// If there is an optimized handler associated with this schema, then use it.
+		// Otherwise fallback to the runtime api.
+		if let Some(handler) = self.optimized.get(&schema) {
+			handler.get_sum(at)
 		}
 		else {
 			SumStorageApiHelper::get_sum(&self.fallback, at)

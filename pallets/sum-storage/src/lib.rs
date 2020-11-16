@@ -12,7 +12,7 @@ use codec::{ Encode, Decode };
 #[cfg(test)]
 mod tests;
 
-#[derive(Clone, Encode, Decode, Debug, PartialEq, Eq)]
+#[derive(Clone, Encode, Decode, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub enum SumStorageSchema {
 	Undefined,
 	V1,
