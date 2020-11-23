@@ -3,7 +3,7 @@
 `consensus/sha3-pow`
 [
 	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
-](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fconsensus%2Fsha3-pow%2Fsrc%2Flib.rs)
+](https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fconsensus%2Fsha3-pow%2Fsrc%2Flib.rs)
 [
 	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
 ](https://github.com/substrate-developer-hub/recipes/tree/master/consensus/sha3-pow/src/lib.rs)

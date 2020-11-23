@@ -1,7 +1,7 @@
 # Currency Imbalances
 
 `pallets/currency-imbalances`
-[ ![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate) ](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fcurrency-imbalances%2Fsrc%2Flib.rs)
+[ ![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate) ](https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fcurrency-imbalances%2Fsrc%2Flib.rs)
 [ ![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github) ](https://github.com/substrate-developer-hub/recipes/blob/master/pallets/currency-imbalances/src/lib.rs)
 
 [`Imbalance`](https://substrate.dev/rustdocs/v2.0.0/frame_support/traits/trait.Imbalance.html)

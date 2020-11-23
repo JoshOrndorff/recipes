@@ -1,7 +1,7 @@
 # Transactions in Off-chain Workers
 
 `pallets/ocw-demo`
-<a href="https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%ocw-demo%2Fsrc%2Flib.rs" target="_blank">![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)</a>
+<a href="https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%ocw-demo%2Fsrc%2Flib.rs" target="_blank">![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)</a>
 <a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/ocw-demo/src/lib.rs" target="_blank">![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)</a>
 
 ## Compiling this Pallet
