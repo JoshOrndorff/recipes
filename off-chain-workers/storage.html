@@ -187,7 +187,7 @@ The atomicity guarantees that the new value is calculated based on up-to-date in
 value had been updated by another thread in the meantime, the write would fail.</p>
 <p>In this recipe, we will add a cache and lock over our previous
 <a href="./http-json.html">http fetching example</a>. If the cached value existed, we will return using the
-cached value. Otherwise we acquire the lock, fetch from github public API, and save it to the cahce.</p>
+cached value. Otherwise we acquire the lock, fetch from github public API, and save it to the cache.</p>
 <h2><a class="header" href="#setup" id="setup">Setup</a></h2>
 <p>In the <code>fetch_if_needed()</code> function, we first define a storage reference used by the off-chain
 worker.</p>
