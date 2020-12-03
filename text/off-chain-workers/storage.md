@@ -28,7 +28,7 @@ value had been updated by another thread in the meantime, the write would fail.
 
 In this recipe, we will add a cache and lock over our previous
 [http fetching example](./http-json.md). If the cached value existed, we will return using the
-cached value. Otherwise we acquire the lock, fetch from github public API, and save it to the cahce.
+cached value. Otherwise we acquire the lock, fetch from github public API, and save it to the cache.
 
 ## Setup
 
