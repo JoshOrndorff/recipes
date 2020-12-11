@@ -40,5 +40,5 @@ std = [
 	'parity-scale-codec/std',
 	'sp-core/std',
 	'sp-runtime/std',
-        'pallet-timestamp/std',
+	'pallet-timestamp/std',
 ]
