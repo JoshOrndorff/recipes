@@ -96,10 +96,7 @@ fn members_can_call() {
 
 		let expected_event = TestEvent::check_membership(RawEvent::IsAMember(1));
 
-		assert_eq!(
-			System::events()[1].event,
-			expected_event,
-		);
+		assert_eq!(System::events()[1].event, expected_event);
 	})
 }
 

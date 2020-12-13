@@ -14,7 +14,10 @@ mod tests;
 /// The pallet's configuration trait.
 /// Notice the explicit tight coupling to the `vec-set` pallet
 pub trait Trait: system::Trait + vec_set::Trait {
-	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
+	// type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
+	type Event: From<Event<Self>>
+		+ Into<<Self as system::Trait>::Event>
+		+ Into<<Self as vec_set::Trait>::Event>;
 }
 
 decl_event!(
