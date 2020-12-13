@@ -93,7 +93,9 @@ fn generate_works() {
 			System::events(),
 			vec![EventRecord {
 				phase: Phase::Initialization,
-				event: TestEvent::randomness(Event::RandomnessConsumed(H256::zero(), H256::zero(),)),
+				event: TestEvent::randomness(
+					Event::RandomnessConsumed(H256::zero(), H256::zero(),)
+				),
 				topics: vec![],
 			}]
 		);
