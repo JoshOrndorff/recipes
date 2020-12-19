@@ -153,6 +153,7 @@ fn increase_works() {
 
 		assert_eq!(System::events()[1].event, expected_event);
 
+		// Assert storage map entry has been increased
 		assert_eq!(SimpleMap::simple_map(2), 21);
 	})
 }
