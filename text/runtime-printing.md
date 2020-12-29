@@ -13,9 +13,9 @@ dispatchable call that prints a message to the node's output. Printing to the no
 
 ## No Std
 
-The very first line of code tells the rust compiler that this crate should not use rust's standard
+The very first line of code tells the Rust compiler that this crate should not use Rust's standard
 library except when explicitly told to. This is useful because Substrate runtimes compile to Web
-Assembly where the standard library is not available.
+Assembly when the standard library is not available.
 
 ```rust, ignore
 #![cfg_attr(not(feature = "std"), no_std)]
@@ -37,7 +37,7 @@ use sp_runtime::print;
 
 ## Tests
 
-Next we see a reference to the tests module. This pallet, as with most recipes pallets, has tests written in a separate file called
+Following, we see a reference to the tests module. This pallet, as with most recipes pallets, has tests written in a separate file called
 `tests.rs`.
 
 ## Configuration Trait
@@ -77,12 +77,12 @@ decl_module! {
 As you can see, our `hello-substrate` pallet has a dispatchable call that takes a single argument,
 called `origin`. The call returns a
 [`DispatchResult`](https://substrate.dev/rustdocs/v2.0.0/frame_support/dispatch/type.DispatchResult.html) which
-can be either `Ok(())` indicating that the call succeeded, or an `Err` which is demonstrated in most other recipes pallets.
+can be either `Ok(())` indicating that the call succeeded, or an `Err` which is demonstrated in most other pallets from this cookbook.
 
 ### Weight Annotations
 
-Right before the `hello-substrate` function, we see the line `#[weight = 10_000]`. This line
-attaches a default weight to the call. Ultimately weights affect the fees a user will have to pay to
+Right before the `say_hello` function, we see the line `#[weight = 10_000]`. This line
+attaches a default weight to the call. Ultimately, weights affect the fees a user will have to pay to
 call the function. Weights are a very interesting aspect of developing with Substrate, but they too
 shall be covered later in the section on [Weights](./weights.md). For now, and for many of
 the recipes pallets, we will simply use the default weight as we have done here.
@@ -120,7 +120,7 @@ this is explained in the next section.
 Finally, the call returns `Ok(())` to indicate that the call has succeeded. At a glance it seems
 that there is no way for this call to fail, but this is not quite true. The `ensure_signed`
 function, used at the beginning, can return an error if the call was not from a signed origin. This
-is the first time we're seeing the important paradigm "**Verify first, write last**". In Substrate
+is the first time we're seeing the important paradigm "**verify first, write last**". In Substrate
 development, it is important that you always ensure preconditions are met and return errors at the
 beginning. After these checks have completed, then you may begin the function's computation.
 
@@ -128,7 +128,7 @@ beginning. After these checks have completed, then you may begin the function's 
 
 Printing to the terminal from a Rust program is typically very simple using the `println!` macro.
 However, Substrate runtimes are compiled to both Web Assembly and a regular native binary, and do
-not have access to rust's standard library. That means we cannot use the regular `println!`. I
+not have access to Rust's standard library. That means we cannot use the regular `println!` macro. I
 encourage you to modify the code to try using `println!` and confirm that it will not compile.
 Nonetheless, printing a message from the runtime is useful both for logging information, and also
 for debugging.
@@ -148,10 +148,10 @@ datatypes too.
 `-lruntime=debug` when running the kitchen node. So, for the kitchen node, the command would become
 `./target/release/kitchen-node --dev -lruntime=debug`.
 
-The next line demonstrates using `debug::info!` macro to log to the screen and also inspecting the
-variable's content. The syntax inside the macro is very similar to what regular rust macro
+The next line uses `debug::info!` macro to log to the screen and to inspect the
+variable's content. The syntax inside the macro is very similar to what the regular Rust macro
 `println!` takes.
 
 **Runtime logger note:** When we execute the runtime in native, `debug::info!` messages are printed.
-However, if we execute the runtime in Wasm, then an additional step to initialise
+However, if we execute the runtime in WASM, then an additional step to initialise
 [RuntimeLogger](https://substrate.dev/rustdocs/v2.0.0/frame_support/debug/struct.RuntimeLogger.html) is required.

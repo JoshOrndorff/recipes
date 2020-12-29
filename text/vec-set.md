@@ -31,7 +31,7 @@ pub const MAX_MEMBERS: usize = 16;
 We will store the members of our set in a Rust
 [`Vec`](https://doc.rust-lang.org/std/vec/struct.Vec.html). A `Vec` is a collection of elements that
 is ordered and may contain duplicates. Because the `Vec` provides more functionality than our set
-needs, we are able to build a set from the `Vec`. We declare our single storage item as so
+needs, we are able to build a set from the `Vec`. We declare our single storage item as so:
 
 ```rust, ignore
 decl_storage! {
@@ -52,7 +52,7 @@ sorted. This allows for quickly determining whether an item is present using a
 Any user may join the membership set by calling the `add_member` dispatchable, providing they are
 not already a member and the membership limit has not been reached. We check for these two
 conditions first, and then insert the new member only after we are sure it is safe to do so. This is
-an example of the mnemonic idiom, "**verify first write last**".
+an example of the mnemonic idiom, "**verify first, write last**".
 
 ```rust, ignore
 pub fn add_member(origin) -> DispatchResult {
@@ -87,8 +87,8 @@ maintaining a sorted `Vec`.
 ## Removing a Member
 
 Removing a member is straightforward. We begin by looking for the caller in the list. If not
-present, there is no work to be done. If the caller is present, the search algorithm returns her
-index, and she can be removed.
+present, there is no work to be done. If the caller _is_ present, the search algorithm returns their
+index, and they can be removed.
 
 ```rust, ignore
 fn remove_member(origin) -> DispatchResult {
@@ -96,9 +96,9 @@ fn remove_member(origin) -> DispatchResult {
 
 	let mut members = Members::<T>::get();
 
-	// We have to find out where, in the sorted vec the member is, if anywhere.
+	// We have to find out where the member is in the sorted vec, if anywhere.
 	match members.binary_search(&old_member) {
-		// If the search succeeds, the caller is a member, so remove her
+		// If the search succeeds, the caller is a member, so remove them
 		Ok(index) => {
 			members.remove(index);
 			Members::<T>::put(members);
@@ -117,10 +117,13 @@ Now that we have built our set, let's analyze its performance in some common ope
 
 ### Membership Check
 
-In order to check for the presence of an item in a `vec-set`, we make a single storage read, decode
-the entire vector, and perform a binary search.
+In order to check for the presence of an item in a `vec-set`, we: 
 
-DB Reads: O(1) Decoding: O(n) Search: O(log n)
+- make a single storage read;
+- decode the entire vector and;
+- perform a binary search.
+
+**Associated complexities**: _DB Reads: O(1), Decoding: O(n), Search: O(log n)_
 
 ### Updating
 
@@ -130,7 +133,7 @@ the database. Finally, it still costs the normal
 [amortized constant time](https://stackoverflow.com/q/200384/4184410) associated with mutating a
 `Vec`.
 
-DB Writes: O(1) Encoding: O(n)
+**Associated complexities**: _DB Writes: O(1), Encoding: O(n)_
 
 ### Iteration
 
@@ -139,7 +142,7 @@ Iterating over all items in a `vec-set` is achieved by using the `Vec`'s own
 be read from storage in one go, and each item must be decoded. Finally, the actual processing you do
 on the items will take some time.
 
-DB Reads: O(1) Decoding: O(n) Processing: O(n)
+**Associated complexities**: _DB Reads: O(1), Decoding: O(n), Processing: O(n)_
 
 Because accessing the database is a relatively slow operation, reading the entire list in a single
 read is a big win. If you need to iterate over the data frequently, you may want a `vec-set`.
@@ -148,6 +151,6 @@ read is a big win. If you need to iterate over the data frequently, you may want
 
 It is always important that the weight associated with your dispatchables represent the actual time
 it takes to execute them. In this pallet, we have provided an upper bound on the size of the set,
-which places an upper bound on the computation - this means we can use constant weight annotations.
+which places an upper bound on the computation. This means we can use constant weight annotations.
 Your set operations should either have a maximum size or a [custom weight function](./weights.md)
 that captures the computation appropriately.

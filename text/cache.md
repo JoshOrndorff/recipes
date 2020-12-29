@@ -70,7 +70,7 @@ If the type was not `Copy`, but was [`Clone`](https://doc.rust-lang.org/std/clon
 then it is still better to clone the value in the method than to make another call to runtime
 storage.
 
-The runtime methods enable the calling account to swap the `T::AccountId` value in storage if
+The runtime methods enable the calling account to swap the `T::AccountId` value in storage if:
 
 1. the existing storage value is not in `GroupMembers` AND
 2. the calling account is in `GroupMembers`
@@ -100,7 +100,7 @@ fn swap_king_no_cache(origin) -> DispatchResult {
 ```
 
 If the `existing_key` is used without a `clone` in the event emission instead of `old_king`, then
-the compiler returns the following error
+the compiler returns the following error:
 
 ```bash
 error[E0382]: use of moved value: `existing_king`

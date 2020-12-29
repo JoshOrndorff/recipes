@@ -28,12 +28,12 @@ Much of this should look familiar to you from storage values. Reading the line f
 have:
 
 -   `SimpleMap` - the name of the storage map
--   `get(fn simple_map)` - the name of a getter function that will return values from the map.
--   `: map hasher(blake2_128_concat)` - beginning of the type declaration. This is a map and it will
+-   `get(fn simple_map)` - the getter function call that will return values from the map.
+-   `: map hasher(blake2_128_concat)` - the beginning of the type declaration. This is a map and it will
     use the
     [`blake2_128_concat`](https://substrate.dev/rustdocs/v2.0.0/frame_support/trait.Hashable.html#tymethod.blake2_128_concat)
-    hasher. More on this below.
--   `T::AccountId => u32` - The specific key and value tyes of the map. This is a map from
+    hasher. More on this [below](https://substrate.dev/recipes/storage-maps.html#choosing-a-hasher).
+-   `T::AccountId => u32` - the specific key and value tyes of the map. This is a map from
     `AccountId`s to `u32`s.
 
 ## Choosing a Hasher
@@ -67,7 +67,7 @@ reasonable choice.
 The `identity` "hasher" is really not a hasher at all, but merely an
 [identity function](https://en.wikipedia.org/wiki/Identity_function) that returns the same value it
 receives. This hasher is only an option when the key type in your storage map is _already_ a hash,
-and is not controllable by the user. If you're in doubt whether the user can influence the key just
+and is not controllable by the user. If you're in doubt whether the user can influence the key, just
 use blake2.
 
 ## The Storage Map API
@@ -91,5 +91,5 @@ let entry = <SimpleMap<T>>::take(&user);
 
 The rest of the API is documented in the rustdocs on the
 [`StorageMap` trait](https://substrate.dev/rustdocs/v2.0.0/frame_support/storage/trait.StorageMap.html). You do
-not need to explicitly `use` this trait because the `decl_storage!` macro will do it for you if you
+not need to explicitly use this trait because the `decl_storage!` macro will do it for you if you
 use a storage map.
