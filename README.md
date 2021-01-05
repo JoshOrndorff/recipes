@@ -10,7 +10,7 @@ _A Hands-On Cookbook for Aspiring Blockchain Chefs_
 ## Get Started
 
 Ready to roll up your sleeves and cook some blockchain? Read the book online at
-[substrate.dev/recipes](https://substrate.dev/recipes)
+[substrate.dev/recipes](https://substrate.dev/recipes) 😋
 
 ## Repository Structure
 
@@ -26,7 +26,7 @@ There are five primary directories in this repository:
 The book is built with [mdbook](https://github.com/rust-lang/mdBook) and deployed via
 [github pages](https://pages.github.com/).
 
-## Building This Book Locally 
+## Building This Book Locally
 
 Building the book requires [mdBook], ideally the same version that
 rust-lang/rust uses in [this file][rust-mdbook]. To get it:
