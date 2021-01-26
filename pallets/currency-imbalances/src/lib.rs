@@ -60,7 +60,7 @@ decl_module! {
 			Self::deposit_event(RawEvent::SlashFunds(to_punish, collateral, now));
 		}
 
-		/// Awards the specified amount of funds to the specified accoutn
+		/// Awards the specified amount of funds to the specified account
 		#[weight = 10_000]
 		pub fn reward_funds(origin, to_reward: T::AccountId, reward: BalanceOf<T>) {
 			let _ = ensure_signed(origin)?;
