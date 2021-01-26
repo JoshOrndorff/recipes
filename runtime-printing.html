@@ -280,9 +280,19 @@ datatypes too.</p>
 <p>The next line demonstrates using <code>debug::info!</code> macro to log to the screen and also inspecting the
 variable's content. The syntax inside the macro is very similar to what regular rust macro
 <code>println!</code> takes.</p>
+<p>You can specify the logger target with </p>
+<pre><code class="language-rust ignore">debug::debug!(target: &quot;mytarget&quot;, &quot;called by {:?}&quot;, sender);
+</code></pre>
+<p>Now you can filter logs with</p>
+<pre><code>kitchen-node --dev -lmytarget=debug
+</code></pre>
+<p>If you do not specify the logger target, it will be set to the crate's name (not to <code>runtime</code>!).</p>
 <p><strong>Runtime logger note:</strong> When we execute the runtime in native, <code>debug::info!</code> messages are printed.
 However, if we execute the runtime in Wasm, then an additional step to initialise
-<a href="https://substrate.dev/rustdocs/v2.0.0/frame_support/debug/struct.RuntimeLogger.html">RuntimeLogger</a> is required.</p>
+<a href="https://substrate.dev/rustdocs/v2.0.0/frame_support/debug/struct.RuntimeLogger.html">RuntimeLogger</a> is required:</p>
+<pre><code>debug::RuntimeLogger::init();
+</code></pre>
+<p>You'll need to call this inside every pallet dispatchable call before logging.</p>
 
                     </main>
 
