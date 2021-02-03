@@ -178,7 +178,7 @@ integers, and we decide in advance to consider some of the place values fraction
 saying we'll omit the decimal point when talking about money and all agree that "1995" actually
 _means_ 19.95 €. This is exactly how Substrate's
 [Balances pallet](https://substrate.dev/rustdocs/v2.0.0/pallet_balances/index.html) works, a tradition that's
-been in blockchain since Bitcon. In our example we will treat 16 bits as integer values, and 16 as
+been in blockchain since Bitcoin. In our example we will treat 16 bits as integer values, and 16 as
 fractional, just as substrate-fixed's `U16F16` did.
 
 If you're rusty or unfamiliar with place values in the
