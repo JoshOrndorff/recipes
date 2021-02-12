@@ -7,9 +7,22 @@
 
 use frame_support::{decl_event, decl_module, decl_storage, dispatch};
 use frame_system::{self as system, ensure_signed};
+use codec::{ Encode, Decode };
 
 #[cfg(test)]
 mod tests;
+
+#[derive(Clone, Encode, Decode, Debug, PartialEq, Eq, PartialOrd, Ord)]
+pub enum SumStorageSchema {
+	Undefined,
+	V1,
+}
+
+impl Default for SumStorageSchema {
+	fn default() -> Self {
+		Self::Undefined
+	}
+}
 
 /// The module's configuration trait.
 pub trait Trait: system::Trait {
@@ -18,7 +31,8 @@ pub trait Trait: system::Trait {
 }
 
 decl_storage! {
-	trait Store for Module<T: Trait> as TemplateModule {
+	trait Store for Module<T: Trait> as SumStorage {
+		StorageSchema: SumStorageSchema;
 		Thing1 get(fn thing1): u32;
 		Thing2 get(fn thing2): u32;
 	}
@@ -29,6 +43,15 @@ decl_module! {
 	/// The module declaration.
 	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
 		fn deposit_event() = default;
+
+		/// For testing purposes only
+		/// Allows changing the on-chain schema on the fly
+		#[weight = 10_000]
+		pub fn set_schema(origin, val: SumStorageSchema) {
+			let _ = ensure_signed(origin)?;
+
+			StorageSchema::put(val);
+		}
 
 		/// Sets the first simple storage value
 		#[weight = 10_000]
