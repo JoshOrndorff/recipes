@@ -3,7 +3,7 @@
 `pallets/weights`
 [
 	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
-](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fweights%2Fsrc%2Flib.rs)
+](https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fweights%2Fsrc%2Flib.rs)
 [
 	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
 ](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/weights/src/lib.rs)
@@ -64,10 +64,10 @@ impl WeighData<(&bool, &u32)> for Conditional {
 ```
 
 In addition to the
-[`WeightData` Trait](https://substrate.dev/rustdocs/v2.0.0-rc6/frame_support/weights/trait.WeighData.html), shown
+[`WeightData` Trait](https://substrate.dev/rustdocs/v2.0.0/frame_support/weights/trait.WeighData.html), shown
 above, types that are used to calculate transaction weights must also implement
-[`ClassifyDispatch`](https://substrate.dev/rustdocs/v2.0.0-rc6/frame_support/weights/trait.ClassifyDispatch.html),
-and [`PaysFee`](https://substrate.dev/rustdocs/v2.0.0-rc6/frame_support/weights/trait.PaysFee.html).
+[`ClassifyDispatch`](https://substrate.dev/rustdocs/v2.0.0/frame_support/weights/trait.ClassifyDispatch.html),
+and [`PaysFee`](https://substrate.dev/rustdocs/v2.0.0/frame_support/weights/trait.PaysFee.html).
 
 ```rust, ignore
 impl<T> ClassifyDispatch<T> for Conditional {

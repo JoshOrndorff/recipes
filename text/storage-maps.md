@@ -3,7 +3,7 @@
 `pallets/simple-map`
 [
 	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
-](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fsimple-map%2Fsrc%2Flib.rs)
+](https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fsimple-map%2Fsrc%2Flib.rs)
 [
 	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
 ](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-map/src/lib.rs)
@@ -31,9 +31,9 @@ have:
 -   `get(fn simple_map)` - the name of a getter function that will return values from the map.
 -   `: map hasher(blake2_128_concat)` - beginning of the type declaration. This is a map and it will
     use the
-    [`blake2_128_concat`](https://substrate.dev/rustdocs/v2.0.0-rc6/frame_support/trait.Hashable.html#tymethod.blake2_128_concat)
+    [`blake2_128_concat`](https://substrate.dev/rustdocs/v2.0.0/frame_support/trait.Hashable.html#tymethod.blake2_128_concat)
     hasher. More on this below.
--   `T::AccountId => u32` - The specific key and value tyes of the map. This is a map from
+-   `T::AccountId => u32` - The specific key and value type of the map. This is a map from
     `AccountId`s to `u32`s.
 
 ## Choosing a Hasher
@@ -90,6 +90,6 @@ let entry = <SimpleMap<T>>::take(&user);
 ```
 
 The rest of the API is documented in the rustdocs on the
-[`StorageMap` trait](https://substrate.dev/rustdocs/v2.0.0-rc6/frame_support/storage/trait.StorageMap.html). You do
+[`StorageMap` trait](https://substrate.dev/rustdocs/v2.0.0/frame_support/storage/trait.StorageMap.html). You do
 not need to explicitly `use` this trait because the `decl_storage!` macro will do it for you if you
 use a storage map.

@@ -44,13 +44,13 @@ pub fn testnet_genesis(root_key: AccountId, endowed_accounts: Vec<AccountId>) ->
 			code: WASM_BINARY.to_vec(),
 			changes_trie_config: Default::default(),
 		}),
-		balances: Some(BalancesConfig {
+		pallet_balances: Some(BalancesConfig {
 			balances: endowed_accounts
 				.iter()
 				.cloned()
 				.map(|k| (k, 1 << 60))
 				.collect(),
 		}),
-		sudo: Some(SudoConfig { key: root_key }),
+		pallet_sudo: Some(SudoConfig { key: root_key }),
 	}
 }

@@ -33,22 +33,20 @@ pub fn create_full<C, P>(
 	C::Api: BlockBuilder<Block>,
 	C::Api: sum_storage_runtime_api::SumStorageApi<Block>,
 	P: TransactionPool + 'static,
-	// C::Api: sum_storage_runtime_api::SumStorageApi<sp_runtime::generic::block::Block<sp_runtime::generic::header::Header<u32, sp_runtime::traits::BlakeTwo256>, sp_runtime::OpaqueExtrinsic>>,
 {
-
 	let mut io = jsonrpc_core::IoHandler::default();
 	let FullDeps { command_sink, client, .. } = deps;
 
 	// Add a silly RPC that returns constant values
-	io.extend_with(crate::silly_rpc::SillyRpc::to_delegate(
-		crate::silly_rpc::Silly {},
-	));
+	io.extend_with(
+		crate::silly_rpc::SillyRpc::to_delegate(crate::silly_rpc::Silly {})
+	);
 
 	// Add a second RPC extension
 	// Because this one calls a Runtime API it needs a reference to the client.
-	io.extend_with(sum_storage_rpc::SumStorageApi::to_delegate(
-		sum_storage_rpc::SumStorage::new(client),
-	));
+	io.extend_with(
+		sum_storage_rpc::SumStorageApi::to_delegate(sum_storage_rpc::SumStorage::new(client))
+	);
 
 	// The final RPC extension receives commands for the manual seal consensus engine.
 	io.extend_with(

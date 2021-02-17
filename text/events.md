@@ -3,7 +3,7 @@
 `pallets/simple-event`
 [
 	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
-](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fsimple-event%2Fsrc%2Flib.rs)
+](https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fsimple-event%2Fsrc%2Flib.rs)
 [
 	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
 ](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-event/src/lib.rs)
@@ -11,7 +11,7 @@
 `pallets/generic-event`
 [
 	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
-](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fgeneric-event%2Fsrc%2Flib.rs)
+](https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fgeneric-event%2Fsrc%2Flib.rs)
 [
 	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
 ](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/generic-event/src/lib.rs)
@@ -56,7 +56,7 @@ decl_module! {
 ## Declaring Events
 
 To declare an event, use the
-[`decl_event!` macro](https://substrate.dev/rustdocs/v2.0.0-rc6/frame_support/macro.decl_event.html). Like any rust
+[`decl_event!` macro](https://substrate.dev/rustdocs/v2.0.0/frame_support/macro.decl_event.html). Like any rust
 enum, Events have names and can optionally carry data with them. The syntax is slightly different
 depending on whether the events carry data of primitive types, or generic types from the pallet's
 configuration trait. These two techniques are demonstrated in the `simple-event` and `generic-event`

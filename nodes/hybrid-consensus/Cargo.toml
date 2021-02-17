@@ -1,6 +1,6 @@
 [package]
 name = "hybrid-consensus"
-version = "2.0.0-rc6"
+version = "2.0.0"
 edition = "2018"
 authors = ['Substrate DevHub <https://github.com/substrate-developer-hub>']
 repository = 'https://github.com/substrate-developer-hub/recipes'
@@ -16,48 +16,52 @@ categories = [
 	"tutorial",
 	"recipe",
 ]
-compatibility_version = "2.0.0-rc6"
+compatibility_version = "2.0.0"
 
 [[bin]]
 name = "hybrid-consensus"
 path = "src/main.rs"
 
 [dependencies]
-derive_more = "0.15.0"
-futures = "0.3.1"
-structopt = "0.3.8"
-futures01 = { package = "futures", version = "0.1.29" }
 ctrlc = { version = "3.1.3", features = ["termination"] }
-log = "0.4.8"
-tokio = "0.1.22"
+derive_more = "0.15.0"
 exit-future = "0.2.0"
+futures = "0.3.1"
+futures01 = { package = "futures", version = "0.1.29" }
+log = "0.4.8"
 parking_lot = "0.9.0"
+structopt = "0.3.8"
+tokio = "0.1.22"
 trie-root = "0.15.2"
-sp-io = '2.0.0-rc6'
-sc-cli = '0.8.0-rc6'
-sc-client-api = '2.0.0-rc6'
-sp-core = '2.0.0-rc6'
-sp-runtime = '2.0.0-rc6'
-sc-executor = '0.8.0-rc6'
-sc-service = '0.8.0-rc6'
-sp-inherents = '2.0.0-rc6'
-sp-timestamp = '2.0.0-rc6'
-sc-transaction-pool = '2.0.0-rc6'
-sp-transaction-pool = '2.0.0-rc6'
-sc-network = '0.8.0-rc6'
-sc-finality-grandpa = '0.8.0-rc6'
-sp-finality-grandpa = '2.0.0-rc6'
-sc-basic-authorship = '0.8.0-rc6'
-sp-consensus = '0.8.0-rc6'
-sc-consensus = '0.8.0-rc6'
-sc-consensus-pow = '0.8.0-rc6'
-sp-consensus-pow = '0.8.0-rc6'
-sha3pow = { path = '../../consensus/sha3pow' }
-sp-api = '2.0.0-rc6'
+
+# Substrate packages
+
+sc-basic-authorship = '0.8.0'
+sc-cli = '0.8.0'
+sc-client-api = '2.0.0'
+sc-consensus = '0.8.0'
+sc-consensus-pow = '0.8.0'
+sc-executor = '0.8.0'
+sc-finality-grandpa = '0.8.0'
+sc-network = '0.8.0'
+sc-service = '0.8.0'
+sc-transaction-pool = '2.0.0'
+sp-api = '2.0.0'
+sp-consensus = '0.8.0'
+sp-consensus-pow = '0.8.0'
+sp-core = '2.0.0'
+sp-finality-grandpa = '2.0.0'
+sp-inherents = '2.0.0'
+sp-io = '2.0.0'
+sp-runtime = '2.0.0'
+sp-timestamp = '2.0.0'
+sp-transaction-pool = '2.0.0'
+
+# local packages
 
 runtime = { package = "minimal-grandpa-runtime", path = "../../runtimes/minimal-grandpa-runtime"}
-
+sha3pow = { path = '../../consensus/sha3pow' }
 
 [build-dependencies]
+substrate-build-script-utils = '2.0.0'
 vergen = "3.0.4"
-substrate-build-script-utils = '2.0.0-rc6'

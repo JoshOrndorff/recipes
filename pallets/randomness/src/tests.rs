@@ -43,7 +43,7 @@ impl system::Trait for TestRuntime {
 	type MaximumBlockLength = MaximumBlockLength;
 	type AvailableBlockRatio = AvailableBlockRatio;
 	type Version = ();
-	type ModuleToIndex = ();
+	type PalletInfo = ();
 	type AccountData = ();
 	type OnNewAccount = ();
 	type OnKilledAccount = ();
@@ -93,7 +93,9 @@ fn generate_works() {
 			System::events(),
 			vec![EventRecord {
 				phase: Phase::Initialization,
-				event: TestEvent::randomness(Event::RandomnessConsumed(H256::zero(), H256::zero(),)),
+				event: TestEvent::randomness(
+					Event::RandomnessConsumed(H256::zero(), H256::zero(),)
+				),
 				topics: vec![],
 			}]
 		);

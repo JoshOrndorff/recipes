@@ -3,7 +3,7 @@
 `pallets/ocw-demo`
 [
 	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
-](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%ocw-demo%2Fsrc%2Flib.rs)
+](https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%ocw-demo%2Fsrc%2Flib.rs)
 [
 	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
 ](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/ocw-demo/src/lib.rs)
@@ -46,7 +46,7 @@ let pending = request
 // By default, the http request is async from the runtime perspective. So we are asking the
 //   runtime to wait here.
 // The returning value here is a `Result` of `Result`, so we are unwrapping it twice by two `?`
-//   ref: https://substrate.dev/rustdocs/v2.0.0-rc6/sp_runtime/offchain/http/struct.PendingRequest.html#method.try_wait
+//   ref: https://substrate.dev/rustdocs/v2.0.0/sp_runtime/offchain/http/struct.PendingRequest.html#method.try_wait
 let response = pending
 	.try_wait(timeout)
 	.map_err(|_| <Error<T>>::HttpFetchingError)?

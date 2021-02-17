@@ -188,12 +188,12 @@ decl_module! {
 		#[weight = Conditional(200)]
 		fn add_or_set(_origin, add_flag: bool, val: u32) -> DispatchResult {
 			if add_flag {
-				StoredValue::put(&val);
-			}
-			else {
 				for _i in 1..=val {
 					StoredValue::put(StoredValue::get());
 				}
+			}
+			else {
+				StoredValue::put(&val);
 			}
 
 			Ok(())

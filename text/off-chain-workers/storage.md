@@ -3,7 +3,7 @@
 `pallets/ocw-demo`
 [
 	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
-](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%ocw-demo%2Fsrc%2Flib.rs)
+](https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%ocw-demo%2Fsrc%2Flib.rs)
 [
 	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
 ](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/ocw-demo/src/lib.rs)
@@ -28,7 +28,7 @@ value had been updated by another thread in the meantime, the write would fail.
 
 In this recipe, we will add a cache and lock over our previous
 [http fetching example](./http-json.md). If the cached value existed, we will return using the
-cached value. Otherwise we acquire the lock, fetch from github public API, and save it to the cahce.
+cached value. Otherwise we acquire the lock, fetch from github public API, and save it to the cache.
 
 ## Setup
 
@@ -120,5 +120,5 @@ Finally when the `_guard` variable goes out of scope, the lock is released.
 
 ## Reference
 
--   [`StorageValueRef` API doc](https://substrate.dev/rustdocs/v2.0.0-rc6/sp_runtime/offchain/storage/struct.StorageValueRef.html)
+-   [`StorageValueRef` API doc](https://substrate.dev/rustdocs/v2.0.0/sp_runtime/offchain/storage/struct.StorageValueRef.html)
 -   [`example-offchain-worker` pallet in Substrate repo](https://github.com/paritytech/substrate/tree/master/frame/example-offchain-worker)

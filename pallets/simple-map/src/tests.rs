@@ -44,7 +44,7 @@ impl system::Trait for TestRuntime {
 	type MaximumBlockLength = MaximumBlockLength;
 	type AvailableBlockRatio = AvailableBlockRatio;
 	type Version = ();
-	type ModuleToIndex = ();
+	type PalletInfo = ();
 	type AccountData = ();
 	type OnNewAccount = ();
 	type OnKilledAccount = ();
@@ -89,10 +89,7 @@ fn set_works() {
 
 		let expected_event = TestEvent::simple_map(RawEvent::EntrySet(1, 19));
 
-		assert_eq!(
-			System::events()[0].event,
-			expected_event,
-		);
+		assert_eq!(System::events()[0].event, expected_event);
 	})
 }
 
@@ -114,10 +111,7 @@ fn get_works() {
 
 		let expected_event = TestEvent::simple_map(RawEvent::EntryGot(1, 19));
 
-		assert_eq!(
-			System::events()[1].event,
-			expected_event,
-		);
+		assert_eq!(System::events()[1].event, expected_event);
 
 		// Ensure storage is still set
 		assert_eq!(SimpleMap::simple_map(2), 19);
@@ -141,11 +135,8 @@ fn take_works() {
 		assert_ok!(SimpleMap::take_single_entry(Origin::signed(2)));
 
 		let expected_event = TestEvent::simple_map(RawEvent::EntryTaken(2, 19));
-	
-		assert_eq!(
-			System::events()[1].event,
-			expected_event,
-		);
+
+		assert_eq!(System::events()[1].event, expected_event);
 
 		// Assert storage has returned to default value (zero)
 		assert_eq!(SimpleMap::simple_map(2), 0);
@@ -160,9 +151,9 @@ fn increase_works() {
 
 		let expected_event = TestEvent::simple_map(RawEvent::EntryIncreased(2, 19, 21));
 
-		assert_eq!(
-			System::events()[1].event,
-			expected_event,
-		);
+		assert_eq!(System::events()[1].event, expected_event);
+
+		// Assert storage map entry has been increased
+		assert_eq!(SimpleMap::simple_map(2), 21);
 	})
 }
