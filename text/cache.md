@@ -1,12 +1,12 @@
 # Cache Multiple Calls
 
 `pallets/storage-cache`
-[
-	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
-](https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fstorage-cache%2Fsrc%2Flib.rs)
-[
-	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
-](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/storage-cache/src/lib.rs)
+<a target="_blank" href="https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fstorage-cache%2Fsrc%2Flib.rs">
+	<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt ="Try on playground"/>
+</a>
+<a target="_blank" href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/storage-cache/src/lib.rs">
+	<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt ="View on GitHub"/>
+</a>
 
 Calls to runtime storage have an associated cost and developers should strive to minimize the number
 of calls.
