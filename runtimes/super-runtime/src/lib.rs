@@ -368,7 +368,7 @@ construct_runtime!(
 		Charity: charity::{Module, Call, Storage, Config, Event<T>},
 		CheckMembershipLoose: check_membership_loose::{Module, Call, Event<T>},
 		CheckMembershipTight: check_membership_tight::{Module, Call, Event<T>},
-		ConmpoundingInterest: compounding_interest::{Module, Call, Storage, Event},
+		CompoundingInterest: compounding_interest::{Module, Call, Storage, Event},
 		ConstantConfig: constant_config::{Module, Call, Storage, Event},
 		DefaultInstance1: default_instance::{Module, Call, Storage, Event<T>},
 		DefaultInstance2: default_instance::<Instance2>::{Module, Call, Storage, Event<T>},
