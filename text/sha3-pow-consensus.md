@@ -1,12 +1,12 @@
 # Sha3 Proof of Work Algorithms
 
 `consensus/sha3-pow`
-[
-	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
-](https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fconsensus%2Fsha3-pow%2Fsrc%2Flib.rs)
-[
-	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
-](https://github.com/substrate-developer-hub/recipes/tree/master/consensus/sha3-pow/src/lib.rs)
+<a target="_blank" href="https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fconsensus%2Fsha3-pow%2Fsrc%2Flib.rs">
+	<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt ="Try on playground"/>
+</a>
+<a target="_blank" href="https://github.com/substrate-developer-hub/recipes/tree/master/consensus/sha3-pow/src/lib.rs">
+	<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt ="View on GitHub"/>
+</a>
 
 [Proof of Work](https://en.wikipedia.org/wiki/Proof_of_work) is not a single consensus algorithm.
 Rather it is a class of algorithms represented in Substrate by the

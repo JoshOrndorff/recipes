@@ -1,12 +1,12 @@
 # Transaction Fees
 
 `runtimes/weight-fee-runtime`
-[
-	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
-](https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fruntimes%2Fweight-fee-runtime%2Fsrc%2Flib.rs)
-[
-	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
-](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/weight-fee-runtime/src/lib.rs)
+<a target="_blank" href="https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fruntimes%2Fweight-fee-runtime%2Fsrc%2Flib.rs">
+	<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt ="Try on playground"/>
+</a>
+<a target="_blank" href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/weight-fee-runtime/src/lib.rs">
+	<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt ="View on GitHub"/>
+</a>
 
 Substrate provides the
 [`transaction_payment` pallet](https://substrate.dev/rustdocs/v2.0.0/pallet_transaction_payment/index.html) for

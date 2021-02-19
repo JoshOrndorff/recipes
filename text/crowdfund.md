@@ -1,12 +1,13 @@
 # Simple Crowdfund
 
 `pallets/simple-crowdfund`
-[
-	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
-](https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fsimple-crowdfund%2Fsrc%2Flib.rs)
-[
-	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
-](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-crowdfund/src/lib.rs)
+<a target="_blank" href="https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fsimple-crowdfund%2Fsrc%2Flib.rs">
+	<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt ="Try on playground"/>
+</a>
+<a target="_blank" href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-crowdfund/src/lib.rs">
+	<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt ="View on GitHub"/>
+</a>
+
 This pallet demonstrates a simple on-chain crowdfunding app where participants can pool funds toward
 a common goal. It demonstrates a pallet that controls multiple token accounts, and storing data in
 [child storage](https://substrate.dev/rustdocs/v2.0.0/frame_support/storage/child/index.html).

@@ -1,8 +1,12 @@
 # Currency Imbalances
 
 `pallets/currency-imbalances`
-[ ![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate) ](https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fcurrency-imbalances%2Fsrc%2Flib.rs)
-[ ![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github) ](https://github.com/substrate-developer-hub/recipes/blob/master/pallets/currency-imbalances/src/lib.rs)
+<a target="_blank" href="https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fcurrency-imbalances%2Fsrc%2Flib.rs">
+	<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt ="Try on playground"/>
+</a>
+<a target="_blank" href="https://github.com/substrate-developer-hub/recipes/blob/master/pallets/currency-imbalances/src/lib.rs">
+	<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt ="View on GitHub"/>
+</a>
 
 [`Imbalance`](https://substrate.dev/rustdocs/v2.0.0/frame_support/traits/trait.Imbalance.html)
 is used when tokens are burned or minted. In order to execute `imbalance` implement the
