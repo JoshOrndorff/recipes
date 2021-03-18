@@ -24,4 +24,4 @@ std = [
 [dependencies]
 # Substrate packages
 
-sp-std = { version = '2.0.0', default-features = false }
+sp-std = { version = '3.0', default-features = false }

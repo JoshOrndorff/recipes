@@ -24,7 +24,7 @@ parameter_types! {
 }
 
 // The TestRuntime implements two pallet/frame traits: system, and simple_event
-impl frame_system::Trait for TestRuntime {
+impl frame_system::Config for TestRuntime {
 	type BaseCallFilter = ();
 	type Origin = Origin;
 	type Index = u64;
@@ -63,7 +63,7 @@ impl_outer_event! {
 	}
 }
 
-impl Trait for TestRuntime {
+impl Config for TestRuntime {
 	type Event = TestEvent;
 }
 

@@ -33,8 +33,8 @@ you don't recognize this feature of Rust yet, don't worry; it is the same every 
 just copy it and move on.
 
 ```rust, ignore
-pub trait Trait: system::Trait {
-	type Event: From<Event> + Into<<Self as system::Trait>::Event>;
+pub trait Config: frame_system::Config {
+	type Event: From<Event> + Into<<Self as frame_system::Config>::Event>;
 }
 ```
 
@@ -44,7 +44,7 @@ recognize this syntax because it is unique to this macro. Just copy it each time
 
 ```rust, ignore
 decl_module! {
-	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
+	pub struct Module<T: Config> for enum Call where origin: T::Origin {
 
 		// This line is new
 		fn deposit_event() = default;
@@ -83,7 +83,7 @@ specify additional syntax
 
 ```rust, ignore
 decl_event!(
-	pub enum Event<T> where AccountId = <T as system::Trait>::AccountId {
+	pub enum Event<T> where AccountId = <T as frame_system::Config>::AccountId {
 		EmitInput(AccountId, u32),
 	}
 );

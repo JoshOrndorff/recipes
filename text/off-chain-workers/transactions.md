@@ -134,7 +134,7 @@ src:
 [`pallets/ocw-demo/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/ocw-demo/src/lib.rs)
 
 ```rust
-pub trait Trait: system::Trait + CreateSignedTransaction<Call<Self>> {
+pub trait Config: frame_system::Config + CreateSignedTransaction<Call<Self>> {
 	/// The identifier type for an offchain worker.
 	type AuthorityId: AppCrypto<Self::Public, Self::Signature>;
 	// -- snip --

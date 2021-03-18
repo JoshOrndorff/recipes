@@ -32,7 +32,7 @@ For this example, we will write a pallet called `sum-storage` with two storage i
 
 ```rust
 decl_storage! {
-	trait Store for Module<T: Trait> as TemplateModule {
+	trait Store for Module<T: Config> as TemplateModule {
 		Thing1 get(fn thing1): Option<u32>;
 		Thing2 get(fn thing2): Option<u32>;
 	}
@@ -46,7 +46,7 @@ API will provide a way for the outer node to query the runtime for this sum. Bef
 actual runtime API, let's write a public helper function in the pallet to do the summing.
 
 ```rust
-impl<T: Trait> Module<T> {
+impl<T: Config> Module<T> {
 	pub fn get_sum() -> u32 {
 		Thing1::get() + Thing2::get()
 	}

@@ -17,7 +17,7 @@ subset maintain an associated identifier type, this can be done in a clean way w
 pub type GroupIndex = u32; // this is Encode (which is necessary for double_map)
 
 decl_storage! {
-	trait Store for Module<T: Trait> as Dmap {
+	trait Store for Module<T: Config> as Dmap {
 		/// Member score (double map)
 		MemberScore get(fn member_score):
 			double_map hasher(blake2_128_concat) GroupIndex, hasher(blake2_128_concat) T::AccountId => u32;

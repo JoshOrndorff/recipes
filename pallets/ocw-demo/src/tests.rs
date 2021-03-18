@@ -43,7 +43,7 @@ parameter_types! {
 }
 
 // The TestRuntime implements two pallet/frame traits: system, and simple_event
-impl system::Trait for TestRuntime {
+impl frame_system::Config for TestRuntime {
 	type BaseCallFilter = ();
 	type Origin = Origin;
 	type Index = u64;
@@ -79,7 +79,7 @@ parameter_types! {
 	pub const UnsignedPriority: u64 = 100;
 }
 
-impl Trait for TestRuntime {
+impl Config for TestRuntime {
 	type AuthorityId = crypto::TestAuthId;
 	type Call = Call<TestRuntime>;
 	type Event = TestEvent;
@@ -92,8 +92,8 @@ where
 	fn create_transaction<C: frame_system::offchain::AppCrypto<Self::Public, Self::Signature>>(
 		call: Call<TestRuntime>,
 		_public: <Signature as Verify>::Signer,
-		_account: <TestRuntime as system::Trait>::AccountId,
-		index: <TestRuntime as system::Trait>::Index,
+		_account: <TestRuntime as frame_system::Config>::AccountId,
+		index: <TestRuntime as frame_system::Config>::Index,
 	) -> Option<(
 		Call<TestRuntime>,
 		<TestExtrinsic as sp_runtime::traits::Extrinsic>::SignaturePayload,
@@ -156,7 +156,7 @@ fn submit_number_signed_works() {
 	t.execute_with(|| {
 		// call submit_number_signed
 		let num = 32;
-		let acct: <TestRuntime as system::Trait>::AccountId = Default::default();
+		let acct: <TestRuntime as frame_system::Config>::AccountId = Default::default();
 		assert_ok!(OcwDemo::submit_number_signed(
 			Origin::signed(acct),
 			num

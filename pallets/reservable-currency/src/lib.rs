@@ -6,17 +6,17 @@ use frame_support::{
 	dispatch::DispatchResult,
 	traits::{Currency, ExistenceRequirement::AllowDeath, ReservableCurrency},
 };
-use frame_system::{self as system, ensure_signed};
+use frame_system::ensure_signed;
 
 #[cfg(test)]
 mod tests;
 
 // balance type using reservable currency type
-type BalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::Balance;
+type BalanceOf<T> = <<T as Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::Balance;
 
-pub trait Trait: system::Trait + Sized {
+pub trait Config: frame_system::Config + Sized {
 	// overarching event type
-	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
+	type Event: From<Event<Self>> + Into<<Self as frame_system::Config>::Event>;
 
 	/// Currency type for this pallet.
 	type Currency: Currency<Self::AccountId> + ReservableCurrency<Self::AccountId>;
@@ -25,9 +25,9 @@ pub trait Trait: system::Trait + Sized {
 decl_event!(
 	pub enum Event<T>
 	where
-		AccountId = <T as system::Trait>::AccountId,
+		AccountId = <T as frame_system::Config>::AccountId,
 		Balance = BalanceOf<T>,
-		BlockNumber = <T as system::Trait>::BlockNumber,
+		BlockNumber = <T as frame_system::Config>::BlockNumber,
 	{
 		LockFunds(AccountId, Balance, BlockNumber),
 		UnlockFunds(AccountId, Balance, BlockNumber),
@@ -37,7 +37,7 @@ decl_event!(
 );
 
 decl_module! {
-	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
+	pub struct Module<T: Config> for enum Call where origin: T::Origin {
 		fn deposit_event() = default;
 
 		/// Reserves the specified amount of funds from the caller
@@ -48,7 +48,7 @@ decl_module! {
 			T::Currency::reserve(&locker, amount)
 					.map_err(|_| "locker can't afford to lock the amount requested")?;
 
-			let now = <system::Module<T>>::block_number();
+			let now = <frame_system::Module<T>>::block_number();
 
 			Self::deposit_event(RawEvent::LockFunds(locker, amount, now));
 			Ok(())
@@ -62,7 +62,7 @@ decl_module! {
 			T::Currency::unreserve(&unlocker, amount);
 			// ReservableCurrency::unreserve does not fail (it will lock up as much as amount)
 
-			let now = <system::Module<T>>::block_number();
+			let now = <frame_system::Module<T>>::block_number();
 
 			Self::deposit_event(RawEvent::UnlockFunds(unlocker, amount, now));
 			Ok(())
@@ -75,7 +75,7 @@ decl_module! {
 
 			T::Currency::transfer(&sender, &dest, amount, AllowDeath)?;
 
-			let now = <system::Module<T>>::block_number();
+			let now = <frame_system::Module<T>>::block_number();
 
 			Self::deposit_event(RawEvent::TransferFunds(sender, dest, amount, now));
 			Ok(())
@@ -97,7 +97,7 @@ decl_module! {
 
 			T::Currency::transfer(&to_punish, &dest, collateral - overdraft, AllowDeath)?;
 
-			let now = <system::Module<T>>::block_number();
+			let now = <frame_system::Module<T>>::block_number();
 			Self::deposit_event(RawEvent::TransferFunds(to_punish, dest, collateral - overdraft, now));
 
 			Ok(())

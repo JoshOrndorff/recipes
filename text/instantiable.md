@@ -48,9 +48,9 @@ non-instantiable pallet. There are just a few places where the syntax differs.
 ### Configuration Trait
 
 ```rust, ignore
-pub trait Trait<I: Instance>: system::Trait {
+pub trait Config<I: Instance>: frame_system::Config {
 	/// The overarching event type.
-	type Event: From<Event<Self, I>> + Into<<Self as system::Trait>::Event>;
+	type Event: From<Event<Self, I>> + Into<<Self as frame_system::Config>::Event>;
 }
 ```
 
@@ -98,7 +98,7 @@ fn deposit_event() = default;
 
 ```rust, ignore
 decl_event!(
-	pub enum Event<T, I> where AccountId = <T as system::Trait>::AccountId {
+	pub enum Event<T, I> where AccountId = <T as frame_system::Config>::AccountId {
 		...
 	}
 }
@@ -142,7 +142,7 @@ instantiable provided they **only use a single instance**.
 To make your instantiable pallet support DefaultInstance, you must specify it in four places.
 
 ```rust, ignore
-pub trait Trait<I=DefaultInstance>: system::Trait {
+pub trait Config<I=DefaultInstance>: frame_system::Config {
 ```
 
 ```rust, ignore

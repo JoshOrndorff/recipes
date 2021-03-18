@@ -35,7 +35,7 @@ track its size internally, so we introduce a second storage value for this purpo
 
 ```rust, ignore
 decl_storage! {
-	trait Store for Module<T: Trait> as VecMap {
+	trait Store for Module<T: Config> as VecMap {
 		// The set of all members.
 		Members get(fn members): map hasher(blake2_128_concat) T::AccountId => ();
 		// The total number of members stored in the map.

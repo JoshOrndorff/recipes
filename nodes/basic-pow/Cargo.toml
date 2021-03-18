@@ -29,23 +29,23 @@ structopt = '0.3.8'
 
 # Substrate packages
 
-sc-basic-authorship = '0.8.0'
-sc-cli = '0.8.0'
-sc-client-api = '2.0.0'
-sc-consensus = '0.8.0'
-sc-consensus-pow = '0.8.0'
-sc-executor = '0.8.0'
-sc-network = '0.8.0'
-sc-service = '0.8.0'
-sc-transaction-pool = '2.0.0'
-sp-api = '2.0.0'
-sp-blockchain = '2.0.0'
-sp-consensus = '0.8.0'
-sp-core = '2.0.0'
-sp-inherents = '2.0.0'
-sp-runtime = '2.0.0'
-sp-timestamp = '2.0.0'
-sp-transaction-pool = '2.0.0'
+sc-basic-authorship = '0.9'
+sc-cli = '0.9'
+sc-client-api = '3.0'
+sc-consensus = '0.9'
+sc-consensus-pow = '0.9'
+sc-executor = '0.9'
+sc-network = '0.9'
+sc-service = '0.9'
+sc-transaction-pool = '3.0'
+sp-api = '3.0'
+sp-blockchain = '3.0'
+sp-consensus = '0.9'
+sp-core = '3.0'
+sp-inherents = '3.0'
+sp-runtime = '3.0'
+sp-timestamp = '3.0'
+sp-transaction-pool = '3.0'
 
 # local packages
 
@@ -64,5 +64,5 @@ runtime = { package = "super-runtime", path = "../../runtimes/super-runtime" }
 # ---
 
 [build-dependencies]
-substrate-build-script-utils = '2.0.0'
+substrate-build-script-utils = '3.0'
 vergen = '3.1.0'

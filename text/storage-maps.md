@@ -18,7 +18,7 @@ We declare a single storage map with the following syntax.
 
 ```rust, ignore
 decl_storage! {
-	trait Store for Module<T: Trait> as SimpleMap {
+	trait Store for Module<T: Config> as SimpleMap {
 		SimpleMap get(fn simple_map): map hasher(blake2_128_concat) T::AccountId => u32;
 	}
 }

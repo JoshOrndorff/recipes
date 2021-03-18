@@ -10,10 +10,10 @@ use frame_support::{
 	decl_error, decl_event, decl_module, decl_storage, ensure,
 	storage::child,
 	traits::{
-		Currency, ExistenceRequirement, Get, ReservableCurrency, WithdrawReason, WithdrawReasons,
+		Currency, ExistenceRequirement, Get, ReservableCurrency, WithdrawReasons,
 	},
 };
-use frame_system::{self as system, ensure_signed};
+use frame_system::ensure_signed;
 use parity_scale_codec::{Decode, Encode};
 use sp_core::Hasher;
 use sp_runtime::{
@@ -28,9 +28,9 @@ mod tests;
 const PALLET_ID: ModuleId = ModuleId(*b"ex/cfund");
 
 /// The pallet's configuration trait
-pub trait Trait: system::Trait {
+pub trait Config: frame_system::Config {
 	/// The ubiquious Event type
-	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
+	type Event: From<Event<Self>> + Into<<Self as frame_system::Config>::Event>;
 
 	/// The currency in which the crowdfunds will be denominated
 	type Currency: ReservableCurrency<Self::AccountId>;
@@ -50,9 +50,9 @@ pub trait Trait: system::Trait {
 /// Simple index for identifying a fund.
 pub type FundIndex = u32;
 
-type AccountIdOf<T> = <T as system::Trait>::AccountId;
-type BalanceOf<T> = <<T as Trait>::Currency as Currency<AccountIdOf<T>>>::Balance;
-type FundInfoOf<T> = FundInfo<AccountIdOf<T>, BalanceOf<T>, <T as system::Trait>::BlockNumber>;
+type AccountIdOf<T> = <T as frame_system::Config>::AccountId;
+type BalanceOf<T> = <<T as Config>::Currency as Currency<AccountIdOf<T>>>::Balance;
+type FundInfoOf<T> = FundInfo<AccountIdOf<T>, BalanceOf<T>, <T as frame_system::Config>::BlockNumber>;
 
 #[derive(Encode, Decode, Default, PartialEq, Eq)]
 #[cfg_attr(feature = "std", derive(Debug))]
@@ -70,7 +70,7 @@ pub struct FundInfo<AccountId, Balance, BlockNumber> {
 }
 
 decl_storage! {
-	trait Store for Module<T: Trait> as ChildTrie {
+	trait Store for Module<T: Config> as ChildTrie {
 		/// Info on all of the funds.
 		Funds get(fn funds):
 			map hasher(blake2_128_concat) FundIndex => Option<FundInfoOf<T>>;
@@ -79,15 +79,15 @@ decl_storage! {
 		FundCount get(fn fund_count): FundIndex;
 
 		// Additional information is stored i na child trie. See the helper
-		// functions in the impl<T: Trait> Module<T> block below
+		// functions in the impl<T: Config> Module<T> block below
 	}
 }
 
 decl_event! {
 	pub enum Event<T> where
 		Balance = BalanceOf<T>,
-		<T as system::Trait>::AccountId,
-		<T as system::Trait>::BlockNumber,
+		<T as frame_system::Config>::AccountId,
+		<T as frame_system::Config>::BlockNumber,
 	{
 		Created(FundIndex, BlockNumber),
 		Contributed(AccountId, FundIndex, Balance, BlockNumber),
@@ -99,7 +99,7 @@ decl_event! {
 }
 
 decl_error! {
-	pub enum Error for Module<T: Trait> {
+	pub enum Error for Module<T: Config> {
 		/// Crowdfund must end after it starts
 		EndTooEarly,
 		/// Must contribute at least the minimum amount of funds
@@ -120,7 +120,7 @@ decl_error! {
 }
 
 decl_module! {
-	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
+	pub struct Module<T: Config> for enum Call where origin: T::Origin {
 		fn deposit_event() = default;
 
 		type Error = Error<T>;
@@ -134,7 +134,7 @@ decl_module! {
 			end: T::BlockNumber,
 		) {
 			let creator = ensure_signed(origin)?;
-			let now = <system::Module<T>>::block_number();
+			let now = <frame_system::Module<T>>::block_number();
 
 			ensure!(end > now, Error::<T>::EndTooEarly);
 
@@ -142,7 +142,7 @@ decl_module! {
 			let imb = T::Currency::withdraw(
 				&creator,
 				deposit,
-				WithdrawReasons::from(WithdrawReason::Transfer),
+				WithdrawReasons::from(WithdrawReasons::TRANSFER),
 				ExistenceRequirement::AllowDeath,
 			)?;
 
@@ -174,7 +174,7 @@ decl_module! {
 			let mut fund = Self::funds(index).ok_or(Error::<T>::InvalidIndex)?;
 
 			// Make sure crowdfund has not ended
-			let now = <system::Module<T>>::block_number();
+			let now = <frame_system::Module<T>>::block_number();
 			ensure!(fund.end > now, Error::<T>::ContributionPeriodOver);
 
 			// Add contribution to the fund
@@ -200,7 +200,7 @@ decl_module! {
 			let who = ensure_signed(origin)?;
 
 			let mut fund = Self::funds(index).ok_or(Error::<T>::InvalidIndex)?;
-			let now = <system::Module<T>>::block_number();
+			let now = <frame_system::Module<T>>::block_number();
 			ensure!(fund.end < now, Error::<T>::FundStillActive);
 
 			let balance = Self::contribution_get(index, &who);
@@ -210,7 +210,7 @@ decl_module! {
 			let _ = T::Currency::resolve_into_existing(&who, T::Currency::withdraw(
 				&Self::fund_account_id(index),
 				balance,
-				WithdrawReasons::from(WithdrawReason::Transfer),
+				WithdrawReasons::from(WithdrawReasons::TRANSFER),
 				ExistenceRequirement::AllowDeath
 			)?);
 
@@ -232,7 +232,7 @@ decl_module! {
 			let fund = Self::funds(index).ok_or(Error::<T>::InvalidIndex)?;
 
 			// Check that enough time has passed to remove from storage
-			let now = <system::Module<T>>::block_number();
+			let now = <frame_system::Module<T>>::block_number();
 			ensure!(now >= fund.end + T::RetirementPeriod::get(), Error::<T>::FundNotRetired);
 
 			let account = Self::fund_account_id(index);
@@ -241,7 +241,7 @@ decl_module! {
 			let _ = T::Currency::resolve_creating(&reporter, T::Currency::withdraw(
 				&account,
 				fund.deposit + fund.raised,
-				WithdrawReasons::from(WithdrawReason::Transfer),
+				WithdrawReasons::from(WithdrawReasons::TRANSFER),
 				ExistenceRequirement::AllowDeath,
 			)?);
 
@@ -264,7 +264,7 @@ decl_module! {
 			let fund = Self::funds(index).ok_or(Error::<T>::InvalidIndex)?;
 
 			// Check that enough time has passed to remove from storage
-			let now = <system::Module<T>>::block_number();
+			let now = <frame_system::Module<T>>::block_number();
 
 			ensure!(now >= fund.end, Error::<T>::FundStillActive);
 
@@ -277,7 +277,7 @@ decl_module! {
 			let _ = T::Currency::resolve_creating(&fund.beneficiary, T::Currency::withdraw(
 				&account,
 				fund.raised,
-				WithdrawReasons::from(WithdrawReason::Transfer),
+				WithdrawReasons::from(WithdrawReasons::TRANSFER),
 				ExistenceRequirement::AllowDeath,
 			)?);
 
@@ -285,7 +285,7 @@ decl_module! {
 			let _ = T::Currency::resolve_creating(&caller, T::Currency::withdraw(
 				&account,
 				fund.deposit,
-				WithdrawReasons::from(WithdrawReason::Transfer),
+				WithdrawReasons::from(WithdrawReasons::TRANSFER),
 				ExistenceRequirement::AllowDeath,
 			)?);
 
@@ -300,7 +300,7 @@ decl_module! {
 	}
 }
 
-impl<T: Trait> Module<T> {
+impl<T: Config> Module<T> {
 	/// The account ID of the fund pot.
 	///
 	/// This actually does computation. If you need to keep using it, then make sure you cache the
@@ -343,6 +343,9 @@ impl<T: Trait> Module<T> {
 	/// storage write.
 	pub fn crowdfund_kill(index: FundIndex) {
 		let id = Self::id_from_index(index);
-		child::kill_storage(&id);
+		// The None here means we aren't setting a limit to how many keys to delete.
+		// Limiting can be useful, but is beyond the scope of this recipe. For more info, see
+		// https://crates.parity.io/frame_support/storage/child/fn.kill_storage.html
+		child::kill_storage(&id, None);
 	}
 }

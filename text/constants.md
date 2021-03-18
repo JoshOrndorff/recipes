@@ -19,8 +19,8 @@ Configurable constants are declared as associated types in the pallet's configur
 the `Get<T>` syntax for any type `T`.
 
 ```rust, ignore
-pub trait Trait: system::Trait {
-	type Event: From<Event> + Into<<Self as system::Trait>::Event>;
+pub trait Config: frame_system::Config {
+	type Event: From<Event> + Into<<Self as frame_system::Config>::Event>;
 
 	/// Maximum amount added per invocation
 	type MaxAddend: Get<u32>;
@@ -36,7 +36,7 @@ the top of this block, right after `fn deposit_event`.
 
 ```rust, ignore
 decl_module! {
-	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
+	pub struct Module<T: Config> for enum Call where origin: T::Origin {
 		fn deposit_event() = default;
 
 		const MaxAddend: u32 = T::MaxAddend::get();
@@ -52,7 +52,7 @@ This example manipulates a single value in storage declared as `SingleValue`.
 
 ```rust, ignore
 decl_storage! {
-	trait Store for Module<T: Trait> as Example {
+	trait Store for Module<T: Config> as Example {
 		SingleValue get(fn single_value): u32;
 	}
 }

@@ -28,7 +28,7 @@ been initialized yet.
 
 ```rust, ignore
 decl_storage! {
-	trait Store for Module<T: Trait> as Token {
+	trait Store for Module<T: Config> as Token {
 		pub Balances get(get_balance): map hasher(blake2_128_concat) T::AccountId => u64;
 
 		pub TotalSupply get(total_supply): u64 = 21000000;
@@ -50,7 +50,7 @@ transfers, and successful and failed initialization.
 decl_event!(
 	pub enum Event<T>
 	where
-		AccountId = <T as system::Trait>::AccountId,
+		AccountId = <T as frame_system::Config>::AccountId,
 	{
 		/// Token was initialized by user
 		Initialized(AccountId),
@@ -60,7 +60,7 @@ decl_event!(
 );
 
 decl_error! {
-	pub enum Error for Module<T: Trait> {
+	pub enum Error for Module<T: Config> {
 		/// Attempted to initialize the token after it had already been initialized.
 		AlreadyInitialized,
 		/// Attempted to transfer more funds than were available

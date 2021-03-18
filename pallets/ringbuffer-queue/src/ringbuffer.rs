@@ -195,10 +195,10 @@ mod tests {
 	#[derive(Clone, Eq, PartialEq)]
 	pub struct Test;
 
-	pub trait Trait: system::Trait {}
+	pub trait Config: frame_system::Config {}
 
 	decl_module! {
-		pub struct Module<T: Trait> for enum Call where origin: T::Origin {
+		pub struct Module<T: Config> for enum Call where origin: T::Origin {
 		}
 	}
 
@@ -211,7 +211,7 @@ mod tests {
 	}
 
 	decl_storage! {
-		trait Store for Module<T: Trait> as RingBufferTest {
+		trait Store for Module<T: Config> as RingBufferTest {
 			TestMap get(fn get_test_value): map hasher(twox_64_concat) TestIdx => SomeStruct;
 			TestRange get(fn get_test_range): (TestIdx, TestIdx) = (0, 0);
 		}
@@ -224,7 +224,7 @@ mod tests {
 		pub const AvailableBlockRatio: Perbill = Perbill::from_percent(75);
 	}
 
-	impl system::Trait for Test {
+	impl frame_system::Config for Test {
 		type BaseCallFilter = ();
 		type Origin = Origin;
 		type Call = ();

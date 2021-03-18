@@ -4,27 +4,27 @@
 use frame_support::{
 	decl_event, decl_module,
 	dispatch::DispatchResult,
-	traits::{Currency, LockIdentifier, LockableCurrency, WithdrawReason, WithdrawReasons},
+	traits::{Currency, LockIdentifier, LockableCurrency, WithdrawReasons},
 };
-use frame_system::{self as system, ensure_signed};
+use frame_system::ensure_signed;
 
 const EXAMPLE_ID: LockIdentifier = *b"example ";
 
-type BalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::Balance;
+type BalanceOf<T> = <<T as Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::Balance;
 
-pub trait Trait: system::Trait {
+pub trait Config: frame_system::Config {
 	/// The lockable currency type
 	type Currency: LockableCurrency<Self::AccountId, Moment = Self::BlockNumber>;
 
 	/// The overarching event type
-	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
+	type Event: From<Event<Self>> + Into<<Self as frame_system::Config>::Event>;
 }
 
 decl_event!(
 	pub enum Event<T>
 	where
 		Balance = BalanceOf<T>,
-		<T as system::Trait>::AccountId
+		<T as frame_system::Config>::AccountId
 	{
 		Locked(AccountId, Balance),
 		ExtendedLock(AccountId, Balance),
@@ -33,7 +33,7 @@ decl_event!(
 );
 
 decl_module! {
-	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
+	pub struct Module<T: Config> for enum Call where origin: T::Origin {
 		fn deposit_event() = default;
 
 		/// Locks the specified amount of tokens from the caller
@@ -45,7 +45,7 @@ decl_module! {
 				EXAMPLE_ID,
 				&user,
 				amount,
-				WithdrawReasons::except(WithdrawReason::TransactionPayment),
+				WithdrawReasons::all(),
 			);
 
 			Self::deposit_event(RawEvent::Locked(user, amount));
@@ -61,7 +61,7 @@ decl_module! {
 				EXAMPLE_ID,
 				&user,
 				amount,
-				WithdrawReasons::except(WithdrawReason::TransactionPayment),
+				WithdrawReasons::all(),
 			);
 
 			Self::deposit_event(RawEvent::ExtendedLock(user, amount));

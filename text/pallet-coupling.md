@@ -77,7 +77,7 @@ name of the pallet on which you depend as a trait bound on the configuration tra
 are writing. This is demonstrated in the tightly coupled variant of `check-membership`.
 
 ```rust, ignore
-pub trait Trait: system::Trait + vec_set::Trait {
+pub trait Config: frame_system::Config + vec_set::Trait {
 	// --snip--
 }
 ```
@@ -112,7 +112,7 @@ another pallet, you add an associated type to the pallet's configuration trait a
 supplied type implements the necessary behavior by specifying a trait bound.
 
 ```rust, ignore
-pub trait Trait: system::Trait {
+pub trait Config: frame_system::Config {
 	// --snip--
 
 	/// A type that will supply a set of members to check access control against

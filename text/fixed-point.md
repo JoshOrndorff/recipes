@@ -69,7 +69,7 @@ storage value to `1`.
 
 ```rust, ignore
 decl_storage! {
-	trait Store for Module<T: Trait> as Example {
+	trait Store for Module<T: Config> as Example {
 		// --snip--
 
 		/// Permill accumulator, value starts at 1 (multiplicative identity)
@@ -128,7 +128,7 @@ fixed-point arithmetic, like ours does, it is advisable to keep your data in sub
 
 ```rust, ignore
 decl_storage! {
-	trait Store for Module<T: Trait> as Example {
+	trait Store for Module<T: Config> as Example {
 		// --snip--
 
 		/// Substrate-fixed accumulator, value starts at 1 (multiplicative identity)
@@ -210,7 +210,7 @@ shift that bit to the middle just left of the imaginary radix point.
 
 ```rust, ignore
 decl_storage! {
-	trait Store for Module<T: Trait> as Example {
+	trait Store for Module<T: Config> as Example {
 		// --snip--
 
 		/// Manual accumulator, value starts at 1 (multiplicative identity)
@@ -297,7 +297,7 @@ Instead we just allow anyone to "deposit" or "withdraw" funds with no source or 
 
 ```rust, ignore
 decl_storage! {
-	trait Store for Module<T: Trait> as Example {
+	trait Store for Module<T: Config> as Example {
 		// --snip--
 
 		/// Balance for the discrete interest account
@@ -398,7 +398,7 @@ With the struct to represent the account's state defined, we can initialize the 
 
 ```rust, ignore
 decl_storage! {
-	trait Store for Module<T: Trait> as Example {
+	trait Store for Module<T: Config> as Example {
 		// --snip--
 
 		/// Balance for the continuously compounded account
@@ -438,7 +438,7 @@ calculates the value of the account considering all the interest that has accrue
 time the account was touched. Let's take a closer look.
 
 ```rust, ignore
-fn value_of_continuous_account(now: &<T as system::Trait>::BlockNumber) -> I32F32 {
+fn value_of_continuous_account(now: &<T as frame_system::Config>::BlockNumber) -> I32F32 {
 	// Get the old state of the accout
 	let ContinuousAccountData{
 		principal,

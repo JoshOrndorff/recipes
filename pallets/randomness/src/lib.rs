@@ -4,7 +4,7 @@
 use frame_support::{
 	decl_event, decl_module, decl_storage, dispatch::DispatchResult, traits::Randomness,
 };
-use frame_system::{self as system, ensure_signed};
+use frame_system::ensure_signed;
 use parity_scale_codec::Encode;
 use sp_core::H256;
 use sp_std::vec::Vec;
@@ -13,8 +13,8 @@ use sp_std::vec::Vec;
 mod tests;
 
 /// The pallet's configuration trait.
-pub trait Trait: system::Trait {
-	type Event: From<Event> + Into<<Self as system::Trait>::Event>;
+pub trait Config: frame_system::Config {
+	type Event: From<Event> + Into<<Self as frame_system::Config>::Event>;
 
 	/// The pallet doesn't know what the source of randomness is; it can be anything that
 	/// implements the trait. When installing this pallet in a runtime, you
@@ -23,14 +23,14 @@ pub trait Trait: system::Trait {
 }
 
 decl_storage! {
-	trait Store for Module<T: Trait> as RandomnessPallet {
+	trait Store for Module<T: Config> as RandomnessPallet {
 		/// A nonce to use as a subject when drawing randomness
 		Nonce get(fn nonce): u32;
 	}
 }
 
 decl_module! {
-	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
+	pub struct Module<T: Config> for enum Call where origin: T::Origin {
 		fn deposit_event() = default;
 
 		/// Grab a random seed and random value from the randomness collective flip pallet
@@ -58,7 +58,7 @@ decl_event!(
 	}
 );
 
-impl<T: Trait> Module<T> {
+impl<T: Config> Module<T> {
 	/// Reads the nonce from storage, increments the stored nonce, and returns
 	/// the encoded nonce to the caller.
 	fn encode_and_update_nonce() -> Vec<u8> {

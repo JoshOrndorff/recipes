@@ -48,7 +48,7 @@ the pallet's behavior. This pallet is simple enough that our configuration trait
 although it must still exist.
 
 ```rust, ignore
-pub trait Trait: system::Trait {}
+pub trait Config: frame_system::Config {}
 ```
 
 ## Dispatchable Calls
@@ -61,7 +61,7 @@ defined in the
 
 ```rust, ignore
 decl_module! {
-	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
+	pub struct Module<T: Config> for enum Call where origin: T::Origin {
 
 		/// A function that says hello to the user by printing messages to the node log
 		#[weight = 10_000]

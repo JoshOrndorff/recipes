@@ -32,7 +32,7 @@ integer in cases situations like this.
 
 ```rust, ignore
 decl_module! {
-	pub struct Module<T: Trait> for enum Call {
+	pub struct Module<T: Config> for enum Call {
 
 		#[weight = 10_000]
 		fn store_value(_origin, entry: u32) -> DispatchResult {

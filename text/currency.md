@@ -41,7 +41,7 @@ from your pallet, include an associated type with the `Currency` trait bound in 
 configuration trait.
 
 ```rust, ignore
-pub trait Trait: system::Trait {
+pub trait Config: frame_system::Config {
 	type Currency: Currency<Self::AccountId>;
 }
 ```
@@ -58,7 +58,7 @@ T::Currency::total_issuance();
 As promised, it is also possible to type alias a balances type for use in the runtime:
 
 ```rust, ignore
-type BalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::Balance;
+type BalanceOf<T> = <<T as Trait>::Currency as Currency<<T as frame_system::Config>::AccountId>>::Balance;
 ```
 
 This new `BalanceOf<T>` type satisfies the type constraints of `Self::Balance` for the provided
@@ -78,7 +78,7 @@ trait. The import and associated type declaration follow convention
 ```rust, ignore
 use frame_support::traits::{Currency, ReservableCurrency};
 
-pub trait Trait: system::Trait {
+pub trait Config: frame_system::Config {
 	type Currency: Currency<Self::AccountId> + ReservableCurrency<Self::AccountId>;
 }
 ```
@@ -93,7 +93,7 @@ pub fn reserve_funds(origin, amount: BalanceOf<T>) -> DispatchResult {
 	T::Currency::reserve(&locker, amount)
 			.map_err(|_| "locker can't afford to lock the amount requested")?;
 
-	let now = <system::Module<T>>::block_number();
+	let now = <frame_system::Module<T>>::block_number();
 
 	Self::deposit_event(RawEvent::LockFunds(locker, amount, now));
 	Ok(())
@@ -107,7 +107,7 @@ pub fn unreserve_funds(origin, amount: BalanceOf<T>) -> DispatchResult {
 	T::Currency::unreserve(&unlocker, amount);
 	// ReservableCurrency::unreserve does not fail (it will lock up as much as amount)
 
-	let now = <system::Module<T>>::block_number();
+	let now = <frame_system::Module<T>>::block_number();
 
 	Self::deposit_event(RawEvent::UnlockFunds(unlocker, amount, now));
 	Ok(())
@@ -173,7 +173,7 @@ pub fn reward_funds(origin, to_reward: T::AccountId, reward: BalanceOf<T>) {
 	total_imbalance.maybe_subsume(r);
 	T::Reward::on_unbalanced(total_imbalance);
 
-	let now = <system::Module<T>>::block_number();
+	let now = <frame_system::Module<T>>::block_number();
 	Self::deposit_event(RawEvent::RewardFunds(to_reward, reward, now));
 }
 ```

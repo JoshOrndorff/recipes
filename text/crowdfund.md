@@ -29,9 +29,9 @@ crowdfund pallet will depend on a notion of
 
 ```rust, ignore
 /// The pallet's configuration trait
-pub trait Trait: system::Trait {
+pub trait Config: frame_system::Config {
 	/// The ubiquious Event type
-	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
+	type Event: From<Event<Self>> + Into<<Self as frame_system::Config>::Event>;
 
 	/// The currency in which the crowdfunds will be denominated
 	type Currency: ReservableCurrency<Self::AccountId>;
@@ -76,9 +76,9 @@ that have ever been created and three convenience aliases.
 ```rust, ignore
 pub type FundIndex = u32;
 
-type AccountIdOf<T> = <T as system::Trait>::AccountId;
+type AccountIdOf<T> = <T as frame_system::Config>::AccountId;
 type BalanceOf<T> = <<T as Trait>::Currency as Currency<AccountIdOf<T>>>::Balance;
-type FundInfoOf<T> = FundInfo<AccountIdOf<T>, BalanceOf<T>, <T as system::Trait>::BlockNumber>;
+type FundInfoOf<T> = FundInfo<AccountIdOf<T>, BalanceOf<T>, <T as frame_system::Config>::BlockNumber>;
 ```
 
 ## Storage
@@ -88,7 +88,7 @@ index that tracks the number of funds, and the second is a mapping from index to
 
 ```rust, ignore
 decl_storage! {
-	trait Store for Module<T: Trait> as ChildTrie {
+	trait Store for Module<T: Config> as ChildTrie {
 		/// Info on all of the funds.
 		Funds get(fn funds):
 			map hasher(blake2_128_concat) FundIndex => Option<FundInfoOf<T>>;
@@ -97,7 +97,7 @@ decl_storage! {
 		FundCount get(fn fund_count): FundIndex;
 
 		// Additional information is stored in a child trie. See the helper
-		// functions in the impl<T: Trait> Module<T> block below
+		// functions in the impl<T: Config> Module<T> block below
 	}
 }
 ```
@@ -113,7 +113,7 @@ Second, it allows any contributor to prove that they contributed using a
 
 ### Using the Child Trie API
 
-The child API is abstracted into a few helper functions in the `impl<T: Trait> Module<T>` block.
+The child API is abstracted into a few helper functions in the `impl<T: Config> Module<T>` block.
 
 ```rust, ignore
 /// Record a contribution in the associated child trie.
@@ -182,7 +182,7 @@ fn dispense(origin, index: FundIndex) {
 	let fund = Self::funds(index).ok_or(Error::<T>::InvalidIndex)?;
 
 	// Check that enough time has passed to remove from storage
-	let now = <system::Module<T>>::block_number();
+	let now = <frame_system::Module<T>>::block_number();
 
 	ensure!(now >= fund.end, Error::<T>::FundStillActive);
 

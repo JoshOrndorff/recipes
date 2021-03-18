@@ -35,7 +35,7 @@ point. (Well, that and Charity work is just so exciting!) This identifier can be
 ```rust, ignore
 const PALLET_ID: ModuleId = ModuleId(*b"Charity!");
 
-impl<T: Trait> Module<T> {
+impl<T: Config> Module<T> {
 	/// The account ID that holds the Charity's funds
 	pub fn account_id() -> T::AccountId {
 		PALLET_ID.into_account()
@@ -85,7 +85,7 @@ incentive-alignment mechanism. To allow our pallet to absorb these imbalances, w
 
 ```rust, ignore
 use frame_support::traits::{OnUnbalanced, Imbalance};
-type NegativeImbalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::NegativeImbalance;
+type NegativeImbalanceOf<T> = <<T as Trait>::Currency as Currency<<T as frame_system::Config>::AccountId>>::NegativeImbalance;
 
 impl<T: Trait> OnUnbalanced<NegativeImbalanceOf<T>> for Module<T> {
 	fn on_nonzero_unbalanced(amount: NegativeImbalanceOf<T>) {

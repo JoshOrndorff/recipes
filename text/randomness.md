@@ -63,8 +63,8 @@ appropriate trait bound. This pallet, being a demo, will use two different sourc
 sources is not necessary in practice.
 
 ```rust, ignore
-pub trait Trait: system::Trait {
-	type Event: From<Event> + Into<<Self as system::Trait>::Event>;
+pub trait Config: frame_system::Config {
+	type Event: From<Event> + Into<<Self as frame_system::Config>::Event>;
 
 	type RandomnessSource: Randomness<H256>;
 }
