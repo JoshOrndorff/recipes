@@ -22,7 +22,7 @@ parameter_types! {
 	pub const MaximumBlockLength: u32 = 2 * 1024;
 	pub const AvailableBlockRatio: Perbill = Perbill::one();
 }
-impl system::Trait for TestRuntime {
+impl frame_system::Config for TestRuntime {
 	type BaseCallFilter = ();
 	type Origin = Origin;
 	type Index = u64;
@@ -66,7 +66,7 @@ impl vec_set::Trait for TestRuntime {
 	type Event = TestEvent;
 }
 
-impl Trait for TestRuntime {
+impl Config for TestRuntime {
 	type Event = TestEvent;
 	type MembershipSource = VecSet;
 }
@@ -97,10 +97,7 @@ fn members_can_call() {
 
 		let expected_event = TestEvent::check_membership(RawEvent::IsAMember(1));
 
-		assert_eq!(
-			System::events()[1].event,
-			expected_event,
-		);
+		assert_eq!(System::events()[1].event, expected_event,);
 	})
 }
 

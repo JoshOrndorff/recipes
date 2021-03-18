@@ -6,18 +6,18 @@
 //! type in this pallet's configuration trait. Any type that implements the `AccountSet` trait can be
 //! used to supply the membership set.
 
-use frame_support::{decl_error, decl_event, decl_module, dispatch::DispatchResult, ensure};
-use frame_system::{self as system, ensure_signed};
 use account_set::AccountSet;
+use frame_support::{decl_error, decl_event, decl_module, dispatch::DispatchResult, ensure};
+use frame_system::ensure_signed;
 
 #[cfg(test)]
 mod tests;
 
 /// The pallet's configuration trait
 /// Notice the loose coupling: any pallet that implements the `AccountSet` behavior works here.
-pub trait Trait: system::Trait {
+pub trait Config: frame_system::Config {
 	/// The ubiquitous event type
-	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
+	type Event: From<Event<Self>> + Into<<Self as frame_system::Config>::Event>;
 
 	/// A type that will supply a set of members to check access control against
 	type MembershipSource: AccountSet<AccountId = Self::AccountId>;
@@ -26,7 +26,7 @@ pub trait Trait: system::Trait {
 decl_event!(
 	pub enum Event<T>
 	where
-		AccountId = <T as system::Trait>::AccountId,
+		AccountId = <T as frame_system::Config>::AccountId,
 	{
 		/// The caller is a member.
 		IsAMember(AccountId),
@@ -34,14 +34,14 @@ decl_event!(
 );
 
 decl_error! {
-	pub enum Error for Module<T: Trait> {
+	pub enum Error for Module<T: Config> {
 		/// The caller is not a member
 		NotAMember,
 	}
 }
 
 decl_module! {
-	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
+	pub struct Module<T: Config> for enum Call where origin: T::Origin {
 		fn deposit_event() = default;
 
 		/// Checks whether the caller is a member of the set of account IDs provided by the
