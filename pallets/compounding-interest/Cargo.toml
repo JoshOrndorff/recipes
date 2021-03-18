@@ -1,6 +1,6 @@
 [package]
 name = "compounding-interest"
-version = "2.0.0"
+version = "3.0.0"
 edition = "2018"
 authors = ['Substrate DevHub <https://github.com/substrate-developer-hub>']
 repository = 'https://github.com/substrate-developer-hub/recipes'
@@ -12,7 +12,6 @@ substrate-fixed = { git = 'https://github.com/encointer/substrate-fixed.git', re
 parity-scale-codec = { version = "2.0", features = ["derive"], default-features = false }
 
 # Substrate packages
-
 frame-support = { version = '3.0', default-features = false }
 frame-system = { version = '3.0', default-features = false }
 sp-arithmetic = { version = '3.0', default-features = false }

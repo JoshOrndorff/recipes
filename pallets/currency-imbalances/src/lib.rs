@@ -9,18 +9,18 @@ use frame_support::{
 	decl_event, decl_module,
 	traits::{Currency, Imbalance, OnUnbalanced, ReservableCurrency},
 };
-use frame_system::{self as system, ensure_signed};
+use frame_system::ensure_signed;
 
 // balance type using reservable currency type
-type BalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::Balance;
+type BalanceOf<T> = <<T as Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::Balance;
 type PositiveImbalanceOf<T> =
-	<<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::PositiveImbalance;
+	<<T as Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::PositiveImbalance;
 type NegativeImbalanceOf<T> =
-	<<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::NegativeImbalance;
+	<<T as Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::NegativeImbalance;
 
-pub trait Trait: system::Trait + Sized {
+pub trait Config: frame_system::Config + Sized {
 	/// The overarching event type
-	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
+	type Event: From<Event<Self>> + Into<<Self as frame_system::Config>::Event>;
 
 	/// Currency type for this pallet.
 	type Currency: Currency<Self::AccountId> + ReservableCurrency<Self::AccountId>;
@@ -35,9 +35,9 @@ pub trait Trait: system::Trait + Sized {
 decl_event!(
 	pub enum Event<T>
 	where
-		AccountId = <T as system::Trait>::AccountId,
+		AccountId = <T as frame_system::Config>::AccountId,
 		Balance = BalanceOf<T>,
-		BlockNumber = <T as system::Trait>::BlockNumber,
+		BlockNumber = <T as frame_system::Config>::BlockNumber,
 	{
 		SlashFunds(AccountId, Balance, BlockNumber),
 		RewardFunds(AccountId, Balance, BlockNumber),
@@ -45,7 +45,7 @@ decl_event!(
 );
 
 decl_module! {
-	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
+	pub struct Module<T: Config> for enum Call where origin: T::Origin {
 		fn deposit_event() = default;
 
 		/// Slashes the specified amount of funds from the specified account
@@ -56,7 +56,7 @@ decl_module! {
 			let imbalance = T::Currency::slash_reserved(&to_punish, collateral).0;
 			T::Slash::on_unbalanced(imbalance);
 
-			let now = <system::Module<T>>::block_number();
+			let now = <frame_system::Module<T>>::block_number();
 			Self::deposit_event(RawEvent::SlashFunds(to_punish, collateral, now));
 		}
 
@@ -71,7 +71,7 @@ decl_module! {
 			total_imbalance.maybe_subsume(r);
 			T::Reward::on_unbalanced(total_imbalance);
 
-			let now = <system::Module<T>>::block_number();
+			let now = <frame_system::Module<T>>::block_number();
 			Self::deposit_event(RawEvent::RewardFunds(to_reward, reward, now));
 		}
 	}
