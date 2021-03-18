@@ -16,28 +16,30 @@ use frame_support::{
 	dispatch::{DispatchError, DispatchResult},
 	traits::{Currency, ExistenceRequirement::AllowDeath, Imbalance, OnUnbalanced},
 };
-use frame_system::{self as system, ensure_root, ensure_signed};
+use frame_system::{ensure_root, ensure_signed};
 
 #[cfg(test)]
 mod tests;
 
-type BalanceOf<T> = <<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::Balance;
-type NegativeImbalanceOf<T> =
-	<<T as Trait>::Currency as Currency<<T as system::Trait>::AccountId>>::NegativeImbalance;
+type BalanceOf<T> =
+	<<T as Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::Balance;
+type NegativeImbalanceOf<T> = <<T as Config>::Currency as Currency<
+	<T as frame_system::Config>::AccountId,
+>>::NegativeImbalance;
 
 /// Hardcoded pallet ID; used to create the special Pot Account
 /// Must be exactly 8 characters long
 const PALLET_ID: ModuleId = ModuleId(*b"Charity!");
 
-pub trait Trait: system::Trait {
+pub trait Config: frame_system::Config {
 	/// The overarching event type.
-	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
+	type Event: From<Event<Self>> + Into<<Self as frame_system::Config>::Event>;
 	/// The currency type that the charity deals in
 	type Currency: Currency<Self::AccountId>;
 }
 
 decl_storage! {
-	trait Store for Module<T: Trait> as SimpleTreasury {
+	trait Store for Module<T: Config> as SimpleTreasury {
 		// No storage items of our own, but we still need decl_storage to initialize the pot
 	}
 	add_extra_genesis {
@@ -55,7 +57,7 @@ decl_event!(
 	pub enum Event<T>
 	where
 		Balance = BalanceOf<T>,
-		<T as system::Trait>::AccountId,
+		<T as frame_system::Config>::AccountId,
 	{
 		/// Donor has made a charitable donation to the charity
 		DonationReceived(AccountId, Balance, Balance),
@@ -63,13 +65,14 @@ decl_event!(
 		ImbalanceAbsorbed(Balance, Balance),
 		/// Charity has allocated funds to a cause
 		FundsAllocated(AccountId, Balance, Balance),
+		//TODO can we get rid of this since a lot of testing stuff changed in 3.0?
 		/// For testing purposes, to impl From<()> for TestEvent to assign `()` to balances::Event
 		NullEvent(u32), // u32 could be aliases as an error code for mocking setup
 	}
 );
 
 decl_module! {
-	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
+	pub struct Module<T: Config> for enum Call where origin: T::Origin {
 		fn deposit_event() = default;
 
 		/// Donate some funds to the charity
@@ -115,7 +118,7 @@ decl_module! {
 	}
 }
 
-impl<T: Trait> Module<T> {
+impl<T: Config> Module<T> {
 	/// The account ID that holds the Charity's funds
 	pub fn account_id() -> T::AccountId {
 		PALLET_ID.into_account()
@@ -130,7 +133,7 @@ impl<T: Trait> Module<T> {
 // This implementation allows the charity to be the recipient of funds that are burned elsewhere in
 // the runtime. For eample, it could be transaction fees, consensus-related slashing, or burns that
 // align incentives in other pallets.
-impl<T: Trait> OnUnbalanced<NegativeImbalanceOf<T>> for Module<T> {
+impl<T: Config> OnUnbalanced<NegativeImbalanceOf<T>> for Module<T> {
 	fn on_nonzero_unbalanced(amount: NegativeImbalanceOf<T>) {
 		let numeric_amount = amount.peek();
 

@@ -1,90 +1,79 @@
-use crate::*;
-use balances;
-use frame_support::{assert_err, assert_ok, impl_outer_event, impl_outer_origin, parameter_types};
+use crate::{self as charity, Config, RawEvent};
+use frame_support::{
+	assert_err, assert_ok, construct_runtime, parameter_types,
+	traits::{Currency, OnUnbalanced},
+};
 use frame_system::{self as system, EventRecord, Phase, RawOrigin};
+use pallet_balances;
 use sp_core::H256;
 use sp_io;
 use sp_runtime::{
 	testing::Header,
 	traits::{BlakeTwo256, IdentityLookup},
-	Perbill,
 };
 
-impl_outer_origin! {
-	pub enum Origin for TestRuntime {}
-}
+type UncheckedExtrinsic = frame_system::mocking::MockUncheckedExtrinsic<TestRuntime>;
+type Block = frame_system::mocking::MockBlock<TestRuntime>;
 
-// Workaround for https://github.com/rust-lang/rust/issues/26925 . Remove when sorted.
-#[derive(Clone, PartialEq, Eq, Debug)]
-pub struct TestRuntime;
+construct_runtime!(
+	pub enum TestRuntime where
+		Block = Block,
+		NodeBlock = Block,
+		UncheckedExtrinsic = UncheckedExtrinsic,
+	{
+		System: frame_system::{Module, Call, Config, Storage, Event<T>},
+		Balances: pallet_balances::{Module, Call, Storage, Config<T>, Event<T>},
+		Charity: charity::{Module, Call, Storage, Event<T>},
+	}
+);
+
 parameter_types! {
 	pub const BlockHashCount: u64 = 250;
-	pub const MaximumBlockWeight: u32 = 1024;
-	pub const MaximumBlockLength: u32 = 2 * 1024;
-	pub const AvailableBlockRatio: Perbill = Perbill::one();
-
-	pub const ExistentialDeposit: u64 = 1;
-	pub const TransferFee: u64 = 0;
-	pub const CreationFee: u64 = 0;
+	pub BlockWeights: frame_system::limits::BlockWeights =
+		frame_system::limits::BlockWeights::simple_max(1024);
 }
-impl system::Trait for TestRuntime {
+impl frame_system::Config for TestRuntime {
 	type BaseCallFilter = ();
+	type BlockWeights = ();
+	type BlockLength = ();
 	type Origin = Origin;
 	type Index = u64;
-	type Call = ();
+	type Call = Call;
 	type BlockNumber = u64;
 	type Hash = H256;
 	type Hashing = BlakeTwo256;
 	type AccountId = u64;
 	type Lookup = IdentityLookup<Self::AccountId>;
 	type Header = Header;
-	type Event = TestEvent;
+	type Event = Event;
 	type BlockHashCount = BlockHashCount;
-	type MaximumBlockWeight = MaximumBlockWeight;
 	type DbWeight = ();
-	type BlockExecutionWeight = ();
-	type ExtrinsicBaseWeight = ();
-	type MaximumExtrinsicWeight = MaximumBlockWeight;
-	type MaximumBlockLength = MaximumBlockLength;
-	type AvailableBlockRatio = AvailableBlockRatio;
 	type Version = ();
-	type PalletInfo = ();
-	type AccountData = balances::AccountData<u64>;
+	type PalletInfo = PalletInfo;
+	type AccountData = pallet_balances::AccountData<u64>;
 	type OnNewAccount = ();
 	type OnKilledAccount = ();
 	type SystemWeightInfo = ();
+	type SS58Prefix = ();
 }
 
-impl balances::Trait for TestRuntime {
-	type Balance = u64;
+parameter_types! {
+	pub const ExistentialDeposit: u64 = 1;
+}
+impl pallet_balances::Config for TestRuntime {
 	type MaxLocks = ();
-	type Event = TestEvent;
+	type Balance = u64;
+	type Event = Event;
 	type DustRemoval = ();
 	type ExistentialDeposit = ExistentialDeposit;
-	type AccountStore = system::Module<TestRuntime>;
+	type AccountStore = System;
 	type WeightInfo = ();
 }
 
-mod charity {
-	pub use crate::Event;
+impl Config for TestRuntime {
+	type Event = Event;
+	type Currency = Balances;
 }
-
-impl_outer_event! {
-	pub enum TestEvent for TestRuntime {
-		system<T>,
-		charity<T>,
-		balances<T>,
-	}
-}
-
-impl Trait for TestRuntime {
-	type Event = TestEvent;
-	type Currency = balances::Module<Self>;
-}
-
-pub type System = system::Module<TestRuntime>;
-pub type Balances = balances::Module<TestRuntime>;
-pub type Charity = Module<TestRuntime>;
 
 // An alternative to `ExternalityBuilder` which includes custom configuration
 pub fn new_test_ext() -> sp_io::TestExternalities {
@@ -92,7 +81,7 @@ pub fn new_test_ext() -> sp_io::TestExternalities {
 		.build_storage::<TestRuntime>()
 		.unwrap();
 
-	balances::GenesisConfig::<TestRuntime> {
+	pallet_balances::GenesisConfig::<TestRuntime> {
 		// Provide some initial balances
 		balances: vec![(1, 13), (2, 11), (3, 1), (4, 3), (5, 19)],
 	}
@@ -140,13 +129,9 @@ fn donations_work() {
 		assert_eq!(Balances::free_balance(&1), original - donation);
 
 		// Check that the correct event is emitted
-		let expected_event =
-			TestEvent::charity(RawEvent::DonationReceived(1, donation, new_pot_total));
+		let expected_event = Event::charity(RawEvent::DonationReceived(1, donation, new_pot_total));
 
-		assert_eq!(
-			System::events()[1].event,
-			expected_event,
-		);
+		assert_eq!(System::events()[1].event, expected_event,);
 	})
 }
 
@@ -165,7 +150,7 @@ fn cant_donate_too_much() {
 fn imbalances_work() {
 	new_test_ext().execute_with(|| {
 		let imb_amt = 5;
-		let imb = balances::NegativeImbalance::new(imb_amt);
+		let imb = pallet_balances::NegativeImbalance::new(imb_amt);
 		Charity::on_nonzero_unbalanced(imb);
 
 		let new_pot_total = imb_amt + Balances::minimum_balance();
@@ -176,7 +161,7 @@ fn imbalances_work() {
 			System::events()[0],
 			EventRecord {
 				phase: Phase::Initialization,
-				event: TestEvent::charity(RawEvent::ImbalanceAbsorbed(5, new_pot_total)),
+				event: Event::charity(RawEvent::ImbalanceAbsorbed(5, new_pot_total)),
 				topics: vec![],
 			},
 		);
@@ -196,13 +181,18 @@ fn allocating_works() {
 
 		// Test that the expected events were emitted
 		let our_events = System::events()
-			.into_iter().map(|r| r.event)
+			.into_iter()
+			.map(|r| r.event)
 			.filter_map(|e| {
-				if let TestEvent::charity(inner) = e { Some(inner) } else { None }
+				if let Event::charity(inner) = e {
+					Some(inner)
+				} else {
+					None
+				}
 			})
 			.collect::<Vec<_>>();
 
-		let expected_events = 	vec![
+		let expected_events = vec![
 			RawEvent::DonationReceived(1, 10, 11),
 			RawEvent::FundsAllocated(2, 5, 6),
 		];
