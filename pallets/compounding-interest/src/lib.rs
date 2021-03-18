@@ -10,7 +10,7 @@
 //! Substrate-fixed's `I32F32` implementation of fixed point.
 
 use frame_support::{decl_event, decl_module, decl_storage, dispatch::DispatchResult};
-use frame_system::{self as system, ensure_signed};
+use frame_system::ensure_signed;
 use parity_scale_codec::{Decode, Encode};
 use sp_arithmetic::Percent;
 use sp_runtime::traits::Zero;
@@ -20,8 +20,8 @@ use substrate_fixed::{transcendental::exp, types::I32F32};
 #[cfg(test)]
 mod tests;
 
-pub trait Trait: system::Trait {
-	type Event: From<Event> + Into<<Self as system::Trait>::Event>;
+pub trait Config: frame_system::Config {
+	type Event: From<Event> + Into<<Self as frame_system::Config>::Event>;
 }
 
 #[derive(Encode, Decode, Default)]
@@ -33,7 +33,7 @@ pub struct ContinuousAccountData<BlockNumber> {
 }
 
 decl_storage! {
-	trait Store for Module<T: Trait> as Example {
+	trait Store for Module<T: Config> as Example {
 		/// Balance for the continuously compounded account
 		ContinuousAccount get(fn balance_compound): ContinuousAccountData<T::BlockNumber>;
 		/// Balance for the discrete interest account
@@ -59,7 +59,7 @@ decl_event!(
 );
 
 decl_module! {
-	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
+	pub struct Module<T: Config> for enum Call where origin: T::Origin {
 		fn deposit_event() = default;
 
 		/// Deposit some funds into the compounding interest account
@@ -67,7 +67,7 @@ decl_module! {
 		fn deposit_continuous(origin, val_to_add: u64) -> DispatchResult {
 			ensure_signed(origin)?;
 
-			let current_block = system::Module::<T>::block_number();
+			let current_block = frame_system::Module::<T>::block_number();
 			let old_value = Self::value_of_continuous_account(&current_block);
 
 			// Update storage for compounding account
@@ -88,7 +88,7 @@ decl_module! {
 		fn withdraw_continuous(origin, val_to_take: u64) -> DispatchResult {
 			ensure_signed(origin)?;
 
-			let current_block = system::Module::<T>::block_number();
+			let current_block = frame_system::Module::<T>::block_number();
 			let old_value = Self::value_of_continuous_account(&current_block);
 
 			// Update storage for compounding account
@@ -136,7 +136,7 @@ decl_module! {
 
 		fn on_finalize(n: T::BlockNumber) {
 			// Apply newly-accrued discrete interest every ten blocks
-			if (n % 10.into()).is_zero() {
+			if (n % 10u32.into()).is_zero() {
 
 				// Calculate interest Interest = principal * rate * time
 				// We can use the `*` operator for multiplying a `Percent` by a u64
@@ -158,10 +158,10 @@ decl_module! {
 	}
 }
 
-impl<T: Trait> Module<T> {
+impl<T: Config> Module<T> {
 	/// A helper function to evaluate the current value of the continuously compounding interest
 	/// account
-	fn value_of_continuous_account(now: &<T as system::Trait>::BlockNumber) -> I32F32 {
+	fn value_of_continuous_account(now: &<T as frame_system::Config>::BlockNumber) -> I32F32 {
 		// Get the old state of the accout
 		let ContinuousAccountData {
 			principal,
@@ -170,7 +170,7 @@ impl<T: Trait> Module<T> {
 
 		// Calculate the exponential function (lots of type conversion)
 		let elapsed_time_block_number = *now - deposit_date;
-		let elapsed_time_u32 = TryInto::try_into(elapsed_time_block_number)
+		let elapsed_time_u32: u32 = TryInto::try_into(elapsed_time_block_number)
 			.ok()
 			.expect("blockchain will not exceed 2^32 blocks; qed");
 		let elapsed_time_i32f32 = I32F32::from_num(elapsed_time_u32);
