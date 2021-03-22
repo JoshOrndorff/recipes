@@ -3,7 +3,6 @@
 use sc_executor::native_executor_instance;
 pub use sc_executor::NativeExecutor;
 use sc_client_api::RemoteBackend;
-use sc_network::config::DummyFinalityProofRequestBuilder;
 use sc_service::{error::Error as ServiceError, Configuration, PartialComponents, TaskManager};
 use sp_inherents::InherentDataProviders;
 use std::sync::Arc;
@@ -40,7 +39,7 @@ ServiceError> {
 		.map_err(Into::into)
 		.map_err(sp_consensus::error::Error::InherentData)?;
 
-	let (client, backend, keystore, task_manager) =
+	let (client, backend, keystore_container, task_manager) =
 		sc_service::new_full_parts::<Block, RuntimeApi, Executor>(&config)?;
 	let client = Arc::new(client);
 
@@ -56,6 +55,7 @@ ServiceError> {
 
 	let transaction_pool = sc_transaction_pool::BasicPool::new_full(
 		config.transaction_pool.clone(),
+		config.role.is_authority().into(),
 		config.prometheus_registry(),
 		task_manager.spawn_handle(),
 		client.clone(),
@@ -68,7 +68,7 @@ ServiceError> {
 	);
 
 	Ok(PartialComponents {
-		client, backend, import_queue, keystore, task_manager, transaction_pool,
+		client, backend, import_queue, keystore_container, task_manager, transaction_pool,
 		select_chain, inherent_data_providers,
 		other: (),
 	})
@@ -78,7 +78,7 @@ ServiceError> {
 pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
 
 	let sc_service::PartialComponents {
-		client, backend, mut task_manager, import_queue, keystore, select_chain, transaction_pool,
+		client, backend, mut task_manager, import_queue, keystore_container, select_chain, transaction_pool,
 		inherent_data_providers, ..
 	} = new_partial(&config)?;
 
@@ -91,8 +91,6 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
 			import_queue,
 			on_demand: None,
 			block_announce_validator_builder: None,
-			finality_proof_request_builder: None,
-			finality_proof_provider: None,
 		})?;
 
 	if config.offchain_worker.enabled {
@@ -103,15 +101,13 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
 
 	let is_authority = config.role.is_authority();
 	let prometheus_registry = config.prometheus_registry().cloned();
-	let telemetry_connection_sinks = sc_service::TelemetryConnectionSinks::default();
 
 	sc_service::spawn_tasks(sc_service::SpawnTasksParams {
 		network,
 		client: client.clone(),
-		keystore,
+		keystore: keystore_container.sync_keystore(),
 		task_manager: &mut task_manager,
 		transaction_pool: transaction_pool.clone(),
-		telemetry_connection_sinks,
 		rpc_extensions_builder: Box::new(|_, _| ()),
 		on_demand: None,
 		remote_blockchain: None,
@@ -120,6 +116,7 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
 
 	if is_authority {
 		let proposer = sc_basic_authorship::ProposerFactory::new(
+			task_manager.spawn_handle(),
 			client.clone(),
 			transaction_pool.clone(),
 			prometheus_registry.as_ref(),
@@ -146,7 +143,7 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
 
 /// Builds a new service for a light client.
 pub fn new_light(config: Configuration) -> Result<TaskManager, ServiceError> {
-	let (client, backend, keystore, mut task_manager, on_demand) =
+	let (client, backend, keystore_container, mut task_manager, on_demand) =
 		sc_service::new_light_parts::<Block, RuntimeApi, Executor>(&config)?;
 
 	let transaction_pool = Arc::new(sc_transaction_pool::BasicPool::new_light(
@@ -163,8 +160,6 @@ pub fn new_light(config: Configuration) -> Result<TaskManager, ServiceError> {
 		config.prometheus_registry(),
 	);
 
-	let fprb = Box::new(DummyFinalityProofRequestBuilder::default()) as Box<_>;
-
 	let (network, network_status_sinks, system_rpc_tx, network_starter) =
 		sc_service::build_network(sc_service::BuildNetworkParams {
 			config: &config,
@@ -174,8 +169,6 @@ pub fn new_light(config: Configuration) -> Result<TaskManager, ServiceError> {
 			import_queue,
 			on_demand: Some(on_demand.clone()),
 			block_announce_validator_builder: None,
-			finality_proof_request_builder: Some(fprb),
-			finality_proof_provider: None,
 		})?;
 
 	if config.offchain_worker.enabled {
@@ -190,10 +183,9 @@ pub fn new_light(config: Configuration) -> Result<TaskManager, ServiceError> {
 		task_manager: &mut task_manager,
 		on_demand: Some(on_demand),
 		rpc_extensions_builder: Box::new(|_, _| ()),
-		telemetry_connection_sinks: sc_service::TelemetryConnectionSinks::default(),
 		config,
 		client,
-		keystore,
+		keystore: keystore_container.sync_keystore(),
 		backend,
 		network,
 		network_status_sinks,
