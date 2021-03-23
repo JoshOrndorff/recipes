@@ -147,7 +147,7 @@ checksum = "afddf7f520a80dbf76e6f50a35bca42a2331ef227a28b3b6dc5c2e2338d114b1"
 
 [[package]]
 name = "api-runtime"
-version = "2.0.0"
+version = "3.0.0"
 dependencies = [
  "frame-executive",
  "frame-support",
@@ -157,7 +157,7 @@ dependencies = [
  "pallet-sudo",
  "pallet-timestamp",
  "pallet-transaction-payment",
- "parity-scale-codec 1.3.7",
+ "parity-scale-codec 2.0.1",
  "serde",
  "sp-api",
  "sp-block-builder",
@@ -170,7 +170,7 @@ dependencies = [
  "sp-std",
  "sp-transaction-pool",
  "sp-version",
- "substrate-wasm-builder-runner",
+ "substrate-wasm-builder",
  "sum-storage",
  "sum-storage-runtime-api",
 ]
@@ -7298,7 +7298,7 @@ dependencies = [
 
 [[package]]
 name = "super-runtime"
-version = "2.0.0"
+version = "3.0.0"
 dependencies = [
  "basic-token",
  "charity",
