@@ -1,20 +1,11 @@
 [package]
 name = 'basic-pow'
-version = "2.0.0"
+version = "3.0.0"
 edition = '2018'
 authors = ['Substrate DevHub <https://github.com/substrate-developer-hub>']
 repository = 'https://github.com/substrate-developer-hub/recipes'
 description = 'A Substrate node that demonstrates minimal proof of work consensus'
 license = "GPL-3.0-or-later"
-
-[package.metadata.substrate]
-categories = [
-	"Node",
-	"PoW",
-	"tutorial",
-	"recipe",
-]
-compatibility_version = "2.0.0"
 
 [[bin]]
 name = 'basic-pow'
@@ -28,7 +19,6 @@ sha3 = "0.8.0"
 structopt = '0.3.8'
 
 # Substrate packages
-
 sc-basic-authorship = '0.9'
 sc-cli = '0.9'
 sc-client-api = '3.0'
@@ -48,7 +38,6 @@ sp-timestamp = '3.0'
 sp-transaction-pool = '3.0'
 
 # local packages
-
 sha3pow = { path = '../../consensus/sha3pow' }
 
 # This node is compatible with any of the runtimes below

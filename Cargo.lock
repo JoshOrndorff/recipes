@@ -468,7 +468,7 @@ checksum = "904dfeac50f3cdaba28fc6f57fdcddb75f49ed61346676a78c4ffe55877802fd"
 
 [[package]]
 name = "basic-pow"
-version = "2.0.0"
+version = "3.0.0"
 dependencies = [
  "futures 0.3.13",
  "log",
@@ -6240,12 +6240,12 @@ dependencies = [
 
 [[package]]
 name = "sha3pow"
-version = "2.0.0"
+version = "3.0.0"
 dependencies = [
- "parity-scale-codec 1.3.7",
- "rand 0.7.3",
+ "parity-scale-codec 2.0.1",
+ "rand 0.8.3",
  "sc-consensus-pow",
- "sha3 0.8.2",
+ "sha3 0.9.1",
  "sp-api",
  "sp-consensus-pow",
  "sp-core",
