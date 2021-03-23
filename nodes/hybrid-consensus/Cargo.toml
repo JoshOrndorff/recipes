@@ -1,22 +1,11 @@
 [package]
 name = "hybrid-consensus"
-version = "2.0.0"
+version = "3.0.0"
 edition = "2018"
 authors = ['Substrate DevHub <https://github.com/substrate-developer-hub>']
 repository = 'https://github.com/substrate-developer-hub/recipes'
 description = 'A Substrate node with PoW authoring and PoA finality'
 license = "GPL-3.0-or-later"
-
-[package.metadata.substrate]
-categories = [
-	"Node",
-	"PoW",
-	"GRANDPA",
-	"Hybrid-consensus",
-	"tutorial",
-	"recipe",
-]
-compatibility_version = "2.0.0"
 
 [[bin]]
 name = "hybrid-consensus"
@@ -35,7 +24,6 @@ tokio = "0.1.22"
 trie-root = "0.15.2"
 
 # Substrate packages
-
 sc-basic-authorship = '0.9'
 sc-cli = '0.9'
 sc-client-api = '3.0'
@@ -58,7 +46,6 @@ sp-timestamp = '3.0'
 sp-transaction-pool = '3.0'
 
 # local packages
-
 runtime = { package = "minimal-grandpa-runtime", path = "../../runtimes/minimal-grandpa-runtime"}
 sha3pow = { path = '../../consensus/sha3pow' }
 
