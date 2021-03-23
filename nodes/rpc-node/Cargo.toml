@@ -1,22 +1,12 @@
 [package]
 name = 'rpc-node'
-version = "2.0.0"
+version = "3.0.0"
 edition = '2018'
 authors = ['Substrate DevHub <https://github.com/substrate-developer-hub>']
 repository = 'https://github.com/substrate-developer-hub/recipes'
 description = "A Substrate node that demonstrates a custom RPC endpoint"
 build = 'build.rs'
 license = "GPL-3.0-or-later"
-
-[package.metadata.substrate]
-categories = [
-	"Node",
-	"Custom RPC",
-	"tutorial",
-	"Instant Seal",
-	"recipe",
-]
-compatibility_version = "2.0.0"
 
 [[bin]]
 name = 'rpc-node'
@@ -36,7 +26,6 @@ tokio = '0.1.22'
 trie-root = '0.15.2'
 
 # Substrate packages
-
 sc-basic-authorship = '0.9'
 sc-cli = '0.9'
 sc-client-api = '3.0'
