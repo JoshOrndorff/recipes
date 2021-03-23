@@ -3386,7 +3386,7 @@ dependencies = [
 
 [[package]]
 name = "minimal-grandpa-runtime"
-version = "2.0.0"
+version = "3.0.0"
 dependencies = [
  "frame-executive",
  "frame-support",
@@ -3411,7 +3411,7 @@ dependencies = [
  "sp-std",
  "sp-transaction-pool",
  "sp-version",
- "substrate-wasm-builder-runner",
+ "substrate-wasm-builder",
 ]
 
 [[package]]
