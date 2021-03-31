@@ -9,6 +9,7 @@ license = "GPL-3.0-or-later"
 
 [dependencies]
 parity-scale-codec = { version = "2.0", features = ["derive"], default-features = false }
+serde = "1.0"
 
 # Substrate packages
 frame-support = { version = '3.0', default-features = false }
