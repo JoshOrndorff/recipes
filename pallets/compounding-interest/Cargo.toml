@@ -10,6 +10,7 @@ license = "GPL-3.0-or-later"
 [dependencies]
 substrate-fixed = { git = 'https://github.com/encointer/substrate-fixed.git', rev = "b33d186888c60f38adafcfc0ec3a21aab263aef1" }
 parity-scale-codec = { version = "2.0", features = ["derive"], default-features = false }
+serde = "1.0"
 
 # Substrate packages
 frame-support = { version = '3.0', default-features = false }
