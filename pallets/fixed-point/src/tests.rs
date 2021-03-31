@@ -1,81 +1,67 @@
-use super::Event;
-use crate::{Error, Module, Trait};
-use frame_support::{assert_noop, assert_ok, impl_outer_event, impl_outer_origin, parameter_types};
-use frame_system::{self as system, EventRecord, Phase};
+use crate::{self as fixed_point, Config, Event as PalletEvent, Error};
+use frame_support::{assert_noop, assert_ok, construct_runtime, parameter_types};
 use sp_arithmetic::Permill;
 use sp_core::H256;
 use sp_io::TestExternalities;
 use sp_runtime::{
 	testing::Header,
 	traits::{BlakeTwo256, IdentityLookup},
-	Perbill,
 };
 use substrate_fixed::types::U16F16;
 
-impl_outer_origin! {
-	pub enum Origin for TestRuntime {}
-}
+type UncheckedExtrinsic = frame_system::mocking::MockUncheckedExtrinsic<TestRuntime>;
+type Block = frame_system::mocking::MockBlock<TestRuntime>;
 
-// Workaround for https://github.com/rust-lang/rust/issues/26925 . Remove when sorted.
-#[derive(Clone, PartialEq, Eq, Debug)]
-pub struct TestRuntime;
+construct_runtime!(
+	pub enum TestRuntime where
+		Block = Block,
+		NodeBlock = Block,
+		UncheckedExtrinsic = UncheckedExtrinsic,
+	{
+		System: frame_system::{Module, Call, Config, Storage, Event<T>},
+		FixedPoint: fixed_point::{Module, Call, Event},
+	}
+);
+
 parameter_types! {
 	pub const BlockHashCount: u64 = 250;
-	pub const MaximumBlockWeight: u32 = 1024;
-	pub const MaximumBlockLength: u32 = 2 * 1024;
-	pub const AvailableBlockRatio: Perbill = Perbill::one();
+	pub BlockWeights: frame_system::limits::BlockWeights =
+		frame_system::limits::BlockWeights::simple_max(1024);
 }
 impl frame_system::Config for TestRuntime {
 	type BaseCallFilter = ();
+	type BlockWeights = ();
+	type BlockLength = ();
 	type Origin = Origin;
 	type Index = u64;
-	type Call = ();
+	type Call = Call;
 	type BlockNumber = u64;
 	type Hash = H256;
 	type Hashing = BlakeTwo256;
 	type AccountId = u64;
 	type Lookup = IdentityLookup<Self::AccountId>;
 	type Header = Header;
-	type Event = TestEvent;
+	type Event = Event;
 	type BlockHashCount = BlockHashCount;
-	type MaximumBlockWeight = MaximumBlockWeight;
 	type DbWeight = ();
-	type BlockExecutionWeight = ();
-	type ExtrinsicBaseWeight = ();
-	type MaximumExtrinsicWeight = MaximumBlockWeight;
-	type MaximumBlockLength = MaximumBlockLength;
-	type AvailableBlockRatio = AvailableBlockRatio;
 	type Version = ();
-	type PalletInfo = ();
+	type PalletInfo = PalletInfo;
 	type AccountData = ();
 	type OnNewAccount = ();
 	type OnKilledAccount = ();
 	type SystemWeightInfo = ();
-}
-
-mod fixed_point {
-	pub use crate::Event;
-}
-
-impl_outer_event! {
-	pub enum TestEvent for TestRuntime {
-		fixed_point,
-		system<T>,
-	}
+	type SS58Prefix = ();
 }
 
 impl Config for TestRuntime {
-	type Event = TestEvent;
+	type Event = Event;
 }
-
-pub type System = system::Module<TestRuntime>;
-pub type FixedPoint = Module<TestRuntime>;
 
 struct ExternalityBuilder;
 
 impl ExternalityBuilder {
 	pub fn build() -> TestExternalities {
-		let storage = system::GenesisConfig::default()
+		let storage = frame_system::GenesisConfig::default()
 			.build_storage::<TestRuntime>()
 			.unwrap();
 		let mut ext = TestExternalities::from(storage);
@@ -113,22 +99,20 @@ fn manual_impl_works() {
 		// Ensure the new value is correct
 		assert_eq!(FixedPoint::manual_value(), quarter);
 
-		// Check for the correct events
-		assert_eq!(
-			System::events(),
-			vec![
-				EventRecord {
-					phase: Phase::Initialization,
-					event: TestEvent::fixed_point(Event::ManualUpdated(half, half,)),
-					topics: vec![],
-				},
-				EventRecord {
-					phase: Phase::Initialization,
-					event: TestEvent::fixed_point(Event::ManualUpdated(half, quarter,)),
-					topics: vec![],
-				},
-			]
-		);
+		// Test that the expected events were emitted
+		let our_events = System::events()
+			.into_iter().map(|r| r.event)
+			.filter_map(|e| {
+				if let Event::fixed_point(inner) = e { Some(inner) } else { None }
+			})
+			.collect::<Vec<_>>();
+
+		let expected_events = vec![
+			PalletEvent::ManualUpdated(half, half),
+			PalletEvent::ManualUpdated(half, quarter),
+		];
+
+		assert_eq!(our_events, expected_events);
 	})
 }
 
@@ -173,22 +157,20 @@ fn permill_impl_works() {
 		// Ensure the new value is correct
 		assert_eq!(FixedPoint::permill_value(), quarter);
 
-		// Check for the correct events
-		assert_eq!(
-			System::events(),
-			vec![
-				EventRecord {
-					phase: Phase::Initialization,
-					event: TestEvent::fixed_point(Event::PermillUpdated(half, half,)),
-					topics: vec![],
-				},
-				EventRecord {
-					phase: Phase::Initialization,
-					event: TestEvent::fixed_point(Event::PermillUpdated(half, quarter,)),
-					topics: vec![],
-				},
-			]
-		);
+		// Test that the expected events were emitted
+		let our_events = System::events()
+			.into_iter().map(|r| r.event)
+			.filter_map(|e| {
+				if let Event::fixed_point(inner) = e { Some(inner) } else { None }
+			})
+			.collect::<Vec<_>>();
+
+		let expected_events = vec![
+			PalletEvent::PermillUpdated(half, half),
+			PalletEvent::PermillUpdated(half, quarter),
+		];
+
+		assert_eq!(our_events, expected_events);
 	})
 }
 
@@ -216,22 +198,20 @@ fn fixed_impl_works() {
 		// Ensure the new value is correct
 		assert_eq!(FixedPoint::fixed_value(), quarter);
 
-		// Check for the correct events
-		assert_eq!(
-			System::events(),
-			vec![
-				EventRecord {
-					phase: Phase::Initialization,
-					event: TestEvent::fixed_point(Event::FixedUpdated(half, half,)),
-					topics: vec![],
-				},
-				EventRecord {
-					phase: Phase::Initialization,
-					event: TestEvent::fixed_point(Event::FixedUpdated(half, quarter,)),
-					topics: vec![],
-				},
-			]
-		);
+		// Test that the expected events were emitted
+		let our_events = System::events()
+			.into_iter().map(|r| r.event)
+			.filter_map(|e| {
+				if let Event::fixed_point(inner) = e { Some(inner) } else { None }
+			})
+			.collect::<Vec<_>>();
+
+		let expected_events = vec![
+			PalletEvent::FixedUpdated(half, half),
+			PalletEvent::FixedUpdated(half, quarter),
+		];
+
+		assert_eq!(our_events, expected_events);
 	})
 }
 

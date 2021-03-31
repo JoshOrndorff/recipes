@@ -12,7 +12,6 @@ parity-scale-codec = { version = "2.0", features = ["derive"], default-features 
 substrate-fixed = { git = 'https://github.com/encointer/substrate-fixed.git', rev = "b33d186888c60f38adafcfc0ec3a21aab263aef1" }
 
 # Substrate packages
-
 frame-support = { version = '3.0', default-features = false }
 frame-system = { version = '3.0', default-features = false }
 sp-arithmetic = { version = '3.0', default-features = false }
@@ -22,6 +21,7 @@ sp-std = { version = '3.0', default-features = false }
 
 [dev-dependencies]
 sp-io = { version = '3.0', default-features = false }
+serde = "1.0"
 
 [features]
 default = ['std']
