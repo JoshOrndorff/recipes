@@ -12,7 +12,6 @@ parity-scale-codec = { version = "2.0", features = ["derive"], default-features 
 serde = "1.0"
 
 # Substrate packages
-
 pallet-balances = { version = '3.0', default-features = false }
 frame-support = { version = '3.0', default-features = false }
 frame-system = { version = '3.0', default-features = false }
