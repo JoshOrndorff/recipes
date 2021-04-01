@@ -300,6 +300,11 @@ impl randomness::Config for Runtime {
 	type RandomnessSource = RandomnessCollectiveFlip;
 }
 
+impl reservable_currency::Config for Runtime {
+	type Event = Event;
+	type Currency = Balances;
+}
+
 parameter_types! {
 	pub const SubmissionDeposit: u128 = 10;
 	pub const MinContribution: u128 = 10;
@@ -366,6 +371,7 @@ construct_runtime!(
 		MapSet: map_set::{Module, Call, Storage, Event<T>},
 		RingbufferQueue: ringbuffer_queue::{Module, Call, Storage, Event<T>},
 		RandomnessDemo: randomness::{Module, Call, Storage, Event},
+		ReservableCurrency: reservable_currency::{Module, Call, Event<T>},
 		SimpleCrowdfund: simple_crowdfund::{Module, Call, Storage, Event<T>},
 		SimpleEvent: simple_event::{Module, Call, Event},
 		SimpleMap: simple_map::{Module, Call, Storage, Event<T>},
