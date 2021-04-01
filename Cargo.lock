@@ -6350,6 +6350,7 @@ dependencies = [
  "frame-support",
  "frame-system",
  "parity-scale-codec 2.0.1",
+ "serde",
  "sp-core",
  "sp-io",
  "sp-runtime",

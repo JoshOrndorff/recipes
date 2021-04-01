@@ -16,8 +16,8 @@ frame-system = { package = "frame-system", version = '3.0', default-features = f
 sp-runtime = { version = '3.0', default-features = false }
 
 [dev-dependencies]
-sp-core = { version = '3.0', default-features = false }
-sp-io = { version = '3.0', default-features = false }
+sp-core = '3.0'
+sp-io = '3.0'
 
 [features]
 default = ['std']
