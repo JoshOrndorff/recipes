@@ -3785,21 +3785,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "pallet-assets"
-version = "3.0.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "87e4ad8ad50df73d1bc99f6a67bfbe84e8be1554019a798ba37db958f9ad4cc9"
-dependencies = [
- "frame-benchmarking",
- "frame-support",
- "frame-system",
- "parity-scale-codec 2.0.1",
- "serde",
- "sp-runtime",
- "sp-std",
-]
-
-[[package]]
 name = "pallet-authorship"
 version = "3.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -7215,12 +7200,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "substrate-wasm-builder-runner"
-version = "1.0.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d2a965994514ab35d3893e9260245f2947fd1981cdd4fffd2c6e6d1a9ce02e6a"
-
-[[package]]
 name = "subtle"
 version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -8305,12 +8284,11 @@ dependencies = [
 
 [[package]]
 name = "weight-fee-runtime"
-version = "2.0.0"
+version = "3.0.0"
 dependencies = [
  "frame-executive",
  "frame-support",
  "frame-system",
- "pallet-assets",
  "pallet-balances",
  "pallet-randomness-collective-flip",
  "pallet-sudo",
@@ -8330,7 +8308,7 @@ dependencies = [
  "sp-std",
  "sp-transaction-pool",
  "sp-version",
- "substrate-wasm-builder-runner",
+ "substrate-wasm-builder",
  "weights",
 ]
 
