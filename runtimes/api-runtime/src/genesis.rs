@@ -43,7 +43,7 @@ pub fn testnet_genesis(
 	endowed_accounts: Vec<AccountId>,
 ) -> GenesisConfig {
 	GenesisConfig {
-		system: Some(SystemConfig {
+		frame_system: Some(SystemConfig {
 			code: wasm_binary.to_vec(),
 			changes_trie_config: Default::default(),
 		}),
