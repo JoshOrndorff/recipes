@@ -15,11 +15,12 @@ frame-support = { version = '3.0', default-features = false }
 frame-system = { version = '3.0', default-features = false }
 
 [dev-dependencies]
-# Substrate packages
-sp-core = { version = '3.0', default-features = false }
-sp-io = { version = '3.0', default-features = false }
-sp-runtime = { version = '3.0', default-features = false }
 serde = '1.0'
+
+# Substrate packages
+sp-core = '3.0'
+sp-io = '3.0'
+sp-runtime = '3.0'
 
 [features]
 default = ['std']
