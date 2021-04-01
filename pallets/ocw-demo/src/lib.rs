@@ -12,7 +12,7 @@ use frame_support::{
 use parity_scale_codec::{Decode, Encode};
 
 use frame_system::{
-	self as system, ensure_none, ensure_signed,
+	ensure_none, ensure_signed,
 	offchain::{
 		AppCrypto, CreateSignedTransaction, SendSignedTransaction, SendUnsignedTransaction,
 		SignedPayload, SigningTypes, Signer, SubmitTransaction,
@@ -235,9 +235,7 @@ decl_module! {
 			// 3. Sending unsigned transactions with signed payloads from ocw
 			// 4. Fetching JSON via http requests in ocw
 			const TRANSACTION_TYPES: usize = 4;
-			let result = match block_number.try_into()
-				.map_or(TRANSACTION_TYPES, |bn| bn % TRANSACTION_TYPES)
-			{
+			let result = match block_number.try_into().unwrap_or(0) % TRANSACTION_TYPES	{
 				0 => Self::offchain_signed_tx(block_number),
 				1 => Self::offchain_unsigned_tx(block_number),
 				2 => Self::offchain_unsigned_tx_signed_payload(block_number),
@@ -379,7 +377,7 @@ impl<T: Config> Module<T> {
 		let signer = Signer::<T, T::AuthorityId>::any_account();
 
 		// Translating the current block number to number and submit it on-chain
-		let number: u64 = block_number.try_into().unwrap_or(0) as u64;
+		let number: u64 = block_number.try_into().unwrap_or(0);
 
 		// `result` is in the type of `Option<(Account<T>, Result<(), ()>)>`. It is:
 		//   - `None`: no account is available for sending transaction
@@ -406,7 +404,7 @@ impl<T: Config> Module<T> {
 	}
 
 	fn offchain_unsigned_tx(block_number: T::BlockNumber) -> Result<(), Error<T>> {
-		let number: u64 = block_number.try_into().unwrap_or(0) as u64;
+		let number: u64 = block_number.try_into().unwrap_or(0);
 		let call = Call::submit_number_unsigned(number);
 
 		// `submit_unsigned_transaction` returns a type of `Result<(), ()>`
@@ -422,7 +420,7 @@ impl<T: Config> Module<T> {
 		// Retrieve the signer to sign the payload
 		let signer = Signer::<T, T::AuthorityId>::any_account();
 
-		let number: u64 = block_number.try_into().unwrap_or(0) as u64;
+		let number: u64 = block_number.try_into().unwrap_or(0);
 
 		// `send_unsigned_transaction` is returning a type of `Option<(Account<T>, Result<(), ()>)>`.
 		//   Similar to `send_signed_transaction`, they account for:
@@ -445,7 +443,7 @@ impl<T: Config> Module<T> {
 	}
 }
 
-impl<T: Trait> frame_support::unsigned::ValidateUnsigned for Module<T> {
+impl<T: Config> frame_support::unsigned::ValidateUnsigned for Module<T> {
 	type Call = Call<T>;
 
 	fn validate_unsigned(_source: TransactionSource, call: &Self::Call) -> TransactionValidity {
@@ -469,7 +467,7 @@ impl<T: Trait> frame_support::unsigned::ValidateUnsigned for Module<T> {
 	}
 }
 
-impl<T: Trait> rt_offchain::storage_lock::BlockNumberProvider for Module<T> {
+impl<T: Config> rt_offchain::storage_lock::BlockNumberProvider for Module<T> {
 	type BlockNumber = T::BlockNumber;
 	fn current_block_number() -> Self::BlockNumber {
 	  <frame_system::Module<T>>::block_number()
