@@ -333,7 +333,7 @@ impl<T: Trait> frame_support::unsigned::ValidateUnsigned for Module<T> {
 
 We implement the `ValidateUnsigned` trait for `Module`, and add the allowance logic inside the
 `validate_unsigned` function. We verify that if the call is `Call::submit_number_unsigned` we return
-a [`ValidTransaction`](https://substrate.dev/rustdocs/v2.0.0/sp_runtime/transaction_validity/struct.ValidTransaction.html) object using the [builder pattern](https://github.com/rust-unofficial/patterns/blob/master/patterns/builder.md).
+a [`ValidTransaction`](https://substrate.dev/rustdocs/v2.0.0/sp_runtime/transaction_validity/struct.ValidTransaction.html) object using the [builder pattern](https://rust-unofficial.github.io/patterns/patterns/creational/builder.html).
 
 The `ValidTransaction` object contain some fields we have not seen before:
 
