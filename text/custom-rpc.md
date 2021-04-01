@@ -301,11 +301,11 @@ custom RPCs in the `nodes/rpc-node/js` directory.
 
 ## The Manual Seal RPC
 
-Our third and final example RPC will interact with consensus. Specifically, it will tell the consensus engine when to author and finalize blocks. The API for this RPC if defined in Substrate in the [`ManualSealApi` Trait](https://substrate.dev/rustdocs/v2.0.0/sc_consensus_manual_seal/rpc/trait.ManualSealApi.html).
+Our third and final example RPC will interact with consensus. Specifically, it will tell the consensus engine when to author and finalize blocks. The API for this RPC if defined in Substrate in the [`ManualSealApi` Trait](https://substrate.dev/rustdocs/v3.0.0/sc_consensus_manual_seal/rpc/trait.ManualSealApi.html).
 
 ### Installing the Manual Seal RPC
 
-The previous RPC needed a reference to the `client` to call into the runtime. Likewise, this RPC needs a command stream to send messages to the actual consensus engine. This recipe does not cover installing the manual seal engine, but it is nearly identical to the [instant seal engine](https://substrate.dev/rustdocs/v2.0.0/sc_consensus_manual_seal/fn.run_instant_seal.html) used in the [Kitchen Node](./kitchen-node.md).
+The previous RPC needed a reference to the `client` to call into the runtime. Likewise, this RPC needs a command stream to send messages to the actual consensus engine. This recipe does not cover installing the manual seal engine, but it is nearly identical to the [instant seal engine](https://substrate.dev/rustdocs/v3.0.0/sc_consensus_manual_seal/fn.run_instant_seal.html) used in the [Kitchen Node](./kitchen-node.md).
 
 To install the RPC endpoint, we do exactly as we have before, and extend the `create_full` function in `rpc.rs`
 

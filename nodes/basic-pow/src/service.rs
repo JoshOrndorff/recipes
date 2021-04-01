@@ -171,7 +171,7 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
 			sp_consensus::CanAuthorWithNativeVersion::new(client.executor().clone());
 
 		// Parameter details:
-		//   https://substrate.dev/rustdocs/v2.0.0/sc_consensus_pow/fn.start_mining_worker.html
+		//   https://substrate.dev/rustdocs/v3.0.0/sc_consensus_pow/fn.start_mining_worker.html
 		// Also refer to kulupu config:
 		//   https://github.com/kulupu/kulupu/blob/master/src/service.rs
 		let (_worker, worker_task) = sc_consensus_pow::start_mining_worker(

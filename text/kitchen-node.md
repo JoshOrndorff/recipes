@@ -11,7 +11,7 @@
 
 This recipe demonstrates a general purpose Substrate node that supports most of the recipes'
 runtimes, and uses
-[Instant Seal consensus](https://substrate.dev/rustdocs/v2.0.0/sc_consensus_manual_seal/index.html).
+[Instant Seal consensus](https://substrate.dev/rustdocs/v3.0.0/sc_consensus_manual_seal/index.html).
 
 The kitchen node serves as the first point of entry for most aspiring chefs when they first
 encounter the recipes. By default it builds with the super-runtime, but it can be used with most of
@@ -48,14 +48,14 @@ complain if you try to import two crates under the name `runtime`.
 It is worth noting that this node does not work with _all_ of the recipes' runtimes. In particular,
 it is not compatible with the babe-grandpa runtime. That runtime uses the babe pallet which requires
 a node that will include a special
-[`PreRuntime` `DigestItem`](https://substrate.dev/rustdocs/v2.0.0/sp_runtime/enum.DigestItem.html#variant.PreRuntime).
+[`PreRuntime` `DigestItem`](https://substrate.dev/rustdocs/v3.0.0/sp_runtime/enum.DigestItem.html#variant.PreRuntime).
 
 ### Building a Service with the Runtime
 
-With a runtime of our choosing listed among our dependencies, we can wiring the nodes [`Service`](https://substrate.dev/rustdocs/v2.0.0/sc_service/index.html), the part of the node that coordinates communication between all other parts.
+With a runtime of our choosing listed among our dependencies, we can wiring the nodes [`Service`](https://substrate.dev/rustdocs/v3.0.0/sc_service/index.html), the part of the node that coordinates communication between all other parts.
 
 We begin by invoking the
-[`native_executor_instance!` macro](https://substrate.dev/rustdocs/v2.0.0/sc_executor/macro.native_executor_instance.html).
+[`native_executor_instance!` macro](https://substrate.dev/rustdocs/v3.0.0/sc_executor/macro.native_executor_instance.html).
 This creates an executor which is responsible for executing transactions in the runtime and
 determining whether to run the native or Wasm version of the runtime.
 
@@ -73,7 +73,7 @@ The remainder of the file will create the individual components of the node and 
 
 The instant seal consensus engine, and its cousin the manual seal consensus engine, are both
 included in the same
-[`sc-consensus-manual-seal` crate](https://substrate.dev/rustdocs/v2.0.0/sc_consensus_manual_seal/index.html). Instant seal
+[`sc-consensus-manual-seal` crate](https://substrate.dev/rustdocs/v3.0.0/sc_consensus_manual_seal/index.html). Instant seal
 simply authors a new block whenever a new transaction is available in the queue. This is similar to
 [Truffle Suite's Ganache](https://www.trufflesuite.com/ganache) in the Ethereum ecosystem, but
 without the UI.
@@ -104,7 +104,7 @@ let import_queue = sc_consensus_manual_seal::import_queue(
 ### The Proposer
 
 Now we pick up in the `new_full` function. All of the code in this portion is executed only if the node is an authority. Create a
-[`Proposer`](https://substrate.dev/rustdocs/v2.0.0/sc_basic_authorship/struct.Proposer.html) which will be
+[`Proposer`](https://substrate.dev/rustdocs/v3.0.0/sc_basic_authorship/struct.Proposer.html) which will be
 responsible for creating proposing blocks in the chain.
 
 ```rust, ignore
@@ -129,8 +129,8 @@ let authorship_future = sc_consensus_manual_seal::run_instant_seal(
 );
 ```
 
-With the future created, we can now kick it off using the [`TaskManager`](https://substrate.dev/rustdocs/v2.0.0/sc_service/struct.TaskManager.html)'s
-[`spawn_essential_handle` method](https://substrate.dev/rustdocs/v2.0.0/sc_service/struct.TaskManager.html#method.spawn_essential_handle).
+With the future created, we can now kick it off using the [`TaskManager`](https://substrate.dev/rustdocs/v3.0.0/sc_service/struct.TaskManager.html)'s
+[`spawn_essential_handle` method](https://substrate.dev/rustdocs/v3.0.0/sc_service/struct.TaskManager.html#method.spawn_essential_handle).
 
 ```rust, ignore
 task_manager.spawn_essential_handle().spawn_blocking("instant-seal", authorship_future);
