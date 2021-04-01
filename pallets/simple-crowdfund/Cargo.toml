@@ -11,7 +11,6 @@ license = "GPL-3.0-or-later"
 parity-scale-codec = { version = "2.0", features = ["derive"], default-features = false }
 
 # Substrate packages
-balances = { package = 'pallet-balances', version = '3.0', default-features = false }
 frame-support = { version = '3.0', default-features = false }
 frame-system = { version = '3.0', default-features = false }
 sp-core = { version = '3.0', default-features = false }
@@ -20,13 +19,14 @@ sp-std = { version = '3.0', default-features = false }
 sp-storage = { version = '3.0', default-features = false }
 
 [dev-dependencies]
-sp-core = { version = '3.0', default-features = false }
-sp-io = { version = '3.0', default-features = false }
+serde = '1.0'
+sp-core = '3.0'
+sp-io = '3.0'
+pallet-balances = '3.0'
 
 [features]
 default = ['std']
 std = [
-	'balances/std',
 	'frame-support/std',
 	'frame-system/std',
 	'parity-scale-codec/std',
