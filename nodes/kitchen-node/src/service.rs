@@ -43,14 +43,6 @@ ServiceError> {
 		sc_service::new_full_parts::<Block, RuntimeApi, Executor>(&config)?;
 	let client = Arc::new(client);
 
-	// Initialize seed for signing transaction using off-chain workers
-	#[cfg(feature = "ocw")]
-	{
-		keystore.write().insert_ephemeral_from_seed_by_type::<runtime::ocw_demo::crypto::Pair>(
-			"//Alice", runtime::ocw_demo::KEY_TYPE
-		).expect("Creating key with account Alice should succeed.");
-	}
-
 	let select_chain = sc_consensus::LongestChain::new(backend.clone());
 
 	let transaction_pool = sc_transaction_pool::BasicPool::new_full(
@@ -93,7 +85,18 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
 			block_announce_validator_builder: None,
 		})?;
 
+	let keystore = keystore_container.sync_keystore();
 	if config.offchain_worker.enabled {
+		// Initialize seed for signing transaction using off-chain workers. This is a convenience
+		// so learners can see the transactions submitted simply running the node.
+		// Typically these keys should be inserted with RPC calls to `author_insertKey`.
+		#[cfg(feature = "ocw")]
+		{
+			keystore.write().insert_ephemeral_from_seed_by_type::<runtime::ocw_demo::crypto::Pair>(
+				"//Alice", runtime::ocw_demo::KEY_TYPE
+			).expect("Creating key with account Alice should succeed.");
+		}
+
 		sc_service::build_offchain_workers(
 			&config, backend.clone(), task_manager.spawn_handle(), client.clone(), network.clone(),
 		);
@@ -105,7 +108,7 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
 	sc_service::spawn_tasks(sc_service::SpawnTasksParams {
 		network,
 		client: client.clone(),
-		keystore: keystore_container.sync_keystore(),
+		keystore,
 		task_manager: &mut task_manager,
 		transaction_pool: transaction_pool.clone(),
 		rpc_extensions_builder: Box::new(|_, _| ()),
