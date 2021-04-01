@@ -1,5 +1,5 @@
 use crate::*;
-use frame_support::{assert_ok, impl_outer_event, impl_outer_origin, parameter_types};
+use frame_support::{assert_ok, construct_runtime, parameter_types};
 use parity_scale_codec::{alloc::sync::Arc, Decode};
 use parking_lot::RwLock;
 use sp_core::{

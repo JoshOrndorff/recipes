@@ -175,14 +175,12 @@ mod tests {
 
 	use codec::{Decode, Encode};
 	use frame_support::{
-		decl_module, decl_storage, impl_outer_origin, parameter_types, weights::Weight,
+		decl_module, decl_storage, impl_outer_origin, parameter_types,
 	};
-	use frame_system as system;
 	use sp_core::H256;
 	use sp_runtime::{
 		testing::Header,
 		traits::{BlakeTwo256, IdentityLookup},
-		Perbill,
 	};
 
 	impl_outer_origin! {
@@ -217,18 +215,25 @@ mod tests {
 		}
 	}
 
-	parameter_types! {
-		pub const BlockHashCount: u64 = 250;
-		pub const MaximumBlockWeight: Weight = 1024;
-		pub const MaximumBlockLength: u32 = 2 * 1024;
-		pub const AvailableBlockRatio: Perbill = Perbill::from_percent(75);
+	// https://github.com/paritytech/substrate/pull/8090#issuecomment-776069095
+	pub struct MockPalletInfo;
+	impl frame_support::traits::PalletInfo for MockPalletInfo {
+		fn index<P: 'static>() -> Option<usize> { Some(0) }
+		fn name<P: 'static>() -> Option<&'static str> { Some("test") }
 	}
 
+	parameter_types! {
+		pub const BlockHashCount: u64 = 250;
+		pub BlockWeights: frame_system::limits::BlockWeights =
+			frame_system::limits::BlockWeights::simple_max(1024);
+	}
 	impl frame_system::Config for Test {
 		type BaseCallFilter = ();
+		type BlockWeights = ();
+		type BlockLength = ();
 		type Origin = Origin;
-		type Call = ();
 		type Index = u64;
+		type Call = ();
 		type BlockNumber = u64;
 		type Hash = H256;
 		type Hashing = BlakeTwo256;
@@ -237,29 +242,24 @@ mod tests {
 		type Header = Header;
 		type Event = ();
 		type BlockHashCount = BlockHashCount;
-		type MaximumBlockWeight = MaximumBlockWeight;
 		type DbWeight = ();
-		type BlockExecutionWeight = ();
-		type ExtrinsicBaseWeight = ();
-		type MaximumExtrinsicWeight = MaximumBlockWeight;
-		type MaximumBlockLength = MaximumBlockLength;
-		type AvailableBlockRatio = AvailableBlockRatio;
 		type Version = ();
-		type PalletInfo = ();
+		type PalletInfo = MockPalletInfo;
 		type AccountData = ();
 		type OnNewAccount = ();
 		type OnKilledAccount = ();
 		type SystemWeightInfo = ();
+		type SS58Prefix = ();
 	}
 
-	impl Trait for Test {}
+	impl Config for Test {}
 
 	type TestModule = Module<Test>;
 
 	// This function basically just builds a genesis storage key/value store according to
 	// our desired mockup.
 	fn new_test_ext() -> sp_io::TestExternalities {
-		let storage = system::GenesisConfig::default()
+		let storage = frame_system::GenesisConfig::default()
 			.build_storage::<Test>()
 			.unwrap();
 		storage.into()

@@ -1,6 +1,6 @@
 use super::RawEvent;
 use crate::{Error, Module, Trait};
-use frame_support::{assert_err, assert_ok, impl_outer_event, impl_outer_origin, parameter_types};
+use frame_support::{assert_err, assert_ok, construct_runtime, parameter_types};
 use frame_system as system;
 use sp_core::H256;
 use sp_io::TestExternalities;
