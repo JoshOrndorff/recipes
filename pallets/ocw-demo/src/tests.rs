@@ -8,10 +8,14 @@ use sp_core::{
 		OffchainExt, TransactionPoolExt,
 	},
 	sr25519::{self, Signature},
-	testing::KeyStore,
-	traits::KeystoreExt,
 	H256,
 };
+
+use sp_keystore::{
+	{KeystoreExt, SyncCryptoStore},
+	testing::KeyStore,
+};
+
 use sp_io::TestExternalities;
 use sp_runtime::{
 	testing::{Header, TestXt},
@@ -21,59 +25,52 @@ use sp_runtime::{
 
 use crate as ocw_demo;
 
-impl_outer_origin! {
-	pub enum Origin for TestRuntime where system = system {}
-}
+type Extrinsic = TestXt<Call, ()>;
+type AccountId = <<Signature as Verify>::Signer as IdentifyAccount>::AccountId;
 
-impl_outer_event! {
-	pub enum TestEvent for TestRuntime {
-		system<T>,
-		ocw_demo<T>,
+// For testing the module, we construct a mock runtime.
+frame_support::construct_runtime!(
+	pub enum TestRuntime where
+		Block = Block,
+		NodeBlock = Block,
+		UncheckedExtrinsic = UncheckedExtrinsic,
+	{
+		System: frame_system::{Pallet, Call, Config, Storage, Event<T>},
+		TestPallet: ocw_demo::{Pallet, Call, Storage, Event<T>, ValidateUnsigned},
 	}
-}
-
-#[derive(Clone, PartialEq, Eq, Debug)]
-pub struct TestRuntime;
+);
 
 parameter_types! {
 	pub const BlockHashCount: u64 = 250;
-	pub const MaximumBlockWeight: u32 = 1_000_000;
-	pub const MaximumBlockLength: u32 = 10 * 1_000_000;
-	pub const AvailableBlockRatio: Perbill = Perbill::one();
+	pub BlockWeights: frame_system::limits::BlockWeights =
+		frame_system::limits::BlockWeights::simple_max(1024);
 }
 
 // The TestRuntime implements two pallet/frame traits: system, and simple_event
 impl frame_system::Config for TestRuntime {
 	type BaseCallFilter = ();
+	type BlockWeights = ();
+	type BlockLength = ();
+	type DbWeight = ();
 	type Origin = Origin;
+	type Call = Call;
 	type Index = u64;
-	type Call = ();
 	type BlockNumber = u64;
 	type Hash = H256;
 	type Hashing = BlakeTwo256;
-	type AccountId = sr25519::Public;
+	type AccountId = sp_core::sr25519::Public;
 	type Lookup = IdentityLookup<Self::AccountId>;
 	type Header = Header;
-	type Event = TestEvent;
+	type Event = Event;
 	type BlockHashCount = BlockHashCount;
-	type MaximumBlockWeight = MaximumBlockWeight;
-	type DbWeight = ();
-	type BlockExecutionWeight = ();
-	type ExtrinsicBaseWeight = ();
-	type MaximumExtrinsicWeight = MaximumBlockWeight;
-	type MaximumBlockLength = MaximumBlockLength;
-	type AvailableBlockRatio = AvailableBlockRatio;
 	type Version = ();
-	type PalletInfo = ();
+	type PalletInfo = PalletInfo;
 	type AccountData = ();
 	type OnNewAccount = ();
 	type OnKilledAccount = ();
 	type SystemWeightInfo = ();
+	type SS58Prefix = ();
 }
-
-// --- mocking offchain-demo trait
-
-type TestExtrinsic = TestXt<Call<TestRuntime>, ()>;
 
 parameter_types! {
 	pub const UnsignedPriority: u64 = 100;
