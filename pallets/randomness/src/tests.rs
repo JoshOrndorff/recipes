@@ -57,9 +57,6 @@ impl Config for TestRuntime {
 	type RandomnessSource = CollectiveFlip;
 }
 
-// There is no config trait...
-// impl pallet_randomness_collective_flip::Config for TestRuntime {}
-
 struct ExternalityBuilder;
 
 impl ExternalityBuilder {
