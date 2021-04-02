@@ -8,10 +8,10 @@ description = "A pallet that demonstrates many aspects of offchain workers"
 license = "GPL-3.0-or-later"
 
 [dependencies]
-parking_lot = '0.10.0'
+parking_lot = '0.11'
 parity-scale-codec = { version = '2.0', default-features = false, features = ['derive'] }
 # https://github.com/serde-rs/json/pull/606
-alt_serde = { package = 'serde', version = '1.0.100', default-features = false, features = ['derive'] }
+serde = { version = '1.0.100', default-features = false, features = ['derive'] }
 serde_json = { version = '1.0.45', default-features = false, features = ['alloc'] }
 
 # Substrate packages
@@ -22,6 +22,7 @@ sp-core = { version = '3.0', default-features = false }
 sp-io = { version = '3.0', default-features = false }
 sp-runtime = { version = '3.0', default-features = false }
 sp-std = { version = '3.0', default-features = false }
+sp-keystore = { version = '0.9', default-features = false }
 
 [features]
 default = ['std']
@@ -33,4 +34,5 @@ std = [
 	'sp-runtime/std',
 	'sp-std/std',
 	'sp-arithmetic/std',
+	'sp-keystore/std',
 ]
