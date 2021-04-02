@@ -36,9 +36,7 @@ use sp_std::{
 	collections::vec_deque::VecDeque,
 };
 
-// We use `alt_serde`, and Xanewok-modified `serde_json` so that we can compile the program
-//   with serde(features `std`) and alt_serde(features `no_std`).
-use alt_serde::{Deserialize, Deserializer};
+use serde::{Deserialize, Deserializer};
 
 /// Defines application identifier for crypto keys of this module.
 ///
@@ -104,9 +102,7 @@ impl <T: SigningTypes> SignedPayload<T> for Payload<T::Public> {
 	}
 }
 
-// Specifying serde path as `alt_serde`
 // ref: https://serde.rs/container-attrs.html#crate
-#[serde(crate = "alt_serde")]
 #[derive(Deserialize, Encode, Decode, Default)]
 struct GithubInfo {
 	// Specify our own deserializing function to convert JSON string to vector of bytes
