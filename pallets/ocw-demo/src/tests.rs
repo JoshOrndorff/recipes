@@ -22,8 +22,7 @@ use sp_runtime::{
 		Extrinsic as ExtrinsicT
 	},
 };
-use crate::*;
-use crate as ocw_demo;
+use crate::{self as ocw_demo, *};
 
 type Extrinsic = TestXt<Call, ()>;
 type UncheckedExtrinsic = mocking::MockUncheckedExtrinsic<TestRuntime>;

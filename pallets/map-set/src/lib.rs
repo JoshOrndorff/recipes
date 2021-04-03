@@ -23,7 +23,7 @@ pub trait Config: frame_system::Config {
 }
 
 decl_storage! {
-	trait Store for Module<T: Config> as VecMap {
+	trait Store for Module<T: Config> as MapSet {
 		//Currently we map to '()' because '()' is not encoded anymore as 0 bytes and the underlying storage
 		Members get(fn members): map hasher(blake2_128_concat) T::AccountId => ();
 		// The total number of members stored in the map.
