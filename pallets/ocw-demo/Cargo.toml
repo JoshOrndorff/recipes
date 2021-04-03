@@ -8,7 +8,7 @@ description = "A pallet that demonstrates many aspects of offchain workers"
 license = "GPL-3.0-or-later"
 
 [dependencies]
-parking_lot = '0.10.0'
+parking_lot = '0.11.1'
 parity-scale-codec = { version = '2.0', default-features = false, features = ['derive'] }
 # https://github.com/serde-rs/json/pull/606
 serde = { version = '1.0.125', default-features = false, features = ['derive'] }

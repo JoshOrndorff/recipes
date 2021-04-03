@@ -1,6 +1,6 @@
 use frame_support::{assert_ok, construct_runtime, parameter_types};
 use frame_system::{mocking, limits};
-use parity_scale_codec::{alloc::sync::Arc, Decode};
+use parity_scale_codec::{alloc::sync::Arc};
 use parking_lot::RwLock;
 use sp_core::{
 	H256,
@@ -107,41 +107,44 @@ impl<LocalCall> frame_system::offchain::CreateSignedTransaction<LocalCall> for T
 	}
 }
 
-// struct ExternalityBuilder;
+struct ExternalityBuilder;
 
-// impl ExternalityBuilder {
-// 	pub fn build() -> (
-// 		TestExternalities,
-// 		Arc<RwLock<PoolState>>,
-// 		Arc<RwLock<OffchainState>>,
-// 	) {
-// 		const PHRASE: &str =
-// 			"expire stage crawl shell boss any story swamp skull yellow bamboo copy";
+impl ExternalityBuilder {
+	pub fn build() -> (
+		TestExternalities,
+		Arc<RwLock<PoolState>>,
+		Arc<RwLock<OffchainState>>,
+	) {
+		const PHRASE: &str =
+			"expire stage crawl shell boss any story swamp skull yellow bamboo copy";
 
-// 		let (offchain, offchain_state) = testing::TestOffchainExt::new();
-// 		let (pool, pool_state) = testing::TestTransactionPoolExt::new();
-// 		let keystore = KeyStore::new();
-// 		keystore
-// 			.write()
-// 			.sr25519_generate_new(KEY_TYPE, Some(&format!("{}/hunter1", PHRASE)))
-// 			.unwrap();
+		let (offchain, offchain_state) = testing::TestOffchainExt::new();
+		let (pool, pool_state) = testing::TestTransactionPoolExt::new();
+		let keystore = KeyStore::new();
+		SyncCryptoStore::sr25519_generate_new(
+			&keystore,
+			KEY_TYPE,
+			Some(&format!("{}/hunter1", PHRASE))
+		).unwrap();
 
-// 		let storage = frame_system::GenesisConfig::default()
-// 			.build_storage::<TestRuntime>()
-// 			.unwrap();
+		let storage = frame_system::GenesisConfig::default()
+			.build_storage::<TestRuntime>()
+			.unwrap();
 
-// 		let mut t = TestExternalities::from(storage);
-// 		t.register_extension(OffchainExt::new(offchain));
-// 		t.register_extension(TransactionPoolExt::new(pool));
-// 		t.register_extension(KeystoreExt(keystore));
-// 		t.execute_with(|| System::set_block_number(1));
-// 		(t, pool_state, offchain_state)
-// 	}
-// }
+		let mut t = TestExternalities::from(storage);
+		t.register_extension(OffchainExt::new(offchain));
+		t.register_extension(TransactionPoolExt::new(pool));
+		t.register_extension(KeystoreExt(Arc::new(keystore)));
+		t.execute_with(|| System::set_block_number(1));
+		(t, pool_state, offchain_state)
+	}
+}
 
 #[test]
 fn submit_number_signed_works() {
-	TestExternalities::default().execute_with(|| {
+	let (mut t, _, _) = ExternalityBuilder::build();
+
+	t.execute_with(|| {
 		// call submit_number_signed
 		let num = 32;
 		let acct: <TestRuntime as frame_system::Config>::AccountId = Default::default();
@@ -162,35 +165,35 @@ fn submit_number_signed_works() {
 
 #[test]
 fn test_offchain_signed_tx() {
-	let (offchain, state) = testing::TestOffchainExt::new();
-	let mut t = TestExternalities::default();
-	t.register_extension(OffchainExt::new(offchain));
+	let (mut t, pool_state, _offchain_state) = ExternalityBuilder::build();
 
-	// t.execute_with(|| {
-	// 	// Setup
-	// 	let num = 32;
-	// 	OcwDemo::offchain_signed_tx(num).unwrap();
+	t.execute_with(|| {
+		// Setup
+		let num = 32;
+		OcwDemo::offchain_signed_tx(num).unwrap();
 
-	// 	// Verify
-	// 	let tx = pool_state.write().transactions.pop().unwrap();
-	// 	assert!(pool_state.read().transactions.is_empty());
-	// 	let tx = Extrinsic::decode(&mut &*tx).unwrap();
-	// 	assert_eq!(tx.signature.unwrap().0, 0);
-	// 	assert_eq!(tx.call, Call::submit_number_signed(num));
-	// });
+		// Verify
+		let tx = pool_state.write().transactions.pop().unwrap();
+		assert!(pool_state.read().transactions.is_empty());
+		let tx = Extrinsic::decode(&mut &*tx).unwrap();
+		assert_eq!(tx.signature.unwrap().0, 0);
+		assert_eq!(tx.call, Call::OcwDemo(ocw_demo::Call::submit_number_signed(num)));
+	});
 }
 
 #[test]
 fn test_offchain_unsigned_tx() {
-	// TestExternalities::default().execute_with(|| {
-	// 	// when
-	// 	let num = 32;
-	// 	OcwDemo::offchain_unsigned_tx(num).unwrap();
-	// 	// then
-	// 	let tx = pool_state.write().transactions.pop().unwrap();
-	// 	assert!(pool_state.read().transactions.is_empty());
-	// 	let tx = Extrinsic::decode(&mut &*tx).unwrap();
-	// 	assert_eq!(tx.signature, None);
-	// 	assert_eq!(tx.call, Call::submit_number_unsigned(num));
-	// });
+	let (mut t, pool_state, _offchain_state) = ExternalityBuilder::build();
+
+	t.execute_with(|| {
+		// when
+		let num = 32;
+		OcwDemo::offchain_unsigned_tx(num).unwrap();
+		// then
+		let tx = pool_state.write().transactions.pop().unwrap();
+		assert!(pool_state.read().transactions.is_empty());
+		let tx = Extrinsic::decode(&mut &*tx).unwrap();
+		assert_eq!(tx.signature, None);
+		assert_eq!(tx.call, Call::OcwDemo(ocw_demo::Call::submit_number_unsigned(num)));
+	});
 }
