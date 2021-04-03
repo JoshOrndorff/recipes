@@ -3714,6 +3714,7 @@ dependencies = [
  "sp-arithmetic",
  "sp-core",
  "sp-io",
+ "sp-keystore",
  "sp-runtime",
  "sp-std",
 ]

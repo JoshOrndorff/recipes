@@ -1,4 +1,3 @@
-use crate::{self as check_membership, Config, RawEvent, Error};
 use frame_support::{assert_noop, assert_ok, construct_runtime, parameter_types};
 use sp_core::H256;
 use sp_io::TestExternalities;
@@ -6,6 +5,8 @@ use sp_runtime::{
 	testing::Header,
 	traits::{BlakeTwo256, IdentityLookup},
 };
+use crate::*;
+use crate as map_set;
 
 type UncheckedExtrinsic = frame_system::mocking::MockUncheckedExtrinsic<TestRuntime>;
 type Block = frame_system::mocking::MockBlock<TestRuntime>;

@@ -11,8 +11,8 @@ license = "GPL-3.0-or-later"
 parity-scale-codec = { version = "2.0", features = ["derive"], default-features = false }
 
 # Substrate packages
-frame-support = { package = "frame-support", version = '3.0', default-features = false }
-frame-system = { package = "frame-system", version = '3.0', default-features = false }
+frame-support = { version = '3.0', default-features = false }
+frame-system = { version = '3.0', default-features = false }
 sp-runtime = { version = '3.0', default-features = false }
 
 [dev-dependencies]
