@@ -45,14 +45,9 @@ Installing a different runtime in the node is just a matter of commenting out th
 line, and enabling another one. Try the weight-fee runtime for example. Of course cargo will
 complain if you try to import two crates under the name `runtime`.
 
-It is worth noting that this node does not work with _all_ of the recipes' runtimes. In particular,
-it is not compatible with the babe-grandpa runtime. That runtime uses the babe pallet which requires
-a node that will include a special
-[`PreRuntime` `DigestItem`](https://substrate.dev/rustdocs/v3.0.0/sp_runtime/enum.DigestItem.html#variant.PreRuntime).
-
 ### Building a Service with the Runtime
 
-With a runtime of our choosing listed among our dependencies, we can wiring the nodes [`Service`](https://substrate.dev/rustdocs/v3.0.0/sc_service/index.html), the part of the node that coordinates communication between all other parts.
+With a runtime of our choosing listed among our dependencies, we can begin wiring the node's [`Service`](https://substrate.dev/rustdocs/v3.0.0/sc_service/index.html) together. The service is the part of the node that coordinates communication between all other parts.
 
 We begin by invoking the
 [`native_executor_instance!` macro](https://substrate.dev/rustdocs/v3.0.0/sc_executor/macro.native_executor_instance.html).
@@ -103,14 +98,16 @@ let import_queue = sc_consensus_manual_seal::import_queue(
 
 ### The Proposer
 
-Now we pick up in the `new_full` function. All of the code in this portion is executed only if the node is an authority. Create a
+Now we pick up in the `new_full` function. All of the non-boilerplate code in this portion is executed only if the node is an authority. Create a
 [`Proposer`](https://substrate.dev/rustdocs/v3.0.0/sc_basic_authorship/struct.Proposer.html) which will be
 responsible for creating proposing blocks in the chain.
 
 ```rust, ignore
 let proposer = sc_basic_authorship::ProposerFactory::new(
-	service.client().clone(),
-	service.transaction_pool(),
+	task_manager.spawn_handle(),
+	client.clone(),
+	transaction_pool.clone(),
+	prometheus_registry.as_ref(),
 );
 ```
 
@@ -120,12 +117,15 @@ As with every authoring engine, instant seal needs to be run as an `async` autho
 
 ```rust, ignore
 let authorship_future = sc_consensus_manual_seal::run_instant_seal(
-	Box::new(client.clone()),
-	proposer,
-	client,
-	transaction_pool.pool().clone(),
-	select_chain,
-	inherent_data_providers,
+	InstantSealParams {
+		block_import: client.clone(),
+		env: proposer,
+		client,
+		pool: transaction_pool.pool().clone(),
+		select_chain,
+		consensus_data_provider: None,
+		inherent_data_providers,
+	}
 );
 ```
 
