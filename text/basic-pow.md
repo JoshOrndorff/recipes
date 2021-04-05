@@ -39,9 +39,7 @@ For example, runtimes that include the Babe pallet expect a pre-runtime digest c
 information about the current babe slot.
 
 In this recipe we will avoid those practical complexities by using the
-[Minimal Sha3 Proof of Work](./sha3-pow-consensus.md) consensus engine, and a dedicated
-`pow-runtime` which are truly isolated from each other. The contents of the runtime should be
-familiar, and will not be discussed here.
+[Minimal Sha3 Proof of Work](./sha3-pow-consensus.md) consensus engine, which is truly isolated from fro mthe runtime. This node works with most of the recipes' runtimes, and has the super runtime isntalled by default.
 
 ## The Substrate Service
 
@@ -62,13 +60,13 @@ let pow_block_import = sc_consensus_pow::PowBlockImport::new(
 	client.clone(),
 	sha3pow::MinimalSha3Algorithm,
 	0, // check inherents starting at block 0
-	Some(select_chain.clone()),
+	select_chain.clone(),
 	inherent_data_providers.clone(),
+	can_author_with,
 );
 
 let import_queue = sc_consensus_pow::import_queue(
 	Box::new(pow_block_import.clone()),
-	None,
 	None,
 	sha3pow::MinimalSha3Algorithm,
 	inherent_data_providers.clone(),
@@ -125,41 +123,42 @@ We've already implemented a mining algorithm as part of our
 mine with that algorithm. This is our last task in the `new_full` function.
 
 ```rust, ignore
-if is_authority {
-	let proposer = sc_basic_authorship::ProposerFactory::new(
-		client.clone(),
-		transaction_pool,
-		prometheus_registry.as_ref(),
-	);
+let proposer = sc_basic_authorship::ProposerFactory::new(
+	task_manager.spawn_handle(),
+	client.clone(),
+	transaction_pool,
+	prometheus_registry.as_ref(),
+);
 
-	// The number of rounds of mining to try in a single call
-	let rounds = 500;
-
-	let can_author_with =
-		sp_consensus::CanAuthorWithNativeVersion::new(client.executor().clone());
-
-	sc_consensus_pow::start_mine(
-		Box::new(block_import),
-		client,
-		MinimalSha3Algorithm,
-		proposer,
-		None, // No preruntime digests
-		rounds,
-		network,
-		std::time::Duration::new(2, 0),
-		Some(select_chain),
-		inherent_data_providers,
-		can_author_with,
-	);
-}
+let (_worker, worker_task) = sc_consensus_pow::start_mining_worker(
+	Box::new(pow_block_import),
+	client,
+	select_chain,
+	MinimalSha3Algorithm,
+	proposer,
+	network.clone(),
+	None,
+	inherent_data_providers,
+	// time to wait for a new block before starting to mine a new one
+	Duration::from_secs(10),
+	// how long to take to actually build the block (i.e. executing extrinsics)
+	Duration::from_secs(10),
+	can_author_with,
+);
 ```
 
 We begin by testing whether this node participates in consensus, which is to say we check whether
 the user wants the node to act as a miner. If this node is to be a miner, we gather references to
 various parts of the node that the
-[`start_mine` function](https://substrate.dev/rustdocs/v3.0.0/sc_consensus_pow/fn.start_mine.html) requires, and
-define that we will attempt 500 rounds of mining for each block before pausing. Finally we call
-`start_mine`.
+[`start_mining_worker` function](https://substrate.dev/rustdocs/v3.0.0/sc_consensus_pow/fn.start_mining_worker.html) requires.
+
+With the worker built, we let the task manager spawn it.
+
+```rust, ignore
+task_manager
+	.spawn_essential_handle()
+	.spawn_blocking("pow", worker_task);
+```
 
 ## The Light Client
 
