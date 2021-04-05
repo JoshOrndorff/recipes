@@ -24,13 +24,13 @@ custom RPCs to your node. In this recipe, we will add three custom RPCs to our n
 
 ## The RPC Extensions Builder
 
-In order to connect custom RPCs you must provide an function known as an "RPC extension builder". This function takes a parameter for whether the node should deny unsafe RPC calls, and returns an [IoHandler](https://docs.rs/jsonrpc-core/15.0.0/jsonrpc_core/struct.IoHandler.html) that the node needs to create a json RPC.
+In order to connect custom RPCs you must provide an function known as an "RPC extension builder". This function takes a parameter for whether the node should deny unsafe RPC calls, and returns an [IoHandler](https://docs.rs/jsonrpc-core/15.0.0/jsonrpc_core/struct.IoHandler.html) that the node needs to create a json RPC. For context read about the [`RpcExtensionBuilder` trait](https://substrate.dev/rustdocs/v3.0.0/sc_service/trait.RpcExtensionBuilder.html).
 
 ```rust, ignore
 let rpc_extensions_builder = {
 	let client = client.clone();
 	let pool = transaction_pool.clone();
-	Box::new(move |deny_unsafe| {
+	Box::new(move |deny_unsafe, _| {
 		let deps = crate::rpc::FullDeps {
 			client: client.clone(),
 			pool: pool.clone(),
@@ -108,7 +108,7 @@ jsonrpc-derive = "15.0"
 sc-rpc = '3.0'
 ```
 
-Now we're ready to write the `create_full` function we referenced from our service. The function is quoted in its entirety below. You ca see we add the
+Now we're ready to write the `create_full` function we referenced from our service. The function is quoted in its entirety below. This code is taken from `nodes/rpc-node/src/rpc.rs`.
 
 ```rust, ignore
 pub fn create_full<C, P>(
@@ -323,6 +323,12 @@ Once your node is running, you will see that it just sits there idly. It will ac
 the pool, but it will not author blocks on its own. In manual seal, the node does not author a block
 until we explicitly tell it to. We can tell it to author a block by calling the `engine_createBlock`
 RPC.
+
+The easiest way is to use Apps's Developer -> RPC Calls tab.
+
+![Calling the createBlock endpoint via Apps](./img/apps-manual-seal-create-block.png)
+
+It can also be called using `curl` as described previously.
 
 ```bash
 $ curl http://localhost:9933 -H "Content-Type:application/json;charset=utf-8" -d   '{
