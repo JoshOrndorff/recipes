@@ -188,21 +188,19 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
 		// Also refer to kulupu config:
 		//   https://github.com/kulupu/kulupu/blob/master/src/service.rs
 		let (_worker, worker_task) = sc_consensus_pow::start_mining_worker(
-			Box::new(pow_block_import), // block_import: BoxBlockImport
-			client.clone(),             // client: Arc<C>
-			// Choosing not to supply a select_chain means we will use the client's
-			//   possibly-outdated metadata when fetching the block to mine on.
-			select_chain,                    // select_chain: S
-			MinimalSha3Algorithm,            // algorithm: Algorithm
-			proposer,                        // env: E
-			network.clone(),                 // sync_oracle: SO
-			None,                            // pre_runtime: Option<Vec<u8>>
-			inherent_data_providers.clone(), // inherent_data_providers: InherentDataProviders
+			Box::new(pow_block_import),
+			client,
+			select_chain,
+			MinimalSha3Algorithm,
+			proposer,
+			network.clone(),
+			None,
+			inherent_data_providers,
 			// time to wait for a new block before starting to mine a new one
-			Duration::from_secs(10), // timeout: Duration
+			Duration::from_secs(10),
 			// how long to take to actually build the block (i.e. executing extrinsics)
-			Duration::from_secs(10), // build_time: Duration
-			can_author_with,         // can_author_with: CAW
+			Duration::from_secs(10),
+			can_author_with,
 		);
 
 		task_manager

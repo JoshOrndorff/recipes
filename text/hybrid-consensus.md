@@ -50,21 +50,21 @@ let pow_block_import = sc_consensus_pow::PowBlockImport::new(
 	client.clone(),
 	sha3pow::MinimalSha3Algorithm,
 	0, // check inherents starting at block 0
-	Some(select_chain.clone()),
+	select_chain.clone(),
 	inherent_data_providers.clone(),
+	can_author_with,
 );
 ```
 
 ## The Import Queue
 
 With the block imports setup, we can proceed to creating the import queue. We make it using PoW's
-`import_queue` helper function. Notice that it requires the entire block import pipeline which we
+[`import_queue` helper function](https://substrate.dev/rustdocs/v3.0.0/sc_consensus_pow/fn.import_queue.html). Notice that it requires the entire block import pipeline which we
 refer to as `pow_block_import` because PoW is the outermost layer.
 
 ```rust, ignore
 let import_queue = sc_consensus_pow::import_queue(
 	Box::new(pow_block_import.clone()),
-	None,
 	None,
 	sha3pow::MinimalSha3Algorithm,
 	inherent_data_providers.clone(),
@@ -73,43 +73,32 @@ let import_queue = sc_consensus_pow::import_queue(
 )?;
 ```
 
-## The Finality Proof Provider
-
-Occasionally in the operation of a blockchain, other nodes will contact our node asking for proof
-that a particular block is finalized. To respond to these requests, we include a finality proof
-provider.
-
-```rust, ignore
-let provider = client.clone() as Arc<dyn StorageAndProofProvider<_, _>>;
-let finality_proof_provider =
-	Arc::new(GrandpaFinalityProofProvider::new(backend.clone(), provider));
-```
-
 ## Spawning the PoW Authorship Task
 
 Any node that is acting as an authority, typically called "miners" in the PoW context, must run a
-mining task in another thread.
+mining worker that is spawned by the task manager.
 
 ```rust, ignore
-sc_consensus_pow::start_mine(
-	Box::new(block_import),
-	client.clone(),
+let (_worker, worker_task) = sc_consensus_pow::start_mining_worker(
+	Box::new(pow_block_import),
+	client,
+	select_chain,
 	MinimalSha3Algorithm,
 	proposer,
-	None, // TODO Do I need some grandpa preruntime digests?
-	rounds,
 	network.clone(),
-	std::time::Duration::new(2, 0),
-	Some(select_chain),
-	inherent_data_providers.clone(),
+	None,
+	inherent_data_providers,
+	// time to wait for a new block before starting to mine a new one
+	Duration::from_secs(10),
+	// how long to take to actually build the block (i.e. executing extrinsics)
+	Duration::from_secs(10),
 	can_author_with,
 );
-```
 
-The use of a separate thread for block authorship is unlike other Substrate-based authorship tasks
-which are typically run as `async` futures. Because mining is a CPU intensive process, it is
-necessary to provide a separate thread or else the mining task would run continually and other tasks
-such as transaction processing, gossiping, and peer discovery would be starved for CPU.
+task_manager
+	.spawn_essential_handle()
+	.spawn_blocking("pow", worker_task);
+```
 
 ## Spawning the Grandpa Task
 
@@ -121,10 +110,10 @@ grandpa votes. We begin by creating a grandpa
 let grandpa_config = sc_finality_grandpa::Config {
 	gossip_duration: Duration::from_millis(333),
 	justification_period: 512,
-	name: Some(name),
+	name: None,
 	observer_enabled: false,
-	keystore,
-	is_authority: is_network_authority,
+	keystore: Some(keystore_container.sync_keystore()),
+	is_authority,
 };
 ```
 
@@ -136,8 +125,7 @@ let grandpa_config = sc_finality_grandpa::GrandpaParams {
 	config: grandpa_config,
 	link: grandpa_link,
 	network,
-	inherent_data_providers,
-	telemetry_on_connect: Some(telemetry_on_connect_sinks.on_connect_stream()),
+	telemetry_on_connect: telemetry_connection_notifier.map(|x| x.on_connect_stream()),
 	voting_rule: sc_finality_grandpa::VotingRulesBuilder::default().build(),
 	prometheus_registry,
 	shared_voter_state: sc_finality_grandpa::SharedVoterState::empty(),
@@ -151,20 +139,6 @@ task_manager.spawn_essential_handle().spawn_blocking(
 	"grandpa-voter",
 	sc_finality_grandpa::run_grandpa_voter(grandpa_config)?
 );
-```
-
-### Disabled Grandpa
-
-Proof of Authority networks generally contain many full nodes that are not authorities. When Grandpa
-is present in the network, we still need to tell the node how to interpret grandpa-related messages
-it may receive (just ignore them).
-
-```rust, ignore
-sc_finality_grandpa::setup_disabled_grandpa(
-	client,
-	&inherent_data_providers,
-	network,
-)?;
 ```
 
 ## Constraints on the Runtime
