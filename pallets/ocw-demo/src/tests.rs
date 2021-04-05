@@ -1,17 +1,14 @@
-use crate::{self as ocw_demo, Numbers, Config, KEY_TYPE, RawEvent, Call as PalletCall};
-use frame_support::{
-	assert_ok, construct_runtime, parameter_types,
-	storage::StorageValue,
-};
-use parity_scale_codec::{alloc::sync::Arc, Decode};
+use frame_support::{assert_ok, construct_runtime, parameter_types};
+use frame_system::{mocking, limits};
+use parity_scale_codec::{alloc::sync::Arc};
 use parking_lot::RwLock;
 use sp_core::{
+	H256,
 	offchain::{
-		testing::{self, OffchainState, PoolState},
 		OffchainExt, TransactionPoolExt,
+		testing::{self, OffchainState, PoolState},
 	},
 	sr25519::{self, Signature},
-	H256,
 };
 use sp_keystore::{
 	testing::KeyStore,
@@ -21,12 +18,19 @@ use sp_keystore::{
 use sp_io::TestExternalities;
 use sp_runtime::{
 	testing::{Header, TestXt},
-	traits::{BlakeTwo256, IdentityLookup, Verify},
+	traits::{
+		BlakeTwo256, IdentityLookup, IdentifyAccount, Verify,
+		Extrinsic as ExtrinsicT
+	},
 };
+use crate::{self as ocw_demo, *};
 
-type UncheckedExtrinsic = frame_system::mocking::MockUncheckedExtrinsic<TestRuntime>;
-type Block = frame_system::mocking::MockBlock<TestRuntime>;
+type Extrinsic = TestXt<Call, ()>;
+type UncheckedExtrinsic = mocking::MockUncheckedExtrinsic<TestRuntime>;
+type Block = mocking::MockBlock<TestRuntime>;
+type AccountId = <<Signature as Verify>::Signer as IdentifyAccount>::AccountId;
 
+// For testing the module, we construct a mock runtime.
 construct_runtime!(
 	pub enum TestRuntime where
 		Block = Block,
@@ -40,16 +44,16 @@ construct_runtime!(
 
 parameter_types! {
 	pub const BlockHashCount: u64 = 250;
-	pub BlockWeights: frame_system::limits::BlockWeights =
-		frame_system::limits::BlockWeights::simple_max(1024);
+	pub BlockWeights: limits::BlockWeights = limits::BlockWeights::simple_max(1024);
 }
 impl frame_system::Config for TestRuntime {
 	type BaseCallFilter = ();
 	type BlockWeights = ();
 	type BlockLength = ();
+	type DbWeight = ();
 	type Origin = Origin;
-	type Index = u64;
 	type Call = Call;
+	type Index = u64;
 	type BlockNumber = u64;
 	type Hash = H256;
 	type Hashing = BlakeTwo256;
@@ -58,7 +62,6 @@ impl frame_system::Config for TestRuntime {
 	type Header = Header;
 	type Event = Event;
 	type BlockHashCount = BlockHashCount;
-	type DbWeight = ();
 	type Version = ();
 	type PalletInfo = PalletInfo;
 	type AccountData = ();
@@ -68,35 +71,14 @@ impl frame_system::Config for TestRuntime {
 	type SS58Prefix = ();
 }
 
-// --- mocking offchain-demo trait
-
-type TestExtrinsic = TestXt<Call, ()>;
-
 parameter_types! {
 	pub const UnsignedPriority: u64 = 100;
 }
 
 impl Config for TestRuntime {
-	type AuthorityId = crate::crypto::TestAuthId;
+	type AuthorityId = crypto::TestAuthId;
 	type Call = Call;
 	type Event = Event;
-}
-
-impl<LocalCall> frame_system::offchain::CreateSignedTransaction<LocalCall> for TestRuntime
-where
-	Call: From<LocalCall>,
-{
-	fn create_transaction<C: frame_system::offchain::AppCrypto<Self::Public, Self::Signature>>(
-		call: Call,
-		_public: <Signature as Verify>::Signer,
-		_account: <TestRuntime as frame_system::Config>::AccountId,
-		index: <TestRuntime as frame_system::Config>::Index,
-	) -> Option<(
-		Call,
-		<TestExtrinsic as sp_runtime::traits::Extrinsic>::SignaturePayload,
-	)> {
-		Some((call, (index, ())))
-	}
 }
 
 impl frame_system::offchain::SigningTypes for TestRuntime {
@@ -104,12 +86,24 @@ impl frame_system::offchain::SigningTypes for TestRuntime {
 	type Signature = Signature;
 }
 
-impl<C> frame_system::offchain::SendTransactionTypes<C> for TestRuntime
-where
+impl<C> frame_system::offchain::SendTransactionTypes<C> for TestRuntime where
 	Call: From<C>,
 {
 	type OverarchingCall = Call;
-	type Extrinsic = TestExtrinsic;
+	type Extrinsic = Extrinsic;
+}
+
+impl<LocalCall> frame_system::offchain::CreateSignedTransaction<LocalCall> for TestRuntime where
+	Call: From<LocalCall>,
+{
+	fn create_transaction<C: frame_system::offchain::AppCrypto<Self::Public, Self::Signature>>(
+		call: Call,
+		_public: <Signature as Verify>::Signer,
+		_account: AccountId,
+		nonce: u64,
+	) -> Option<(Call, <Extrinsic as ExtrinsicT>::SignaturePayload)> {
+		Some((call, (nonce, ())))
+	}
 }
 
 struct ExternalityBuilder;
@@ -146,27 +140,21 @@ impl ExternalityBuilder {
 #[test]
 fn submit_number_signed_works() {
 	let (mut t, _, _) = ExternalityBuilder::build();
+
 	t.execute_with(|| {
 		// call submit_number_signed
 		let num = 32;
 		let acct: <TestRuntime as frame_system::Config>::AccountId = Default::default();
-		assert_ok!(OcwDemo::submit_number_signed(
-			Origin::signed(acct),
-			num
-		));
+		assert_ok!(OcwDemo::submit_number_signed(Origin::signed(acct), num));
 		// A number is inserted to <Numbers> vec
 		assert_eq!(<Numbers>::get(), vec![num]);
 		// An event is emitted
-		assert!(System::events()
-			.iter()
+		assert!(System::events().iter()
 			.any(|er| er.event == Event::ocw_demo(RawEvent::NewNumber(Some(acct), num))));
 
 		// Insert another number
 		let num2 = num * 2;
-		assert_ok!(OcwDemo::submit_number_signed(
-			Origin::signed(acct),
-			num2
-		));
+		assert_ok!(OcwDemo::submit_number_signed(Origin::signed(acct), num2));
 		// A number is inserted to <Numbers> vec
 		assert_eq!(<Numbers>::get(), vec![num, num2]);
 	});
@@ -184,9 +172,9 @@ fn test_offchain_signed_tx() {
 		// Verify
 		let tx = pool_state.write().transactions.pop().unwrap();
 		assert!(pool_state.read().transactions.is_empty());
-		let tx = TestExtrinsic::decode(&mut &*tx).unwrap();
+		let tx = Extrinsic::decode(&mut &*tx).unwrap();
 		assert_eq!(tx.signature.unwrap().0, 0);
-		assert_eq!(tx.call, Call::OcwDemo(PalletCall::submit_number_signed(num)));
+		assert_eq!(tx.call, Call::OcwDemo(ocw_demo::Call::submit_number_signed(num)));
 	});
 }
 
@@ -201,8 +189,8 @@ fn test_offchain_unsigned_tx() {
 		// then
 		let tx = pool_state.write().transactions.pop().unwrap();
 		assert!(pool_state.read().transactions.is_empty());
-		let tx = TestExtrinsic::decode(&mut &*tx).unwrap();
+		let tx = Extrinsic::decode(&mut &*tx).unwrap();
 		assert_eq!(tx.signature, None);
-		assert_eq!(tx.call, Call::OcwDemo(PalletCall::submit_number_unsigned(num)));
+		assert_eq!(tx.call, Call::OcwDemo(ocw_demo::Call::submit_number_unsigned(num)));
 	});
 }

@@ -1,11 +1,12 @@
-use crate::{self as simple-event, Event as PalletEvent, Module, Config};
 use frame_support::{assert_ok, construct_runtime, parameter_types};
+use frame_system::{EventRecord, Phase};
 use sp_core::H256;
 use sp_io::TestExternalities;
 use sp_runtime::{
 	testing::Header,
 	traits::{BlakeTwo256, IdentityLookup},
 };
+use crate::{self as simple_event, *};
 
 type UncheckedExtrinsic = frame_system::mocking::MockUncheckedExtrinsic<TestRuntime>;
 type Block = frame_system::mocking::MockBlock<TestRuntime>;
@@ -17,8 +18,7 @@ construct_runtime!(
 		UncheckedExtrinsic = UncheckedExtrinsic,
 	{
 		System: frame_system::{Module, Call, Config, Storage, Event<T>},
-		VecSet: vec_set::{Module, Call, Storage, Event<T>},
-		SimpeEvent: simple_event::{Module, Call, Event<T>},
+		SimpleEvent: simple_event::{Module, Call, Event},
 	}
 );
 
@@ -78,7 +78,7 @@ fn test() {
 			System::events(),
 			vec![EventRecord {
 				phase: Phase::Initialization,
-				event: TestEvent::simple_event(Event::EmitInput(32)),
+				event: Event::simple_event(simple_event::Event::EmitInput(32)),
 				topics: vec![],
 			}]
 		);

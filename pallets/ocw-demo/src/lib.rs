@@ -102,6 +102,7 @@ impl <T: SigningTypes> SignedPayload<T> for Payload<T::Public> {
 	}
 }
 
+// ref: https://serde.rs/container-attrs.html#crate
 #[derive(Deserialize, Encode, Decode, Default)]
 struct GithubInfo {
 	// Specify our own deserializing function to convert JSON string to vector of bytes
