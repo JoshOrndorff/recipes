@@ -77,7 +77,7 @@ decl_event!(
 ### Events with Generic Types
 
 Sometimes, events might contain types from the pallet's Configuration Trait. In this case, it is necessary to
-specify additional syntax
+specify additional syntax:
 
 ```rust, ignore
 decl_event!(

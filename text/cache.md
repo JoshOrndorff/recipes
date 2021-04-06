@@ -100,7 +100,7 @@ fn swap_king_no_cache(origin) -> DispatchResult {
 ```
 
 If the `existing_key` is used without a `clone` in the event emission instead of `old_king`, then
-the compiler returns the following error
+the compiler returns the following error:
 
 ```bash
 error[E0382]: use of moved value: `existing_king`
