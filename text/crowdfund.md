@@ -208,7 +208,7 @@ fn dispense(origin, index: FundIndex) {
 	)?);
 ```
 
-This pallet also uses Currency
-[`Imbalance`](https://substrate.dev/rustdocs/v3.0.0/frame_support/traits/trait.Imbalance.html)s as discussed in
-the [Charity](./charity.md) recipe, to make transfers without incurring transfer fees to the
+This pallet also uses the Currency
+[`Imbalance`](https://substrate.dev/rustdocs/v3.0.0/frame_support/traits/trait.Imbalance.html) trait as discussed in
+the [Charity recipe](./charity.md), to make transfers without incurring transfer fees to the
 crowdfund pallet itself.
