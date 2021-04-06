@@ -58,7 +58,7 @@ pub trait Config<I: Instance>: frame_system::Config {
 
 ```rust, ignore
 decl_storage! {
-	trait Store for Module<T: Trait<I>, I: Instance> as TemplatePallet {
+	trait Store for Module<T: Config<I>, I: Instance> as TemplatePallet {
 		...
 	}
 }
@@ -69,7 +69,7 @@ decl_storage! {
 ```rust, ignore
 decl_module! {
 	/// The module declaration.
-	pub struct Module<T: Trait<I>, I: Instance> for enum Call where origin: T::Origin {
+	pub struct Module<T: Config<I>, I: Instance> for enum Call where origin: T::Origin {
 		...
 	}
 }
@@ -116,7 +116,7 @@ Each instance needs to be configured separately. Configuration consists of imple
 instance's trait. The following snippet shows a configuration for `Instance1`.
 
 ```rust, ignore
-impl template::Trait<template::Instance1> for Runtime {
+impl template::Config<template::Instance1> for Runtime {
 	type Event = Event;
 }
 ```
@@ -147,7 +147,7 @@ pub trait Config<I=DefaultInstance>: frame_system::Config {
 
 ```rust, ignore
 decl_storage! {
-	trait Store for Module<T: Trait<I>, I: Instance=DefaultInstance> as TemplateModule {
+	trait Store for Module<T: Config<I>, I: Instance=DefaultInstance> as TemplateModule {
 		...
 	}
 }
@@ -155,7 +155,7 @@ decl_storage! {
 
 ```rust, ignore
 decl_module! {
-	pub struct Module<T: Trait<I>, I: Instance = DefaultInstance> for enum Call where origin: T::Origin {
+	pub struct Module<T: Config<I>, I: Instance = DefaultInstance> for enum Call where origin: T::Origin {
 		...
 	}
 }

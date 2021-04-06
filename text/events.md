@@ -121,7 +121,7 @@ must specify this type when implementing its trait. In the case of the `Event` t
 entirely straight forward, and looks the same for both simple events and generic events.
 
 ```rust, ignore
-impl simple_event::Trait for Runtime {
+impl simple_event::Config for Runtime {
 	type Event = Event;
 }
 ```

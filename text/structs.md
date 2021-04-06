@@ -62,7 +62,7 @@ It is often convenient to make a type alias that takes `T`, your pallet's config
 single type parameter. Doing so simply saves you typing in the future.
 
 ```rust, ignore
-type InnerThingOf<T> = InnerThing<<T as frame_system::Config>::Hash, <T as balances::Trait>::Balance>;
+type InnerThingOf<T> = InnerThing<<T as frame_system::Config>::Hash, <T as pallet_balances::Config>::Balance>;
 ```
 
 ## Structs in Storage

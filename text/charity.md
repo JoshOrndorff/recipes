@@ -85,9 +85,9 @@ incentive-alignment mechanism. To allow our pallet to absorb these imbalances, w
 
 ```rust, ignore
 use frame_support::traits::{OnUnbalanced, Imbalance};
-type NegativeImbalanceOf<T> = <<T as Trait>::Currency as Currency<<T as frame_system::Config>::AccountId>>::NegativeImbalance;
+type NegativeImbalanceOf<T> = <<T as Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::NegativeImbalance;
 
-impl<T: Trait> OnUnbalanced<NegativeImbalanceOf<T>> for Module<T> {
+impl<T: Config> OnUnbalanced<NegativeImbalanceOf<T>> for Module<T> {
 	fn on_nonzero_unbalanced(amount: NegativeImbalanceOf<T>) {
 		let numeric_amount = amount.peek();
 

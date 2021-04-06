@@ -113,7 +113,7 @@ parameter_types! {
 	pub const ClearFrequency: u32 = 10;
 }
 
-impl constant_config::Trait for Runtime {
+impl constant_config::Config for Runtime {
 	type Event = Event;
 	type MaxAddend = MaxAddend;
 	type ClearFrequency = ClearFrequency;
