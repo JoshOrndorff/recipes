@@ -30,8 +30,8 @@ import from a few common crates including
 imports. The `hello-substrate` pallet uses these imports.
 
 ```rust, ignore
-use frame_support::{ decl_module, dispatch::DispatchResult, debug };
-use frame_system::{ self as system, ensure_signed };
+use frame_support::{debug, decl_module, dispatch::DispatchResult};
+use frame_system::ensure_signed;
 use sp_runtime::print;
 ```
 
@@ -42,7 +42,7 @@ Next we see a reference to the tests module. This pallet, as with most recipes p
 
 ## Configuration Trait
 
-Next, each pallet has a configuration trait which is called `Trait`. The configuration trait can be
+Next, each pallet has a configuration trait which is called [`Config`](https://substrate.dev/rustdocs/v3.0.0/frame_system/pallet/trait.Config.html). The configuration trait can be
 used to access features from other pallets, or [constants](./constants.md) that affect
 the pallet's behavior. This pallet is simple enough that our configuration trait can remain empty,
 although it must still exist.
