@@ -92,8 +92,10 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
 		// Typically these keys should be inserted with RPC calls to `author_insertKey`.
 		#[cfg(feature = "ocw")]
 		{
-			keystore.write().insert_ephemeral_from_seed_by_type::<runtime::ocw_demo::crypto::Pair>(
-				"//Alice", runtime::ocw_demo::KEY_TYPE
+			sp_keystore::SyncCryptoStore::sr25519_generate_new(
+				&*keystore,
+				runtime::ocw_demo::KEY_TYPE,
+				Some("//Alice")
 			).expect("Creating key with account Alice should succeed.");
 		}
 
