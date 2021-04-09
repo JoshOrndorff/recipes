@@ -41,21 +41,22 @@ src:
 Running the `kitchen-node` you will see log messages similar to the following:
 
 ```
-2020-09-02 11:09:33.780 main WARN sc_cli::commands::run_cmd  Running in --dev mode, RPC CORS has been disabled.
-2020-09-02 11:09:33.780 main INFO sc_cli::runner  Kitchen Node
-2020-09-02 11:09:33.781 main INFO sc_cli::runner  ✌️  version 2.0.0-rc6-unknown-x86_64-linux-gnu
-2020-09-02 11:09:33.781 main INFO sc_cli::runner  ❤️  by Substrate DevHub <https://github.com/substrate-developer-hub>, 2019-2020
-2020-09-02 11:09:33.781 main INFO sc_cli::runner  📋 Chain specification: Development
-2020-09-02 11:09:33.781 main INFO sc_cli::runner  🏷  Node name: precious-angle-3060
-2020-09-02 11:09:33.781 main INFO sc_cli::runner  👤 Role: AUTHORITY
-2020-09-02 11:09:33.781 main INFO sc_cli::runner  💾 Database: RocksDb at /home/jimmychu/.local/share/kitchen-node/chains/dev/db
-2020-09-02 11:09:33.781 main INFO sc_cli::runner  ⛓  Native runtime: ocw-runtime-1 (ocw-runtime-1.tx1.au1)
-2020-09-02 11:09:34.881 main INFO sc_service::client::client  🔨 Initializing Genesis block/state (state: 0x2b24…4bf9, header-hash: 0xde55…8fed)
-2020-09-02 11:09:35.081 main WARN sc_service::builder  Using default protocol ID "sup" because none is configured in the chain specs
-2020-09-02 11:09:35.083 main INFO sub-libp2p  🏷  Local node identity is: 12D3KooWC8iNnJqM64qiurVSA3mRFGE4LPj99QPVtUE6whyxFAJy (legacy representation: QmZPmiuc4DAmM7Fo6GdChmxF4pTaDc8brgUKVXLhxKjq62)
-2020-09-02 11:09:35.517 main INFO sc_service::builder  📦 Highest known block at #0
-2020-09-02 11:09:35.519 tokio-runtime-worker INFO substrate_prometheus_endpoint::known_os  〽️ Prometheus server started at 127.0.0.1:9615
-2020-09-02 11:09:40.527 tokio-runtime-worker INFO substrate  💤 Idle (0 peers), best: #0 (0xde55…8fed), finalized #0 (0xde55…8fed), ⬇ 0 ⬆ 0
+2021-04-09 16:30:21 Running in --dev mode, RPC CORS has been disabled.    
+2021-04-09 16:30:21 Kitchen Node    
+2021-04-09 16:30:21 ✌️  version 3.0.0-6a528b4-x86_64-linux-gnu    
+2021-04-09 16:30:21 ❤️  by Substrate DevHub <https://github.com/substrate-developer-hub>, 2019-2021    
+2021-04-09 16:30:21 📋 Chain specification: Development    
+2021-04-09 16:30:21 🏷 Node name: needless-body-2155    
+2021-04-09 16:30:21 👤 Role: AUTHORITY    
+2021-04-09 16:30:21 💾 Database: RocksDb at /tmp/substratek7h0lC/chains/dev/db    
+2021-04-09 16:30:21 ⛓  Native runtime: ocw-runtime-1 (ocw-runtime-1.tx1.au1)    
+2021-04-09 16:30:21 🔨 Initializing Genesis block/state (state: 0xe76c…ae9b, header-hash: 0x3e88…db95)    
+2021-04-09 16:30:21 Using default protocol ID "sup" because none is configured in the chain specs    
+2021-04-09 16:30:21 🏷 Local node identity is: 12D3KooWPwkfdk29ZeqfSF8acAgRR6ToTofjQq11PYhi9WDpQijq    
+2021-04-09 16:30:22 📦 Highest known block at #0    
+2021-04-09 16:30:22 〽️ Prometheus server started at 127.0.0.1:9615    
+2021-04-09 16:30:22 Listening for new connections on 127.0.0.1:9944.    
+2021-04-09 16:30:27 💤 Idle (0 peers), best: #0 (0x3e88…db95), finalized #0 (0x3e88…db95), ⬇ 0 ⬆ 0    
 ...
 ```
 
@@ -70,12 +71,15 @@ block to be imported.
 Once a transaction is sent, such as using [Polkadot-JS App](https://polkadot.js.org/apps?rpc=ws://localhost:9944)
 to perform a balance transfer, the following more interesting logs are shown.
 
-```
-2020-09-03 23:47:24.656 tokio-runtime-worker INFO sc_consensus_manual_seal::rpc  Instant Seal success: CreatedBlock { hash: 0x02f2fd8e06bd8138040813f18c4b2df41404c289c3418142f613ae5c72abe6ce, aux: ImportedAux { header_only: false, clear_justification_requests: false, needs_justification: false, bad_justification: false, needs_finality_proof: false, is_new_best: true } }
-2020-09-03 23:47:24.658  INFO ocw_demo  Entering off-chain worker
-2020-09-03 23:47:24.866 tokio-runtime-worker INFO sc_basic_authorship::basic_authorship  🙌 Starting consensus session on top of parent 0x02f2fd8e06bd8138040813f18c4b2df41404c289c3418142f613ae5c72abe6ce
-2020-09-03 23:47:24.874 tokio-blocking-driver INFO ocw_demo  submit_number_signed: (0, d43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d (5GrwvaEF...))
-2020-09-03 23:47:24.874 tokio-blocking-driver INFO ocw_demo  Number vector: [0]
+``` 
+2021-04-09 16:32:13 🙌 Starting consensus session on top of parent 0x3e88096c5794c8a8ba5b81994a5f7b5dcd48c013413afae94c92cd9eb851db95    
+2021-04-09 16:32:13 🎁 Prepared block for proposing at 1 [hash: 0x2ad95670b92fd9bc46be6e948eae6cbd8e420e61055bc67245c2698669d44508; parent_hash: 0x3e88…db95; extrinsics (2): [0x6e19…1309, 0x8927…b1a3]]    
+2021-04-09 16:32:13 Instant Seal success: CreatedBlock { hash: 0x2ad95670b92fd9bc46be6e948eae6cbd8e420e61055bc67245c2698669d44508, aux: ImportedAux { header_only: false, clear_justification_requests: false, needs_justification: false, bad_justification: false, is_new_best: true } }    
+2021-04-09 16:32:13 ✨ Imported #1 (0x2ad9…4508)    
+2021-04-09 16:32:13 Entering off-chain worker    
+2021-04-09 16:32:13 🙌 Starting consensus session on top of parent 0x2ad95670b92fd9bc46be6e948eae6cbd8e420e61055bc67245c2698669d44508    
+2021-04-09 16:32:13 submit_number_unsigned: 1    
+2021-04-09 16:32:13 Number vector: [1]    
 ...
 ```
 
