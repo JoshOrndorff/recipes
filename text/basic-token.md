@@ -122,6 +122,5 @@ fn transfer(_origin, to: T::AccountId, value: u64) -> DispatchResult {
 
 ## Don't Panic!
 
-When adding the incoming balance, notice the peculiar `.expect` method. In a Substrate runtime,
-**you must never panic**. To encourage careful thinking about your code, you use the `.expect`
+When adding the incoming balance, notice the peculiar `.expect` method. In Substrate, **your runtime must never panic**. To encourage careful thinking about your code, you use the `.expect`
 method and provide a proof of why the potential panic will never happen.

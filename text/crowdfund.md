@@ -77,7 +77,7 @@ that have ever been created and three convenience aliases.
 pub type FundIndex = u32;
 
 type AccountIdOf<T> = <T as frame_system::Config>::AccountId;
-type BalanceOf<T> = <<T as Trait>::Currency as Currency<AccountIdOf<T>>>::Balance;
+type BalanceOf<T> = <<T as Config>::Currency as Currency<AccountIdOf<T>>>::Balance;
 type FundInfoOf<T> = FundInfo<AccountIdOf<T>, BalanceOf<T>, <T as frame_system::Config>::BlockNumber>;
 ```
 
@@ -208,7 +208,7 @@ fn dispense(origin, index: FundIndex) {
 	)?);
 ```
 
-This pallet also uses Currency
-[`Imbalance`](https://substrate.dev/rustdocs/v3.0.0/frame_support/traits/trait.Imbalance.html)s as discussed in
-the [Charity](./charity.md) recipe, to make transfers without incurring transfer fees to the
+This pallet also uses the Currency
+[`Imbalance`](https://substrate.dev/rustdocs/v3.0.0/frame_support/traits/trait.Imbalance.html) trait as discussed in
+the [Charity recipe](./charity.md), to make transfers without incurring transfer fees to the
 crowdfund pallet itself.

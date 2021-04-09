@@ -77,7 +77,7 @@ decl_event!(
 ### Events with Generic Types
 
 Sometimes, events might contain types from the pallet's Configuration Trait. In this case, it is necessary to
-specify additional syntax
+specify additional syntax:
 
 ```rust, ignore
 decl_event!(
@@ -121,7 +121,7 @@ must specify this type when implementing its trait. In the case of the `Event` t
 entirely straight forward, and looks the same for both simple events and generic events.
 
 ```rust, ignore
-impl simple_event::Trait for Runtime {
+impl simple_event::Config for Runtime {
 	type Event = Event;
 }
 ```

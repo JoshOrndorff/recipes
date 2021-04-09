@@ -14,7 +14,7 @@ to store a mapping from keys to values, similar to Rust's own
 
 ## Declaring a `StorageMap`
 
-We declare a single storage map with the following syntax.
+We declare a single storage map with the following syntax:
 
 ```rust, ignore
 decl_storage! {
