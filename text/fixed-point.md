@@ -54,7 +54,7 @@ We'll be using the most common approach which takes its fixed point implementati
 itself. There are a few fixed-point structs available in Substrate, all of which implement the
 [`PerThing` trait](https://substrate.dev/rustdocs/v3.0.0/sp_arithmetic/per_things/trait.PerThing.html), that cover different
 amounts of precision. For this accumulator example, we'll use the
-[`PerMill` struct](https://substrate.dev/rustdocs/v3.0.0/sp_arithmetic/struct.Permill.html) which represents
+[`PerMill` struct](https://substrate.dev/rustdocs/v3.0.0/sp_arithmetic/per_things/struct.Permill.html) which represents
 fractions as parts per million. There are also
 [`Perbill`](https://substrate.dev/rustdocs/v3.0.0/sp_arithmetic/per_things/struct.Perbill.html),
 [`PerCent`](https://substrate.dev/rustdocs/v3.0.0/sp_arithmetic/per_things/struct.Percent.html), and
