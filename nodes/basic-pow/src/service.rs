@@ -180,7 +180,7 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
 			select_chain,
 			MinimalSha3Algorithm,
 			proposer,
-			network.clone(),
+			network,
 			None,
 			inherent_data_providers,
 			// time to wait for a new block before starting to mine a new one
