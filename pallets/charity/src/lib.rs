@@ -65,9 +65,6 @@ decl_event!(
 		ImbalanceAbsorbed(Balance, Balance),
 		/// Charity has allocated funds to a cause
 		FundsAllocated(AccountId, Balance, Balance),
-		//TODO can we get rid of this since a lot of testing stuff changed in 3.0?
-		/// For testing purposes, to impl From<()> for TestEvent to assign `()` to balances::Event
-		NullEvent(u32), // u32 could be aliases as an error code for mocking setup
 	}
 );
 
