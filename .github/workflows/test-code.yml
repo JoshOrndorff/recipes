@@ -20,7 +20,7 @@ jobs:
           - stable
     runs-on:                       ubuntu-18.04
     container:
-      image:                       paritytech/ci-linux:ba887019-20210411
+      image:                       paritytech/ci-linux:4843e4d0-20201231
     env:
       RUST_BACKTRACE:              full
       CARGO_INCREMENTAL:           0
