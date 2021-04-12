@@ -33,7 +33,7 @@ pub struct ContinuousAccountData<BlockNumber> {
 }
 
 decl_storage! {
-	trait Store for Module<T: Config> as Example {
+	trait Store for Module<T: Config> as CompoundingInterest {
 		/// Balance for the continuously compounded account
 		ContinuousAccount get(fn balance_compound): ContinuousAccountData<T::BlockNumber>;
 		/// Balance for the discrete interest account

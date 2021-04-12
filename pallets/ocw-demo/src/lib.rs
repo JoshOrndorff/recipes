@@ -139,7 +139,7 @@ pub trait Config: frame_system::Config + CreateSignedTransaction<Call<Self>> {
 }
 
 decl_storage! {
-	trait Store for Module<T: Config> as Example {
+	trait Store for Module<T: Config> as OcwDemo {
 		/// A vector of recently submitted numbers. Bounded by NUM_VEC_LEN
 		Numbers get(fn numbers): VecDeque<u64>;
 	}

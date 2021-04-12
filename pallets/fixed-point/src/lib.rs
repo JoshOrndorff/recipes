@@ -28,7 +28,7 @@ pub trait Config: frame_system::Config {
 }
 
 decl_storage! {
-	trait Store for Module<T: Config> as Example {
+	trait Store for Module<T: Config> as FixedPoint {
 		/// Permill accumulator, value starts at 1 (multiplicative identity)
 		PermillAccumulator get(fn permill_value): Permill = Permill::one();
 		/// Substrate-fixed accumulator, value starts at 1 (multiplicative identity)
