@@ -141,7 +141,7 @@ decl_module! {
 			let imb = T::Currency::withdraw(
 				&creator,
 				deposit,
-				WithdrawReasons::from(WithdrawReasons::TRANSFER),
+				WithdrawReasons::TRANSFER,
 				ExistenceRequirement::AllowDeath,
 			)?;
 
@@ -209,7 +209,7 @@ decl_module! {
 			let _ = T::Currency::resolve_into_existing(&who, T::Currency::withdraw(
 				&Self::fund_account_id(index),
 				balance,
-				WithdrawReasons::from(WithdrawReasons::TRANSFER),
+				WithdrawReasons::TRANSFER,
 				ExistenceRequirement::AllowDeath
 			)?);
 
@@ -240,7 +240,7 @@ decl_module! {
 			let _ = T::Currency::resolve_creating(&reporter, T::Currency::withdraw(
 				&account,
 				fund.deposit + fund.raised,
-				WithdrawReasons::from(WithdrawReasons::TRANSFER),
+				WithdrawReasons::TRANSFER,
 				ExistenceRequirement::AllowDeath,
 			)?);
 
@@ -276,7 +276,7 @@ decl_module! {
 			let _ = T::Currency::resolve_creating(&fund.beneficiary, T::Currency::withdraw(
 				&account,
 				fund.raised,
-				WithdrawReasons::from(WithdrawReasons::TRANSFER),
+				WithdrawReasons::TRANSFER,
 				ExistenceRequirement::AllowDeath,
 			)?);
 
@@ -284,7 +284,7 @@ decl_module! {
 			let _ = T::Currency::resolve_creating(&caller, T::Currency::withdraw(
 				&account,
 				fund.deposit,
-				WithdrawReasons::from(WithdrawReasons::TRANSFER),
+				WithdrawReasons::TRANSFER,
 				ExistenceRequirement::AllowDeath,
 			)?);
 
