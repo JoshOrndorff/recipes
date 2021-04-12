@@ -1,4 +1,4 @@
-use crate::{self as randomness, Event as PalletEvent, Config};
+use crate::{self as randomness, Config, Event as PalletEvent};
 use frame_support::{assert_ok, construct_runtime, parameter_types};
 use sp_core::H256;
 use sp_io;
@@ -76,11 +76,9 @@ fn generate_works() {
 		assert_ok!(Randomness::consume_randomness(Origin::signed(1)));
 
 		// Check for the event
-		let expected_event = Event::randomness(PalletEvent::RandomnessConsumed(H256::zero(), H256::zero()));
+		let expected_event =
+			Event::randomness(PalletEvent::RandomnessConsumed(H256::zero(), H256::zero()));
 
-		assert_eq!(
-			System::events()[0].event,
-			expected_event
-		);
+		assert_eq!(System::events()[0].event, expected_event);
 	})
 }

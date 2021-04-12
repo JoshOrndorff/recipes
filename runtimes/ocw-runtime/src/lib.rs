@@ -17,8 +17,7 @@ use pallet_transaction_payment::CurrencyAdapter;
 use sp_api::impl_runtime_apis;
 use sp_core::{Encode, OpaqueMetadata, H256};
 use sp_runtime::traits::{
-	BlakeTwo256, Block as BlockT, IdentifyAccount, IdentityLookup, SaturatedConversion,
-	Verify,
+	BlakeTwo256, Block as BlockT, IdentifyAccount, IdentityLookup, SaturatedConversion, Verify,
 };
 use sp_runtime::{
 	create_runtime_str, generic,

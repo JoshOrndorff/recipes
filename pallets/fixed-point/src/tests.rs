@@ -1,4 +1,4 @@
-use crate::{self as fixed_point, Config, Event as PalletEvent, Error};
+use crate::{self as fixed_point, Config, Error, Event as PalletEvent};
 use frame_support::{assert_noop, assert_ok, construct_runtime, parameter_types};
 use sp_arithmetic::Permill;
 use sp_core::H256;
@@ -101,9 +101,14 @@ fn manual_impl_works() {
 
 		// Test that the expected events were emitted
 		let our_events = System::events()
-			.into_iter().map(|r| r.event)
+			.into_iter()
+			.map(|r| r.event)
 			.filter_map(|e| {
-				if let Event::fixed_point(inner) = e { Some(inner) } else { None }
+				if let Event::fixed_point(inner) = e {
+					Some(inner)
+				} else {
+					None
+				}
 			})
 			.collect::<Vec<_>>();
 
@@ -159,9 +164,14 @@ fn permill_impl_works() {
 
 		// Test that the expected events were emitted
 		let our_events = System::events()
-			.into_iter().map(|r| r.event)
+			.into_iter()
+			.map(|r| r.event)
 			.filter_map(|e| {
-				if let Event::fixed_point(inner) = e { Some(inner) } else { None }
+				if let Event::fixed_point(inner) = e {
+					Some(inner)
+				} else {
+					None
+				}
 			})
 			.collect::<Vec<_>>();
 
@@ -200,9 +210,14 @@ fn fixed_impl_works() {
 
 		// Test that the expected events were emitted
 		let our_events = System::events()
-			.into_iter().map(|r| r.event)
+			.into_iter()
+			.map(|r| r.event)
 			.filter_map(|e| {
-				if let Event::fixed_point(inner) = e { Some(inner) } else { None }
+				if let Event::fixed_point(inner) = e {
+					Some(inner)
+				} else {
+					None
+				}
 			})
 			.collect::<Vec<_>>();
 

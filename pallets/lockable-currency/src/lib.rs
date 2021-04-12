@@ -10,7 +10,8 @@ use frame_system::ensure_signed;
 
 const EXAMPLE_ID: LockIdentifier = *b"example ";
 
-type BalanceOf<T> = <<T as Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::Balance;
+type BalanceOf<T> =
+	<<T as Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::Balance;
 
 pub trait Config: frame_system::Config {
 	/// The lockable currency type

@@ -1,29 +1,22 @@
+use crate::{self as ocw_demo, *};
 use frame_support::{assert_ok, construct_runtime, parameter_types};
-use frame_system::{mocking, limits};
-use parity_scale_codec::{alloc::sync::Arc};
+use frame_system::{limits, mocking};
+use parity_scale_codec::alloc::sync::Arc;
 use parking_lot::RwLock;
 use sp_core::{
-	H256,
 	offchain::{
-		OffchainExt, TransactionPoolExt,
 		testing::{self, OffchainState, PoolState},
+		OffchainExt, TransactionPoolExt,
 	},
 	sr25519::{self, Signature},
-};
-use sp_keystore::{
-	testing::KeyStore,
-	KeystoreExt,
-	SyncCryptoStore,
+	H256,
 };
 use sp_io::TestExternalities;
+use sp_keystore::{testing::KeyStore, KeystoreExt, SyncCryptoStore};
 use sp_runtime::{
 	testing::{Header, TestXt},
-	traits::{
-		BlakeTwo256, IdentityLookup, IdentifyAccount, Verify,
-		Extrinsic as ExtrinsicT
-	},
+	traits::{BlakeTwo256, Extrinsic as ExtrinsicT, IdentifyAccount, IdentityLookup, Verify},
 };
-use crate::{self as ocw_demo, *};
 
 type Extrinsic = TestXt<Call, ()>;
 type UncheckedExtrinsic = mocking::MockUncheckedExtrinsic<TestRuntime>;
@@ -86,14 +79,16 @@ impl frame_system::offchain::SigningTypes for TestRuntime {
 	type Signature = Signature;
 }
 
-impl<C> frame_system::offchain::SendTransactionTypes<C> for TestRuntime where
+impl<C> frame_system::offchain::SendTransactionTypes<C> for TestRuntime
+where
 	Call: From<C>,
 {
 	type OverarchingCall = Call;
 	type Extrinsic = Extrinsic;
 }
 
-impl<LocalCall> frame_system::offchain::CreateSignedTransaction<LocalCall> for TestRuntime where
+impl<LocalCall> frame_system::offchain::CreateSignedTransaction<LocalCall> for TestRuntime
+where
 	Call: From<LocalCall>,
 {
 	fn create_transaction<C: frame_system::offchain::AppCrypto<Self::Public, Self::Signature>>(
@@ -149,7 +144,8 @@ fn submit_number_signed_works() {
 		// A number is inserted to <Numbers> vec
 		assert_eq!(<Numbers>::get(), vec![num]);
 		// An event is emitted
-		assert!(System::events().iter()
+		assert!(System::events()
+			.iter()
 			.any(|er| er.event == Event::ocw_demo(RawEvent::NewNumber(Some(acct), num))));
 
 		// Insert another number
@@ -174,7 +170,10 @@ fn test_offchain_signed_tx() {
 		assert!(pool_state.read().transactions.is_empty());
 		let tx = Extrinsic::decode(&mut &*tx).unwrap();
 		assert_eq!(tx.signature.unwrap().0, 0);
-		assert_eq!(tx.call, Call::OcwDemo(ocw_demo::Call::submit_number_signed(num)));
+		assert_eq!(
+			tx.call,
+			Call::OcwDemo(ocw_demo::Call::submit_number_signed(num))
+		);
 	});
 }
 
@@ -191,6 +190,9 @@ fn test_offchain_unsigned_tx() {
 		assert!(pool_state.read().transactions.is_empty());
 		let tx = Extrinsic::decode(&mut &*tx).unwrap();
 		assert_eq!(tx.signature, None);
-		assert_eq!(tx.call, Call::OcwDemo(ocw_demo::Call::submit_number_unsigned(num)));
+		assert_eq!(
+			tx.call,
+			Call::OcwDemo(ocw_demo::Call::submit_number_unsigned(num))
+		);
 	});
 }

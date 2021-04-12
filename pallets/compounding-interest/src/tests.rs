@@ -1,7 +1,5 @@
 use crate::{self as fixed_point, Config, Event as PalletEvent};
-use frame_support::{
-	assert_ok, construct_runtime, parameter_types, traits::OnFinalize,
-};
+use frame_support::{assert_ok, construct_runtime, parameter_types, traits::OnFinalize};
 use sp_core::H256;
 use sp_io::TestExternalities;
 use sp_runtime::{
@@ -82,15 +80,20 @@ fn deposit_withdraw_discrete_works() {
 
 		// Test that the expected events were emitted
 		let our_events = System::events()
-			.into_iter().map(|r| r.event)
+			.into_iter()
+			.map(|r| r.event)
 			.filter_map(|e| {
-				if let Event::fixed_point(inner) = e { Some(inner) } else { None }
+				if let Event::fixed_point(inner) = e {
+					Some(inner)
+				} else {
+					None
+				}
 			})
 			.collect::<Vec<_>>();
 
 		let expected_events = vec![
-			PalletEvent::DepositedDiscrete(10,),
-			PalletEvent::WithdrewDiscrete(5,),
+			PalletEvent::DepositedDiscrete(10),
+			PalletEvent::WithdrewDiscrete(5),
 		];
 
 		assert_eq!(our_events, expected_events);
@@ -115,15 +118,20 @@ fn discrete_interest_works() {
 
 		// Test that the expected events were emitted
 		let our_events = System::events()
-			.into_iter().map(|r| r.event)
+			.into_iter()
+			.map(|r| r.event)
 			.filter_map(|e| {
-				if let Event::fixed_point(inner) = e { Some(inner) } else { None }
+				if let Event::fixed_point(inner) = e {
+					Some(inner)
+				} else {
+					None
+				}
 			})
 			.collect::<Vec<_>>();
 
 		let expected_events = vec![
-			PalletEvent::DepositedDiscrete(100,),
-			PalletEvent::DiscreteInterestApplied(50,),
+			PalletEvent::DepositedDiscrete(100),
+			PalletEvent::DiscreteInterestApplied(50),
 		];
 
 		assert_eq!(our_events, expected_events);

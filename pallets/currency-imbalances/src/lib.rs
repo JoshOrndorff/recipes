@@ -12,11 +12,14 @@ use frame_support::{
 use frame_system::ensure_signed;
 
 // balance type using reservable currency type
-type BalanceOf<T> = <<T as Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::Balance;
-type PositiveImbalanceOf<T> =
-	<<T as Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::PositiveImbalance;
-type NegativeImbalanceOf<T> =
-	<<T as Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::NegativeImbalance;
+type BalanceOf<T> =
+	<<T as Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::Balance;
+type PositiveImbalanceOf<T> = <<T as Config>::Currency as Currency<
+	<T as frame_system::Config>::AccountId,
+>>::PositiveImbalance;
+type NegativeImbalanceOf<T> = <<T as Config>::Currency as Currency<
+	<T as frame_system::Config>::AccountId,
+>>::NegativeImbalance;
 
 pub trait Config: frame_system::Config + Sized {
 	/// The overarching event type

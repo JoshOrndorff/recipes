@@ -1,8 +1,6 @@
 //! Helper module to build a genesis configuration for the super-runtime
 
-use super::{
-	AccountId, BalancesConfig, GenesisConfig, Signature, SudoConfig, SystemConfig,
-};
+use super::{AccountId, BalancesConfig, GenesisConfig, Signature, SudoConfig, SystemConfig};
 use sp_core::{sr25519, Pair};
 use sp_runtime::traits::{IdentifyAccount, Verify};
 
@@ -24,7 +22,6 @@ where
 }
 
 pub fn dev_genesis(wasm_binary: &[u8]) -> GenesisConfig {
-
 	testnet_genesis(
 		wasm_binary,
 		// Root Key

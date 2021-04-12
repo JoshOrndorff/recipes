@@ -1,4 +1,4 @@
-use crate::tight::{self as check_membership, Config, RawEvent, Error};
+use crate::tight::{self as check_membership, Config, Error, RawEvent};
 use frame_support::{assert_noop, assert_ok, construct_runtime, parameter_types};
 use sp_core::H256;
 use sp_io::TestExternalities;

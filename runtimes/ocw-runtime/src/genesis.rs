@@ -1,8 +1,6 @@
 //! Helper module to build a genesis configuration for the Offchain Worker
 
-use super::{
-	AccountId, BalancesConfig, GenesisConfig, Signature, SudoConfig, SystemConfig,
-};
+use super::{AccountId, BalancesConfig, GenesisConfig, Signature, SudoConfig, SystemConfig};
 use sp_core::{sr25519, Pair};
 use sp_runtime::traits::{IdentifyAccount, Verify};
 

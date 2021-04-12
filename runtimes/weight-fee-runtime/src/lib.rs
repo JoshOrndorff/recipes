@@ -14,7 +14,6 @@ include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 #[cfg(feature = "std")]
 pub mod genesis;
 
-use pallet_transaction_payment::CurrencyAdapter;
 use frame_support::{
 	construct_runtime, parameter_types,
 	traits::{Get, Randomness},
@@ -23,12 +22,11 @@ use frame_support::{
 		WeightToFeeCoefficient, WeightToFeeCoefficients, WeightToFeePolynomial,
 	},
 };
+use pallet_transaction_payment::CurrencyAdapter;
 use smallvec::smallvec;
 use sp_api::impl_runtime_apis;
 use sp_core::{OpaqueMetadata, H256};
-use sp_runtime::traits::{
-	BlakeTwo256, Block as BlockT, IdentifyAccount, IdentityLookup, Verify,
-};
+use sp_runtime::traits::{BlakeTwo256, Block as BlockT, IdentifyAccount, IdentityLookup, Verify};
 use sp_runtime::{
 	create_runtime_str, generic,
 	transaction_validity::{TransactionSource, TransactionValidity},
@@ -341,8 +339,13 @@ pub type UncheckedExtrinsic = generic::UncheckedExtrinsic<Address, Call, Signatu
 /// Extrinsic type that has already been checked.
 pub type CheckedExtrinsic = generic::CheckedExtrinsic<AccountId, Call, SignedExtra>;
 /// Executive: handles dispatch to the various pallets.
-pub type Executive =
-	frame_executive::Executive<Runtime, Block, frame_system::ChainContext<Runtime>, Runtime, AllModules>;
+pub type Executive = frame_executive::Executive<
+	Runtime,
+	Block,
+	frame_system::ChainContext<Runtime>,
+	Runtime,
+	AllModules,
+>;
 
 impl_runtime_apis! {
 	impl sp_api::Core<Block> for Runtime {

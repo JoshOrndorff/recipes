@@ -1,4 +1,4 @@
-use crate::{self as simple_map, Error, Config, RawEvent};
+use crate::{self as simple_map, Config, Error, RawEvent};
 use frame_support::{assert_err, assert_ok, construct_runtime, parameter_types};
 use sp_core::H256;
 use sp_io::TestExternalities;

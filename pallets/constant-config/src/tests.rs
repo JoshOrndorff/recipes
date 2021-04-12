@@ -103,7 +103,6 @@ fn overflow_checked() {
 #[test]
 fn add_value_works() {
 	ExternalityBuilder::build().execute_with(|| {
-
 		assert_ok!(ConstantConfig::set_value(Origin::signed(1), 10));
 
 		assert_ok!(ConstantConfig::add_value(Origin::signed(2), 100));
@@ -114,39 +113,40 @@ fn add_value_works() {
 
 		//Test that the expected events were emitted
 		let our_events = System::events()
-		.into_iter().map(|r| r.event)
-		.filter_map(|e| {
-			if let Event::constant_config(inner) = e { Some(inner) } else { None }
-		})
-		.collect::<Vec<_>>();
+			.into_iter()
+			.map(|r| r.event)
+			.filter_map(|e| {
+				if let Event::constant_config(inner) = e {
+					Some(inner)
+				} else {
+					None
+				}
+			})
+			.collect::<Vec<_>>();
 
 		let expected_events = vec![
 			PalletEvent::Added(10, 100, 110),
 			PalletEvent::Added(110, 100, 210),
 			PalletEvent::Added(210, 100, 310),
-	];
+		];
 
-	assert_eq!(our_events, expected_events);
-
+		assert_eq!(our_events, expected_events);
 	})
 }
 
-	#[test]
-	fn on_finalize_clears() {
-		ExternalityBuilder::build().execute_with(|| {
-			System::set_block_number(5);
-			assert_ok!(ConstantConfig::set_value(Origin::signed(1), 10));
+#[test]
+fn on_finalize_clears() {
+	ExternalityBuilder::build().execute_with(|| {
+		System::set_block_number(5);
+		assert_ok!(ConstantConfig::set_value(Origin::signed(1), 10));
 
-			assert_ok!(ConstantConfig::add_value(Origin::signed(2), 100));
+		assert_ok!(ConstantConfig::add_value(Origin::signed(2), 100));
 
-			ConstantConfig::on_finalize(10);
-			let expected_event = Event::constant_config(PalletEvent::Cleared(110));
+		ConstantConfig::on_finalize(10);
+		let expected_event = Event::constant_config(PalletEvent::Cleared(110));
 
-			assert_eq!(
-				System::events()[1].event,
-				expected_event,
-			);
+		assert_eq!(System::events()[1].event, expected_event,);
 
-			assert_eq!(ConstantConfig::single_value(), 0);
+		assert_eq!(ConstantConfig::single_value(), 0);
 	})
 }

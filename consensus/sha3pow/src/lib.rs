@@ -131,9 +131,10 @@ where
 			.runtime_api()
 			.difficulty(&parent_id)
 			.map_err(|err| {
-				sc_consensus_pow::Error::Environment(
-					format!("Fetching difficulty from runtime failed: {:?}", err)
-				)
+				sc_consensus_pow::Error::Environment(format!(
+					"Fetching difficulty from runtime failed: {:?}",
+					err
+				))
 			})
 	}
 

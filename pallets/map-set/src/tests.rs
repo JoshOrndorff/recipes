@@ -1,3 +1,4 @@
+use crate::{self as map_set, *};
 use frame_support::{assert_noop, assert_ok, construct_runtime, parameter_types};
 use sp_core::H256;
 use sp_io::TestExternalities;
@@ -5,7 +6,6 @@ use sp_runtime::{
 	testing::Header,
 	traits::{BlakeTwo256, IdentityLookup},
 };
-use crate::{self as map_set, *}; 
 
 type UncheckedExtrinsic = frame_system::mocking::MockUncheckedExtrinsic<TestRuntime>;
 type Block = frame_system::mocking::MockBlock<TestRuntime>;
@@ -75,10 +75,7 @@ fn add_member_works() {
 
 		let expected_event = Event::map_set(RawEvent::MemberAdded(1));
 
-		assert_eq!(
-			System::events()[0].event,
-			expected_event,
-		);
+		assert_eq!(System::events()[0].event, expected_event,);
 
 		assert!(<Members<TestRuntime>>::contains_key(1));
 	})
@@ -121,10 +118,7 @@ fn remove_member_works() {
 		// check correct event emission
 		let expected_event = Event::map_set(RawEvent::MemberRemoved(1));
 
-		assert_eq!(
-			System::events()[1].event,
-			expected_event,
-		);
+		assert_eq!(System::events()[1].event, expected_event,);
 
 		// check storage changes
 		assert!(!<Members<TestRuntime>>::contains_key(1));

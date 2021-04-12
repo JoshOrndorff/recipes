@@ -1,3 +1,4 @@
+use crate::{self as simple_event, *};
 use frame_support::{assert_ok, construct_runtime, parameter_types};
 use frame_system::{EventRecord, Phase};
 use sp_core::H256;
@@ -6,7 +7,6 @@ use sp_runtime::{
 	testing::Header,
 	traits::{BlakeTwo256, IdentityLookup},
 };
-use crate::{self as simple_event, *};
 
 type UncheckedExtrinsic = frame_system::mocking::MockUncheckedExtrinsic<TestRuntime>;
 type Block = frame_system::mocking::MockBlock<TestRuntime>;

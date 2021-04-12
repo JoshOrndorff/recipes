@@ -174,9 +174,7 @@ mod tests {
 	use RingBufferTrait;
 
 	use codec::{Decode, Encode};
-	use frame_support::{
-		decl_module, decl_storage, impl_outer_origin, parameter_types,
-	};
+	use frame_support::{decl_module, decl_storage, impl_outer_origin, parameter_types};
 	use sp_core::H256;
 	use sp_runtime::{
 		testing::Header,
@@ -218,8 +216,12 @@ mod tests {
 	// https://github.com/paritytech/substrate/pull/8090#issuecomment-776069095
 	pub struct MockPalletInfo;
 	impl frame_support::traits::PalletInfo for MockPalletInfo {
-		fn index<P: 'static>() -> Option<usize> { Some(0) }
-		fn name<P: 'static>() -> Option<&'static str> { Some("test") }
+		fn index<P: 'static>() -> Option<usize> {
+			Some(0)
+		}
+		fn name<P: 'static>() -> Option<&'static str> {
+			Some("test")
+		}
 	}
 
 	parameter_types! {

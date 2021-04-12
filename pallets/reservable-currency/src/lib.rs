@@ -13,7 +13,8 @@ use frame_system::ensure_signed;
 mod tests;
 
 // balance type using reservable currency type
-type BalanceOf<T> = <<T as Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::Balance;
+type BalanceOf<T> =
+	<<T as Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::Balance;
 
 pub trait Config: frame_system::Config + Sized {
 	// overarching event type

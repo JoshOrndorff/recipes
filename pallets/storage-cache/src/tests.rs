@@ -183,10 +183,7 @@ fn swap_king_works() {
 
 		let expected_event = Event::storage_cache(RawEvent::BetterKingSwap(1, 3));
 
-		assert_eq!(
-			System::events()[1].event,
-			expected_event,
-		);
+		assert_eq!(System::events()[1].event, expected_event,);
 
 		assert_eq!(StorageCache::king_member(), 3);
 	})

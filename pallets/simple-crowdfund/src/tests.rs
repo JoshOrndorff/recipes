@@ -1,4 +1,4 @@
-use crate::{self as simple_crowdfund, Config, Error, ModuleId, FundInfo};
+use crate::{self as simple_crowdfund, Config, Error, FundInfo, ModuleId};
 
 use frame_support::{
 	assert_noop, assert_ok, construct_runtime, parameter_types,

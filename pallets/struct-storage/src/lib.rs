@@ -26,7 +26,8 @@ pub struct InnerThing<Hash, Balance> {
 	balance: Balance,
 }
 
-type InnerThingOf<T> = InnerThing<<T as frame_system::Config>::Hash, <T as pallet_balances::Config>::Balance>;
+type InnerThingOf<T> =
+	InnerThing<<T as frame_system::Config>::Hash, <T as pallet_balances::Config>::Balance>;
 
 #[derive(Encode, Decode, Default, RuntimeDebug)]
 pub struct SuperThing<Hash, Balance> {

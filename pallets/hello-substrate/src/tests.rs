@@ -1,6 +1,6 @@
 use crate::{self as hello_substrate, Config};
 use frame_support::{
-	assert_noop, assert_ok, dispatch::DispatchError, construct_runtime, parameter_types,
+	assert_noop, assert_ok, construct_runtime, dispatch::DispatchError, parameter_types,
 };
 use frame_system::RawOrigin;
 use sp_core::H256;

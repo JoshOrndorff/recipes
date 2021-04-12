@@ -9,9 +9,7 @@
 use frame_support::{
 	decl_error, decl_event, decl_module, decl_storage, ensure,
 	storage::child,
-	traits::{
-		Currency, ExistenceRequirement, Get, ReservableCurrency, WithdrawReasons,
-	},
+	traits::{Currency, ExistenceRequirement, Get, ReservableCurrency, WithdrawReasons},
 };
 use frame_system::ensure_signed;
 use parity_scale_codec::{Decode, Encode};
@@ -52,7 +50,8 @@ pub type FundIndex = u32;
 
 type AccountIdOf<T> = <T as frame_system::Config>::AccountId;
 type BalanceOf<T> = <<T as Config>::Currency as Currency<AccountIdOf<T>>>::Balance;
-type FundInfoOf<T> = FundInfo<AccountIdOf<T>, BalanceOf<T>, <T as frame_system::Config>::BlockNumber>;
+type FundInfoOf<T> =
+	FundInfo<AccountIdOf<T>, BalanceOf<T>, <T as frame_system::Config>::BlockNumber>;
 
 #[derive(Encode, Decode, Default, PartialEq, Eq)]
 #[cfg_attr(feature = "std", derive(Debug))]

@@ -15,26 +15,22 @@ use frame_system::{
 	ensure_none, ensure_signed,
 	offchain::{
 		AppCrypto, CreateSignedTransaction, SendSignedTransaction, SendUnsignedTransaction,
-		SignedPayload, SigningTypes, Signer, SubmitTransaction,
+		SignedPayload, Signer, SigningTypes, SubmitTransaction,
 	},
 };
 use sp_core::crypto::KeyTypeId;
 use sp_runtime::{
-	RuntimeDebug,
 	offchain as rt_offchain,
 	offchain::{
 		storage::StorageValueRef,
-		storage_lock::{StorageLock, BlockAndTime},
+		storage_lock::{BlockAndTime, StorageLock},
 	},
 	transaction_validity::{
-		InvalidTransaction, TransactionSource, TransactionValidity,
-		ValidTransaction,
+		InvalidTransaction, TransactionSource, TransactionValidity, ValidTransaction,
 	},
+	RuntimeDebug,
 };
-use sp_std::{
-	prelude::*, str,
-	collections::vec_deque::VecDeque,
-};
+use sp_std::{collections::vec_deque::VecDeque, prelude::*, str};
 
 use serde::{Deserialize, Deserializer};
 
@@ -65,10 +61,7 @@ pub mod crypto {
 	use crate::KEY_TYPE;
 	use sp_core::sr25519::Signature as Sr25519Signature;
 	use sp_runtime::app_crypto::{app_crypto, sr25519};
-	use sp_runtime::{
-		traits::Verify,
-		MultiSignature, MultiSigner,
-	};
+	use sp_runtime::{traits::Verify, MultiSignature, MultiSigner};
 
 	app_crypto!(sr25519, KEY_TYPE);
 
@@ -93,10 +86,10 @@ pub mod crypto {
 #[derive(Encode, Decode, Clone, PartialEq, Eq, RuntimeDebug)]
 pub struct Payload<Public> {
 	number: u64,
-	public: Public
+	public: Public,
 }
 
-impl <T: SigningTypes> SignedPayload<T> for Payload<T::Public> {
+impl<T: SigningTypes> SignedPayload<T> for Payload<T::Public> {
 	fn public(&self) -> T::Public {
 		self.public.clone()
 	}
@@ -294,8 +287,9 @@ impl<T: Config> Module<T> {
 		//   4) `with_block_and_time_deadline` - lock with custom time and block expiration
 		// Here we choose the most custom one for demonstration purpose.
 		let mut lock = StorageLock::<BlockAndTime<Self>>::with_block_and_time_deadline(
-			b"offchain-demo::lock", LOCK_BLOCK_EXPIRATION,
-			rt_offchain::Duration::from_millis(LOCK_TIMEOUT_EXPIRATION)
+			b"offchain-demo::lock",
+			LOCK_BLOCK_EXPIRATION,
+			rt_offchain::Duration::from_millis(LOCK_TIMEOUT_EXPIRATION),
 		);
 
 		// We try to acquire the lock here. If failed, we know the `fetch_n_parse` part inside is being
@@ -303,8 +297,12 @@ impl<T: Config> Module<T> {
 		// ref: https://substrate.dev/rustdocs/v3.0.0/sp_runtime/offchain/storage_lock/struct.StorageLock.html#method.try_lock
 		if let Ok(_guard) = lock.try_lock() {
 			match Self::fetch_n_parse() {
-				Ok(gh_info) => { s_info.set(&gh_info); }
-				Err(err) => { return Err(err); }
+				Ok(gh_info) => {
+					s_info.set(&gh_info);
+				}
+				Err(err) => {
+					return Err(err);
+				}
 			}
 		}
 		Ok(())
@@ -381,8 +379,7 @@ impl<T: Config> Module<T> {
 		//   - `Some((account, Err(())))`: error occured when sending the transaction
 		let result = signer.send_signed_transaction(|_acct|
 			// This is the on-chain function
-			Call::submit_number_signed(number)
-		);
+			Call::submit_number_signed(number));
 
 		// Display error if the signed tx fails.
 		if let Some((acc, res)) = result {
@@ -405,11 +402,10 @@ impl<T: Config> Module<T> {
 
 		// `submit_unsigned_transaction` returns a type of `Result<(), ()>`
 		//   ref: https://substrate.dev/rustdocs/v3.0.0/frame_system/offchain/struct.SubmitTransaction.html#method.submit_unsigned_transaction
-		SubmitTransaction::<T, Call<T>>::submit_unsigned_transaction(call.into())
-			.map_err(|_| {
-				debug::error!("Failed in offchain_unsigned_tx");
-				<Error<T>>::OffchainUnsignedTxError
-			})
+		SubmitTransaction::<T, Call<T>>::submit_unsigned_transaction(call.into()).map_err(|_| {
+			debug::error!("Failed in offchain_unsigned_tx");
+			<Error<T>>::OffchainUnsignedTxError
+		})
 	}
 
 	fn offchain_unsigned_tx_signed_payload(block_number: T::BlockNumber) -> Result<(), Error<T>> {
@@ -424,8 +420,11 @@ impl<T: Config> Module<T> {
 		//   - `Some((account, Ok(())))`: transaction is successfully sent
 		//   - `Some((account, Err(())))`: error occured when sending the transaction
 		if let Some((_, res)) = signer.send_unsigned_transaction(
-			|acct| Payload { number, public: acct.public.clone() },
-			Call::submit_number_unsigned_with_signed_payload
+			|acct| Payload {
+				number,
+				public: acct.public.clone(),
+			},
+			Call::submit_number_unsigned_with_signed_payload,
 		) {
 			return res.map_err(|_| {
 				debug::error!("Failed in offchain_unsigned_tx_signed_payload");
@@ -443,12 +442,14 @@ impl<T: Config> frame_support::unsigned::ValidateUnsigned for Module<T> {
 	type Call = Call<T>;
 
 	fn validate_unsigned(_source: TransactionSource, call: &Self::Call) -> TransactionValidity {
-		let valid_tx = |provide| ValidTransaction::with_tag_prefix("ocw-demo")
-			.priority(UNSIGNED_TXS_PRIORITY)
-			.and_provides([&provide])
-			.longevity(3)
-			.propagate(true)
-			.build();
+		let valid_tx = |provide| {
+			ValidTransaction::with_tag_prefix("ocw-demo")
+				.priority(UNSIGNED_TXS_PRIORITY)
+				.and_provides([&provide])
+				.longevity(3)
+				.propagate(true)
+				.build()
+		};
 
 		match call {
 			Call::submit_number_unsigned(_number) => valid_tx(b"submit_number_unsigned".to_vec()),
@@ -457,7 +458,7 @@ impl<T: Config> frame_support::unsigned::ValidateUnsigned for Module<T> {
 					return InvalidTransaction::BadProof.into();
 				}
 				valid_tx(b"submit_number_unsigned_with_signed_payload".to_vec())
-			},
+			}
 			_ => InvalidTransaction::Call.into(),
 		}
 	}
@@ -466,6 +467,6 @@ impl<T: Config> frame_support::unsigned::ValidateUnsigned for Module<T> {
 impl<T: Config> rt_offchain::storage_lock::BlockNumberProvider for Module<T> {
 	type BlockNumber = T::BlockNumber;
 	fn current_block_number() -> Self::BlockNumber {
-	  <frame_system::Module<T>>::block_number()
+		<frame_system::Module<T>>::block_number()
 	}
 }
