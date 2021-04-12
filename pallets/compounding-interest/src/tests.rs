@@ -1,4 +1,4 @@
-use crate::{self as fixed_point, Config, Event as PalletEvent};
+use crate::{self as compounding_interest, Config, Event as PalletEvent};
 use frame_support::{assert_ok, construct_runtime, parameter_types, traits::OnFinalize};
 use sp_core::H256;
 use sp_io::TestExternalities;
@@ -17,8 +17,7 @@ construct_runtime!(
 		UncheckedExtrinsic = UncheckedExtrinsic,
 	{
 		System: frame_system::{Module, Call, Config, Storage, Event<T>},
-		//TODO Why is this called FixedPoint? Maybe copy pasta?
-		FixedPoint: fixed_point::{Module, Call, Event},
+		CompoundingInterest: compounding_interest::{Module, Call, Event},
 	}
 );
 
@@ -73,17 +72,17 @@ impl ExternalityBuilder {
 fn deposit_withdraw_discrete_works() {
 	ExternalityBuilder::build().execute_with(|| {
 		// Deposit 10 tokens
-		assert_ok!(FixedPoint::deposit_discrete(Origin::signed(1), 10));
+		assert_ok!(CompoundingInterest::deposit_discrete(Origin::signed(1), 10));
 
 		// Withdraw 5 tokens
-		assert_ok!(FixedPoint::withdraw_discrete(Origin::signed(1), 5));
+		assert_ok!(CompoundingInterest::withdraw_discrete(Origin::signed(1), 5));
 
 		// Test that the expected events were emitted
 		let our_events = System::events()
 			.into_iter()
 			.map(|r| r.event)
 			.filter_map(|e| {
-				if let Event::fixed_point(inner) = e {
+				if let Event::compounding_interest(inner) = e {
 					Some(inner)
 				} else {
 					None
@@ -99,7 +98,7 @@ fn deposit_withdraw_discrete_works() {
 		assert_eq!(our_events, expected_events);
 
 		// Check that five tokens are still there
-		assert_eq!(FixedPoint::discrete_account(), 5);
+		assert_eq!(CompoundingInterest::discrete_account(), 5);
 	})
 }
 
@@ -107,21 +106,21 @@ fn deposit_withdraw_discrete_works() {
 fn discrete_interest_works() {
 	ExternalityBuilder::build().execute_with(|| {
 		// Deposit 100 tokens
-		assert_ok!(FixedPoint::deposit_discrete(Origin::signed(1), 100));
+		assert_ok!(CompoundingInterest::deposit_discrete(Origin::signed(1), 100));
 
 		// balance should not change after the 3rd block
-		FixedPoint::on_finalize(3);
-		assert_eq!(FixedPoint::discrete_account(), 100);
+		CompoundingInterest::on_finalize(3);
+		assert_eq!(CompoundingInterest::discrete_account(), 100);
 
 		// on_finalize should compute interest on 10th block
-		FixedPoint::on_finalize(10);
+		CompoundingInterest::on_finalize(10);
 
 		// Test that the expected events were emitted
 		let our_events = System::events()
 			.into_iter()
 			.map(|r| r.event)
 			.filter_map(|e| {
-				if let Event::fixed_point(inner) = e {
+				if let Event::compounding_interest(inner) = e {
 					Some(inner)
 				} else {
 					None
@@ -137,6 +136,6 @@ fn discrete_interest_works() {
 		assert_eq!(our_events, expected_events);
 
 		// Check that the balance has updated
-		assert_eq!(FixedPoint::discrete_account(), 150);
+		assert_eq!(CompoundingInterest::discrete_account(), 150);
 	})
 }
