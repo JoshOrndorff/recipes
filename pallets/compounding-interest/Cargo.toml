@@ -8,7 +8,7 @@ description = "A savings account that uses fixed point arithmetic to implement c
 license = "GPL-3.0-or-later"
 
 [dependencies]
-substrate-fixed = { git = 'https://github.com/encointer/substrate-fixed.git', rev = "b33d186888c60f38adafcfc0ec3a21aab263aef1" }
+substrate-fixed = { git = 'https://github.com/encointer/substrate-fixed.git', branch = "master" }
 parity-scale-codec = { version = "2.0", features = ["derive"], default-features = false }
 
 # Substrate packages
