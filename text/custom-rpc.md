@@ -24,7 +24,7 @@ custom RPCs to your node. In this recipe, we will add three custom RPCs to our n
 
 ## The RPC Extensions Builder
 
-In order to connect custom RPCs you must provide an function known as an "RPC extension builder". This function takes a parameter for whether the node should deny unsafe RPC calls, and returns an [IoHandler](https://docs.rs/jsonrpc-core/15.0.0/jsonrpc_core/struct.IoHandler.html) that the node needs to create a json RPC. For context read about the [`RpcExtensionBuilder` trait](https://substrate.dev/rustdocs/v3.0.0/sc_service/trait.RpcExtensionBuilder.html).
+In order to connect custom RPCs you must provide a function known as an "RPC extension builder". This function takes a parameter for whether the node should deny unsafe RPC calls, and returns an [IoHandler](https://docs.rs/jsonrpc-core/15.0.0/jsonrpc_core/struct.IoHandler.html) that the node needs to create a json RPC. For context, read more at [`RpcExtensionBuilder` trait API doc](https://substrate.dev/rustdocs/v3.0.0/sc_service/trait.RpcExtensionBuilder.html).
 
 ```rust, ignore
 let rpc_extensions_builder = {
