@@ -39,7 +39,7 @@ For example, runtimes that include the Babe pallet expect a pre-runtime digest c
 information about the current babe slot.
 
 In this recipe we will avoid those practical complexities by using the
-[Minimal Sha3 Proof of Work](./sha3-pow-consensus.md) consensus engine, which is truly isolated from fro mthe runtime. This node works with most of the recipes' runtimes, and has the super runtime isntalled by default.
+[Minimal Sha3 Proof of Work](./sha3-pow-consensus.md) consensus engine, which is truly isolated from the runtime. This node works with most of the recipes' runtimes, and has the super runtime installed by default.
 
 ## The Substrate Service
 
