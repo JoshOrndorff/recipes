@@ -18,15 +18,12 @@ jobs:
       matrix:
         toolchain:
           - stable
-    runs-on:                       ubuntu-18.04
+    runs-on:                       ubuntu-latest
     container:
       image:                       paritytech/ci-linux:production
     env:
       RUST_BACKTRACE:              full
       CARGO_INCREMENTAL:           0
-      CARGO_HOME:                  /github/home/cache/${{ github.head_ref }}/${{ matrix.toolchain }}/cargo
-      CARGO_TARGET_DIR:            /github/home/cache/${{ github.head_ref }}/${{ matrix.toolchain }}/target
-      SCCACHE_DIR:                 /github/home/cache/${{ github.head_ref }}/${{ matrix.toolchain }}/sccache
       SCCACHE_IDLE_TIMEOUT:        0
       CMAKE_C_COMPILER_LAUNCHER:   sccache
       CMAKE_CXX_COMPILER_LAUNCHER: sccache
@@ -48,21 +45,13 @@ jobs:
           fetch-depth:             5
           submodules:              recursive
 
-      - name:                      Cache CARGO_HOME, CARGO_TARGET_DIR, SCCACHE_DIR
-        uses:                      actions/cache@v2
-        with:
-          path:                    |
-            /github/home/cache/${{ github.head_ref }}/${{ matrix.toolchain }}
-          key:                     ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys:            |
-            ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-            ${{ runner.os }}-cargo-
+      - name:                      Rust Cache
+        uses:                      Swatinem/rust-cache@v1.2.0
 
-      - name:                      Cache stats
+      - name:                      Sccache stats
         shell:                     bash
         run:                       |
           sccache --show-stats
-          du -sh /github/home/cache/${{ github.head_ref }}/${{ matrix.toolchain }}/*
 
       ## --- Test stage ---
 
