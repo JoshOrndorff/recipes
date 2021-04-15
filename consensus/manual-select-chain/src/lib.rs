@@ -55,8 +55,12 @@ impl<B, Block, CS> ManualSelectChain<B, Block, CS>
 	/// Run the worker task that listens to the RPC and updates the best block accordingly
 	/// This is a little different than manual seal. There it is just a function. There is no
 	/// struct for it to be a method on.
-	pub async fn start_worker() {
-		//TODO
+	//TODO Oh wow, shoudl the channel just be a parameter to this function rather than a field on the struct?
+	// Probably.
+	pub async fn start_worker(&self) {
+		while let Some(newly_selected) = self.command_stream.next().await {
+			self. 
+		}
 	}
 
 	fn best_block_header(&self) -> sp_blockchain::Result<<Block as BlockT>::Header> {
