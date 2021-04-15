@@ -163,7 +163,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#basic-token" id="basic-token">Basic Token</a></h1>
+                        <h1 id="basic-token"><a class="header" href="#basic-token">Basic Token</a></h1>
 <p><code>pallets/basic-token</code>
 <a target="_blank" href="https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fbasic-token%2Fsrc%2Flib.rs">
 <img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt ="Try on playground"/>
@@ -172,19 +172,19 @@
 <img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt ="View on GitHub"/>
 </a></p>
 <p>This recipe demonstrates a simple but functional token in a pallet.</p>
-<h2><a class="header" href="#mapping-accounts-to-balances" id="mapping-accounts-to-balances">Mapping Accounts to Balances</a></h2>
+<h2 id="mapping-accounts-to-balances"><a class="header" href="#mapping-accounts-to-balances">Mapping Accounts to Balances</a></h2>
 <p>Mappings are a very powerful primitive. A <em>stateful</em> cryptocurrency might store a mapping between
 accounts and balances. Likewise, mappings prove useful when representing <em>owned</em> data. By tracking
 ownership with maps, it is easy manage permissions for modifying values specific to individual users
 or groups.</p>
-<h2><a class="header" href="#storage-items" id="storage-items">Storage Items</a></h2>
+<h2 id="storage-items"><a class="header" href="#storage-items">Storage Items</a></h2>
 <p>The primary storage item is the mapping between AccountIds and Balances described above. Every
 account that holds tokens appears as a key in that map and its value is the number of tokens it
 holds.</p>
 <p>The next two storage items set the total supply of the token and keep track of whether the token has
 been initialized yet.</p>
 <pre><code class="language-rust ignore">decl_storage! {
-	trait Store for Module&lt;T: Trait&gt; as Token {
+	trait Store for Module&lt;T: Config&gt; as Token {
 		pub Balances get(get_balance): map hasher(blake2_128_concat) T::AccountId =&gt; u64;
 
 		pub TotalSupply get(total_supply): u64 = 21000000;
@@ -195,13 +195,13 @@ been initialized yet.</p>
 </code></pre>
 <p>Because users can influence the keys in our storage map, we've chosen the <code>blake2_128_concat</code> hasher
 as described in the recipe on <a href="./storage-maps.html">storage maps</a>s.</p>
-<h2><a class="header" href="#events-and-errors" id="events-and-errors">Events and Errors</a></h2>
+<h2 id="events-and-errors"><a class="header" href="#events-and-errors">Events and Errors</a></h2>
 <p>The pallet defines events and errors for common lifecycle events such as successful and failed
 transfers, and successful and failed initialization.</p>
 <pre><code class="language-rust ignore">decl_event!(
 	pub enum Event&lt;T&gt;
 	where
-		AccountId = &lt;T as system::Trait&gt;::AccountId,
+		AccountId = &lt;T as frame_system::Config&gt;::AccountId,
 	{
 		/// Token was initialized by user
 		Initialized(AccountId),
@@ -211,7 +211,7 @@ transfers, and successful and failed initialization.</p>
 );
 
 decl_error! {
-	pub enum Error for Module&lt;T: Trait&gt; {
+	pub enum Error for Module&lt;T: Config&gt; {
 		/// Attempted to initialize the token after it had already been initialized.
 		AlreadyInitialized,
 		/// Attempted to transfer more funds than were available
@@ -219,7 +219,7 @@ decl_error! {
 	}
 }
 </code></pre>
-<h2><a class="header" href="#initializing-the-token" id="initializing-the-token">Initializing the Token</a></h2>
+<h2 id="initializing-the-token"><a class="header" href="#initializing-the-token">Initializing the Token</a></h2>
 <p>In order for the token to be useful, some accounts need to own it. There are many possible ways to
 initialize a token including genesis config, claims process, lockdrop, and many more. This pallet
 will use a simple process where the first user to call the <code>init</code> function receives all of the
@@ -237,7 +237,7 @@ default value in the <code>decl_storage!</code> block.</p>
 </code></pre>
 <p>As usual, we first check for preconditions. In this case that means making sure that the token is
 not already initialized. Then we do any mutation necessary.</p>
-<h2><a class="header" href="#transferring-tokens" id="transferring-tokens">Transferring Tokens</a></h2>
+<h2 id="transferring-tokens"><a class="header" href="#transferring-tokens">Transferring Tokens</a></h2>
 <p>To transfer tokens, a user who owns some tokens calls the <code>transfer</code> method specifying the recipient
 and the amount of tokens to transfer as parameters.</p>
 <p>We again check for error conditions before mutating storage. In this case it is <em>not</em> necessary to
@@ -260,9 +260,8 @@ will simply fail with <code>InsufficientFunds</code>.</p>
 	Ok(())
 }
 </code></pre>
-<h2><a class="header" href="#dont-panic" id="dont-panic">Don't Panic!</a></h2>
-<p>When adding the incoming balance, notice the peculiar <code>.expect</code> method. In a Substrate runtime,
-<strong>you must never panic</strong>. To encourage careful thinking about your code, you use the <code>.expect</code>
+<h2 id="dont-panic"><a class="header" href="#dont-panic">Don't Panic!</a></h2>
+<p>When adding the incoming balance, notice the peculiar <code>.expect</code> method. In Substrate, <strong>your runtime must never panic</strong>. To encourage careful thinking about your code, you use the <code>.expect</code>
 method and provide a proof of why the potential panic will never happen.</p>
 
                     </main>

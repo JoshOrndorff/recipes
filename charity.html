@@ -163,7 +163,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#charity" id="charity">Charity</a></h1>
+                        <h1 id="charity"><a class="header" href="#charity">Charity</a></h1>
 <p><code>pallets/charity</code>
 <a target="_blank" href="https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fcharity%2Fsrc%2Flib.rs">
 <img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt ="Try on playground"/>
@@ -178,12 +178,12 @@ concepts in Substrate development:</p>
 <li>A pallet-controlled shared pot of funds</li>
 <li>Absorbing imbalances from the runtime</li>
 </ul>
-<h2><a class="header" href="#instantiate-a-pot" id="instantiate-a-pot">Instantiate a Pot</a></h2>
+<h2 id="instantiate-a-pot"><a class="header" href="#instantiate-a-pot">Instantiate a Pot</a></h2>
 <p>Our charity needs an account to hold its funds. Unlike other accounts, it will not be controlled by
 a user's cryptographic key pair, but directly by the pallet. To instantiate such a pool of funds,
-import <a href="https://substrate.dev/rustdocs/v2.0.0/sp_runtime/struct.ModuleId.html"><code>ModuleId</code></a> and
-<a href="https://substrate.dev/rustdocs/v2.0.0/sp_runtime/traits/trait.AccountIdConversion.html"><code>AccountIdConversion</code></a>
-from <a href="https://substrate.dev/rustdocs/v2.0.0/sp_runtime/index.html"><code>sp-runtime</code></a>.</p>
+import <a href="https://substrate.dev/rustdocs/v3.0.0/sp_runtime/struct.ModuleId.html"><code>ModuleId</code></a> and
+<a href="https://substrate.dev/rustdocs/v3.0.0/sp_runtime/traits/trait.AccountIdConversion.html"><code>AccountIdConversion</code></a>
+from <a href="https://substrate.dev/rustdocs/v3.0.0/sp_runtime/index.html"><code>sp-runtime</code></a>.</p>
 <pre><code class="language-rust ignore">use sp-runtime::{ModuleId, traits::AccountIdConversion};
 </code></pre>
 <p>With these imports, a <code>PALLET_ID</code> constant can be generated as an identifier for the pool of funds.
@@ -192,7 +192,7 @@ point. (Well, that and Charity work is just so exciting!) This identifier can be
 <code>AccountId</code> with the <code>into_account()</code> method provided by the <code>AccountIdConversion</code> trait.</p>
 <pre><code class="language-rust ignore">const PALLET_ID: ModuleId = ModuleId(*b&quot;Charity!&quot;);
 
-impl&lt;T: Trait&gt; Module&lt;T&gt; {
+impl&lt;T: Config&gt; Module&lt;T&gt; {
 	/// The account ID that holds the Charity's funds
 	pub fn account_id() -&gt; T::AccountId {
 		PALLET_ID.into_account()
@@ -204,9 +204,9 @@ impl&lt;T: Trait&gt; Module&lt;T&gt; {
 	}
 }
 </code></pre>
-<h1><a class="header" href="#receiving-funds" id="receiving-funds">Receiving Funds</a></h1>
+<h1 id="receiving-funds"><a class="header" href="#receiving-funds">Receiving Funds</a></h1>
 <p>Our charity can receive funds in two different ways.</p>
-<h2><a class="header" href="#donations" id="donations">Donations</a></h2>
+<h2 id="donations"><a class="header" href="#donations">Donations</a></h2>
 <p>The first and perhaps more familiar way is through charitable donations. Donations can be made
 through a standard <code>donate</code> extrinsic which accepts the amount to be donated as a parameter.</p>
 <pre><code class="language-rust ignore">fn donate(
@@ -221,20 +221,20 @@ through a standard <code>donate</code> extrinsic which accepts the amount to be 
 		Ok(())
 }
 </code></pre>
-<h2><a class="header" href="#imbalances" id="imbalances">Imbalances</a></h2>
+<h2 id="imbalances"><a class="header" href="#imbalances">Imbalances</a></h2>
 <p>The second way the charity can receive funds is by absorbing imbalances created elsewhere in the
-runtime. An <a href="https://substrate.dev/rustdocs/v2.0.0/frame_support/traits/trait.Imbalance.html"><code>Imbalance</code></a> is
+runtime. An <a href="https://substrate.dev/rustdocs/v3.0.0/frame_support/traits/trait.Imbalance.html"><code>Imbalance</code></a> is
 created whenever tokens are burned, or minted. Because our charity wants to <em>collect</em> funds, we are
 specifically interested in
-<a href="https://substrate.dev/rustdocs/v2.0.0/pallet_balances/struct.NegativeImbalance.html"><code>NegativeImbalance</code></a>s.
+<a href="https://substrate.dev/rustdocs/v3.0.0/pallet_balances/struct.NegativeImbalance.html"><code>NegativeImbalance</code></a>s.
 Negative imbalances are created, for example, when a validator is slashed for violating consensus
 rules, transaction fees are collected, or another pallet burns funds as part of an
 incentive-alignment mechanism. To allow our pallet to absorb these imbalances, we implement the
-<a href="https://substrate.dev/rustdocs/v2.0.0/frame_support/traits/trait.OnUnbalanced.html"><code>OnUnbalanced</code> trait</a>.</p>
+<a href="https://substrate.dev/rustdocs/v3.0.0/frame_support/traits/trait.OnUnbalanced.html"><code>OnUnbalanced</code> trait</a>.</p>
 <pre><code class="language-rust ignore">use frame_support::traits::{OnUnbalanced, Imbalance};
-type NegativeImbalanceOf&lt;T&gt; = &lt;&lt;T as Trait&gt;::Currency as Currency&lt;&lt;T as system::Trait&gt;::AccountId&gt;&gt;::NegativeImbalance;
+type NegativeImbalanceOf&lt;T&gt; = &lt;&lt;T as Config&gt;::Currency as Currency&lt;&lt;T as frame_system::Config&gt;::AccountId&gt;&gt;::NegativeImbalance;
 
-impl&lt;T: Trait&gt; OnUnbalanced&lt;NegativeImbalanceOf&lt;T&gt;&gt; for Module&lt;T&gt; {
+impl&lt;T: Config&gt; OnUnbalanced&lt;NegativeImbalanceOf&lt;T&gt;&gt; for Module&lt;T&gt; {
 	fn on_nonzero_unbalanced(amount: NegativeImbalanceOf&lt;T&gt;) {
 		let numeric_amount = amount.peek();
 
@@ -245,12 +245,12 @@ impl&lt;T: Trait&gt; OnUnbalanced&lt;NegativeImbalanceOf&lt;T&gt;&gt; for Module
 	}
 }
 </code></pre>
-<h1><a class="header" href="#allocating-funds" id="allocating-funds">Allocating Funds</a></h1>
+<h1 id="allocating-funds"><a class="header" href="#allocating-funds">Allocating Funds</a></h1>
 <p>In order for the charity to affect change with the funds it has collected it must be able to
 allocate those funds. Our charity pallet abstracts the governance of where funds will be allocated
 to the rest of the runtime. Funds can be allocated by a root call to the <code>allocate</code> extrinsic. One
 good example of a governance mechanism for such decisions is Substrate's own
-<a href="https://substrate.dev/rustdocs/v2.0.0/pallet_democracy/index.html">Democracy pallet</a>.</p>
+<a href="https://substrate.dev/rustdocs/v3.0.0/pallet_democracy/index.html">Democracy pallet</a>.</p>
 
                     </main>
 

@@ -163,7 +163,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#currency-imbalances" id="currency-imbalances">Currency Imbalances</a></h1>
+                        <h1 id="currency-imbalances"><a class="header" href="#currency-imbalances">Currency Imbalances</a></h1>
 <p><code>pallets/currency-imbalances</code>
 <a target="_blank" href="https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fcurrency-imbalances%2Fsrc%2Flib.rs">
 <img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt ="Try on playground"/>
@@ -171,23 +171,23 @@
 <a target="_blank" href="https://github.com/substrate-developer-hub/recipes/blob/master/pallets/currency-imbalances/src/lib.rs">
 <img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt ="View on GitHub"/>
 </a></p>
-<p><a href="https://substrate.dev/rustdocs/v2.0.0/frame_support/traits/trait.Imbalance.html"><code>Imbalance</code></a>
+<p><a href="https://substrate.dev/rustdocs/v3.0.0/frame_support/traits/trait.Imbalance.html"><code>Imbalance</code></a>
 is used when tokens are burned or minted. In order to execute <code>imbalance</code> implement the
-<a href="https://substrate.dev/rustdocs/v2.0.0/frame_support/traits/trait.OnUnbalanced.html"><code>OnUnbalanced</code></a>trait.
+<a href="https://substrate.dev/rustdocs/v3.0.0/frame_support/traits/trait.OnUnbalanced.html"><code>OnUnbalanced</code></a>trait.
 In this pallet a specific amount of funds will be slashed from an account and award a specific
 amount of funds to said specific account.</p>
-<h2><a class="header" href="#slash-funds" id="slash-funds">Slash funds</a></h2>
+<h2 id="slash-funds"><a class="header" href="#slash-funds">Slash funds</a></h2>
 <pre><code class="language-rust ignore">pub fn slash_funds(origin, to_punish: T::AccountId, collateral: BalanceOf&lt;T&gt;) {
     let _ = ensure_signed(origin)?;
 
     let imbalance = T::Currency::slash_reserved(&amp;to_punish, collateral).0;
     T::Slash::on_unbalanced(imbalance);
 
-    let now = &lt;system::Module&lt;T&gt;&gt;::block_number();
+    let now = &lt;frame_system::Module&lt;T&gt;&gt;::block_number();
     Self::deposit_event(RawEvent::SlashFunds(to_punish, collateral, now));
 }
 </code></pre>
-<h2><a class="header" href="#reward-funds" id="reward-funds">Reward funds</a></h2>
+<h2 id="reward-funds"><a class="header" href="#reward-funds">Reward funds</a></h2>
 <pre><code class="language-rust ignore">pub fn reward_funds(origin, to_reward: T::AccountId, reward: BalanceOf&lt;T&gt;) {
 
     let _ = ensure_signed(origin)?;
@@ -198,7 +198,7 @@ amount of funds to said specific account.</p>
     total_imbalance.maybe_subsume(r);
     T::Reward::on_unbalanced(total_imbalance);
 
-    let now = &lt;system::Module&lt;T&gt;&gt;::block_number();
+    let now = &lt;frame_system::Module&lt;T&gt;&gt;::block_number();
     Self::deposit_event(RawEvent::RewardFunds(to_reward, reward, now));
 }
 </code></pre>

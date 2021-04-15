@@ -163,7 +163,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#fixed-point-arithmetic" id="fixed-point-arithmetic">Fixed Point Arithmetic</a></h1>
+                        <h1 id="fixed-point-arithmetic"><a class="header" href="#fixed-point-arithmetic">Fixed Point Arithmetic</a></h1>
 <p><code>pallets/fixed-point</code>
 <a target="_blank" href="https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Ffixed-point%2Fsrc%2Flib.rs">
 <img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt ="Try on playground"/>
@@ -189,7 +189,7 @@ fixed point numbers, and this recipe will introduce three of them. In particular
 <li>A manual fixed point implementation (and why it's nicer to use a library)</li>
 <li>A comparison of the two libraries in a compounding interest example</li>
 </ul>
-<h2><a class="header" href="#whats-wrong-with-floats" id="whats-wrong-with-floats">What's Wrong with Floats?</a></h2>
+<h2 id="whats-wrong-with-floats"><a class="header" href="#whats-wrong-with-floats">What's Wrong with Floats?</a></h2>
 <p>Floats are cool for all kinds of reasons, but they also have one important drawback. Floating point
 arithmetic is <strong>nondeterministic</strong> which means that different processors compute (slightly)
 different results for the same operation. Although there is an
@@ -197,7 +197,7 @@ different results for the same operation. Although there is an
 used, or even hardware. In order for the nodes in a blockchain network to reach agreement on the
 state of the chain, all operations must be completely deterministic. Luckily fixed point arithmetic
 is deterministic, and is often not much harder to use once you get the hang of it.</p>
-<h2><a class="header" href="#multiplicative-accumulators" id="multiplicative-accumulators">Multiplicative Accumulators</a></h2>
+<h2 id="multiplicative-accumulators"><a class="header" href="#multiplicative-accumulators">Multiplicative Accumulators</a></h2>
 <p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/fixed-point"><code>pallets/fixed-point</code></a></em></p>
 <p>The first pallet covered in this recipe contains three implementations of a multiplicative
 accumulator. That's a fancy way to say the pallet lets users submit fractional numbers and keeps
@@ -205,16 +205,16 @@ track of the product from multiplying them all together. The value starts out at
 <a href="https://en.wikipedia.org/wiki/Identity_element">multiplicative identity</a>), and it gets multiplied
 by whatever values the users submit. These three independent implementations compare and contrast
 the features of each.</p>
-<h3><a class="header" href="#permill-accumulator" id="permill-accumulator">Permill Accumulator</a></h3>
+<h3 id="permill-accumulator"><a class="header" href="#permill-accumulator">Permill Accumulator</a></h3>
 <p>We'll be using the most common approach which takes its fixed point implementation from Substrate
 itself. There are a few fixed-point structs available in Substrate, all of which implement the
-<a href="https://substrate.dev/rustdocs/v2.0.0/sp_arithmetic/trait.PerThing.html"><code>PerThing</code> trait</a>, that cover different
+<a href="https://substrate.dev/rustdocs/v3.0.0/sp_arithmetic/per_things/trait.PerThing.html"><code>PerThing</code> trait</a>, that cover different
 amounts of precision. For this accumulator example, we'll use the
-<a href="https://substrate.dev/rustdocs/v2.0.0/sp_arithmetic/struct.Permill.html"><code>PerMill</code> struct</a> which represents
+<a href="https://substrate.dev/rustdocs/v3.0.0/sp_arithmetic/per_things/struct.Permill.html"><code>PerMill</code> struct</a> which represents
 fractions as parts per million. There are also
-<a href="https://substrate.dev/rustdocs/v2.0.0/sp_arithmetic/struct.Perbill.html"><code>Perbill</code></a>,
-<a href="https://substrate.dev/rustdocs/v2.0.0/sp_arithmetic/struct.Percent.html"><code>PerCent</code></a>, and
-<a href="https://substrate.dev/rustdocs/v2.0.0/sp_arithmetic/struct.PerU16.html"><code>PerU16</code></a>, which all provide the same
+<a href="https://substrate.dev/rustdocs/v3.0.0/sp_arithmetic/per_things/struct.Perbill.html"><code>Perbill</code></a>,
+<a href="https://substrate.dev/rustdocs/v3.0.0/sp_arithmetic/per_things/struct.Percent.html"><code>PerCent</code></a>, and
+<a href="https://substrate.dev/rustdocs/v3.0.0/sp_arithmetic/per_things/struct.PerU16.html"><code>PerU16</code></a>, which all provide the same
 interface (because it comes from the trait). Substrate's fixed-point structs are somewhat unique
 because they represent <em>only</em> fractional parts of numbers. That means they can represent numbers
 between 0 and 1 inclusive, but <em>not</em> numbers with whole parts like 2.718 or 3.14.</p>
@@ -222,7 +222,7 @@ between 0 and 1 inclusive, but <em>not</em> numbers with whole parts like 2.718 
 trait provides a handy function for getting the identity value which we use to set the default
 storage value to <code>1</code>.</p>
 <pre><code class="language-rust ignore">decl_storage! {
-	trait Store for Module&lt;T: Trait&gt; as Example {
+	trait Store for Module&lt;T: Config&gt; as Example {
 		// --snip--
 
 		/// Permill accumulator, value starts at 1 (multiplicative identity)
@@ -255,7 +255,7 @@ that a Substrate runtime must never panic, and a developer must be extremely dil
 checking for and gracefully handling error conditions. Because <code>Permill</code> only holds values between 0
 and 1, we know that their product will always be in that same range. Thus it is impossible to
 overflow or saturate. So we can happily use <code>saturating_mul</code> and move on.</p>
-<h3><a class="header" href="#substrate-fixed-accumulator" id="substrate-fixed-accumulator">Substrate-fixed Accumulator</a></h3>
+<h3 id="substrate-fixed-accumulator"><a class="header" href="#substrate-fixed-accumulator">Substrate-fixed Accumulator</a></h3>
 <p><a href="https://github.com/encointer/substrate-fixed/">Substrate-fixed</a> takes a more traditional approach
 in that their types represent numbers with both whole <em>and</em> fractional parts. For this
 implementation, we'll use the <code>U16F16</code> type. This type contains an unsigned number (indicated by the
@@ -273,7 +273,7 @@ fixed-point arithmetic, like ours does, it is advisable to keep your data in sub
 implements the parity scale codec.</p>
 </blockquote>
 <pre><code class="language-rust ignore">decl_storage! {
-	trait Store for Module&lt;T: Trait&gt; as Example {
+	trait Store for Module&lt;T: Config&gt; as Example {
 		// --snip--
 
 		/// Substrate-fixed accumulator, value starts at 1 (multiplicative identity)
@@ -305,7 +305,7 @@ value.</p>
 handling here is straightforward, the important part is just that you remember to do it.</p>
 <p>This example has shown the fundamentals of substrate-fixed, but this library has much more to offer
 as we'll see in the compounding interest example.</p>
-<h3><a class="header" href="#manual-accumulator" id="manual-accumulator">Manual Accumulator</a></h3>
+<h3 id="manual-accumulator"><a class="header" href="#manual-accumulator">Manual Accumulator</a></h3>
 <p>In this final accumulator implementation, we manually track fixed point numbers using Rust's native
 <code>u32</code> as the underlying data type. This example is educational, but is only practical in the
 simplest scenarios. Generally you will have a <del>more fun</del> less error-prone time coding if you use
@@ -314,7 +314,7 @@ one of the previous two fixed-point types in your real-world applications.</p>
 integers, and we decide in advance to consider some of the place values fractional. It's just like
 saying we'll omit the decimal point when talking about money and all agree that &quot;1995&quot; actually
 <em>means</em> 19.95 €. This is exactly how Substrate's
-<a href="https://substrate.dev/rustdocs/v2.0.0/pallet_balances/index.html">Balances pallet</a> works, a tradition that's
+<a href="https://substrate.dev/rustdocs/v3.0.0/pallet_balances/index.html">Balances pallet</a> works, a tradition that's
 been in blockchain since Bitcoin. In our example we will treat 16 bits as integer values, and 16 as
 fractional, just as substrate-fixed's <code>U16F16</code> did.</p>
 <p>If you're rusty or unfamiliar with place values in the
@@ -330,7 +330,7 @@ Fixed interpretation of u32 place values
 </code></pre>
 <p>Although the concepts are straight-forward, you'll see that manually implementing operations like
 multiplication is quite error prone. Therefore, when writing your own blockchain applications, it is
-often best to use on of the provided libraries covered in the other two implementations of the
+often best to use one of the provided libraries covered in the other two implementations of the
 accumulator.</p>
 <p>As before, we begin by declaring the storage value. This time around it is just a simple u32. But
 the default value, <code>1 &lt;&lt; 16</code> looks quite funny. If you haven't encountered it before <code>&lt;&lt;</code> is Rust's
@@ -340,7 +340,7 @@ move it 16 bits to the left. This is because Rust interprets <code>1</code> as a
 the <code>1</code> in the far right place value. But because we're treating this <code>u32</code> specially, we need to
 shift that bit to the middle just left of the imaginary radix point.</p>
 <pre><code class="language-rust ignore">decl_storage! {
-	trait Store for Module&lt;T: Trait&gt; as Example {
+	trait Store for Module&lt;T: Config&gt; as Example {
 		// --snip--
 
 		/// Manual accumulator, value starts at 1 (multiplicative identity)
@@ -397,17 +397,17 @@ digits are in the product? Try that again with larger numbers like 98.76 and 99.
 00.11 and 00.22. Which of these products can be fit back into a 4-digit number like the ones we
 started with?</p>
 </blockquote>
-<h2><a class="header" href="#compounding-interest" id="compounding-interest">Compounding Interest</a></h2>
+<h2 id="compounding-interest"><a class="header" href="#compounding-interest">Compounding Interest</a></h2>
 <p><em><a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/compounding-interest"><code>pallets/compounding-interest</code></a></em></p>
 <p>Many financial agreements involve interest for loaned or borrowed money.
 <a href="https://en.wikipedia.org/wiki/Compound_interest">Compounding interest</a> is when new interest is paid
 on top of not only the original loan amount, the so-called &quot;principal&quot;, but also any interest that
 has been previously paid.</p>
-<h3><a class="header" href="#discrete-compounding" id="discrete-compounding">Discrete Compounding</a></h3>
+<h3 id="discrete-compounding"><a class="header" href="#discrete-compounding">Discrete Compounding</a></h3>
 <p>Our first example will look at discrete compounding interest. This is when interest is paid at a
 fixed interval. In our case, interest will be paid every ten blocks.</p>
 <p>For this implementation we've chosen to use Substrate's
-<a href="https://substrate.dev/rustdocs/v2.0.0/sp_arithmetic/struct.Percent.html"><code>Percent</code> type</a>. It works nearly the
+<a href="https://substrate.dev/rustdocs/v3.0.0/sp_arithmetic/per_things/struct.Percent.html"><code>Percent</code> type</a>. It works nearly the
 same as <code>Permill</code>, but it represents numbers as &quot;parts per hundred&quot; rather than &quot;parts per million&quot;.
 We could also have used Substrate-fixed for this implementation, but chose to save it for the next
 example.</p>
@@ -415,7 +415,7 @@ example.</p>
 fixed-point- and interest-related topics, this pallet does not actually interface with a <code>Currency</code>.
 Instead we just allow anyone to &quot;deposit&quot; or &quot;withdraw&quot; funds with no source or destination.</p>
 <pre><code class="language-rust ignore">decl_storage! {
-	trait Store for Module&lt;T: Trait&gt; as Example {
+	trait Store for Module&lt;T: Config&gt; as Example {
 		// --snip--
 
 		/// Balance for the discrete interest account
@@ -470,7 +470,7 @@ blocks, so the first thing we do is check whether this block is a multiple of te
 calculate the interest due by the formula <code>interest = principal * rate * time</code>. As the comments
 explain, there is some subtlety in the order of the multiplication. You can multiply <code>PerCent * u64</code>
 but not <code>u64 * PerCent</code>.</p>
-<h3><a class="header" href="#continuously-compounding" id="continuously-compounding">Continuously Compounding</a></h3>
+<h3 id="continuously-compounding"><a class="header" href="#continuously-compounding">Continuously Compounding</a></h3>
 <p>You can imagine increasing the frequency at which the interest is paid out. Increasing the frequency
 enough approaches
 <a href="https://en.wikipedia.org/wiki/Compound_interest#Continuous_compounding">continuously compounding interest</a>.
@@ -498,7 +498,7 @@ intend to handle negative balances, there is currently a limitation in the trans
 that requires using signed types.</p>
 <p>With the struct to represent the account's state defined, we can initialize the storage value.</p>
 <pre><code class="language-rust ignore">decl_storage! {
-	trait Store for Module&lt;T: Trait&gt; as Example {
+	trait Store for Module&lt;T: Config&gt; as Example {
 		// --snip--
 
 		/// Balance for the continuously compounded account
@@ -532,7 +532,7 @@ look up the old value and the deposit, update storage, and emit an event. The on
 is that it calls a helper function to get the account's previous value. This helper function
 calculates the value of the account considering all the interest that has accrued since the last
 time the account was touched. Let's take a closer look.</p>
-<pre><code class="language-rust ignore">fn value_of_continuous_account(now: &amp;&lt;T as system::Trait&gt;::BlockNumber) -&gt; I32F32 {
+<pre><code class="language-rust ignore">fn value_of_continuous_account(now: &amp;&lt;T as frame_system::Config&gt;::BlockNumber) -&gt; I32F32 {
 	// Get the old state of the accout
 	let ContinuousAccountData{
 		principal,

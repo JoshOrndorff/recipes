@@ -163,7 +163,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#ringbuffer-queue" id="ringbuffer-queue">Ringbuffer Queue</a></h1>
+                        <h1 id="ringbuffer-queue"><a class="header" href="#ringbuffer-queue">Ringbuffer Queue</a></h1>
 <p><code>pallets/ringbuffer-queue</code>
 <a target="_blank" href="https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fringbuffer-queue%2Fsrc%2Flib.rs">
 <img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt ="Try on playground"/>
@@ -186,7 +186,7 @@ persisted as a <code>StorageMap</code> and a <code>(start, end)</code> range in 
 file contains the <a href="#usage">usage</a> of the transient storage adapter while
 <a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/ringbuffer-queue/src/ringbuffer.rs"><code>ringbuffer-queue/src/ringbuffer.rs</code></a>
 contains the implementation.</p>
-<h2><a class="header" href="#defining-the-ringbuffer-trait-a-name--traita" id="defining-the-ringbuffer-trait-a-name--traita">Defining the RingBuffer Trait <a name = "trait"></a></a></h2>
+<h2 id="defining-the-ringbuffer-trait-a-name--traita"><a class="header" href="#defining-the-ringbuffer-trait-a-name--traita">Defining the RingBuffer Trait <a name = "trait"></a></a></h2>
 <p>First we define the queue interface we want to use:</p>
 <pre><code class="language-rust ignore">pub trait RingBufferTrait&lt;Item&gt;
 where
@@ -204,7 +204,7 @@ where
 </code></pre>
 <p>It defines the usual <code>push</code>, <code>pop</code> and <code>is_empty</code> functions we expect from a queue as well as a
 <code>commit</code> function that will be used to sync the changes made to the underlying storage.</p>
-<h2><a class="header" href="#specifying-the-ringbuffer-transient-a-name--transienta" id="specifying-the-ringbuffer-transient-a-name--transienta">Specifying the RingBuffer Transient <a name = "transient"></a></a></h2>
+<h2 id="specifying-the-ringbuffer-transient-a-name--transienta"><a class="header" href="#specifying-the-ringbuffer-transient-a-name--transienta">Specifying the RingBuffer Transient <a name = "transient"></a></a></h2>
 <p>Now we want to add an implementation of the trait. We will be storing the start and end of the
 ringbuffer separately from the actual items and will thus need to store these in our struct:</p>
 <pre><code class="language-rust ignore">pub struct RingBufferTransient&lt;Index&gt;
@@ -215,7 +215,7 @@ where
 	end: Index,
 }
 </code></pre>
-<h3><a class="header" href="#defining-the-storage-interface" id="defining-the-storage-interface">Defining the Storage Interface</a></h3>
+<h3 id="defining-the-storage-interface"><a class="header" href="#defining-the-storage-interface">Defining the Storage Interface</a></h3>
 <p>In order to access the underlying storage we will also need to include the bounds (we will call the
 type <code>B</code>) and the item storage (whose type will be <code>M</code>). In order to specify the constraints on the
 storage map (<code>M</code>) we will also need to specify the <code>Item</code> type. This results in the following struct
@@ -241,7 +241,7 @@ be different from the stored representation).</p>
 type constraints make sure that both items and indices can be stored in storage.</p>
 <p>We need the <a href="https://doc.rust-lang.org/std/marker/struct.PhantomData.html"><code>PhantomData</code></a> in order
 to &quot;hold on to&quot; the types during the lifetime of the transient object.</p>
-<h3><a class="header" href="#the-complete-type" id="the-complete-type">The Complete Type</a></h3>
+<h3 id="the-complete-type"><a class="header" href="#the-complete-type">The Complete Type</a></h3>
 <p>There are two more alterations we will make to our struct to make it work well:</p>
 <pre><code class="language-rust ignore">type DefaultIdx = u16;
 pub struct RingBufferTransient&lt;Item, B, M, Index = DefaultIdx&gt;
@@ -260,9 +260,9 @@ where
 ringbuffer per default. We also add the <code>WrappingOps</code> and <code>From&lt;u8&gt;</code> type bounds to enable the kind
 of operations we need in our implementation. More details in the <a href="#implementation">implementation</a>
 section, especially in the <a href="#wrapping_ops"><code>WrappingOps</code></a> subsection.</p>
-<h2><a class="header" href="#implementation-of-the-ringbuffer-a-name--implementationa" id="implementation-of-the-ringbuffer-a-name--implementationa">Implementation of the RingBuffer <a name = "implementation"></a></a></h2>
+<h2 id="implementation-of-the-ringbuffer-a-name--implementationa"><a class="header" href="#implementation-of-the-ringbuffer-a-name--implementationa">Implementation of the RingBuffer <a name = "implementation"></a></a></h2>
 <p>Now that we have the type definition for <code>RingBufferTransient</code> we need to write the implementation.</p>
-<h3><a class="header" href="#instantiating-the-transient" id="instantiating-the-transient">Instantiating the Transient</a></h3>
+<h3 id="instantiating-the-transient"><a class="header" href="#instantiating-the-transient">Instantiating the Transient</a></h3>
 <p>First we need to specify how to create a new instance by providing a <code>new</code> function:</p>
 <pre><code class="language-rust ignore">impl&lt;Item, B, M, Index&gt; RingBufferTransient&lt;Item, B, M, Index&gt;
 where // ... same where clause as the type, elided here
@@ -284,7 +284,7 @@ parameter. Feel free to add that function as an exercise.</p>
 <p><strong>Second Aside</strong>: This <code>B::get()</code> is one of the reasons for specifying the <code>Query</code> associated type
 on the <code>StorageValue</code> type constraint.</p>
 </blockquote>
-<h3><a class="header" href="#implementing-the-ringbuffertrait" id="implementing-the-ringbuffertrait">Implementing the <code>RingBufferTrait</code></a></h3>
+<h3 id="implementing-the-ringbuffertrait"><a class="header" href="#implementing-the-ringbuffertrait">Implementing the <code>RingBufferTrait</code></a></h3>
 <p>We will now implement the <code>RingBufferTrait</code>:</p>
 <pre><code class="language-rust ignore">impl&lt;Item, B, M, Index&gt; RingBufferTrait&lt;Item&gt; for RingBufferTransient&lt;Item, B, M, Index&gt;
 where // same as the struct definition
@@ -326,7 +326,7 @@ using the <code>wrapping_add</code> function. This way our ringbuffer will wrap 
 is empty, otherwise we would need to keep track of this state separately. We thus &quot;toss away&quot; the
 oldest item in the queue if a new item is pushed into a full queue by incrementing the start index.</p>
 <blockquote>
-<h5><a class="header" href="#note-the-wrappingops-trait-a-name--wrapping_opsa" id="note-the-wrappingops-trait-a-name--wrapping_opsa">Note: The <code>WrappingOps</code> Trait <a name = "wrapping_ops"></a></a></h5>
+<h5 id="note-the-wrappingops-trait-a-name--wrapping_opsa"><a class="header" href="#note-the-wrappingops-trait-a-name--wrapping_opsa">Note: The <code>WrappingOps</code> Trait <a name = "wrapping_ops"></a></a></h5>
 <p>The ringbuffer should be agnostic to the concrete <code>Index</code> type used. In order to decrement and
 increment the start and end index, though, any concrete type needs to implement <code>wrapping_add</code> and
 <code>wrapping_sub</code>. Because <code>std</code> does not provide such a trait, we need another way to require this
@@ -348,7 +348,7 @@ want to support (<code>u8</code>, <code>u16</code>, <code>u32</code> and <code>u
 we <code>take</code> the value at <code>self.start</code> from storage, i.e. the first value is removed from storage and
 passed to us. We then increment <code>self.start</code> to point to the new first item of the queue, again
 using the <code>wrapping_add</code> to get the ringbuffer behavior.</p>
-<h3><a class="header" href="#implementing-drop" id="implementing-drop">Implementing Drop</a></h3>
+<h3 id="implementing-drop"><a class="header" href="#implementing-drop">Implementing Drop</a></h3>
 <p>In order to make the usage more ergonomic and to avoid synchronization errors (where the storage map
 diverges from the bounds) we also implement the
 <a href="https://doc.rust-lang.org/std/ops/trait.Drop.html"><code>Drop</code> trait</a>:</p>
@@ -363,11 +363,11 @@ where // ... same where clause elided
 <p>On <code>drop</code>, we <code>commit</code> the bounds to storage. With this implementation of <code>Drop</code>, <code>commit</code> is called
 when our transient goes out of scope, making sure that the storage state is consistent for the next
 call to the using pallet.</p>
-<h2><a class="header" href="#typical-usage-a-name--usagea" id="typical-usage-a-name--usagea">Typical Usage <a name = "usage"></a></a></h2>
+<h2 id="typical-usage-a-name--usagea"><a class="header" href="#typical-usage-a-name--usagea">Typical Usage <a name = "usage"></a></a></h2>
 <p>The
 <a href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/ringbuffer-queue/src/lib.rs"><code>lib.rs</code></a>
 file of the pallet shows typical usage of the transient.</p>
-<pre><code class="language-rust ignore">impl&lt;T: Trait&gt; Module&lt;T&gt; {
+<pre><code class="language-rust ignore">impl&lt;T: Config&gt; Module&lt;T&gt; {
 	fn queue_transient() -&gt; Box&lt;dyn RingBufferTrait&lt;ValueStruct&gt;&gt; {
 		Box::new(RingBufferTransient::&lt;
 			ValueStruct,

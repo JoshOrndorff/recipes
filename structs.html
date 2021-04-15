@@ -163,7 +163,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#using-and-storing-structs" id="using-and-storing-structs">Using and Storing Structs</a></h1>
+                        <h1 id="using-and-storing-structs"><a class="header" href="#using-and-storing-structs">Using and Storing Structs</a></h1>
 <p><code>pallets/struct-storage</code>
 <a target="_blank" href="https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fstruct-storage%2Fsrc%2Flib.rs">
 <img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt ="Try on playground"/>
@@ -175,7 +175,7 @@
 multiple related values that make up a meaningful group. If you’re familiar with an object-oriented
 language, a <code>struct</code> is like an object’s data attributes (read more in
 <a href="https://doc.rust-lang.org/book/ch05-01-defining-structs.html">The Rust Book</a>).</p>
-<h2><a class="header" href="#defining-a-struct" id="defining-a-struct">Defining a Struct</a></h2>
+<h2 id="defining-a-struct"><a class="header" href="#defining-a-struct">Defining a Struct</a></h2>
 <p>To define a <em>simple</em> custom struct for the runtime, the following syntax may be used:</p>
 <pre><code class="language-rust ignore">#[derive(Encode, Decode, Default, Clone, PartialEq)]
 pub struct MyStruct {
@@ -192,7 +192,7 @@ storage, you will need to derive (or manually ipmlement) each of these traits.</
 <p>To use the <code>Encode</code> and <code>Decode</code> traits, it is necessary to import them.</p>
 <pre><code class="language-rust ignore">use frame_support::codec::{Encode, Decode};
 </code></pre>
-<h2><a class="header" href="#structs-with-generic-fields" id="structs-with-generic-fields">Structs with Generic Fields</a></h2>
+<h2 id="structs-with-generic-fields"><a class="header" href="#structs-with-generic-fields">Structs with Generic Fields</a></h2>
 <p>The simple struct shown earlier only uses Rust primitive types for its fields. In the common case
 where you want to store types that come from your pallet's configuration trait (or the configuration
 trait of another pallet in your runtime), you must use generic type parameters in your struct's
@@ -209,16 +209,16 @@ these types come from the system and balances pallets' configuration traits, we 
 generics when declaring the struct.</p>
 <p>It is often convenient to make a type alias that takes <code>T</code>, your pallet's configuration trait, as a
 single type parameter. Doing so simply saves you typing in the future.</p>
-<pre><code class="language-rust ignore">type InnerThingOf&lt;T&gt; = InnerThing&lt;&lt;T as system::Trait&gt;::Hash, &lt;T as balances::Trait&gt;::Balance&gt;;
+<pre><code class="language-rust ignore">type InnerThingOf&lt;T&gt; = InnerThing&lt;&lt;T as frame_system::Config&gt;::Hash, &lt;T as pallet_balances::Config&gt;::Balance&gt;;
 </code></pre>
-<h2><a class="header" href="#structs-in-storage" id="structs-in-storage">Structs in Storage</a></h2>
+<h2 id="structs-in-storage"><a class="header" href="#structs-in-storage">Structs in Storage</a></h2>
 <p>Using one of our structs as a storage item is not significantly different than using a primitive
 type. When using a generic struct, we must supply all of the generic type parameters. This snippet
 shows how to supply thos parameters when you have a type alias (like we do for <code>InnerThing</code>) as well
 as when you don't. Whether to include the type alias is a matter of style and taste, but it is
 generally preferred when the entire type exceeds the preferred line length.</p>
 <pre><code class="language-rust ignore">decl_storage! {
-	trait Store for Module&lt;T: Trait&gt; as NestedStructs {
+	trait Store for Module&lt;T: Config&gt; as NestedStructs {
 		InnerThingsByNumbers get(fn inner_things_by_numbers):
 			map hasher(blake2_128_concat) u32 =&gt; InnerThingOf&lt;T&gt;;
 		SuperThingsBySuperNumbers get(fn super_things_by_super_numbers):
@@ -239,7 +239,7 @@ generally preferred when the entire type exceeds the preferred line length.</p>
 	Ok(())
 }
 </code></pre>
-<h2><a class="header" href="#nested-structs" id="nested-structs">Nested Structs</a></h2>
+<h2 id="nested-structs"><a class="header" href="#nested-structs">Nested Structs</a></h2>
 <p>Structs can also contain other structs as their fields. We have demonstrated this with the type
 <code>SuperThing</code>. As you see, any generic types needed by the inner struct must also be supplied to the
 outer.</p>

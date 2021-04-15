@@ -163,7 +163,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#cache-multiple-calls" id="cache-multiple-calls">Cache Multiple Calls</a></h1>
+                        <h1 id="cache-multiple-calls"><a class="header" href="#cache-multiple-calls">Cache Multiple Calls</a></h1>
 <p><code>pallets/storage-cache</code>
 <a target="_blank" href="https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fstorage-cache%2Fsrc%2Flib.rs">
 <img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt ="Try on playground"/>
@@ -174,7 +174,7 @@
 <p>Calls to runtime storage have an associated cost and developers should strive to minimize the number
 of calls.</p>
 <pre><code class="language-rust ignore">decl_storage! {
-	trait Store for Module&lt;T: Trait&gt; as StorageCache {
+	trait Store for Module&lt;T: Config&gt; as StorageCache {
 		// copy type
 		SomeCopyValue get(fn some_copy_value): u32;
 
@@ -184,7 +184,7 @@ of calls.</p>
 	}
 }
 </code></pre>
-<h2><a class="header" href="#copy-types" id="copy-types">Copy Types</a></h2>
+<h2 id="copy-types"><a class="header" href="#copy-types">Copy Types</a></h2>
 <p>For <a href="https://doc.rust-lang.org/std/marker/trait.Copy.html"><code>Copy</code></a> types, it is easy to reuse
 previous storage calls by simply reusing the value, which is automatically cloned upon reuse. In the
 code below, the second call is unnecessary:</p>
@@ -197,7 +197,7 @@ code below, the second call is unnecessary:</p>
 	// should've just used `original_call` here because u32 is copy
 	let another_calculation = some_calculation.checked_add(unnecessary_call).ok_or(&quot;addition overflowed2&quot;)?;
 	&lt;SomeCopyValue&gt;::put(another_calculation);
-	let now = &lt;system::Module&lt;T&gt;&gt;::block_number();
+	let now = &lt;frame_system::Module&lt;T&gt;&gt;::block_number();
 	Self::deposit_event(RawEvent::InefficientValueChange(another_calculation, now));
 	Ok(())
 }
@@ -212,12 +212,12 @@ code without the unnecessary second call to storage:</p>
 	// uses the original_call because u32 is copy
 	let another_calculation = some_calculation.checked_add(original_call).ok_or(&quot;addition overflowed2&quot;)?;
 	&lt;SomeCopyValue&gt;::put(another_calculation);
-	let now = &lt;system::Module&lt;T&gt;&gt;::block_number();
+	let now = &lt;frame_system::Module&lt;T&gt;&gt;::block_number();
 	Self::deposit_event(RawEvent::BetterValueChange(another_calculation, now));
 	Ok(())
 }
 </code></pre>
-<h2><a class="header" href="#clone-types" id="clone-types">Clone Types</a></h2>
+<h2 id="clone-types"><a class="header" href="#clone-types">Clone Types</a></h2>
 <p>If the type was not <code>Copy</code>, but was <a href="https://doc.rust-lang.org/std/clone/trait.Clone.html"><code>Clone</code></a>,
 then it is still better to clone the value in the method than to make another call to runtime
 storage.</p>
@@ -248,12 +248,12 @@ call for <code>existing_key</code>:</p>
 }
 </code></pre>
 <p>If the <code>existing_key</code> is used without a <code>clone</code> in the event emission instead of <code>old_king</code>, then
-the compiler returns the following error</p>
+the compiler returns the following error:</p>
 <pre><code class="language-bash">error[E0382]: use of moved value: `existing_king`
   --&gt; src/lib.rs:93:63
    |
 80 |             let existing_king = &lt;KingMember&lt;T&gt;&gt;::get();
-   |                 ------------- move occurs because `existing_king` has type `&lt;T as frame_system::Trait&gt;::AccountId`, which does not implement the `Copy` trait
+   |                 ------------- move occurs because `existing_king` has type `&lt;T as frame_system::Config&gt;::AccountId`, which does not implement the `Copy` trait
 ...
 85 |             ensure!(!Self::is_member(existing_king), &quot;is a member so maintains priority&quot;);
    |                                      ------------- value moved here

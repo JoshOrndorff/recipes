@@ -163,7 +163,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#local-storage-in-off-chain-workers" id="local-storage-in-off-chain-workers">Local Storage in Off-chain Workers</a></h1>
+                        <h1 id="local-storage-in-off-chain-workers"><a class="header" href="#local-storage-in-off-chain-workers">Local Storage in Off-chain Workers</a></h1>
 <p><code>pallets/ocw-demo</code>
 <a target="_blank" href="https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%ocw-demo%2Fsrc%2Flib.rs">
 <img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt ="Try on playground"/>
@@ -188,7 +188,7 @@ value had been updated by another thread in the meantime, the write would fail.<
 <p>In this recipe, we will add a cache and lock over our previous
 <a href="./http-json.html">http fetching example</a>. If the cached value existed, we will return using the
 cached value. Otherwise we acquire the lock, fetch from github public API, and save it to the cache.</p>
-<h2><a class="header" href="#setup" id="setup">Setup</a></h2>
+<h2 id="setup"><a class="header" href="#setup">Setup</a></h2>
 <p>In the <code>fetch_if_needed()</code> function, we first define a storage reference used by the off-chain
 worker.</p>
 <pre><pre class="playground"><code class="language-rust">
@@ -205,7 +205,7 @@ worker.</p>
 </span></code></pre></pre>
 <p>We pass in a key as our storage key. As storage keys are namespaced globally, a good practice
 would be to prepend our pallet name in front of our storage key.</p>
-<h2><a class="header" href="#access" id="access">Access</a></h2>
+<h2 id="access"><a class="header" href="#access">Access</a></h2>
 <p>Once we have the storage reference, we can access the storage via <code>get</code>, <code>set</code>, and <code>mutate</code>. Let's
 demonstrate the <code>mutate</code> function as the usage of the remaining two functions are pretty
 self-explanatory.</p>
@@ -232,7 +232,7 @@ self-explanatory.</p>
 	//...
 	// off-chain storage can be accessed by off-chain workers from multiple runs, so we want to lock
 	//   it before doing heavy computations and write operations.
-	// ref: https://substrate.dev/rustdocs/v2.0.0-rc3/sp_runtime/offchain/storage_lock/index.html
+	// ref: https://substrate.dev/rustdocs/v3.0.0-rc3/sp_runtime/offchain/storage_lock/index.html
 	//
 	// There are four ways of defining a lock:
 	//   1) `new` - lock with default time and block exipration
@@ -248,7 +248,7 @@ self-explanatory.</p>
 
 	// We try to acquire the lock here. If failed, we know the fetching logic inside is being
 	//   executed by previous run of ocw, so the function just returns.
-	// ref: https://substrate.dev/rustdocs/v2.0.0-rc3/sp_runtime/offchain/storage_lock/struct.StorageLock.html#method.try_lock
+	// ref: https://substrate.dev/rustdocs/v3.0.0-rc3/sp_runtime/offchain/storage_lock/struct.StorageLock.html#method.try_lock
 	if let Ok(_guard) = lock.try_lock() {
 		// fetching logic here ...
 	}
@@ -275,9 +275,9 @@ self-explanatory.</p>
 <span class="boring">}
 </span></code></pre></pre>
 <p>Finally when the <code>_guard</code> variable goes out of scope, the lock is released.</p>
-<h2><a class="header" href="#reference" id="reference">Reference</a></h2>
+<h2 id="reference"><a class="header" href="#reference">Reference</a></h2>
 <ul>
-<li><a href="https://substrate.dev/rustdocs/v2.0.0/sp_runtime/offchain/storage/struct.StorageValueRef.html"><code>StorageValueRef</code> API doc</a></li>
+<li><a href="https://substrate.dev/rustdocs/v3.0.0/sp_runtime/offchain/storage/struct.StorageValueRef.html"><code>StorageValueRef</code> API doc</a></li>
 <li><a href="https://github.com/paritytech/substrate/tree/master/frame/example-offchain-worker"><code>example-offchain-worker</code> pallet in Substrate repo</a></li>
 </ul>
 

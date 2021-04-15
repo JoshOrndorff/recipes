@@ -163,7 +163,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#instantiable-pallets" id="instantiable-pallets">Instantiable Pallets</a></h1>
+                        <h1 id="instantiable-pallets"><a class="header" href="#instantiable-pallets">Instantiable Pallets</a></h1>
 <p><code>pallets/last-caller</code>
 <a target="_blank" href="https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Flast-caller%2Fsrc%2Flib.rs">
 <img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt ="Try on playground"/>
@@ -194,85 +194,85 @@ Council and Technical Committee. Each collective has its own storage, events, an
 <pre><code class="language-rust ignore">Council: collective::&lt;Instance1&gt;::{Module, Call, Storage, Origin&lt;T&gt;, Event&lt;T&gt;, Config&lt;T&gt;},
 TechnicalCommittee: collective::&lt;Instance2&gt;::{Module, Call, Storage, Origin&lt;T&gt;, Event&lt;T&gt;, Config&lt;T&gt;}
 </code></pre>
-<h2><a class="header" href="#writing-an-instantiable-pallet" id="writing-an-instantiable-pallet">Writing an Instantiable Pallet</a></h2>
+<h2 id="writing-an-instantiable-pallet"><a class="header" href="#writing-an-instantiable-pallet">Writing an Instantiable Pallet</a></h2>
 <p>Writing an instantiable pallet is almost entirely the same process as writing a plain
 non-instantiable pallet. There are just a few places where the syntax differs.</p>
 <blockquote>
 <p>You must call <code>decl_storage!</code></p>
 <p>Instantiable pallets <em>must</em> call the <code>decl_storage!</code> macro so that the <code>Instance</code> type is created.</p>
 </blockquote>
-<h3><a class="header" href="#configuration-trait" id="configuration-trait">Configuration Trait</a></h3>
-<pre><code class="language-rust ignore">pub trait Trait&lt;I: Instance&gt;: system::Trait {
+<h3 id="configuration-trait"><a class="header" href="#configuration-trait">Configuration Trait</a></h3>
+<pre><code class="language-rust ignore">pub trait Config&lt;I: Instance&gt;: frame_system::Config {
 	/// The overarching event type.
-	type Event: From&lt;Event&lt;Self, I&gt;&gt; + Into&lt;&lt;Self as system::Trait&gt;::Event&gt;;
+	type Event: From&lt;Event&lt;Self, I&gt;&gt; + Into&lt;&lt;Self as frame_system::Config&gt;::Event&gt;;
 }
 </code></pre>
-<h3><a class="header" href="#storage-declaration" id="storage-declaration">Storage Declaration</a></h3>
+<h3 id="storage-declaration"><a class="header" href="#storage-declaration">Storage Declaration</a></h3>
 <pre><code class="language-rust ignore">decl_storage! {
-	trait Store for Module&lt;T: Trait&lt;I&gt;, I: Instance&gt; as TemplatePallet {
+	trait Store for Module&lt;T: Config&lt;I&gt;, I: Instance&gt; as TemplatePallet {
 		...
 	}
 }
 </code></pre>
-<h3><a class="header" href="#declaring-the-module-struct" id="declaring-the-module-struct">Declaring the <code>Module</code> Struct</a></h3>
+<h3 id="declaring-the-module-struct"><a class="header" href="#declaring-the-module-struct">Declaring the <code>Module</code> Struct</a></h3>
 <pre><code class="language-rust ignore">decl_module! {
 	/// The module declaration.
-	pub struct Module&lt;T: Trait&lt;I&gt;, I: Instance&gt; for enum Call where origin: T::Origin {
+	pub struct Module&lt;T: Config&lt;I&gt;, I: Instance&gt; for enum Call where origin: T::Origin {
 		...
 	}
 }
 </code></pre>
-<h3><a class="header" href="#accessing-storage" id="accessing-storage">Accessing Storage</a></h3>
+<h3 id="accessing-storage"><a class="header" href="#accessing-storage">Accessing Storage</a></h3>
 <pre><code class="language-rust ignore">&lt;Something&lt;T, I&gt;&gt;::put(something);
 </code></pre>
 <p>If the storage item does not use any types specified in the configuration trait, the T is omitted,
 as always.</p>
 <pre><code class="language-rust ignore">&lt;Something&lt;I&gt;&gt;::put(something);
 </code></pre>
-<h3><a class="header" href="#event-initialization" id="event-initialization">Event initialization</a></h3>
+<h3 id="event-initialization"><a class="header" href="#event-initialization">Event initialization</a></h3>
 <pre><code class="language-rust ignore">fn deposit_event() = default;
 </code></pre>
-<h3><a class="header" href="#event-declaration" id="event-declaration">Event Declaration</a></h3>
+<h3 id="event-declaration"><a class="header" href="#event-declaration">Event Declaration</a></h3>
 <pre><code class="language-rust ignore">decl_event!(
-	pub enum Event&lt;T, I&gt; where AccountId = &lt;T as system::Trait&gt;::AccountId {
+	pub enum Event&lt;T, I&gt; where AccountId = &lt;T as frame_system::Config&gt;::AccountId {
 		...
 	}
 }
 </code></pre>
-<h2><a class="header" href="#installing-a-pallet-instance-in-a-runtime" id="installing-a-pallet-instance-in-a-runtime">Installing a Pallet Instance in a Runtime</a></h2>
+<h2 id="installing-a-pallet-instance-in-a-runtime"><a class="header" href="#installing-a-pallet-instance-in-a-runtime">Installing a Pallet Instance in a Runtime</a></h2>
 <p>The syntax for including an instance of an instantiable pallet in a runtime is slightly different
 than for a regular pallet. The only exception is for pallets that use the
 <a href="#default-instance">Default Instance</a> feature described below.</p>
-<h3><a class="header" href="#implementing-configuration-traits" id="implementing-configuration-traits">Implementing Configuration Traits</a></h3>
+<h3 id="implementing-configuration-traits"><a class="header" href="#implementing-configuration-traits">Implementing Configuration Traits</a></h3>
 <p>Each instance needs to be configured separately. Configuration consists of implementing the specific
 instance's trait. The following snippet shows a configuration for <code>Instance1</code>.</p>
-<pre><code class="language-rust ignore">impl template::Trait&lt;template::Instance1&gt; for Runtime {
+<pre><code class="language-rust ignore">impl template::Config&lt;template::Instance1&gt; for Runtime {
 	type Event = Event;
 }
 </code></pre>
-<h3><a class="header" href="#using-the-construct_runtime-macro" id="using-the-construct_runtime-macro">Using the <code>construct_runtime!</code> Macro</a></h3>
+<h3 id="using-the-construct_runtime-macro"><a class="header" href="#using-the-construct_runtime-macro">Using the <code>construct_runtime!</code> Macro</a></h3>
 <p>The final step of installing the pallet instance in your runtime is updating the
 <code>construct_runtime!</code> macro. You may give each instance a meaningful name. Here I've called
 <code>Instance1</code> <code>FirstTemplate</code>.</p>
 <pre><code class="language-rust ignore">FirstTemplate: template::&lt;Instance1&gt;::{Module, Call, Storage, Event&lt;T&gt;, Config},
 </code></pre>
-<h2><a class="header" href="#default-instance-a-namedefault-instancea" id="default-instance-a-namedefault-instancea">Default Instance <a name="default-instance"></a></a></h2>
+<h2 id="default-instance-a-namedefault-instancea"><a class="header" href="#default-instance-a-namedefault-instancea">Default Instance <a name="default-instance"></a></a></h2>
 <p>One drawback of instantiable pallets, as we've presented them so far, is that they require the
 runtime designer to use the more elaborate syntax even if they only desire a single instance of the
 pallet. To alleviate this inconvenience, Substrate provides a feature known as DefaultInstance. This
 allows runtime developers to deploy an instantiable pallet exactly as they would if it were not
 instantiable provided they <strong>only use a single instance</strong>.</p>
 <p>To make your instantiable pallet support DefaultInstance, you must specify it in four places.</p>
-<pre><code class="language-rust ignore">pub trait Trait&lt;I=DefaultInstance&gt;: system::Trait {
+<pre><code class="language-rust ignore">pub trait Config&lt;I=DefaultInstance&gt;: frame_system::Config {
 </code></pre>
 <pre><code class="language-rust ignore">decl_storage! {
-	trait Store for Module&lt;T: Trait&lt;I&gt;, I: Instance=DefaultInstance&gt; as TemplateModule {
+	trait Store for Module&lt;T: Config&lt;I&gt;, I: Instance=DefaultInstance&gt; as TemplateModule {
 		...
 	}
 }
 </code></pre>
 <pre><code class="language-rust ignore">decl_module! {
-	pub struct Module&lt;T: Trait&lt;I&gt;, I: Instance = DefaultInstance&gt; for enum Call where origin: T::Origin {
+	pub struct Module&lt;T: Config&lt;I&gt;, I: Instance = DefaultInstance&gt; for enum Call where origin: T::Origin {
 		...
 	}
 }
@@ -285,7 +285,7 @@ instantiable provided they <strong>only use a single instance</strong>.</p>
 </code></pre>
 <p>Having made these changes, a developer who uses your pallet doesn't need to know or care that your
 pallet is instantable. They can deploy it just as they would any other pallet.</p>
-<h2><a class="header" href="#genesis-configuration" id="genesis-configuration">Genesis Configuration</a></h2>
+<h2 id="genesis-configuration"><a class="header" href="#genesis-configuration">Genesis Configuration</a></h2>
 <p>Some pallets require a genesis configuration to be specified. Let's look to the default Substrate
 node's use of the Collective pallet as an example.</p>
 <p>In its <code>chain_spec.rs</code> file we see</p>

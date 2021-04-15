@@ -163,7 +163,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#storage-maps" id="storage-maps">Storage Maps</a></h1>
+                        <h1 id="storage-maps"><a class="header" href="#storage-maps">Storage Maps</a></h1>
 <p><code>pallets/simple-map</code>
 <a target="_blank" href="https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fsimple-map%2Fsrc%2Flib.rs">
 <img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt ="Try on playground"/>
@@ -174,10 +174,10 @@
 <p>In this recipe, we will see how
 to store a mapping from keys to values, similar to Rust's own
 <a href="https://doc.rust-lang.org/std/collections/struct.HashMap.html"><code>HashMap</code></a>.</p>
-<h2><a class="header" href="#declaring-a-storagemap" id="declaring-a-storagemap">Declaring a <code>StorageMap</code></a></h2>
-<p>We declare a single storage map with the following syntax.</p>
+<h2 id="declaring-a-storagemap"><a class="header" href="#declaring-a-storagemap">Declaring a <code>StorageMap</code></a></h2>
+<p>We declare a single storage map with the following syntax:</p>
 <pre><code class="language-rust ignore">decl_storage! {
-	trait Store for Module&lt;T: Trait&gt; as SimpleMap {
+	trait Store for Module&lt;T: Config&gt; as SimpleMap {
 		SimpleMap get(fn simple_map): map hasher(blake2_128_concat) T::AccountId =&gt; u32;
 	}
 }
@@ -189,38 +189,38 @@ have:</p>
 <li><code>get(fn simple_map)</code> - the name of a getter function that will return values from the map.</li>
 <li><code>: map hasher(blake2_128_concat)</code> - beginning of the type declaration. This is a map and it will
 use the
-<a href="https://substrate.dev/rustdocs/v2.0.0/frame_support/trait.Hashable.html#tymethod.blake2_128_concat"><code>blake2_128_concat</code></a>
+<a href="https://substrate.dev/rustdocs/v3.0.0/frame_support/trait.Hashable.html#tymethod.blake2_128_concat"><code>blake2_128_concat</code></a>
 hasher. More on this below.</li>
 <li><code>T::AccountId =&gt; u32</code> - The specific key and value type of the map. This is a map from
 <code>AccountId</code>s to <code>u32</code>s.</li>
 </ul>
-<h2><a class="header" href="#choosing-a-hasher" id="choosing-a-hasher">Choosing a Hasher</a></h2>
+<h2 id="choosing-a-hasher"><a class="header" href="#choosing-a-hasher">Choosing a Hasher</a></h2>
 <p>Although the syntax above is complex, most of it should be straightforward if you've understood the
 recipe on storage values. The last unfamiliar piece of writing a storage map is choosing which
 hasher to use. In general you should choose one of the three following hashers. The choice of hasher
 will affect the performance and security of your chain. If you don't want to think much about this,
 just choose <code>blake2_128_concat</code> and skip to the next section.</p>
-<h3><a class="header" href="#blake2_128_concat" id="blake2_128_concat"><code>blake2_128_concat</code></a></h3>
+<h3 id="blake2_128_concat"><a class="header" href="#blake2_128_concat"><code>blake2_128_concat</code></a></h3>
 <p>This is a cryptographically secure hash function, and is always safe to use. It is reasonably
 efficient, and will keep your storage tree balanced. You <em>must</em> choose this hasher if users of your
 chain have the ability to affect the storage keys. In this pallet, the keys are <code>AccountId</code>s. At
 first it may <em>seem</em> that the user doesn't affect the <code>AccountId</code>, but in reality a malicious user
 can generate thousands of accounts and use the one that will affect the chain's storage tree in the
 way the attacker likes. For this reason, we have chosen to use the <code>blake2_128_concat</code> hasher.</p>
-<h3><a class="header" href="#twox_64_concat" id="twox_64_concat"><code>twox_64_concat</code></a></h3>
+<h3 id="twox_64_concat"><a class="header" href="#twox_64_concat"><code>twox_64_concat</code></a></h3>
 <p>This hasher is <em>not</em> cryptographically secure, but is more efficient than blake2. Thus it represents
 trading security for performance. You should <em>not</em> use this hasher if chain users can affect the
 storage keys. However, it is perfectly safe to use this hasher to gain performance in scenarios
 where the users do not control the keys. For example, if the keys in your map are sequentially
 increasing indices and users cannot cause the indices to rapidly increase, then this is a perfectly
 reasonable choice.</p>
-<h3><a class="header" href="#identity" id="identity"><code>identity</code></a></h3>
+<h3 id="identity"><a class="header" href="#identity"><code>identity</code></a></h3>
 <p>The <code>identity</code> &quot;hasher&quot; is really not a hasher at all, but merely an
 <a href="https://en.wikipedia.org/wiki/Identity_function">identity function</a> that returns the same value it
 receives. This hasher is only an option when the key type in your storage map is <em>already</em> a hash,
 and is not controllable by the user. If you're in doubt whether the user can influence the key just
 use blake2.</p>
-<h2><a class="header" href="#the-storage-map-api" id="the-storage-map-api">The Storage Map API</a></h2>
+<h2 id="the-storage-map-api"><a class="header" href="#the-storage-map-api">The Storage Map API</a></h2>
 <p>This pallet demonstrated some of the most common methods available in a storage map including
 <code>insert</code>, <code>get</code>, <code>take</code>, and <code>contains_key</code>.</p>
 <pre><code class="language-rust ignore">// Insert
@@ -236,7 +236,7 @@ let entry = &lt;SimpleMap&lt;T&gt;&gt;::take(&amp;user);
 &lt;SimpleMap&lt;T&gt;&gt;::contains_key(&amp;user)
 </code></pre>
 <p>The rest of the API is documented in the rustdocs on the
-<a href="https://substrate.dev/rustdocs/v2.0.0/frame_support/storage/trait.StorageMap.html"><code>StorageMap</code> trait</a>. You do
+<a href="https://substrate.dev/rustdocs/v3.0.0/frame_support/storage/trait.StorageMap.html"><code>StorageMap</code> trait</a>. You do
 not need to explicitly <code>use</code> this trait because the <code>decl_storage!</code> macro will do it for you if you
 use a storage map.</p>
 

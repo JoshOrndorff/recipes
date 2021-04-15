@@ -163,7 +163,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#hybrid-consensus" id="hybrid-consensus">Hybrid Consensus</a></h1>
+                        <h1 id="hybrid-consensus"><a class="header" href="#hybrid-consensus">Hybrid Consensus</a></h1>
 <p><code>nodes/hybrid-consensus</code>
 <a target="_blank" href="https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fnodes%2Fhybrid-consensus%2Fsrc%2Fservice.rs">
 <img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt ="Try on playground"/>
@@ -173,14 +173,14 @@
 </a></p>
 <p>This recipe demonstrates a Substrate-based node that employs hybrid consensus. Specifically, it uses
 <a href="./sha3-pow-consensus.html">Sha3 Proof of Work</a> to dictate block authoring, and the
-<a href="https://substrate.dev/rustdocs/v2.0.0/sc_finality_grandpa/index.html">Grandpa</a> finality gadget to provide
+<a href="https://substrate.dev/rustdocs/v3.0.0/sc_finality_grandpa/index.html">Grandpa</a> finality gadget to provide
 <a href="https://substrate.dev/docs/en/knowledgebase/advanced/consensus#finality">deterministic finality</a>. The minimal proof
 of work consensus lives entirely outside of the runtime while the grandpa finality obtains its
 authorities from the runtime via the
-<a href="https://substrate.dev/rustdocs/v2.0.0/sp_finality_grandpa/trait.GrandpaApi.html">GrandpaAPI</a>. Understanding this
+<a href="https://substrate.dev/rustdocs/v3.0.0/sp_finality_grandpa/trait.GrandpaApi.html">GrandpaAPI</a>. Understanding this
 recipe requires familiarity with Substrate's
 <a href="https://substrate.dev/docs/en/knowledgebase/advanced/block-import">block import pipeline</a>.</p>
-<h2><a class="header" href="#the-block-import-pipeline" id="the-block-import-pipeline">The Block Import Pipeline</a></h2>
+<h2 id="the-block-import-pipeline"><a class="header" href="#the-block-import-pipeline">The Block Import Pipeline</a></h2>
 <p>Substrate's block import pipeline is structured like an onion in the sense that it is layered. A
 Substrate node can compose pieces of block import logic by wrapping block imports in other block
 imports. In this node we need to ensure that blocks are valid according to both Pow <em>and</em> grandpa.
@@ -205,17 +205,17 @@ is the outer-most layer of the block import onion and it wraps the grandpa block
 	client.clone(),
 	sha3pow::MinimalSha3Algorithm,
 	0, // check inherents starting at block 0
-	Some(select_chain.clone()),
+	select_chain.clone(),
 	inherent_data_providers.clone(),
+	can_author_with,
 );
 </code></pre>
-<h2><a class="header" href="#the-import-queue" id="the-import-queue">The Import Queue</a></h2>
+<h2 id="the-import-queue"><a class="header" href="#the-import-queue">The Import Queue</a></h2>
 <p>With the block imports setup, we can proceed to creating the import queue. We make it using PoW's
-<code>import_queue</code> helper function. Notice that it requires the entire block import pipeline which we
+<a href="https://substrate.dev/rustdocs/v3.0.0/sc_consensus_pow/fn.import_queue.html"><code>import_queue</code> helper function</a>. Notice that it requires the entire block import pipeline which we
 refer to as <code>pow_block_import</code> because PoW is the outermost layer.</p>
 <pre><code class="language-rust ignore">let import_queue = sc_consensus_pow::import_queue(
 	Box::new(pow_block_import.clone()),
-	None,
 	None,
 	sha3pow::MinimalSha3Algorithm,
 	inherent_data_providers.clone(),
@@ -223,56 +223,49 @@ refer to as <code>pow_block_import</code> because PoW is the outermost layer.</p
 	config.prometheus_registry(),
 )?;
 </code></pre>
-<h2><a class="header" href="#the-finality-proof-provider" id="the-finality-proof-provider">The Finality Proof Provider</a></h2>
-<p>Occasionally in the operation of a blockchain, other nodes will contact our node asking for proof
-that a particular block is finalized. To respond to these requests, we include a finality proof
-provider.</p>
-<pre><code class="language-rust ignore">let provider = client.clone() as Arc&lt;dyn StorageAndProofProvider&lt;_, _&gt;&gt;;
-let finality_proof_provider =
-	Arc::new(GrandpaFinalityProofProvider::new(backend.clone(), provider));
-</code></pre>
-<h2><a class="header" href="#spawning-the-pow-authorship-task" id="spawning-the-pow-authorship-task">Spawning the PoW Authorship Task</a></h2>
+<h2 id="spawning-the-pow-authorship-task"><a class="header" href="#spawning-the-pow-authorship-task">Spawning the PoW Authorship Task</a></h2>
 <p>Any node that is acting as an authority, typically called &quot;miners&quot; in the PoW context, must run a
-mining task in another thread.</p>
-<pre><code class="language-rust ignore">sc_consensus_pow::start_mine(
-	Box::new(block_import),
-	client.clone(),
+mining worker that is spawned by the task manager.</p>
+<pre><code class="language-rust ignore">let (_worker, worker_task) = sc_consensus_pow::start_mining_worker(
+	Box::new(pow_block_import),
+	client,
+	select_chain,
 	MinimalSha3Algorithm,
 	proposer,
-	None, // TODO Do I need some grandpa preruntime digests?
-	rounds,
 	network.clone(),
-	std::time::Duration::new(2, 0),
-	Some(select_chain),
-	inherent_data_providers.clone(),
+	None,
+	inherent_data_providers,
+	// time to wait for a new block before starting to mine a new one
+	Duration::from_secs(10),
+	// how long to take to actually build the block (i.e. executing extrinsics)
+	Duration::from_secs(10),
 	can_author_with,
 );
+
+task_manager
+	.spawn_essential_handle()
+	.spawn_blocking(&quot;pow&quot;, worker_task);
 </code></pre>
-<p>The use of a separate thread for block authorship is unlike other Substrate-based authorship tasks
-which are typically run as <code>async</code> futures. Because mining is a CPU intensive process, it is
-necessary to provide a separate thread or else the mining task would run continually and other tasks
-such as transaction processing, gossiping, and peer discovery would be starved for CPU.</p>
-<h2><a class="header" href="#spawning-the-grandpa-task" id="spawning-the-grandpa-task">Spawning the Grandpa Task</a></h2>
+<h2 id="spawning-the-grandpa-task"><a class="header" href="#spawning-the-grandpa-task">Spawning the Grandpa Task</a></h2>
 <p>Grandpa is <em>not</em> CPU intensive, so we will use a standard <code>async</code> worker to listen to and cast
 grandpa votes. We begin by creating a grandpa
-<a href="https://substrate.dev/rustdocs/v2.0.0/sc_finality_grandpa/struct.Config.html"><code>Config</code></a>.</p>
+<a href="https://substrate.dev/rustdocs/v3.0.0/sc_finality_grandpa/struct.Config.html"><code>Config</code></a>.</p>
 <pre><code class="language-rust ignore">let grandpa_config = sc_finality_grandpa::Config {
 	gossip_duration: Duration::from_millis(333),
 	justification_period: 512,
-	name: Some(name),
+	name: None,
 	observer_enabled: false,
-	keystore,
-	is_authority: is_network_authority,
+	keystore: Some(keystore_container.sync_keystore()),
+	is_authority,
 };
 </code></pre>
 <p>We can then use this config to create an instance of
-<a href="https://substrate.dev/rustdocs/v2.0.0/sc_finality_grandpa/struct.GrandpaParams.html"><code>GrandpaParams</code></a>.</p>
+<a href="https://substrate.dev/rustdocs/v3.0.0/sc_finality_grandpa/struct.GrandpaParams.html"><code>GrandpaParams</code></a>.</p>
 <pre><code class="language-rust ignore">let grandpa_config = sc_finality_grandpa::GrandpaParams {
 	config: grandpa_config,
 	link: grandpa_link,
 	network,
-	inherent_data_providers,
-	telemetry_on_connect: Some(telemetry_on_connect_sinks.on_connect_stream()),
+	telemetry_on_connect: telemetry_connection_notifier.map(|x| x.on_connect_stream()),
 	voting_rule: sc_finality_grandpa::VotingRulesBuilder::default().build(),
 	prometheus_registry,
 	shared_voter_state: sc_finality_grandpa::SharedVoterState::empty(),
@@ -284,20 +277,10 @@ grandpa votes. We begin by creating a grandpa
 	sc_finality_grandpa::run_grandpa_voter(grandpa_config)?
 );
 </code></pre>
-<h3><a class="header" href="#disabled-grandpa" id="disabled-grandpa">Disabled Grandpa</a></h3>
-<p>Proof of Authority networks generally contain many full nodes that are not authorities. When Grandpa
-is present in the network, we still need to tell the node how to interpret grandpa-related messages
-it may receive (just ignore them).</p>
-<pre><code class="language-rust ignore">sc_finality_grandpa::setup_disabled_grandpa(
-	client,
-	&amp;inherent_data_providers,
-	network,
-)?;
-</code></pre>
-<h2><a class="header" href="#constraints-on-the-runtime" id="constraints-on-the-runtime">Constraints on the Runtime</a></h2>
-<h3><a class="header" href="#runtime-apis" id="runtime-apis">Runtime APIs</a></h3>
+<h2 id="constraints-on-the-runtime"><a class="header" href="#constraints-on-the-runtime">Constraints on the Runtime</a></h2>
+<h3 id="runtime-apis"><a class="header" href="#runtime-apis">Runtime APIs</a></h3>
 <p>Grandpa relies on getting its authority sets from the runtime via the
-<a href="https://substrate.dev/rustdocs/v2.0.0/sp_finality_grandpa/trait.GrandpaApi.html">GrandpaAPI</a>. So trying to build
+<a href="https://substrate.dev/rustdocs/v3.0.0/sp_finality_grandpa/trait.GrandpaApi.html">GrandpaAPI</a>. So trying to build
 this node with a runtime that does not provide this API will fail to compile. For that reason, we
 have included the dedicated <code>minimal-grandpa-runtime</code>.</p>
 <p>The opposite is not true, however. A node that does <em>not</em> require grandpa may use the

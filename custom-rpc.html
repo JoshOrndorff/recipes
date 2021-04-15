@@ -163,7 +163,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#custom-rpcs" id="custom-rpcs">Custom RPCs</a></h1>
+                        <h1 id="custom-rpcs"><a class="header" href="#custom-rpcs">Custom RPCs</a></h1>
 <p><code>nodes/custom-rpc</code>
 <a target="_blank" href="https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fnodes%2Frpc-node%2Fsrc%2Fservice.rs">
 <img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt ="Try on playground"/>
@@ -183,12 +183,12 @@ with a Substrate node. They are used for checking storage values, submitting tra
 querying the current consensus authorities. Substrate comes with several
 <a href="https://polkadot.js.org/docs/substrate/rpc">default RPCs</a>. In many cases it is useful to add
 custom RPCs to your node. In this recipe, we will add three custom RPCs to our node. The first is trivial, the second calls into a <a href="./runtime-api.html">custom runtime API</a>, and the third interfaces with consensus.</p>
-<h2><a class="header" href="#the-rpc-extensions-builder" id="the-rpc-extensions-builder">The RPC Extensions Builder</a></h2>
-<p>In order to connect custom RPCs you must provide an function known as an &quot;RPC extension builder&quot;. This function takes a parameter for whether the node should deny unsafe RPC calls, and returns an <a href="https://docs.rs/jsonrpc-core/15.0.0/jsonrpc_core/struct.IoHandler.html">IoHandler</a> that the node needs to create a json RPC.</p>
+<h2 id="the-rpc-extensions-builder"><a class="header" href="#the-rpc-extensions-builder">The RPC Extensions Builder</a></h2>
+<p>In order to connect custom RPCs you must provide a function known as an &quot;RPC extension builder&quot;. This function takes a parameter for whether the node should deny unsafe RPC calls, and returns an <a href="https://docs.rs/jsonrpc-core/15.0.0/jsonrpc_core/struct.IoHandler.html">IoHandler</a> that the node needs to create a json RPC. For context, read more at <a href="https://substrate.dev/rustdocs/v3.0.0/sc_service/trait.RpcExtensionBuilder.html"><code>RpcExtensionBuilder</code> trait API doc</a>.</p>
 <pre><code class="language-rust ignore">let rpc_extensions_builder = {
 	let client = client.clone();
 	let pool = transaction_pool.clone();
-	Box::new(move |deny_unsafe| {
+	Box::new(move |deny_unsafe, _| {
 		let deps = crate::rpc::FullDeps {
 			client: client.clone(),
 			pool: pool.clone(),
@@ -208,9 +208,9 @@ custom RPCs to your node. In this recipe, we will add three custom RPCs to our n
 <li><code>commands_sink</code> - will be used in our third RPC</li>
 </ul>
 <p>With this builder function out of the way we can begin attaching our actual RPC endpoints.</p>
-<h2><a class="header" href="#the-silly-rpc" id="the-silly-rpc">The Silly RPC</a></h2>
+<h2 id="the-silly-rpc"><a class="header" href="#the-silly-rpc">The Silly RPC</a></h2>
 <p>We'll begin by defining a simple RPC called &quot;silly rpc&quot; which just returns integers. A Hello world of sorts.</p>
-<h3><a class="header" href="#defining-the-silly-rpc" id="defining-the-silly-rpc">Defining the Silly RPC</a></h3>
+<h3 id="defining-the-silly-rpc"><a class="header" href="#defining-the-silly-rpc">Defining the Silly RPC</a></h3>
 <p>Every RPC that the node will use must be defined in a trait. In the
 <code>nodes/rpc-node/src/silly_rpc.rs</code> file, we define a basic rpc as</p>
 <pre><pre class="playground"><code class="language-rust">
@@ -252,15 +252,15 @@ impl SillyRpc for Silly {
 </span>mod silly_rpc;
 <span class="boring">}
 </span></code></pre></pre>
-<h3><a class="header" href="#including-the-silly-rpc" id="including-the-silly-rpc">Including the Silly RPC</a></h3>
+<h3 id="including-the-silly-rpc"><a class="header" href="#including-the-silly-rpc">Including the Silly RPC</a></h3>
 <p>With our RPC written, we're ready to extend our <code>IoHandler</code> with it. We begin with a few dependencies in our
 <code>rpc-node</code>'s <code>Cargo.toml</code>.</p>
 <pre><code class="language-toml">jsonrpc-core = &quot;15.0&quot;
 jsonrpc-core-client = &quot;15.0&quot;
 jsonrpc-derive = &quot;15.0&quot;
-sc-rpc = '2.0.0'
+sc-rpc = '3.0'
 </code></pre>
-<p>Now we're ready to write the <code>create_full</code> function we referenced from our service. The function is quoted in its entirety below. You ca see we add the</p>
+<p>Now we're ready to write the <code>create_full</code> function we referenced from our service. The function is quoted in its entirety below. This code is taken from <code>nodes/rpc-node/src/rpc.rs</code>.</p>
 <pre><code class="language-rust ignore">pub fn create_full&lt;C, P&gt;(
 	deps: FullDeps&lt;C, P&gt;,
 ) -&gt; jsonrpc_core::IoHandler&lt;sc_rpc::Metadata&gt; where
@@ -280,7 +280,7 @@ sc-rpc = '2.0.0'
 }
 </code></pre>
 <p>These few lines extend our node with the Silly RPC.</p>
-<h3><a class="header" href="#calling-the-silly-rpc" id="calling-the-silly-rpc">Calling the Silly RPC</a></h3>
+<h3 id="calling-the-silly-rpc"><a class="header" href="#calling-the-silly-rpc">Calling the Silly RPC</a></h3>
 <p>Once your node is running, you can test the RPC by calling it with any client that speaks json RPC.
 One widely available option is <code>curl</code>.</p>
 <pre><code class="language-bash">$ curl http://localhost:9933 -H &quot;Content-Type:application/json;charset=utf-8&quot; -d   '{
@@ -305,13 +305,13 @@ parameter by including its in the <code>params</code> list. For example:</p>
 <p>To which the RPC responds with the doubled parameter</p>
 <pre><code>{&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;result&quot;:14,&quot;id&quot;:1}
 </code></pre>
-<h2><a class="header" href="#rpc-to-call-a-runtime-api" id="rpc-to-call-a-runtime-api">RPC to Call a Runtime API</a></h2>
+<h2 id="rpc-to-call-a-runtime-api"><a class="header" href="#rpc-to-call-a-runtime-api">RPC to Call a Runtime API</a></h2>
 <p>The silly RPC demonstrates the fundamentals of working with RPCs in Substrate. Nonetheless, most
 RPCs will go beyond what we've learned so far and actually interacts with other parts of the node.
 In this second example, we will include an RPC that calls into the <code>sum-storage</code> runtime API from
 the <a href="./runtime-api.html">runtime API recipe</a>. While it isn't strictly necessary to understand what the
 runtime API does, reading that recipe may provide helpful context.</p>
-<h3><a class="header" href="#defining-the-sum-storage-rpc" id="defining-the-sum-storage-rpc">Defining the Sum Storage RPC</a></h3>
+<h3 id="defining-the-sum-storage-rpc"><a class="header" href="#defining-the-sum-storage-rpc">Defining the Sum Storage RPC</a></h3>
 <p>Because this RPC's behavior is closely related to a specific pallet, we've chosen to define the RPC
 in the pallet's directory. In this case the RPC is defined in <code>pallets/sum-storage/rpc</code>. So rather
 than using the <code>mod</code> keyword as we did before, we must include this RPC definition in the node's
@@ -384,7 +384,7 @@ where
 }
 <span class="boring">}
 </span></code></pre></pre>
-<h3><a class="header" href="#installing-the-sum-storage-rpc" id="installing-the-sum-storage-rpc">Installing the Sum Storage RPC</a></h3>
+<h3 id="installing-the-sum-storage-rpc"><a class="header" href="#installing-the-sum-storage-rpc">Installing the Sum Storage RPC</a></h3>
 <p>To install this RPC , we expand the existing <code>create_full</code> function from <code>rpc.rs</code>.</p>
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
@@ -394,7 +394,7 @@ where
 ));
 <span class="boring">}
 </span></code></pre></pre>
-<h3><a class="header" href="#using-rpc-parameters" id="using-rpc-parameters">Using RPC Parameters</a></h3>
+<h3 id="using-rpc-parameters"><a class="header" href="#using-rpc-parameters">Using RPC Parameters</a></h3>
 <p>This RPC takes a parameter ,<code>at</code>, whose type is <code>Option&lt;_&gt;</code>. We may call this RPC by omitting the
 optional parameter entirely. In this case the implementation provides a default value of the best
 block.</p>
@@ -416,14 +416,14 @@ call is by copying it from the logs of a running node.</p>
 </code></pre>
 <p>As an exercise, change the storage values and confirm that the RPC provides the correct updated sum.
 Then call the RPC at an old block and confirm you get the old sum.</p>
-<h3><a class="header" href="#polkadot-js-api" id="polkadot-js-api">Polkadot JS API</a></h3>
+<h3 id="polkadot-js-api"><a class="header" href="#polkadot-js-api">Polkadot JS API</a></h3>
 <p>Many frontends interact with Substrate nodes through Polkadot JS API. While the Recipes does not
 strive to document that project, we have included a snippet of javascript for interacting with these first two
 custom RPCs in the <code>nodes/rpc-node/js</code> directory.</p>
-<h2><a class="header" href="#the-manual-seal-rpc" id="the-manual-seal-rpc">The Manual Seal RPC</a></h2>
-<p>Our third and final example RPC will interact with consensus. Specifically, it will tell the consensus engine when to author and finalize blocks. The API for this RPC if defined in Substrate in the <a href="https://substrate.dev/rustdocs/v2.0.0/sc_consensus_manual_seal/rpc/trait.ManualSealApi.html"><code>ManualSealApi</code> Trait</a>.</p>
-<h3><a class="header" href="#installing-the-manual-seal-rpc" id="installing-the-manual-seal-rpc">Installing the Manual Seal RPC</a></h3>
-<p>The previous RPC needed a reference to the <code>client</code> to call into the runtime. Likewise, this RPC needs a command stream to send messages to the actual consensus engine. This recipe does not cover installing the manual seal engine, but it is nearly identical to the <a href="https://substrate.dev/rustdocs/v2.0.0/sc_consensus_manual_seal/fn.run_instant_seal.html">instant seal engine</a> used in the <a href="./kitchen-node.html">Kitchen Node</a>.</p>
+<h2 id="the-manual-seal-rpc"><a class="header" href="#the-manual-seal-rpc">The Manual Seal RPC</a></h2>
+<p>Our third and final example RPC will interact with consensus. Specifically, it will tell the consensus engine when to author and finalize blocks. The API for this RPC if defined in Substrate in the <a href="https://substrate.dev/rustdocs/v3.0.0/sc_consensus_manual_seal/rpc/trait.ManualSealApi.html"><code>ManualSealApi</code> Trait</a>.</p>
+<h3 id="installing-the-manual-seal-rpc"><a class="header" href="#installing-the-manual-seal-rpc">Installing the Manual Seal RPC</a></h3>
+<p>The previous RPC needed a reference to the <code>client</code> to call into the runtime. Likewise, this RPC needs a command stream to send messages to the actual consensus engine. This recipe does not cover installing the manual seal engine, but it is nearly identical to the <a href="https://substrate.dev/rustdocs/v3.0.0/sc_consensus_manual_seal/fn.run_instant_seal.html">instant seal engine</a> used in the <a href="./kitchen-node.html">Kitchen Node</a>.</p>
 <p>To install the RPC endpoint, we do exactly as we have before, and extend the <code>create_full</code> function in <code>rpc.rs</code></p>
 <pre><code class="language-rust ignore">io.extend_with(
 	// We provide the rpc handler with the sending end of the channel to allow the rpc
@@ -431,11 +431,14 @@ custom RPCs in the <code>nodes/rpc-node/js</code> directory.</p>
 	ManualSealApi::to_delegate(ManualSeal::new(command_sink)),
 );
 </code></pre>
-<h3><a class="header" href="#using-manual-seal" id="using-manual-seal">Using Manual Seal</a></h3>
+<h3 id="using-manual-seal"><a class="header" href="#using-manual-seal">Using Manual Seal</a></h3>
 <p>Once your node is running, you will see that it just sits there idly. It will accept transactions to
 the pool, but it will not author blocks on its own. In manual seal, the node does not author a block
 until we explicitly tell it to. We can tell it to author a block by calling the <code>engine_createBlock</code>
 RPC.</p>
+<p>The easiest way is to use Apps's Developer -&gt; RPC Calls tab.</p>
+<p><img src="./img/apps-manual-seal-create-block.png" alt="Calling the createBlock endpoint via Apps" /></p>
+<p>It can also be called using <code>curl</code> as described previously.</p>
 <pre><code class="language-bash">$ curl http://localhost:9933 -H &quot;Content-Type:application/json;charset=utf-8&quot; -d   '{
      &quot;jsonrpc&quot;:&quot;2.0&quot;,
       &quot;id&quot;:1,
@@ -444,23 +447,23 @@ RPC.</p>
     }'
 </code></pre>
 <p>This call takes three parameters, each of which are worth exploring.</p>
-<h4><a class="header" href="#create-empty" id="create-empty">Create Empty</a></h4>
+<h4 id="create-empty"><a class="header" href="#create-empty">Create Empty</a></h4>
 <p><code>create_empty</code> is a Boolean value indicating whether empty blocks may be created. Setting
 <code>create-empty</code> to true does not mean that an empty block will necessarily be created. Rather it
 means that the engine should go ahead creating a block even if no transaction are present. If
 transactions are present in the queue, they will be included regardless of <code>create_empty</code>'s value.'</p>
-<h4><a class="header" href="#finalize" id="finalize">Finalize</a></h4>
+<h4 id="finalize"><a class="header" href="#finalize">Finalize</a></h4>
 <p><code>finalize</code> is a Boolean indicating whether the block (and its ancestors, recursively) should be
 finalized after creation. Manually controlling finality is interesting, but also dangerous. If you
 attempt to author and finalize a block that does not build on the best finalized chain, the block
 will not be imported. If you finalize one block in one node, and a conflicting block in another
 node, you will cause a safety violation when the nodes synchronize.</p>
-<h4><a class="header" href="#parent-hash" id="parent-hash">Parent Hash</a></h4>
+<h4 id="parent-hash"><a class="header" href="#parent-hash">Parent Hash</a></h4>
 <p><code>parent_hash</code> is an optional hash of a block to use as a parent. To set the parent, use the format
 <code>&quot;0x0e0626477621754200486f323e3858cd5f28fcbe52c69b2581aecb622e384764&quot;</code>. To omit the parent, use
 <code>null</code>. When the parent is omitted the block is built on the current best block. Manually specifying
 the parent is useful for constructing fork scenarios and demonstrating chain reorganizations.</p>
-<h4><a class="header" href="#manually-finalizing-blocks" id="manually-finalizing-blocks">Manually Finalizing Blocks</a></h4>
+<h4 id="manually-finalizing-blocks"><a class="header" href="#manually-finalizing-blocks">Manually Finalizing Blocks</a></h4>
 <p>In addition to finalizing blocks while creating them, they can be finalized later by using the
 second provided RPC call, <code>engine_finalizeBlock</code>.</p>
 <pre><code class="language-bash">$ curl http://localhost:9933 -H &quot;Content-Type:application/json;charset=utf-8&quot; -d   '{

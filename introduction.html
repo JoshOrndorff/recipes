@@ -163,12 +163,12 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#substrate-recipes-" id="substrate-recipes-">Substrate Recipes 🍴😋🍴</a></h1>
+                        <h1 id="substrate-recipes-"><a class="header" href="#substrate-recipes-">Substrate Recipes 🍴😋🍴</a></h1>
 <p><em>A Hands-On Cookbook for Aspiring Blockchain Chefs</em></p>
 <p>Substrate Recipes is a cookbook of working examples that demonstrate best practices when building
 blockchains with <strong><a href="https://substrate.dev">Substrate</a></strong>. Each recipe contains
 complete working code as well as a detailed writeup explaining the code.</p>
-<h2><a class="header" href="#how-to-use-this-book" id="how-to-use-this-book">How to Use This Book</a></h2>
+<h2 id="how-to-use-this-book"><a class="header" href="#how-to-use-this-book">How to Use This Book</a></h2>
 <p>You can read this book in any particular order. If you have a certain topic you want to dive into, or
 know the subject/keyword to look for, please use the search button (the small magnifier on top
 left) to search for the subject. The list is organized roughly in order of increasing complexity.</p>
@@ -177,7 +177,7 @@ the code, extract patterns, and apply them to a problem that you want to solve!<
 <p>If you haven't already, you should probably clone this repository right now.</p>
 <pre><code class="language-bash">git clone https://github.com/substrate-developer-hub/recipes.git
 </code></pre>
-<h2><a class="header" href="#getting-help" id="getting-help">Getting Help</a></h2>
+<h2 id="getting-help"><a class="header" href="#getting-help">Getting Help</a></h2>
 <p>When learning any new skill, you will inevitably get stuck at some point. When you do get stuck you
 can seek help in several ways:</p>
 <ul>
@@ -187,7 +187,7 @@ can seek help in several ways:</p>
 <li>Open a <a href="https://github.com/substrate-developer-hub/recipes/issues/new">new issue</a> against this
 repository</li>
 </ul>
-<h2><a class="header" href="#prerequisites" id="prerequisites">Prerequisites</a></h2>
+<h2 id="prerequisites"><a class="header" href="#prerequisites">Prerequisites</a></h2>
 <p>Each recipe targets a specific aspect of Substrate development and explains the details of that aspect. In all recipes some basic familiarity with Substrate development and a working Rust environment are assumed. Generally speaking you should meet the following prerequisites:</p>
 <ul>
 <li>Have a working Substrate development environment. There are excellent docs on <a href="https://substrate.dev/docs/en/knowledgebase/getting-started/">setting up a Substrate development environment</a>.</li>
@@ -195,7 +195,7 @@ repository</li>
 you learn Substrate.</li>
 <li>Complete the first few <a href="https://substrate.dev/en/tutorials">Official Substrate Tutorials</a>.</li>
 </ul>
-<h2><a class="header" href="#structure-of-a-substrate-node" id="structure-of-a-substrate-node">Structure of a Substrate Node</a></h2>
+<h2 id="structure-of-a-substrate-node"><a class="header" href="#structure-of-a-substrate-node">Structure of a Substrate Node</a></h2>
 <p>It is useful to recognize that
 <a href="https://youtu.be/05H4YsyPA-U?t=1789">coding is all about abstraction</a>.</p>
 <p>To understand how the code in this repository is organized, let's first take a look at how a
@@ -208,7 +208,7 @@ function&quot;) that codifies the chain's functionality.</p>
 composing runtimes from individual building blocks called Pallets. Runtimes built with FRAME
 typically contain several such pallets. The kitchen node you built previously follows this paradigm.</p>
 <p><img src="img/substrate-architecture.png" alt="Substrate Architecture Diagram" /></p>
-<h2><a class="header" href="#the-directories-in-our-kitchen" id="the-directories-in-our-kitchen">The Directories in our Kitchen</a></h2>
+<h2 id="the-directories-in-our-kitchen"><a class="header" href="#the-directories-in-our-kitchen">The Directories in our Kitchen</a></h2>
 <p>If you haven't already, you should clone it now. There are five primary directories in this repository.</p>
 <ul>
 <li><strong>Consensus</strong>: Consensus engines for use in Substrate nodes.</li>
@@ -253,7 +253,7 @@ you're reading right now.</li>
 |
 +-- text
 </code></pre>
-<h2><a class="header" href="#inside-the-kitchen-node" id="inside-the-kitchen-node">Inside the Kitchen Node</a></h2>
+<h2 id="inside-the-kitchen-node"><a class="header" href="#inside-the-kitchen-node">Inside the Kitchen Node</a></h2>
 <p>Let us take a deeper look at the
 <a href="https://github.com/substrate-developer-hub/recipes/tree/master/nodes/kitchen-node">Kitchen Node</a>.</p>
 <p>Looking inside the Kitchen Node's <code>Cargo.toml</code> file we see that it has many dependencies. Most of
@@ -283,7 +283,7 @@ chosen. We could also use the Weight-Fee runtime, and I encourage you to try tha
 (remember, instructions to re-compile the node are in the previous section).</p>
 <p>Every node must have a runtime. You may confirm that by looking at the <code>Cargo.toml</code> files of the
 other nodes included in our kitchen.</p>
-<h2><a class="header" href="#inside-the-super-runtime" id="inside-the-super-runtime">Inside the Super Runtime</a></h2>
+<h2 id="inside-the-super-runtime"><a class="header" href="#inside-the-super-runtime">Inside the Super Runtime</a></h2>
 <p>Having seen that the Kitchen Node depends on a runtime, let us now look deeper at the
 <a href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/super-runtime">Super Runtime</a>.</p>
 <p><strong><code>runtimes/super-runtime/Cargo.toml</code></strong></p>
@@ -300,7 +300,7 @@ basic-token = { path = &quot;../../pallets/basic-token&quot;, default-features =
 itself. Indeed, Substrate offers a rich collection of commonly used pallets which you may use in
 your own runtimes. This runtime also contains several custom pallets that are written right here in
 our Kitchen.</p>
-<h2><a class="header" href="#common-patterns" id="common-patterns">Common Patterns</a></h2>
+<h2 id="common-patterns"><a class="header" href="#common-patterns">Common Patterns</a></h2>
 <p>We've just observed the general pattern used throughout the recipes. From the inside out, we see a
 piece of pallet code stored in <code>pallets/&lt;pallet-name&gt;/src/lib.rs</code>. The pallet is then included into
 a runtime by adding its name and relative path in <code>runtimes/&lt;runtime-name&gt;/Cargo.toml</code>. That runtime

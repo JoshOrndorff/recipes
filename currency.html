@@ -163,7 +163,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#currency-types" id="currency-types">Currency Types</a></h1>
+                        <h1 id="currency-types"><a class="header" href="#currency-types">Currency Types</a></h1>
 <p><code>pallets/lockable-currency</code>
 <a target="_blank" href="https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Flockable-currency%2Fsrc%2Flib.rs">
 <img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt ="Try on playground"/>
@@ -185,9 +185,9 @@
 <a target="_blank" href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/currency-imbalances/src/lib.rs">
 <img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt ="View on GitHub"/>
 </a></p>
-<h2><a class="header" href="#just-plain-currency" id="just-plain-currency">Just Plain Currency</a></h2>
+<h2 id="just-plain-currency"><a class="header" href="#just-plain-currency">Just Plain Currency</a></h2>
 <p>To use a balance type in the runtime, import the
-<a href="https://substrate.dev/rustdocs/v2.0.0/frame_support/traits/trait.Currency.html"><code>Currency</code></a> trait from
+<a href="https://substrate.dev/rustdocs/v3.0.0/frame_support/traits/trait.Currency.html"><code>Currency</code></a> trait from
 <code>frame_support</code>.</p>
 <pre><code class="language-rust ignore">use frame_support::traits::Currency;
 </code></pre>
@@ -195,33 +195,33 @@
 <a href="https://en.wikipedia.org/wiki/Fungibility">fungible assets</a> system. To use such a fungible asset
 from your pallet, include an associated type with the <code>Currency</code> trait bound in your pallet's
 configuration trait.</p>
-<pre><code class="language-rust ignore">pub trait Trait: system::Trait {
+<pre><code class="language-rust ignore">pub trait Config: frame_system::Config {
 	type Currency: Currency&lt;Self::AccountId&gt;;
 }
 </code></pre>
 <p>Defining an associated type with this trait bound allows this pallet to access the provided methods
-of <a href="https://substrate.dev/rustdocs/v2.0.0/frame_support/traits/trait.Currency.html"><code>Currency</code></a>. For example, it
+of <a href="https://substrate.dev/rustdocs/v3.0.0/frame_support/traits/trait.Currency.html"><code>Currency</code></a>. For example, it
 is straightforward to check the total issuance of the system:</p>
 <pre><code class="language-rust ignore">// in decl_module block
 T::Currency::total_issuance();
 </code></pre>
 <p>As promised, it is also possible to type alias a balances type for use in the runtime:</p>
-<pre><code class="language-rust ignore">type BalanceOf&lt;T&gt; = &lt;&lt;T as Trait&gt;::Currency as Currency&lt;&lt;T as system::Trait&gt;::AccountId&gt;&gt;::Balance;
+<pre><code class="language-rust ignore">type BalanceOf&lt;T&gt; = &lt;&lt;T as Trait&gt;::Currency as Currency&lt;&lt;T as frame_system::Config&gt;::AccountId&gt;&gt;::Balance;
 </code></pre>
 <p>This new <code>BalanceOf&lt;T&gt;</code> type satisfies the type constraints of <code>Self::Balance</code> for the provided
 methods of <code>Currency</code>. This means that this type can be used for
-<a href="https://substrate.dev/rustdocs/v2.0.0/frame_support/traits/trait.Currency.html#tymethod.transfer">transfer</a>,
-<a href="https://substrate.dev/rustdocs/v2.0.0/frame_support/traits/trait.Currency.html#tymethod.deposit_into_existing">minting</a>,
+<a href="https://substrate.dev/rustdocs/v3.0.0/frame_support/traits/trait.Currency.html#tymethod.transfer">transfer</a>,
+<a href="https://substrate.dev/rustdocs/v3.0.0/frame_support/traits/trait.Currency.html#tymethod.deposit_into_existing">minting</a>,
 and much more.</p>
-<h2><a class="header" href="#reservable-currency" id="reservable-currency">Reservable Currency</a></h2>
-<p>Substrate's <a href="https://substrate.dev/rustdocs/v2.0.0/pallet_treasury/index.html">Treasury pallet</a> uses the
+<h2 id="reservable-currency"><a class="header" href="#reservable-currency">Reservable Currency</a></h2>
+<p>Substrate's <a href="https://substrate.dev/rustdocs/v3.0.0/pallet_treasury/index.html">Treasury pallet</a> uses the
 <code>Currency</code> type for bonding spending proposals. To reserve and unreserve funds for bonding,
 <code>treasury</code> uses the
-<a href="https://substrate.dev/rustdocs/v2.0.0/frame_support/traits/trait.ReservableCurrency.html"><code>ReservableCurrency</code></a>
+<a href="https://substrate.dev/rustdocs/v3.0.0/frame_support/traits/trait.ReservableCurrency.html"><code>ReservableCurrency</code></a>
 trait. The import and associated type declaration follow convention</p>
 <pre><code class="language-rust ignore">use frame_support::traits::{Currency, ReservableCurrency};
 
-pub trait Trait: system::Trait {
+pub trait Config: frame_system::Config {
 	type Currency: Currency&lt;Self::AccountId&gt; + ReservableCurrency&lt;Self::AccountId&gt;;
 }
 </code></pre>
@@ -233,7 +233,7 @@ respectively</p>
 	T::Currency::reserve(&amp;locker, amount)
 			.map_err(|_| &quot;locker can't afford to lock the amount requested&quot;)?;
 
-	let now = &lt;system::Module&lt;T&gt;&gt;::block_number();
+	let now = &lt;frame_system::Module&lt;T&gt;&gt;::block_number();
 
 	Self::deposit_event(RawEvent::LockFunds(locker, amount, now));
 	Ok(())
@@ -245,22 +245,22 @@ respectively</p>
 	T::Currency::unreserve(&amp;unlocker, amount);
 	// ReservableCurrency::unreserve does not fail (it will lock up as much as amount)
 
-	let now = &lt;system::Module&lt;T&gt;&gt;::block_number();
+	let now = &lt;frame_system::Module&lt;T&gt;&gt;::block_number();
 
 	Self::deposit_event(RawEvent::UnlockFunds(unlocker, amount, now));
 	Ok(())
 }
 </code></pre>
-<h2><a class="header" href="#lockable-currency" id="lockable-currency">Lockable Currency</a></h2>
-<p>Substrate's <a href="https://substrate.dev/rustdocs/v2.0.0/pallet_staking/index.html">Staking pallet</a> similarly uses
-<a href="https://substrate.dev/rustdocs/v2.0.0/frame_support/traits/trait.LockableCurrency.html"><code>LockableCurrency</code></a>
+<h2 id="lockable-currency"><a class="header" href="#lockable-currency">Lockable Currency</a></h2>
+<p>Substrate's <a href="https://substrate.dev/rustdocs/v3.0.0/pallet_staking/index.html">Staking pallet</a> similarly uses
+<a href="https://substrate.dev/rustdocs/v3.0.0/frame_support/traits/trait.LockableCurrency.html"><code>LockableCurrency</code></a>
 trait for more nuanced handling of capital locking based on time increments. This type can be very
 useful in the context of economic systems that enforce accountability by collateralizing fungible
 resources. Import this trait in the usual way</p>
 <pre><code class="language-rust ignore">use frame_support::traits::{LockIdentifier, LockableCurrency}
 </code></pre>
 <p>To use <code>LockableCurrency</code>, it is necessary to define a
-<a href="https://substrate.dev/rustdocs/v2.0.0/frame_support/traits/type.LockIdentifier.html"><code>LockIdentifier</code></a>.</p>
+<a href="https://substrate.dev/rustdocs/v3.0.0/frame_support/traits/type.LockIdentifier.html"><code>LockIdentifier</code></a>.</p>
 <pre><code class="language-rust ignore">const EXAMPLE_ID: LockIdentifier = *b&quot;example &quot;;
 </code></pre>
 <p>By using this <code>EXAMPLE_ID</code>, it is straightforward to define logic within the runtime to schedule
@@ -279,13 +279,13 @@ locking, unlocking, and extending existing locks.</p>
 	Ok(())
 }
 </code></pre>
-<h2><a class="header" href="#imbalances" id="imbalances">Imbalances</a></h2>
+<h2 id="imbalances"><a class="header" href="#imbalances">Imbalances</a></h2>
 <p>Functions that alter balances return an object of the
-<a href="https://substrate.dev/rustdocs/v2.0.0/frame_support/traits/trait.Imbalance.html"><code>Imbalance</code></a> type to express
+<a href="https://substrate.dev/rustdocs/v3.0.0/frame_support/traits/trait.Imbalance.html"><code>Imbalance</code></a> type to express
 how much account balances have been altered in aggregate. This is useful in the context of state
 transitions that adjust the total supply of the <code>Currency</code> type in question.</p>
 <p>To manage this supply adjustment, the
-<a href="https://substrate.dev/rustdocs/v2.0.0/frame_support/traits/trait.OnUnbalanced.html"><code>OnUnbalanced</code></a> handler is
+<a href="https://substrate.dev/rustdocs/v3.0.0/frame_support/traits/trait.OnUnbalanced.html"><code>OnUnbalanced</code></a> handler is
 often used. An example might look something like</p>
 <pre><code class="language-rust ignore">pub fn reward_funds(origin, to_reward: T::AccountId, reward: BalanceOf&lt;T&gt;) {
 	let _ = ensure_signed(origin)?;
@@ -296,11 +296,11 @@ often used. An example might look something like</p>
 	total_imbalance.maybe_subsume(r);
 	T::Reward::on_unbalanced(total_imbalance);
 
-	let now = &lt;system::Module&lt;T&gt;&gt;::block_number();
+	let now = &lt;frame_system::Module&lt;T&gt;&gt;::block_number();
 	Self::deposit_event(RawEvent::RewardFunds(to_reward, reward, now));
 }
 </code></pre>
-<h2><a class="header" href="#takeaway" id="takeaway">takeaway</a></h2>
+<h2 id="takeaway"><a class="header" href="#takeaway">takeaway</a></h2>
 <p>The way we represent value in the runtime dictates both the security and flexibility of the
 underlying transactional system. Likewise, it is convenient to be able to take advantage of Rust's
 <a href="https://blog.rust-lang.org/2015/05/11/traits.html">flexible trait system</a> when building systems

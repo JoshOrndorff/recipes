@@ -163,7 +163,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#tightly--and-loosely-coupled-pallets" id="tightly--and-loosely-coupled-pallets">Tightly- and Loosely-Coupled Pallets</a></h1>
+                        <h1 id="tightly--and-loosely-coupled-pallets"><a class="header" href="#tightly--and-loosely-coupled-pallets">Tightly- and Loosely-Coupled Pallets</a></h1>
 <p><code>pallets/check-membership</code>
 <a target="_blank" href="https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fcheck-membership%2Fsrc%2Flib.rs">
 <img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt ="Try on playground"/>
@@ -178,7 +178,7 @@ by callers who are members of an
 access control list is abstracted away to another pallet. This pallet and the membership-managing
 pallet can be coupled in two different ways which are demonstrated by the tight and loose variants
 of the pallet.</p>
-<h2><a class="header" href="#twin-pallets" id="twin-pallets">Twin Pallets</a></h2>
+<h2 id="twin-pallets"><a class="header" href="#twin-pallets">Twin Pallets</a></h2>
 <p>Before we dive into the pallet code, let's talk a bit more about the structure of the crate in the
 <code>pallets/check-membership</code> directory. This directory is a single Rust crate that contains two
 pallets. The two pallets live in the <code>pallets/check-membership/tight</code> and
@@ -189,7 +189,7 @@ pub mod tight;
 </code></pre>
 <p>This allows us to demonstrate both techniques while keeping the closely related work in a single
 crate.</p>
-<h2><a class="header" href="#controlling-access" id="controlling-access">Controlling Access</a></h2>
+<h2 id="controlling-access"><a class="header" href="#controlling-access">Controlling Access</a></h2>
 <p>While the primary learning objective of these twin pallets is understanding the way in which they
 are coupled to the membership-managing pallets, they also demonstrate the concept of an access
 control list, which we will investigate first.</p>
@@ -213,17 +213,17 @@ fn check_membership(origin) -&gt; DispatchResult {
 	Ok(())
 }
 </code></pre>
-<h2><a class="header" href="#coupling-pallets" id="coupling-pallets">Coupling Pallets</a></h2>
+<h2 id="coupling-pallets"><a class="header" href="#coupling-pallets">Coupling Pallets</a></h2>
 <p>Each <code>check-membership</code> pallet actually contains very little logic. It has no storage of its own and
 a single extrinsic that does the membership checking. All of the heavy lifting is abstracted away to
 another pallet. There are two different ways that pallets can be coupled to one another and this
 section investigates both.</p>
-<h3><a class="header" href="#tight-coupling" id="tight-coupling">Tight Coupling</a></h3>
+<h3 id="tight-coupling"><a class="header" href="#tight-coupling">Tight Coupling</a></h3>
 <p>Tightly coupling pallets is more explicit than loosely coupling them. When you are writing a pallet
 that you want to tightly couple with some other pallet as a dependency, you explicitly specify the
 name of the pallet on which you depend as a trait bound on the configuration trait of the pallet you
 are writing. This is demonstrated in the tightly coupled variant of <code>check-membership</code>.</p>
-<pre><code class="language-rust ignore">pub trait Trait: system::Trait + vec_set::Trait {
+<pre><code class="language-rust ignore">pub trait Config: frame_system::Config + vec_set::Trait {
 	// --snip--
 }
 </code></pre>
@@ -244,11 +244,11 @@ let members = vec_set::Module::&lt;T&gt;::members();
 specific implementation rather than an abstract interface. This makes the code more difficult to
 maintain over time and is generally frowned upon. The tightly coupled version of <code>check-membership</code>
 depends on exactly the <code>vec-set</code> pallet rather than a behavior such as managing a set of accounts.</p>
-<h2><a class="header" href="#loose-coupling" id="loose-coupling">Loose Coupling</a></h2>
+<h2 id="loose-coupling"><a class="header" href="#loose-coupling">Loose Coupling</a></h2>
 <p>Loose coupling solves the problem of coupling to a specific implementation. When loosely coupling to
 another pallet, you add an associated type to the pallet's configuration trait and ensure the
 supplied type implements the necessary behavior by specifying a trait bound.</p>
-<pre><code class="language-rust ignore">pub trait Trait: system::Trait {
+<pre><code class="language-rust ignore">pub trait Config: frame_system::Config {
 	// --snip--
 
 	/// A type that will supply a set of members to check access control against
@@ -257,7 +257,7 @@ supplied type implements the necessary behavior by specifying a trait bound.</p>
 </code></pre>
 <blockquote>
 <p>Many pallets throughout the ecosystem are coupled to a token through the
-<a href="https://substrate.dev/rustdocs/v2.0.0/frame_support/traits/trait.Currency.html"><code>Currency</code> trait</a>.</p>
+<a href="https://substrate.dev/rustdocs/v3.0.0/frame_support/traits/trait.Currency.html"><code>Currency</code> trait</a>.</p>
 </blockquote>
 <p>Having this associated type means that the loosely coupled variant of the <code>check-membership</code> pallet
 can be installed in any runtime that can supply it with a set of accounts to use as an access

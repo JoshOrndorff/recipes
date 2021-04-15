@@ -163,7 +163,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#using-vectors-as-sets" id="using-vectors-as-sets">Using Vectors as Sets</a></h1>
+                        <h1 id="using-vectors-as-sets"><a class="header" href="#using-vectors-as-sets">Using Vectors as Sets</a></h1>
 <p><code>pallets/vec-set</code>
 <a target="_blank" href="https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fvec-set%2Fsrc%2Flib.rs">
 <img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt ="Try on playground"/>
@@ -184,13 +184,13 @@ ensuring that the number of members never exceeds a hard-coded maximum.</p>
 <pre><code class="language-rust ignore">/// A maximum number of members. When membership reaches this number, no new members may join.
 pub const MAX_MEMBERS: usize = 16;
 </code></pre>
-<h2><a class="header" href="#storage-item" id="storage-item">Storage Item</a></h2>
+<h2 id="storage-item"><a class="header" href="#storage-item">Storage Item</a></h2>
 <p>We will store the members of our set in a Rust
 <a href="https://doc.rust-lang.org/std/vec/struct.Vec.html"><code>Vec</code></a>. A <code>Vec</code> is a collection of elements that
 is ordered and may contain duplicates. Because the <code>Vec</code> provides more functionality than our set
 needs, we are able to build a set from the <code>Vec</code>. We declare our single storage item as so</p>
 <pre><code class="language-rust ignore">decl_storage! {
-	trait Store for Module&lt;T: Trait&gt; as VecSet {
+	trait Store for Module&lt;T: Config&gt; as VecSet {
 		// The set of all members. Stored as a single vec
 		Members get(fn members): Vec&lt;T::AccountId&gt;;
 	}
@@ -200,7 +200,7 @@ needs, we are able to build a set from the <code>Vec</code>. We declare our sing
 entries are added. To ensure reasonable performance, we will enforce that the <code>Vec</code> always remains
 sorted. This allows for quickly determining whether an item is present using a
 <a href="https://en.wikipedia.org/wiki/Binary_search_algorithm">binary search</a>.</p>
-<h2><a class="header" href="#adding-members" id="adding-members">Adding Members</a></h2>
+<h2 id="adding-members"><a class="header" href="#adding-members">Adding Members</a></h2>
 <p>Any user may join the membership set by calling the <code>add_member</code> dispatchable, providing they are
 not already a member and the membership limit has not been reached. We check for these two
 conditions first, and then insert the new member only after we are sure it is safe to do so. This is
@@ -232,7 +232,7 @@ an example of the mnemonic idiom, &quot;<strong>verify first write last</strong>
 it still returns the index into the <code>Vec</code> at which the member would have been stored had they been
 present. We then use this information to insert the member at the appropriate location, thus
 maintaining a sorted <code>Vec</code>.</p>
-<h2><a class="header" href="#removing-a-member" id="removing-a-member">Removing a Member</a></h2>
+<h2 id="removing-a-member"><a class="header" href="#removing-a-member">Removing a Member</a></h2>
 <p>Removing a member is straightforward. We begin by looking for the caller in the list. If not
 present, there is no work to be done. If the caller is present, the search algorithm returns her
 index, and she can be removed.</p>
@@ -255,20 +255,20 @@ index, and she can be removed.</p>
 	}
 }
 </code></pre>
-<h2><a class="header" href="#performance" id="performance">Performance</a></h2>
+<h2 id="performance"><a class="header" href="#performance">Performance</a></h2>
 <p>Now that we have built our set, let's analyze its performance in some common operations.</p>
-<h3><a class="header" href="#membership-check" id="membership-check">Membership Check</a></h3>
+<h3 id="membership-check"><a class="header" href="#membership-check">Membership Check</a></h3>
 <p>In order to check for the presence of an item in a <code>vec-set</code>, we make a single storage read, decode
 the entire vector, and perform a binary search.</p>
 <p>DB Reads: O(1) Decoding: O(n) Search: O(log n)</p>
-<h3><a class="header" href="#updating" id="updating">Updating</a></h3>
+<h3 id="updating"><a class="header" href="#updating">Updating</a></h3>
 <p>Updates to the set, such as adding and removing members as we demonstrated, requires first
 performing a membership check. It also requires re-encoding the entire <code>Vec</code> and storing it back in
 the database. Finally, it still costs the normal
 <a href="https://stackoverflow.com/q/200384/4184410">amortized constant time</a> associated with mutating a
 <code>Vec</code>.</p>
 <p>DB Writes: O(1) Encoding: O(n)</p>
-<h3><a class="header" href="#iteration" id="iteration">Iteration</a></h3>
+<h3 id="iteration"><a class="header" href="#iteration">Iteration</a></h3>
 <p>Iterating over all items in a <code>vec-set</code> is achieved by using the <code>Vec</code>'s own
 <a href="https://doc.rust-lang.org/std/vec/struct.Vec.html#method.iter"><code>iter</code> method</a>. The entire set can
 be read from storage in one go, and each item must be decoded. Finally, the actual processing you do
@@ -276,7 +276,7 @@ on the items will take some time.</p>
 <p>DB Reads: O(1) Decoding: O(n) Processing: O(n)</p>
 <p>Because accessing the database is a relatively slow operation, reading the entire list in a single
 read is a big win. If you need to iterate over the data frequently, you may want a <code>vec-set</code>.</p>
-<h3><a class="header" href="#a-note-on-weights" id="a-note-on-weights">A Note on Weights</a></h3>
+<h3 id="a-note-on-weights"><a class="header" href="#a-note-on-weights">A Note on Weights</a></h3>
 <p>It is always important that the weight associated with your dispatchables represent the actual time
 it takes to execute them. In this pallet, we have provided an upper bound on the size of the set,
 which places an upper bound on the computation - this means we can use constant weight annotations.

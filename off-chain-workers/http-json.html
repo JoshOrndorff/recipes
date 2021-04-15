@@ -163,7 +163,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#http-fetching-and-json-parsing-in-off-chain-workers" id="http-fetching-and-json-parsing-in-off-chain-workers">HTTP Fetching and JSON Parsing in Off-chain Workers</a></h1>
+                        <h1 id="http-fetching-and-json-parsing-in-off-chain-workers"><a class="header" href="#http-fetching-and-json-parsing-in-off-chain-workers">HTTP Fetching and JSON Parsing in Off-chain Workers</a></h1>
 <p><code>pallets/ocw-demo</code>
 <a target="_blank" href="https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%ocw-demo%2Fsrc%2Flib.rs">
 <img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt ="Try on playground"/>
@@ -171,7 +171,7 @@
 <a target="_blank" href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/ocw-demo/src/lib.rs">
 <img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt ="View on GitHub"/>
 </a></p>
-<h2><a class="header" href="#http-fetching" id="http-fetching">HTTP Fetching</a></h2>
+<h2 id="http-fetching"><a class="header" href="#http-fetching">HTTP Fetching</a></h2>
 <p>In traditional web apps, we use HTTP requests to communicate with and fetch data from third-party APIs.
 But this is tricky when we want to perform this in Substrate runtime on chain. First, HTTP requests
 are indeterministic. There are uncertainty in terms of how long the request will take, and the result
@@ -205,7 +205,7 @@ let pending = request
 // By default, the http request is async from the runtime perspective. So we are asking the
 //   runtime to wait here.
 // The returning value here is a `Result` of `Result`, so we are unwrapping it twice by two `?`
-//   ref: https://substrate.dev/rustdocs/v2.0.0/sp_runtime/offchain/http/struct.PendingRequest.html#method.try_wait
+//   ref: https://substrate.dev/rustdocs/v3.0.0/sp_runtime/offchain/http/struct.PendingRequest.html#method.try_wait
 let response = pending
 	.try_wait(timeout)
 	.map_err(|_| &lt;Error&lt;T&gt;&gt;::HttpFetchingError)?
@@ -228,33 +228,26 @@ we use <code>try_wait()</code> to wait for the result to come back, and terminat
 non-200 is regarded as error and return. Finally, we get the response back from <code>response.body()</code>
 iterator. Since we are in a <code>no_std</code> environment, we collect them back as a byte vector instead of a
 string and return.</p>
-<h2><a class="header" href="#json-parsing" id="json-parsing">JSON Parsing</a></h2>
+<h2 id="json-parsing"><a class="header" href="#json-parsing">JSON Parsing</a></h2>
 <p>We frequently get JSON back when requesting from HTTP APIs. The next task is to parse the JSON
 and fetch the required (key, value) pair out. This is demonstrated in the <code>fetch_n_parse</code>
 function.</p>
-<h3><a class="header" href="#setup" id="setup">Setup</a></h3>
-<p>In Rust, <code>serde</code> and <code>serde-json</code> are the popular combo-package used for JSON parsing. Due to the
-project setup of compiling Substrate with <code>serde</code> feature <code>std</code> on and cargo feature
-unification limitation, we cannot simultaneously have <code>serde</code> feature <code>std</code> off (<code>no_std</code> on) when
-compiling the runtime (this is a bit of a mouthful,
-<a href="https://github.com/rust-lang/cargo/issues/4463">the details can be seen in this issue</a>). So we are
-going to use a renamed <code>serde</code> crate, <code>alt_serde</code>, in our pallet to remedy this situation.</p>
+<h3 id="setup"><a class="header" href="#setup">Setup</a></h3>
+<p>In Rust, <code>serde</code> and <code>serde-json</code> are the popular combo-package used for JSON parsing.</p>
 <p>src:
 <code>pallets/ocw-demo/Cargo.toml</code></p>
-<pre><code class="language-toml">[package]
-# ...
+<pre><code class="language-toml">#--snip--
 
 [dependencies]
-# external dependencies
-# ...
+#--snip--
 
-alt_serde = { version = &quot;1&quot;, default-features = false, features = [&quot;derive&quot;] }
-serde_json = { version = &quot;1&quot;, default-features = false, git = &quot;https://github.com/Xanewok/json&quot;, branch = &quot;no-std&quot;, features = [&quot;alloc&quot;] }
+serde = { version = '1.0.125', default-features = false, features = ['derive'] }
+serde_json = { version = '1.0.64', default-features = false, features = ['alloc'] }
 
-# ...
+
+#--snip--
 </code></pre>
-<p>We also use a modified version of <code>serde_json</code> with the latest <code>alloc</code> feature that depends on <code>alt_serde</code>.</p>
-<h3><a class="header" href="#deserializing-json-string-to-struct" id="deserializing-json-string-to-struct">Deserializing JSON string to struct</a></h3>
+<h3 id="deserializing-json-string-to-struct"><a class="header" href="#deserializing-json-string-to-struct">Deserializing JSON string to struct</a></h3>
 <p>Then we use the usual <code>serde-derive</code> approach on deserializing. First we define the struct with
 fields that we are interested to extract out.</p>
 <p>src:
@@ -262,13 +255,9 @@ fields that we are interested to extract out.</p>
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>// We use `alt_serde`, and Xanewok-modified `serde_json` so that we can compile the program
-//   with serde(features `std`) and alt_serde(features `no_std`).
-use alt_serde::{Deserialize, Deserializer};
+</span>use serde::{Deserialize, Deserializer};
 
-// Specifying serde path as `alt_serde`
 // ref: https://serde.rs/container-attrs.html#crate
-#[serde(crate = &quot;alt_serde&quot;)]
 #[derive(Deserialize, Encode, Decode, Default)]
 struct GithubInfo {
 	// Specify our own deserializing function to convert JSON string to vector of bytes
@@ -280,7 +269,7 @@ struct GithubInfo {
 }
 <span class="boring">}
 </span></code></pre></pre>
-<p>By default, <code>serde</code> deserialize JSON string to the datatype <code>String</code>. We want to write our own
+<p>By default, <code>serde</code> deserializes JSON strings to the <code>String</code> datatype. We want to write our own
 deserializer to convert it to vector of bytes.</p>
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
@@ -308,7 +297,7 @@ fn fetch_n_parse() -&gt; Result&lt;GithubInfo, Error&lt;T&gt;&gt; {
 		.map_err(|_| &lt;Error&lt;T&gt;&gt;::HttpFetchingError)?;
 
 	// Deserializing JSON to struct, thanks to `serde` and `serde_derive`
-	let gh_info: GithubInfo = serde_json::from_str(&amp;resp_str).unwrap();
+	let gh_info: GithubInfo = serde_json::from_str(&amp;resp_str).map_err(|_| &lt;Error&lt;T&gt;&gt;::HttpFetchingError)?;
 	Ok(gh_info)
 }
 <span class="boring">}

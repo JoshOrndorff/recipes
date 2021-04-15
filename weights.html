@@ -163,7 +163,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#computational-resources-and-weights" id="computational-resources-and-weights">Computational Resources and Weights</a></h1>
+                        <h1 id="computational-resources-and-weights"><a class="header" href="#computational-resources-and-weights">Computational Resources and Weights</a></h1>
 <p><code>pallets/weights</code>
 <a target="_blank" href="https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fweights%2Fsrc%2Flib.rs">
 <img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt ="Try on playground"/>
@@ -177,7 +177,7 @@ provides a mechanism known as transaction weighting to quantify the resources co
 executing a transaction.</p>
 <p><em>Indeed, mispriced EVM operations have shown how operations that underestimate cost can provide
 economic DOS attack vectors: <a href="https://www.parity.io/onwards/">Onwards; Underpriced EVM Operations</a></em></p>
-<h2><a class="header" href="#assigning-transaction-weights" id="assigning-transaction-weights">Assigning Transaction Weights</a></h2>
+<h2 id="assigning-transaction-weights"><a class="header" href="#assigning-transaction-weights">Assigning Transaction Weights</a></h2>
 <p>Pallet authors can annotate their dispatchable function with a weight using syntax like this,</p>
 <pre><code class="language-rust ignore">#[weight = &lt;Some Weighting Instance&gt;]
 fn some_call(...) -&gt; Result {
@@ -187,7 +187,7 @@ fn some_call(...) -&gt; Result {
 <p>For simple transactions a fixed weight will do. Substrate allows simply specifying a constant
 integer in cases situations like this.</p>
 <pre><code class="language-rust ignore">decl_module! {
-	pub struct Module&lt;T: Trait&gt; for enum Call {
+	pub struct Module&lt;T: Config&gt; for enum Call {
 
 		#[weight = 10_000]
 		fn store_value(_origin, entry: u32) -&gt; DispatchResult {
@@ -215,10 +215,10 @@ impl WeighData&lt;(&amp;bool, &amp;u32)&gt; for Conditional {
 }
 </code></pre>
 <p>In addition to the
-<a href="https://substrate.dev/rustdocs/v2.0.0/frame_support/weights/trait.WeighData.html"><code>WeightData</code> Trait</a>, shown
+<a href="https://substrate.dev/rustdocs/v3.0.0/frame_support/weights/trait.WeighData.html"><code>WeightData</code> Trait</a>, shown
 above, types that are used to calculate transaction weights must also implement
-<a href="https://substrate.dev/rustdocs/v2.0.0/frame_support/weights/trait.ClassifyDispatch.html"><code>ClassifyDispatch</code></a>,
-and <a href="https://substrate.dev/rustdocs/v2.0.0/frame_support/weights/trait.PaysFee.html"><code>PaysFee</code></a>.</p>
+<a href="https://substrate.dev/rustdocs/v3.0.0/frame_support/weights/trait.ClassifyDispatch.html"><code>ClassifyDispatch</code></a>,
+and <a href="https://substrate.dev/rustdocs/v3.0.0/frame_support/weights/trait.PaysFee.html"><code>PaysFee</code></a>.</p>
 <pre><code class="language-rust ignore">impl&lt;T&gt; ClassifyDispatch&lt;T&gt; for Conditional {
     fn classify_dispatch(&amp;self, _: T) -&gt; DispatchClass {
         // Classify all calls as Normal (which is the default)
@@ -233,13 +233,13 @@ and <a href="https://substrate.dev/rustdocs/v2.0.0/frame_support/weights/trait.P
 }
 </code></pre>
 <p>The complete code for this example as well as several others can be found in the kitchen.</p>
-<h2><a class="header" href="#cautions" id="cautions">Cautions</a></h2>
+<h2 id="cautions"><a class="header" href="#cautions">Cautions</a></h2>
 <p>While you can make reasonable estimates of resource consumption at design time, it is always best to
 actually measure the resources required of your functions through an empirical process. Failure to
 perform such rigorous measurement may result in an economically insecure chain.</p>
 <p>While it isn't enforced, calculating a transaction's weight should itself be a cheap operation. If
 the weight calculation itself is expensive, your chain will be insecure.</p>
-<h2><a class="header" href="#what-about-fees" id="what-about-fees">What About Fees?</a></h2>
+<h2 id="what-about-fees"><a class="header" href="#what-about-fees">What About Fees?</a></h2>
 <p>Weights are used only to describe the computational resources consumed by a transaction, and enable
 accounting of these resources. To learn how to turn these weights into actual fees charged to
 transactors, continue to the recipe on <a href="./fees.html">Fees</a>.</p>

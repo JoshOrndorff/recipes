@@ -163,7 +163,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#kitchen-node-instant-seal" id="kitchen-node-instant-seal">Kitchen Node (Instant Seal)</a></h1>
+                        <h1 id="kitchen-node-instant-seal"><a class="header" href="#kitchen-node-instant-seal">Kitchen Node (Instant Seal)</a></h1>
 <p><code>nodes/kitchen-node</code>
 <a target="_blank" href="https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fnodes%2Fkitchen-node%2Fsrc%2Fservice.rs">
 <img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt ="Try on playground"/>
@@ -173,13 +173,13 @@
 </a></p>
 <p>This recipe demonstrates a general purpose Substrate node that supports most of the recipes'
 runtimes, and uses
-<a href="https://substrate.dev/rustdocs/v2.0.0/sc_consensus_manual_seal/index.html">Instant Seal consensus</a>.</p>
+<a href="https://substrate.dev/rustdocs/v3.0.0/sc_consensus_manual_seal/index.html">Instant Seal consensus</a>.</p>
 <p>The kitchen node serves as the first point of entry for most aspiring chefs when they first
 encounter the recipes. By default it builds with the super-runtime, but it can be used with most of
 the runtimes in the recipes. Changing the runtime is described below. It features the instant seal
 consensus which is perfect for testing and iterating on a runtime.</p>
-<h2><a class="header" href="#installing-a-runtime" id="installing-a-runtime">Installing a Runtime</a></h2>
-<h3><a class="header" href="#cargo-dependency" id="cargo-dependency">Cargo Dependency</a></h3>
+<h2 id="installing-a-runtime"><a class="header" href="#installing-a-runtime">Installing a Runtime</a></h2>
+<h3 id="cargo-dependency"><a class="header" href="#cargo-dependency">Cargo Dependency</a></h3>
 <p>The <code>Cargo.toml</code> file specifies the runtime as a dependency. The file imports the super-runtime, and
 has dependencies on other runtimes commented out.</p>
 <pre><code class="language-toml"># Common runtime configured with most Recipes pallets.
@@ -199,14 +199,10 @@ runtime = { package = &quot;super-runtime&quot;, path = &quot;../../runtimes/sup
 <p>Installing a different runtime in the node is just a matter of commenting out the super-runtime
 line, and enabling another one. Try the weight-fee runtime for example. Of course cargo will
 complain if you try to import two crates under the name <code>runtime</code>.</p>
-<p>It is worth noting that this node does not work with <em>all</em> of the recipes' runtimes. In particular,
-it is not compatible with the babe-grandpa runtime. That runtime uses the babe pallet which requires
-a node that will include a special
-<a href="https://substrate.dev/rustdocs/v2.0.0/sp_runtime/enum.DigestItem.html#variant.PreRuntime"><code>PreRuntime</code> <code>DigestItem</code></a>.</p>
-<h3><a class="header" href="#building-a-service-with-the-runtime" id="building-a-service-with-the-runtime">Building a Service with the Runtime</a></h3>
-<p>With a runtime of our choosing listed among our dependencies, we can wiring the nodes <a href="https://substrate.dev/rustdocs/v2.0.0/sc_service/index.html"><code>Service</code></a>, the part of the node that coordinates communication between all other parts.</p>
+<h3 id="building-a-service-with-the-runtime"><a class="header" href="#building-a-service-with-the-runtime">Building a Service with the Runtime</a></h3>
+<p>With a runtime of our choosing listed among our dependencies, we can begin wiring the node's <a href="https://substrate.dev/rustdocs/v3.0.0/sc_service/index.html"><code>Service</code></a> together. The service is the part of the node that coordinates communication between all other parts.</p>
 <p>We begin by invoking the
-<a href="https://substrate.dev/rustdocs/v2.0.0/sc_executor/macro.native_executor_instance.html"><code>native_executor_instance!</code> macro</a>.
+<a href="https://substrate.dev/rustdocs/v3.0.0/sc_executor/macro.native_executor_instance.html"><code>native_executor_instance!</code> macro</a>.
 This creates an executor which is responsible for executing transactions in the runtime and
 determining whether to run the native or Wasm version of the runtime.</p>
 <pre><code class="language-rust_ignore">native_executor_instance!(
@@ -216,20 +212,20 @@ determining whether to run the native or Wasm version of the runtime.</p>
 );
 </code></pre>
 <p>The remainder of the file will create the individual components of the node and connect them together. Most of this code is boilerplate taken from the Substrate Node Template. We will focus specifically on the unique consensus engine used here.</p>
-<h2><a class="header" href="#instant-seal-consensus" id="instant-seal-consensus">Instant Seal Consensus</a></h2>
+<h2 id="instant-seal-consensus"><a class="header" href="#instant-seal-consensus">Instant Seal Consensus</a></h2>
 <p>The instant seal consensus engine, and its cousin the manual seal consensus engine, are both
 included in the same
-<a href="https://substrate.dev/rustdocs/v2.0.0/sc_consensus_manual_seal/index.html"><code>sc-consensus-manual-seal</code> crate</a>. Instant seal
+<a href="https://substrate.dev/rustdocs/v3.0.0/sc_consensus_manual_seal/index.html"><code>sc-consensus-manual-seal</code> crate</a>. Instant seal
 simply authors a new block whenever a new transaction is available in the queue. This is similar to
 <a href="https://www.trufflesuite.com/ganache">Truffle Suite's Ganache</a> in the Ethereum ecosystem, but
 without the UI.</p>
-<h3><a class="header" href="#the-cargo-dependencies" id="the-cargo-dependencies">The Cargo Dependencies</a></h3>
+<h3 id="the-cargo-dependencies"><a class="header" href="#the-cargo-dependencies">The Cargo Dependencies</a></h3>
 <p>Installing the instant seal engine has three dependencies whereas the runtime had only one.</p>
-<pre><code class="language-toml">sc-consensus = '0.8.0'
-sc-consensus-manual-seal = '0.8.0'
-sp-consensus = '0.8.0'
+<pre><code class="language-toml">sc-consensus = '0.9'
+sc-consensus-manual-seal = '0.9'
+sp-consensus = '0.9'
 </code></pre>
-<h3><a class="header" href="#the-import-queue" id="the-import-queue">The Import Queue</a></h3>
+<h3 id="the-import-queue"><a class="header" href="#the-import-queue">The Import Queue</a></h3>
 <p>We begin in <code>new_partial</code> by creating a manual-seal import queue. Both instant seal and manual seal use the same import queue. This process is similar to, but simpler than, the
 <a href="./basic-pow.html">basic-pow</a> import queue.</p>
 <pre><code class="language-rust ignore">let import_queue = sc_consensus_manual_seal::import_queue(
@@ -238,31 +234,36 @@ sp-consensus = '0.8.0'
 	config.prometheus_registry(),
 );
 </code></pre>
-<h3><a class="header" href="#the-proposer" id="the-proposer">The Proposer</a></h3>
-<p>Now we pick up in the <code>new_full</code> function. All of the code in this portion is executed only if the node is an authority. Create a
-<a href="https://substrate.dev/rustdocs/v2.0.0/sc_basic_authorship/struct.Proposer.html"><code>Proposer</code></a> which will be
+<h3 id="the-proposer"><a class="header" href="#the-proposer">The Proposer</a></h3>
+<p>Now we pick up in the <code>new_full</code> function. All of the non-boilerplate code in this portion is executed only if the node is an authority. Create a
+<a href="https://substrate.dev/rustdocs/v3.0.0/sc_basic_authorship/struct.Proposer.html"><code>Proposer</code></a> which will be
 responsible for creating proposing blocks in the chain.</p>
 <pre><code class="language-rust ignore">let proposer = sc_basic_authorship::ProposerFactory::new(
-	service.client().clone(),
-	service.transaction_pool(),
+	task_manager.spawn_handle(),
+	client.clone(),
+	transaction_pool.clone(),
+	prometheus_registry.as_ref(),
 );
 </code></pre>
-<h3><a class="header" href="#the-authorship-task" id="the-authorship-task">The Authorship Task</a></h3>
+<h3 id="the-authorship-task"><a class="header" href="#the-authorship-task">The Authorship Task</a></h3>
 <p>As with every authoring engine, instant seal needs to be run as an <code>async</code> authoring task.</p>
 <pre><code class="language-rust ignore">let authorship_future = sc_consensus_manual_seal::run_instant_seal(
-	Box::new(client.clone()),
-	proposer,
-	client,
-	transaction_pool.pool().clone(),
-	select_chain,
-	inherent_data_providers,
+	InstantSealParams {
+		block_import: client.clone(),
+		env: proposer,
+		client,
+		pool: transaction_pool.pool().clone(),
+		select_chain,
+		consensus_data_provider: None,
+		inherent_data_providers,
+	}
 );
 </code></pre>
-<p>With the future created, we can now kick it off using the <a href="https://substrate.dev/rustdocs/v2.0.0/sc_service/struct.TaskManager.html"><code>TaskManager</code></a>'s
-<a href="https://substrate.dev/rustdocs/v2.0.0/sc_service/struct.TaskManager.html#method.spawn_essential_handle"><code>spawn_essential_handle</code> method</a>.</p>
+<p>With the future created, we can now kick it off using the <a href="https://substrate.dev/rustdocs/v3.0.0/sc_service/struct.TaskManager.html"><code>TaskManager</code></a>'s
+<a href="https://substrate.dev/rustdocs/v3.0.0/sc_service/struct.TaskManager.html#method.spawn_essential_handle"><code>spawn_essential_handle</code> method</a>.</p>
 <pre><code class="language-rust ignore">task_manager.spawn_essential_handle().spawn_blocking(&quot;instant-seal&quot;, authorship_future);
 </code></pre>
-<h2><a class="header" href="#manual-seal-consensus" id="manual-seal-consensus">Manual Seal Consensus</a></h2>
+<h2 id="manual-seal-consensus"><a class="header" href="#manual-seal-consensus">Manual Seal Consensus</a></h2>
 <p>The instant seal consensus engine used in this node is built on top of a similar manual seal engine. Manual seal listens for commands to come over the RPC instructing it to author blocks. To see this engine in use, check out the <a href="./custom-rpc.html">RPC node recipe</a>.</p>
 
                     </main>
