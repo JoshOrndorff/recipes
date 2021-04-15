@@ -3,11 +3,13 @@
 //! A pallet that implements a storage set on top of a sorted vec and demonstrates performance
 //! tradeoffs when using map sets.
 
-use frame_support::{decl_error, decl_event, decl_module, decl_storage, dispatch::DispatchResult, ensure};
-use frame_system::{self as system, ensure_signed};
-use sp_std::prelude::*;
-use sp_std::collections::btree_set::BTreeSet;
 use account_set::AccountSet;
+use frame_support::{
+	decl_error, decl_event, decl_module, decl_storage, dispatch::DispatchResult, ensure,
+};
+use frame_system::ensure_signed;
+use sp_std::collections::btree_set::BTreeSet;
+use sp_std::prelude::*;
 
 #[cfg(test)]
 mod tests;
@@ -15,12 +17,12 @@ mod tests;
 /// A maximum number of members. When membership reaches this number, no new members may join.
 pub const MAX_MEMBERS: usize = 16;
 
-pub trait Trait: system::Trait {
-	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
+pub trait Config: frame_system::Config {
+	type Event: From<Event<Self>> + Into<<Self as frame_system::Config>::Event>;
 }
 
 decl_storage! {
-	trait Store for Module<T: Trait> as VecSet {
+	trait Store for Module<T: Config> as VecSet {
 		// The set of all members. Stored as a single vec
 		Members get(fn members): Vec<T::AccountId>;
 	}
@@ -29,7 +31,7 @@ decl_storage! {
 decl_event!(
 	pub enum Event<T>
 	where
-		AccountId = <T as system::Trait>::AccountId,
+		AccountId = <T as frame_system::Config>::AccountId,
 	{
 		/// Added a member
 		MemberAdded(AccountId),
@@ -39,7 +41,7 @@ decl_event!(
 );
 
 decl_error! {
-	pub enum Error for Module<T: Trait> {
+	pub enum Error for Module<T: Config> {
 		/// Cannot join as a member because you are already a member
 		AlreadyMember,
 		/// Cannot give up membership because you are not currently a member
@@ -50,7 +52,7 @@ decl_error! {
 }
 
 decl_module! {
-	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
+	pub struct Module<T: Config> for enum Call where origin: T::Origin {
 		fn deposit_event() = default;
 
 		type Error = Error<T>;
@@ -105,7 +107,7 @@ decl_module! {
 	}
 }
 
-impl<T: Trait> AccountSet for Module<T> {
+impl<T: Config> AccountSet for Module<T> {
 	type AccountId = T::AccountId;
 
 	fn accounts() -> BTreeSet<T::AccountId> {

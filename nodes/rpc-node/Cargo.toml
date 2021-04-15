@@ -1,22 +1,12 @@
 [package]
 name = 'rpc-node'
-version = "2.0.0"
+version = "3.0.0"
 edition = '2018'
 authors = ['Substrate DevHub <https://github.com/substrate-developer-hub>']
 repository = 'https://github.com/substrate-developer-hub/recipes'
 description = "A Substrate node that demonstrates a custom RPC endpoint"
 build = 'build.rs'
 license = "GPL-3.0-or-later"
-
-[package.metadata.substrate]
-categories = [
-	"Node",
-	"Custom RPC",
-	"tutorial",
-	"Instant Seal",
-	"recipe",
-]
-compatibility_version = "2.0.0"
 
 [[bin]]
 name = 'rpc-node'
@@ -30,34 +20,33 @@ jsonrpc-core = "15.0"
 jsonrpc-core-client = "15.0"
 jsonrpc-derive = "15.0"
 log = '0.4.8'
-parking_lot = '0.9.0'
+parking_lot = '0.9'
 structopt = "0.3.8"
 tokio = '0.1.22'
 trie-root = '0.15.2'
 
 # Substrate packages
-
-sc-basic-authorship = '0.8.0'
-sc-cli = '0.8.0'
-sc-client-api = '2.0.0'
-sc-consensus = '0.8.0'
-sc-consensus-manual-seal = '0.8.0'
-sc-executor = '0.8.0'
-sc-network = '0.8.0'
-sc-rpc = '2.0.0'
-sc-rpc-api = '0.8.0'
-sc-service = '0.8.0'
-sc-transaction-pool = '2.0.0'
-sp-api = '2.0.0'
-sp-block-builder = '2.0.0'
-sp-blockchain = '2.0.0'
-sp-consensus = '0.8.0'
-sp-core = '2.0.0'
-sp-inherents = '2.0.0'
-sp-io = '2.0.0'
-sp-runtime = '2.0.0'
-sp-timestamp = '2.0.0'
-sp-transaction-pool = '2.0.0'
+sc-basic-authorship = '0.9'
+sc-cli = '0.9'
+sc-client-api = '3.0'
+sc-consensus = '0.9'
+sc-consensus-manual-seal = '0.9'
+sc-executor = '0.9'
+sc-network = '0.9'
+sc-rpc = '3.0'
+sc-rpc-api = '0.9'
+sc-service = '0.9'
+sc-transaction-pool = '3.0'
+sp-api = '3.0'
+sp-block-builder = '3.0'
+sp-blockchain = '3.0'
+sp-consensus = '0.9'
+sp-core = '3.0'
+sp-inherents = '3.0'
+sp-io = '3.0'
+sp-runtime = '3.0'
+sp-timestamp = '3.0'
+sp-transaction-pool = '3.0'
 
 # local packages
 
@@ -68,5 +57,5 @@ sum-storage-rpc = { path = "../../pallets/sum-storage/rpc" }
 sum-storage-runtime-api = { path = "../../pallets/sum-storage/runtime-api" }
 
 [build-dependencies]
-substrate-build-script-utils = '2.0.0'
+substrate-build-script-utils = '3.0'
 vergen = '3.0.4'

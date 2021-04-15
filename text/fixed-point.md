@@ -52,13 +52,13 @@ the features of each.
 
 We'll be using the most common approach which takes its fixed point implementation from Substrate
 itself. There are a few fixed-point structs available in Substrate, all of which implement the
-[`PerThing` trait](https://substrate.dev/rustdocs/v2.0.0/sp_arithmetic/trait.PerThing.html), that cover different
+[`PerThing` trait](https://substrate.dev/rustdocs/v3.0.0/sp_arithmetic/per_things/trait.PerThing.html), that cover different
 amounts of precision. For this accumulator example, we'll use the
-[`PerMill` struct](https://substrate.dev/rustdocs/v2.0.0/sp_arithmetic/struct.Permill.html) which represents
+[`PerMill` struct](https://substrate.dev/rustdocs/v3.0.0/sp_arithmetic/per_things/struct.Permill.html) which represents
 fractions as parts per million. There are also
-[`Perbill`](https://substrate.dev/rustdocs/v2.0.0/sp_arithmetic/struct.Perbill.html),
-[`PerCent`](https://substrate.dev/rustdocs/v2.0.0/sp_arithmetic/struct.Percent.html), and
-[`PerU16`](https://substrate.dev/rustdocs/v2.0.0/sp_arithmetic/struct.PerU16.html), which all provide the same
+[`Perbill`](https://substrate.dev/rustdocs/v3.0.0/sp_arithmetic/per_things/struct.Perbill.html),
+[`PerCent`](https://substrate.dev/rustdocs/v3.0.0/sp_arithmetic/per_things/struct.Percent.html), and
+[`PerU16`](https://substrate.dev/rustdocs/v3.0.0/sp_arithmetic/per_things/struct.PerU16.html), which all provide the same
 interface (because it comes from the trait). Substrate's fixed-point structs are somewhat unique
 because they represent _only_ fractional parts of numbers. That means they can represent numbers
 between 0 and 1 inclusive, but _not_ numbers with whole parts like 2.718 or 3.14.
@@ -69,7 +69,7 @@ storage value to `1`.
 
 ```rust, ignore
 decl_storage! {
-	trait Store for Module<T: Trait> as Example {
+	trait Store for Module<T: Config> as Example {
 		// --snip--
 
 		/// Permill accumulator, value starts at 1 (multiplicative identity)
@@ -128,7 +128,7 @@ fixed-point arithmetic, like ours does, it is advisable to keep your data in sub
 
 ```rust, ignore
 decl_storage! {
-	trait Store for Module<T: Trait> as Example {
+	trait Store for Module<T: Config> as Example {
 		// --snip--
 
 		/// Substrate-fixed accumulator, value starts at 1 (multiplicative identity)
@@ -177,7 +177,7 @@ Fixed point is not very complex conceptually. We represent fractional numbers as
 integers, and we decide in advance to consider some of the place values fractional. It's just like
 saying we'll omit the decimal point when talking about money and all agree that "1995" actually
 _means_ 19.95 €. This is exactly how Substrate's
-[Balances pallet](https://substrate.dev/rustdocs/v2.0.0/pallet_balances/index.html) works, a tradition that's
+[Balances pallet](https://substrate.dev/rustdocs/v3.0.0/pallet_balances/index.html) works, a tradition that's
 been in blockchain since Bitcoin. In our example we will treat 16 bits as integer values, and 16 as
 fractional, just as substrate-fixed's `U16F16` did.
 
@@ -197,7 +197,7 @@ Fixed interpretation of u32 place values
 
 Although the concepts are straight-forward, you'll see that manually implementing operations like
 multiplication is quite error prone. Therefore, when writing your own blockchain applications, it is
-often best to use on of the provided libraries covered in the other two implementations of the
+often best to use one of the provided libraries covered in the other two implementations of the
 accumulator.
 
 As before, we begin by declaring the storage value. This time around it is just a simple u32. But
@@ -210,7 +210,7 @@ shift that bit to the middle just left of the imaginary radix point.
 
 ```rust, ignore
 decl_storage! {
-	trait Store for Module<T: Trait> as Example {
+	trait Store for Module<T: Config> as Example {
 		// --snip--
 
 		/// Manual accumulator, value starts at 1 (multiplicative identity)
@@ -286,7 +286,7 @@ Our first example will look at discrete compounding interest. This is when inter
 fixed interval. In our case, interest will be paid every ten blocks.
 
 For this implementation we've chosen to use Substrate's
-[`Percent` type](https://substrate.dev/rustdocs/v2.0.0/sp_arithmetic/struct.Percent.html). It works nearly the
+[`Percent` type](https://substrate.dev/rustdocs/v3.0.0/sp_arithmetic/per_things/struct.Percent.html). It works nearly the
 same as `Permill`, but it represents numbers as "parts per hundred" rather than "parts per million".
 We could also have used Substrate-fixed for this implementation, but chose to save it for the next
 example.
@@ -297,7 +297,7 @@ Instead we just allow anyone to "deposit" or "withdraw" funds with no source or 
 
 ```rust, ignore
 decl_storage! {
-	trait Store for Module<T: Trait> as Example {
+	trait Store for Module<T: Config> as Example {
 		// --snip--
 
 		/// Balance for the discrete interest account
@@ -398,7 +398,7 @@ With the struct to represent the account's state defined, we can initialize the 
 
 ```rust, ignore
 decl_storage! {
-	trait Store for Module<T: Trait> as Example {
+	trait Store for Module<T: Config> as Example {
 		// --snip--
 
 		/// Balance for the continuously compounded account
@@ -438,7 +438,7 @@ calculates the value of the account considering all the interest that has accrue
 time the account was touched. Let's take a closer look.
 
 ```rust, ignore
-fn value_of_continuous_account(now: &<T as system::Trait>::BlockNumber) -> I32F32 {
+fn value_of_continuous_account(now: &<T as frame_system::Config>::BlockNumber) -> I32F32 {
 	// Get the old state of the accout
 	let ContinuousAccountData{
 		principal,

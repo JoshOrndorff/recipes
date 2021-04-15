@@ -62,7 +62,7 @@ It is often convenient to make a type alias that takes `T`, your pallet's config
 single type parameter. Doing so simply saves you typing in the future.
 
 ```rust, ignore
-type InnerThingOf<T> = InnerThing<<T as system::Trait>::Hash, <T as balances::Trait>::Balance>;
+type InnerThingOf<T> = InnerThing<<T as frame_system::Config>::Hash, <T as pallet_balances::Config>::Balance>;
 ```
 
 ## Structs in Storage
@@ -75,7 +75,7 @@ generally preferred when the entire type exceeds the preferred line length.
 
 ```rust, ignore
 decl_storage! {
-	trait Store for Module<T: Trait> as NestedStructs {
+	trait Store for Module<T: Config> as NestedStructs {
 		InnerThingsByNumbers get(fn inner_things_by_numbers):
 			map hasher(blake2_128_concat) u32 => InnerThingOf<T>;
 		SuperThingsBySuperNumbers get(fn super_things_by_super_numbers):

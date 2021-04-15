@@ -33,8 +33,8 @@ you don't recognize this feature of Rust yet, don't worry; it is the same every 
 just copy it and move on.
 
 ```rust, ignore
-pub trait Trait: system::Trait {
-	type Event: From<Event> + Into<<Self as system::Trait>::Event>;
+pub trait Config: frame_system::Config {
+	type Event: From<Event> + Into<<Self as frame_system::Config>::Event>;
 }
 ```
 
@@ -44,7 +44,7 @@ recognize this syntax because it is unique to this macro. Just copy it each time
 
 ```rust, ignore
 decl_module! {
-	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
+	pub struct Module<T: Config> for enum Call where origin: T::Origin {
 
 		// This line is new
 		fn deposit_event() = default;
@@ -57,7 +57,7 @@ decl_module! {
 ## Declaring Events
 
 To declare an event, use the
-[`decl_event!` macro](https://substrate.dev/rustdocs/v2.0.0/frame_support/macro.decl_event.html). Like any rust
+[`decl_event!` macro](https://substrate.dev/rustdocs/v3.0.0/frame_support/macro.decl_event.html). Like any rust
 enum, Events have names and can optionally carry data with them. The syntax is slightly different
 depending on whether the events carry data of primitive types, or generic types from the pallet's
 configuration trait. These two techniques are demonstrated in the `simple-event` and `generic-event`
@@ -83,7 +83,7 @@ specify additional syntax
 
 ```rust, ignore
 decl_event!(
-	pub enum Event<T> where AccountId = <T as system::Trait>::AccountId {
+	pub enum Event<T> where AccountId = <T as frame_system::Config>::AccountId {
 		EmitInput(AccountId, u32),
 	}
 );

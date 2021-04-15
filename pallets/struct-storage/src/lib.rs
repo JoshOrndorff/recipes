@@ -9,14 +9,14 @@ use frame_support::{
 	decl_event, decl_module, decl_storage,
 	dispatch::DispatchResult,
 };
-use frame_system::{self as system, ensure_signed};
+use frame_system::ensure_signed;
 use sp_runtime::RuntimeDebug;
 
 #[cfg(test)]
 mod tests;
 
-pub trait Trait: balances::Trait + system::Trait {
-	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
+pub trait Config: pallet_balances::Config + frame_system::Config {
+	type Event: From<Event<Self>> + Into<<Self as frame_system::Config>::Event>;
 }
 
 #[derive(Encode, Decode, Clone, Default, RuntimeDebug)]
@@ -26,7 +26,8 @@ pub struct InnerThing<Hash, Balance> {
 	balance: Balance,
 }
 
-type InnerThingOf<T> = InnerThing<<T as system::Trait>::Hash, <T as balances::Trait>::Balance>;
+type InnerThingOf<T> =
+	InnerThing<<T as frame_system::Config>::Hash, <T as pallet_balances::Config>::Balance>;
 
 #[derive(Encode, Decode, Default, RuntimeDebug)]
 pub struct SuperThing<Hash, Balance> {
@@ -35,7 +36,7 @@ pub struct SuperThing<Hash, Balance> {
 }
 
 decl_storage! {
-	trait Store for Module<T: Trait> as NestedStructs {
+	trait Store for Module<T: Config> as NestedStructs {
 		InnerThingsByNumbers get(fn inner_things_by_numbers):
 			map hasher(blake2_128_concat) u32 => InnerThingOf<T>;
 		SuperThingsBySuperNumbers get(fn super_things_by_super_numbers):
@@ -46,8 +47,8 @@ decl_storage! {
 decl_event! (
 	pub enum Event<T>
 	where
-		<T as system::Trait>::Hash,
-		<T as balances::Trait>::Balance
+		<T as frame_system::Config>::Hash,
+		<T as pallet_balances::Config>::Balance
 	{
 		// fields of the new inner thing
 		NewInnerThing(u32, Hash, Balance),
@@ -59,7 +60,7 @@ decl_event! (
 );
 
 decl_module! {
-	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
+	pub struct Module<T: Config> for enum Call where origin: T::Origin {
 		fn deposit_event() = default;
 
 		/// Stores an `InnerThing` struct in the storage map

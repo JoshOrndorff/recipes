@@ -10,14 +10,14 @@
 
 For some runtimes, it may be necessary to remove a subset of values in a key-value mapping. If the
 subset maintain an associated identifier type, this can be done in a clean way with the
-[`double_map`](https://substrate.dev/rustdocs/v2.0.0/frame_support/storage/trait.StorageDoubleMap.html) via the
+[`double_map`](https://substrate.dev/rustdocs/v3.0.0/frame_support/storage/trait.StorageDoubleMap.html) via the
 `remove_prefix` api.
 
 ```rust, ignore
 pub type GroupIndex = u32; // this is Encode (which is necessary for double_map)
 
 decl_storage! {
-	trait Store for Module<T: Trait> as Dmap {
+	trait Store for Module<T: Config> as Dmap {
 		/// Member score (double map)
 		MemberScore get(fn member_score):
 			double_map hasher(blake2_128_concat) GroupIndex, hasher(blake2_128_concat) T::AccountId => u32;

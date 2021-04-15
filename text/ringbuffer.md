@@ -256,7 +256,7 @@ The
 file of the pallet shows typical usage of the transient.
 
 ```rust, ignore
-impl<T: Trait> Module<T> {
+impl<T: Config> Module<T> {
 	fn queue_transient() -> Box<dyn RingBufferTrait<ValueStruct>> {
 		Box::new(RingBufferTransient::<
 			ValueStruct,

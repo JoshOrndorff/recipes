@@ -1,74 +1,60 @@
-use crate::{Event, Module, Trait};
-use frame_support::{assert_ok, impl_outer_event, impl_outer_origin, parameter_types};
+use crate::{self as simple_event, *};
+use frame_support::{assert_ok, construct_runtime, parameter_types};
+use frame_system::{EventRecord, Phase};
 use sp_core::H256;
 use sp_io::TestExternalities;
 use sp_runtime::{
 	testing::Header,
 	traits::{BlakeTwo256, IdentityLookup},
-	Perbill,
 };
-use frame_system::{EventRecord, Phase};
 
-impl_outer_origin! {
-	pub enum Origin for TestRuntime {}
-}
+type UncheckedExtrinsic = frame_system::mocking::MockUncheckedExtrinsic<TestRuntime>;
+type Block = frame_system::mocking::MockBlock<TestRuntime>;
 
-// Workaround for https://github.com/rust-lang/rust/issues/26925 . Remove when sorted.
-#[derive(Clone, PartialEq, Eq, Debug)]
-pub struct TestRuntime;
+construct_runtime!(
+	pub enum TestRuntime where
+		Block = Block,
+		NodeBlock = Block,
+		UncheckedExtrinsic = UncheckedExtrinsic,
+	{
+		System: frame_system::{Module, Call, Config, Storage, Event<T>},
+		SimpleEvent: simple_event::{Module, Call, Event},
+	}
+);
+
 parameter_types! {
 	pub const BlockHashCount: u64 = 250;
-	pub const MaximumBlockWeight: u32 = 1024;
-	pub const MaximumBlockLength: u32 = 2 * 1024;
-	pub const AvailableBlockRatio: Perbill = Perbill::one();
+	pub BlockWeights: frame_system::limits::BlockWeights =
+		frame_system::limits::BlockWeights::simple_max(1024);
 }
-
-// The TestRuntime implements two pallet/frame traits: system, and simple_event
-impl frame_system::Trait for TestRuntime {
+impl frame_system::Config for TestRuntime {
 	type BaseCallFilter = ();
+	type BlockWeights = ();
+	type BlockLength = ();
 	type Origin = Origin;
 	type Index = u64;
-	type Call = ();
+	type Call = Call;
 	type BlockNumber = u64;
 	type Hash = H256;
 	type Hashing = BlakeTwo256;
 	type AccountId = u64;
 	type Lookup = IdentityLookup<Self::AccountId>;
 	type Header = Header;
-	type Event = TestEvent;
+	type Event = Event;
 	type BlockHashCount = BlockHashCount;
-	type MaximumBlockWeight = MaximumBlockWeight;
 	type DbWeight = ();
-	type BlockExecutionWeight = ();
-	type ExtrinsicBaseWeight = ();
-	type MaximumExtrinsicWeight = MaximumBlockWeight;
-	type MaximumBlockLength = MaximumBlockLength;
-	type AvailableBlockRatio = AvailableBlockRatio;
 	type Version = ();
-	type PalletInfo = ();
+	type PalletInfo = PalletInfo;
 	type AccountData = ();
 	type OnNewAccount = ();
 	type OnKilledAccount = ();
 	type SystemWeightInfo = ();
+	type SS58Prefix = ();
 }
 
-mod simple_event {
-	pub use crate::Event;
+impl Config for TestRuntime {
+	type Event = Event;
 }
-
-impl_outer_event! {
-	pub enum TestEvent for TestRuntime {
-		simple_event,
-		frame_system<T>,
-	}
-}
-
-impl Trait for TestRuntime {
-	type Event = TestEvent;
-}
-
-pub type System = frame_system::Module<TestRuntime>;
-pub type SimpleEvent = Module<TestRuntime>;
 
 struct ExternalityBuilder;
 
@@ -92,7 +78,7 @@ fn test() {
 			System::events(),
 			vec![EventRecord {
 				phase: Phase::Initialization,
-				event: TestEvent::simple_event(Event::EmitInput(32)),
+				event: Event::simple_event(simple_event::Event::EmitInput(32)),
 				topics: vec![],
 			}]
 		);

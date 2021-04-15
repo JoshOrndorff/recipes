@@ -35,7 +35,7 @@ needs, we are able to build a set from the `Vec`. We declare our single storage 
 
 ```rust, ignore
 decl_storage! {
-	trait Store for Module<T: Trait> as VecSet {
+	trait Store for Module<T: Config> as VecSet {
 		// The set of all members. Stored as a single vec
 		Members get(fn members): Vec<T::AccountId>;
 	}

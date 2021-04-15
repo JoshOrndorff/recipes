@@ -24,13 +24,13 @@ custom RPCs to your node. In this recipe, we will add three custom RPCs to our n
 
 ## The RPC Extensions Builder
 
-In order to connect custom RPCs you must provide an function known as an "RPC extension builder". This function takes a parameter for whether the node should deny unsafe RPC calls, and returns an [IoHandler](https://docs.rs/jsonrpc-core/15.0.0/jsonrpc_core/struct.IoHandler.html) that the node needs to create a json RPC.
+In order to connect custom RPCs you must provide a function known as an "RPC extension builder". This function takes a parameter for whether the node should deny unsafe RPC calls, and returns an [IoHandler](https://docs.rs/jsonrpc-core/15.0.0/jsonrpc_core/struct.IoHandler.html) that the node needs to create a json RPC. For context, read more at [`RpcExtensionBuilder` trait API doc](https://substrate.dev/rustdocs/v3.0.0/sc_service/trait.RpcExtensionBuilder.html).
 
 ```rust, ignore
 let rpc_extensions_builder = {
 	let client = client.clone();
 	let pool = transaction_pool.clone();
-	Box::new(move |deny_unsafe| {
+	Box::new(move |deny_unsafe, _| {
 		let deps = crate::rpc::FullDeps {
 			client: client.clone(),
 			pool: pool.clone(),
@@ -105,10 +105,10 @@ With our RPC written, we're ready to extend our `IoHandler` with it. We begin wi
 jsonrpc-core = "15.0"
 jsonrpc-core-client = "15.0"
 jsonrpc-derive = "15.0"
-sc-rpc = '2.0.0'
+sc-rpc = '3.0'
 ```
 
-Now we're ready to write the `create_full` function we referenced from our service. The function is quoted in its entirety below. You ca see we add the
+Now we're ready to write the `create_full` function we referenced from our service. The function is quoted in its entirety below. This code is taken from `nodes/rpc-node/src/rpc.rs`.
 
 ```rust, ignore
 pub fn create_full<C, P>(
@@ -301,11 +301,11 @@ custom RPCs in the `nodes/rpc-node/js` directory.
 
 ## The Manual Seal RPC
 
-Our third and final example RPC will interact with consensus. Specifically, it will tell the consensus engine when to author and finalize blocks. The API for this RPC if defined in Substrate in the [`ManualSealApi` Trait](https://substrate.dev/rustdocs/v2.0.0/sc_consensus_manual_seal/rpc/trait.ManualSealApi.html).
+Our third and final example RPC will interact with consensus. Specifically, it will tell the consensus engine when to author and finalize blocks. The API for this RPC if defined in Substrate in the [`ManualSealApi` Trait](https://substrate.dev/rustdocs/v3.0.0/sc_consensus_manual_seal/rpc/trait.ManualSealApi.html).
 
 ### Installing the Manual Seal RPC
 
-The previous RPC needed a reference to the `client` to call into the runtime. Likewise, this RPC needs a command stream to send messages to the actual consensus engine. This recipe does not cover installing the manual seal engine, but it is nearly identical to the [instant seal engine](https://substrate.dev/rustdocs/v2.0.0/sc_consensus_manual_seal/fn.run_instant_seal.html) used in the [Kitchen Node](./kitchen-node.md).
+The previous RPC needed a reference to the `client` to call into the runtime. Likewise, this RPC needs a command stream to send messages to the actual consensus engine. This recipe does not cover installing the manual seal engine, but it is nearly identical to the [instant seal engine](https://substrate.dev/rustdocs/v3.0.0/sc_consensus_manual_seal/fn.run_instant_seal.html) used in the [Kitchen Node](./kitchen-node.md).
 
 To install the RPC endpoint, we do exactly as we have before, and extend the `create_full` function in `rpc.rs`
 
@@ -323,6 +323,12 @@ Once your node is running, you will see that it just sits there idly. It will ac
 the pool, but it will not author blocks on its own. In manual seal, the node does not author a block
 until we explicitly tell it to. We can tell it to author a block by calling the `engine_createBlock`
 RPC.
+
+The easiest way is to use Apps's Developer -> RPC Calls tab.
+
+![Calling the createBlock endpoint via Apps](./img/apps-manual-seal-create-block.png)
+
+It can also be called using `curl` as described previously.
 
 ```bash
 $ curl http://localhost:9933 -H "Content-Type:application/json;charset=utf-8" -d   '{

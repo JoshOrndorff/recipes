@@ -14,38 +14,34 @@ include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 #[cfg(feature = "std")]
 pub mod genesis;
 
+use check_membership::{loose as check_membership_loose, tight as check_membership_tight};
 use frame_system as system;
+use pallet_transaction_payment::CurrencyAdapter;
 use sp_api::impl_runtime_apis;
 use sp_core::{OpaqueMetadata, H256};
 use sp_runtime::traits::{BlakeTwo256, Block as BlockT, IdentifyAccount, IdentityLookup, Verify};
 use sp_runtime::{
 	create_runtime_str, generic,
-	traits::Saturating,
 	transaction_validity::{TransactionSource, TransactionValidity},
 	ApplyExtrinsicResult, MultiSignature,
 };
 use sp_std::prelude::*;
-use check_membership::{ loose as check_membership_loose, tight as check_membership_tight };
 
 #[cfg(feature = "std")]
 use sp_version::NativeVersion;
 use sp_version::RuntimeVersion;
 
-// A few exports that help ease life for downstream crates.
-pub use balances::Call as BalancesCall;
-pub use frame_support::{
-	construct_runtime, debug, parameter_types,
+use frame_support::{
+	construct_runtime, parameter_types,
 	traits::Randomness,
 	weights::{
-		constants::{BlockExecutionWeight, ExtrinsicBaseWeight, RocksDbWeight, WEIGHT_PER_SECOND},
-		IdentityFee, Weight,
+		constants::{RocksDbWeight, WEIGHT_PER_SECOND},
+		IdentityFee,
 	},
-	StorageValue,
 };
 #[cfg(any(feature = "std", test))]
 pub use sp_runtime::BuildStorage;
 pub use sp_runtime::{Perbill, Permill};
-pub use timestamp::Call as TimestampCall;
 
 /// An index to a block.
 pub type BlockNumber = u32;
@@ -101,8 +97,6 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
 	transaction_version: 1,
 };
 
-pub const MILLISECS_PER_BLOCK: u64 = 6000;
-
 /// The version infromation used to identify this runtime when compiled natively.
 #[cfg(feature = "std")]
 pub fn native_version() -> NativeVersion {
@@ -112,20 +106,26 @@ pub fn native_version() -> NativeVersion {
 	}
 }
 
+const NORMAL_DISPATCH_RATIO: Perbill = Perbill::from_percent(75);
+
 parameter_types! {
-	pub const BlockHashCount: BlockNumber = 250;
-	pub const MaximumBlockWeight: Weight = 2 * WEIGHT_PER_SECOND;
-	pub const AvailableBlockRatio: Perbill = Perbill::from_percent(75);
-	/// Assume 10% of weight for average on_initialize calls.
-	pub MaximumExtrinsicWeight: Weight = AvailableBlockRatio::get()
-		.saturating_sub(Perbill::from_percent(10)) * MaximumBlockWeight::get();
-	pub const MaximumBlockLength: u32 = 5 * 1024 * 1024;
 	pub const Version: RuntimeVersion = VERSION;
+	pub const BlockHashCount: BlockNumber = 2400;
+	/// We allow for 2 seconds of compute with a 6 second average block time.
+	pub BlockWeights: frame_system::limits::BlockWeights = frame_system::limits::BlockWeights
+		::with_sensible_defaults(2 * WEIGHT_PER_SECOND, NORMAL_DISPATCH_RATIO);
+	pub BlockLength: frame_system::limits::BlockLength = frame_system::limits::BlockLength
+		::max_with_normal_ratio(5 * 1024 * 1024, NORMAL_DISPATCH_RATIO);
+	pub const SS58Prefix: u8 = 42;
 }
 
-impl system::Trait for Runtime {
+impl frame_system::Config for Runtime {
 	/// The basic call filter to use in dispatchable.
 	type BaseCallFilter = ();
+	/// Block & extrinsics weights: base values and limits.
+	type BlockWeights = BlockWeights;
+	/// The maximum length of a block (in bytes).
+	type BlockLength = BlockLength;
 	/// The identifier used to distinguish between accounts.
 	type AccountId = AccountId;
 	/// The aggregated dispatch type that is available for extrinsics.
@@ -148,24 +148,8 @@ impl system::Trait for Runtime {
 	type Origin = Origin;
 	/// Maximum number of block number to block hash mappings to keep (oldest pruned first).
 	type BlockHashCount = BlockHashCount;
-	/// Maximum weight of each block. With a default weight system of 1byte == 1weight, 4mb is ok.
-	type MaximumBlockWeight = MaximumBlockWeight;
 	/// The weight of database operations that the runtime can invoke.
 	type DbWeight = RocksDbWeight;
-	/// The weight of the overhead invoked on the block import process, independent of the
-	/// extrinsics included in that block.
-	type BlockExecutionWeight = BlockExecutionWeight;
-	/// The base weight of any extrinsic processed by the runtime, independent of the
-	/// logic of that extrinsic. (Signature verification, nonce increment, fee, etc...)
-	type ExtrinsicBaseWeight = ExtrinsicBaseWeight;
-	/// The maximum weight that a single extrinsic of `Normal` dispatch class can have,
-	/// idependent of the logic of that extrinsic. (Roughly max block weight - average on
-	/// initialize cost).
-	type MaximumExtrinsicWeight = MaximumExtrinsicWeight;
-	/// Maximum size of all encoded transactions (in bytes) that are allowed in one block.
-	type MaximumBlockLength = MaximumBlockLength;
-	/// Portion of the block weight that is available to all normal transactions.
-	type AvailableBlockRatio = AvailableBlockRatio;
 	/// Version of the runtime.
 	type Version = Version;
 	/// Converts a module to the index of the module in `construct_runtime!`.
@@ -177,16 +161,18 @@ impl system::Trait for Runtime {
 	/// What to do if an account is fully reaped from the system.
 	type OnKilledAccount = ();
 	/// The data to be stored in an account.
-	type AccountData = balances::AccountData<Balance>;
+	type AccountData = pallet_balances::AccountData<Balance>;
 	/// Weight information for the extrinsics of this pallet.
 	type SystemWeightInfo = ();
+	/// This is used as an identifier of the chain. 42 is the generic substrate prefix.
+	type SS58Prefix = SS58Prefix;
 }
 
 parameter_types! {
 	pub const MinimumPeriod: u64 = 1;
 }
 
-impl timestamp::Trait for Runtime {
+impl pallet_timestamp::Config for Runtime {
 	/// A timestamp: milliseconds since the unix epoch.
 	type Moment = u64;
 	type OnTimestampSet = ();
@@ -201,7 +187,7 @@ parameter_types! {
 	pub const MaxLocks: u32 = 50;
 }
 
-impl balances::Trait for Runtime {
+impl pallet_balances::Config for Runtime {
 	type MaxLocks = MaxLocks;
 	/// The type for recording an account's balance.
 	type Balance = Balance;
@@ -217,31 +203,30 @@ parameter_types! {
 	pub const TransactionByteFee: u128 = 1;
 }
 
-impl transaction_payment::Trait for Runtime {
-	type Currency = balances::Module<Runtime>;
-	type OnTransactionPayment = ();
+impl pallet_transaction_payment::Config for Runtime {
+	type OnChargeTransaction = CurrencyAdapter<Balances, ()>;
 	type TransactionByteFee = TransactionByteFee;
 	type WeightToFee = IdentityFee<Balance>;
 	type FeeMultiplierUpdate = ();
 }
 
-impl sudo::Trait for Runtime {
+impl pallet_sudo::Config for Runtime {
 	type Event = Event;
 	type Call = Call;
 }
 
 // ---------------------- Recipe Pallet Configurations ----------------------
 
-impl basic_token::Trait for Runtime {
+impl basic_token::Config for Runtime {
 	type Event = Event;
 }
 
-impl charity::Trait for Runtime {
+impl charity::Config for Runtime {
 	type Event = Event;
 	type Currency = Balances;
 }
 
-impl compounding_interest::Trait for Runtime {
+impl compounding_interest::Config for Runtime {
 	type Event = Event;
 }
 
@@ -250,7 +235,7 @@ parameter_types! {
 	pub const ClearFrequency: u32 = 10;
 }
 
-impl constant_config::Trait for Runtime {
+impl constant_config::Config for Runtime {
 	type Event = Event;
 	type MaxAddend = MaxAddend;
 	type ClearFrequency = ClearFrequency;
@@ -258,61 +243,66 @@ impl constant_config::Trait for Runtime {
 
 // The following two configuration traits are for the loosely and tightly coupled variants
 // of the check membership pallet. Both pallets are located in the same `check-membership` crate.
-impl check_membership_loose::Trait for Runtime {
+impl check_membership_loose::Config for Runtime {
 	type Event = Event;
 	// You can choose either the `vec-set` or `map-set` implementation of the `AccountSet` trait
 	type MembershipSource = VecSet;
 	// type MembershipSource = MapSet;
 }
 
-impl check_membership_tight::Trait for Runtime {
+impl check_membership_tight::Config for Runtime {
 	type Event = Event;
 }
 
 // The following two configuration traits are for two different instances of the deafult-instance
 // pallet. Notice that only the second instance has to explicitly specify an instance.
-impl default_instance::Trait for Runtime {
+impl default_instance::Config for Runtime {
 	type Event = Event;
 }
 
-impl default_instance::Trait<default_instance::Instance2> for Runtime {
+impl default_instance::Config<default_instance::Instance2> for Runtime {
 	type Event = Event;
 }
 
-impl double_map::Trait for Runtime {
+impl double_map::Config for Runtime {
 	type Event = Event;
 }
 
-impl fixed_point::Trait for Runtime {
+impl fixed_point::Config for Runtime {
 	type Event = Event;
 }
 
-impl generic_event::Trait for Runtime {
+impl generic_event::Config for Runtime {
 	type Event = Event;
 }
 
-impl hello_substrate::Trait for Runtime {}
+impl hello_substrate::Config for Runtime {}
 
 // The following two configuration traits are for two different instances of the last-caller pallet
-impl last_caller::Trait<last_caller::Instance1> for Runtime {
+impl last_caller::Config<last_caller::Instance1> for Runtime {
 	type Event = Event;
 }
 
-impl last_caller::Trait<last_caller::Instance2> for Runtime {
+impl last_caller::Config<last_caller::Instance2> for Runtime {
 	type Event = Event;
 }
 
-impl map_set::Trait for Runtime {
+impl map_set::Config for Runtime {
 	type Event = Event;
 }
 
-impl ringbuffer_queue::Trait for Runtime {
+impl ringbuffer_queue::Config for Runtime {
 	type Event = Event;
 }
 
-impl randomness::Trait for Runtime {
+impl randomness::Config for Runtime {
 	type Event = Event;
 	type RandomnessSource = RandomnessCollectiveFlip;
+}
+
+impl reservable_currency::Config for Runtime {
+	type Event = Event;
+	type Currency = Balances;
 }
 
 parameter_types! {
@@ -321,7 +311,7 @@ parameter_types! {
 	pub const RetirementPeriod: u32 = 10;
 }
 
-impl simple_crowdfund::Trait for Runtime {
+impl simple_crowdfund::Config for Runtime {
 	type Event = Event;
 	type Currency = Balances;
 	type SubmissionDeposit = SubmissionDeposit;
@@ -329,23 +319,23 @@ impl simple_crowdfund::Trait for Runtime {
 	type RetirementPeriod = RetirementPeriod;
 }
 
-impl simple_event::Trait for Runtime {
+impl simple_event::Config for Runtime {
 	type Event = Event;
 }
 
-impl simple_map::Trait for Runtime {
+impl simple_map::Config for Runtime {
 	type Event = Event;
 }
 
-impl storage_cache::Trait for Runtime {
+impl storage_cache::Config for Runtime {
 	type Event = Event;
 }
 
-impl struct_storage::Trait for Runtime {
+impl struct_storage::Config for Runtime {
 	type Event = Event;
 }
 
-impl vec_set::Trait for Runtime {
+impl vec_set::Config for Runtime {
 	type Event = Event;
 }
 
@@ -358,11 +348,11 @@ construct_runtime!(
 		UncheckedExtrinsic = UncheckedExtrinsic
 	{
 		System: system::{Module, Call, Storage, Config, Event<T>},
-		Timestamp: timestamp::{Module, Call, Storage, Inherent},
-		Balances: balances::{Module, Call, Storage, Config<T>, Event<T>},
-		RandomnessCollectiveFlip: randomness_collective_flip::{Module, Call, Storage},
-		Sudo: sudo::{Module, Call, Config<T>, Storage, Event<T>},
-		TransactionPayment: transaction_payment::{Module, Storage},
+		Timestamp: pallet_timestamp::{Module, Call, Storage, Inherent},
+		Balances: pallet_balances::{Module, Call, Storage, Config<T>, Event<T>},
+		RandomnessCollectiveFlip: pallet_randomness_collective_flip::{Module, Call, Storage},
+		Sudo: pallet_sudo::{Module, Call, Config<T>, Storage, Event<T>},
+		TransactionPayment: pallet_transaction_payment::{Module, Storage},
 		// The Recipe Pallets
 		BasicToken: basic_token::{Module, Call, Storage, Event<T>},
 		Charity: charity::{Module, Call, Storage, Config, Event<T>},
@@ -381,6 +371,7 @@ construct_runtime!(
 		MapSet: map_set::{Module, Call, Storage, Event<T>},
 		RingbufferQueue: ringbuffer_queue::{Module, Call, Storage, Event<T>},
 		RandomnessDemo: randomness::{Module, Call, Storage, Event},
+		ReservableCurrency: reservable_currency::{Module, Call, Event<T>},
 		SimpleCrowdfund: simple_crowdfund::{Module, Call, Storage, Event<T>},
 		SimpleEvent: simple_event::{Module, Call, Event},
 		SimpleMap: simple_map::{Module, Call, Storage, Event<T>},
@@ -408,7 +399,7 @@ pub type SignedExtra = (
 	system::CheckEra<Runtime>,
 	system::CheckNonce<Runtime>,
 	system::CheckWeight<Runtime>,
-	transaction_payment::ChargeTransactionPayment<Runtime>,
+	pallet_transaction_payment::ChargeTransactionPayment<Runtime>,
 );
 /// Unchecked extrinsic type as expected by this runtime.
 pub type UncheckedExtrinsic = generic::UncheckedExtrinsic<Address, Call, Signature, SignedExtra>;

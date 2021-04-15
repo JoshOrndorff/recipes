@@ -7,17 +7,17 @@
 use frame_support::{
 	decl_error, decl_event, decl_module, decl_storage, dispatch::DispatchResult, ensure,
 };
-use frame_system::{self as system, ensure_signed};
+use frame_system::ensure_signed;
 
 #[cfg(test)]
 mod tests;
 
-pub trait Trait: system::Trait {
-	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
+pub trait Config: frame_system::Config {
+	type Event: From<Event<Self>> + Into<<Self as frame_system::Config>::Event>;
 }
 
 decl_storage! {
-	trait Store for Module<T: Trait> as Token {
+	trait Store for Module<T: Config> as Token {
 		pub Balances get(fn get_balance): map hasher(blake2_128_concat) T::AccountId => u64;
 
 		pub TotalSupply get(fn total_supply): u64 = 21000000;
@@ -29,7 +29,7 @@ decl_storage! {
 decl_event!(
 	pub enum Event<T>
 	where
-		AccountId = <T as system::Trait>::AccountId,
+		AccountId = <T as frame_system::Config>::AccountId,
 	{
 		/// Token was initialized by user
 		Initialized(AccountId),
@@ -39,7 +39,7 @@ decl_event!(
 );
 
 decl_error! {
-	pub enum Error for Module<T: Trait> {
+	pub enum Error for Module<T: Config> {
 		/// Attempted to initialize the token after it had already been initialized.
 		AlreadyInitialized,
 		/// Attempted to transfer more funds than were available
@@ -48,7 +48,7 @@ decl_error! {
 }
 
 decl_module! {
-	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
+	pub struct Module<T: Config> for enum Call where origin: T::Origin {
 		fn deposit_event() = default;
 
 		/// Initialize the token

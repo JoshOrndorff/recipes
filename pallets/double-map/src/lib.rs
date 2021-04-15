@@ -15,17 +15,17 @@ use frame_support::{
 	ensure,
 	storage::{StorageDoubleMap, StorageMap, StorageValue},
 };
-use frame_system::{self as system, ensure_signed};
+use frame_system::ensure_signed;
 use sp_std::prelude::*;
 
-pub trait Trait: system::Trait {
-	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
+pub trait Config: frame_system::Config {
+	type Event: From<Event<Self>> + Into<<Self as frame_system::Config>::Event>;
 }
 
 pub type GroupIndex = u32; // this is Encode (which is necessary for double_map)
 
 decl_storage! {
-	trait Store for Module<T: Trait> as Dmap {
+	trait Store for Module<T: Config> as Dmap {
 		/// Member score (double map)
 		MemberScore get(fn member_score):
 			double_map hasher(blake2_128_concat) GroupIndex, hasher(blake2_128_concat) T::AccountId => u32;
@@ -39,7 +39,7 @@ decl_storage! {
 decl_event!(
 	pub enum Event<T>
 	where
-		AccountId = <T as system::Trait>::AccountId,
+		AccountId = <T as frame_system::Config>::AccountId,
 	{
 		/// New member for `AllMembers` group
 		NewMember(AccountId),
@@ -53,7 +53,7 @@ decl_event!(
 );
 
 decl_module! {
-	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
+	pub struct Module<T: Config> for enum Call where origin: T::Origin {
 		fn deposit_event() = default;
 
 		/// Join the `AllMembers` vec before joining a group
@@ -109,7 +109,7 @@ decl_module! {
 	}
 }
 
-impl<T: Trait> Module<T> {
+impl<T: Config> Module<T> {
 	// for fast membership checks (see check-membership recipe for more details)
 	fn is_member(who: &T::AccountId) -> bool {
 		Self::all_members().contains(who)

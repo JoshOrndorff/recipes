@@ -10,7 +10,7 @@
 
 [Proof of Work](https://en.wikipedia.org/wiki/Proof_of_work) is not a single consensus algorithm.
 Rather it is a class of algorithms represented in Substrate by the
-[`PowAlgorithm` trait](https://substrate.dev/rustdocs/v2.0.0/sc_consensus_pow/trait.PowAlgorithm.html). Before we
+[`PowAlgorithm` trait](https://substrate.dev/rustdocs/v3.0.0/sc_consensus_pow/trait.PowAlgorithm.html). Before we
 can build a PoW node we must specify a concrete PoW algorithm by implementing this trait. In this
 recipe we specify two concrete PoW algorithms, both of which are based on the
 [sha3 hashing algorithm](https://en.wikipedia.org/wiki/SHA-3).
@@ -44,12 +44,11 @@ minimal sha3 algorithm, this function is quite simple. The difficulty is fixed. 
 more mining power joins the network, the block time will become faster.
 
 ```rust, ignore
-impl<B: BlockT<Hash=H256>> PowAlgorithm<B> for Sha3Algorithm {
+impl<B: BlockT<Hash = H256>> PowAlgorithm<B> for MinimalSha3Algorithm {
 	type Difficulty = U256;
 
-	fn difficulty(&self, _parent: &BlockId<B>) -> Result<Self::Difficulty, Error<B>> {
-		// This basic PoW uses a fixed difficulty.
-		// Raising this difficulty will make the block time slower.
+	fn difficulty(&self, _parent: B::Hash) -> Result<Self::Difficulty, Error<B>> {
+		// Fixed difficulty hardcoded here
 		Ok(U256::from(1_000_000))
 	}
 
@@ -72,7 +71,7 @@ fn verify(
 	pre_hash: &H256,
 	_pre_digest: Option<&[u8]>,
 	seal: &RawSeal,
-	difficulty: Self::Difficulty
+	difficulty: Self::Difficulty,
 ) -> Result<bool, Error<B>> {
 	// Try to construct a seal object by decoding the raw seal given
 	let seal = match Seal::decode(&mut &seal[..]) {
@@ -82,7 +81,7 @@ fn verify(
 
 	// See whether the hash meets the difficulty requirement. If not, fail fast.
 	if !hash_meets_difficulty(&seal.work, difficulty) {
-		return Ok(false)
+		return Ok(false);
 	}
 
 	// Make sure the provided work actually comes from the correct pre_hash
@@ -93,60 +92,12 @@ fn verify(
 	};
 
 	if compute.compute() != seal {
-		return Ok(false)
+		return Ok(false);
 	}
 
 	Ok(true)
 }
 ```
-
-### Mining
-
-Finally our proof of work algorithm needs to be able to mine blocks of our own.
-
-```rust, ignore
-fn mine(
-	&self,
-	_parent: &BlockId<B>,
-	pre_hash: &H256,
-	_pre_digest: Option<&[u8]>,
-	difficulty: Self::Difficulty,
-	round: u32 // The number of nonces to try during this call
-) -> Result<Option<RawSeal>, Error<B>> {
-	// Get a randomness source from the environment; fail if one isn't available
-	let mut rng = SmallRng::from_rng(&mut thread_rng())
-		.map_err(|e| Error::Environment(format!("Initialize RNG failed for mining: {:?}", e)))?;
-
-	// Loop the specified number of times
-	for _ in 0..round {
-
-		// Choose a new nonce
-		let nonce = H256::random_using(&mut rng);
-
-		// Calculate the seal
-		let compute = Compute {
-			difficulty,
-			pre_hash: *pre_hash,
-			nonce,
-		};
-		let seal = compute.compute();
-
-		// If we solved the PoW then return, otherwise loop again
-		if hash_meets_difficulty(&seal.work, difficulty) {
-			return Ok(Some(seal.encode()))
-		}
-	}
-
-	// Tried the specified number of rounds and never found a solution
-	Ok(None)
-}
-```
-
-Notice that this function takes a parameter for the number of rounds of mining it should attempt. If
-no block has been successfully mined in this time, the method will return. This gives the service a
-chance to check whether any new blocks have been received from other authors since the mining
-started. If a valid block has been received, then we will start mining on it. If no such block has
-been received, we will go in for another try at mining on the same block as before.
 
 ## Realistic Sha3 PoW
 
@@ -160,7 +111,7 @@ blocktime remains constant.
 
 We begin as before by defining a struct that will implement the `PowAlgorithm` trait. Unlike before,
 this struct must hold a reference to the
-[`Client`](https://substrate.dev/rustdocs/v2.0.0/sc_service/client/struct.Client.html) so it can call the
+[`Client`](https://substrate.dev/rustdocs/v3.0.0/sc_service/client/struct.Client.html) so it can call the
 appropriate runtime APIs.
 
 ```rust, ignore
@@ -199,14 +150,14 @@ impl<C> Clone for Sha3Algorithm<C> {
 
 ### Implementing the `PowAlgorithm` trait
 
-As before we implement the `PowAlgorithm` trait for out `Sha3Algorithm`. This time we supply more
-complex trait bounds to ensure that the client the algorithm holds a reference to actually provides
-the [`DifficultyAPI`](https://substrate.dev/rustdocs/v2.0.0/sp_consensus_pow/trait.DifficultyApi.html) necessary
+As before we implement the `PowAlgorithm` trait for our `Sha3Algorithm`. This time we supply more
+complex trait bounds to ensure that the encapsulated client actually provides
+the [`DifficultyAPI`](https://substrate.dev/rustdocs/v3.0.0/sp_consensus_pow/trait.DifficultyApi.html) necessary
 to fetch the PoW difficulty from the runtime.
 
 ```rust, ignore
-// Here we implement the general PowAlgorithm trait for our concrete Sha3Algorithm
-impl<B: BlockT<Hash=H256>, C> PowAlgorithm<B> for Sha3Algorithm<C> where
+impl<B: BlockT<Hash = H256>, C> PowAlgorithm<B> for Sha3Algorithm<C>
+where
 	C: ProvideRuntimeApi<B>,
 	C::Api: DifficultyApi<B, U256>,
 {
@@ -216,22 +167,22 @@ impl<B: BlockT<Hash=H256>, C> PowAlgorithm<B> for Sha3Algorithm<C> where
 }
 ```
 
-### Difficulty
-
-The implementation of `PowAlgorithm`'s `difficulty` function, no longer returns a fxed value, but
+The implementation of `PowAlgorithm`'s `difficulty` function, no longer returns a fixed value, but
 rather calls into the runtime API which is guaranteed to exist because of the trait bounds. It also
 maps any errors that may have occurred when using the API.
 
 ```rust, ignore
 fn difficulty(&self, parent: B::Hash) -> Result<Self::Difficulty, Error<B>> {
 	let parent_id = BlockId::<B>::hash(parent);
-	self.client.runtime_api().difficulty(&parent_id)
-		.map_err(|e| sc_consensus_pow::Error::Environment(
-			format!("Fetching difficulty from runtime failed: {:?}", e)
-		))
+	self.client
+		.runtime_api()
+		.difficulty(&parent_id)
+		.map_err(|err| {
+			sc_consensus_pow::Error::Environment(
+				format!("Fetching difficulty from runtime failed: {:?}", err)
+			)
+		})
 }
 ```
 
-### Verify and Mine
-
-The `verify` and `mine` functions are unchanged from the `MinimalSha3Algorithm` implementation.
+The `verify` function is unchanged from the `MinimalSha3Algorithm` implementation.

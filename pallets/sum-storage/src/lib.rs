@@ -6,19 +6,19 @@
 //! the two storage items.
 
 use frame_support::{decl_event, decl_module, decl_storage, dispatch};
-use frame_system::{self as system, ensure_signed};
+use frame_system::ensure_signed;
 
 #[cfg(test)]
 mod tests;
 
 /// The module's configuration trait.
-pub trait Trait: system::Trait {
+pub trait Config: frame_system::Config {
 	/// The overarching event type.
-	type Event: From<Event> + Into<<Self as system::Trait>::Event>;
+	type Event: From<Event> + Into<<Self as frame_system::Config>::Event>;
 }
 
 decl_storage! {
-	trait Store for Module<T: Trait> as TemplateModule {
+	trait Store for Module<T: Config> as SumStorage {
 		Thing1 get(fn thing1): u32;
 		Thing2 get(fn thing2): u32;
 	}
@@ -27,7 +27,7 @@ decl_storage! {
 // The module's dispatchable functions.
 decl_module! {
 	/// The module declaration.
-	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
+	pub struct Module<T: Config> for enum Call where origin: T::Origin {
 		fn deposit_event() = default;
 
 		/// Sets the first simple storage value
@@ -54,7 +54,7 @@ decl_module! {
 	}
 }
 
-impl<T: Trait> Module<T> {
+impl<T: Config> Module<T> {
 	pub fn get_sum() -> u32 {
 		Thing1::get() + Thing2::get()
 	}

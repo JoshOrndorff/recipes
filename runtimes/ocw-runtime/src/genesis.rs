@@ -1,8 +1,6 @@
 //! Helper module to build a genesis configuration for the Offchain Worker
 
-use super::{
-	AccountId, BalancesConfig, GenesisConfig, Signature, SudoConfig, SystemConfig, WASM_BINARY,
-};
+use super::{AccountId, BalancesConfig, GenesisConfig, Signature, SudoConfig, SystemConfig};
 use sp_core::{sr25519, Pair};
 use sp_runtime::traits::{IdentifyAccount, Verify};
 
@@ -23,8 +21,9 @@ where
 	AccountPublic::from(get_from_seed::<TPair>(seed)).into_account()
 }
 
-pub fn dev_genesis() -> GenesisConfig {
+pub fn dev_genesis(wasm_binary: &[u8]) -> GenesisConfig {
 	testnet_genesis(
+		wasm_binary,
 		// Root Key
 		account_id_from_seed::<sr25519::Pair>("Alice"),
 		// Endowed Accounts
@@ -38,10 +37,14 @@ pub fn dev_genesis() -> GenesisConfig {
 }
 
 /// Helper function to build a genesis configuration
-pub fn testnet_genesis(root_key: AccountId, endowed_accounts: Vec<AccountId>) -> GenesisConfig {
+pub fn testnet_genesis(
+	wasm_binary: &[u8],
+	root_key: AccountId,
+	endowed_accounts: Vec<AccountId>,
+) -> GenesisConfig {
 	GenesisConfig {
 		frame_system: Some(SystemConfig {
-			code: WASM_BINARY.to_vec(),
+			code: wasm_binary.to_vec(),
 			changes_trie_config: Default::default(),
 		}),
 		pallet_balances: Some(BalancesConfig {

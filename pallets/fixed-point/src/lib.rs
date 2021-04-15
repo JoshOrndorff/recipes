@@ -16,19 +16,19 @@
 //! mathematical operations including transcendental functions.
 
 use frame_support::{decl_error, decl_event, decl_module, decl_storage, dispatch::DispatchResult};
-use frame_system::{self as system, ensure_signed};
+use frame_system::ensure_signed;
 use sp_arithmetic::{traits::Saturating, Permill};
 use substrate_fixed::types::U16F16;
 
 #[cfg(test)]
 mod tests;
 
-pub trait Trait: system::Trait {
-	type Event: From<Event> + Into<<Self as system::Trait>::Event>;
+pub trait Config: frame_system::Config {
+	type Event: From<Event> + Into<<Self as frame_system::Config>::Event>;
 }
 
 decl_storage! {
-	trait Store for Module<T: Trait> as Example {
+	trait Store for Module<T: Config> as FixedPoint {
 		/// Permill accumulator, value starts at 1 (multiplicative identity)
 		PermillAccumulator get(fn permill_value): Permill = Permill::one();
 		/// Substrate-fixed accumulator, value starts at 1 (multiplicative identity)
@@ -52,14 +52,14 @@ decl_event!(
 );
 
 decl_error! {
-	pub enum Error for Module<T: Trait> {
+	pub enum Error for Module<T: Config> {
 		/// Some math operation overflowed
 		Overflow,
 	}
 }
 
 decl_module! {
-	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
+	pub struct Module<T: Config> for enum Call where origin: T::Origin {
 		fn deposit_event() = default;
 
 		/// Update the Permill accumulator implementation's value by multiplying it

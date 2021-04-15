@@ -1,7 +1,7 @@
-use super::*;
+use crate::{self as simple_crowdfund, Config, Error, FundInfo, ModuleId};
 
 use frame_support::{
-	assert_noop, assert_ok, impl_outer_origin, parameter_types,
+	assert_noop, assert_ok, construct_runtime, parameter_types,
 	traits::{OnFinalize, OnInitialize},
 };
 use sp_core::H256;
@@ -10,58 +10,60 @@ use sp_core::H256;
 use sp_runtime::{
 	testing::Header,
 	traits::{BlakeTwo256, IdentityLookup},
-	Perbill, Percent, Permill,
+	Percent, Permill,
 };
 
-impl_outer_origin! {
-	pub enum Origin for Test {}
-}
+type UncheckedExtrinsic = frame_system::mocking::MockUncheckedExtrinsic<TestRuntime>;
+type Block = frame_system::mocking::MockBlock<TestRuntime>;
 
-// For testing the module, we construct most of a mock runtime. This means
-// first constructing a configuration type (`Test`) which `impl`s each of the
-// configuration traits of modules we want to use.
-#[derive(Clone, Eq, PartialEq)]
-pub struct Test;
+construct_runtime!(
+	pub enum TestRuntime where
+		Block = Block,
+		NodeBlock = Block,
+		UncheckedExtrinsic = UncheckedExtrinsic,
+	{
+		System: frame_system::{Module, Call, Config, Storage, Event<T>},
+		Balances: pallet_balances::{Module, Call, Storage, Config<T>, Event<T>},
+		Crowdfund: simple_crowdfund::{Module, Call, Storage, Event<T>},
+	}
+);
+
 parameter_types! {
-	pub const BlockHashCount: u32 = 250;
-	pub const MaximumBlockWeight: u32 = 4 * 1024 * 1024;
-	pub const MaximumBlockLength: u32 = 4 * 1024 * 1024;
-	pub const AvailableBlockRatio: Perbill = Perbill::from_percent(75);
+	pub const BlockHashCount: u64 = 250;
+	pub BlockWeights: frame_system::limits::BlockWeights =
+		frame_system::limits::BlockWeights::simple_max(1024);
 }
-impl system::Trait for Test {
+impl frame_system::Config for TestRuntime {
 	type BaseCallFilter = ();
+	type BlockWeights = ();
+	type BlockLength = ();
 	type Origin = Origin;
 	type Index = u64;
-	type Call = ();
+	type Call = Call;
 	type BlockNumber = u64;
 	type Hash = H256;
 	type Hashing = BlakeTwo256;
 	type AccountId = u64;
 	type Lookup = IdentityLookup<Self::AccountId>;
 	type Header = Header;
-	type Event = ();
+	type Event = Event;
 	type BlockHashCount = BlockHashCount;
-	type MaximumBlockWeight = MaximumBlockWeight;
 	type DbWeight = ();
-	type BlockExecutionWeight = ();
-	type ExtrinsicBaseWeight = ();
-	type MaximumExtrinsicWeight = MaximumBlockWeight;
-	type MaximumBlockLength = MaximumBlockLength;
-	type AvailableBlockRatio = AvailableBlockRatio;
 	type Version = ();
-	type PalletInfo = ();
-	type AccountData = balances::AccountData<u64>;
+	type PalletInfo = PalletInfo;
+	type AccountData = pallet_balances::AccountData<u64>;
 	type OnNewAccount = ();
 	type OnKilledAccount = ();
 	type SystemWeightInfo = ();
+	type SS58Prefix = ();
 }
 parameter_types! {
 	pub const ExistentialDeposit: u64 = 1;
 }
-impl balances::Trait for Test {
+impl pallet_balances::Config for TestRuntime {
 	type Balance = u64;
 	type MaxLocks = ();
-	type Event = ();
+	type Event = Event;
 	type DustRemoval = ();
 	type ExistentialDeposit = ExistentialDeposit;
 	type AccountStore = System;
@@ -85,26 +87,23 @@ parameter_types! {
 	pub const MinContribution: u64 = 10;
 	pub const RetirementPeriod: u64 = 5;
 }
-impl Trait for Test {
-	type Event = ();
+impl Config for TestRuntime {
+	type Event = Event;
 	type Currency = Balances;
 	type SubmissionDeposit = SubmissionDeposit;
 	type MinContribution = MinContribution;
 	type RetirementPeriod = RetirementPeriod;
 }
 
-type System = system::Module<Test>;
-type Balances = balances::Module<Test>;
-type Crowdfund = Module<Test>;
-use balances::Error as BalancesError;
+use pallet_balances::Error as BalancesError;
 
 // This function basically just builds a genesis storage key/value store according to
 // our desired mockup.
 fn new_test_ext() -> sp_io::TestExternalities {
-	let mut t = system::GenesisConfig::default()
-		.build_storage::<Test>()
+	let mut t = frame_system::GenesisConfig::default()
+		.build_storage::<TestRuntime>()
 		.unwrap();
-	balances::GenesisConfig::<Test> {
+	pallet_balances::GenesisConfig::<TestRuntime> {
 		balances: vec![(1, 1000), (2, 2000), (3, 3000), (4, 4000)],
 	}
 	.assimilate_storage(&mut t)
@@ -162,7 +161,7 @@ fn create_handles_insufficient_balance() {
 	new_test_ext().execute_with(|| {
 		assert_noop!(
 			Crowdfund::create(Origin::signed(1337), 2, 1000, 9),
-			BalancesError::<Test, _>::InsufficientBalance
+			BalancesError::<TestRuntime, _>::InsufficientBalance
 		);
 	});
 }
@@ -197,12 +196,12 @@ fn contribute_handles_basic_errors() {
 		// Cannot contribute to non-existing fund
 		assert_noop!(
 			Crowdfund::contribute(Origin::signed(1), 0, 49),
-			Error::<Test>::InvalidIndex
+			Error::<TestRuntime>::InvalidIndex
 		);
 		// Cannot contribute below minimum contribution
 		assert_noop!(
 			Crowdfund::contribute(Origin::signed(1), 0, 9),
-			Error::<Test>::ContributionTooSmall
+			Error::<TestRuntime>::ContributionTooSmall
 		);
 
 		// Set up a crowdfund
@@ -215,7 +214,7 @@ fn contribute_handles_basic_errors() {
 		// Cannot contribute to ended fund
 		assert_noop!(
 			Crowdfund::contribute(Origin::signed(1), 0, 49),
-			Error::<Test>::ContributionPeriodOver
+			Error::<TestRuntime>::ContributionPeriodOver
 		);
 	});
 }
@@ -260,7 +259,7 @@ fn withdraw_handles_basic_errors() {
 		// Cannot withdraw before fund ends
 		assert_noop!(
 			Crowdfund::withdraw(Origin::signed(1), 0),
-			Error::<Test>::FundStillActive
+			Error::<TestRuntime>::FundStillActive
 		);
 
 		// Skip to the retirement period
@@ -270,12 +269,12 @@ fn withdraw_handles_basic_errors() {
 		// Cannot withdraw if they did not contribute
 		assert_noop!(
 			Crowdfund::withdraw(Origin::signed(2), 0),
-			Error::<Test>::NoContribution
+			Error::<TestRuntime>::NoContribution
 		);
 		// Cannot withdraw from a non-existent fund
 		assert_noop!(
 			Crowdfund::withdraw(Origin::signed(1), 1),
-			Error::<Test>::InvalidIndex
+			Error::<TestRuntime>::InvalidIndex
 		);
 	});
 }
@@ -327,12 +326,12 @@ fn dissolve_handles_basic_errors() {
 		// Cannot dissolve an invalid fund index
 		assert_noop!(
 			Crowdfund::dissolve(Origin::signed(1), 1),
-			Error::<Test>::InvalidIndex
+			Error::<TestRuntime>::InvalidIndex
 		);
 		// Cannot dissolve an active fund
 		assert_noop!(
 			Crowdfund::dissolve(Origin::signed(1), 0),
-			Error::<Test>::FundNotRetired
+			Error::<TestRuntime>::FundNotRetired
 		);
 
 		run_to_block(10);
@@ -340,7 +339,7 @@ fn dissolve_handles_basic_errors() {
 		// Cannot disolve an ended but not yet retired fund
 		assert_noop!(
 			Crowdfund::dissolve(Origin::signed(1), 0),
-			Error::<Test>::FundNotRetired
+			Error::<TestRuntime>::FundNotRetired
 		);
 	});
 }
@@ -395,12 +394,12 @@ fn dispense_handles_basic_errors() {
 		// Cannot dispense an invalid fund index
 		assert_noop!(
 			Crowdfund::dispense(Origin::signed(1), 1),
-			Error::<Test>::InvalidIndex
+			Error::<TestRuntime>::InvalidIndex
 		);
 		// Cannot dispense an active fund
 		assert_noop!(
 			Crowdfund::dispense(Origin::signed(1), 0),
-			Error::<Test>::FundStillActive
+			Error::<TestRuntime>::FundStillActive
 		);
 
 		// Skip to the retirement period
@@ -410,7 +409,7 @@ fn dispense_handles_basic_errors() {
 		// Cannot disopens an ended but unsuccessful fund
 		assert_noop!(
 			Crowdfund::dispense(Origin::signed(1), 0),
-			Error::<Test>::UnsuccessfulFund
+			Error::<TestRuntime>::UnsuccessfulFund
 		);
 	});
 }

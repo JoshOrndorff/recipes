@@ -1,20 +1,11 @@
 [package]
 name = "kitchen-node"
-version = "2.0.0"
+version = "3.0.0"
 edition = "2018"
 authors = ['Substrate DevHub <https://github.com/substrate-developer-hub>']
 repository = 'https://github.com/substrate-developer-hub/recipes'
 description = 'An instant-sealing Substrate node. Can be used with most recipe runtimes.'
 license = "GPL-3.0-or-later"
-
-[package.metadata.substrate]
-categories = [
-	"Node",
-	"Instant Seal",
-	"tutorial",
-	"recipe",
-]
-compatibility_version = "2.0.0"
 
 [[bin]]
 name = "kitchen-node"
@@ -33,24 +24,24 @@ parking_lot = "0.9.0"
 trie-root = "0.15.2"
 
 # Substrate packages
-
-sc-basic-authorship = '0.8.0'
-sc-cli = '0.8.0'
-sc-client-api = '2.0.0'
-sc-consensus = '0.8.0'
-sc-consensus-manual-seal = '0.8.0'
-sc-executor = '0.8.0'
-sc-network = '0.8.0'
-sc-service = '0.8.0'
-sc-transaction-pool = '2.0.0'
-sp-api = '2.0.0'
-sp-consensus = '0.8.0'
-sp-core = '2.0.0'
-sp-inherents = '2.0.0'
-sp-io = '2.0.0'
-sp-runtime = '2.0.0'
-sp-timestamp = '2.0.0'
-sp-transaction-pool = '2.0.0'
+sc-basic-authorship = '0.9'
+sc-cli = '0.9'
+sc-client-api = '3.0'
+sc-consensus = '0.9'
+sc-consensus-manual-seal = '0.9'
+sc-executor = '0.9'
+sc-network = '0.9'
+sc-service = '0.9'
+sc-transaction-pool = '3.0'
+sp-api = '3.0'
+sp-consensus = '0.9'
+sp-core = '3.0'
+sp-inherents = '3.0'
+sp-io = '3.0'
+sp-keystore = '0.9'
+sp-runtime = '3.0'
+sp-timestamp = '3.0'
+sp-transaction-pool = '3.0'
 
 # local packages
 
@@ -72,7 +63,7 @@ runtime = { package = "super-runtime", path = "../../runtimes/super-runtime" }
 # ---
 
 [build-dependencies]
-substrate-build-script-utils = '2.0.0'
+substrate-build-script-utils = '3.0'
 vergen = "3.0.4"
 
 [features]

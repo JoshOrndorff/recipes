@@ -9,7 +9,7 @@
 </a>
 
 To declare constant values within a runtime, it is necessary to import the
-[`Get`](https://substrate.dev/rustdocs/v2.0.0/frame_support/traits/trait.Get.html) trait from `frame_support`
+[`Get`](https://substrate.dev/rustdocs/v3.0.0/frame_support/traits/trait.Get.html) trait from `frame_support`
 
 ```rust, ignore
 use frame_support::traits::Get;
@@ -19,8 +19,8 @@ Configurable constants are declared as associated types in the pallet's configur
 the `Get<T>` syntax for any type `T`.
 
 ```rust, ignore
-pub trait Trait: system::Trait {
-	type Event: From<Event> + Into<<Self as system::Trait>::Event>;
+pub trait Config: frame_system::Config {
+	type Event: From<Event> + Into<<Self as frame_system::Config>::Event>;
 
 	/// Maximum amount added per invocation
 	type MaxAddend: Get<u32>;
@@ -36,7 +36,7 @@ the top of this block, right after `fn deposit_event`.
 
 ```rust, ignore
 decl_module! {
-	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
+	pub struct Module<T: Config> for enum Call where origin: T::Origin {
 		fn deposit_event() = default;
 
 		const MaxAddend: u32 = T::MaxAddend::get();
@@ -52,7 +52,7 @@ This example manipulates a single value in storage declared as `SingleValue`.
 
 ```rust, ignore
 decl_storage! {
-	trait Store for Module<T: Trait> as Example {
+	trait Store for Module<T: Config> as Example {
 		SingleValue get(fn single_value): u32;
 	}
 }
@@ -103,7 +103,7 @@ transaction fees).
 
 When the pallet is included in a runtime, the runtime developer supplies the value of the constant
 using the
-[`parameter_types!` macro](https://substrate.dev/rustdocs/v2.0.0/frame_support/macro.parameter_types.html). This
+[`parameter_types!` macro](https://substrate.dev/rustdocs/v3.0.0/frame_support/macro.parameter_types.html). This
 pallet is included in the `super-runtime` where we see the following macro invocation and trait
 implementation.
 
@@ -113,7 +113,7 @@ parameter_types! {
 	pub const ClearFrequency: u32 = 10;
 }
 
-impl constant_config::Trait for Runtime {
+impl constant_config::Config for Runtime {
 	type Event = Event;
 	type MaxAddend = MaxAddend;
 	type ClearFrequency = ClearFrequency;

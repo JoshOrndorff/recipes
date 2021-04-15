@@ -46,7 +46,7 @@ let pending = request
 // By default, the http request is async from the runtime perspective. So we are asking the
 //   runtime to wait here.
 // The returning value here is a `Result` of `Result`, so we are unwrapping it twice by two `?`
-//   ref: https://substrate.dev/rustdocs/v2.0.0/sp_runtime/offchain/http/struct.PendingRequest.html#method.try_wait
+//   ref: https://substrate.dev/rustdocs/v3.0.0/sp_runtime/offchain/http/struct.PendingRequest.html#method.try_wait
 let response = pending
 	.try_wait(timeout)
 	.map_err(|_| <Error<T>>::HttpFetchingError)?
@@ -79,31 +79,23 @@ function.
 
 ### Setup
 
-In Rust, `serde` and `serde-json` are the popular combo-package used for JSON parsing. Due to the
-project setup of compiling Substrate with `serde` feature `std` on and cargo feature
-unification limitation, we cannot simultaneously have `serde` feature `std` off (`no_std` on) when
-compiling the runtime (this is a bit of a mouthful,
-[the details can be seen in this issue](https://github.com/rust-lang/cargo/issues/4463)). So we are
-going to use a renamed `serde` crate, `alt_serde`, in our pallet to remedy this situation.
+In Rust, `serde` and `serde-json` are the popular combo-package used for JSON parsing.
 
 src:
 `pallets/ocw-demo/Cargo.toml`
 
 ```toml
-[package]
-# ...
+#--snip--
 
 [dependencies]
-# external dependencies
-# ...
+#--snip--
 
-alt_serde = { version = "1", default-features = false, features = ["derive"] }
-serde_json = { version = "1", default-features = false, git = "https://github.com/Xanewok/json", branch = "no-std", features = ["alloc"] }
+serde = { version = '1.0.125', default-features = false, features = ['derive'] }
+serde_json = { version = '1.0.64', default-features = false, features = ['alloc'] }
 
-# ...
+
+#--snip--
 ```
-
-We also use a modified version of `serde_json` with the latest `alloc` feature that depends on `alt_serde`.
 
 ### Deserializing JSON string to struct
 
@@ -114,13 +106,9 @@ src:
 `pallets/ocw-demo/src/lib.rs`
 
 ```rust
-// We use `alt_serde`, and Xanewok-modified `serde_json` so that we can compile the program
-//   with serde(features `std`) and alt_serde(features `no_std`).
-use alt_serde::{Deserialize, Deserializer};
+use serde::{Deserialize, Deserializer};
 
-// Specifying serde path as `alt_serde`
 // ref: https://serde.rs/container-attrs.html#crate
-#[serde(crate = "alt_serde")]
 #[derive(Deserialize, Encode, Decode, Default)]
 struct GithubInfo {
 	// Specify our own deserializing function to convert JSON string to vector of bytes
@@ -132,7 +120,7 @@ struct GithubInfo {
 }
 ```
 
-By default, `serde` deserialize JSON string to the datatype `String`. We want to write our own
+By default, `serde` deserializes JSON strings to the `String` datatype. We want to write our own
 deserializer to convert it to vector of bytes.
 
 ```rust
@@ -158,7 +146,7 @@ fn fetch_n_parse() -> Result<GithubInfo, Error<T>> {
 		.map_err(|_| <Error<T>>::HttpFetchingError)?;
 
 	// Deserializing JSON to struct, thanks to `serde` and `serde_derive`
-	let gh_info: GithubInfo = serde_json::from_str(&resp_str).unwrap();
+	let gh_info: GithubInfo = serde_json::from_str(&resp_str).map_err(|_| <Error<T>>::HttpFetchingError)?;
 	Ok(gh_info)
 }
 ```
