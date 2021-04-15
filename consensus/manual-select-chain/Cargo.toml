@@ -1,0 +1,19 @@
+[package]
+name = 'manual-select-chain'
+version = "3.0.0"
+edition = '2018'
+authors = ['Substrate DevHub <https://github.com/substrate-developer-hub>']
+repository = 'https://github.com/substrate-developer-hub/recipes'
+description = 'A select chain rule controlled manually by the user.'
+license = "GPL-3.0-or-later"
+
+[dependencies]
+parity-scale-codec = '2.0'
+
+# Substrate packages
+sp-api = '3.0'
+sp-core = '3.0'
+sp-consensus = '0.9'
+sp-runtime = '3.0'
+sp-blockchain = '3.0'
+sc-client-api = '3.0'

@@ -36,5 +36,6 @@ members = [
 	"nodes/kitchen-node",
 	"nodes/rpc-node",
 	"consensus/sha3pow",
+	"consensus/manual-select-chain",
 	"traits/account-set",
 ]
