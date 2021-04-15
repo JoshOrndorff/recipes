@@ -7,7 +7,8 @@ on:
   push:
     branches:
       - master
-      - test-ci # always want to including test-ci for testing gh-action
+      # always include test-ci for testing gh-action
+      - test-ci
     paths-ignore:
       - 'README.md'
 
