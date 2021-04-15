@@ -59,7 +59,9 @@ impl<B, Block, CS> ManualSelectChain<B, Block, CS>
 	// Probably.
 	pub async fn start_worker(&self) {
 		while let Some(newly_selected) = self.command_stream.next().await {
-			self. 
+			// TODO Set the `selected` field to be whatever came in over the channel.
+			// The tricky part is that `ManualSelectChain` has to be `Clone`. So how can
+			// I ensure they all get updated?
 		}
 	}
 
