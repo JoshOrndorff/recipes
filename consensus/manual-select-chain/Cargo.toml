@@ -9,6 +9,7 @@ license = "GPL-3.0-or-later"
 
 [dependencies]
 parity-scale-codec = '2.0'
+futures = '0.3'
 
 # Substrate packages
 sp-api = '3.0'

@@ -3259,6 +3259,7 @@ dependencies = [
 name = "manual-select-chain"
 version = "3.0.0"
 dependencies = [
+ "futures 0.3.13",
  "parity-scale-codec 2.0.1",
  "sc-client-api",
  "sp-api",
