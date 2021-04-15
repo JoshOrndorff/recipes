@@ -12,9 +12,10 @@ use futures::prelude::*;
 
 
 /// A select chain implementation that receives commands dictating when to change the best block over a channel.
-pub struct ManualSelectChain<B, Block, CS> {
+pub struct ManualSelectChain<B, Block: BlockT, CS> {
 	backend: Arc<B>,
 	command_stream: CS, //TODO is it actually useful for CS to be generic? Will we ever use anything else?
+	selected: Option<Block::Hash>,
 	_phantom: PhantomData<Block>
 }
 
@@ -22,12 +23,13 @@ pub struct ManualSelectChain<B, Block, CS> {
 // That means I either need to use `watch` vs `mpsc`, or not have the channel belong
 // to the struct. Which I guess would mean the start method would become a standalone function
 // For now I'll continue assuming I'll use `watch`.
-impl<B, Block, CS: Clone> Clone for ManualSelectChain<B, Block, CS> {
+impl<B, Block: BlockT, CS: Clone> Clone for ManualSelectChain<B, Block, CS> {
 	fn clone(&self) -> Self {
 		Self {
 			backend: self.backend.clone(),
 			command_stream: self.command_stream.clone(),
-			_phantom: Default::default()
+			selected: self.selected.clone(),
+			_phantom: Default::default(),
 		}
 	}
 }
@@ -45,6 +47,7 @@ impl<B, Block, CS> ManualSelectChain<B, Block, CS>
 		Self {
 			backend,
 			command_stream,
+			selected: None,
 			_phantom: Default::default()
 		}
 	}
