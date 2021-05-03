@@ -389,11 +389,11 @@ impl<T: Config> Module<T> {
 			}
 			// Transaction is sent successfully
 			return Ok(());
+		} else {
+			// The case result == `None`: no account is available for sending
+			debug::error!("No local account available");
+			return Err(<Error<T>>::NoLocalAcctForSigning);
 		}
-
-		// The case of `None`: no account is available for sending
-		debug::error!("No local account available");
-		Err(<Error<T>>::NoLocalAcctForSigning)
 	}
 
 	fn offchain_unsigned_tx(block_number: T::BlockNumber) -> Result<(), Error<T>> {
@@ -430,11 +430,11 @@ impl<T: Config> Module<T> {
 				debug::error!("Failed in offchain_unsigned_tx_signed_payload");
 				<Error<T>>::OffchainUnsignedTxSignedPayloadError
 			});
+		} else {
+			// The case of `None`: no account is available for sending
+			debug::error!("No local account available");
+			Err(<Error<T>>::NoLocalAcctForSigning)
 		}
-
-		// The case of `None`: no account is available for sending
-		debug::error!("No local account available");
-		Err(<Error<T>>::NoLocalAcctForSigning)
 	}
 }
 
@@ -453,12 +453,14 @@ impl<T: Config> frame_support::unsigned::ValidateUnsigned for Module<T> {
 
 		match call {
 			Call::submit_number_unsigned(_number) => valid_tx(b"submit_number_unsigned".to_vec()),
+
 			Call::submit_number_unsigned_with_signed_payload(ref payload, ref signature) => {
 				if !SignedPayload::<T>::verify::<T::AuthorityId>(payload, signature.clone()) {
 					return InvalidTransaction::BadProof.into();
 				}
 				valid_tx(b"submit_number_unsigned_with_signed_payload".to_vec())
-			}
+			},
+
 			_ => InvalidTransaction::Call.into(),
 		}
 	}
