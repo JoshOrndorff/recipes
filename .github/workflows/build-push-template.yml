@@ -10,7 +10,7 @@ on:
 jobs:
   build-push-template:
     if: ${{ github.repository == 'substrate-developer-hub/recipes' }}
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
     - name: Trigger playground inclusion
       uses: peter-evans/repository-dispatch@v1
