@@ -6,12 +6,15 @@ use sc_executor::native_executor_instance;
 pub use sc_executor::NativeExecutor;
 use sc_finality_grandpa::GrandpaBlockImport;
 use sc_service::{error::Error as ServiceError, Configuration, PartialComponents, TaskManager};
-use sha3pow::MinimalSha3Algorithm;
+use sha3pow::*;
 use sp_api::TransactionFor;
 use sp_consensus::import_queue::BasicQueue;
 use sp_inherents::InherentDataProviders;
 use std::sync::Arc;
 use std::time::Duration;
+use std::thread;
+use sp_core::{H256, Encode};
+use sha3::{Digest, Sha3_256};
 
 // Our native executor instance.
 native_executor_instance!(
@@ -206,6 +209,33 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
 		task_manager
 			.spawn_essential_handle()
 			.spawn_blocking("pow", worker_task);
+
+		// Start Mining
+		let mut numb: u8 = 0;
+		thread::spawn(move || {
+			loop {
+				let worker = _worker.clone();
+				let metadata = worker.lock().metadata();
+				if let Some(metadata) = metadata {
+					let nonce = H256::from_slice(Sha3_256::digest(&[numb]).as_slice());
+					let compute = Compute {
+						difficulty: metadata.difficulty,
+						pre_hash: metadata.pre_hash,
+						nonce,
+					};
+					let seal = compute.compute();
+					if hash_meets_difficulty(&seal.work, seal.difficulty) {
+						let mut worker = worker.lock();
+						worker.submit(seal.encode());
+					}
+					numb = numb.saturating_add(1u8);
+					if numb == 255u8 {
+						numb = 0;
+					}
+					thread::sleep(Duration::new(0, 500_000_000));
+				}
+			}
+		});
 	}
 
 	let grandpa_config = sc_finality_grandpa::Config {
