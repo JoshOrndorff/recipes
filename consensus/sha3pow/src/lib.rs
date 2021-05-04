@@ -12,7 +12,7 @@ use std::sync::Arc;
 /// The test is done by multiplying the two together. If the product
 /// overflows the bounds of U256, then the product (and thus the hash)
 /// was too high.
-fn hash_meets_difficulty(hash: &H256, difficulty: U256) -> bool {
+pub fn hash_meets_difficulty(hash: &H256, difficulty: U256) -> bool {
 	let num_hash = U256::from(&hash[..]);
 	let (_, overflowed) = num_hash.overflowing_mul(difficulty);
 
@@ -60,7 +60,7 @@ impl<B: BlockT<Hash = H256>> PowAlgorithm<B> for MinimalSha3Algorithm {
 
 	fn difficulty(&self, _parent: B::Hash) -> Result<Self::Difficulty, Error<B>> {
 		// Fixed difficulty hardcoded here
-		Ok(U256::from(1_000_000))
+		Ok(U256::from(1_0))
 	}
 
 	fn verify(
