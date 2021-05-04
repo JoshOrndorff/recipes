@@ -931,7 +931,7 @@ dependencies = [
  "sp-io",
  "sp-runtime",
  "sp-std",
- "substrate-fixed",
+ "substrate-fixed 0.5.6 (git+https://github.com/encointer/substrate-fixed.git)",
 ]
 
 [[package]]
@@ -1472,7 +1472,7 @@ dependencies = [
  "sp-io",
  "sp-runtime",
  "sp-std",
- "substrate-fixed",
+ "substrate-fixed 0.5.6 (git+https://github.com/encointer/substrate-fixed.git?rev=b33d186888c60f38adafcfc0ec3a21aab263aef1)",
 ]
 
 [[package]]
@@ -2614,6 +2614,7 @@ dependencies = [
  "futures 0.1.31",
  "futures 0.3.13",
  "log",
+ "ocw-runtime",
  "parking_lot 0.9.0",
  "sc-basic-authorship",
  "sc-cli",
@@ -2635,7 +2636,6 @@ dependencies = [
  "sp-transaction-pool",
  "structopt",
  "substrate-build-script-utils",
- "super-runtime",
  "tokio 0.1.22",
  "trie-root 0.15.2",
  "vergen",
@@ -7166,6 +7166,15 @@ dependencies = [
 name = "substrate-fixed"
 version = "0.5.6"
 source = "git+https://github.com/encointer/substrate-fixed.git?rev=b33d186888c60f38adafcfc0ec3a21aab263aef1#b33d186888c60f38adafcfc0ec3a21aab263aef1"
+dependencies = [
+ "parity-scale-codec 2.0.1",
+ "typenum",
+]
+
+[[package]]
+name = "substrate-fixed"
+version = "0.5.6"
+source = "git+https://github.com/encointer/substrate-fixed.git?branch=master#b33d186888c60f38adafcfc0ec3a21aab263aef1"
 dependencies = [
  "parity-scale-codec 2.0.1",
  "typenum",
