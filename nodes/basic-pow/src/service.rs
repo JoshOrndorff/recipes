@@ -11,9 +11,8 @@ use sp_consensus::import_queue::BasicQueue;
 use sp_inherents::InherentDataProviders;
 use std::{sync::Arc, time::Duration};
 use std::thread;
-use sp_core::H256;
+use sp_core::{H256, Encode};
 use sha3::{Digest, Sha3_256};
-use sp_core::Encode;
 
 // Our native executor instance.
 native_executor_instance!(
