@@ -18,7 +18,8 @@ use frame_system::{
 		SignedPayload, Signer, SigningTypes, SubmitTransaction,
 	},
 };
-use sp_core::crypto::KeyTypeId;
+use sp_core::{crypto::KeyTypeId, offchain::StorageKind};
+use sp_io::offchain_index;
 use sp_runtime::{
 	offchain as rt_offchain,
 	offchain::{
@@ -42,17 +43,19 @@ use serde::{Deserialize, Deserializer};
 /// `KeyTypeId` via the keystore to sign the transaction.
 /// The keys can be inserted manually via RPC (see `author_insertKey`).
 pub const KEY_TYPE: KeyTypeId = KeyTypeId(*b"demo");
-pub const NUM_VEC_LEN: usize = 10;
+const NUM_VEC_LEN: usize = 10;
 /// The type to sign and send transactions.
-pub const UNSIGNED_TXS_PRIORITY: u64 = 100;
+const UNSIGNED_TXS_PRIORITY: u64 = 100;
 
 // We are fetching information from the github public API about organization`substrate-developer-hub`.
-pub const HTTP_REMOTE_REQUEST: &str = "https://api.github.com/orgs/substrate-developer-hub";
-pub const HTTP_HEADER_USER_AGENT: &str = "jimmychu0807";
+const HTTP_REMOTE_REQUEST: &str = "https://api.github.com/orgs/substrate-developer-hub";
+const HTTP_HEADER_USER_AGENT: &str = "jimmychu0807";
 
-pub const FETCH_TIMEOUT_PERIOD: u64 = 3000; // in milli-seconds
-pub const LOCK_TIMEOUT_EXPIRATION: u64 = FETCH_TIMEOUT_PERIOD + 1000; // in milli-seconds
-pub const LOCK_BLOCK_EXPIRATION: u32 = 3; // in block number
+const FETCH_TIMEOUT_PERIOD: u64 = 3000; // in milli-seconds
+const LOCK_TIMEOUT_EXPIRATION: u64 = FETCH_TIMEOUT_PERIOD + 1000; // in milli-seconds
+const LOCK_BLOCK_EXPIRATION: u32 = 3; // in block number
+
+const ONCHAIN_TX_KEY: &[u8] = b"ocw-demo::storage::tx";
 
 /// Based on the above `KeyTypeId` we need to generate a pallet-specific crypto type wrapper.
 /// We can utilize the supported crypto kinds (`sr25519`, `ed25519` and `ecdsa`) and augment
@@ -186,6 +189,13 @@ decl_module! {
 			debug::info!("submit_number_signed: ({}, {:?})", number, who);
 			Self::append_or_replace_number(number);
 
+			// Incrementing everytime when an on-chain transaction happen
+			offchain_index::set(ONCHAIN_TX_KEY, &1.encode());
+
+			// `local_storage_get` can only be called in offchain worker context
+			// let read = sp_io::offchain::local_storage_get(StorageKind::PERSISTENT, ONCHAIN_TX_KEY);
+			// debug::info!("onchain read: {:?}", read);
+
 			Self::deposit_event(RawEvent::NewNumber(Some(who), number));
 			Ok(())
 		}
@@ -195,6 +205,12 @@ decl_module! {
 			let _ = ensure_none(origin)?;
 			debug::info!("submit_number_unsigned: {}", number);
 			Self::append_or_replace_number(number);
+
+			// Incrementing everytime when an on-chain transaction happen
+			offchain_index::set(ONCHAIN_TX_KEY, &10.encode());
+
+			// let read = sp_io::offchain::local_storage_get(StorageKind::PERSISTENT, ONCHAIN_TX_KEY);
+			// debug::info!("onchain read: {:?}", read);
 
 			Self::deposit_event(RawEvent::NewNumber(None, number));
 			Ok(())
@@ -235,6 +251,10 @@ decl_module! {
 			if let Err(e) = result {
 				debug::error!("offchain_worker error: {:?}", e);
 			}
+
+			// Reading # of on-chain transactions happened
+			let onchain_txs = sp_io::offchain::local_storage_get(StorageKind::PERSISTENT, ONCHAIN_TX_KEY);
+			debug::info!("Num of on-chain transactions: {:?}", onchain_txs);
 		}
 	}
 }
@@ -259,7 +279,7 @@ impl<T: Config> Module<T> {
 		// Create a reference to Local Storage value.
 		// Since the local storage is common for all offchain workers, it's a good practice
 		// to prepend our entry with the pallet name.
-		let s_info = StorageValueRef::persistent(b"offchain-demo::gh-info");
+		let s_info = StorageValueRef::persistent(b"ocw-demo::gh-info");
 
 		// Local storage is persisted and shared between runs of the offchain workers,
 		// offchain workers may run concurrently. We can use the `mutate` function to
@@ -287,7 +307,7 @@ impl<T: Config> Module<T> {
 		//   4) `with_block_and_time_deadline` - lock with custom time and block expiration
 		// Here we choose the most custom one for demonstration purpose.
 		let mut lock = StorageLock::<BlockAndTime<Self>>::with_block_and_time_deadline(
-			b"offchain-demo::lock",
+			b"ocw-demo::lock",
 			LOCK_BLOCK_EXPIRATION,
 			rt_offchain::Duration::from_millis(LOCK_TIMEOUT_EXPIRATION),
 		);
