@@ -241,10 +241,10 @@ decl_module! {
 			// 4. Fetching JSON via http requests in ocw
 			const TRANSACTION_TYPES: usize = 4;
 			let result = match block_number.try_into().unwrap_or(0) % TRANSACTION_TYPES	{
-				0 => Self::offchain_signed_tx(block_number),
-				1 => Self::offchain_unsigned_tx(block_number),
-				2 => Self::offchain_unsigned_tx_signed_payload(block_number),
-				3 => Self::fetch_github_info(),
+				1 => Self::offchain_signed_tx(block_number),
+				2 => Self::offchain_unsigned_tx(block_number),
+				3 => Self::offchain_unsigned_tx_signed_payload(block_number),
+				0 => Self::fetch_github_info(),
 				_ => Err(Error::<T>::UnknownOffchainMux),
 			};
 
