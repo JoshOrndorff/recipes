@@ -189,12 +189,18 @@ decl_module! {
 			debug::info!("submit_number_signed: ({}, {:?})", number, who);
 			Self::append_or_replace_number(number);
 
-			// Incrementing everytime when an on-chain transaction happen
-			offchain_index::set(ONCHAIN_TX_KEY, &1.encode());
-
-			// `local_storage_get` can only be called in offchain worker context
-			// let read = sp_io::offchain::local_storage_get(StorageKind::PERSISTENT, ONCHAIN_TX_KEY);
-			// debug::info!("onchain read: {:?}", read);
+			// Offchain-indexing allowing on-chain extrinsics to write to off-chain storage so it can be
+			// reaad in off-chain worker context. This could serve as a buffer for on-chain extrinsic
+			// passing data to ocw. Note though from extrinsics perspective this is write-only and cannot
+			// be read back.
+			//
+			// The value is written in byte form, so we need to encode/decode it when writting/reading
+			// a number to/from this memory space.
+			//
+			// Ref: https://substrate.dev/rustdocs/v3.0.0/sp_io/offchain_index/index.html
+			//
+			// Incrementing everytime when an on-chain transaction happen.
+			offchain_index::set(ONCHAIN_TX_KEY, &number.encode());
 
 			Self::deposit_event(RawEvent::NewNumber(Some(who), number));
 			Ok(())
@@ -207,10 +213,7 @@ decl_module! {
 			Self::append_or_replace_number(number);
 
 			// Incrementing everytime when an on-chain transaction happen
-			offchain_index::set(ONCHAIN_TX_KEY, &10.encode());
-
-			// let read = sp_io::offchain::local_storage_get(StorageKind::PERSISTENT, ONCHAIN_TX_KEY);
-			// debug::info!("onchain read: {:?}", read);
+			offchain_index::set(ONCHAIN_TX_KEY, &number.encode());
 
 			Self::deposit_event(RawEvent::NewNumber(None, number));
 			Ok(())
@@ -226,6 +229,9 @@ decl_module! {
 			let Payload { number, public } = payload;
 			debug::info!("submit_number_unsigned_with_signed_payload: ({}, {:?})", number, public);
 			Self::append_or_replace_number(number);
+
+			// Incrementing everytime when an on-chain transaction happen
+			offchain_index::set(ONCHAIN_TX_KEY, &number.encode());
 
 			Self::deposit_event(RawEvent::NewNumber(None, number));
 			Ok(())
@@ -252,9 +258,11 @@ decl_module! {
 				debug::error!("offchain_worker error: {:?}", e);
 			}
 
-			// Reading # of on-chain transactions happened
-			let onchain_txs = sp_io::offchain::local_storage_get(StorageKind::PERSISTENT, ONCHAIN_TX_KEY);
-			debug::info!("Num of on-chain transactions: {:?}", onchain_txs);
+			// Reading the number written in the last on-chain transaction.
+			let mem_onchain_num = StorageValueRef::persistent(ONCHAIN_TX_KEY);
+			if let Some(Some(onchain_num)) = mem_onchain_num.get::<u64>() {
+				debug::info!("Number written on last on-chain transaction: {:?}", onchain_num);
+			}
 		}
 	}
 }
