@@ -190,7 +190,7 @@ decl_module! {
 			Self::append_or_replace_number(number);
 
 			// Offchain-indexing allowing on-chain extrinsics to write to off-chain storage so it can be
-			// reaad in off-chain worker context. This could serve as a buffer for on-chain extrinsic
+			// read in off-chain worker context. This could serve as a buffer for on-chain extrinsic
 			// passing data to ocw. Note though from extrinsics perspective this is write-only and cannot
 			// be read back.
 			//
