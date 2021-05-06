@@ -191,7 +191,7 @@ decl_module! {
 
 			// Offchain-indexing allowing on-chain extrinsics to write to off-chain storage so it can be
 			// read in off-chain worker context. This could serve as a buffer for on-chain extrinsic
-			// passing data to ocw. Note though from extrinsics perspective this is write-only and cannot
+			// passing data to ocw. From an on-chain perspective, this is write-only and cannot
 			// be read back.
 			//
 			// The value is written in byte form, so we need to encode/decode it when writting/reading
