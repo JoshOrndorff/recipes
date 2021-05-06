@@ -60,7 +60,7 @@ impl<B: BlockT<Hash = H256>> PowAlgorithm<B> for MinimalSha3Algorithm {
 
 	fn difficulty(&self, _parent: B::Hash) -> Result<Self::Difficulty, Error<B>> {
 		// Fixed difficulty hardcoded here
-		Ok(U256::from(1_0))
+		Ok(U256::from(10))
 	}
 
 	fn verify(
