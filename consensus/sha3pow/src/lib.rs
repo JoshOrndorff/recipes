@@ -25,7 +25,7 @@ pub fn hash_meets_difficulty(hash: &H256, difficulty: U256) -> bool {
 pub struct Seal {
 	pub difficulty: U256,
 	pub work: H256,
-	pub nonce: H256,
+	pub nonce: U256,
 }
 
 /// A not-yet-computed attempt to solve the proof of work. Calling the
@@ -34,7 +34,7 @@ pub struct Seal {
 pub struct Compute {
 	pub difficulty: U256,
 	pub pre_hash: H256,
-	pub nonce: H256,
+	pub nonce: U256,
 }
 
 impl Compute {
@@ -60,7 +60,7 @@ impl<B: BlockT<Hash = H256>> PowAlgorithm<B> for MinimalSha3Algorithm {
 
 	fn difficulty(&self, _parent: B::Hash) -> Result<Self::Difficulty, Error<B>> {
 		// Fixed difficulty hardcoded here
-		Ok(U256::from(10))
+		Ok(U256::from(1_000_000))
 	}
 
 	fn verify(
