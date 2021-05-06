@@ -10,7 +10,7 @@ Knowledge discussed in this chapter built upon [using local storage in off-chain
 > **Notes**
 >
 > In order to see the off-chain indexing feature in effect, please run the kitchen node with
-> off-chain indexing flag on, as `./target/debug/kitchen-node --dev --tmp --enable-offchain-indexing true`
+> off-chain indexing flag on, as `./target/release/kitchen-node --dev --tmp --enable-offchain-indexing true`
 
 ## Writing to Off-chain Storage From On-chain Context
 
@@ -51,7 +51,7 @@ fn offchain_worker(block_number: T::BlockNumber) {
 }
 ```
 
-We read the data back in the `offchain_worker()` function by how we would normally read from the
+We read the data back in the `offchain_worker()` function as we would normally read from the
 local off-chain storage. We first specify the memory space with `StorageValueRef::persistent()` with
 its key, and then read back the data with `get` and decode it to `u64`.
 
