@@ -149,7 +149,9 @@ pub trait Config: frame_system::Config + CreateSignedTransaction<Call<Self>> {
 
 ### Setup: Runtime `ocw-runtime`
 
-Going back to our runtime `ocw-runtime`, in addition of implementing the pallet configuration trait `ocw_demo::Config`, we also implement `frame_system::offchain::CreateSignedTransaction`,
+Going back to our runtime `ocw-runtime`, in addition of implementing the pallet
+ configuration trait `ocw_demo::Config`, we also implement 
+ `frame_system::offchain::CreateSignedTransaction`,
 `frame_system::offchain::SigningTypes`, and `frame_system::offchain::SendTransactionTypes`.
 
 src:
@@ -209,7 +211,8 @@ where
 // -- snip --
 ```
 
-Let's focus on the `CreateSignedTransaction` implementation first. The overall objective here is to perform the following:
+Let's focus on the `CreateSignedTransaction` implementation first.
+The overall objective here is to perform the following:
 
 - Signing the on-chain `call` and `extra` payload of the call. This together is called the signature.
 - Finally returning the on-chain `call`, the account/address making the signature, the signature
@@ -332,7 +335,7 @@ We implement the `ValidateUnsigned` trait for `Module`, and add the allowance lo
 `validate_unsigned` function. We verify that if the call is `Call::submit_number_unsigned` we return
 a [`ValidTransaction`](https://substrate.dev/rustdocs/v3.0.0/sp_runtime/transaction_validity/struct.ValidTransaction.html) object using the [builder pattern](https://rust-unofficial.github.io/patterns/patterns/creational/builder.html).
 
-The `ValidTransaction` object contain certain fields:
+The `ValidTransaction` object contains certain fields:
 
 - `priority`: determine the ordering of two transactions, given their dependencies are satisfied.
 - `provides`: contain a list of tags provided by this transaction. Successfully importing the

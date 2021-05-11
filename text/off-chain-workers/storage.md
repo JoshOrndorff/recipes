@@ -84,7 +84,9 @@ fn fetch_github_info() -> Result<(), Error<T>> {
 }
 ```
 
-In the above code, we first define a lock by giving it a name and set the time limit. The time limit can be specified by providing number of blocks to wait, amount of time to wait, or both (whichever is shorter).
+In the above code, we first define a lock by giving it a name and set the time limit.
+The time limit can be specified by providing number of blocks to wait, amount of
+time to wait, or both (whichever is shorter).
 
 We then perform the fetch after the lock is acquired.
 
@@ -106,7 +108,11 @@ Finally when the `_guard` variable goes out of scope, the lock is released.
 
 ## Conclusion
 
-In this chapter, we demonstrate how to define a persistent storage value and a storage lock that set the locking time limit by either number of block passed or time passed, or both. Finally we demonstrate how to acquire the lock, perform a relatively long process (fetching data externally) and writing the data back to the storage.
+In this chapter, we demonstrate how to define a persistent storage value and a
+storage lock that set the locking time limit by either number of block passed or
+time passed, or both. Finally we demonstrate how to acquire the lock, perform
+a relatively long process (fetching data externally) and writing the data back to
+the storage.
 
 ## Reference
 

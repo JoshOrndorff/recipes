@@ -150,4 +150,7 @@ fn fetch_n_parse() -> Result<GithubInfo, Error<T>> {
 
 ## Conclusion
 
-In this chapter, we go over how to construct an HTTP request and send it out to the GitHub API remote endpoint. We then demonstrate how to use `serde` library to parse the JSON string we retrieved in the HTTP response into a data structure that we can further manipulated in our runtime.
+In this chapter, we go over how to construct an HTTP request and send it out to the
+GitHub API remote endpoint. We then demonstrate how to use `serde` library to
+parse the JSON string we retrieved in the HTTP response into a data structure that
+we can further manipulate in our runtime.
