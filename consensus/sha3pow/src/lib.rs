@@ -12,7 +12,7 @@ use std::sync::Arc;
 /// The test is done by multiplying the two together. If the product
 /// overflows the bounds of U256, then the product (and thus the hash)
 /// was too high.
-fn hash_meets_difficulty(hash: &H256, difficulty: U256) -> bool {
+pub fn hash_meets_difficulty(hash: &H256, difficulty: U256) -> bool {
 	let num_hash = U256::from(&hash[..]);
 	let (_, overflowed) = num_hash.overflowing_mul(difficulty);
 
@@ -25,7 +25,7 @@ fn hash_meets_difficulty(hash: &H256, difficulty: U256) -> bool {
 pub struct Seal {
 	pub difficulty: U256,
 	pub work: H256,
-	pub nonce: H256,
+	pub nonce: U256,
 }
 
 /// A not-yet-computed attempt to solve the proof of work. Calling the
@@ -34,7 +34,7 @@ pub struct Seal {
 pub struct Compute {
 	pub difficulty: U256,
 	pub pre_hash: H256,
-	pub nonce: H256,
+	pub nonce: U256,
 }
 
 impl Compute {

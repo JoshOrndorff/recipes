@@ -5,11 +5,13 @@ use sc_client_api::{ExecutorProvider, RemoteBackend};
 use sc_executor::native_executor_instance;
 pub use sc_executor::NativeExecutor;
 use sc_service::{error::Error as ServiceError, Configuration, PartialComponents, TaskManager};
-use sha3pow::MinimalSha3Algorithm;
+use sha3pow::*;
 use sp_api::TransactionFor;
 use sp_consensus::import_queue::BasicQueue;
 use sp_inherents::InherentDataProviders;
 use std::{sync::Arc, time::Duration};
+use std::thread;
+use sp_core::{U256, Encode};
 
 // Our native executor instance.
 native_executor_instance!(
@@ -193,6 +195,33 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
 		task_manager
 			.spawn_essential_handle()
 			.spawn_blocking("pow", worker_task);
+		
+		// Start Mining
+		let mut nonce: U256 = U256::from(0);
+		thread::spawn(move || loop {
+			let worker = _worker.clone();
+			let metadata = worker.lock().metadata();
+			if let Some(metadata) = metadata {
+				let compute = Compute {
+					difficulty: metadata.difficulty,
+					pre_hash: metadata.pre_hash,
+					nonce,
+				};
+				let seal = compute.compute();
+				if hash_meets_difficulty(&seal.work, seal.difficulty) {
+					nonce = U256::from(0);
+					let mut worker = worker.lock();
+					worker.submit(seal.encode());
+				} else {
+					nonce = nonce.saturating_add(U256::from(1));
+					if nonce == U256::MAX {
+						nonce = U256::from(0);
+					}
+				}
+			} else {
+				thread::sleep(Duration::new(1, 0));
+			}
+		});
 	}
 
 	network_starter.start_network();
