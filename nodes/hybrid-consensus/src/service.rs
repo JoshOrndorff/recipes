@@ -211,29 +211,29 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
 
 		// Start Mining
 		let mut nonce: U256 = U256::from(0);
-        	thread::spawn(move || loop {
-        	    let worker = _worker.clone();
-        	    let metadata = worker.lock().metadata();
-        	    if let Some(metadata) = metadata {
-        	        let compute = Compute {
-        	            difficulty: metadata.difficulty,
-        	            pre_hash: metadata.pre_hash,
-        	            nonce,
-        	        };
-        	        let seal = compute.compute();
-        	        if hash_meets_difficulty(&seal.work, seal.difficulty) {
-        	            nonce = U256::from(0);
-        	            let mut worker = worker.lock();
-        	            worker.submit(seal.encode());
-        	        } else {
-        	            nonce = nonce.saturating_add(U256::from(1));
-        	            if nonce == U256::MAX {
-        	                nonce = U256::from(0);
-        	            }
-        	        }
-        	    } else {
-        	        thread::sleep(Duration::new(1, 0));
-        	    }
+		thread::spawn(move || loop {
+			let worker = _worker.clone();
+			let metadata = worker.lock().metadata();
+			if let Some(metadata) = metadata {
+				let compute = Compute {
+					difficulty: metadata.difficulty,
+					pre_hash: metadata.pre_hash,
+					nonce,
+				};
+				let seal = compute.compute();
+				if hash_meets_difficulty(&seal.work, seal.difficulty) {
+					nonce = U256::from(0);
+					let mut worker = worker.lock();
+					worker.submit(seal.encode());
+				} else {
+					nonce = nonce.saturating_add(U256::from(1));
+					if nonce == U256::MAX {
+						nonce = U256::from(0);
+					}
+				}
+			} else {
+				thread::sleep(Duration::new(1, 0));
+			}
 		});
 	}
 
