@@ -13,7 +13,7 @@ use sp_inherents::InherentDataProviders;
 use std::sync::Arc;
 use std::time::Duration;
 use std::thread;
-use sp_core::{H256, Encode};
+use sp_core::{U256, Encode};
 
 // Our native executor instance.
 native_executor_instance!(
