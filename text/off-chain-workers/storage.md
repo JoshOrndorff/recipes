@@ -14,7 +14,7 @@ also local storage that persist across runs in off-chain workers. Storage is onl
 workers and is not passed within the blockchain network.
 
 Off-chain workers are asynchronously run at the end of block import. Since ocws are not limited by how
-long they run, at any single instance there could be multiple ocws running, being initiated by previous
+long they run, at any single instance there could be multiple ocw instances running, being initiated by previous
 block imports. See diagram below.
 
 ![More than one off-chain workers at a single instance](../img/multiple-ocws.png)
@@ -32,7 +32,7 @@ cached value. Otherwise we acquire the lock, fetch from github public API, and s
 
 ## Setup
 
-In the `fetch_if_needed()` function, we first define a storage reference used by the off-chain
+In the `fetch_github_info()` function, we first define a storage reference used by the off-chain
 worker.
 
 ```rust
@@ -45,8 +45,8 @@ fn fetch_github_info() -> Result<(), Error<T>> {
 }
 ```
 
-We pass in a key as our storage key. As storage keys are namespaced globally, a good practice
-would be to prepend our pallet name in front of our storage key.
+We pass in a key as our storage key. As all storage keys share a single global namespace, a good practice
+would be to prepend the pallet name in front of our storage key, as we have done above.
 
 ## Access
 
@@ -58,49 +58,37 @@ We first check if the github info has been fetched and cached.
 
 ```rust
 fn fetch_github_info() -> Result<(), Error<T>> {
-	// ...
+	// -- snip --
 	if let Some(Some(gh_info)) = s_info.get::<GithubInfo>() {
 		// gh-info has already been fetched. Return early.
 		debug::info!("cached gh-info: {:?}", gh_info);
 		return Ok(());
 	}
-	// ...
+	// -- snip --
 }
 ```
 
 We then define a lock and try to acquire it before fetching github info.
 
 ```rust
-fn fetch_if_needed() -> Result<(), Error<T>> {
-	//...
-	// off-chain storage can be accessed by off-chain workers from multiple runs, so we want to lock
-	//   it before doing heavy computations and write operations.
-	// ref: https://substrate.dev/rustdocs/v3.0.0-rc3/sp_runtime/offchain/storage_lock/index.html
-	//
-	// There are four ways of defining a lock:
-	//   1) `new` - lock with default time and block exipration
-	//   2) `with_deadline` - lock with default block but custom time exipration
-	//   3) `with_block_deadline` - lock with default time but custom block exipration
-	//   4) `with_block_and_time_deadline` - lock with custom time and block exipration
-	// Here we choose the most custom one for demonstration purpose.
+fn fetch_github_info() -> Result<(), Error<T>> {
+	// -- snip --
+
 	let mut lock = StorageLock::<BlockAndTime<Self>>::with_block_and_time_deadline(
 		b"offchain-demo::lock",
 		LOCK_BLOCK_EXPIRATION,
 		rt_offchain::Duration::from_millis(LOCK_TIMEOUT_EXPIRATION)
 	);
 
-	// We try to acquire the lock here. If failed, we know the fetching logic inside is being
-	//   executed by previous run of ocw, so the function just returns.
-	// ref: https://substrate.dev/rustdocs/v3.0.0-rc3/sp_runtime/offchain/storage_lock/struct.StorageLock.html#method.try_lock
-	if let Ok(_guard) = lock.try_lock() {
-		// fetching logic here ...
-	}
-
-	//...
+	// -- snip --
 }
 ```
 
-We then perform the fetch after the lock is acquired
+In the above code, we first define a lock by giving it a name and set the time limit.
+The time limit can be specified by providing number of blocks to wait, amount of
+time to wait, or both (whichever is shorter).
+
+We then perform the fetch after the lock is acquired.
 
 ```rust
 fn fetch_if_needed() -> Result<(), Error<T>> {
@@ -118,7 +106,15 @@ fn fetch_if_needed() -> Result<(), Error<T>> {
 
 Finally when the `_guard` variable goes out of scope, the lock is released.
 
+## Conclusion
+
+In this chapter, we demonstrate how to define a persistent storage value and a
+storage lock that set the locking time limit by either number of block passed or
+time passed, or both. Finally we demonstrate how to acquire the lock, perform
+a relatively long process (fetching data externally) and writing the data back to
+the storage.
+
 ## Reference
 
--   [`StorageValueRef` API doc](https://substrate.dev/rustdocs/v3.0.0/sp_runtime/offchain/storage/struct.StorageValueRef.html)
--   [`example-offchain-worker` pallet in Substrate repo](https://github.com/paritytech/substrate/tree/master/frame/example-offchain-worker)
+- [`StorageValueRef` API doc](https://substrate.dev/rustdocs/v3.0.0/sp_runtime/offchain/storage/struct.StorageValueRef.html)
+- [`example-offchain-worker` pallet in Substrate repo](https://github.com/paritytech/substrate/tree/master/frame/example-offchain-worker)
