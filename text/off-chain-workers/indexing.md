@@ -1,8 +1,19 @@
 # Off-chain Indexing
 
-There are times when on-chain extrinsics need to pass data to the off-chain worker context, such as pass the extrinsic caller account to off-chain worker for further computation.
+There are times when on-chain extrinsics need to pass data to the off-chain worker context with
+predictable write behavior. We can surely pass this piece of data via on-chain storage, but this is
+costly and it will make the data propagate among the blockchain network. If this is not a piece of
+information that need to have consensus upon the whole network, another way is to save this data
+in off-chain local storage via off-chain indexing.
 
-We can surely pass this piece of data via on-chain storage, but this is costly and it will make the data propagate among the blockchain network. If this is not a piece of critical information that need to have consensus upon the whole network, another way is to pass this data via off-chain indexing.
+As off-chain indexing is called in on-chain context, **it will be agreed upon eventually by the
+blockchain consensus mechanism and be run predicably by all nodes in the network**. One use case is
+to store only the hash of certain information in on-chain storage for verification purpose but
+keeping the original data off-chain for lookup later. In this case the original data can be sent
+and saved via off-chain indexing.
+
+Notice as off-chain indexing is called and data is saved on block import, the result may be
+overridden should the block IS NOT FINALIZED eventually, or a fork appears in the blockchain.
 
 We will demonstrate this in [`ocw-demo` pallet](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/ocw-demo/src/lib.rs).
 Knowledge discussed in this chapter built upon [using local storage in off-chain worker context](./storage.md).

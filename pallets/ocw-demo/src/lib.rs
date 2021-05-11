@@ -18,7 +18,7 @@ use frame_system::{
 		SignedPayload, Signer, SigningTypes, SubmitTransaction,
 	},
 };
-use sp_core::{crypto::KeyTypeId, offchain::StorageKind};
+use sp_core::{crypto::KeyTypeId};
 use sp_io::offchain_index;
 use sp_runtime::{
 	offchain as rt_offchain,
@@ -190,8 +190,8 @@ decl_module! {
 			Self::append_or_replace_number(number);
 
 			// Offchain-indexing allowing on-chain extrinsics to write to off-chain storage so it can be
-			// read in off-chain worker context. This could serve as a buffer for on-chain extrinsic
-			// passing data to ocw. From an on-chain perspective, this is write-only and cannot
+			// read in off-chain worker context.
+			// From an on-chain perspective, this is write-only and cannot
 			// be read back.
 			//
 			// The value is written in byte form, so we need to encode/decode it when writting/reading
@@ -200,7 +200,9 @@ decl_module! {
 			// Ref: https://substrate.dev/rustdocs/v3.0.0/sp_io/offchain_index/index.html
 			//
 			// Incrementing everytime when an on-chain transaction happen.
-			offchain_index::set(ONCHAIN_TX_KEY, &number.encode());
+			let key = Self::derived_key(frame_system::Module::<T>::block_number());
+			let data = Self::offchain_data("submit_number_signed", &number.encode());
+			offchain_index::set(&key, &data);
 
 			Self::deposit_event(RawEvent::NewNumber(Some(who), number));
 			Ok(())
@@ -213,7 +215,9 @@ decl_module! {
 			Self::append_or_replace_number(number);
 
 			// Incrementing everytime when an on-chain transaction happen
-			offchain_index::set(ONCHAIN_TX_KEY, &number.encode());
+			let key = Self::derived_key(frame_system::Module::<T>::block_number());
+			let data = Self::offchain_data("submit_number_unsigned", &number.encode());
+			offchain_index::set(&key, &data);
 
 			Self::deposit_event(RawEvent::NewNumber(None, number));
 			Ok(())
@@ -231,7 +235,9 @@ decl_module! {
 			Self::append_or_replace_number(number);
 
 			// Incrementing everytime when an on-chain transaction happen
-			offchain_index::set(ONCHAIN_TX_KEY, &number.encode());
+			let key = Self::derived_key(frame_system::Module::<T>::block_number());
+			let data = Self::offchain_data("submit_number_unsigned_with_signed_payload", &number.encode());
+			offchain_index::set(&key, &data);
 
 			Self::deposit_event(RawEvent::NewNumber(None, number));
 			Ok(())
@@ -259,9 +265,10 @@ decl_module! {
 			}
 
 			// Reading the number written in the last on-chain transaction.
-			let mem_onchain_num = StorageValueRef::persistent(ONCHAIN_TX_KEY);
-			if let Some(Some(onchain_num)) = mem_onchain_num.get::<u64>() {
-				debug::info!("Number written on last on-chain transaction: {:?}", onchain_num);
+			let key = Self::derived_key(block_number);
+			let mem_onchain_num = StorageValueRef::persistent(&key);
+			if let Some(Some(data)) = mem_onchain_num.get::<u64>() {
+				debug::info!("Off-chain indexing data from last imported block: {:?}", data);
 			}
 		}
 	}
@@ -278,6 +285,23 @@ impl<T: Config> Module<T> {
 			numbers.push_back(number);
 			debug::info!("Number vector: {:?}", numbers);
 		});
+	}
+
+	fn derived_key(block_number: T::BlockNumber) -> Vec<u8> {
+		block_number.using_encoded(|encoded_bn| {
+			ONCHAIN_TX_KEY.clone().into_iter()
+				.chain(b"/".into_iter())
+				.chain(encoded_bn)
+				.copied()
+				.collect::<Vec<u8>>()
+		})
+	}
+
+	fn offchain_data(data_prefix: &str, data: &[u8]) -> Vec<u8> {
+		data_prefix.as_bytes().into_iter()
+			.chain(data)
+			.copied()
+			.collect::<Vec<u8>>()
 	}
 
 	/// Check if we have fetched github info before. If yes, we can use the cached version
