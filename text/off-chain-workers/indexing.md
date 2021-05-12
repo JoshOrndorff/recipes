@@ -6,11 +6,11 @@ costly and it will make the data propagate among the blockchain network. If this
 information that need to have consensus upon the whole network, another way is to save this data
 in off-chain local storage via off-chain indexing.
 
-As off-chain indexing is called in on-chain context, **it will be agreed upon eventually by the
-blockchain consensus mechanism and be run predicably by all nodes in the network**. One use case is
-to store only the hash of certain information in on-chain storage for verification purpose but
-keeping the original data off-chain for lookup later. In this case the original data can be sent
-and saved via off-chain indexing.
+As off-chain indexing is called in on-chain context, **if it is agreed upon by the blockchain
+consensus mechanism, then it is expected to run predictably by all nodes in the network**. One use case
+is to store only the hash of certain information in on-chain storage for verification purpose but
+keeping the full data set off-chain for lookup later. In this case the original data can be saved
+via off-chain indexing.
 
 Notice as off-chain indexing is called and data is saved on block import, the result may be
 overridden should the block IS NOT FINALIZED eventually, or a fork appears in the blockchain.

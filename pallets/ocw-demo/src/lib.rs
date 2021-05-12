@@ -109,6 +109,9 @@ struct GithubInfo {
 	public_repos: u32,
 }
 
+#[derive(Debug, Deserialize, Encode, Decode, Default)]
+struct IndexingData(Vec<u8>, u64);
+
 pub fn de_string_to_bytes<'de, D>(de: D) -> Result<Vec<u8>, D::Error>
 where
 	D: Deserializer<'de>,
@@ -189,20 +192,20 @@ decl_module! {
 			debug::info!("submit_number_signed: ({}, {:?})", number, who);
 			Self::append_or_replace_number(number);
 
-			// Offchain-indexing allowing on-chain extrinsics to write to off-chain storage so it can be
-			// read in off-chain worker context.
-			// From an on-chain perspective, this is write-only and cannot
-			// be read back.
+			// Off-chain indexing allowing on-chain extrinsics to write to off-chain storage predictably
+			// so it can be read in off-chain worker context. As off-chain indexing is called in on-chain
+			// context, if it is agreed upon by the blockchain consensus mechanism, then it is expected
+			// to run predicably by all nodes in the network.
+			//
+			// From an on-chain perspective, this is write-only and cannot be read back.
 			//
 			// The value is written in byte form, so we need to encode/decode it when writting/reading
 			// a number to/from this memory space.
 			//
 			// Ref: https://substrate.dev/rustdocs/v3.0.0/sp_io/offchain_index/index.html
-			//
-			// Incrementing everytime when an on-chain transaction happen.
 			let key = Self::derived_key(frame_system::Module::<T>::block_number());
-			let data = Self::offchain_data("submit_number_signed", &number.encode());
-			offchain_index::set(&key, &data);
+			let data = IndexingData(b"submit_number_signed".to_vec(), number);
+			offchain_index::set(&key, &data.encode());
 
 			Self::deposit_event(RawEvent::NewNumber(Some(who), number));
 			Ok(())
@@ -214,10 +217,10 @@ decl_module! {
 			debug::info!("submit_number_unsigned: {}", number);
 			Self::append_or_replace_number(number);
 
-			// Incrementing everytime when an on-chain transaction happen
+			// Off-chain indexing write
 			let key = Self::derived_key(frame_system::Module::<T>::block_number());
-			let data = Self::offchain_data("submit_number_unsigned", &number.encode());
-			offchain_index::set(&key, &data);
+			let data = IndexingData(b"submit_number_unsigned".to_vec(), number);
+			offchain_index::set(&key, &data.encode());
 
 			Self::deposit_event(RawEvent::NewNumber(None, number));
 			Ok(())
@@ -234,10 +237,10 @@ decl_module! {
 			debug::info!("submit_number_unsigned_with_signed_payload: ({}, {:?})", number, public);
 			Self::append_or_replace_number(number);
 
-			// Incrementing everytime when an on-chain transaction happen
+			// Off-chain indexing write
 			let key = Self::derived_key(frame_system::Module::<T>::block_number());
-			let data = Self::offchain_data("submit_number_unsigned_with_signed_payload", &number.encode());
-			offchain_index::set(&key, &data);
+			let data = IndexingData(b"submit_number_unsigned_with_signed_payload".to_vec(), number);
+			offchain_index::set(&key, &data.encode());
 
 			Self::deposit_event(RawEvent::NewNumber(None, number));
 			Ok(())
@@ -264,11 +267,16 @@ decl_module! {
 				debug::error!("offchain_worker error: {:?}", e);
 			}
 
-			// Reading the number written in the last on-chain transaction.
+			// Reading back the off-chain indexing value. It is exactly the same as reading from
+			// ocw local storage.
 			let key = Self::derived_key(block_number);
-			let mem_onchain_num = StorageValueRef::persistent(&key);
-			if let Some(Some(data)) = mem_onchain_num.get::<u64>() {
-				debug::info!("Off-chain indexing data from last imported block: {:?}", data);
+			let oci_mem = StorageValueRef::persistent(&key);
+
+			if let Some(Some(data)) = oci_mem.get::<IndexingData>() {
+				debug::info!("off-chain indexing data: {:?}, {:?}",
+					str::from_utf8(&data.0).unwrap_or("error"), data.1);
+			} else {
+				debug::info!("no off-chain indexing data retrieved.");
 			}
 		}
 	}
@@ -295,13 +303,6 @@ impl<T: Config> Module<T> {
 				.copied()
 				.collect::<Vec<u8>>()
 		})
-	}
-
-	fn offchain_data(data_prefix: &str, data: &[u8]) -> Vec<u8> {
-		data_prefix.as_bytes().into_iter()
-			.chain(data)
-			.copied()
-			.collect::<Vec<u8>>()
 	}
 
 	/// Check if we have fetched github info before. If yes, we can use the cached version
