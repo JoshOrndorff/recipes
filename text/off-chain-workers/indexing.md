@@ -28,19 +28,37 @@ Knowledge discussed in this chapter built upon [using local storage in off-chain
 src: [`pallets/ocw-demo/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/ocw-demo/src/lib.rs)
 
 ```rust
+#[derive(Debug, Deserialize, Encode, Decode, Default)]
+struct IndexingData(Vec<u8>, u64);
+
 const ONCHAIN_TX_KEY: &[u8] = b"ocw-demo::storage::tx";
 
 // -- snip --
 
 pub fn submit_number_signed(origin, number: u64) -> DispatchResult {
   // -- snip --
-  offchain_index::set(ONCHAIN_TX_KEY, &number.encode());
+  let key = Self::derived_key(frame_system::Module::<T>::block_number());
+  let data = IndexingData(b"submit_number_unsigned".to_vec(), number);
+  offchain_index::set(&key, &data.encode());
+}
+
+impl<T: Config> Module<T> {
+  fn derived_key(block_number: T::BlockNumber) -> Vec<u8> {
+    block_number.using_encoded(|encoded_bn| {
+      ONCHAIN_TX_KEY.clone().into_iter()
+        .chain(b"/".into_iter())
+        .chain(encoded_bn)
+        .copied()
+        .collect::<Vec<u8>>()
+    })
+  }
 }
 ```
 
-We first define a key used in the local off-chain storage. Then we can write to the storage with
+We first define a key used in the local off-chain storage. It is formed in the `derive_key` function
+that append an encoded block number to a pre-defined prefix. Then we write to the storage with
 `offchain_index::set(key, value)` function. Here `offchain_index::set()` accepts values in byte
-format (`&[u8]`) so we encode the number first. If you refer back to
+format (`&[u8]`) so we encode the data structure `IndexingData` first. If you refer back to
 [`offchain_index` API rustdoc](https://substrate.dev/rustdocs/v3.0.0/sp_io/offchain_index/index.html),
 you will see there are only `set()` and `clear()` functions. This means from the on-chain context,
 we only expect to write to this local off-chain storage location but not reading from it, and we
@@ -54,17 +72,25 @@ src: [`pallets/ocw-demo/src/lib.rs`](https://github.com/substrate-developer-hub/
 fn offchain_worker(block_number: T::BlockNumber) {
   // -- snip --
 
-  // Reading the number written in the last on-chain transaction.
-  let mem_onchain_num = StorageValueRef::persistent(ONCHAIN_TX_KEY);
-  if let Some(Some(onchain_num)) = mem_onchain_num.get::<u64>() {
-    debug::info!("Number written on last on-chain transaction: {:?}", onchain_num);
+  // Reading back the off-chain indexing value. It is exactly the same as reading from
+  // ocw local storage.
+  let key = Self::derived_key(block_number);
+  let oci_mem = StorageValueRef::persistent(&key);
+
+  if let Some(Some(data)) = oci_mem.get::<IndexingData>() {
+    debug::info!("off-chain indexing data: {:?}, {:?}",
+      str::from_utf8(&data.0).unwrap_or("error"), data.1);
+  } else {
+    debug::info!("no off-chain indexing data retrieved.");
   }
+
+  // -- snip --
 }
 ```
 
 We read the data back in the `offchain_worker()` function as we would normally read from the
 local off-chain storage. We first specify the memory space with `StorageValueRef::persistent()` with
-its key, and then read back the data with `get` and decode it to `u64`.
+its key, and then read back the data with `get` and decode it to `IndexingData`.
 
 ## Reference
 
