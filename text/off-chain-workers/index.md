@@ -15,3 +15,4 @@ We will deep-dive into each of the topics below.
 - [Signed and Unsigned Transactions](./transactions.md)
 - [HTTP fetching and JSON parsing](./http-json.md)
 - [Local storage in Off-chain Workers](./storage.md)
+- [Off-chain Indexing](./indexing.md)

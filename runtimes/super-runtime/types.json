@@ -1,6 +1,7 @@
 {
   "Address": "AccountId",
   "LookupSource": "AccountId",
+  "AccountInfo": "AccountInfoWithDualRefCount",
   "ContinuousAccountData": {
     "principal": "u64",
     "deposit_date": "BlockNumber"

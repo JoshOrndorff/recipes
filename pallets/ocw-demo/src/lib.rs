@@ -18,7 +18,8 @@ use frame_system::{
 		SignedPayload, Signer, SigningTypes, SubmitTransaction,
 	},
 };
-use sp_core::crypto::KeyTypeId;
+use sp_core::{crypto::KeyTypeId};
+use sp_io::offchain_index;
 use sp_runtime::{
 	offchain as rt_offchain,
 	offchain::{
@@ -42,17 +43,19 @@ use serde::{Deserialize, Deserializer};
 /// `KeyTypeId` via the keystore to sign the transaction.
 /// The keys can be inserted manually via RPC (see `author_insertKey`).
 pub const KEY_TYPE: KeyTypeId = KeyTypeId(*b"demo");
-pub const NUM_VEC_LEN: usize = 10;
+const NUM_VEC_LEN: usize = 10;
 /// The type to sign and send transactions.
-pub const UNSIGNED_TXS_PRIORITY: u64 = 100;
+const UNSIGNED_TXS_PRIORITY: u64 = 100;
 
 // We are fetching information from the github public API about organization`substrate-developer-hub`.
-pub const HTTP_REMOTE_REQUEST: &str = "https://api.github.com/orgs/substrate-developer-hub";
-pub const HTTP_HEADER_USER_AGENT: &str = "jimmychu0807";
+const HTTP_REMOTE_REQUEST: &str = "https://api.github.com/orgs/substrate-developer-hub";
+const HTTP_HEADER_USER_AGENT: &str = "jimmychu0807";
 
-pub const FETCH_TIMEOUT_PERIOD: u64 = 3000; // in milli-seconds
-pub const LOCK_TIMEOUT_EXPIRATION: u64 = FETCH_TIMEOUT_PERIOD + 1000; // in milli-seconds
-pub const LOCK_BLOCK_EXPIRATION: u32 = 3; // in block number
+const FETCH_TIMEOUT_PERIOD: u64 = 3000; // in milli-seconds
+const LOCK_TIMEOUT_EXPIRATION: u64 = FETCH_TIMEOUT_PERIOD + 1000; // in milli-seconds
+const LOCK_BLOCK_EXPIRATION: u32 = 3; // in block number
+
+const ONCHAIN_TX_KEY: &[u8] = b"ocw-demo::storage::tx";
 
 /// Based on the above `KeyTypeId` we need to generate a pallet-specific crypto type wrapper.
 /// We can utilize the supported crypto kinds (`sr25519`, `ed25519` and `ecdsa`) and augment
@@ -105,6 +108,9 @@ struct GithubInfo {
 	blog: Vec<u8>,
 	public_repos: u32,
 }
+
+#[derive(Debug, Deserialize, Encode, Decode, Default)]
+struct IndexingData(Vec<u8>, u64);
 
 pub fn de_string_to_bytes<'de, D>(de: D) -> Result<Vec<u8>, D::Error>
 where
@@ -186,6 +192,21 @@ decl_module! {
 			debug::info!("submit_number_signed: ({}, {:?})", number, who);
 			Self::append_or_replace_number(number);
 
+			// Off-chain indexing allowing on-chain extrinsics to write to off-chain storage predictably
+			// so it can be read in off-chain worker context. As off-chain indexing is called in on-chain
+			// context, if it is agreed upon by the blockchain consensus mechanism, then it is expected
+			// to run predicably by all nodes in the network.
+			//
+			// From an on-chain perspective, this is write-only and cannot be read back.
+			//
+			// The value is written in byte form, so we need to encode/decode it when writting/reading
+			// a number to/from this memory space.
+			//
+			// Ref: https://substrate.dev/rustdocs/v3.0.0/sp_io/offchain_index/index.html
+			let key = Self::derived_key(frame_system::Module::<T>::block_number());
+			let data = IndexingData(b"submit_number_signed".to_vec(), number);
+			offchain_index::set(&key, &data.encode());
+
 			Self::deposit_event(RawEvent::NewNumber(Some(who), number));
 			Ok(())
 		}
@@ -195,6 +216,11 @@ decl_module! {
 			let _ = ensure_none(origin)?;
 			debug::info!("submit_number_unsigned: {}", number);
 			Self::append_or_replace_number(number);
+
+			// Off-chain indexing write
+			let key = Self::derived_key(frame_system::Module::<T>::block_number());
+			let data = IndexingData(b"submit_number_unsigned".to_vec(), number);
+			offchain_index::set(&key, &data.encode());
 
 			Self::deposit_event(RawEvent::NewNumber(None, number));
 			Ok(())
@@ -211,6 +237,11 @@ decl_module! {
 			debug::info!("submit_number_unsigned_with_signed_payload: ({}, {:?})", number, public);
 			Self::append_or_replace_number(number);
 
+			// Off-chain indexing write
+			let key = Self::derived_key(frame_system::Module::<T>::block_number());
+			let data = IndexingData(b"submit_number_unsigned_with_signed_payload".to_vec(), number);
+			offchain_index::set(&key, &data.encode());
+
 			Self::deposit_event(RawEvent::NewNumber(None, number));
 			Ok(())
 		}
@@ -225,15 +256,27 @@ decl_module! {
 			// 4. Fetching JSON via http requests in ocw
 			const TRANSACTION_TYPES: usize = 4;
 			let result = match block_number.try_into().unwrap_or(0) % TRANSACTION_TYPES	{
-				0 => Self::offchain_signed_tx(block_number),
-				1 => Self::offchain_unsigned_tx(block_number),
-				2 => Self::offchain_unsigned_tx_signed_payload(block_number),
-				3 => Self::fetch_github_info(),
+				1 => Self::offchain_signed_tx(block_number),
+				2 => Self::offchain_unsigned_tx(block_number),
+				3 => Self::offchain_unsigned_tx_signed_payload(block_number),
+				0 => Self::fetch_github_info(),
 				_ => Err(Error::<T>::UnknownOffchainMux),
 			};
 
 			if let Err(e) = result {
 				debug::error!("offchain_worker error: {:?}", e);
+			}
+
+			// Reading back the off-chain indexing value. It is exactly the same as reading from
+			// ocw local storage.
+			let key = Self::derived_key(block_number);
+			let oci_mem = StorageValueRef::persistent(&key);
+
+			if let Some(Some(data)) = oci_mem.get::<IndexingData>() {
+				debug::info!("off-chain indexing data: {:?}, {:?}",
+					str::from_utf8(&data.0).unwrap_or("error"), data.1);
+			} else {
+				debug::info!("no off-chain indexing data retrieved.");
 			}
 		}
 	}
@@ -252,6 +295,16 @@ impl<T: Config> Module<T> {
 		});
 	}
 
+	fn derived_key(block_number: T::BlockNumber) -> Vec<u8> {
+		block_number.using_encoded(|encoded_bn| {
+			ONCHAIN_TX_KEY.clone().into_iter()
+				.chain(b"/".into_iter())
+				.chain(encoded_bn)
+				.copied()
+				.collect::<Vec<u8>>()
+		})
+	}
+
 	/// Check if we have fetched github info before. If yes, we can use the cached version
 	///   stored in off-chain worker storage `storage`. If not, we fetch the remote info and
 	///   write the info into the storage for future retrieval.
@@ -259,7 +312,7 @@ impl<T: Config> Module<T> {
 		// Create a reference to Local Storage value.
 		// Since the local storage is common for all offchain workers, it's a good practice
 		// to prepend our entry with the pallet name.
-		let s_info = StorageValueRef::persistent(b"offchain-demo::gh-info");
+		let s_info = StorageValueRef::persistent(b"ocw-demo::gh-info");
 
 		// Local storage is persisted and shared between runs of the offchain workers,
 		// offchain workers may run concurrently. We can use the `mutate` function to
@@ -287,7 +340,7 @@ impl<T: Config> Module<T> {
 		//   4) `with_block_and_time_deadline` - lock with custom time and block expiration
 		// Here we choose the most custom one for demonstration purpose.
 		let mut lock = StorageLock::<BlockAndTime<Self>>::with_block_and_time_deadline(
-			b"offchain-demo::lock",
+			b"ocw-demo::lock",
 			LOCK_BLOCK_EXPIRATION,
 			rt_offchain::Duration::from_millis(LOCK_TIMEOUT_EXPIRATION),
 		);
