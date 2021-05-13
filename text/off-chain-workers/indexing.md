@@ -3,8 +3,8 @@
 There are times when on-chain extrinsics need to pass data to the off-chain worker context with
 predictable write behavior. We can surely pass this piece of data via on-chain storage, but this is
 costly and it will make the data propagate among the blockchain network. If this is not a piece of
-information that need to have consensus upon the whole network, another way is to save this data
-in off-chain local storage via off-chain indexing.
+information that need to be saved on-chain, another way is to save this data in off-chain local
+storage via off-chain indexing.
 
 As off-chain indexing is called in on-chain context, **if it is agreed upon by the blockchain
 consensus mechanism, then it is expected to run predictably by all nodes in the network**. One use case
@@ -12,8 +12,10 @@ is to store only the hash of certain information in on-chain storage for verific
 keeping the full data set off-chain for lookup later. In this case the original data can be saved
 via off-chain indexing.
 
-Notice as off-chain indexing is called and data is saved on block import, the result may be
-overridden should the block IS NOT FINALIZED eventually, or a fork appears in the blockchain.
+Notice as off-chain indexing is called and data is saved on every block import (this also includes
+forks), the consequence is that in case non-unique keys are used the data might be overwritten by different forked blocks and the content of off-chain database will be different between nodes.
+Care should be taken in choosing the right indexing `key` to prevent potential overwrites if not
+desired.
 
 We will demonstrate this in [`ocw-demo` pallet](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/ocw-demo/src/lib.rs).
 Knowledge discussed in this chapter built upon [using local storage in off-chain worker context](./storage.md).
