@@ -56,7 +56,7 @@ type FundInfoOf<T> =
 #[derive(Encode, Decode, Default, PartialEq, Eq)]
 #[cfg_attr(feature = "std", derive(Debug))]
 pub struct FundInfo<AccountId, Balance, BlockNumber> {
-	/// The account that will recieve the funds if the campaign is successful
+	/// The account that will receive the funds if the campaign is successful
 	beneficiary: AccountId,
 	/// The amount of deposit placed
 	deposit: Balance,
@@ -77,7 +77,7 @@ decl_storage! {
 		/// The total number of funds that have so far been allocated.
 		FundCount get(fn fund_count): FundIndex;
 
-		// Additional information is stored i na child trie. See the helper
+		// Additional information is stored in a child trie. See the helper
 		// functions in the impl<T: Config> Module<T> block below
 	}
 }

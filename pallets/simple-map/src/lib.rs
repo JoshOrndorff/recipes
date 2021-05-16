@@ -28,16 +28,16 @@ decl_event!(
 	where
 		AccountId = <T as frame_system::Config>::AccountId,
 	{
-		/// A user has set their enrty
+		/// A user has set their entry
 		EntrySet(AccountId, u32),
 
 		/// A user has read their entry, leaving it in storage
 		EntryGot(AccountId, u32),
 
-		/// A user has read their entry removing it fro mstorage
+		/// A user has read their entry, removing it from storage
 		EntryTaken(AccountId, u32),
 
-		/// A user has read their entry, incremented it, and writtenthe new entry to storage
+		/// A user has read their entry, incremented it, and written the new entry to storage
 		/// Parameters are (user, old_entry, new_entry)
 		EntryIncreased(AccountId, u32, u32),
 	}
@@ -48,7 +48,7 @@ decl_error! {
 		/// The requested user has not stored a value yet
 		NoValueStored,
 
-		/// The value cannot be incremented further because it has reached the maimum allowed value
+		/// The value cannot be incremented further because it has reached the maximum allowed value
 		MaxValueReached,
 	}
 }
@@ -86,7 +86,7 @@ decl_module! {
 			Ok(())
 		}
 
-		/// Read the value stored at a particular key,while removing it from the map.
+		/// Read the value stored at a particular key, while removing it from the map.
 		/// Also emit the read value in an event
 		#[weight = 10_000]
 		fn take_single_entry(origin) -> DispatchResult {
