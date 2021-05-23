@@ -40,7 +40,7 @@ parameter_types! {
 	pub const TransactionByteFee: u128 = 1;
 }
 
-impl transaction_payment::Trait for Runtime {
+impl transaction_payment::Config for Runtime {
 	type Currency = balances::Module<Runtime>;
 	type OnTransactionPayment = ();
 	type TransactionByteFee = TransactionByteFee;
@@ -112,7 +112,7 @@ parameter_types! {
 	// --snip--
 }
 
-impl transaction_payment::Trait for Runtime {
+impl transaction_payment::Config for Runtime {
 
 	// Convert dispatch weight to a chargeable fee.
 	type WeightToFee = LinearWeightToFee<FeeWeightRatio>;
@@ -170,7 +170,7 @@ src:
 [`runtimes/weight-fee-runtime/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/weight-fee-runtime/src/lib.rs)
 
 ```rust, ignore
-impl transaction_payment::Trait for Runtime {
+impl transaction_payment::Config for Runtime {
 
 	// A generic asset whose ID is stored in the generic_asset pallet's runtime storage
 	type Currency = SpendingAssetCurrency<Self>;
