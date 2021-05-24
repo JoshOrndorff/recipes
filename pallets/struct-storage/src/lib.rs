@@ -1,7 +1,7 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 //! Struct Storage
-//! This pallet demonstrates how to declare and store `strcuts` that contain types
+//! This pallet demonstrates how to declare and store `structs` that contain types
 //! that come from the pallet's configuration trait.
 
 use frame_support::{
