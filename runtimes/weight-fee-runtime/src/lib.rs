@@ -38,7 +38,7 @@ use sp_version::NativeVersion;
 use sp_version::RuntimeVersion;
 
 // These structs are used in one of the commented-by-default implementations of
-// transaction_payment::Trait. Don't warn when they are unused.
+// transaction_payment::Config. Don't warn when they are unused.
 #[allow(unused_imports)]
 use frame_support::weights::IdentityFee;
 

@@ -58,7 +58,7 @@ T::Currency::total_issuance();
 As promised, it is also possible to type alias a balances type for use in the runtime:
 
 ```rust, ignore
-type BalanceOf<T> = <<T as Trait>::Currency as Currency<<T as frame_system::Config>::AccountId>>::Balance;
+type BalanceOf<T> = <<T as Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::Balance;
 ```
 
 This new `BalanceOf<T>` type satisfies the type constraints of `Self::Balance` for the provided
