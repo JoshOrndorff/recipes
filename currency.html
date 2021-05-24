@@ -208,7 +208,7 @@ is straightforward to check the total issuance of the system:</p>
 T::Currency::total_issuance();
 </code></pre>
 <p>As promised, it is also possible to type alias a balances type for use in the runtime:</p>
-<pre><code class="language-rust ignore">type BalanceOf&lt;T&gt; = &lt;&lt;T as Trait&gt;::Currency as Currency&lt;&lt;T as frame_system::Config&gt;::AccountId&gt;&gt;::Balance;
+<pre><code class="language-rust ignore">type BalanceOf&lt;T&gt; = &lt;&lt;T as Config&gt;::Currency as Currency&lt;&lt;T as frame_system::Config&gt;::AccountId&gt;&gt;::Balance;
 </code></pre>
 <p>This new <code>BalanceOf&lt;T&gt;</code> type satisfies the type constraints of <code>Self::Balance</code> for the provided
 methods of <code>Currency</code>. This means that this type can be used for

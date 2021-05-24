@@ -3264,7 +3264,7 @@ is straightforward to check the total issuance of the system:</p>
 T::Currency::total_issuance();
 </code></pre>
 <p>As promised, it is also possible to type alias a balances type for use in the runtime:</p>
-<pre><code class="language-rust ignore">type BalanceOf&lt;T&gt; = &lt;&lt;T as Trait&gt;::Currency as Currency&lt;&lt;T as frame_system::Config&gt;::AccountId&gt;&gt;::Balance;
+<pre><code class="language-rust ignore">type BalanceOf&lt;T&gt; = &lt;&lt;T as Config&gt;::Currency as Currency&lt;&lt;T as frame_system::Config&gt;::AccountId&gt;&gt;::Balance;
 </code></pre>
 <p>This new <code>BalanceOf&lt;T&gt;</code> type satisfies the type constraints of <code>Self::Balance</code> for the provided
 methods of <code>Currency</code>. This means that this type can be used for
@@ -3784,7 +3784,7 @@ configuration trait. For example, the <code>super-runtime</code> sets these para
 	pub const TransactionByteFee: u128 = 1;
 }
 
-impl transaction_payment::Trait for Runtime {
+impl transaction_payment::Config for Runtime {
 	type Currency = balances::Module&lt;Runtime&gt;;
 	type OnTransactionPayment = ();
 	type TransactionByteFee = TransactionByteFee;
@@ -3843,7 +3843,7 @@ where
 	// --snip--
 }
 
-impl transaction_payment::Trait for Runtime {
+impl transaction_payment::Config for Runtime {
 
 	// Convert dispatch weight to a chargeable fee.
 	type WeightToFee = LinearWeightToFee&lt;FeeWeightRatio&gt;;
@@ -3892,7 +3892,7 @@ implements the <a href="https://substrate.dev/rustdocs/v3.0.0/frame_support/trai
 can be used.</p>
 <p>src:
 <a href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/weight-fee-runtime/src/lib.rs"><code>runtimes/weight-fee-runtime/src/lib.rs</code></a></p>
-<pre><code class="language-rust ignore">impl transaction_payment::Trait for Runtime {
+<pre><code class="language-rust ignore">impl transaction_payment::Config for Runtime {
 
 	// A generic asset whose ID is stored in the generic_asset pallet's runtime storage
 	type Currency = SpendingAssetCurrency&lt;Self&gt;;

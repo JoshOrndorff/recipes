@@ -199,7 +199,7 @@ configuration trait. For example, the <code>super-runtime</code> sets these para
 	pub const TransactionByteFee: u128 = 1;
 }
 
-impl transaction_payment::Trait for Runtime {
+impl transaction_payment::Config for Runtime {
 	type Currency = balances::Module&lt;Runtime&gt;;
 	type OnTransactionPayment = ();
 	type TransactionByteFee = TransactionByteFee;
@@ -258,7 +258,7 @@ where
 	// --snip--
 }
 
-impl transaction_payment::Trait for Runtime {
+impl transaction_payment::Config for Runtime {
 
 	// Convert dispatch weight to a chargeable fee.
 	type WeightToFee = LinearWeightToFee&lt;FeeWeightRatio&gt;;
@@ -307,7 +307,7 @@ implements the <a href="https://substrate.dev/rustdocs/v3.0.0/frame_support/trai
 can be used.</p>
 <p>src:
 <a href="https://github.com/substrate-developer-hub/recipes/tree/master/runtimes/weight-fee-runtime/src/lib.rs"><code>runtimes/weight-fee-runtime/src/lib.rs</code></a></p>
-<pre><code class="language-rust ignore">impl transaction_payment::Trait for Runtime {
+<pre><code class="language-rust ignore">impl transaction_payment::Config for Runtime {
 
 	// A generic asset whose ID is stored in the generic_asset pallet's runtime storage
 	type Currency = SpendingAssetCurrency&lt;Self&gt;;
