@@ -34,11 +34,11 @@ pub mod pallet {
 
 	#[pallet::storage]
 	#[pallet::getter(fn thing1)]
-	pub type Thing1<T: Config> = StorageValue<_, u32>;
+	pub type Thing1<T: Config> = StorageValue<_, u32, ValueQuery>;
 
 	#[pallet::storage]
 	#[pallet::getter(fn thing2)]
-	pub type Thing2<T: Config> = StorageValue<_, u32>;
+	pub type Thing2<T: Config> = StorageValue<_, u32, ValueQuery>;
 
 	#[pallet::hooks]
     impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {}
@@ -72,6 +72,6 @@ pub mod pallet {
 
 impl<T: Config> Pallet<T> {
 	pub fn get_sum() -> u32 {
-		Thing1::<T>::get().unwrap() + Thing2::<T>::get().unwrap()
+		Thing1::<T>::get() + Thing2::<T>::get()
 	}
 }
