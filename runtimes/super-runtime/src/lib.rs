@@ -323,6 +323,10 @@ impl simple_event::Config for Runtime {
 	type Event = Event;
 }
 
+impl simple_event_v2::Config for Runtime {
+	type Event = Event;
+}
+
 impl simple_map::Config for Runtime {
 	type Event = Event;
 }
@@ -374,6 +378,7 @@ construct_runtime!(
 		ReservableCurrency: reservable_currency::{Module, Call, Event<T>},
 		SimpleCrowdfund: simple_crowdfund::{Module, Call, Storage, Event<T>},
 		SimpleEvent: simple_event::{Module, Call, Event},
+		SimpleEventV2: simple_event_v2::{Module, Call, Event},
 		SimpleMap: simple_map::{Module, Call, Storage, Event<T>},
 		StorageCache: storage_cache::{Module, Call, Storage, Event<T>},
 		StructStorage: struct_storage::{Module, Call, Storage, Event<T>},

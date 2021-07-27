@@ -50,6 +50,7 @@ reservable-currency = { path = "../../pallets/reservable-currency", default-feat
 ringbuffer-queue = { path = "../../pallets/ringbuffer-queue", default-features = false }
 simple-crowdfund = { path = "../../pallets/simple-crowdfund", default-features = false}
 simple-event = { path = "../../pallets/simple-event", default-features = false }
+simple-event-v2 = { path = "../../pallets/simple-event-v2", default-features = false }
 simple-map = { path = "../../pallets/simple-map", default-features = false }
 storage-cache = { path = "../../pallets/storage-cache", default-features = false }
 struct-storage = { path = "../../pallets/struct-storage", default-features = false }
@@ -85,6 +86,7 @@ std = [
 	"serde",
 	"simple-crowdfund/std",
 	"simple-event/std",
+	"simple-event-v2/std",
 	"simple-map/std",
 	"sp-api/std",
 	"sp-block-builder/std",
