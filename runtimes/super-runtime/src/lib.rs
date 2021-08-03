@@ -14,7 +14,7 @@ include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 #[cfg(feature = "std")]
 pub mod genesis;
 
-use check_membership::{loose as check_membership_loose, tight as check_membership_tight};
+// use check_membership::{loose as check_membership_loose, tight as check_membership_tight};
 use frame_system as system;
 use pallet_transaction_payment::CurrencyAdapter;
 use sp_api::impl_runtime_apis;
@@ -217,93 +217,93 @@ impl pallet_sudo::Config for Runtime {
 
 // ---------------------- Recipe Pallet Configurations ----------------------
 
-impl basic_token::Config for Runtime {
-	type Event = Event;
-}
+// impl basic_token::Config for Runtime {
+// 	type Event = Event;
+// }
 
-impl charity::Config for Runtime {
-	type Event = Event;
-	type Currency = Balances;
-}
+// impl charity::Config for Runtime {
+// 	type Event = Event;
+// 	type Currency = Balances;
+// }
 
-impl compounding_interest::Config for Runtime {
-	type Event = Event;
-}
+// impl compounding_interest::Config for Runtime {
+// 	type Event = Event;
+// }
 
 parameter_types! {
 	pub const MaxAddend: u32 = 1738;
 	pub const ClearFrequency: u32 = 10;
 }
 
-impl constant_config::Config for Runtime {
-	type Event = Event;
-	type MaxAddend = MaxAddend;
-	type ClearFrequency = ClearFrequency;
-}
+// impl constant_config::Config for Runtime {
+// 	type Event = Event;
+// 	type MaxAddend = MaxAddend;
+// 	type ClearFrequency = ClearFrequency;
+// }
 
 // The following two configuration traits are for the loosely and tightly coupled variants
 // of the check membership pallet. Both pallets are located in the same `check-membership` crate.
-impl check_membership_loose::Config for Runtime {
-	type Event = Event;
-	// You can choose either the `vec-set` or `map-set` implementation of the `AccountSet` trait
-	type MembershipSource = VecSet;
-	// type MembershipSource = MapSet;
-}
+// impl check_membership_loose::Config for Runtime {
+// 	type Event = Event;
+// 	// You can choose either the `vec-set` or `map-set` implementation of the `AccountSet` trait
+// 	type MembershipSource = VecSet;
+// 	// type MembershipSource = MapSet;
+// }
 
-impl check_membership_tight::Config for Runtime {
-	type Event = Event;
-}
+// impl check_membership_tight::Config for Runtime {
+// 	type Event = Event;
+// }
 
 // The following two configuration traits are for two different instances of the deafult-instance
 // pallet. Notice that only the second instance has to explicitly specify an instance.
-impl default_instance::Config for Runtime {
-	type Event = Event;
-}
+// impl default_instance::Config for Runtime {
+// 	type Event = Event;
+// }
 
-impl default_instance::Config<default_instance::Instance2> for Runtime {
-	type Event = Event;
-}
+// impl default_instance::Config<default_instance::Instance2> for Runtime {
+// 	type Event = Event;
+// }
 
-impl double_map::Config for Runtime {
-	type Event = Event;
-}
+// impl double_map::Config for Runtime {
+// 	type Event = Event;
+// }
 
-impl fixed_point::Config for Runtime {
-	type Event = Event;
-}
+// impl fixed_point::Config for Runtime {
+// 	type Event = Event;
+// }
 
-impl generic_event::Config for Runtime {
-	type Event = Event;
-}
+// impl generic_event::Config for Runtime {
+// 	type Event = Event;
+// }
 
-impl hello_substrate::Config for Runtime {}
+// impl hello_substrate::Config for Runtime {}
 
 // The following two configuration traits are for two different instances of the last-caller pallet
-impl last_caller::Config<last_caller::Instance1> for Runtime {
-	type Event = Event;
-}
+// impl last_caller::Config<last_caller::Instance1> for Runtime {
+// 	type Event = Event;
+// }
 
-impl last_caller::Config<last_caller::Instance2> for Runtime {
-	type Event = Event;
-}
+// impl last_caller::Config<last_caller::Instance2> for Runtime {
+// 	type Event = Event;
+// }
 
-impl map_set::Config for Runtime {
-	type Event = Event;
-}
+// impl map_set::Config for Runtime {
+// 	type Event = Event;
+// }
 
-impl ringbuffer_queue::Config for Runtime {
-	type Event = Event;
-}
+// impl ringbuffer_queue::Config for Runtime {
+// 	type Event = Event;
+// }
 
-impl randomness::Config for Runtime {
-	type Event = Event;
-	type RandomnessSource = RandomnessCollectiveFlip;
-}
+// impl randomness::Config for Runtime {
+// 	type Event = Event;
+// 	type RandomnessSource = RandomnessCollectiveFlip;
+// }
 
-impl reservable_currency::Config for Runtime {
-	type Event = Event;
-	type Currency = Balances;
-}
+// impl reservable_currency::Config for Runtime {
+// 	type Event = Event;
+// 	type Currency = Balances;
+// }
 
 parameter_types! {
 	pub const SubmissionDeposit: u128 = 10;
@@ -311,33 +311,33 @@ parameter_types! {
 	pub const RetirementPeriod: u32 = 10;
 }
 
-impl simple_crowdfund::Config for Runtime {
-	type Event = Event;
-	type Currency = Balances;
-	type SubmissionDeposit = SubmissionDeposit;
-	type MinContribution = MinContribution;
-	type RetirementPeriod = RetirementPeriod;
-}
+// impl simple_crowdfund::Config for Runtime {
+// 	type Event = Event;
+// 	type Currency = Balances;
+// 	type SubmissionDeposit = SubmissionDeposit;
+// 	type MinContribution = MinContribution;
+// 	type RetirementPeriod = RetirementPeriod;
+// }
 
-impl simple_event::Config for Runtime {
-	type Event = Event;
-}
+// impl simple_event::Config for Runtime {
+// 	type Event = Event;
+// }
 
-impl simple_map::Config for Runtime {
-	type Event = Event;
-}
+// impl simple_map::Config for Runtime {
+// 	type Event = Event;
+// }
 
-impl storage_cache::Config for Runtime {
-	type Event = Event;
-}
+// impl storage_cache::Config for Runtime {
+// 	type Event = Event;
+// }
 
-impl struct_storage::Config for Runtime {
-	type Event = Event;
-}
+// impl struct_storage::Config for Runtime {
+// 	type Event = Event;
+// }
 
-impl vec_set::Config for Runtime {
-	type Event = Event;
-}
+// impl vec_set::Config for Runtime {
+// 	type Event = Event;
+// }
 
 // ---------------------- End of Recipe Pallet Configurations ----------------------
 
@@ -354,30 +354,30 @@ construct_runtime!(
 		Sudo: pallet_sudo::{Module, Call, Config<T>, Storage, Event<T>},
 		TransactionPayment: pallet_transaction_payment::{Module, Storage},
 		// The Recipe Pallets
-		BasicToken: basic_token::{Module, Call, Storage, Event<T>},
-		Charity: charity::{Module, Call, Storage, Config, Event<T>},
-		CheckMembershipLoose: check_membership_loose::{Module, Call, Event<T>},
-		CheckMembershipTight: check_membership_tight::{Module, Call, Event<T>},
-		CompoundingInterest: compounding_interest::{Module, Call, Storage, Event},
-		ConstantConfig: constant_config::{Module, Call, Storage, Event},
-		DefaultInstance1: default_instance::{Module, Call, Storage, Event<T>},
-		DefaultInstance2: default_instance::<Instance2>::{Module, Call, Storage, Event<T>},
-		DoubleMap: double_map::{Module, Call, Storage, Event<T>},
-		FixedPoint: fixed_point::{Module, Call, Storage, Event},
-		HelloSubstrate: hello_substrate::{Module, Call},
-		GenericEvent: generic_event::{Module, Call, Event<T>},
-		LastCaller1: last_caller::<Instance1>::{Module, Call, Storage, Event<T>},
-		LastCaller2: last_caller::<Instance2>::{Module, Call, Storage, Event<T>},
-		MapSet: map_set::{Module, Call, Storage, Event<T>},
-		RingbufferQueue: ringbuffer_queue::{Module, Call, Storage, Event<T>},
-		RandomnessDemo: randomness::{Module, Call, Storage, Event},
-		ReservableCurrency: reservable_currency::{Module, Call, Event<T>},
-		SimpleCrowdfund: simple_crowdfund::{Module, Call, Storage, Event<T>},
-		SimpleEvent: simple_event::{Module, Call, Event},
-		SimpleMap: simple_map::{Module, Call, Storage, Event<T>},
-		StorageCache: storage_cache::{Module, Call, Storage, Event<T>},
-		StructStorage: struct_storage::{Module, Call, Storage, Event<T>},
-		VecSet: vec_set::{Module, Call, Storage, Event<T>},
+		// BasicToken: basic_token::{Module, Call, Storage, Event<T>},
+		// Charity: charity::{Module, Call, Storage, Config, Event<T>},
+		// CheckMembershipLoose: check_membership_loose::{Module, Call, Event<T>},
+		// CheckMembershipTight: check_membership_tight::{Module, Call, Event<T>},
+		// CompoundingInterest: compounding_interest::{Module, Call, Storage, Event},
+		// ConstantConfig: constant_config::{Module, Call, Storage, Event},
+		// DefaultInstance1: default_instance::{Module, Call, Storage, Event<T>},
+		// DefaultInstance2: default_instance::<Instance2>::{Module, Call, Storage, Event<T>},
+		// DoubleMap: double_map::{Module, Call, Storage, Event<T>},
+		// FixedPoint: fixed_point::{Module, Call, Storage, Event},
+		// HelloSubstrate: hello_substrate::{Module, Call},
+		// GenericEvent: generic_event::{Module, Call, Event<T>},
+		// LastCaller1: last_caller::<Instance1>::{Module, Call, Storage, Event<T>},
+		// LastCaller2: last_caller::<Instance2>::{Module, Call, Storage, Event<T>},
+		// MapSet: map_set::{Module, Call, Storage, Event<T>},
+		// RingbufferQueue: ringbuffer_queue::{Module, Call, Storage, Event<T>},
+		// RandomnessDemo: randomness::{Module, Call, Storage, Event},
+		// ReservableCurrency: reservable_currency::{Module, Call, Event<T>},
+		// SimpleCrowdfund: simple_crowdfund::{Module, Call, Storage, Event<T>},
+		// SimpleEvent: simple_event::{Module, Call, Event},
+		// SimpleMap: simple_map::{Module, Call, Storage, Event<T>},
+		// StorageCache: storage_cache::{Module, Call, Storage, Event<T>},
+		// StructStorage: struct_storage::{Module, Call, Storage, Event<T>},
+		// VecSet: vec_set::{Module, Call, Storage, Event<T>},
 	}
 );
 
