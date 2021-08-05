@@ -382,7 +382,7 @@ construct_runtime!(
 		// StorageCache: storage_cache::{Module, Call, Storage, Event<T>},
 		// StructStorage: struct_storage::{Module, Call, Storage, Event<T>},
 		// VecSet: vec_set::{Module, Call, Storage, Event<T>},
-		   PalletTemplate: pallet_template::{Module, Call, Event},
+		TemplateModule: pallet_template::{Module, Call, Storage, Event<T>},
 	}
 );
 
