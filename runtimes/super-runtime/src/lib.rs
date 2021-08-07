@@ -319,9 +319,9 @@ parameter_types! {
 // 	type RetirementPeriod = RetirementPeriod;
 // }
 
-// impl simple_event::Config for Runtime {
-// 	type Event = Event;
-// }
+impl simple_event::Config for Runtime {
+	type Event = Event;
+}
 
 impl pallet_template::Config for Runtime {
 	type Event = Event;
@@ -377,11 +377,11 @@ construct_runtime!(
 		// RandomnessDemo: randomness::{Module, Call, Storage, Event},
 		// ReservableCurrency: reservable_currency::{Module, Call, Event<T>},
 		// SimpleCrowdfund: simple_crowdfund::{Module, Call, Storage, Event<T>},
-		// SimpleEvent: simple_event::{Module, Call, Event},
 		// SimpleMap: simple_map::{Module, Call, Storage, Event<T>},
 		// StorageCache: storage_cache::{Module, Call, Storage, Event<T>},
 		// StructStorage: struct_storage::{Module, Call, Storage, Event<T>},
 		// VecSet: vec_set::{Module, Call, Storage, Event<T>},
+		SimpleEvent: simple_event::{Module, Call, Storage, Event<T>},
 		TemplateModule: pallet_template::{Module, Call, Storage, Event<T>},
 	}
 );
