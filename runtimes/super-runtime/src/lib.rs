@@ -322,9 +322,10 @@ parameter_types! {
 impl simple_event::Config for Runtime {
 	type Event = Event;
 }
-// impl simple_map::Config for Runtime {
-// 	type Event = Event;
-// }
+
+impl simple_map::Config for Runtime {
+ 	type Event = Event;
+ }
 
 // impl storage_cache::Config for Runtime {
 // 	type Event = Event;
@@ -372,7 +373,7 @@ construct_runtime!(
 		// RandomnessDemo: randomness::{Module, Call, Storage, Event},
 		// ReservableCurrency: reservable_currency::{Module, Call, Event<T>},
 		// SimpleCrowdfund: simple_crowdfund::{Module, Call, Storage, Event<T>},
-		// SimpleMap: simple_map::{Module, Call, Storage, Event<T>},
+		SimpleMap: simple_map::{Module, Call, Storage, Event<T>},
 		// StorageCache: storage_cache::{Module, Call, Storage, Event<T>},
 		// StructStorage: struct_storage::{Module, Call, Storage, Event<T>},
 		// VecSet: vec_set::{Module, Call, Storage, Event<T>},

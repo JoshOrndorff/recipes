@@ -1,4 +1,4 @@
-use crate::{self as simple_map, Config, Error, RawEvent};
+use crate::{self as simple_map, Config, Error };
 use frame_support::{assert_err, assert_ok, construct_runtime, parameter_types};
 use sp_core::H256;
 use sp_io::TestExternalities;
@@ -73,7 +73,7 @@ fn set_works() {
 	ExternalityBuilder::build().execute_with(|| {
 		assert_ok!(SimpleMap::set_single_entry(Origin::signed(1), 19));
 
-		let expected_event = Event::simple_map(RawEvent::EntrySet(1, 19));
+		let expected_event = Event::simple_map(simple_map::Event::EntrySet(1, 19));
 
 		assert_eq!(System::events()[0].event, expected_event);
 	})
@@ -95,7 +95,7 @@ fn get_works() {
 		assert_ok!(SimpleMap::set_single_entry(Origin::signed(2), 19));
 		assert_ok!(SimpleMap::get_single_entry(Origin::signed(1), 2));
 
-		let expected_event = Event::simple_map(RawEvent::EntryGot(1, 19));
+		let expected_event = Event::simple_map(simple_map::Event::EntryGot(1, 19));
 
 		assert_eq!(System::events()[1].event, expected_event);
 
@@ -120,7 +120,7 @@ fn take_works() {
 		assert_ok!(SimpleMap::set_single_entry(Origin::signed(2), 19));
 		assert_ok!(SimpleMap::take_single_entry(Origin::signed(2)));
 
-		let expected_event = Event::simple_map(RawEvent::EntryTaken(2, 19));
+		let expected_event = Event::simple_map(simple_map::Event::EntryTaken(2, 19));
 
 		assert_eq!(System::events()[1].event, expected_event);
 
@@ -135,7 +135,7 @@ fn increase_works() {
 		assert_ok!(SimpleMap::set_single_entry(Origin::signed(2), 19));
 		assert_ok!(SimpleMap::increase_single_entry(Origin::signed(2), 2));
 
-		let expected_event = Event::simple_map(RawEvent::EntryIncreased(2, 19, 21));
+		let expected_event = Event::simple_map(simple_map::Event::EntryIncreased(2, 19, 21));
 
 		assert_eq!(System::events()[1].event, expected_event);
 

@@ -7281,6 +7281,7 @@ dependencies = [
  "parity-scale-codec 2.0.1",
  "serde",
  "simple-event",
+ "simple-map",
  "sp-api",
  "sp-block-builder",
  "sp-core",
