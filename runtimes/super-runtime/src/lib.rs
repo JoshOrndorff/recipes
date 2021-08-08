@@ -322,11 +322,6 @@ parameter_types! {
 impl simple_event::Config for Runtime {
 	type Event = Event;
 }
-
-impl pallet_template::Config for Runtime {
-	type Event = Event;
- }
-
 // impl simple_map::Config for Runtime {
 // 	type Event = Event;
 // }
@@ -382,7 +377,6 @@ construct_runtime!(
 		// StructStorage: struct_storage::{Module, Call, Storage, Event<T>},
 		// VecSet: vec_set::{Module, Call, Storage, Event<T>},
 		SimpleEvent: simple_event::{Module, Call, Storage, Event<T>},
-		TemplateModule: pallet_template::{Module, Call, Storage, Event<T>},
 	}
 );
 

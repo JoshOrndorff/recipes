@@ -54,7 +54,6 @@ simple-event = { path = "../../pallets/simple-event", default-features = false }
 # storage-cache = { path = "../../pallets/storage-cache", default-features = false }
 # struct-storage = { path = "../../pallets/struct-storage", default-features = false }
 # vec-set = { path = "../../pallets/vec-set", default-features = false }
-pallet-template = { path = "../../pallets/pallet-template", default-features = false }
 
 [build-dependencies]
 substrate-wasm-builder = "4.0.0"
@@ -63,7 +62,6 @@ substrate-wasm-builder = "4.0.0"
 default = ["std"]
 std = [
 	"pallet-balances/std",
-	"pallet-template/std",
 	# "basic-token/std",
 	# "charity/std",
 	# "check-membership/std",
