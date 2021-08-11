@@ -42,15 +42,15 @@ pallet-transaction-payment = { version = '3.0', default-features = false }
 # double-map = { path = "../../pallets/double-map", default-features = false }
 # fixed-point = { path = "../../pallets/fixed-point", default-features = false }
 # generic-event = { path = "../../pallets/generic-event", default-features = false }
-# hello-substrate = { path = "../../pallets/hello-substrate", default-features = false }
+ hello-substrate = { path = "../../pallets/hello-substrate", default-features = false }
 # last-caller = { path = "../../pallets/last-caller", default-features = false }
 # map-set = { path = "../../pallets/map-set", default-features = false }
 # randomness = { path = "../../pallets/randomness", default-features = false }
 # reservable-currency = { path = "../../pallets/reservable-currency", default-features = false }
 # ringbuffer-queue = { path = "../../pallets/ringbuffer-queue", default-features = false }
 # simple-crowdfund = { path = "../../pallets/simple-crowdfund", default-features = false}
-simple-event = { path = "../../pallets/simple-event", default-features = false }
-simple-map = { path = "../../pallets/simple-map", default-features = false }
+ simple-event = { path = "../../pallets/simple-event", default-features = false }
+ simple-map = { path = "../../pallets/simple-map", default-features = false }
 # storage-cache = { path = "../../pallets/storage-cache", default-features = false }
 # struct-storage = { path = "../../pallets/struct-storage", default-features = false }
 # vec-set = { path = "../../pallets/vec-set", default-features = false }
@@ -74,7 +74,7 @@ std = [
 	"frame-support/std",
 	"frame-system/std",
 	# "generic-event/std",
-	# "hello-substrate/std",
+	"hello-substrate/std",
 	# "last-caller/std",
 	# "map-set/std",
 	"parity-scale-codec/std",

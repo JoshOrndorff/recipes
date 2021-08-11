@@ -276,7 +276,7 @@ parameter_types! {
 // 	type Event = Event;
 // }
 
-// impl hello_substrate::Config for Runtime {}
+ impl hello_substrate::Config for Runtime {}
 
 // The following two configuration traits are for two different instances of the last-caller pallet
 // impl last_caller::Config<last_caller::Instance1> for Runtime {
@@ -364,7 +364,7 @@ construct_runtime!(
 		// DefaultInstance2: default_instance::<Instance2>::{Module, Call, Storage, Event<T>},
 		// DoubleMap: double_map::{Module, Call, Storage, Event<T>},
 		// FixedPoint: fixed_point::{Module, Call, Storage, Event},
-		// HelloSubstrate: hello_substrate::{Module, Call},
+		 HelloSubstrate: hello_substrate::{Module, Call},
 		// GenericEvent: generic_event::{Module, Call, Event<T>},
 		// LastCaller1: last_caller::<Instance1>::{Module, Call, Storage, Event<T>},
 		// LastCaller2: last_caller::<Instance2>::{Module, Call, Storage, Event<T>},

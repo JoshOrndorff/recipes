@@ -1,23 +1,39 @@
 #![cfg_attr(not(feature = "std"), no_std)]
+//! A pallet to demonstrate usage of a simple storage map
+//!
+//! Storage maps map a key type to a value type. The hasher used to hash the key can be customized.
+//! This pallet uses the `blake2_128_concat` hasher. This is a good default hasher.
 
-//! A simple Substrate pallet that demonstrates declaring dispatchable functions, and
-//! Printing text to the terminal.
 
-use frame_support::{debug, decl_module, dispatch::DispatchResult};
-use frame_system::ensure_signed;
-use sp_runtime::print;
+
+pub use pallet::*;
 
 #[cfg(test)]
 mod tests;
 
-pub trait Config: frame_system::Config {}
+#[frame_support::pallet]
+pub mod pallet {
+	use frame_support::{dispatch::DispatchResultWithPostInfo, pallet_prelude::*};
+	use frame_system::pallet_prelude::*;
+	use sp_runtime::print;
 
-decl_module! {
-	pub struct Module<T: Config> for enum Call where origin: T::Origin {
+	#[pallet::config]
+	pub trait Config: frame_system::Config {  }
 
-		/// A function that says hello to the user by printing messages to the node log
-		#[weight = 10_000]
-		pub fn say_hello(origin) -> DispatchResult {
+	#[pallet::pallet]
+	#[pallet::generate_store(pub(super) trait Store)]
+	pub struct Pallet<T>(PhantomData<T>);
+
+	#[pallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> { }
+
+
+	#[pallet::call]
+	impl<T:Config> Pallet<T> {
+
+		/// Increase the value associated with a particular key
+		#[pallet::weight(10_000)]
+		pub fn say_hello(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
 			// Ensure that the caller is a regular keypair account
 			let caller = ensure_signed(origin)?;
 
@@ -27,7 +43,7 @@ decl_module! {
 			debug::info!("Request sent by: {:?}", caller);
 
 			// Indicate that this call succeeded
-			Ok(())
+			Ok(().into())
 		}
 	}
 }
