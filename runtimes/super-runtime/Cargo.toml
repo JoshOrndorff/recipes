@@ -39,7 +39,7 @@ pallet-transaction-payment = { version = '3.0', default-features = false }
 # compounding-interest = { path = "../../pallets/compounding-interest", default-features = false }
 # constant-config = { path = "../../pallets/constant-config", default-features = false }
 # default-instance = { path = "../../pallets/default-instance", default-features = false }
-# double-map = { path = "../../pallets/double-map", default-features = false }
+  double-map = { path = "../../pallets/double-map", default-features = false }
 # fixed-point = { path = "../../pallets/fixed-point", default-features = false }
 # generic-event = { path = "../../pallets/generic-event", default-features = false }
  hello-substrate = { path = "../../pallets/hello-substrate", default-features = false }
@@ -68,7 +68,7 @@ std = [
 	# "compounding-interest/std",
 	# "constant-config/std",
 	# "default-instance/std",
-	# "double-map/std",
+	 "double-map/std",
 	# "fixed-point/std",
 	"frame-executive/std",
 	"frame-support/std",

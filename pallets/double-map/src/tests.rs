@@ -1,7 +1,6 @@
-use crate::{self as double_map, Config, GroupMembership, MemberScore, RawEvent};
+use crate::{self as double_map, Config, GroupMembership, MemberScore};
 use frame_support::{
 	assert_noop, assert_ok, construct_runtime, parameter_types,
-	storage::{StorageDoubleMap, StorageMap},
 };
 use sp_core::H256;
 use sp_io::TestExternalities;
@@ -82,7 +81,7 @@ fn join_all_members_works() {
 		);
 
 		// correct event emission
-		let expected_event = Event::double_map(RawEvent::NewMember(1));
+		let expected_event = Event::double_map(double_map::Event::NewMember(1));
 
 		assert_eq!(System::events()[0].event, expected_event,);
 		// correct storage changes
@@ -103,7 +102,7 @@ fn group_join_works() {
 		assert_ok!(DoubleMap::join_a_group(Origin::signed(1), 3, 5));
 
 		// correct event emission
-		let expected_event = Event::double_map(RawEvent::MemberJoinsGroup(1, 3, 5));
+		let expected_event = Event::double_map(double_map::Event::MemberJoinsGroup(1, 3, 5));
 
 		assert_eq!(System::events()[1].event, expected_event,);
 
@@ -124,7 +123,7 @@ fn remove_member_works() {
 		assert_ok!(DoubleMap::remove_member(Origin::signed(1)));
 
 		// check: correct event emitted
-		let expected_event = Event::double_map(RawEvent::RemoveMember(1));
+		let expected_event = Event::double_map(double_map::Event::RemoveMember(1));
 
 		assert_eq!(System::events()[2].event, expected_event,);
 
@@ -157,7 +156,7 @@ fn remove_group_score_works() {
 		assert_ok!(DoubleMap::remove_group_score(Origin::signed(1), 3));
 
 		// correct event emitted
-		let expected_event = Event::double_map(RawEvent::RemoveGroup(3));
+		let expected_event = Event::double_map(double_map::Event::RemoveGroup(3));
 
 		assert_eq!(System::events()[6].event, expected_event,);
 
