@@ -1,4 +1,4 @@
-use crate::{self as generic_event, Config, RawEvent};
+use crate::{self as generic_event, Config};
 use frame_support::{assert_ok, construct_runtime, parameter_types};
 use sp_core::H256;
 use sp_io::TestExternalities;
@@ -74,7 +74,7 @@ fn test() {
 		assert_ok!(GenericEvent::do_something(Origin::signed(1), 32));
 
 		// construct event that should be emitted in the method call directly above
-		let expected_event = Event::generic_event(RawEvent::EmitInput(1, 32));
+		let expected_event = Event::generic_event(generic_event::Event::EmitInput(1, 32));
 
 		// iterate through array of `EventRecord`s
 		assert_eq!(System::events()[0].event, expected_event,);
