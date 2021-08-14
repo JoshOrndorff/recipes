@@ -33,13 +33,13 @@ pallet-timestamp = { version = '3.0', default-features = false }
 pallet-transaction-payment = { version = '3.0', default-features = false }
 
 # local packages
-# basic-token = { path = "../../pallets/basic-token", default-features = false }
+ basic-token = { path = "../../pallets/basic-token", default-features = false }
 # charity = { path = "../../pallets/charity", default-features = false }
 # check-membership = { path = "../../pallets/check-membership", default-features = false }
 # compounding-interest = { path = "../../pallets/compounding-interest", default-features = false }
 # constant-config = { path = "../../pallets/constant-config", default-features = false }
 # default-instance = { path = "../../pallets/default-instance", default-features = false }
-  double-map = { path = "../../pallets/double-map", default-features = false }
+ double-map = { path = "../../pallets/double-map", default-features = false }
 # fixed-point = { path = "../../pallets/fixed-point", default-features = false }
 # generic-event = { path = "../../pallets/generic-event", default-features = false }
  hello-substrate = { path = "../../pallets/hello-substrate", default-features = false }
@@ -62,7 +62,7 @@ substrate-wasm-builder = "4.0.0"
 default = ["std"]
 std = [
 	"pallet-balances/std",
-	# "basic-token/std",
+	 "basic-token/std",
 	# "charity/std",
 	# "check-membership/std",
 	# "compounding-interest/std",

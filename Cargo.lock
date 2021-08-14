@@ -7270,6 +7270,7 @@ dependencies = [
 name = "super-runtime"
 version = "3.0.0"
 dependencies = [
+ "basic-token",
  "double-map",
  "frame-executive",
  "frame-support",

@@ -217,9 +217,9 @@ impl pallet_sudo::Config for Runtime {
 
 // ---------------------- Recipe Pallet Configurations ----------------------
 
-// impl basic_token::Config for Runtime {
-// 	type Event = Event;
-// }
+impl basic_token::Config for Runtime {
+	type Event = Event;
+}
 
 // impl charity::Config for Runtime {
 // 	type Event = Event;
@@ -354,7 +354,7 @@ construct_runtime!(
 		Sudo: pallet_sudo::{Module, Call, Config<T>, Storage, Event<T>},
 		TransactionPayment: pallet_transaction_payment::{Module, Storage},
 		// The Recipe Pallets
-		// BasicToken: basic_token::{Module, Call, Storage, Event<T>},
+		 BasicToken: basic_token::{Module, Call, Storage, Event<T>},
 		// Charity: charity::{Module, Call, Storage, Config, Event<T>},
 		// CheckMembershipLoose: check_membership_loose::{Module, Call, Event<T>},
 		// CheckMembershipTight: check_membership_tight::{Module, Call, Event<T>},
