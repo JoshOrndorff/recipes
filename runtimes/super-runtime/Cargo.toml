@@ -43,7 +43,7 @@ pallet-transaction-payment = { version = '3.0', default-features = false }
  fixed-point = { path = "../../pallets/fixed-point", default-features = false }
 # generic-event = { path = "../../pallets/generic-event", default-features = false }
  hello-substrate = { path = "../../pallets/hello-substrate", default-features = false }
-# last-caller = { path = "../../pallets/last-caller", default-features = false }
+ last-caller = { path = "../../pallets/last-caller", default-features = false }
 # map-set = { path = "../../pallets/map-set", default-features = false }
 # randomness = { path = "../../pallets/randomness", default-features = false }
 # reservable-currency = { path = "../../pallets/reservable-currency", default-features = false }
@@ -75,7 +75,7 @@ std = [
 	"frame-system/std",
 	# "generic-event/std",
 	"hello-substrate/std",
-	# "last-caller/std",
+	"last-caller/std",
 	# "map-set/std",
 	"parity-scale-codec/std",
 	"pallet-randomness-collective-flip/std",

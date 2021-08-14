@@ -279,13 +279,13 @@ parameter_types! {
  impl hello_substrate::Config for Runtime {}
 
 // The following two configuration traits are for two different instances of the last-caller pallet
-// impl last_caller::Config<last_caller::Instance1> for Runtime {
-// 	type Event = Event;
-// }
+ impl last_caller::Config for Runtime {
+ 	type Event = Event;
+ }
 
-// impl last_caller::Config<last_caller::Instance2> for Runtime {
-// 	type Event = Event;
-// }
+/* impl last_caller::Config<last_caller::Instance2> for Runtime {
+ 	type Event = Event;
+ }*/
 
 // impl map_set::Config for Runtime {
 // 	type Event = Event;
@@ -366,8 +366,7 @@ construct_runtime!(
 		 FixedPoint: fixed_point::{Module, Call, Storage, Event<T>},
 		 HelloSubstrate: hello_substrate::{Module, Call},
 		// GenericEvent: generic_event::{Module, Call, Event<T>},
-		// LastCaller1: last_caller::<Instance1>::{Module, Call, Storage, Event<T>},
-		// LastCaller2: last_caller::<Instance2>::{Module, Call, Storage, Event<T>},
+		 LastCaller1: last_caller::{Module, Call, Storage, Event<T>},
 		// MapSet: map_set::{Module, Call, Storage, Event<T>},
 		// RingbufferQueue: ringbuffer_queue::{Module, Call, Storage, Event<T>},
 		// RandomnessDemo: randomness::{Module, Call, Storage, Event},
