@@ -268,9 +268,9 @@ parameter_types! {
 	 type Event = Event;
  }
 
-// impl fixed_point::Config for Runtime {
-// 	type Event = Event;
-// }
+ impl fixed_point::Config for Runtime {
+ 	type Event = Event;
+ }
 
 // impl generic_event::Config for Runtime {
 // 	type Event = Event;
@@ -363,7 +363,7 @@ construct_runtime!(
 		 DefaultInstance1: default_instance::{Module, Call, Storage, Event<T>},
 		 //DefaultInstance2: default_instance::<Instance2>::{Module, Call, Storage, Event<T>},
 		 DoubleMap: double_map::{Module, Call, Storage, Event<T>},
-		// FixedPoint: fixed_point::{Module, Call, Storage, Event},
+		 FixedPoint: fixed_point::{Module, Call, Storage, Event<T>},
 		 HelloSubstrate: hello_substrate::{Module, Call},
 		// GenericEvent: generic_event::{Module, Call, Event<T>},
 		// LastCaller1: last_caller::<Instance1>::{Module, Call, Storage, Event<T>},

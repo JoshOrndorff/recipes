@@ -7273,6 +7273,7 @@ dependencies = [
  "basic-token",
  "default-instance",
  "double-map",
+ "fixed-point",
  "frame-executive",
  "frame-support",
  "frame-system",

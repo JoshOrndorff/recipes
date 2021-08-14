@@ -14,32 +14,59 @@
 //! ## Substrate-fixed Implementation
 //! Here we use an external crate called substrate-fixed which implements more advanced
 //! mathematical operations including transcendental functions.
-
-use frame_support::{decl_error, decl_event, decl_module, decl_storage, dispatch::DispatchResult};
-use frame_system::ensure_signed;
-use sp_arithmetic::{traits::Saturating, Permill};
-use substrate_fixed::types::U16F16;
+pub use pallet::*;
 
 #[cfg(test)]
 mod tests;
 
-pub trait Config: frame_system::Config {
-	type Event: From<Event> + Into<<Self as frame_system::Config>::Event>;
-}
+#[frame_support::pallet]
+pub mod pallet {
+	use frame_support::{dispatch::DispatchResultWithPostInfo, pallet_prelude::*};
+	use frame_system::pallet_prelude::*;
+	use substrate_fixed::types::U16F16;
+	use sp_arithmetic::{traits::Saturating, Permill};
 
-decl_storage! {
-	trait Store for Module<T: Config> as FixedPoint {
-		/// Permill accumulator, value starts at 1 (multiplicative identity)
-		PermillAccumulator get(fn permill_value): Permill = Permill::one();
-		/// Substrate-fixed accumulator, value starts at 1 (multiplicative identity)
-		FixedAccumulator get(fn fixed_value): U16F16 = U16F16::from_num(1);
-		/// Manual accumulator, value starts at 1 (multiplicative identity)
-		ManualAccumulator get(fn manual_value): u32 = 1 << 16;
+
+	#[pallet::config]
+	pub trait Config: frame_system::Config {
+		/// The overarching event type.
+		type Event: From<Event<Self>> + IsType<<Self as frame_system::Config>::Event>;
 	}
-}
 
-decl_event!(
-	pub enum Event {
+
+	#[pallet::type_value]
+	pub(super) fn PermillAccumulatorDefaultValue<T: Config>() -> Permill { Permill::one() }
+
+	#[pallet::storage]
+	#[pallet::getter(fn permill_value)]
+	pub(super) type PermillAccumulator<T: Config> = StorageValue<_, Permill, ValueQuery, PermillAccumulatorDefaultValue<T>>;
+
+
+	#[pallet::type_value]
+	pub(super) fn FixedAccumulatorDefaultValue<T: Config>() -> U16F16 { U16F16::from_num(1) }
+	#[pallet::storage]
+	#[pallet::getter(fn fixed_value)]
+	pub(super) type FixedAccumulator<T: Config> = StorageValue<_, U16F16, ValueQuery, FixedAccumulatorDefaultValue<T>>;
+
+
+	#[pallet::type_value]
+	pub(super) fn ManualAccumulatorDefaultValue<T: Config>() -> u32 { 1 << 16 }
+	#[pallet::storage]
+	#[pallet::getter(fn manual_value)]
+	pub(super) type ManualAccumulator<T: Config> = StorageValue<_, u32, ValueQuery, ManualAccumulatorDefaultValue<T>>;
+
+
+	#[pallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {}
+
+	#[pallet::pallet]
+	#[pallet::generate_store(pub (super) trait Store)]
+	pub struct Pallet<T>(PhantomData<T>);
+
+	#[pallet::event]
+	#[pallet::metadata(T::AccountId = "AccountId")]
+	#[pallet::generate_deposit(pub (super) fn deposit_event)]
+	pub enum Event<T: Config> {
 		// For all varients of the event, the contained data is
 		// (new_factor, new_product)
 		/// Permill accumulator has been updated.
@@ -49,23 +76,18 @@ decl_event!(
 		/// Manual accumulator has been updated.
 		ManualUpdated(u32, u32),
 	}
-);
 
-decl_error! {
-	pub enum Error for Module<T: Config> {
-		/// Some math operation overflowed
+	#[pallet::error]
+	pub enum Error<T> {
 		Overflow,
 	}
-}
 
-decl_module! {
-	pub struct Module<T: Config> for enum Call where origin: T::Origin {
-		fn deposit_event() = default;
-
+	#[pallet::call]
+	impl<T: Config> Pallet<T> {
 		/// Update the Permill accumulator implementation's value by multiplying it
 		/// by the new factor given in the extrinsic
-		#[weight = 10_000]
-		fn update_permill(origin, new_factor: Permill) -> DispatchResult {
+		#[pallet::weight(10_000)]
+		pub fn update_permill(origin: OriginFor<T>, new_factor: Permill) -> DispatchResultWithPostInfo {
 			ensure_signed(origin)?;
 
 			let old_accumulated = Self::permill_value();
@@ -75,17 +97,17 @@ decl_module! {
 			let new_product = old_accumulated.saturating_mul(new_factor);
 
 			// Write the new value to storage
-			PermillAccumulator::put(new_product);
+			PermillAccumulator::<T>::put(new_product);
 
 			// Emit event
 			Self::deposit_event(Event::PermillUpdated(new_factor, new_product));
-			Ok(())
+			Ok(().into())
 		}
 
 		/// Update the Substrate-fixed accumulator implementation's value by multiplying it
 		/// by the new factor given in the extrinsic
-		#[weight = 10_000]
-		fn update_fixed(origin, new_factor: U16F16) -> DispatchResult {
+		#[pallet::weight(10_000)]
+		pub fn update_fixed(origin: OriginFor<T>, new_factor: U16F16) -> DispatchResultWithPostInfo {
 			ensure_signed(origin)?;
 
 			let old_accumulated = Self::fixed_value();
@@ -95,17 +117,17 @@ decl_module! {
 				.ok_or(Error::<T>::Overflow)?;
 
 			// Write the new value to storage
-			FixedAccumulator::put(new_product);
+			FixedAccumulator::<T>::put(new_product);
 
 			// Emit event
 			Self::deposit_event(Event::FixedUpdated(new_factor, new_product));
-			Ok(())
+			Ok(().into())
 		}
 
 		/// Update the manually-implemented accumulator's value by multiplying it
 		/// by the new factor given in the extrinsic
-		#[weight = 10_000]
-		fn update_manual(origin, new_factor: u32) -> DispatchResult {
+		#[pallet::weight(10_000)]
+		pub fn update_manual(origin: OriginFor<T>, new_factor: u32) -> DispatchResultWithPostInfo {
 			ensure_signed(origin)?;
 
 			// To ensure we don't overflow unnecessarily, the values are cast up to u64 before multiplying.
@@ -130,11 +152,11 @@ decl_module! {
 			let final_product = shifted_product as u32;
 
 			// Write the new value to storage
-			ManualAccumulator::put(final_product);
+			ManualAccumulator::<T>::put(final_product);
 
 			// Emit event
 			Self::deposit_event(Event::ManualUpdated(new_factor, final_product));
-			Ok(())
+			Ok(().into())
 		}
 	}
 }
