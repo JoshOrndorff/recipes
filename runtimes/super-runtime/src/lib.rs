@@ -256,13 +256,13 @@ parameter_types! {
 
 // The following two configuration traits are for two different instances of the deafult-instance
 // pallet. Notice that only the second instance has to explicitly specify an instance.
-// impl default_instance::Config for Runtime {
-// 	type Event = Event;
-// }
+ impl default_instance::Config for Runtime {
+ 	type Event = Event;
+ }
 
-// impl default_instance::Config<default_instance::Instance2> for Runtime {
-// 	type Event = Event;
-// }
+/* impl default_instance::Config<default_instance::Instance2> for Runtime {
+ 	type Event = Event;
+ }*/
 
  impl double_map::Config for Runtime {
 	 type Event = Event;
@@ -360,8 +360,8 @@ construct_runtime!(
 		// CheckMembershipTight: check_membership_tight::{Module, Call, Event<T>},
 		// CompoundingInterest: compounding_interest::{Module, Call, Storage, Event},
 		// ConstantConfig: constant_config::{Module, Call, Storage, Event},
-		// DefaultInstance1: default_instance::{Module, Call, Storage, Event<T>},
-		// DefaultInstance2: default_instance::<Instance2>::{Module, Call, Storage, Event<T>},
+		 DefaultInstance1: default_instance::{Module, Call, Storage, Event<T>},
+		 //DefaultInstance2: default_instance::<Instance2>::{Module, Call, Storage, Event<T>},
 		 DoubleMap: double_map::{Module, Call, Storage, Event<T>},
 		// FixedPoint: fixed_point::{Module, Call, Storage, Event},
 		 HelloSubstrate: hello_substrate::{Module, Call},

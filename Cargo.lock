@@ -7271,6 +7271,7 @@ name = "super-runtime"
 version = "3.0.0"
 dependencies = [
  "basic-token",
+ "default-instance",
  "double-map",
  "frame-executive",
  "frame-support",
