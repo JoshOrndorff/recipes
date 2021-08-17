@@ -4,6 +4,7 @@
 
 use parity_scale_codec::Encode;
 pub use pallet::*;
+use sp_std::vec::Vec;
 
 
 #[cfg(test)]

@@ -295,10 +295,10 @@ parameter_types! {
 // 	type Event = Event;
 // }
 
-// impl randomness::Config for Runtime {
-// 	type Event = Event;
-// 	type RandomnessSource = RandomnessCollectiveFlip;
-// }
+ impl randomness::Config for Runtime {
+ 	type Event = Event;
+ 	type RandomnessSource = RandomnessCollectiveFlip;
+ }
 
 // impl reservable_currency::Config for Runtime {
 // 	type Event = Event;
@@ -369,7 +369,7 @@ construct_runtime!(
 		 LastCaller1: last_caller::{Module, Call, Storage, Event<T>},
 		// MapSet: map_set::{Module, Call, Storage, Event<T>},
 		// RingbufferQueue: ringbuffer_queue::{Module, Call, Storage, Event<T>},
-		// RandomnessDemo: randomness::{Module, Call, Storage, Event},
+		 RandomnessDemo: randomness::{Module, Call, Storage, Event<T>},
 		// ReservableCurrency: reservable_currency::{Module, Call, Event<T>},
 		// SimpleCrowdfund: simple_crowdfund::{Module, Call, Storage, Event<T>},
 		SimpleMap: simple_map::{Module, Call, Storage, Event<T>},
