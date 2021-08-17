@@ -46,7 +46,7 @@ pallet-transaction-payment = { version = '3.0', default-features = false }
  last-caller = { path = "../../pallets/last-caller", default-features = false }
 # map-set = { path = "../../pallets/map-set", default-features = false }
  randomness = { path = "../../pallets/randomness", default-features = false }
-# reservable-currency = { path = "../../pallets/reservable-currency", default-features = false }
+ reservable-currency = { path = "../../pallets/reservable-currency", default-features = false }
 # ringbuffer-queue = { path = "../../pallets/ringbuffer-queue", default-features = false }
 # simple-crowdfund = { path = "../../pallets/simple-crowdfund", default-features = false}
  simple-event = { path = "../../pallets/simple-event", default-features = false }
@@ -80,7 +80,7 @@ std = [
 	"parity-scale-codec/std",
 	"pallet-randomness-collective-flip/std",
 	 "randomness/std",
-	# "reservable-currency/std",
+	 "reservable-currency/std",
 	# "ringbuffer-queue/std",
 	"serde",
 	# "simple-crowdfund/std",

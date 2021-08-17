@@ -7286,6 +7286,7 @@ dependencies = [
  "pallet-transaction-payment",
  "parity-scale-codec 2.0.1",
  "randomness",
+ "reservable-currency",
  "serde",
  "simple-event",
  "simple-map",
