@@ -18,7 +18,7 @@ construct_runtime!(
 	{
 		System: frame_system::{Module, Call, Config, Storage, Event<T>},
 		CollectiveFlip: pallet_randomness_collective_flip::{Module, Call, Storage},
-		Randomness: randomness::{Module, Call, Storage, Event},
+		Randomness: randomness::{Module, Call, Storage, Event<T>},
 	}
 );
 
@@ -75,7 +75,7 @@ fn generate_works() {
 	ExternalityBuilder::build().execute_with(|| {
 		assert_ok!(Randomness::consume_randomness(Origin::signed(1)));
 
-		// Check for the event
+		// Check for the eventx
 		let expected_event =
 			Event::randomness(PalletEvent::RandomnessConsumed(H256::zero(), H256::zero()));
 

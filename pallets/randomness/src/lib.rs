@@ -1,20 +1,23 @@
 //! Generating (insecure) randomness
 #![cfg_attr(not(feature = "std"), no_std)]
 
-use frame_support::{
-	decl_event, decl_module, decl_storage, dispatch::DispatchResult, traits::Randomness,
-};
-use frame_system::ensure_signed;
+
 use parity_scale_codec::Encode;
-use sp_core::H256;
-use sp_std::vec::Vec;
+pub use pallet::*;
+
 
 #[cfg(test)]
 mod tests;
 
-/// The pallet's configuration trait.
-pub trait Config: frame_system::Config {
-	type Event: From<Event> + Into<<Self as frame_system::Config>::Event>;
+#[frame_support::pallet]
+pub mod pallet {
+	use frame_support::{dispatch::DispatchResultWithPostInfo, pallet_prelude::*};
+	use frame_system::pallet_prelude::*;
+	use frame_support::{traits::Randomness, sp_runtime::app_crypto::sp_core::H256};
+
+	#[pallet::config]
+	pub trait Config: frame_system::Config {
+		type Event: From<Event<Self>> + IsType<<Self as frame_system::Config>::Event>;
 
 	/// The pallet doesn't know what the source of randomness is; it can be anything that
 	/// implements the trait. When installing this pallet in a runtime, you
@@ -22,20 +25,31 @@ pub trait Config: frame_system::Config {
 	type RandomnessSource: Randomness<H256>;
 }
 
-decl_storage! {
-	trait Store for Module<T: Config> as RandomnessPallet {
-		/// A nonce to use as a subject when drawing randomness
-		Nonce get(fn nonce): u32;
+	#[pallet::event]
+	#[pallet::generate_deposit(pub (super) fn deposit_event)]
+	pub enum Event<T: Config> {
+		/// First element is raw seed, second is using nonce.
+		RandomnessConsumed(H256, H256),
 	}
-}
 
-decl_module! {
-	pub struct Module<T: Config> for enum Call where origin: T::Origin {
-		fn deposit_event() = default;
+	#[pallet::storage]
+	#[pallet::getter(fn nonce)]
+	pub(super) type Nonce<T: Config> = StorageValue<_, u32, ValueQuery>;
+
+	#[pallet::pallet]
+	#[pallet::generate_store(pub (super) trait Store)]
+	pub struct Pallet<T>(PhantomData<T>);
+
+	#[pallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {}
+
+
+	#[pallet::call]
+	impl<T: Config> Pallet<T> {
 
 		/// Grab a random seed and random value from the randomness collective flip pallet
-		#[weight = 10_000]
-		fn consume_randomness(origin) -> DispatchResult {
+		#[pallet::weight(10_000)]
+		pub fn consume_randomness(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
 			let _ = ensure_signed(origin)?;
 
 			// Using a subject is recommended to prevent accidental re-use of the seed
@@ -46,24 +60,17 @@ decl_module! {
 			let random_result = T::RandomnessSource::random(&subject);
 
 			Self::deposit_event(Event::RandomnessConsumed(random_seed, random_result));
-			Ok(())
+			Ok(().into())
 		}
 	}
 }
 
-decl_event!(
-	pub enum Event {
-		/// First element is raw seed, second is using nonce.
-		RandomnessConsumed(H256, H256),
-	}
-);
-
-impl<T: Config> Module<T> {
+impl<T: Config> Pallet<T> {
 	/// Reads the nonce from storage, increments the stored nonce, and returns
 	/// the encoded nonce to the caller.
 	fn encode_and_update_nonce() -> Vec<u8> {
-		let nonce = Nonce::get();
-		Nonce::put(nonce.wrapping_add(1));
+		let nonce = Nonce::<T>::get();
+		Nonce::<T>::put(nonce.wrapping_add(1));
 		nonce.encode()
 	}
 }
