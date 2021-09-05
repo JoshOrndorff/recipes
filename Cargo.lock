@@ -7302,6 +7302,7 @@ dependencies = [
  "sp-transaction-pool",
  "sp-version",
  "substrate-wasm-builder",
+ "vec-set",
 ]
 
 [[package]]

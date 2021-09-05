@@ -1,4 +1,4 @@
-use crate::{self as vec_set, Config, Error, RawEvent};
+use crate::{self as vec_set, Config, Error};
 use frame_support::{assert_noop, assert_ok, construct_runtime, parameter_types};
 use frame_system as system;
 use sp_core::H256;
@@ -74,7 +74,7 @@ fn add_member_works() {
 	ExternalityBuilder::build().execute_with(|| {
 		assert_ok!(VecSet::add_member(Origin::signed(1)));
 
-		let expected_event = Event::vec_set(RawEvent::MemberAdded(1));
+		let expected_event = Event::vec_set(vec_set::Event::MemberAdded(1));
 
 		assert_eq!(System::events()[0].event, expected_event,);
 
@@ -117,7 +117,7 @@ fn remove_member_works() {
 		assert_ok!(VecSet::remove_member(Origin::signed(1)));
 
 		// check correct event emission
-		let expected_event = Event::vec_set(RawEvent::MemberRemoved(1));
+		let expected_event = Event::vec_set(vec_set::Event::MemberRemoved(1));
 		assert!(System::events().iter().any(|a| a.event == expected_event));
 
 		// check storage changes

@@ -53,7 +53,7 @@ pallet-transaction-payment = { version = '3.0', default-features = false }
  simple-map = { path = "../../pallets/simple-map", default-features = false }
 # storage-cache = { path = "../../pallets/storage-cache", default-features = false }
 # struct-storage = { path = "../../pallets/struct-storage", default-features = false }
-# vec-set = { path = "../../pallets/vec-set", default-features = false }
+ vec-set = { path = "../../pallets/vec-set", default-features = false }
 
 [build-dependencies]
 substrate-wasm-builder = "4.0.0"
@@ -102,5 +102,5 @@ std = [
 	"pallet-sudo/std",
 	"pallet-timestamp/std",
 	"pallet-transaction-payment/std",
-	# "vec-set/std",
+	"vec-set/std",
 ]

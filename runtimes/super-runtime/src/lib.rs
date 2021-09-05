@@ -335,9 +335,9 @@ impl simple_map::Config for Runtime {
 // 	type Event = Event;
 // }
 
-// impl vec_set::Config for Runtime {
-// 	type Event = Event;
-// }
+ impl vec_set::Config for Runtime {
+ 	type Event = Event;
+ }
 
 // ---------------------- End of Recipe Pallet Configurations ----------------------
 
@@ -375,7 +375,7 @@ construct_runtime!(
 		SimpleMap: simple_map::{Module, Call, Storage, Event<T>},
 		// StorageCache: storage_cache::{Module, Call, Storage, Event<T>},
 		// StructStorage: struct_storage::{Module, Call, Storage, Event<T>},
-		// VecSet: vec_set::{Module, Call, Storage, Event<T>},
+		VecSet: vec_set::{Module, Call, Storage, Event<T>},
 		SimpleEvent: simple_event::{Module, Call, Storage, Event<T>},
 	}
 );
