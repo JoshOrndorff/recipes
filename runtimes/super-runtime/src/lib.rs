@@ -272,9 +272,9 @@ parameter_types! {
  	type Event = Event;
  }
 
-// impl generic_event::Config for Runtime {
-// 	type Event = Event;
-// }
+ impl generic_event::Config for Runtime {
+ 	type Event = Event;
+ }
 
  impl hello_substrate::Config for Runtime {}
 
@@ -327,9 +327,9 @@ impl simple_map::Config for Runtime {
  	type Event = Event;
  }
 
-// impl storage_cache::Config for Runtime {
-// 	type Event = Event;
-// }
+ impl storage_cache::Config for Runtime {
+ 	type Event = Event;
+ }
 
 // impl struct_storage::Config for Runtime {
 // 	type Event = Event;
@@ -365,7 +365,7 @@ construct_runtime!(
 		 DoubleMap: double_map::{Module, Call, Storage, Event<T>},
 		 FixedPoint: fixed_point::{Module, Call, Storage, Event<T>},
 		 HelloSubstrate: hello_substrate::{Module, Call},
-		// GenericEvent: generic_event::{Module, Call, Event<T>},
+		 GenericEvent: generic_event::{Module, Call, Event<T>},
 		 LastCaller1: last_caller::{Module, Call, Storage, Event<T>},
 		// MapSet: map_set::{Module, Call, Storage, Event<T>},
 		// RingbufferQueue: ringbuffer_queue::{Module, Call, Storage, Event<T>},
@@ -373,7 +373,7 @@ construct_runtime!(
 		 ReservableCurrency: reservable_currency::{Module, Call, Event<T>},
 		// SimpleCrowdfund: simple_crowdfund::{Module, Call, Storage, Event<T>},
 		SimpleMap: simple_map::{Module, Call, Storage, Event<T>},
-		// StorageCache: storage_cache::{Module, Call, Storage, Event<T>},
+		StorageCache: storage_cache::{Module, Call, Storage, Event<T>},
 		// StructStorage: struct_storage::{Module, Call, Storage, Event<T>},
 		VecSet: vec_set::{Module, Call, Storage, Event<T>},
 		SimpleEvent: simple_event::{Module, Call, Storage, Event<T>},

@@ -7277,6 +7277,7 @@ dependencies = [
  "frame-executive",
  "frame-support",
  "frame-system",
+ "generic-event",
  "hello-substrate",
  "last-caller",
  "map-set",
@@ -7302,6 +7303,7 @@ dependencies = [
  "sp-std",
  "sp-transaction-pool",
  "sp-version",
+ "storage-cache",
  "substrate-wasm-builder",
  "vec-set",
 ]

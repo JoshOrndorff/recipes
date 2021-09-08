@@ -3,89 +3,99 @@
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
-use frame_support::{decl_event, decl_module, decl_storage, dispatch::DispatchResult, ensure};
-use frame_system::ensure_signed;
-use sp_std::prelude::*;
+pub use pallet::*;
 
 #[cfg(test)]
 mod tests;
 
-pub trait Config: frame_system::Config {
-	type Event: From<Event<Self>> + Into<<Self as frame_system::Config>::Event>;
-}
+#[frame_support::pallet]
+pub mod pallet {
+	use frame_support::{dispatch::DispatchResultWithPostInfo, pallet_prelude::*};
+	use frame_system::pallet_prelude::*;
+	use sp_std::prelude::*;
 
-decl_storage! {
-	trait Store for Module<T: Config> as StorageCache {
-		// copy type
-		SomeCopyValue get(fn some_copy_value): u32;
-
-		// clone type
-		KingMember get(fn king_member): T::AccountId;
-		GroupMembers get(fn group_members): Vec<T::AccountId>;
+	#[pallet::config]
+	pub trait Config: frame_system::Config {
+		/// The overarching event type.
+		type Event: From<Event<Self>> + IsType<<Self as frame_system::Config>::Event>;
 	}
-}
 
-decl_event!(
-	pub enum Event<T>
-	where
-		AccountId = <T as frame_system::Config>::AccountId,
-		BlockNumber = <T as frame_system::Config>::BlockNumber,
-	{
+	#[pallet::storage]
+	#[pallet::getter(fn some_copy_value)]
+	pub(super) type SomeCopyValue<T: Config> = StorageValue<_, u32, ValueQuery>;
+
+	#[pallet::storage]
+	#[pallet::getter(fn king_member)]
+	pub(super) type KingMember<T: Config> = StorageValue<_, T::AccountId, ValueQuery>;
+
+	#[pallet::storage]
+	#[pallet::getter(fn group_members)]
+	pub(super) type GroupMembers<T: Config> = StorageValue<_, Vec<T::AccountId>, ValueQuery>;
+
+	#[pallet::event]
+	#[pallet::metadata(T::AccountId = "AccountId")]
+	#[pallet::generate_deposit(pub (super) fn deposit_event)]
+	pub enum Event<T: Config> {
 		// swap old value with new value (new_value, time_now)
-		InefficientValueChange(u32, BlockNumber),
+		InefficientValueChange(u32, T::BlockNumber),
 		// '' (new_value, time_now)
-		BetterValueChange(u32, BlockNumber),
+		BetterValueChange(u32, T::BlockNumber),
 		// swap old king with new king (old, new)
-		InefficientKingSwap(AccountId, AccountId),
+		InefficientKingSwap(T::AccountId, T::AccountId),
 		// '' (old, new)
-		BetterKingSwap(AccountId, AccountId),
+		BetterKingSwap(T::AccountId, T::AccountId),
 	}
-);
 
-decl_module! {
-	pub struct Module<T: Config> for enum Call where origin: T::Origin {
-		fn deposit_event() = default;
+	#[pallet::pallet]
+	#[pallet::generate_store(pub (super) trait Store)]
+	pub struct Pallet<T>(PhantomData<T>);
+
+	#[pallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {}
+
+	#[pallet::call]
+	impl<T: Config> Pallet<T> {
 
 		///  (Copy) inefficient way of updating value in storage
 		///
 		/// storage value -> storage_value * 2 + input_val
-		#[weight = 10_000]
-		fn increase_value_no_cache(origin, some_val: u32) -> DispatchResult {
+		#[pallet::weight(10_000)]
+		pub fn increase_value_no_cache(origin: OriginFor<T>, some_val: u32) -> DispatchResultWithPostInfo {
 			let _ = ensure_signed(origin)?;
-			let original_call = <SomeCopyValue>::get();
+			let original_call = <SomeCopyValue<T>>::get();
 			let some_calculation = original_call.checked_add(some_val).ok_or("addition overflowed1")?;
 			// this next storage call is unnecessary and is wasteful
-			let unnecessary_call = <SomeCopyValue>::get();
+			let unnecessary_call = <SomeCopyValue<T>>::get();
 			// should've just used `original_call` here because u32 is copy
 			let another_calculation = some_calculation.checked_add(unnecessary_call).ok_or("addition overflowed2")?;
-			<SomeCopyValue>::put(another_calculation);
+			<SomeCopyValue<T>>::put(another_calculation);
 			let now = <frame_system::Module<T>>::block_number();
-			Self::deposit_event(RawEvent::InefficientValueChange(another_calculation, now));
-			Ok(())
+			Self::deposit_event(Event::InefficientValueChange(another_calculation, now));
+			Ok(().into())
 		}
 
 		/// (Copy) more efficient value change
 		///
 		/// storage value -> storage_value * 2 + input_val
-		#[weight = 10_000]
-		fn increase_value_w_copy(origin, some_val: u32) -> DispatchResult {
+		#[pallet::weight(10_000)]
+		pub fn increase_value_w_copy(origin: OriginFor<T>, some_val: u32) -> DispatchResultWithPostInfo {
 			let _ = ensure_signed(origin)?;
-			let original_call = <SomeCopyValue>::get();
+			let original_call = <SomeCopyValue<T>>::get();
 			let some_calculation = original_call.checked_add(some_val).ok_or("addition overflowed1")?;
 			// uses the original_call because u32 is copy
 			let another_calculation = some_calculation.checked_add(original_call).ok_or("addition overflowed2")?;
-			<SomeCopyValue>::put(another_calculation);
+			<SomeCopyValue<T>>::put(another_calculation);
 			let now = <frame_system::Module<T>>::block_number();
-			Self::deposit_event(RawEvent::BetterValueChange(another_calculation, now));
-			Ok(())
+			Self::deposit_event(Event::BetterValueChange(another_calculation, now));
+			Ok(().into())
 		}
 
 		///  (Clone) inefficient implementation
 		/// swaps the king account with Origin::signed() if
 		/// (1) other account is member &&
 		/// (2) existing king isn't
-		#[weight = 10_000]
-		fn swap_king_no_cache(origin) -> DispatchResult {
+		#[pallet::weight(10_000)]
+		pub fn swap_king_no_cache(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
 			let new_king = ensure_signed(origin)?;
 			let existing_king = <KingMember<T>>::get();
 
@@ -100,16 +110,16 @@ decl_module! {
 			// place new king
 			<KingMember<T>>::put(new_king.clone());
 
-			Self::deposit_event(RawEvent::InefficientKingSwap(old_king, new_king));
-			Ok(())
+			Self::deposit_event(Event::InefficientKingSwap(old_king, new_king));
+			Ok(().into())
 		}
 
 		///  (Clone) better implementation
 		/// swaps the king account with Origin::signed() if
 		/// (1) other account is member &&
 		/// (2) existing king isn't
-		#[weight = 10_000]
-		fn swap_king_with_cache(origin) -> DispatchResult {
+		#[pallet::weight(10_000)]
+		pub fn swap_king_with_cache(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
 			let new_king = ensure_signed(origin)?;
 			let existing_king = <KingMember<T>>::get();
 			// prefer to clone previous call rather than repeat call unnecessarily
@@ -125,36 +135,36 @@ decl_module! {
 			// place new king
 			<KingMember<T>>::put(new_king.clone());
 
-			Self::deposit_event(RawEvent::BetterKingSwap(old_king, new_king));
-			Ok(())
+			Self::deposit_event(Event::BetterKingSwap(old_king, new_king));
+			Ok(().into())
 		}
 
 		// ---- for testing purposes ----
-		#[weight = 10_000]
-		fn set_copy(origin, val: u32) -> DispatchResult {
+		#[pallet::weight(10_000)]
+		pub fn set_copy(origin: OriginFor<T>, val: u32) -> DispatchResultWithPostInfo {
 			let _ = ensure_signed(origin)?;
-			<SomeCopyValue>::put(val);
-			Ok(())
+			<SomeCopyValue<T>>::put(val);
+			Ok(().into())
 		}
 
-		#[weight = 10_000]
-		fn set_king(origin) -> DispatchResult {
+		#[pallet::weight(10_000)]
+		pub fn set_king(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
 			let user = ensure_signed(origin)?;
 			<KingMember<T>>::put(user);
-			Ok(())
+			Ok(().into())
 		}
 
-		#[weight = 10_000]
-		fn mock_add_member(origin) -> DispatchResult {
+		#[pallet::weight(10_000)]
+		pub fn mock_add_member(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
 			let added = ensure_signed(origin)?;
 			ensure!(!Self::is_member(&added), "member already in group");
 			<GroupMembers<T>>::append(added);
-			Ok(())
+			Ok(().into())
 		}
 	}
 }
 
-impl<T: Config> Module<T> {
+impl<T: Config> Pallet<T> {
 	pub fn is_member(who: &T::AccountId) -> bool {
 		<GroupMembers<T>>::get().contains(who)
 	}
