@@ -235,11 +235,11 @@ parameter_types! {
 	pub const ClearFrequency: u32 = 10;
 }
 
-// impl constant_config::Config for Runtime {
-// 	type Event = Event;
-// 	type MaxAddend = MaxAddend;
-// 	type ClearFrequency = ClearFrequency;
-// }
+ impl constant_config::Config for Runtime {
+ 	type Event = Event;
+ 	type MaxAddend = MaxAddend;
+ 	type ClearFrequency = ClearFrequency;
+ }
 
 // The following two configuration traits are for the loosely and tightly coupled variants
 // of the check membership pallet. Both pallets are located in the same `check-membership` crate.
@@ -331,9 +331,9 @@ impl simple_map::Config for Runtime {
  	type Event = Event;
  }
 
-// impl struct_storage::Config for Runtime {
-// 	type Event = Event;
-// }
+ impl struct_storage::Config for Runtime {
+ 	type Event = Event;
+ }
 
  impl vec_set::Config for Runtime {
  	type Event = Event;
@@ -359,7 +359,7 @@ construct_runtime!(
 		// CheckMembershipLoose: check_membership_loose::{Module, Call, Event<T>},
 		// CheckMembershipTight: check_membership_tight::{Module, Call, Event<T>},
 		// CompoundingInterest: compounding_interest::{Module, Call, Storage, Event},
-		// ConstantConfig: constant_config::{Module, Call, Storage, Event},
+		 ConstantConfig: constant_config::{Module, Call, Storage, Event},
 		 DefaultInstance1: default_instance::{Module, Call, Storage, Event<T>},
 		 //DefaultInstance2: default_instance::<Instance2>::{Module, Call, Storage, Event<T>},
 		 DoubleMap: double_map::{Module, Call, Storage, Event<T>},
@@ -374,7 +374,7 @@ construct_runtime!(
 		// SimpleCrowdfund: simple_crowdfund::{Module, Call, Storage, Event<T>},
 		SimpleMap: simple_map::{Module, Call, Storage, Event<T>},
 		StorageCache: storage_cache::{Module, Call, Storage, Event<T>},
-		// StructStorage: struct_storage::{Module, Call, Storage, Event<T>},
+		StructStorage: struct_storage::{Module, Call, Storage, Event<T>},
 		VecSet: vec_set::{Module, Call, Storage, Event<T>},
 		SimpleEvent: simple_event::{Module, Call, Storage, Event<T>},
 	}

@@ -1,4 +1,4 @@
-use crate::{self as struct_storage, Config, InnerThing, RawEvent, SuperThing};
+use crate::{self as struct_storage, Config, InnerThing, SuperThing};
 use frame_support::{assert_ok, construct_runtime, parameter_types};
 use sp_core::H256;
 use sp_io::TestExternalities;
@@ -122,7 +122,7 @@ fn insert_inner_works() {
 		);
 
 		// check events emitted match expectations
-		let expected_event = Event::struct_storage(RawEvent::NewInnerThing(3u32, data, 7u64));
+		let expected_event = Event::struct_storage(struct_storage::Event::NewInnerThing(3u32, data, 7u64));
 
 		assert_eq!(System::events()[0].event, expected_event,);
 	})
@@ -163,7 +163,7 @@ fn insert_super_thing_with_existing_works() {
 			expected_outer
 		);
 
-		let expected_event = Event::struct_storage(RawEvent::NewSuperThingByExistingInner(
+		let expected_event = Event::struct_storage(struct_storage::Event::NewSuperThingByExistingInner(
 			5u32,
 			3u32,
 			data,
@@ -218,8 +218,8 @@ fn insert_super_with_new_inner_works() {
 			.collect::<Vec<_>>();
 
 		let expected_events = vec![
-			RawEvent::NewInnerThing(3u32, data, 7u64),
-			RawEvent::NewSuperThingByNewInner(5u32, 3u32, data, 7u64.into()),
+			struct_storage::Event::NewInnerThing(3u32, data, 7u64),
+			struct_storage::Event::NewSuperThingByNewInner(5u32, 3u32, data, 7u64.into()),
 		];
 
 		assert_eq!(our_events, expected_events);

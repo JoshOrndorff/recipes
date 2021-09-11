@@ -7271,6 +7271,7 @@ name = "super-runtime"
 version = "3.0.0"
 dependencies = [
  "basic-token",
+ "constant-config",
  "default-instance",
  "double-map",
  "fixed-point",
@@ -7304,6 +7305,7 @@ dependencies = [
  "sp-transaction-pool",
  "sp-version",
  "storage-cache",
+ "struct-storage",
  "substrate-wasm-builder",
  "vec-set",
 ]
