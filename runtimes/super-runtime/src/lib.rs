@@ -311,13 +311,13 @@ parameter_types! {
 	pub const RetirementPeriod: u32 = 10;
 }
 
-// impl simple_crowdfund::Config for Runtime {
-// 	type Event = Event;
-// 	type Currency = Balances;
-// 	type SubmissionDeposit = SubmissionDeposit;
-// 	type MinContribution = MinContribution;
-// 	type RetirementPeriod = RetirementPeriod;
-// }
+ impl simple_crowdfund::Config for Runtime {
+ 	type Event = Event;
+ 	type Currency = Balances;
+ 	type SubmissionDeposit = SubmissionDeposit;
+ 	type MinContribution = MinContribution;
+ 	type RetirementPeriod = RetirementPeriod;
+ }
 
 impl simple_event::Config for Runtime {
 	type Event = Event;
@@ -359,19 +359,19 @@ construct_runtime!(
 		// CheckMembershipLoose: check_membership_loose::{Module, Call, Event<T>},
 		// CheckMembershipTight: check_membership_tight::{Module, Call, Event<T>},
 		// CompoundingInterest: compounding_interest::{Module, Call, Storage, Event},
-		 ConstantConfig: constant_config::{Module, Call, Storage, Event},
-		 DefaultInstance1: default_instance::{Module, Call, Storage, Event<T>},
-		 //DefaultInstance2: default_instance::<Instance2>::{Module, Call, Storage, Event<T>},
-		 DoubleMap: double_map::{Module, Call, Storage, Event<T>},
-		 FixedPoint: fixed_point::{Module, Call, Storage, Event<T>},
-		 HelloSubstrate: hello_substrate::{Module, Call},
-		 GenericEvent: generic_event::{Module, Call, Event<T>},
-		 LastCaller1: last_caller::{Module, Call, Storage, Event<T>},
+		ConstantConfig: constant_config::{Module, Call, Storage, Event},
+		DefaultInstance1: default_instance::{Module, Call, Storage, Event<T>},
+		//DefaultInstance2: default_instance::<Instance2>::{Module, Call, Storage, Event<T>},
+		DoubleMap: double_map::{Module, Call, Storage, Event<T>},
+		FixedPoint: fixed_point::{Module, Call, Storage, Event<T>},
+		HelloSubstrate: hello_substrate::{Module, Call},
+		GenericEvent: generic_event::{Module, Call, Event<T>},
+		LastCaller1: last_caller::{Module, Call, Storage, Event<T>},
 		// MapSet: map_set::{Module, Call, Storage, Event<T>},
 		// RingbufferQueue: ringbuffer_queue::{Module, Call, Storage, Event<T>},
-		 RandomnessDemo: randomness::{Module, Call, Storage, Event<T>},
-		 ReservableCurrency: reservable_currency::{Module, Call, Event<T>},
-		// SimpleCrowdfund: simple_crowdfund::{Module, Call, Storage, Event<T>},
+		RandomnessDemo: randomness::{Module, Call, Storage, Event<T>},
+		ReservableCurrency: reservable_currency::{Module, Call, Event<T>},
+		SimpleCrowdfund: simple_crowdfund::{Module, Call, Storage, Event<T>},
 		SimpleMap: simple_map::{Module, Call, Storage, Event<T>},
 		StorageCache: storage_cache::{Module, Call, Storage, Event<T>},
 		StructStorage: struct_storage::{Module, Call, Storage, Event<T>},

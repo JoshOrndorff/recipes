@@ -36,13 +36,6 @@ pub struct SuperThing<Hash, Balance> {
 	pub super_number: u32,
 	pub inner_thing: InnerThing<Hash, Balance>,
 }
-/*	decl_storage! {
-	trait Store for Module<T: Config> as NestedStructs {
-		InnerThingsByNumbers get(fn inner_things_by_numbers): map hasher(blake2_128_concat) u32 => InnerThingOf<T>;
-		SuperThingsBySuperNumbers get(fn super_things_by_super_numbers):
-			map hasher(blake2_128_concat) u32 => SuperThing<T::Hash, T::Balance>;
-	}
-}*/
 
 	#[pallet::storage]
 	#[pallet::getter(fn inner_things_by_numbers)]
@@ -51,22 +44,6 @@ pub struct SuperThing<Hash, Balance> {
 	#[pallet::storage]
 	#[pallet::getter(fn super_things_by_super_numbers)]
 	pub(super) type SuperThingsBySuperNumbers<T: Config> = StorageMap<_, Blake2_128Concat, u32, SuperThing<T::Hash, T::Balance>, ValueQuery>;
-
-
-/*	decl_event! (
-	pub enum Event<T>
-	where
-		<T as frame_system::Config>::Hash,
-		<T as pallet_balances::Config>::Balance
-	{
-		// fields of the new inner thing
-		NewInnerThing(u32, Hash, Balance),
-		// fields of the super_number and the inner_thing fields
-		NewSuperThingByExistingInner(u32, u32, Hash, Balance),
-		// ""
-		NewSuperThingByNewInner(u32, u32, Hash, Balance),
-	}
-);*/
 
 	#[pallet::event]
 	#[pallet::metadata(T::AccountId = "AccountId")]

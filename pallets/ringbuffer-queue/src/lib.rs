@@ -3,67 +3,81 @@
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
-use codec::{Decode, Encode};
-use frame_support::{decl_event, decl_module, decl_storage, dispatch::DispatchResult};
-use frame_system::ensure_signed;
 use sp_std::prelude::*;
 
 mod ringbuffer;
 
 use ringbuffer::{RingBufferTrait, RingBufferTransient};
 
+pub use pallet::*;
+
 #[cfg(test)]
 mod tests;
 
-type BufferIndex = u8;
 
-#[derive(Encode, Decode, Default, Clone, PartialEq, Eq)]
-#[cfg_attr(feature = "std", derive(Debug))]
-pub struct ValueStruct {
-	integer: i32,
-	boolean: bool,
-}
+#[frame_support::pallet]
+pub mod pallet {
+	use frame_support::{dispatch::DispatchResultWithPostInfo, pallet_prelude::*};
+	use frame_system::pallet_prelude::*;
+	type BufferIndex = u8;
 
+#[pallet::config]
 pub trait Config: frame_system::Config {
-	type Event: From<Event<Self>> + Into<<Self as frame_system::Config>::Event>;
+	/// The overarching event type.
+	type Event: From<Event<Self>> + IsType<<Self as frame_system::Config>::Event>;
 }
 
-decl_storage! {
-	trait Store for Module<T: Config> as RingBufferQueue {
-		BufferMap get(fn get_value): map hasher(twox_64_concat) BufferIndex => ValueStruct;
-		BufferRange get(fn range): (BufferIndex, BufferIndex) = (0, 0);
+	#[derive(Encode, Decode, Default, Clone, PartialEq, Eq)]
+	#[cfg_attr(feature = "std", derive(Debug))]
+	pub struct ValueStruct {
+		pub integer: i32,
+		pub boolean: bool,
 	}
-}
 
-decl_event!(
-	pub enum Event<T>
-	where
-		AccountId = <T as frame_system::Config>::AccountId,
-	{
+	#[pallet::storage]
+	#[pallet::getter(fn get_value)]
+	pub(super) type BufferMap<T> = StorageMap<_, Blake2_128Concat,BufferIndex, ValueStruct,ValueQuery>;
+
+
+	#[pallet::type_value]
+	pub(super) fn BufferIndexDefaultValue() -> (BufferIndex, BufferIndex) { (0, 0) }
+
+	#[pallet::storage]
+	#[pallet::getter(fn range)]
+	pub(super) type BufferRange<T: Config> = StorageValue<_,(BufferIndex, BufferIndex), ValueQuery, BufferIndexDefaultValue>;
+
+	#[pallet::event]
+	#[pallet::generate_deposit(pub (super) fn deposit_event)]
+	pub enum Event<T: Config> {
 		Popped(i32, bool),
-		DummyEvent(AccountId),
+		DummyEvent(T::AccountId),
 	}
-);
 
-decl_module! {
-	pub struct Module<T: Config> for enum Call where origin: T::Origin {
-		fn deposit_event() = default;
+	#[pallet::pallet]
+	#[pallet::generate_store(pub (super) trait Store)]
+	pub struct Pallet<T>(PhantomData<T>);
+
+	#[pallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {}
+
+	#[pallet::call]
+	impl<T: Config> Pallet<T> {
 
 		/// Add an item to the queue
-		#[weight = 10_000]
-		pub fn add_to_queue(origin, integer: i32, boolean: bool) -> DispatchResult {
+		#[pallet::weight(10_000)]
+		pub fn add_to_queue(origin: OriginFor<T>, integer: i32, boolean: bool) -> DispatchResultWithPostInfo {
 			// only a user can push into the queue
 			let _user = ensure_signed(origin)?;
 
 			let mut queue = Self::queue_transient();
 			queue.push(ValueStruct{ integer, boolean });
 
-			Ok(())
+			Ok(().into())
 		}
 
 		/// Add several items to the queue
-		#[weight = 10_000]
-		pub fn add_multiple(origin, integers: Vec<i32>, boolean: bool) -> DispatchResult {
+		#[pallet::weight(10_000)]
+		pub fn add_multiple(origin: OriginFor<T>, integers: Vec<i32>, boolean: bool) -> DispatchResultWithPostInfo {
 			// only a user can push into the queue
 			let _user = ensure_signed(origin)?;
 
@@ -72,21 +86,21 @@ decl_module! {
 				queue.push(ValueStruct{ integer, boolean });
 			}
 
-			Ok(())
+			Ok(().into())
 		}
 
 		/// Remove and return an item from the queue
-		#[weight = 10_000]
-		pub fn pop_from_queue(origin) -> DispatchResult {
+		#[pallet::weight(10_000)]
+		pub fn pop_from_queue(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
 			// only a user can pop from the queue
 			let _user = ensure_signed(origin)?;
 
 			let mut queue = Self::queue_transient();
 			if let Some(ValueStruct{ integer, boolean }) = queue.pop() {
-				Self::deposit_event(RawEvent::Popped(integer, boolean));
+				Self::deposit_event(Event::Popped(integer, boolean));
 			}
 
-			Ok(())
+			Ok(().into())
 		}
 	}
 }
@@ -101,7 +115,7 @@ impl<T: Config> Module<T> {
 			ValueStruct,
 			<Self as Store>::BufferRange,
 			<Self as Store>::BufferMap,
-			BufferIndex,
+			u8,
 		>::new())
 	}
 }

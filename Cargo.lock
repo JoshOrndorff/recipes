@@ -7291,6 +7291,7 @@ dependencies = [
  "randomness",
  "reservable-currency",
  "serde",
+ "simple-crowdfund",
  "simple-event",
  "simple-map",
  "sp-api",
