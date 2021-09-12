@@ -35,7 +35,7 @@ pallet-transaction-payment = { version = '3.0', default-features = false }
 # local packages
  basic-token = { path = "../../pallets/basic-token", default-features = false }
 # charity = { path = "../../pallets/charity", default-features = false }
-# check-membership = { path = "../../pallets/check-membership", default-features = false }
+ check-membership = { path = "../../pallets/check-membership", default-features = false }
 # compounding-interest = { path = "../../pallets/compounding-interest", default-features = false }
  constant-config = { path = "../../pallets/constant-config", default-features = false }
  default-instance = { path = "../../pallets/default-instance", default-features = false }
@@ -47,7 +47,7 @@ pallet-transaction-payment = { version = '3.0', default-features = false }
  map-set = { path = "../../pallets/map-set", default-features = false }
  randomness = { path = "../../pallets/randomness", default-features = false }
  reservable-currency = { path = "../../pallets/reservable-currency", default-features = false }
-# ringbuffer-queue = { path = "../../pallets/ringbuffer-queue", default-features = false }
+ # ringbuffer-queue = { path = "../../pallets/ringbuffer-queue", default-features = false }
  simple-crowdfund = { path = "../../pallets/simple-crowdfund", default-features = false}
  simple-event = { path = "../../pallets/simple-event", default-features = false }
  simple-map = { path = "../../pallets/simple-map", default-features = false }
@@ -64,7 +64,7 @@ std = [
 	"pallet-balances/std",
 	"basic-token/std",
 	# "charity/std",
-	# "check-membership/std",
+	"check-membership/std",
 	# "compounding-interest/std",
 	"constant-config/std",
 	"default-instance/std",
@@ -79,9 +79,9 @@ std = [
 	 "map-set/std",
 	"parity-scale-codec/std",
 	"pallet-randomness-collective-flip/std",
-	 "randomness/std",
-	 "reservable-currency/std",
-	# "ringbuffer-queue/std",
+	"randomness/std",
+	"reservable-currency/std",
+   # "ringbuffer-queue/std",
 	"serde",
 	"simple-crowdfund/std",
 	"simple-event/std",

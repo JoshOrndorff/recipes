@@ -14,7 +14,7 @@ include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 #[cfg(feature = "std")]
 pub mod genesis;
 
-// use check_membership::{loose as check_membership_loose, tight as check_membership_tight};
+use check_membership::{ loose as check_membership_loose, tight as check_membership_tight };
 use frame_system as system;
 use pallet_transaction_payment::CurrencyAdapter;
 use sp_api::impl_runtime_apis;
@@ -26,6 +26,7 @@ use sp_runtime::{
 	ApplyExtrinsicResult, MultiSignature,
 };
 use sp_std::prelude::*;
+
 
 #[cfg(feature = "std")]
 use sp_version::NativeVersion;
@@ -243,16 +244,15 @@ parameter_types! {
 
 // The following two configuration traits are for the loosely and tightly coupled variants
 // of the check membership pallet. Both pallets are located in the same `check-membership` crate.
-// impl check_membership_loose::Config for Runtime {
-// 	type Event = Event;
-// 	// You can choose either the `vec-set` or `map-set` implementation of the `AccountSet` trait
-// 	type MembershipSource = VecSet;
-// 	// type MembershipSource = MapSet;
-// }
-
-// impl check_membership_tight::Config for Runtime {
-// 	type Event = Event;
-// }
+impl check_membership_loose::Config for Runtime {
+	type Event = Event;
+	// You can choose either the `vec-set` or `map-set` implementation of the `AccountSet` trait
+	 type MembershipSource = VecSet;
+	// type MembershipSource = MapSet;
+}
+impl check_membership_tight::Config for Runtime {
+	type Event = Event;
+}
 
 // The following two configuration traits are for two different instances of the deafult-instance
 // pallet. Notice that only the second instance has to explicitly specify an instance.
@@ -356,8 +356,8 @@ construct_runtime!(
 		// The Recipe Pallets
 		 BasicToken: basic_token::{Module, Call, Storage, Event<T>},
 		// Charity: charity::{Module, Call, Storage, Config, Event<T>},
-		// CheckMembershipLoose: check_membership_loose::{Module, Call, Event<T>},
-		// CheckMembershipTight: check_membership_tight::{Module, Call, Event<T>},
+		 CheckMembershipLoose: check_membership_loose::{Module, Call, Event<T>},
+		 CheckMembershipTight: check_membership_tight::{Module, Call, Event<T>},
 		// CompoundingInterest: compounding_interest::{Module, Call, Storage, Event},
 		ConstantConfig: constant_config::{Module, Call, Storage, Event},
 		DefaultInstance1: default_instance::{Module, Call, Storage, Event<T>},
