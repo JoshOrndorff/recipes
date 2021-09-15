@@ -9,39 +9,47 @@
 //! The continuous account accrues interest continuously and is implemented using
 //! Substrate-fixed's `I32F32` implementation of fixed point.
 
-use frame_support::{decl_event, decl_module, decl_storage, dispatch::DispatchResult};
-use frame_system::ensure_signed;
-use parity_scale_codec::{Decode, Encode};
+
 use sp_arithmetic::Percent;
-use sp_runtime::traits::Zero;
 use sp_std::convert::TryInto;
 use substrate_fixed::{transcendental::exp, types::I32F32};
+
+pub use pallet::*;
 
 #[cfg(test)]
 mod tests;
 
-pub trait Config: frame_system::Config {
-	type Event: From<Event> + Into<<Self as frame_system::Config>::Event>;
-}
+#[frame_support::pallet]
+pub mod pallet {
+	use frame_support::{dispatch::DispatchResultWithPostInfo, pallet_prelude::*};
+	use frame_system::pallet_prelude::*;
+	use substrate_fixed::types::I32F32;
+	use sp_runtime::traits::Zero;
 
-#[derive(Encode, Decode, Default)]
-pub struct ContinuousAccountData<BlockNumber> {
-	/// The balance of the account after last manual adjustment
-	principal: I32F32,
-	/// The time (block height) at which the balance was last adjusted
-	deposit_date: BlockNumber,
-}
-
-decl_storage! {
-	trait Store for Module<T: Config> as CompoundingInterest {
-		/// Balance for the continuously compounded account
-		ContinuousAccount get(fn balance_compound): ContinuousAccountData<T::BlockNumber>;
-		/// Balance for the discrete interest account
-		DiscreteAccount get(fn discrete_account): u64;
+	#[pallet::config]
+	pub trait Config: frame_system::Config {
+		/// The overarching event type.
+		type Event: From<Event> + IsType<<Self as frame_system::Config>::Event>;
 	}
-}
 
-decl_event!(
+	#[derive(Encode, Decode, Default)]
+	pub struct ContinuousAccountData<BlockNumber> {
+		/// The balance of the account after last manual adjustment
+		pub principal: I32F32,
+		/// The time (block height) at which the balance was last adjusted
+		pub deposit_date: BlockNumber,
+	}
+
+	#[pallet::storage]
+	#[pallet::getter(fn balance_compound)]
+	pub(super) type ContinuousAccount<T: Config> = StorageValue<_, ContinuousAccountData<T::BlockNumber>, ValueQuery>;
+
+	#[pallet::storage]
+	#[pallet::getter(fn discrete_account)]
+	pub(super) type DiscreteAccount<T: Config> = StorageValue<_, u64, ValueQuery>;
+
+	#[pallet::event]
+	#[pallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event {
 		/// Deposited some balance into the compounding interest account
 		DepositedContinuous(u64),
@@ -56,15 +64,42 @@ decl_event!(
 		/// This happens every ten blocks
 		DiscreteInterestApplied(u64),
 	}
-);
 
-decl_module! {
-	pub struct Module<T: Config> for enum Call where origin: T::Origin {
-		fn deposit_event() = default;
+	#[pallet::pallet]
+	#[pallet::generate_store(pub(super) trait Store)]
+	pub struct Pallet<T>(PhantomData<T>);
+
+	#[pallet::hooks]
+	impl<T: Config> Hooks<T::BlockNumber> for Pallet<T> {
+		fn on_finalize(n: T::BlockNumber) {
+			// Apply newly-accrued discrete interest every ten blocks
+			if (n % 10u32.into()).is_zero() {
+
+				// Calculate interest Interest = principal * rate * time
+				// We can use the `*` operator for multiplying a `Percent` by a u64
+				// because `Percent` implements the trait Mul<u64>
+				let interest = Self::discrete_interest_rate() * DiscreteAccount::<T>::get() * 10;
+
+				// The following line, although similar, does not work because
+				// u64 does not implement the trait Mul<Percent>
+				// let interest = DiscreteAccount::get() * Self::discrete_interest_rate() * 10;
+
+				// Update the balance
+				let old_balance = DiscreteAccount::<T>::get();
+				DiscreteAccount::<T>::put(old_balance + interest);
+
+				// Emit the event
+				Self::deposit_event(Event::DiscreteInterestApplied(interest));
+			}
+		}
+	}
+
+	#[pallet::call]
+	impl<T:Config> Pallet<T> {
 
 		/// Deposit some funds into the compounding interest account
-		#[weight = 10_000]
-		fn deposit_continuous(origin, val_to_add: u64) -> DispatchResult {
+		#[pallet::weight(10_000)]
+		fn deposit_continuous(origin: OriginFor<T>, val_to_add: u64) -> DispatchResultWithPostInfo {
 			ensure_signed(origin)?;
 
 			let current_block = frame_system::Module::<T>::block_number();
@@ -80,12 +115,12 @@ decl_module! {
 
 			// Emit event
 			Self::deposit_event(Event::DepositedContinuous(val_to_add));
-			Ok(())
+			Ok(().into())
 		}
 
 		/// Withdraw some funds from the compounding interest account
-		#[weight = 10_000]
-		fn withdraw_continuous(origin, val_to_take: u64) -> DispatchResult {
+		#[pallet::weight(10_000)]
+		fn withdraw_continuous(origin: OriginFor<T>, val_to_take: u64) -> DispatchResultWithPostInfo {
 			ensure_signed(origin)?;
 
 			let current_block = frame_system::Module::<T>::block_number();
@@ -101,64 +136,42 @@ decl_module! {
 
 			// Emit event
 			Self::deposit_event(Event::WithdrewContinuous(val_to_take));
-			Ok(())
+			Ok(().into())
 		}
 
 		/// Deposit some funds into the discrete interest account
-		#[weight = 10_000]
-		fn deposit_discrete(origin, val_to_add: u64) -> DispatchResult {
+		#[pallet::weight(10_000)]
+		pub fn deposit_discrete(origin: OriginFor<T>, val_to_add: u64) -> DispatchResultWithPostInfo {
 			ensure_signed(origin)?;
 
-			let old_value = DiscreteAccount::get();
+			let old_value = DiscreteAccount::<T>::get();
 
 			// Update storage for discrete account
-			DiscreteAccount::put(old_value + val_to_add);
+			DiscreteAccount::<T>::put(old_value + val_to_add);
 
 			// Emit event
 			Self::deposit_event(Event::DepositedDiscrete(val_to_add));
-			Ok(())
+			Ok(().into())
 		}
 
 		/// Withdraw some funds from the discrete interest account
-		#[weight = 10_000]
-		fn withdraw_discrete(origin, val_to_take: u64) -> DispatchResult {
+		#[pallet::weight(10_000)]
+		pub fn withdraw_discrete(origin: OriginFor<T>, val_to_take: u64) -> DispatchResultWithPostInfo {
 			ensure_signed(origin)?;
 
-			let old_value = DiscreteAccount::get();
+			let old_value = DiscreteAccount::<T>::get();
 
 			// Update storage for discrete account
-			DiscreteAccount::put(old_value - val_to_take);
+			DiscreteAccount::<T>::put(old_value - val_to_take);
 
 			// Emit event
 			Self::deposit_event(Event::WithdrewDiscrete(val_to_take));
-			Ok(())
-		}
-
-		fn on_finalize(n: T::BlockNumber) {
-			// Apply newly-accrued discrete interest every ten blocks
-			if (n % 10u32.into()).is_zero() {
-
-				// Calculate interest Interest = principal * rate * time
-				// We can use the `*` operator for multiplying a `Percent` by a u64
-				// because `Percent` implements the trait Mul<u64>
-				let interest = Self::discrete_interest_rate() * DiscreteAccount::get() * 10;
-
-				// The following line, although similar, does not work because
-				// u64 does not implement the trait Mul<Percent>
-				// let interest = DiscreteAccount::get() * Self::discrete_interest_rate() * 10;
-
-				// Update the balance
-				let old_balance = DiscreteAccount::get();
-				DiscreteAccount::put(old_balance + interest);
-
-				// Emit the event
-				Self::deposit_event(Event::DiscreteInterestApplied(interest));
-			}
+			Ok(().into())
 		}
 	}
 }
 
-impl<T: Config> Module<T> {
+impl<T: Config> Pallet<T> {
 	/// A helper function to evaluate the current value of the continuously compounding interest
 	/// account
 	fn value_of_continuous_account(now: &<T as frame_system::Config>::BlockNumber) -> I32F32 {

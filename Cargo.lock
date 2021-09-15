@@ -7272,6 +7272,7 @@ version = "3.0.0"
 dependencies = [
  "basic-token",
  "check-membership",
+ "compounding-interest",
  "constant-config",
  "default-instance",
  "double-map",
