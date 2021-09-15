@@ -3638,12 +3638,13 @@ recipe, we will write our own minimal runtime API.</p>
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>decl_storage! {
-	trait Store for Module&lt;T: Config&gt; as TemplateModule {
-		Thing1 get(fn thing1): Option&lt;u32&gt;;
-		Thing2 get(fn thing2): Option&lt;u32&gt;;
-	}
-}
+</span>	#[pallet::storage]
+	#[pallet::getter(fn thing1)]
+	pub type Thing1&lt;T: Config&gt; = StorageValue&lt;_, u32, ValueQuery&gt;;
+
+	#[pallet::storage]
+	#[pallet::getter(fn thing2)]
+	pub type Thing2&lt;T: Config&gt; = StorageValue&lt;_, u32, ValueQuery&gt;;
 <span class="boring">}
 </span></code></pre></pre>
 <p>Substrate already comes with a runtime API for querying storage values, which is why we can easily
@@ -3654,9 +3655,9 @@ actual runtime API, let's write a public helper function in the pallet to do the
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>impl&lt;T: Config&gt; Module&lt;T&gt; {
+</span>impl&lt;T: Config&gt; Pallet&lt;T&gt; {
 	pub fn get_sum() -&gt; u32 {
-		Thing1::get() + Thing2::get()
+		Thing1::&lt;T&gt;::get() + Thing2::&lt;T&gt;::get()
 	}
 }
 <span class="boring">}
@@ -4138,10 +4139,10 @@ responsible for creating proposing blocks in the chain.</p>
 <p>The instant seal consensus engine used in this node is built on top of a similar manual seal engine. Manual seal listens for commands to come over the RPC instructing it to author blocks. To see this engine in use, check out the <a href="./custom-rpc.html">RPC node recipe</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="custom-rpcs"><a class="header" href="#custom-rpcs">Custom RPCs</a></h1>
 <p><code>nodes/custom-rpc</code>
-<a target="_blank" href="https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fnodes%2Frpc-node%2Fsrc%2Fservice.rs">
+<a target="_blank" href="https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fnodes%2Frpc-node%2Fsrc%2Fsilly_rpc.rs">
 <img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt ="Try on playground"/>
 </a>
-<a target="_blank" href="https://github.com/substrate-developer-hub/recipes/tree/master/nodes/rpc-node/src/service.rs">
+<a target="_blank" href="https://github.com/substrate-developer-hub/recipes/tree/master/nodes/rpc-node/src/silly_rpc.rs">
 <img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt ="View on GitHub"/>
 </a></p>
 <p><code>runtimes/api-runtime</code>

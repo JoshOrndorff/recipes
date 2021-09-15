@@ -172,12 +172,13 @@ recipe, we will write our own minimal runtime API.</p>
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>decl_storage! {
-	trait Store for Module&lt;T: Config&gt; as TemplateModule {
-		Thing1 get(fn thing1): Option&lt;u32&gt;;
-		Thing2 get(fn thing2): Option&lt;u32&gt;;
-	}
-}
+</span>	#[pallet::storage]
+	#[pallet::getter(fn thing1)]
+	pub type Thing1&lt;T: Config&gt; = StorageValue&lt;_, u32, ValueQuery&gt;;
+
+	#[pallet::storage]
+	#[pallet::getter(fn thing2)]
+	pub type Thing2&lt;T: Config&gt; = StorageValue&lt;_, u32, ValueQuery&gt;;
 <span class="boring">}
 </span></code></pre></pre>
 <p>Substrate already comes with a runtime API for querying storage values, which is why we can easily
@@ -188,9 +189,9 @@ actual runtime API, let's write a public helper function in the pallet to do the
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>impl&lt;T: Config&gt; Module&lt;T&gt; {
+</span>impl&lt;T: Config&gt; Pallet&lt;T&gt; {
 	pub fn get_sum() -&gt; u32 {
-		Thing1::get() + Thing2::get()
+		Thing1::&lt;T&gt;::get() + Thing2::&lt;T&gt;::get()
 	}
 }
 <span class="boring">}
