@@ -1,32 +1,39 @@
-use crate::{Error, Module, Trait};
-use frame_support::{assert_noop, assert_ok, impl_outer_origin, parameter_types};
+use crate::{self as basic_token, Config, Error};
+use frame_support::{assert_noop, assert_ok, construct_runtime, parameter_types};
 use frame_system as system;
 use sp_core::H256;
 use sp_io::TestExternalities;
 use sp_runtime::{
 	testing::Header,
 	traits::{BlakeTwo256, IdentityLookup},
-	Perbill,
 };
 
-impl_outer_origin! {
-	pub enum Origin for TestRuntime {}
-}
+type UncheckedExtrinsic = frame_system::mocking::MockUncheckedExtrinsic<TestRuntime>;
+type Block = frame_system::mocking::MockBlock<TestRuntime>;
 
-// Workaround for https://github.com/rust-lang/rust/issues/26925 . Remove when sorted.
-#[derive(Clone, PartialEq, Eq, Debug)]
-pub struct TestRuntime;
+construct_runtime!(
+	pub enum TestRuntime where
+		Block = Block,
+		NodeBlock = Block,
+		UncheckedExtrinsic = UncheckedExtrinsic,
+	{
+		System: frame_system::{Module, Call, Config, Storage, Event<T>},
+		BasicToken: basic_token::{Module, Call, Storage, Event<T>},
+	}
+);
+
 parameter_types! {
 	pub const BlockHashCount: u64 = 250;
-	pub const MaximumBlockWeight: u32 = 1024;
-	pub const MaximumBlockLength: u32 = 2 * 1024;
-	pub const AvailableBlockRatio: Perbill = Perbill::one();
+	pub BlockWeights: frame_system::limits::BlockWeights =
+		frame_system::limits::BlockWeights::simple_max(1024);
 }
-impl system::Trait for TestRuntime {
+impl frame_system::Config for TestRuntime {
 	type BaseCallFilter = ();
+	type BlockWeights = ();
+	type BlockLength = ();
 	type Origin = Origin;
 	type Index = u64;
-	type Call = ();
+	type Call = Call;
 	type BlockNumber = u64;
 	type Hash = H256;
 	type Hashing = BlakeTwo256;
@@ -35,30 +42,23 @@ impl system::Trait for TestRuntime {
 	type Header = Header;
 	type Event = ();
 	type BlockHashCount = BlockHashCount;
-	type MaximumBlockWeight = MaximumBlockWeight;
 	type DbWeight = ();
-	type BlockExecutionWeight = ();
-	type ExtrinsicBaseWeight = ();
-	type MaximumExtrinsicWeight = MaximumBlockWeight;
-	type MaximumBlockLength = MaximumBlockLength;
-	type AvailableBlockRatio = AvailableBlockRatio;
 	type Version = ();
-	type ModuleToIndex = ();
+	type PalletInfo = PalletInfo;
 	type AccountData = ();
 	type OnNewAccount = ();
 	type OnKilledAccount = ();
 	type SystemWeightInfo = ();
+	type SS58Prefix = ();
 }
 
-impl Trait for TestRuntime {
+impl Config for TestRuntime {
 	type Event = ();
 }
 
-pub type BasicToken = Module<TestRuntime>;
+struct ExternalityBuilder;
 
-pub struct ExtBuilder;
-
-impl ExtBuilder {
+impl ExternalityBuilder {
 	pub fn build() -> TestExternalities {
 		let storage = system::GenesisConfig::default()
 			.build_storage::<TestRuntime>()
@@ -69,7 +69,7 @@ impl ExtBuilder {
 
 #[test]
 fn init_works() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		assert_ok!(BasicToken::init(Origin::signed(1)));
 		assert_eq!(BasicToken::get_balance(1), 21000000);
 	})
@@ -77,7 +77,7 @@ fn init_works() {
 
 #[test]
 fn cant_double_init() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		assert_ok!(BasicToken::init(Origin::signed(1)));
 		assert_noop!(
 			BasicToken::init(Origin::signed(1)),
@@ -88,7 +88,7 @@ fn cant_double_init() {
 
 #[test]
 fn transfer_works() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		assert_ok!(BasicToken::init(Origin::signed(1)));
 
 		// Transfer 100 tokens from user 1 to user 2
@@ -101,7 +101,7 @@ fn transfer_works() {
 
 #[test]
 fn cant_spend_more_than_you_have() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		assert_ok!(BasicToken::init(Origin::signed(1)));
 		assert_noop!(
 			BasicToken::transfer(Origin::signed(1), 2, 21000001),

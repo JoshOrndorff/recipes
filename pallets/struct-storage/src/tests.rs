@@ -1,11 +1,10 @@
-use crate::*;
-use frame_support::{assert_ok, impl_outer_event, impl_outer_origin, parameter_types};
+use crate::{self as struct_storage, Config, InnerThing, RawEvent, SuperThing};
+use frame_support::{assert_ok, construct_runtime, parameter_types};
 use sp_core::H256;
 use sp_io::TestExternalities;
 use sp_runtime::{
 	testing::Header,
 	traits::{AtLeast32Bit, BlakeTwo256, IdentityLookup},
-	Perbill,
 };
 
 // hacky Eq implementation for testing InnerThing
@@ -23,85 +22,73 @@ impl<Hash: Clone, Balance: Copy + AtLeast32Bit> PartialEq for SuperThing<Hash, B
 }
 impl<Hash: Clone, Balance: Copy + AtLeast32Bit> Eq for SuperThing<Hash, Balance> {}
 
-impl_outer_origin! {
-	pub enum Origin for TestRuntime {}
-}
+type UncheckedExtrinsic = frame_system::mocking::MockUncheckedExtrinsic<TestRuntime>;
+type Block = frame_system::mocking::MockBlock<TestRuntime>;
 
-// Workaround for https://github.com/rust-lang/rust/issues/26925 . Remove when sorted.
-#[derive(Clone, PartialEq, Eq, Debug)]
-pub struct TestRuntime;
+construct_runtime!(
+	pub enum TestRuntime where
+		Block = Block,
+		NodeBlock = Block,
+		UncheckedExtrinsic = UncheckedExtrinsic,
+	{
+		System: frame_system::{Module, Call, Config, Storage, Event<T>},
+		Balances: pallet_balances::{Module, Call, Storage, Config<T>, Event<T>},
+		StructStorage: struct_storage::{Module, Call, Storage, Event<T>},
+	}
+);
+
 parameter_types! {
 	pub const BlockHashCount: u64 = 250;
-	pub const MaximumBlockWeight: u32 = 1024;
-	pub const MaximumBlockLength: u32 = 2 * 1024;
-	pub const AvailableBlockRatio: Perbill = Perbill::one();
+	pub BlockWeights: frame_system::limits::BlockWeights =
+		frame_system::limits::BlockWeights::simple_max(1024);
 }
-impl system::Trait for TestRuntime {
+impl frame_system::Config for TestRuntime {
 	type BaseCallFilter = ();
+	type BlockWeights = ();
+	type BlockLength = ();
 	type Origin = Origin;
 	type Index = u64;
-	type Call = ();
+	type Call = Call;
 	type BlockNumber = u64;
 	type Hash = H256;
 	type Hashing = BlakeTwo256;
 	type AccountId = u64;
 	type Lookup = IdentityLookup<Self::AccountId>;
 	type Header = Header;
-	type Event = TestEvent;
+	type Event = Event;
 	type BlockHashCount = BlockHashCount;
-	type MaximumBlockWeight = MaximumBlockWeight;
 	type DbWeight = ();
-	type BlockExecutionWeight = ();
-	type ExtrinsicBaseWeight = ();
-	type MaximumExtrinsicWeight = MaximumBlockWeight;
-	type MaximumBlockLength = MaximumBlockLength;
-	type AvailableBlockRatio = AvailableBlockRatio;
 	type Version = ();
-	type ModuleToIndex = ();
-	type AccountData = balances::AccountData<u64>;
+	type PalletInfo = PalletInfo;
+	type AccountData = pallet_balances::AccountData<u64>;
 	type OnNewAccount = ();
 	type OnKilledAccount = ();
 	type SystemWeightInfo = ();
+	type SS58Prefix = ();
 }
-// note: very unrealistic for most test envs
+
 parameter_types! {
-	pub const ExistentialDeposit: u64 = 0;
-	pub const TransferFee: u64 = 0;
-	pub const CreationFee: u64 = 0;
+	pub const ExistentialDeposit: u64 = 1;
 }
-impl balances::Trait for TestRuntime {
+impl pallet_balances::Config for TestRuntime {
+	type MaxLocks = ();
 	type Balance = u64;
-	type Event = TestEvent;
+	type Event = Event;
 	type DustRemoval = ();
 	type ExistentialDeposit = ExistentialDeposit;
-	type AccountStore = system::Module<TestRuntime>;
+	type AccountStore = System;
 	type WeightInfo = ();
 }
 
-mod struct_storage {
-	pub use crate::Event;
+impl Config for TestRuntime {
+	type Event = Event;
 }
 
-impl_outer_event! {
-	pub enum TestEvent for TestRuntime {
-		struct_storage<T>,
-		system<T>,
-		balances<T>,
-	}
-}
+struct ExternalityBuilder;
 
-impl Trait for TestRuntime {
-	type Event = TestEvent;
-}
-
-pub type System = system::Module<TestRuntime>;
-pub type StructStorage = Module<TestRuntime>;
-
-pub struct ExtBuilder;
-
-impl ExtBuilder {
+impl ExternalityBuilder {
 	pub fn build() -> TestExternalities {
-		let storage = system::GenesisConfig::default()
+		let storage = frame_system::GenesisConfig::default()
 			.build_storage::<TestRuntime>()
 			.unwrap();
 		let mut ext = TestExternalities::from(storage);
@@ -112,7 +99,7 @@ impl ExtBuilder {
 
 #[test]
 fn insert_inner_works() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		// prepare hash
 		let data = H256::from_low_u64_be(16);
 		// insert inner thing
@@ -135,14 +122,15 @@ fn insert_inner_works() {
 		);
 
 		// check events emitted match expectations
-		let expected_event = TestEvent::struct_storage(RawEvent::NewInnerThing(3u32, data, 7u64));
-		assert!(System::events().iter().any(|a| a.event == expected_event));
+		let expected_event = Event::struct_storage(RawEvent::NewInnerThing(3u32, data, 7u64));
+
+		assert_eq!(System::events()[0].event, expected_event,);
 	})
 }
 
 #[test]
 fn insert_super_thing_with_existing_works() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		// prepare hash
 		let data = H256::from_low_u64_be(16);
 		// insert inner first (tested in direct test above)
@@ -175,19 +163,20 @@ fn insert_super_thing_with_existing_works() {
 			expected_outer
 		);
 
-		let expected_event = TestEvent::struct_storage(RawEvent::NewSuperThingByExistingInner(
+		let expected_event = Event::struct_storage(RawEvent::NewSuperThingByExistingInner(
 			5u32,
 			3u32,
 			data,
 			7u64.into(),
 		));
-		assert!(System::events().iter().any(|a| a.event == expected_event));
+
+		assert_eq!(System::events()[1].event, expected_event,);
 	})
 }
 
 #[test]
 fn insert_super_with_new_inner_works() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		// prepare hash
 		let data = H256::from_low_u64_be(16);
 		// insert super with new inner
@@ -215,14 +204,24 @@ fn insert_super_with_new_inner_works() {
 			expected_outer
 		);
 
-		let expected_event = TestEvent::struct_storage(RawEvent::NewInnerThing(3u32, data, 7u64));
-		assert!(System::events().iter().any(|a| a.event == expected_event));
-		let expected_event2 = TestEvent::struct_storage(RawEvent::NewSuperThingByNewInner(
-			5u32,
-			3u32,
-			data,
-			7u64.into(),
-		));
-		assert!(System::events().iter().any(|a| a.event == expected_event2));
+		//Test that the expected events were emitted
+		let our_events = System::events()
+			.into_iter()
+			.map(|r| r.event)
+			.filter_map(|e| {
+				if let Event::struct_storage(inner) = e {
+					Some(inner)
+				} else {
+					None
+				}
+			})
+			.collect::<Vec<_>>();
+
+		let expected_events = vec![
+			RawEvent::NewInnerThing(3u32, data, 7u64),
+			RawEvent::NewSuperThingByNewInner(5u32, 3u32, data, 7u64.into()),
+		];
+
+		assert_eq!(our_events, expected_events);
 	})
 }

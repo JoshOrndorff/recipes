@@ -1,0 +1,39 @@
+[package]
+name = "ocw-demo"
+version = "2.0.0"
+edition = "2018"
+authors = ['Substrate DevHub <https://github.com/substrate-developer-hub>']
+repository = "https://github.com/substrate-developer-hub/recipes/"
+description = "A pallet that demonstrates many aspects of offchain workers"
+license = "GPL-3.0-or-later"
+
+[dependencies]
+parking_lot = '0.11'
+parity-scale-codec = { version = '2.0', default-features = false, features = ['derive'] }
+# https://github.com/serde-rs/json/pull/606
+serde = { version = '1.0.100', default-features = false, features = ['derive'] }
+serde_json = { version = '1.0.45', default-features = false, features = ['alloc'] }
+
+# Substrate packages
+frame-support = { version = '3.0', default-features = false }
+frame-system = { version = '3.0', default-features = false }
+sp-arithmetic = { version = '3.0', default-features = false }
+sp-core = { version = '3.0', default-features = false }
+sp-io = { version = '3.0', default-features = false }
+sp-runtime = { version = '3.0', default-features = false }
+sp-std = { version = '3.0', default-features = false }
+sp-keystore = { version = '0.9', optional = true }
+
+[features]
+default = ['std']
+std = [
+	'frame-support/std',
+	'frame-system/std',
+	'parity-scale-codec/std',
+	'sp-keystore',
+	'sp-io/std',
+	'sp-runtime/std',
+	'sp-std/std',
+	'sp-arithmetic/std',
+	'sp-keystore/std',
+]

@@ -4,10 +4,13 @@ on:
   pull_request:
     branches:
     - master
+  push:
+    branches:
+    - test-ci # always want to including test-ci for testing gh-action
 
 jobs:
   build-book:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
 

@@ -1,9 +1,6 @@
 //! Helper module to build a genesis configuration for the weight-fee-runtime
 
-use super::{
-	AccountId, BalancesConfig, GenericAssetConfig, GenesisConfig, Signature, SudoConfig,
-	SystemConfig, WASM_BINARY,
-};
+use super::{AccountId, BalancesConfig, GenesisConfig, Signature, SudoConfig, SystemConfig};
 use sp_core::{sr25519, Pair};
 use sp_runtime::traits::{IdentifyAccount, Verify};
 
@@ -24,8 +21,9 @@ where
 	AccountPublic::from(get_from_seed::<TPair>(seed)).into_account()
 }
 
-pub fn dev_genesis() -> GenesisConfig {
+pub fn dev_genesis(wasm_binary: &[u8]) -> GenesisConfig {
 	testnet_genesis(
+		wasm_binary,
 		// Root Key
 		account_id_from_seed::<sr25519::Pair>("Alice"),
 		// Endowed Accounts
@@ -39,31 +37,23 @@ pub fn dev_genesis() -> GenesisConfig {
 }
 
 /// Helper function to build a genesis configuration
-pub fn testnet_genesis(root_key: AccountId, endowed_accounts: Vec<AccountId>) -> GenesisConfig {
+pub fn testnet_genesis(
+	wasm_binary: &[u8],
+	root_key: AccountId,
+	endowed_accounts: Vec<AccountId>,
+) -> GenesisConfig {
 	GenesisConfig {
-		system: Some(SystemConfig {
-			code: WASM_BINARY.to_vec(),
+		frame_system: Some(SystemConfig {
+			code: wasm_binary.to_vec(),
 			changes_trie_config: Default::default(),
 		}),
-		balances: Some(BalancesConfig {
+		pallet_balances: Some(BalancesConfig {
 			balances: endowed_accounts
 				.iter()
 				.cloned()
 				.map(|k| (k, 1 << 60))
 				.collect(),
 		}),
-		generic_asset: Some(GenericAssetConfig {
-			assets: vec![13, 1],
-			initial_balance: 10u128.pow(18 + 9), // 1 billion token with 18 decimals
-			endowed_accounts: endowed_accounts
-				.clone()
-				.into_iter()
-				.map(Into::into)
-				.collect(),
-			next_asset_id: 100,
-			staking_asset_id: 1,
-			spending_asset_id: 1,
-		}),
-		sudo: Some(SudoConfig { key: root_key }),
+		pallet_sudo: Some(SudoConfig { key: root_key }),
 	}
 }

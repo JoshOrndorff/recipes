@@ -1,12 +1,12 @@
 # Computational Resources and Weights
 
 `pallets/weights`
-[
-	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
-](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fweights%2Fsrc%2Flib.rs)
-[
-	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
-](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/weights/src/lib.rs)
+<a target="_blank" href="https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fweights%2Fsrc%2Flib.rs">
+	<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt ="Try on playground"/>
+</a>
+<a target="_blank" href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/weights/src/lib.rs">
+	<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt ="View on GitHub"/>
+</a>
 
 Any computational resources used by a transaction must be accounted for so that appropriate fees can
 be applied, and it is a pallet author's job to ensure that this accounting happens. Substrate
@@ -32,7 +32,7 @@ integer in cases situations like this.
 
 ```rust, ignore
 decl_module! {
-	pub struct Module<T: Trait> for enum Call {
+	pub struct Module<T: Config> for enum Call {
 
 		#[weight = 10_000]
 		fn store_value(_origin, entry: u32) -> DispatchResult {
@@ -64,10 +64,10 @@ impl WeighData<(&bool, &u32)> for Conditional {
 ```
 
 In addition to the
-[`WeightData` Trait](https://substrate.dev/rustdocs/v2.0.0-rc6/frame_support/weights/trait.WeighData.html), shown
+[`WeightData` Trait](https://substrate.dev/rustdocs/v3.0.0/frame_support/weights/trait.WeighData.html), shown
 above, types that are used to calculate transaction weights must also implement
-[`ClassifyDispatch`](https://substrate.dev/rustdocs/v2.0.0-rc6/frame_support/weights/trait.ClassifyDispatch.html),
-and [`PaysFee`](https://substrate.dev/rustdocs/v2.0.0-rc6/frame_support/weights/trait.PaysFee.html).
+[`ClassifyDispatch`](https://substrate.dev/rustdocs/v3.0.0/frame_support/weights/trait.ClassifyDispatch.html),
+and [`PaysFee`](https://substrate.dev/rustdocs/v3.0.0/frame_support/weights/trait.PaysFee.html).
 
 ```rust, ignore
 impl<T> ClassifyDispatch<T> for Conditional {

@@ -1,4 +1,6 @@
 {
+  "AccountInfo": "AccountInfoWithTripleRefCount",
   "Address": "AccountId",
-  "LookupSource": "AccountId"
+  "LookupSource": "AccountId",
+  "AccountInfo": "AccountInfoWithDualRefCount"
 }

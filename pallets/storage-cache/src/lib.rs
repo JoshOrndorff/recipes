@@ -4,18 +4,18 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 use frame_support::{decl_event, decl_module, decl_storage, dispatch::DispatchResult, ensure};
-use frame_system::{self as system, ensure_signed};
+use frame_system::ensure_signed;
 use sp_std::prelude::*;
 
 #[cfg(test)]
 mod tests;
 
-pub trait Trait: system::Trait {
-	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
+pub trait Config: frame_system::Config {
+	type Event: From<Event<Self>> + Into<<Self as frame_system::Config>::Event>;
 }
 
 decl_storage! {
-	trait Store for Module<T: Trait> as StorageCache {
+	trait Store for Module<T: Config> as StorageCache {
 		// copy type
 		SomeCopyValue get(fn some_copy_value): u32;
 
@@ -28,8 +28,8 @@ decl_storage! {
 decl_event!(
 	pub enum Event<T>
 	where
-		AccountId = <T as system::Trait>::AccountId,
-		BlockNumber = <T as system::Trait>::BlockNumber,
+		AccountId = <T as frame_system::Config>::AccountId,
+		BlockNumber = <T as frame_system::Config>::BlockNumber,
 	{
 		// swap old value with new value (new_value, time_now)
 		InefficientValueChange(u32, BlockNumber),
@@ -43,7 +43,7 @@ decl_event!(
 );
 
 decl_module! {
-	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
+	pub struct Module<T: Config> for enum Call where origin: T::Origin {
 		fn deposit_event() = default;
 
 		///  (Copy) inefficient way of updating value in storage
@@ -59,7 +59,7 @@ decl_module! {
 			// should've just used `original_call` here because u32 is copy
 			let another_calculation = some_calculation.checked_add(unnecessary_call).ok_or("addition overflowed2")?;
 			<SomeCopyValue>::put(another_calculation);
-			let now = <system::Module<T>>::block_number();
+			let now = <frame_system::Module<T>>::block_number();
 			Self::deposit_event(RawEvent::InefficientValueChange(another_calculation, now));
 			Ok(())
 		}
@@ -75,7 +75,7 @@ decl_module! {
 			// uses the original_call because u32 is copy
 			let another_calculation = some_calculation.checked_add(original_call).ok_or("addition overflowed2")?;
 			<SomeCopyValue>::put(another_calculation);
-			let now = <system::Module<T>>::block_number();
+			let now = <frame_system::Module<T>>::block_number();
 			Self::deposit_event(RawEvent::BetterValueChange(another_calculation, now));
 			Ok(())
 		}
@@ -154,7 +154,7 @@ decl_module! {
 	}
 }
 
-impl<T: Trait> Module<T> {
+impl<T: Config> Module<T> {
 	pub fn is_member(who: &T::AccountId) -> bool {
 		<GroupMembers<T>>::get().contains(who)
 	}

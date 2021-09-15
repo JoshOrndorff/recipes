@@ -6,21 +6,21 @@
 //! used, the `vec-set` pallet must also be present in the runtime.
 
 use frame_support::{decl_error, decl_event, decl_module, dispatch::DispatchResult};
-use frame_system::{self as system, ensure_signed};
+use frame_system::ensure_signed;
 
 #[cfg(test)]
 mod tests;
 
 /// The pallet's configuration trait.
 /// Notice the explicit tight coupling to the `vec-set` pallet
-pub trait Trait: system::Trait + vec_set::Trait {
-	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
+pub trait Config: frame_system::Config + vec_set::Config {
+	type Event: From<Event<Self>> + Into<<Self as frame_system::Config>::Event>;
 }
 
 decl_event!(
 	pub enum Event<T>
 	where
-		AccountId = <T as system::Trait>::AccountId,
+		AccountId = <T as frame_system::Config>::AccountId,
 	{
 		/// The caller is a member.
 		IsAMember(AccountId),
@@ -28,14 +28,14 @@ decl_event!(
 );
 
 decl_error! {
-	pub enum Error for Module<T: Trait> {
+	pub enum Error for Module<T: Config> {
 		/// The caller is not a member
 		NotAMember,
 	}
 }
 
 decl_module! {
-	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
+	pub struct Module<T: Config> for enum Call where origin: T::Origin {
 		fn deposit_event() = default;
 
 		/// Checks whether the caller is a member of the set of account IDs provided by the `vec-set`

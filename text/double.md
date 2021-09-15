@@ -1,23 +1,23 @@
 # Efficent Subgroup Removal by Subkey: Double Maps
 
 `pallets/double-map`
-[
-	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
-](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fdouble-map%2Fsrc%2Flib.rs)
-[
-	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
-](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/double-map/src/lib.rs)
+<a target="_blank" href="https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fdouble-map%2Fsrc%2Flib.rs">
+	<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt ="Try on playground"/>
+</a>
+<a target="_blank" href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/double-map/src/lib.rs">
+	<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt ="View on GitHub"/>
+</a>
 
 For some runtimes, it may be necessary to remove a subset of values in a key-value mapping. If the
 subset maintain an associated identifier type, this can be done in a clean way with the
-[`double_map`](https://substrate.dev/rustdocs/v2.0.0-rc6/frame_support/storage/trait.StorageDoubleMap.html) via the
+[`double_map`](https://substrate.dev/rustdocs/v3.0.0/frame_support/storage/trait.StorageDoubleMap.html) via the
 `remove_prefix` api.
 
 ```rust, ignore
 pub type GroupIndex = u32; // this is Encode (which is necessary for double_map)
 
 decl_storage! {
-	trait Store for Module<T: Trait> as Dmap {
+	trait Store for Module<T: Config> as Dmap {
 		/// Member score (double map)
 		MemberScore get(fn member_score):
 			double_map hasher(blake2_128_concat) GroupIndex, hasher(blake2_128_concat) T::AccountId => u32;

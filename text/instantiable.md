@@ -1,20 +1,20 @@
 # Instantiable Pallets
 
 `pallets/last-caller`
-[
-	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
-](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Flast-caller%2Fsrc%2Flib.rs)
-[
-	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
-](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/last-caller/src/lib.rs)
+<a target="_blank" href="https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Flast-caller%2Fsrc%2Flib.rs">
+	<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt ="Try on playground"/>
+</a>
+<a target="_blank" href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/last-caller/src/lib.rs">
+	<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt ="View on GitHub"/>
+</a>
 
 `pallets/default-instance`
-[
-	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
-](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fdefault-instance%2Fsrc%2Flib.rs)
-[
-	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
-](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/default-instance/src/lib.rs)
+<a target="_blank" href="https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fdefault-instance%2Fsrc%2Flib.rs">
+	<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt ="Try on playground"/>
+</a>
+<a target="_blank" href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/default-instance/src/lib.rs">
+	<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt ="View on GitHub"/>
+</a>
 
 Instantiable pallets enable multiple instances of the same pallet logic within a single runtime.
 Each instance of the pallet has its own independent storage, and extrinsics must specify which
@@ -48,9 +48,9 @@ non-instantiable pallet. There are just a few places where the syntax differs.
 ### Configuration Trait
 
 ```rust, ignore
-pub trait Trait<I: Instance>: system::Trait {
+pub trait Config<I: Instance>: frame_system::Config {
 	/// The overarching event type.
-	type Event: From<Event<Self, I>> + Into<<Self as system::Trait>::Event>;
+	type Event: From<Event<Self, I>> + Into<<Self as frame_system::Config>::Event>;
 }
 ```
 
@@ -58,7 +58,7 @@ pub trait Trait<I: Instance>: system::Trait {
 
 ```rust, ignore
 decl_storage! {
-	trait Store for Module<T: Trait<I>, I: Instance> as TemplatePallet {
+	trait Store for Module<T: Config<I>, I: Instance> as TemplatePallet {
 		...
 	}
 }
@@ -69,7 +69,7 @@ decl_storage! {
 ```rust, ignore
 decl_module! {
 	/// The module declaration.
-	pub struct Module<T: Trait<I>, I: Instance> for enum Call where origin: T::Origin {
+	pub struct Module<T: Config<I>, I: Instance> for enum Call where origin: T::Origin {
 		...
 	}
 }
@@ -98,7 +98,7 @@ fn deposit_event() = default;
 
 ```rust, ignore
 decl_event!(
-	pub enum Event<T, I> where AccountId = <T as system::Trait>::AccountId {
+	pub enum Event<T, I> where AccountId = <T as frame_system::Config>::AccountId {
 		...
 	}
 }
@@ -116,7 +116,7 @@ Each instance needs to be configured separately. Configuration consists of imple
 instance's trait. The following snippet shows a configuration for `Instance1`.
 
 ```rust, ignore
-impl template::Trait<template::Instance1> for Runtime {
+impl template::Config<template::Instance1> for Runtime {
 	type Event = Event;
 }
 ```
@@ -142,12 +142,12 @@ instantiable provided they **only use a single instance**.
 To make your instantiable pallet support DefaultInstance, you must specify it in four places.
 
 ```rust, ignore
-pub trait Trait<I=DefaultInstance>: system::Trait {
+pub trait Config<I=DefaultInstance>: frame_system::Config {
 ```
 
 ```rust, ignore
 decl_storage! {
-	trait Store for Module<T: Trait<I>, I: Instance=DefaultInstance> as TemplateModule {
+	trait Store for Module<T: Config<I>, I: Instance=DefaultInstance> as TemplateModule {
 		...
 	}
 }
@@ -155,7 +155,7 @@ decl_storage! {
 
 ```rust, ignore
 decl_module! {
-	pub struct Module<T: Trait<I>, I: Instance = DefaultInstance> for enum Call where origin: T::Origin {
+	pub struct Module<T: Config<I>, I: Instance = DefaultInstance> for enum Call where origin: T::Origin {
 		...
 	}
 }

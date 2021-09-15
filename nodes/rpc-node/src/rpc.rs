@@ -2,14 +2,17 @@
 
 use std::sync::Arc;
 
-use runtime::{opaque::Block, Hash};
-use sp_api::ProvideRuntimeApi;
-use sp_blockchain::{Error as BlockChainError, HeaderMetadata, HeaderBackend};
-use sp_block_builder::BlockBuilder;
-pub use sc_rpc_api::DenyUnsafe;
-use sp_transaction_pool::TransactionPool;
-use sc_consensus_manual_seal::{EngineCommand, rpc::{ManualSeal, ManualSealApi}};
 use futures::channel::mpsc::Sender;
+use runtime::{opaque::Block, Hash};
+use sc_consensus_manual_seal::{
+	rpc::{ManualSeal, ManualSealApi},
+	EngineCommand,
+};
+pub use sc_rpc_api::DenyUnsafe;
+use sp_api::ProvideRuntimeApi;
+use sp_block_builder::BlockBuilder;
+use sp_blockchain::{Error as BlockChainError, HeaderBackend, HeaderMetadata};
+use sp_transaction_pool::TransactionPool;
 
 /// Full client dependencies.
 pub struct FullDeps<C, P> {
@@ -24,20 +27,21 @@ pub struct FullDeps<C, P> {
 }
 
 /// Instantiate all full RPC extensions.
-pub fn create_full<C, P>(
-	deps: FullDeps<C, P>,
-) -> jsonrpc_core::IoHandler<sc_rpc::Metadata> where
+pub fn create_full<C, P>(deps: FullDeps<C, P>) -> jsonrpc_core::IoHandler<sc_rpc::Metadata>
+where
 	C: ProvideRuntimeApi<Block>,
-	C: HeaderBackend<Block> + HeaderMetadata<Block, Error=BlockChainError> + 'static,
+	C: HeaderBackend<Block> + HeaderMetadata<Block, Error = BlockChainError> + 'static,
 	C: Send + Sync + 'static,
 	C::Api: BlockBuilder<Block>,
 	C::Api: sum_storage_runtime_api::SumStorageApi<Block>,
 	P: TransactionPool + 'static,
-	// C::Api: sum_storage_runtime_api::SumStorageApi<sp_runtime::generic::block::Block<sp_runtime::generic::header::Header<u32, sp_runtime::traits::BlakeTwo256>, sp_runtime::OpaqueExtrinsic>>,
 {
-
 	let mut io = jsonrpc_core::IoHandler::default();
-	let FullDeps { command_sink, client, .. } = deps;
+	let FullDeps {
+		command_sink,
+		client,
+		..
+	} = deps;
 
 	// Add a silly RPC that returns constant values
 	io.extend_with(crate::silly_rpc::SillyRpc::to_delegate(

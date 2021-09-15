@@ -1,12 +1,12 @@
 # Using and Storing Structs
 
 `pallets/struct-storage`
-[
-	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
-](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fstruct-storage%2Fsrc%2Flib.rs)
-[
-	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
-](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/struct-storage/src/lib.rs)
+<a target="_blank" href="https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fstruct-storage%2Fsrc%2Flib.rs">
+	<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt ="Try on playground"/>
+</a>
+<a target="_blank" href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/struct-storage/src/lib.rs">
+	<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt ="View on GitHub"/>
+</a>
 
 In Rust, a `struct`, or structure, is a custom data type that lets you name and package together
 multiple related values that make up a meaningful group. If you’re familiar with an object-oriented
@@ -62,7 +62,7 @@ It is often convenient to make a type alias that takes `T`, your pallet's config
 single type parameter. Doing so simply saves you typing in the future.
 
 ```rust, ignore
-type InnerThingOf<T> = InnerThing<<T as system::Trait>::Hash, <T as balances::Trait>::Balance>;
+type InnerThingOf<T> = InnerThing<<T as frame_system::Config>::Hash, <T as pallet_balances::Config>::Balance>;
 ```
 
 ## Structs in Storage
@@ -75,7 +75,7 @@ generally preferred when the entire type exceeds the preferred line length.
 
 ```rust, ignore
 decl_storage! {
-	trait Store for Module<T: Trait> as NestedStructs {
+	trait Store for Module<T: Config> as NestedStructs {
 		InnerThingsByNumbers get(fn inner_things_by_numbers):
 			map hasher(blake2_128_concat) u32 => InnerThingOf<T>;
 		SuperThingsBySuperNumbers get(fn super_things_by_super_numbers):

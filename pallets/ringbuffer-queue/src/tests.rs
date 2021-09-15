@@ -1,79 +1,65 @@
-use super::{RawEvent, ValueStruct};
-use crate::{Module, Trait};
-use frame_support::{assert_ok, impl_outer_event, impl_outer_origin, parameter_types};
-use frame_system as system;
+use crate::{self as ringbuffer_queue, Config, RawEvent, ValueStruct};
+use frame_support::{assert_ok, construct_runtime, parameter_types};
 use sp_core::H256;
 use sp_io::TestExternalities;
 use sp_runtime::{
 	testing::Header,
 	traits::{BlakeTwo256, IdentityLookup},
-	Perbill,
 };
 
-impl_outer_origin! {
-	pub enum Origin for TestRuntime {}
-}
+type UncheckedExtrinsic = frame_system::mocking::MockUncheckedExtrinsic<TestRuntime>;
+type Block = frame_system::mocking::MockBlock<TestRuntime>;
 
-// Workaround for https://github.com/rust-lang/rust/issues/26925 . Remove when sorted.
-#[derive(Clone, PartialEq, Eq, Debug)]
-pub struct TestRuntime;
+construct_runtime!(
+	pub enum TestRuntime where
+		Block = Block,
+		NodeBlock = Block,
+		UncheckedExtrinsic = UncheckedExtrinsic,
+	{
+		System: frame_system::{Module, Call, Config, Storage, Event<T>},
+		RingBuffer: ringbuffer_queue::{Module, Call, Event<T>},
+	}
+);
+
 parameter_types! {
 	pub const BlockHashCount: u64 = 250;
-	pub const MaximumBlockWeight: u32 = 1024;
-	pub const MaximumBlockLength: u32 = 2 * 1024;
-	pub const AvailableBlockRatio: Perbill = Perbill::one();
+	pub BlockWeights: frame_system::limits::BlockWeights =
+		frame_system::limits::BlockWeights::simple_max(1024);
 }
-impl system::Trait for TestRuntime {
+impl frame_system::Config for TestRuntime {
 	type BaseCallFilter = ();
+	type BlockWeights = ();
+	type BlockLength = ();
 	type Origin = Origin;
 	type Index = u64;
-	type Call = ();
+	type Call = Call;
 	type BlockNumber = u64;
 	type Hash = H256;
 	type Hashing = BlakeTwo256;
 	type AccountId = u64;
 	type Lookup = IdentityLookup<Self::AccountId>;
 	type Header = Header;
-	type Event = TestEvent;
+	type Event = Event;
 	type BlockHashCount = BlockHashCount;
-	type MaximumBlockWeight = MaximumBlockWeight;
 	type DbWeight = ();
-	type BlockExecutionWeight = ();
-	type ExtrinsicBaseWeight = ();
-	type MaximumExtrinsicWeight = MaximumBlockWeight;
-	type MaximumBlockLength = MaximumBlockLength;
-	type AvailableBlockRatio = AvailableBlockRatio;
 	type Version = ();
-	type ModuleToIndex = ();
+	type PalletInfo = PalletInfo;
 	type AccountData = ();
 	type OnNewAccount = ();
 	type OnKilledAccount = ();
 	type SystemWeightInfo = ();
+	type SS58Prefix = ();
 }
 
-mod ringbuffer {
-	pub use crate::Event;
+impl Config for TestRuntime {
+	type Event = Event;
 }
 
-impl_outer_event! {
-	pub enum TestEvent for TestRuntime {
-		ringbuffer<T>,
-		system<T>,
-	}
-}
+struct ExternalityBuilder;
 
-impl Trait for TestRuntime {
-	type Event = TestEvent;
-}
-
-pub type System = system::Module<TestRuntime>;
-pub type RingBuffer = Module<TestRuntime>;
-
-pub struct ExtBuilder;
-
-impl ExtBuilder {
+impl ExternalityBuilder {
 	pub fn build() -> TestExternalities {
-		let storage = system::GenesisConfig::default()
+		let storage = frame_system::GenesisConfig::default()
 			.build_storage::<TestRuntime>()
 			.unwrap();
 		let mut ext = TestExternalities::from(storage);
@@ -84,7 +70,7 @@ impl ExtBuilder {
 
 #[test]
 fn add_to_queue_works() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		assert_ok!(RingBuffer::add_to_queue(Origin::signed(1), 1, true));
 		assert_eq!(
 			RingBuffer::get_value(0),
@@ -99,7 +85,7 @@ fn add_to_queue_works() {
 
 #[test]
 fn add_multiple_works() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		assert_ok!(RingBuffer::add_multiple(
 			Origin::signed(1),
 			vec![1, 2, 3],
@@ -118,7 +104,7 @@ fn add_multiple_works() {
 
 #[test]
 fn pop_works() {
-	ExtBuilder::build().execute_with(|| {
+	ExternalityBuilder::build().execute_with(|| {
 		assert_ok!(RingBuffer::add_to_queue(Origin::signed(1), 1, true));
 		assert_eq!(
 			RingBuffer::get_value(0),
@@ -132,8 +118,8 @@ fn pop_works() {
 		assert_ok!(RingBuffer::pop_from_queue(Origin::signed(1)));
 		assert_eq!(RingBuffer::range(), (1, 1));
 
-		let expected_event = TestEvent::ringbuffer(RawEvent::Popped(1, true));
+		let expected_event = Event::ringbuffer_queue(RawEvent::Popped(1, true));
 
-		assert!(System::events().iter().any(|a| a.event == expected_event));
+		assert_eq!(System::events()[0].event, expected_event,);
 	})
 }

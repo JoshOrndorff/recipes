@@ -3,12 +3,14 @@ name: Build and Push Playground Image
 on:
   push:
     branches:
-    - master
+    # Temporarily disabled, to be fix.
+    # - master
+    - test-ci # always want to including test-ci for testing gh-action
 
 jobs:
   build-push-template:
     if: ${{ github.repository == 'substrate-developer-hub/recipes' }}
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
     - name: Trigger playground inclusion
       uses: peter-evans/repository-dispatch@v1

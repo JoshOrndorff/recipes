@@ -1,19 +1,19 @@
 # Cache Multiple Calls
 
 `pallets/storage-cache`
-[
-	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
-](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fstorage-cache%2Fsrc%2Flib.rs)
-[
-	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
-](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/storage-cache/src/lib.rs)
+<a target="_blank" href="https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fstorage-cache%2Fsrc%2Flib.rs">
+	<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt ="Try on playground"/>
+</a>
+<a target="_blank" href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/storage-cache/src/lib.rs">
+	<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt ="View on GitHub"/>
+</a>
 
 Calls to runtime storage have an associated cost and developers should strive to minimize the number
 of calls.
 
 ```rust, ignore
 decl_storage! {
-	trait Store for Module<T: Trait> as StorageCache {
+	trait Store for Module<T: Config> as StorageCache {
 		// copy type
 		SomeCopyValue get(fn some_copy_value): u32;
 
@@ -40,7 +40,7 @@ fn increase_value_no_cache(origin, some_val: u32) -> DispatchResult {
 	// should've just used `original_call` here because u32 is copy
 	let another_calculation = some_calculation.checked_add(unnecessary_call).ok_or("addition overflowed2")?;
 	<SomeCopyValue>::put(another_calculation);
-	let now = <system::Module<T>>::block_number();
+	let now = <frame_system::Module<T>>::block_number();
 	Self::deposit_event(RawEvent::InefficientValueChange(another_calculation, now));
 	Ok(())
 }
@@ -58,7 +58,7 @@ fn increase_value_w_copy(origin, some_val: u32) -> DispatchResult {
 	// uses the original_call because u32 is copy
 	let another_calculation = some_calculation.checked_add(original_call).ok_or("addition overflowed2")?;
 	<SomeCopyValue>::put(another_calculation);
-	let now = <system::Module<T>>::block_number();
+	let now = <frame_system::Module<T>>::block_number();
 	Self::deposit_event(RawEvent::BetterValueChange(another_calculation, now));
 	Ok(())
 }
@@ -100,14 +100,14 @@ fn swap_king_no_cache(origin) -> DispatchResult {
 ```
 
 If the `existing_key` is used without a `clone` in the event emission instead of `old_king`, then
-the compiler returns the following error
+the compiler returns the following error:
 
 ```bash
 error[E0382]: use of moved value: `existing_king`
   --> src/lib.rs:93:63
    |
 80 |             let existing_king = <KingMember<T>>::get();
-   |                 ------------- move occurs because `existing_king` has type `<T as frame_system::Trait>::AccountId`, which does not implement the `Copy` trait
+   |                 ------------- move occurs because `existing_king` has type `<T as frame_system::Config>::AccountId`, which does not implement the `Copy` trait
 ...
 85 |             ensure!(!Self::is_member(existing_king), "is a member so maintains priority");
    |                                      ------------- value moved here

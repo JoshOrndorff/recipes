@@ -1,12 +1,12 @@
 # Basic Token
 
 `pallets/basic-token`
-[
-	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
-](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fbasic-token%2Fsrc%2Flib.rs)
-[
-	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
-](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/basic-token/src/lib.rs)
+<a target="_blank" href="https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fbasic-token%2Fsrc%2Flib.rs">
+	<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt ="Try on playground"/>
+</a>
+<a target="_blank" href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/basic-token/src/lib.rs">
+	<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt ="View on GitHub"/>
+</a>
 
 This recipe demonstrates a simple but functional token in a pallet.
 
@@ -28,7 +28,7 @@ been initialized yet.
 
 ```rust, ignore
 decl_storage! {
-	trait Store for Module<T: Trait> as Token {
+	trait Store for Module<T: Config> as Token {
 		pub Balances get(get_balance): map hasher(blake2_128_concat) T::AccountId => u64;
 
 		pub TotalSupply get(total_supply): u64 = 21000000;
@@ -50,7 +50,7 @@ transfers, and successful and failed initialization.
 decl_event!(
 	pub enum Event<T>
 	where
-		AccountId = <T as system::Trait>::AccountId,
+		AccountId = <T as frame_system::Config>::AccountId,
 	{
 		/// Token was initialized by user
 		Initialized(AccountId),
@@ -60,7 +60,7 @@ decl_event!(
 );
 
 decl_error! {
-	pub enum Error for Module<T: Trait> {
+	pub enum Error for Module<T: Config> {
 		/// Attempted to initialize the token after it had already been initialized.
 		AlreadyInitialized,
 		/// Attempted to transfer more funds than were available
@@ -122,6 +122,5 @@ fn transfer(_origin, to: T::AccountId, value: u64) -> DispatchResult {
 
 ## Don't Panic!
 
-When adding the incoming balance, notice the peculiar `.expect` method. In a Substrate runtime,
-**you must never panic**. To encourage careful thinking about your code, you use the `.expect`
+When adding the incoming balance, notice the peculiar `.expect` method. In Substrate, **your runtime must never panic**. To encourage careful thinking about your code, you use the `.expect`
 method and provide a proof of why the potential panic will never happen.

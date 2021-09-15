@@ -4,10 +4,11 @@ on:
   push:
     branches:
     - master
+    # Do not include test-ci, as it deploy mdbook to production
 
 jobs:
   build-deploy-book:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
 

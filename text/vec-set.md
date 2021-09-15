@@ -1,12 +1,12 @@
 # Using Vectors as Sets
 
 `pallets/vec-set`
-[
-	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
-](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fvec-set%2Fsrc%2Flib.rs)
-[
-	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
-](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/vec-set/src/lib.rs)
+<a target="_blank" href="https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fvec-set%2Fsrc%2Flib.rs">
+	<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt ="Try on playground"/>
+</a>
+<a target="_blank" href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/vec-set/src/lib.rs">
+	<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt ="View on GitHub"/>
+</a>
 
 A [Set](<https://en.wikipedia.org/wiki/Set_(abstract_data_type)>) is an unordered data structure
 that stores entries without duplicates. Substrate's storage API does not provide a way to declare
@@ -35,7 +35,7 @@ needs, we are able to build a set from the `Vec`. We declare our single storage 
 
 ```rust, ignore
 decl_storage! {
-	trait Store for Module<T: Trait> as VecSet {
+	trait Store for Module<T: Config> as VecSet {
 		// The set of all members. Stored as a single vec
 		Members get(fn members): Vec<T::AccountId>;
 	}

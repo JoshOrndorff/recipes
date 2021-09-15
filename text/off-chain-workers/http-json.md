@@ -1,137 +1,111 @@
 # HTTP Fetching and JSON Parsing in Off-chain Workers
 
-`pallets/offchain-demo`
-[
-	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
-](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Foffchain-demo%2Fsrc%2Flib.rs)
-[
-	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
-](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/offchain-demo/src/lib.rs)
+`pallets/ocw-demo`
+<a target="_blank" href="https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%ocw-demo%2Fsrc%2Flib.rs">
+	<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt ="Try on playground"/>
+</a>
+<a target="_blank" href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/ocw-demo/src/lib.rs">
+	<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt ="View on GitHub"/>
+</a>
 
 ## HTTP Fetching
 
-In traditional web app, it is often necessary to communicate with third-party APIs to fetch data
-that the app itself does not contains. But this becomes tricky in blockchain decentralized apps
-because HTTP requests are indeterministic. There are uncertainty in terms of whether the HTTP
-request will come back, how long it takes, and if the result stays the same when the result is being
-validated by another node at a future point.
+In traditional web apps, we use HTTP requests to communicate with and fetch data from third-party APIs.
+But this is tricky when we want to perform this in Substrate runtime on chain. First, HTTP requests
+are indeterministic. There are uncertainty in terms of how long the request will take, and the result
+may not be the same all the time. This causes problem for the network reaching consensus.
 
-In Substrate, we solve this problem by using off-chain workers to issue HTTP requests and get the
-result back.
+So in Substrate runtime, we use off-chain workers to issue HTTP requests and fetching the results back.
 
-In `pallets/offchain-demo/src/lib.rs`, we have an example of fetching information of github
-organization `substrate-developer-hub` via its public API. Then we extract the `login`, `blog`, and
-`public_repos` values out.
+In this chapter, we will dive into fetching data using GitHub RESTful API on the organization `substrate-developer-hub`
+that hosts this recipe.
 
-First, include the tools implemented in `sp_runtime::offchain` at the top.
+We issue an http request and return the JSON string in byte vector inside the `fetch_from_remote()`
+function.
+
+src:
+[`pallets/ocw-demo/src/lib.rs`](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/ocw-demo/src/lib.rs)
 
 ```rust
-use sp_runtime::{
-	offchain as rt_offchain
+fn fetch_from_remote() -> Result<Vec<u8>, Error<T>> {
+  // Initiate an external HTTP GET request. This is using high-level wrappers from `sp_runtime`.
+  let request = rt_offchain::http::Request::get(HTTP_REMOTE_REQUEST);
+
+  // Keeping the offchain worker execution time reasonable, so limiting the call to be within 3s.
+  let timeout = sp_io::offchain::timestamp()
+  	.add(rt_offchain::Duration::from_millis(FETCH_TIMEOUT_PERIOD));
+
+  // For github API request, we also need to specify `user-agent` in http request header.
+  //   See: https://developer.github.com/v3/#user-agent-required
+  let pending = request
+  	.add_header("User-Agent", HTTP_HEADER_USER_AGENT)
+  	.deadline(timeout) // Setting the timeout time
+  	.send() // Sending the request out by the host
+  	.map_err(|_| <Error<T>>::HttpFetchingError)?;
+
+  // By default, the http request is async from the runtime perspective. So we are asking the
+  //   runtime to wait here.
+  // The returning value here is a `Result` of `Result`, so we are unwrapping it twice by two `?`
+  //   ref: https://substrate.dev/rustdocs/v3.0.0/sp_runtime/offchain/http/struct.PendingRequest.html#method.try_wait
+  let response = pending
+  	.try_wait(timeout)
+  	.map_err(|_| <Error<T>>::HttpFetchingError)?
+  	.map_err(|_| <Error<T>>::HttpFetchingError)?;
+
+  if response.code != 200 {
+  	debug::error!("Unexpected http request status code: {}", response.code);
+  	return Err(<Error<T>>::HttpFetchingError);
+  }
+
+  // Next we fully read the response body and collect it to a vector of bytes.
+  Ok(response.body().collect::<Vec<u8>>())
 }
 ```
 
-We then issue http requests inside the `fetch_from_remote()` function.
+On the above code, we first create a request object `request`, and set a timeout period so the http request does not hold
+indefinitely with `.deadline(timeout)`. For querying github APIs, we also need to add an extra HTTP
+header of `user-agent` with `add_header(...)`. HTTP requests from off-chain workers are fetched asynchronously. Here
+we use `try_wait()` to wait for the result to come back, and terminate and return if any errors occured, i.e. returning non-200 http response code.
 
-```rust
-// Initiate an external HTTP GET request. This is using high-level wrappers from `sp_runtime`.
-let request = rt_offchain::http::Request::get(HTTP_REMOTE_REQUEST);
-```
-
-We should also set a timeout period so the http request does not hold indefinitely. For github API
-usage, we also need to add extra HTTP header information to it. This is how we do it.
-
-```rust
-pub const FETCH_TIMEOUT_PERIOD: u64 = 3000; // in milli-seconds
-pub const HTTP_HEADER_USER_AGENT: &str = "my-github-username";
-
-// ...
-// Keeping the offchain worker execution time reasonable, so limiting the call to be within 3s.
-let timeout = sp_io::offchain::timestamp()
-	.add(rt_offchain::Duration::from_millis(FETCH_TIMEOUT_PERIOD));
-
-// For github API request, we also need to specify `user-agent` in http request header.
-//   See: https://developer.github.com/v3/#user-agent-required
-let pending = request
-	.add_header("User-Agent", HTTP_HEADER_USER_AGENT)
-	.deadline(timeout) // Setting the timeout time
-	.send() // Sending the request out by the host
-	.map_err(|_| <Error<T>>::HttpFetchingError)?; // Here we capture and return any http error.
-```
-
-HTTP requests from off-chain worker are fetched asynchronously. Here we use `try_wait()` to wait for
-the result to come back, and terminate and return if any errors occured.
-
-Then, We check for the response status code to ensure it is okay with HTTP status code equals
-to 200. Any status code that is non-200 is regarded as error and return.
-
-```rust
-let response = pending.try_wait(timeout)
-	.map_err(|_| <Error<T>>::HttpFetchingError)?
-	.map_err(|_| <Error<T>>::HttpFetchingError)?;
-
-if response.code != 200 {
-	debug::error!("Unexpected http request status code: {}", response.code);
-	return Err(<Error<T>>::HttpFetchingError);
-}
-```
-
-Finally, get the response back with `response.body()` iterator. Since we are in a `no_std`
-environment, we collect them back as a vector of bytes instead of a string and return.
-
-```rust
-Ok(response.body().collect::<Vec<u8>>())
-```
+Finally we get the response back from `response.body()`
+iterator. Since we are in a `no_std` environment, we collect them back as a byte vector instead of a string and return.
 
 ## JSON Parsing
 
-We usually get JSON objects back when requesting from HTTP APIs. The next task is to parse the JSON
-object and fetch the required (key, value) pair out. This is demonstrated in the `fetch_n_parse`
-function.
+We frequently get data back in JSON format when requesting from HTTP APIs. The next task is to parse the JSON
+and fetch the required key-value pairs out. This is demonstrated in the `fetch_n_parse` function.
 
 ### Setup
 
-In Rust, `serde` and `serde-json` are the popular combo-package used for JSON parsing. Due to the
-project setup of compiling Substrate node with `serde` feature `std` on and cargo feature
-unification limitation, we cannot simultaneously have `serde` feature `std` off (`no_std` on) when
-compiling the runtime
-([details described in this issue](https://github.com/rust-lang/cargo/issues/4463)). So we are going
-to use a renamed `serde` crate, `alt_serde`, in our offchain-demo pallet to remedy this situation.
+In Rust, `serde` and `serde-json` are the popular combo-package used for JSON parsing.
 
-src: `pallets/offchain-demo/Cargo.toml`
+src: `pallets/ocw-demo/Cargo.toml`
 
 ```toml
-[package]
-# ...
+#--snip--
 
 [dependencies]
-# external dependencies
-# ...
+#--snip--
 
-alt_serde = { version = "1", default-features = false, features = ["derive"] }
-# updated to `alt_serde_json` when latest version supporting feature `alloc` is released
-serde_json = { version = "1", default-features = false, git = "https://github.com/Xanewok/json", branch = "no-std", features = ["alloc"] }
+serde = { version = '1.0.100', default-features = false, features = ['derive'] }
+serde_json = { version = '1.0.45', default-features = false, features = ['alloc'] }
 
-# ...
+
+#--snip--
 ```
-
-We also use a modified version of `serde_json` with the latest `alloc` feature and depending on `alt_serde`.
 
 ### Deserializing JSON string to struct
 
 Then we use the usual `serde-derive` approach on deserializing. First we define the struct with
-fields we are interested to extract out.
+fields that we are interested to extract out.
 
-src: `pallets/offchain-demo/src/lib.rs`
+src:
+`pallets/ocw-demo/src/lib.rs`
 
 ```rust
-// We use `alt_serde`, and Xanewok-modified `serde_json` so that we can compile the program
-//   with serde(features `std`) and alt_serde(features `no_std`).
-use alt_serde::{Deserialize, Deserializer};
+use serde::{Deserialize, Deserializer};
 
-// Specifying serde path as `alt_serde`
 // ref: https://serde.rs/container-attrs.html#crate
-#[serde(crate = "alt_serde")]
 #[derive(Deserialize, Encode, Decode, Default)]
 struct GithubInfo {
 	// Specify our own deserializing function to convert JSON string to vector of bytes
@@ -143,7 +117,7 @@ struct GithubInfo {
 }
 ```
 
-By default, `serde` deserialize JSON string to the datatype `String`. We want to write our own
+By default, `serde` deserializes JSON strings to the `String` datatype. We want to write our own
 deserializer to convert it to vector of bytes.
 
 ```rust
@@ -154,7 +128,7 @@ where D: Deserializer<'de> {
 }
 ```
 
-Now the actual deserialization takes place in the `Self::fetch_n_parse` function.
+Now the actual deserialization takes place in the `fetch_n_parse` function.
 
 ```rust
 /// Fetch from remote and deserialize the JSON to a struct
@@ -169,7 +143,14 @@ fn fetch_n_parse() -> Result<GithubInfo, Error<T>> {
 		.map_err(|_| <Error<T>>::HttpFetchingError)?;
 
 	// Deserializing JSON to struct, thanks to `serde` and `serde_derive`
-	let gh_info: GithubInfo = serde_json::from_str(&resp_str).unwrap();
+	let gh_info: GithubInfo = serde_json::from_str(&resp_str).map_err(|_| <Error<T>>::HttpFetchingError)?;
 	Ok(gh_info)
 }
 ```
+
+## Conclusion
+
+In this chapter, we go over how to construct an HTTP request and send it out to the
+GitHub API remote endpoint. We then demonstrate how to use `serde` library to
+parse the JSON string we retrieved in the HTTP response into a data structure that
+we can further manipulate in our runtime.

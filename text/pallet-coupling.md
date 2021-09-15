@@ -1,12 +1,12 @@
 # Tightly- and Loosely-Coupled Pallets
 
 `pallets/check-membership`
-[
-	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
-](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fcheck-membership%2Fsrc%2Flib.rs)
-[
-	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
-](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/check-membership/src/lib.rs)
+<a target="_blank" href="https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fcheck-membership%2Fsrc%2Flib.rs">
+	<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt ="Try on playground"/>
+</a>
+<a target="_blank" href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/check-membership/src/lib.rs">
+	<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt ="View on GitHub"/>
+</a>
 
 The `check-membership` crate contains two pallets that solve the same problems in slightly different
 ways. Both pallets implement a single dispatchable function that can only be successfully executed
@@ -77,7 +77,7 @@ name of the pallet on which you depend as a trait bound on the configuration tra
 are writing. This is demonstrated in the tightly coupled variant of `check-membership`.
 
 ```rust, ignore
-pub trait Trait: system::Trait + vec_set::Trait {
+pub trait Config: frame_system::Config + vec_set::Trait {
 	// --snip--
 }
 ```
@@ -112,7 +112,7 @@ another pallet, you add an associated type to the pallet's configuration trait a
 supplied type implements the necessary behavior by specifying a trait bound.
 
 ```rust, ignore
-pub trait Trait: system::Trait {
+pub trait Config: frame_system::Config {
 	// --snip--
 
 	/// A type that will supply a set of members to check access control against
@@ -121,7 +121,7 @@ pub trait Trait: system::Trait {
 ```
 
 > Many pallets throughout the ecosystem are coupled to a token through the
-> [`Currency` trait](https://substrate.dev/rustdocs/v2.0.0-rc6/frame_support/traits/trait.Currency.html).
+> [`Currency` trait](https://substrate.dev/rustdocs/v3.0.0/frame_support/traits/trait.Currency.html).
 
 Having this associated type means that the loosely coupled variant of the `check-membership` pallet
 can be installed in any runtime that can supply it with a set of accounts to use as an access

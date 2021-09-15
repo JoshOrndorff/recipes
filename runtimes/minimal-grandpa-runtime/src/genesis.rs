@@ -2,7 +2,6 @@
 
 use super::{
 	AccountId, BalancesConfig, GenesisConfig, GrandpaConfig, Signature, SudoConfig, SystemConfig,
-	WASM_BINARY,
 };
 use sp_core::{sr25519, Pair, Public};
 use sp_finality_grandpa::AuthorityId as GrandpaId;
@@ -30,8 +29,9 @@ pub fn authority_keys_from_seed(seed: &str) -> GrandpaId {
 	get_from_seed::<GrandpaId>(seed)
 }
 
-pub fn dev_genesis() -> GenesisConfig {
+pub fn dev_genesis(wasm_binary: &[u8]) -> GenesisConfig {
 	testnet_genesis(
+		wasm_binary,
 		// Initial Authorities
 		vec![authority_keys_from_seed("Alice")],
 		// Root Key
@@ -48,24 +48,25 @@ pub fn dev_genesis() -> GenesisConfig {
 
 /// Helper function to build a genesis configuration
 pub fn testnet_genesis(
+	wasm_binary: &[u8],
 	initial_authorities: Vec<GrandpaId>,
 	root_key: AccountId,
 	endowed_accounts: Vec<AccountId>,
 ) -> GenesisConfig {
 	GenesisConfig {
-		system: Some(SystemConfig {
-			code: WASM_BINARY.to_vec(),
+		frame_system: Some(SystemConfig {
+			code: wasm_binary.to_vec(),
 			changes_trie_config: Default::default(),
 		}),
-		balances: Some(BalancesConfig {
+		pallet_balances: Some(BalancesConfig {
 			balances: endowed_accounts
 				.iter()
 				.cloned()
 				.map(|k| (k, 1 << 60))
 				.collect(),
 		}),
-		sudo: Some(SudoConfig { key: root_key }),
-		grandpa: Some(GrandpaConfig {
+		pallet_sudo: Some(SudoConfig { key: root_key }),
+		pallet_grandpa: Some(GrandpaConfig {
 			authorities: initial_authorities.iter().map(|x| (x.clone(), 1)).collect(),
 		}),
 	}

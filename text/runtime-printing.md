@@ -1,12 +1,12 @@
 # Hello Substrate
 
 `pallets/hello-substrate`
-[
-	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
-](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fhello-substrate%2Fsrc%2Flib.rs)
-[
-	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
-](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/hello-substrate/src/lib.rs)
+<a target="_blank" href="https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fhello-substrate%2Fsrc%2Flib.rs">
+	<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt ="Try on playground"/>
+</a>
+<a target="_blank" href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/hello-substrate/src/lib.rs">
+	<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt ="View on GitHub"/>
+</a>
 
 This pallet has one
 dispatchable call that prints a message to the node's output. Printing to the node log is not common for runtimes, but can be quite useful when debugging and as a "hello world" example. Because this is the first pallet in the recipes, we'll also take a look at the general structure of a pallet.
@@ -25,13 +25,13 @@ Assembly where the standard library is not available.
 
 Next, you'll find imports that come from various parts of the Substrate framework. All pallets will
 import from a few common crates including
-[`frame-support`](https://substrate.dev/rustdocs/v2.0.0-rc6/frame_support/index.html), and
-[`frame-system`](https://substrate.dev/rustdocs/v2.0.0-rc6/frame_system/index.html). Complex pallets will have many
+[`frame-support`](https://substrate.dev/rustdocs/v3.0.0/frame_support/index.html), and
+[`frame-system`](https://substrate.dev/rustdocs/v3.0.0/frame_system/index.html). Complex pallets will have many
 imports. The `hello-substrate` pallet uses these imports.
 
 ```rust, ignore
-use frame_support::{ decl_module, dispatch::DispatchResult, debug };
-use frame_system::{ self as system, ensure_signed };
+use frame_support::{debug, decl_module, dispatch::DispatchResult};
+use frame_system::ensure_signed;
 use sp_runtime::print;
 ```
 
@@ -42,13 +42,13 @@ Next we see a reference to the tests module. This pallet, as with most recipes p
 
 ## Configuration Trait
 
-Next, each pallet has a configuration trait which is called `Trait`. The configuration trait can be
+Next, each pallet has a configuration trait which is called [`Config`](https://substrate.dev/rustdocs/v3.0.0/frame_system/pallet/trait.Config.html). The configuration trait can be
 used to access features from other pallets, or [constants](./constants.md) that affect
 the pallet's behavior. This pallet is simple enough that our configuration trait can remain empty,
 although it must still exist.
 
 ```rust, ignore
-pub trait Trait: system::Trait {}
+pub trait Config: frame_system::Config {}
 ```
 
 ## Dispatchable Calls
@@ -57,11 +57,11 @@ A Dispatchable call is a function that a blockchain user can call as part of an 
 "Extrinsic" is Substrate jargon meaning a call from outside of the chain. Most of the time they are
 transactions, and for now it is fine to think of them as transactions. Dispatchable calls are
 defined in the
-[`decl_module!` macro](https://substrate.dev/rustdocs/v2.0.0-rc6/frame_support/macro.decl_module.html).
+[`decl_module!` macro](https://substrate.dev/rustdocs/v3.0.0/frame_support/macro.decl_module.html).
 
 ```rust, ignore
 decl_module! {
-	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
+	pub struct Module<T: Config> for enum Call where origin: T::Origin {
 
 		/// A function that says hello to the user by printing messages to the node log
 		#[weight = 10_000]
@@ -76,7 +76,7 @@ decl_module! {
 
 As you can see, our `hello-substrate` pallet has a dispatchable call that takes a single argument,
 called `origin`. The call returns a
-[`DispatchResult`](https://substrate.dev/rustdocs/v2.0.0-rc6/frame_support/dispatch/type.DispatchResult.html) which
+[`DispatchResult`](https://substrate.dev/rustdocs/v3.0.0/frame_support/dispatch/type.DispatchResult.html) which
 can be either `Ok(())` indicating that the call succeeded, or an `Err` which is demonstrated in most other recipes pallets.
 
 ### Weight Annotations
@@ -107,14 +107,14 @@ pub fn say_hello(origin) -> DispatchResult {
 ```
 
 This function essentially does three things. First, it uses the
-[`ensure_signed` function](https://substrate.dev/rustdocs/v2.0.0-rc6/frame_system/fn.ensure_signed.html) to ensure
+[`ensure_signed` function](https://substrate.dev/rustdocs/v3.0.0/frame_system/fn.ensure_signed.html) to ensure
 that the caller of the function was a regular user who owns a private key. This function also
 returns who that caller was. We store the caller's identity in the `caller` variable.
 
 Second, it prints a message and logs the caller. Notice that we aren't using Rust's normal
 `println!` macro, but rather a special
-[`print` function](https://substrate.dev/rustdocs/v2.0.0-rc6/sp_runtime/fn.print.html) and
-[`debug::info!` macro](https://substrate.dev/rustdocs/v2.0.0-rc6/frame_support/debug/macro.info.html). The reason for
+[`print` function](https://substrate.dev/rustdocs/v3.0.0/sp_runtime/fn.print.html) and
+[`debug::info!` macro](https://substrate.dev/rustdocs/v3.0.0/frame_support/debug/macro.info.html). The reason for
 this is explained in the next section.
 
 Finally, the call returns `Ok(())` to indicate that the call has succeeded. At a glance it seems
@@ -136,11 +136,11 @@ for debugging.
 ![Substrate Architecture Diagram](./img/substrate-architecture.png)
 
 At the top of our pallet, we imported `sp_runtime`'s
-[`print` function](https://substrate.dev/rustdocs/v2.0.0-rc6/sp_runtime/fn.print.html). This special function allows
+[`print` function](https://substrate.dev/rustdocs/v3.0.0/sp_runtime/fn.print.html). This special function allows
 the runtime to pass a message for printing to the outer part of the node which is not compiled to
 Wasm and does have access to the standard library and can perform regular IO. This function is only
 able to print items that implement the
-[`Printable` trait](https://substrate.dev/rustdocs/v2.0.0-rc6/sp_runtime/traits/trait.Printable.html). Luckily all
+[`Printable` trait](https://substrate.dev/rustdocs/v3.0.0/sp_runtime/traits/trait.Printable.html). Luckily all
 the primitive types already implement this trait, and you can implement the trait for your own
 datatypes too.
 
@@ -152,6 +152,20 @@ The next line demonstrates using `debug::info!` macro to log to the screen and a
 variable's content. The syntax inside the macro is very similar to what regular rust macro
 `println!` takes.
 
+You can specify the logger target with 
+```rust, ignore
+debug::debug!(target: "mytarget", "called by {:?}", sender);
+```
+Now you can filter logs with
+```
+kitchen-node --dev -lmytarget=debug
+```
+If you do not specify the logger target, it will be set to the crate's name (not to `runtime`!).
+
 **Runtime logger note:** When we execute the runtime in native, `debug::info!` messages are printed.
 However, if we execute the runtime in Wasm, then an additional step to initialise
-[RuntimeLogger](https://substrate.dev/rustdocs/v2.0.0-rc6/frame_support/debug/struct.RuntimeLogger.html) is required.
+[RuntimeLogger](https://substrate.dev/rustdocs/v3.0.0/frame_support/debug/struct.RuntimeLogger.html) is required:
+```
+debug::RuntimeLogger::init();
+```
+You'll need to call this inside every pallet dispatchable call before logging.

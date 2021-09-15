@@ -9,6 +9,5 @@
 //! The _loose_ variant demonstrates loosely coupling pallets and is itself loosely coupled through
 //! the `AccountSet` trait.
 
-
 pub mod loose;
 pub mod tight;

@@ -3,41 +3,60 @@ name: Test Code
 on:
   pull_request:
     branches:
-    - master
+      - master
   push:
     branches:
-    - master
+      - master
+      - test-ci # always want to including test-ci for testing gh-action
+    paths-ignore:
+      - 'README.md'
 
 jobs:
   test-code:
-    runs-on: ubuntu-18.04
+    name: Test
+    strategy:
+      matrix:
+        toolchain:
+          - stable
+    runs-on:                       ubuntu-latest
+    container:
+      image:                       paritytech/ci-linux:production
+    env:
+      RUST_BACKTRACE:              full
+      CARGO_INCREMENTAL:           0
+      SCCACHE_IDLE_TIMEOUT:        0
+      CMAKE_C_COMPILER_LAUNCHER:   sccache
+      CMAKE_CXX_COMPILER_LAUNCHER: sccache
 
     steps:
-    - name: Checkout Code
-      uses: actions/checkout@v2
+      - name:                      Cancel previous runs
+        uses:                      styfle/cancel-workflow-action@0.4.1
+        with:
+          access_token:            ${{ github.token }}
 
-      # Steps taken from https://github.com/actions/cache/blob/master/examples.md#rust---cargo
-    - name: Cache cargo registry
-      uses: actions/cache@v2
-      with:
-        path: |
-          ~/.cargo/registry
-          ~/.cargo/git
-          target
-        key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+      - name:                      Rust version
+        shell:                     bash
+        run:                       |
+          rustup show
 
-    - name: Install toolchain
-      uses: actions-rs/toolchain@v1
-      with:
-        profile: minimal
-        toolchain: nightly-2020-05-07
-        components: rustfmt, clippy
-        target: wasm32-unknown-unknown
-        override: true
-        default: true
+      - name:                      Checkout sources & submodules
+        uses:                      actions/checkout@v2
+        with:
+          fetch-depth:             5
+          submodules:              recursive
 
-    - name: Run clippy
-      run: cargo +nightly-2020-05-07 clippy -- -D warnings
+      - name:                      Rust Cache
+        uses:                      Swatinem/rust-cache@v1.2.0
 
-    - name: Run Tests
-      run: cargo test --all
+      - name:                      Sccache stats
+        shell:                     bash
+        run:                       |
+          sccache --show-stats
+
+      ## --- Test stage ---
+
+      - name:                      Run all recipes tests
+        uses:                      actions-rs/cargo@master
+        with:
+          command:                 test
+          args:                    --all --verbose

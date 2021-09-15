@@ -17,7 +17,7 @@ the code, extract patterns, and apply them to a problem that you want to solve!
 
 If you haven't already, you should probably clone this repository right now.
 ```bash
-git clone git@github.com:substrate-developer-hub/recipes.git
+git clone https://github.com/substrate-developer-hub/recipes.git
 ```
 
 ## Getting Help
@@ -142,7 +142,7 @@ The commented lines, quoted above, show that the Super Runtime is not the only r
 chosen. We could also use the Weight-Fee runtime, and I encourage you to try that experiment
 (remember, instructions to re-compile the node are in the previous section).
 
-Every node must have a runtime. You may confirm that by looking at the `Cago.toml` files of the
+Every node must have a runtime. You may confirm that by looking at the `Cargo.toml` files of the
 other nodes included in our kitchen.
 
 ## Inside the Super Runtime

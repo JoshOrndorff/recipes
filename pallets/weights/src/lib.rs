@@ -8,12 +8,11 @@ use frame_support::{
 	ensure,
 	weights::{ClassifyDispatch, DispatchClass, Pays, Weight},
 };
-use frame_system as system;
 
-pub trait Trait: system::Trait {}
+pub trait Config: frame_system::Config {}
 
 decl_storage! {
-	trait Store for Module<T: Trait> as SimpleMap {
+	trait Store for Module<T: Config> as SimpleMap {
 		StoredValue get(fn stored_value): u32;
 	}
 }
@@ -107,7 +106,7 @@ impl<T> ClassifyDispatch<T> for Conditional {
 }
 
 decl_module! {
-	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
+	pub struct Module<T: Config> for enum Call where origin: T::Origin {
 
 		// Store value does not loop at all so a fixed weight is appropriate. Fixed weights can
 		// be assigned using integer constants. No custom coding is
@@ -188,12 +187,12 @@ decl_module! {
 		#[weight = Conditional(200)]
 		fn add_or_set(_origin, add_flag: bool, val: u32) -> DispatchResult {
 			if add_flag {
-				StoredValue::put(&val);
-			}
-			else {
 				for _i in 1..=val {
 					StoredValue::put(StoredValue::get());
 				}
+			}
+			else {
+				StoredValue::put(&val);
 			}
 
 			Ok(())

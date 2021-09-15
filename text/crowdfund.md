@@ -1,15 +1,16 @@
 # Simple Crowdfund
 
 `pallets/simple-crowdfund`
-[
-	![Try on playground](https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate)
-](https://playground-staging.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fsimple-crowdfund%2Fsrc%2Flib.rs)
-[
-	![View on GitHub](https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github)
-](https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-crowdfund/src/lib.rs)
+<a target="_blank" href="https://playground.substrate.dev/?deploy=recipes&files=%2Fhome%2Fsubstrate%2Fworkspace%2Fpallets%2Fsimple-crowdfund%2Fsrc%2Flib.rs">
+	<img src="https://img.shields.io/badge/Playground-Try%20it!-brightgreen?logo=Parity%20Substrate" alt ="Try on playground"/>
+</a>
+<a target="_blank" href="https://github.com/substrate-developer-hub/recipes/tree/master/pallets/simple-crowdfund/src/lib.rs">
+	<img src="https://img.shields.io/badge/Github-View%20Code-brightgreen?logo=github" alt ="View on GitHub"/>
+</a>
+
 This pallet demonstrates a simple on-chain crowdfunding app where participants can pool funds toward
 a common goal. It demonstrates a pallet that controls multiple token accounts, and storing data in
-[child storage](https://substrate.dev/rustdocs/v2.0.0-rc6/frame_support/storage/child/index.html).
+[child storage](https://substrate.dev/rustdocs/v3.0.0/frame_support/storage/child/index.html).
 
 ## Basic Usage
 
@@ -23,14 +24,14 @@ dissolves it.
 
 We begin by declaring our configuration trait. In addition to the ubiquitous `Event` type, our
 crowdfund pallet will depend on a notion of
-[`Currency`](https://substrate.dev/rustdocs/v2.0.0-rc6/frame_support/traits/trait.Currency.html), and three
+[`Currency`](https://substrate.dev/rustdocs/v3.0.0/frame_support/traits/trait.Currency.html), and three
 [configuration constants](./constants.md).
 
 ```rust, ignore
 /// The pallet's configuration trait
-pub trait Trait: system::Trait {
+pub trait Config: frame_system::Config {
 	/// The ubiquious Event type
-	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
+	type Event: From<Event<Self>> + Into<<Self as frame_system::Config>::Event>;
 
 	/// The currency in which the crowdfunds will be denominated
 	type Currency: ReservableCurrency<Self::AccountId>;
@@ -75,9 +76,9 @@ that have ever been created and three convenience aliases.
 ```rust, ignore
 pub type FundIndex = u32;
 
-type AccountIdOf<T> = <T as system::Trait>::AccountId;
-type BalanceOf<T> = <<T as Trait>::Currency as Currency<AccountIdOf<T>>>::Balance;
-type FundInfoOf<T> = FundInfo<AccountIdOf<T>, BalanceOf<T>, <T as system::Trait>::BlockNumber>;
+type AccountIdOf<T> = <T as frame_system::Config>::AccountId;
+type BalanceOf<T> = <<T as Config>::Currency as Currency<AccountIdOf<T>>>::Balance;
+type FundInfoOf<T> = FundInfo<AccountIdOf<T>, BalanceOf<T>, <T as frame_system::Config>::BlockNumber>;
 ```
 
 ## Storage
@@ -87,7 +88,7 @@ index that tracks the number of funds, and the second is a mapping from index to
 
 ```rust, ignore
 decl_storage! {
-	trait Store for Module<T: Trait> as ChildTrie {
+	trait Store for Module<T: Config> as ChildTrie {
 		/// Info on all of the funds.
 		Funds get(fn funds):
 			map hasher(blake2_128_concat) FundIndex => Option<FundInfoOf<T>>;
@@ -96,13 +97,13 @@ decl_storage! {
 		FundCount get(fn fund_count): FundIndex;
 
 		// Additional information is stored in a child trie. See the helper
-		// functions in the impl<T: Trait> Module<T> block below
+		// functions in the impl<T: Config> Module<T> block below
 	}
 }
 ```
 
 This pallet also stores the data about which users have contributed and how many funds they
-contributed in a [child trie](https://substrate.dev/rustdocs/v2.0.0-rc6/frame_support/storage/child/index.html). This
+contributed in a [child trie](https://substrate.dev/rustdocs/v3.0.0/frame_support/storage/child/index.html). This
 child trie is not explicitly declared anywhere.
 
 The use of the child trie provides two advantages over using standard storage. First, it allows for
@@ -112,7 +113,7 @@ Second, it allows any contributor to prove that they contributed using a
 
 ### Using the Child Trie API
 
-The child API is abstracted into a few helper functions in the `impl<T: Trait> Module<T>` block.
+The child API is abstracted into a few helper functions in the `impl<T: Config> Module<T>` block.
 
 ```rust, ignore
 /// Record a contribution in the associated child trie.
@@ -142,7 +143,7 @@ pub fn crowdfund_kill(index: FundIndex) {
 ```
 
 Because this pallet uses one trie for each active crowdfund, we need to generate a unique
-[`ChildInfo`](https://substrate.dev/rustdocs/v2.0.0-rc6/frame_support/storage/child/enum.ChildInfo.html) for each of
+[`ChildInfo`](https://substrate.dev/rustdocs/v3.0.0/frame_support/storage/child/enum.ChildInfo.html) for each of
 them. To ensure that the ids are really unique, we incluce the `FundIndex` in the generation.
 
 ```rust, ignore
@@ -181,7 +182,7 @@ fn dispense(origin, index: FundIndex) {
 	let fund = Self::funds(index).ok_or(Error::<T>::InvalidIndex)?;
 
 	// Check that enough time has passed to remove from storage
-	let now = <system::Module<T>>::block_number();
+	let now = <frame_system::Module<T>>::block_number();
 
 	ensure!(now >= fund.end, Error::<T>::FundStillActive);
 
@@ -207,7 +208,7 @@ fn dispense(origin, index: FundIndex) {
 	)?);
 ```
 
-This pallet also uses Currency
-[`Imbalance`](https://substrate.dev/rustdocs/v2.0.0-rc6/frame_support/traits/trait.Imbalance.html)s as discussed in
-the [Charity](./charity.md) recipe, to make transfers without incurring transfer fees to the
+This pallet also uses the Currency
+[`Imbalance`](https://substrate.dev/rustdocs/v3.0.0/frame_support/traits/trait.Imbalance.html) trait as discussed in
+the [Charity recipe](./charity.md), to make transfers without incurring transfer fees to the
 crowdfund pallet itself.
