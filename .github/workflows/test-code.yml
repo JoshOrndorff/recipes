@@ -61,7 +61,7 @@ jobs:
           cargo +nightly-2020-05-07 clippy -- -D warnings
 
       - name:                      Run all recipes tests
-        uses:                      actions-rs/cargo@1
+        uses:                      actions-rs/cargo@v1
         with:
           command:                 test
           args:                    --all --verbose
