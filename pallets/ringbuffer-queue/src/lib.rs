@@ -3,7 +3,11 @@
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
+use codec::{Decode, Encode};
+use frame_support::{decl_event, decl_module, decl_storage, dispatch::DispatchResult};
+use frame_system::{self as system, ensure_signed};
 use sp_std::prelude::*;
+use frame_system::pallet_prelude::*;
 
 mod ringbuffer;
 
@@ -19,6 +23,7 @@ mod tests;
 pub mod pallet {
 	use frame_support::{dispatch::DispatchResultWithPostInfo, pallet_prelude::*};
 	use frame_system::pallet_prelude::*;
+	use sp_std::vec::Vec;
 	type BufferIndex = u8;
 
 #[pallet::config]
@@ -105,7 +110,7 @@ pub trait Config: frame_system::Config {
 	}
 }
 
-impl<T: Config> Module<T> {
+impl<T: Config> Pallet<T> {
 	/// Constructor function so we don't have to specify the types every time.
 	///
 	/// Constructs a ringbuffer transient and returns it as a boxed trait object.

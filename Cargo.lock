@@ -7292,6 +7292,7 @@ dependencies = [
  "parity-scale-codec 2.0.1",
  "randomness",
  "reservable-currency",
+ "ringbuffer-queue",
  "serde",
  "simple-crowdfund",
  "simple-event",
