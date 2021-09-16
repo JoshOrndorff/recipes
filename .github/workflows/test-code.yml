@@ -19,25 +19,15 @@ jobs:
         toolchain:
           - stable
     runs-on:                       ubuntu-latest
-    container:
-      image:                       paritytech/ci-linux:production
     env:
       RUST_BACKTRACE:              full
       CARGO_INCREMENTAL:           0
-      SCCACHE_IDLE_TIMEOUT:        0
-      CMAKE_C_COMPILER_LAUNCHER:   sccache
-      CMAKE_CXX_COMPILER_LAUNCHER: sccache
 
     steps:
       - name:                      Cancel previous runs
-        uses:                      styfle/cancel-workflow-action@0.4.1
+        uses:                      styfle/cancel-workflow-action@0.9.1
         with:
           access_token:            ${{ github.token }}
-
-      - name:                      Rust version
-        shell:                     bash
-        run:                       |
-          rustup show
 
       - name:                      Checkout sources & submodules
         uses:                      actions/checkout@v2
@@ -46,17 +36,32 @@ jobs:
           submodules:              recursive
 
       - name:                      Rust Cache
-        uses:                      Swatinem/rust-cache@v1.2.0
+        uses:                      Swatinem/rust-cache@v1
 
-      - name:                      Sccache stats
+      - name:                      Install toolchain
+        uses:                      actions-rs/toolchain@v1
+        with:
+          profile:                 minimal
+          toolchain:               nightly-2021-09-13
+          components:              rustfmt, clippy
+          target:                  wasm32-unknown-unknown
+          override:                true
+          default:                 true
+
+      - name:                      Rust version
         shell:                     bash
         run:                       |
-          sccache --show-stats
+          rustup show
+          rustup +nightly show
 
       ## --- Test stage ---
 
+      - name:                      Run clippy
+        run:                       |
+          cargo +nightly-2020-05-07 clippy -- -D warnings
+
       - name:                      Run all recipes tests
-        uses:                      actions-rs/cargo@master
+        uses:                      actions-rs/cargo@v1
         with:
           command:                 test
           args:                    --all --verbose
