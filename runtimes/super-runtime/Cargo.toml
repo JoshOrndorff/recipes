@@ -34,7 +34,7 @@ pallet-transaction-payment = { version = '3.0', default-features = false }
 
 # local packages
  basic-token = { path = "../../pallets/basic-token", default-features = false }
-# charity = { path = "../../pallets/charity", default-features = false }
+ charity = { path = "../../pallets/charity", default-features = false }
  check-membership = { path = "../../pallets/check-membership", default-features = false }
  compounding-interest = { path = "../../pallets/compounding-interest", default-features = false }
  constant-config = { path = "../../pallets/constant-config", default-features = false }
@@ -63,7 +63,7 @@ default = ["std"]
 std = [
 	"pallet-balances/std",
 	"basic-token/std",
-	# "charity/std",
+	"charity/std",
 	"check-membership/std",
 	"compounding-interest/std",
 	"constant-config/std",

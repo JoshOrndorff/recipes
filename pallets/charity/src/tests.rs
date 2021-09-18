@@ -1,4 +1,4 @@
-use crate::{self as charity, Config, RawEvent};
+use crate::{self as charity, Config};
 use frame_support::{
 	assert_err, assert_ok, construct_runtime, parameter_types,
 	traits::{Currency, OnUnbalanced},
@@ -11,6 +11,8 @@ use sp_runtime::{
 	testing::Header,
 	traits::{BlakeTwo256, IdentityLookup},
 };
+
+
 
 type UncheckedExtrinsic = frame_system::mocking::MockUncheckedExtrinsic<TestRuntime>;
 type Block = frame_system::mocking::MockBlock<TestRuntime>;
@@ -88,8 +90,12 @@ pub fn new_test_ext() -> sp_io::TestExternalities {
 	.assimilate_storage(&mut t)
 	.unwrap();
 
-	crate::GenesisConfig {}
+/*	pallet_balances::GenesisConfig {}
 		.assimilate_storage::<TestRuntime>(&mut t)
+		.unwrap();*/
+
+	pallet_balances::GenesisConfig::<TestRuntime>::default()
+		.assimilate_storage(&mut t)
 		.unwrap();
 
 	let mut ext: sp_io::TestExternalities = t.into();
@@ -101,6 +107,8 @@ pub fn new_test_ext() -> sp_io::TestExternalities {
 #[test]
 fn pot_min_balance_is_set() {
 	new_test_ext().execute_with(|| {
+		let pot = Charity::pot();
+		let bc =  Balances::minimum_balance();
 		assert_eq!(Charity::pot(), Balances::minimum_balance());
 	})
 }
@@ -129,7 +137,7 @@ fn donations_work() {
 		assert_eq!(Balances::free_balance(&1), original - donation);
 
 		// Check that the correct event is emitted
-		let expected_event = Event::charity(RawEvent::DonationReceived(1, donation, new_pot_total));
+		let expected_event = Event::charity(charity::Event::DonationReceived(1, donation, new_pot_total));
 
 		assert_eq!(System::events()[1].event, expected_event,);
 	})
@@ -161,7 +169,7 @@ fn imbalances_work() {
 			System::events()[0],
 			EventRecord {
 				phase: Phase::Initialization,
-				event: Event::charity(RawEvent::ImbalanceAbsorbed(5, new_pot_total)),
+				event: Event::charity(charity::Event::ImbalanceAbsorbed(5, new_pot_total)),
 				topics: vec![],
 			},
 		);
@@ -193,8 +201,8 @@ fn allocating_works() {
 			.collect::<Vec<_>>();
 
 		let expected_events = vec![
-			RawEvent::DonationReceived(1, 10, 11),
-			RawEvent::FundsAllocated(2, 5, 6),
+			charity::Event::DonationReceived(1, 10, 11),
+			charity::Event::FundsAllocated(2, 5, 6),
 		];
 
 		assert_eq!(our_events, expected_events);

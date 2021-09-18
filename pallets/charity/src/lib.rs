@@ -8,18 +8,19 @@
 //! Funds can only be allocated by a root call to the `allocate` extrinsic/
 #![cfg_attr(not(feature = "std"), no_std)]
 
+
+pub use pallet::*;
+
 use sp_runtime::{traits::AccountIdConversion, ModuleId};
-use sp_std::prelude::*;
 
 use frame_support::{
-	decl_event, decl_module, decl_storage,
-	dispatch::{DispatchError, DispatchResult},
-	traits::{Currency, ExistenceRequirement::AllowDeath, Imbalance, OnUnbalanced},
+	traits::{Currency,Imbalance, OnUnbalanced},
 };
-use frame_system::{ensure_root, ensure_signed};
 
-#[cfg(test)]
-mod tests;
+
+/// Hardcoded pallet ID; used to create the special Pot Account
+/// Must be exactly 8 characters long
+const PALLET_ID: ModuleId = ModuleId(*b"Charity!");
 
 type BalanceOf<T> =
 	<<T as Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::Balance;
@@ -27,76 +28,89 @@ type NegativeImbalanceOf<T> = <<T as Config>::Currency as Currency<
 	<T as frame_system::Config>::AccountId,
 >>::NegativeImbalance;
 
-/// Hardcoded pallet ID; used to create the special Pot Account
-/// Must be exactly 8 characters long
-const PALLET_ID: ModuleId = ModuleId(*b"Charity!");
+#[cfg(test)]
+mod tests;
 
-pub trait Config: frame_system::Config {
-	/// The overarching event type.
-	type Event: From<Event<Self>> + Into<<Self as frame_system::Config>::Event>;
-	/// The currency type that the charity deals in
-	type Currency: Currency<Self::AccountId>;
-}
+#[frame_support::pallet]
+pub mod pallet {
+	use frame_support::{dispatch::DispatchResultWithPostInfo, pallet_prelude::*, traits::{Currency, ExistenceRequirement::AllowDeath}};
+	use frame_system::pallet_prelude::*;
+	use crate::BalanceOf;
 
-decl_storage! {
-	trait Store for Module<T: Config> as SimpleTreasury {
-		// No storage items of our own, but we still need decl_storage to initialize the pot
+
+	#[pallet::config]
+	pub trait Config: frame_system::Config {
+
+		/// The overarching event type.
+		type Event: From<Event<Self>> + IsType<<Self as frame_system::Config>::Event>;
+		/// The currency type that the charity deals in
+		type Currency: Currency<Self::AccountId>;
 	}
-	add_extra_genesis {
-		build(|_config| {
-			// Create the charity's pot of funds, and ensure it has the minimum required deposit
+
+	#[pallet::genesis_config]
+	#[derive(Default)]
+	pub struct GenesisConfig {
+
+	}
+
+	#[pallet::genesis_build]
+	impl<T: Config> GenesisBuild<T> for GenesisConfig {
+		fn build(&self) {
 			let _ = T::Currency::make_free_balance_be(
 				&<Module<T>>::account_id(),
 				T::Currency::minimum_balance(),
 			);
-		});
+		}
 	}
-}
 
-decl_event!(
-	pub enum Event<T>
-	where
-		Balance = BalanceOf<T>,
-		<T as frame_system::Config>::AccountId,
-	{
+
+	#[pallet::event]
+	#[pallet::metadata(T::Balance = "Balance")]
+	#[pallet::generate_deposit(pub (super) fn deposit_event)]
+	pub enum Event<T: Config> {
 		/// Donor has made a charitable donation to the charity
-		DonationReceived(AccountId, Balance, Balance),
+		DonationReceived(T::AccountId, BalanceOf<T>, BalanceOf<T>),
 		/// An imbalance from elsewhere in the runtime has been absorbed by the Charity
-		ImbalanceAbsorbed(Balance, Balance),
+		ImbalanceAbsorbed(BalanceOf<T>, BalanceOf<T>),
 		/// Charity has allocated funds to a cause
-		FundsAllocated(AccountId, Balance, Balance),
+		FundsAllocated(T::AccountId, BalanceOf<T>, BalanceOf<T>),
 	}
-);
 
-decl_module! {
-	pub struct Module<T: Config> for enum Call where origin: T::Origin {
-		fn deposit_event() = default;
+	#[pallet::pallet]
+	#[pallet::generate_store(pub (super) trait Store)]
+	pub struct Pallet<T>(PhantomData<T>);
+
+	#[pallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {}
+
+	#[pallet::call]
+	impl<T: Config> Pallet<T> {
 
 		/// Donate some funds to the charity
-		#[weight = 10_000]
-		fn donate(
-			origin,
+		#[pallet::weight(10_000)]
+		pub fn donate(
+			origin: OriginFor<T>,
 			amount: BalanceOf<T>
-		) -> DispatchResult {
+		) -> DispatchResultWithPostInfo {
 			let donor = ensure_signed(origin)?;
 
 			T::Currency::transfer(&donor, &Self::account_id(), amount, AllowDeath)
 				.map_err(|_| DispatchError::Other("Can't make donation"))?;
 
-			Self::deposit_event(RawEvent::DonationReceived(donor, amount, Self::pot()));
-			Ok(())
+			Self::deposit_event(Event::DonationReceived(donor, amount, Self::pot()));
+			Ok(().into())
 		}
 
 		/// Allocate the Charity's funds
 		///
 		/// Take funds from the Charity's pot and send them somewhere. This call requires root origin,
 		/// which means it must come from a governance mechanism such as Substrate's Democracy pallet.
-		#[weight = 10_000]
-		fn allocate(
-			origin,
+		#[pallet::weight(10_000)]
+		pub fn allocate(
+			origin: OriginFor<T>,
 			dest: T::AccountId,
 			amount: BalanceOf<T>,
-		) -> DispatchResult {
+		) -> DispatchResultWithPostInfo {
 			ensure_root(origin)?;
 
 			// Make the transfer requested
@@ -109,8 +123,8 @@ decl_module! {
 
 			//TODO what about errors here??
 
-			Self::deposit_event(RawEvent::FundsAllocated(dest, amount, Self::pot()));
-			Ok(())
+			Self::deposit_event(Event::FundsAllocated(dest, amount, Self::pot()));
+			Ok(().into())
 		}
 	}
 }
@@ -137,6 +151,6 @@ impl<T: Config> OnUnbalanced<NegativeImbalanceOf<T>> for Module<T> {
 		// Must resolve into existing but better to be safe.
 		let _ = T::Currency::resolve_creating(&Self::account_id(), amount);
 
-		Self::deposit_event(RawEvent::ImbalanceAbsorbed(numeric_amount, Self::pot()));
+		Self::deposit_event(Event::ImbalanceAbsorbed(numeric_amount, Self::pot()));
 	}
 }

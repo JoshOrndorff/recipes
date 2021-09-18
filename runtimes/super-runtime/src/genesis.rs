@@ -55,6 +55,6 @@ pub fn testnet_genesis(
 				.collect(),
 		}),
 		pallet_sudo: Some(SudoConfig { key: root_key }),
-		// charity: Some(Default::default()),
+		charity: Some(Default::default()),
 	}
 }
