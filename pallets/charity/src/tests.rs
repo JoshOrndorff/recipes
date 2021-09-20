@@ -1,7 +1,7 @@
 use crate::{self as charity, Config};
 use frame_support::{
 	assert_err, assert_ok, construct_runtime, parameter_types,
-	traits::{Currency, OnUnbalanced},
+	traits::{Currency, OnUnbalanced, GenesisBuild},
 };
 use frame_system::{self as system, EventRecord, Phase, RawOrigin};
 use pallet_balances;
@@ -25,7 +25,7 @@ construct_runtime!(
 	{
 		System: frame_system::{Module, Call, Config, Storage, Event<T>},
 		Balances: pallet_balances::{Module, Call, Storage, Config<T>, Event<T>},
-		Charity: charity::{Module, Call, Storage, Event<T>},
+		Charity: charity::{Module, Call, Config, Storage, Event<T>},
 	}
 );
 
@@ -94,8 +94,8 @@ pub fn new_test_ext() -> sp_io::TestExternalities {
 		.assimilate_storage::<TestRuntime>(&mut t)
 		.unwrap();*/
 
-	pallet_balances::GenesisConfig::<TestRuntime>::default()
-		.assimilate_storage(&mut t)
+	let charity_config = charity::GenesisConfig::default();
+	GenesisBuild::<TestRuntime>::assimilate_storage(&charity_config, &mut t)
 		.unwrap();
 
 	let mut ext: sp_io::TestExternalities = t.into();
