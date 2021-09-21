@@ -287,9 +287,9 @@ impl check_membership_tight::Config for Runtime {
  	type Event = Event;
  }*/
 
-// impl map_set::Config for Runtime {
-// 	type Event = Event;
-// }
+ impl map_set::Config for Runtime {
+ 	type Event = Event;
+ }
 
 // impl ringbuffer_queue::Config for Runtime {
 // 	type Event = Event;
@@ -354,11 +354,11 @@ construct_runtime!(
 		Sudo: pallet_sudo::{Module, Call, Config<T>, Storage, Event<T>},
 		TransactionPayment: pallet_transaction_payment::{Module, Storage},
 		// The Recipe Pallets
-		 BasicToken: basic_token::{Module, Call, Storage, Event<T>},
-		 Charity: charity::{Module, Call, Storage, Config, Event<T>},
-		 CheckMembershipLoose: check_membership_loose::{Module, Call, Event<T>},
-		 CheckMembershipTight: check_membership_tight::{Module, Call, Event<T>},
-		 CompoundingInterest: compounding_interest::{Module, Call, Storage, Event},
+		BasicToken: basic_token::{Module, Call, Storage, Event<T>},
+		Charity: charity::{Module, Call, Storage, Config, Event<T>},
+		CheckMembershipLoose: check_membership_loose::{Module, Call, Event<T>},
+		CheckMembershipTight: check_membership_tight::{Module, Call, Event<T>},
+		CompoundingInterest: compounding_interest::{Module, Call, Storage, Event},
 		ConstantConfig: constant_config::{Module, Call, Storage, Event},
 		DefaultInstance1: default_instance::{Module, Call, Storage, Event<T>},
 		//DefaultInstance2: default_instance::<Instance2>::{Module, Call, Storage, Event<T>},
@@ -367,7 +367,7 @@ construct_runtime!(
 		HelloSubstrate: hello_substrate::{Module, Call},
 		GenericEvent: generic_event::{Module, Call, Event<T>},
 		LastCaller1: last_caller::{Module, Call, Storage, Event<T>},
-		// MapSet: map_set::{Module, Call, Storage, Event<T>},
+		MapSet: map_set::{Module, Call, Storage, Event<T>},
 		// RingbufferQueue: ringbuffer_queue::{Module, Call, Storage, Event<T>},
 		RandomnessDemo: randomness::{Module, Call, Storage, Event<T>},
 		ReservableCurrency: reservable_currency::{Module, Call, Event<T>},
