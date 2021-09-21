@@ -1,6 +1,6 @@
 [package]
 name = "simple-crowdfund"
-version = "2.0.0"
+version = "3.0.0"
 edition = "2018"
 authors = ['Substrate DevHub <https://github.com/substrate-developer-hub>']
 repository = 'https://github.com/substrate-developer-hub/recipes'
@@ -9,8 +9,10 @@ license = "GPL-3.0-or-later"
 
 [dependencies]
 parity-scale-codec = { version = "2.0", features = ["derive"], default-features = false }
+serde = '1.0'
 
 # Substrate packages
+pallet-balances = { version = '3.0', default-features = false }
 frame-support = { version = '3.0', default-features = false }
 frame-system = { version = '3.0', default-features = false }
 sp-core = { version = '3.0', default-features = false }
@@ -19,14 +21,13 @@ sp-std = { version = '3.0', default-features = false }
 sp-storage = { version = '3.0', default-features = false }
 
 [dev-dependencies]
-serde = '1.0'
 sp-core = '3.0'
 sp-io = '3.0'
-pallet-balances = '3.0'
 
 [features]
 default = ['std']
 std = [
+	'pallet-balances/std',
 	'frame-support/std',
 	'frame-system/std',
 	'parity-scale-codec/std',

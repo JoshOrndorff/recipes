@@ -291,9 +291,9 @@ impl check_membership_tight::Config for Runtime {
  	type Event = Event;
  }
 
-// impl ringbuffer_queue::Config for Runtime {
-// 	type Event = Event;
-// }
+ impl ringbuffer_queue::Config for Runtime {
+ 	type Event = Event;
+ }
 
  impl randomness::Config for Runtime {
  	type Event = Event;
@@ -368,7 +368,7 @@ construct_runtime!(
 		GenericEvent: generic_event::{Module, Call, Event<T>},
 		LastCaller1: last_caller::{Module, Call, Storage, Event<T>},
 		MapSet: map_set::{Module, Call, Storage, Event<T>},
-		// RingbufferQueue: ringbuffer_queue::{Module, Call, Storage, Event<T>},
+		RingbufferQueue: ringbuffer_queue::{Module, Call, Storage, Event<T>},
 		RandomnessDemo: randomness::{Module, Call, Storage, Event<T>},
 		ReservableCurrency: reservable_currency::{Module, Call, Event<T>},
 		SimpleCrowdfund: simple_crowdfund::{Module, Call, Storage, Event<T>},
