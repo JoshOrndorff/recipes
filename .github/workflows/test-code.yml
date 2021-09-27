@@ -58,7 +58,7 @@ jobs:
 
       - name:                      Run clippy
         run:                       |
-          cargo +nightly-2020-05-07 clippy -- -D warnings
+          cargo +nightly-2021-09-13 clippy -- -D warnings
 
       - name:                      Run all recipes tests
         uses:                      actions-rs/cargo@v1
