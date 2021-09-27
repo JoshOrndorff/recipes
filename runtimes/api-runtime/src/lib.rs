@@ -223,7 +223,7 @@ construct_runtime!(
 		RandomnessCollectiveFlip: pallet_randomness_collective_flip::{Module, Call, Storage},
 		Sudo: pallet_sudo::{Module, Call, Config<T>, Storage, Event<T>},
 		TransactionPayment: pallet_transaction_payment::{Module, Storage},
-		SumStorage: sum_storage::{Module, Call, Storage, Event},
+		SumStorage: sum_storage::{Module, Call, Storage, Event<T>},
 	}
 );
 
