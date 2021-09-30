@@ -42,7 +42,7 @@ jobs:
         uses:                      actions-rs/toolchain@v1
         with:
           profile:                 minimal
-          toolchain:               nightly-2021-09-13
+          toolchain:               nightly-2021-08-31
           components:              rustfmt, clippy
           target:                  wasm32-unknown-unknown
           override:                true
@@ -58,7 +58,7 @@ jobs:
 
       - name:                      Run clippy
         run:                       |
-          cargo +nightly-2020-05-07 clippy -- -D warnings
+          cargo +nightly-2021-08-31 clippy -- -D warnings
 
       - name:                      Run all recipes tests
         uses:                      actions-rs/cargo@v1
