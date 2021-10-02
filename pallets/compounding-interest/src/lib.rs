@@ -1,5 +1,5 @@
 #![cfg_attr(not(feature = "std"), no_std)]
-
+#![allow(clippy::unused_unit)]
 //! A pallet that demonstrates Fixed Point arithmetic in the context of two simple bank accounts
 //! that accrue compounding interest.
 //!

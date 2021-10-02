@@ -1,7 +1,7 @@
 //! An example instantiable pallet (without default instance)
 
 #![cfg_attr(not(feature = "std"), no_std)]
-
+#![allow(clippy::unused_unit)]
 pub use pallet::*;
 
 #[frame_support::pallet]

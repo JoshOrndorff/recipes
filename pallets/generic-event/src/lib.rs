@@ -1,7 +1,7 @@
 //! Demonstration of Event variants that use type(s) from the pallet's configuration trait
 
 #![cfg_attr(not(feature = "std"), no_std)]
-
+#![allow(clippy::unused_unit)]
 pub use pallet::*;
 
 #[cfg(test)]

@@ -1,5 +1,6 @@
 //! A pallet to demonstrate the `LockableCurrency` trait
 //! borrows collateral locking logic from pallet_staking
+#![allow(clippy::unused_unit)]
 pub use pallet::*;
 
 #[frame_support::pallet]

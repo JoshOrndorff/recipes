@@ -2,6 +2,7 @@
 //! Takeaway: minimize calls to runtime storage
 
 #![cfg_attr(not(feature = "std"), no_std)]
+#![allow(clippy::unused_unit)]
 
 pub use pallet::*;
 

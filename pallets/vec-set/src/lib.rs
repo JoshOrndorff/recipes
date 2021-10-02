@@ -1,4 +1,5 @@
 #![cfg_attr(not(feature = "std"), no_std)]
+#![allow(clippy::unused_unit)]
 
 //! A pallet that implements a storage set on top of a sorted vec and demonstrates performance
 //! tradeoffs when using map sets.

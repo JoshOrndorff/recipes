@@ -6,7 +6,9 @@
 //! * Anyone can make a donation through the `donate` extrinsic.
 //! * An imablance can be absorbed from somewhere else in the runtime.
 //! Funds can only be allocated by a root call to the `allocate` extrinsic/
+
 #![cfg_attr(not(feature = "std"), no_std)]
+#![allow(clippy::unused_unit)]
 
 pub use pallet::*;
 

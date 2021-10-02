@@ -1,4 +1,5 @@
 #![cfg_attr(not(feature = "std"), no_std)]
+#![allow(clippy::unused_unit)]
 //! A pallet to demonstrate usage of a simple storage map
 //!
 //! Storage maps map a key type to a value type. The hasher used to hash the key can be customized.

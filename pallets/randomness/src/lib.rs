@@ -1,6 +1,6 @@
 //! Generating (insecure) randomness
 #![cfg_attr(not(feature = "std"), no_std)]
-
+#![allow(clippy::unused_unit)]
 pub use pallet::*;
 use parity_scale_codec::Encode;
 use sp_std::vec::Vec;

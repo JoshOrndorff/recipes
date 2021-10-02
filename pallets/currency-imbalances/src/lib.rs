@@ -1,5 +1,5 @@
 #![cfg_attr(not(feature = "std"), no_std)]
-
+#![allow(clippy::unused_unit)]
 //! A Pallet to demonstrate using currency imbalances
 //!
 //! WARNING: never use this code in production (for demonstration/teaching purposes only)

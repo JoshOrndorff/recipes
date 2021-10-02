@@ -1,4 +1,5 @@
 #![cfg_attr(not(feature = "std"), no_std)]
+#![allow(clippy::unused_unit)]
 
 //! Struct Storage
 //! This pallet demonstrates how to declare and store `strcuts` that contain types

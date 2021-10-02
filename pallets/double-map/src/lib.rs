@@ -5,7 +5,7 @@
 //! `remove_prefix` enables clean removal of all values with the group identifier
 
 #![cfg_attr(not(feature = "std"), no_std)]
-
+#![allow(clippy::unused_unit)]
 pub use pallet::*;
 
 #[cfg(test)]

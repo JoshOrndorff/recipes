@@ -5,6 +5,7 @@
 //! from the parachain logic.
 
 #![cfg_attr(not(feature = "std"), no_std)]
+#![allow(clippy::unused_unit)]
 
 use frame_support::{storage::child, traits::Currency};
 

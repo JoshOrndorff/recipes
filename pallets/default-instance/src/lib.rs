@@ -2,7 +2,7 @@
 //! TODO combine this and last caller into a singe crate (see check membership for an example)
 
 #![cfg_attr(not(feature = "std"), no_std)]
-
+#![allow(clippy::unused_unit)]
 pub use pallet::*;
 
 #[frame_support::pallet]

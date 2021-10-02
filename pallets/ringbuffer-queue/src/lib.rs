@@ -2,6 +2,7 @@
 //! the concrete example of a ringbuffer queue
 
 #![cfg_attr(not(feature = "std"), no_std)]
+#![allow(clippy::unused_unit)]
 use sp_std::prelude::*;
 
 mod ringbuffer;
