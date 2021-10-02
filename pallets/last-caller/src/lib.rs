@@ -10,7 +10,7 @@ pub mod pallet {
 	use frame_system::pallet_prelude::*;
 
 	// The pallet's configuration trait takes an instance as a type parameter. The instance type is
-// created by the `decl_storage!` macro below.
+	// created by the `decl_storage!` macro below.
 	#[pallet::config]
 	pub trait Config: frame_system::Config {
 		/// The overarching event type.

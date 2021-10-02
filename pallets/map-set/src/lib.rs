@@ -7,7 +7,6 @@ use account_set::AccountSet;
 use frame_support::storage::IterableStorageMap;
 use sp_std::collections::btree_set::BTreeSet;
 
-
 #[cfg(test)]
 mod tests;
 
@@ -27,10 +26,10 @@ pub mod pallet {
 		type Event: From<Event<Self>> + IsType<<Self as frame_system::Config>::Event>;
 	}
 
-
 	#[pallet::storage]
 	#[pallet::getter(fn members)]
-	pub(super) type Members<T: Config> = StorageMap<_, Blake2_128Concat, T::AccountId, (), ValueQuery>;
+	pub(super) type Members<T: Config> =
+		StorageMap<_, Blake2_128Concat, T::AccountId, (), ValueQuery>;
 
 	#[pallet::storage]
 	pub(super) type MemberCount<T> = StorageValue<_, u32, ValueQuery>;
@@ -42,7 +41,6 @@ pub mod pallet {
 	#[pallet::generate_store(pub(super) trait Store)]
 	pub struct Pallet<T>(PhantomData<T>);
 
-
 	#[pallet::event]
 	#[pallet::metadata(T::AccountId = "AccountId")]
 	#[pallet::generate_deposit(pub(super) fn deposit_event)]
@@ -52,7 +50,6 @@ pub mod pallet {
 		/// Removed a member
 		MemberRemoved(T::AccountId),
 	}
-
 
 	#[pallet::error]
 	pub enum Error<T> {
@@ -65,20 +62,25 @@ pub mod pallet {
 	}
 
 	#[pallet::call]
-	impl<T:Config> Pallet<T> {
-
+	impl<T: Config> Pallet<T> {
 		/// Adds a member to the membership set
 		#[pallet::weight(10_000)]
 		pub fn add_member(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
 			let new_member = ensure_signed(origin)?;
 
 			let member_count = MemberCount::<T>::get();
-			ensure!(member_count < MAX_MEMBERS, Error::<T>::MembershipLimitReached);
+			ensure!(
+				member_count < MAX_MEMBERS,
+				Error::<T>::MembershipLimitReached
+			);
 
 			// We don't want to add duplicate members, so we check whether the potential new
 			// member is already present in the list. Because the membership is stored as a hash
 			// map this check is constant time O(1)
-			ensure!(!Members::<T>::contains_key(&new_member), Error::<T>::AlreadyMember);
+			ensure!(
+				!Members::<T>::contains_key(&new_member),
+				Error::<T>::AlreadyMember
+			);
 
 			// Insert the new member and emit the event
 			Members::<T>::insert(&new_member, ());
@@ -92,14 +94,16 @@ pub mod pallet {
 		pub fn remove_member(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
 			let old_member = ensure_signed(origin)?;
 
-			ensure!(Members::<T>::contains_key(&old_member), Error::<T>::NotMember);
+			ensure!(
+				Members::<T>::contains_key(&old_member),
+				Error::<T>::NotMember
+			);
 
 			Members::<T>::remove(&old_member);
 			MemberCount::<T>::mutate(|v| *v -= 1);
 			Self::deposit_event(Event::MemberRemoved(old_member));
 			Ok(().into())
 		}
-
 	}
 }
 

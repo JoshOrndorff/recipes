@@ -35,7 +35,6 @@ pub mod pallet {
 
 	#[pallet::call]
 	impl<T: Config> Pallet<T> {
-
 		/// A simple call that does little more than emit an event
 		#[pallet::weight(10_000)]
 		pub fn do_something(origin: OriginFor<T>, input: u32) -> DispatchResultWithPostInfo {

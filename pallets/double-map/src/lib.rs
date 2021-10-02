@@ -6,7 +6,6 @@
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
-
 pub use pallet::*;
 
 #[cfg(test)]
@@ -28,17 +27,24 @@ pub mod pallet {
 
 	#[pallet::storage]
 	#[pallet::getter(fn member_score)]
-	pub(super) type MemberScore<T: Config> = StorageDoubleMap<_, Blake2_128Concat, GroupIndex, Blake2_128Concat, T::AccountId, u32, ValueQuery>;
-
+	pub(super) type MemberScore<T: Config> = StorageDoubleMap<
+		_,
+		Blake2_128Concat,
+		GroupIndex,
+		Blake2_128Concat,
+		T::AccountId,
+		u32,
+		ValueQuery,
+	>;
 
 	#[pallet::storage]
 	#[pallet::getter(fn group_membership)]
-	pub(super) type GroupMembership<T: Config> = StorageMap<_, Blake2_128Concat, T::AccountId, GroupIndex, ValueQuery>;
+	pub(super) type GroupMembership<T: Config> =
+		StorageMap<_, Blake2_128Concat, T::AccountId, GroupIndex, ValueQuery>;
 
 	#[pallet::storage]
 	#[pallet::getter(fn all_members)]
 	pub(super) type AllMembers<T: Config> = StorageValue<_, Vec<T::AccountId>, ValueQuery>;
-
 
 	#[pallet::pallet]
 	#[pallet::generate_store(pub(super) trait Store)]
@@ -61,15 +67,16 @@ pub mod pallet {
 		RemoveGroup(GroupIndex),
 	}
 
-
 	#[pallet::call]
-	impl<T:Config> Pallet<T> {
-
-		 /// Join the `AllMembers` vec before joining a group
-		 #[pallet::weight(10_000)]
+	impl<T: Config> Pallet<T> {
+		/// Join the `AllMembers` vec before joining a group
+		#[pallet::weight(10_000)]
 		pub fn join_all_members(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
 			let new_member = ensure_signed(origin)?;
-			ensure!(!Self::is_member(&new_member), "already a member, can't join");
+			ensure!(
+				!Self::is_member(&new_member),
+				"already a member, can't join"
+			);
 			<AllMembers<T>>::append(&new_member);
 
 			Self::deposit_event(Event::NewMember(new_member));
@@ -78,7 +85,11 @@ pub mod pallet {
 
 		/// Put MemberScore (for testing purposes)
 		#[pallet::weight(10_000)]
-		pub fn join_a_group(origin: OriginFor<T>, index: GroupIndex, score: u32) -> DispatchResultWithPostInfo {
+		pub fn join_a_group(
+			origin: OriginFor<T>,
+			index: GroupIndex,
+			score: u32,
+		) -> DispatchResultWithPostInfo {
 			let member = ensure_signed(origin)?;
 			ensure!(Self::is_member(&member), "not a member, can't remove");
 			<MemberScore<T>>::insert(&index, &member, score);
@@ -92,7 +103,10 @@ pub mod pallet {
 		#[pallet::weight(10_000)]
 		pub fn remove_member(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
 			let member_to_remove = ensure_signed(origin)?;
-			ensure!(Self::is_member(&member_to_remove), "not a member, can't remove");
+			ensure!(
+				Self::is_member(&member_to_remove),
+				"not a member, can't remove"
+			);
 			let group_id = <GroupMembership<T>>::take(member_to_remove.clone());
 			<MemberScore<T>>::remove(&group_id, &member_to_remove);
 
@@ -102,12 +116,18 @@ pub mod pallet {
 
 		/// Remove group score
 		#[pallet::weight(10_000)]
-		pub fn remove_group_score(origin: OriginFor<T>, group: GroupIndex) -> DispatchResultWithPostInfo {
+		pub fn remove_group_score(
+			origin: OriginFor<T>,
+			group: GroupIndex,
+		) -> DispatchResultWithPostInfo {
 			let member = ensure_signed(origin)?;
 
 			let group_id = <GroupMembership<T>>::get(member);
 			// check that the member is in the group
-			ensure!(group_id == group, "member isn't in the group, can't remove it");
+			ensure!(
+				group_id == group,
+				"member isn't in the group, can't remove it"
+			);
 
 			// remove all group members from MemberScore at once
 			<MemberScore<T>>::remove_prefix(&group_id);
@@ -118,9 +138,9 @@ pub mod pallet {
 	}
 }
 
-	impl<T: Config> Pallet<T> {
-		// for fast membership checks (see check-membership recipe for more details)
-		fn is_member(who: &T::AccountId) -> bool {
-			Self::all_members().contains(who)
-		}
+impl<T: Config> Pallet<T> {
+	// for fast membership checks (see check-membership recipe for more details)
+	fn is_member(who: &T::AccountId) -> bool {
+		Self::all_members().contains(who)
+	}
 }

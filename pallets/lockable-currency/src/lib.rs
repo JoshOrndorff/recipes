@@ -4,14 +4,14 @@ pub use pallet::*;
 
 #[frame_support::pallet]
 pub mod pallet {
+	use frame_support::traits::{Currency, LockIdentifier, LockableCurrency, WithdrawReasons};
 	use frame_support::{dispatch::DispatchResultWithPostInfo, pallet_prelude::*};
 	use frame_system::pallet_prelude::*;
-	use frame_support::	traits::{Currency, LockIdentifier, LockableCurrency, WithdrawReasons};
 
 	const EXAMPLE_ID: LockIdentifier = *b"example ";
 
 	type BalanceOf<T> =
-	<<T as Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::Balance;
+		<<T as Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::Balance;
 
 	#[pallet::config]
 	pub trait Config: frame_system::Config {
@@ -40,18 +40,12 @@ pub mod pallet {
 
 	#[pallet::call]
 	impl<T: Config> Pallet<T> {
-
 		/// Locks the specified amount of tokens from the caller
 		#[pallet::weight(10_000)]
 		fn lock_capital(origin: OriginFor<T>, amount: BalanceOf<T>) -> DispatchResultWithPostInfo {
 			let user = ensure_signed(origin)?;
 
-			T::Currency::set_lock(
-				EXAMPLE_ID,
-				&user,
-				amount,
-				WithdrawReasons::all(),
-			);
+			T::Currency::set_lock(EXAMPLE_ID, &user, amount, WithdrawReasons::all());
 
 			Self::deposit_event(Event::Locked(user, amount));
 			Ok(().into())
@@ -62,12 +56,7 @@ pub mod pallet {
 		fn extend_lock(origin: OriginFor<T>, amount: BalanceOf<T>) -> DispatchResultWithPostInfo {
 			let user = ensure_signed(origin)?;
 
-			T::Currency::extend_lock(
-				EXAMPLE_ID,
-				&user,
-				amount,
-				WithdrawReasons::all(),
-			);
+			T::Currency::extend_lock(EXAMPLE_ID, &user, amount, WithdrawReasons::all());
 
 			Self::deposit_event(Event::ExtendedLock(user, amount));
 			Ok(().into())

@@ -4,8 +4,6 @@
 //! Storage maps map a key type to a value type. The hasher used to hash the key can be customized.
 //! This pallet uses the `blake2_128_concat` hasher. This is a good default hasher.
 
-
-
 pub use pallet::*;
 
 #[cfg(test)]
@@ -18,19 +16,17 @@ pub mod pallet {
 	use sp_runtime::print;
 
 	#[pallet::config]
-	pub trait Config: frame_system::Config {  }
+	pub trait Config: frame_system::Config {}
 
 	#[pallet::pallet]
 	#[pallet::generate_store(pub(super) trait Store)]
 	pub struct Pallet<T>(PhantomData<T>);
 
 	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> { }
-
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {}
 
 	#[pallet::call]
-	impl<T:Config> Pallet<T> {
-
+	impl<T: Config> Pallet<T> {
 		/// Increase the value associated with a particular key
 		#[pallet::weight(10_000)]
 		pub fn say_hello(origin: OriginFor<T>) -> DispatchResultWithPostInfo {

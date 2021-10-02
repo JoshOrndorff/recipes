@@ -8,15 +8,11 @@
 //! Funds can only be allocated by a root call to the `allocate` extrinsic/
 #![cfg_attr(not(feature = "std"), no_std)]
 
-
 pub use pallet::*;
 
 use sp_runtime::{traits::AccountIdConversion, ModuleId};
 
-use frame_support::{
-	traits::{Currency,Imbalance, OnUnbalanced},
-};
-
+use frame_support::traits::{Currency, Imbalance, OnUnbalanced};
 
 /// Hardcoded pallet ID; used to create the special Pot Account
 /// Must be exactly 8 characters long
@@ -33,14 +29,16 @@ mod tests;
 
 #[frame_support::pallet]
 pub mod pallet {
-	use frame_support::{dispatch::DispatchResultWithPostInfo, pallet_prelude::*, traits::{Currency, ExistenceRequirement::AllowDeath}};
-	use frame_system::pallet_prelude::*;
 	use crate::BalanceOf;
-
+	use frame_support::{
+		dispatch::DispatchResultWithPostInfo,
+		pallet_prelude::*,
+		traits::{Currency, ExistenceRequirement::AllowDeath},
+	};
+	use frame_system::pallet_prelude::*;
 
 	#[pallet::config]
 	pub trait Config: frame_system::Config {
-
 		/// The overarching event type.
 		type Event: From<Event<Self>> + IsType<<Self as frame_system::Config>::Event>;
 		/// The currency type that the charity deals in
@@ -49,9 +47,7 @@ pub mod pallet {
 
 	#[pallet::genesis_config]
 	#[derive(Default)]
-	pub struct GenesisConfig {
-
-	}
+	pub struct GenesisConfig {}
 
 	#[pallet::genesis_build]
 	impl<T: Config> GenesisBuild<T> for GenesisConfig {
@@ -62,7 +58,6 @@ pub mod pallet {
 			);
 		}
 	}
-
 
 	#[pallet::event]
 	#[pallet::metadata(T::Balance = "Balance")]
@@ -85,13 +80,9 @@ pub mod pallet {
 
 	#[pallet::call]
 	impl<T: Config> Pallet<T> {
-
 		/// Donate some funds to the charity
 		#[pallet::weight(10_000)]
-		pub fn donate(
-			origin: OriginFor<T>,
-			amount: BalanceOf<T>
-		) -> DispatchResultWithPostInfo {
+		pub fn donate(origin: OriginFor<T>, amount: BalanceOf<T>) -> DispatchResultWithPostInfo {
 			let donor = ensure_signed(origin)?;
 
 			T::Currency::transfer(&donor, &Self::account_id(), amount, AllowDeath)
@@ -114,12 +105,8 @@ pub mod pallet {
 			ensure_root(origin)?;
 
 			// Make the transfer requested
-			T::Currency::transfer(
-				&Self::account_id(),
-				&dest,
-				amount,
-				AllowDeath,
-			).map_err(|_| DispatchError::Other("Can't make allocation"))?;
+			T::Currency::transfer(&Self::account_id(), &dest, amount, AllowDeath)
+				.map_err(|_| DispatchError::Other("Can't make allocation"))?;
 
 			//TODO what about errors here??
 

@@ -5,9 +5,8 @@
 
 use account_set::AccountSet;
 
-use sp_std::collections::btree_set::BTreeSet;
 pub use pallet::*;
-
+use sp_std::collections::btree_set::BTreeSet;
 
 #[cfg(test)]
 mod tests;
@@ -41,7 +40,6 @@ pub mod pallet {
 		MemberRemoved(T::AccountId),
 	}
 
-
 	#[pallet::error]
 	pub enum Error<T> {
 		/// Cannot join as a member because you are already a member
@@ -61,14 +59,16 @@ pub mod pallet {
 
 	#[pallet::call]
 	impl<T: Config> Pallet<T> {
-
 		/// Adds a member to the membership set unless the max is reached
 		#[pallet::weight(10_000)]
 		pub fn add_member(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
 			let new_member = ensure_signed(origin)?;
 
 			let mut members = Members::<T>::get();
-			ensure!(members.len() < MAX_MEMBERS, Error::<T>::MembershipLimitReached);
+			ensure!(
+				members.len() < MAX_MEMBERS,
+				Error::<T>::MembershipLimitReached
+			);
 
 			// We don't want to add duplicate members, so we check whether the potential new
 			// member is already present in the list. Because the list is always ordered, we can
@@ -102,7 +102,7 @@ pub mod pallet {
 					Members::<T>::put(members);
 					Self::deposit_event(Event::MemberRemoved(old_member));
 					Ok(().into())
-				},
+				}
 				// If the search fails, the caller is not a member, so just return
 				Err(_) => Err(Error::<T>::NotMember.into()),
 			}

@@ -1,7 +1,5 @@
 use crate::{self as double_map, Config, GroupMembership, MemberScore};
-use frame_support::{
-	assert_noop, assert_ok, construct_runtime, parameter_types,
-};
+use frame_support::{assert_noop, assert_ok, construct_runtime, parameter_types};
 use sp_core::H256;
 use sp_io::TestExternalities;
 use sp_runtime::{

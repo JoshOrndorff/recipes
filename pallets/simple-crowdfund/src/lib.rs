@@ -6,25 +6,19 @@
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
-use frame_support::{
-	storage::child,
-	traits::{Currency},
-};
+use frame_support::{storage::child, traits::Currency};
 
-use parity_scale_codec::{Encode};
+use parity_scale_codec::Encode;
 use sp_core::Hasher;
 
-use sp_runtime::{
-	traits::{AccountIdConversion},
-	ModuleId,
-};
+use sp_runtime::{traits::AccountIdConversion, ModuleId};
 use sp_std::prelude::*;
 
 pub type FundIndex = u32;
 type AccountIdOf<T> = <T as frame_system::Config>::AccountId;
 type BalanceOf<T> = <<T as Config>::Currency as Currency<AccountIdOf<T>>>::Balance;
 type FundInfoOf<T> =
-FundInfo<AccountIdOf<T>, BalanceOf<T>, <T as frame_system::Config>::BlockNumber>;
+	FundInfo<AccountIdOf<T>, BalanceOf<T>, <T as frame_system::Config>::BlockNumber>;
 
 pub use pallet::*;
 
@@ -37,13 +31,14 @@ const PALLET_ID: ModuleId = ModuleId(*b"ex/cfund");
 
 #[frame_support::pallet]
 pub mod pallet {
+	use crate::{AccountIdOf, BalanceOf, FundIndex, FundInfoOf};
+	use frame_support::sp_runtime::traits::Zero;
+	use frame_support::traits::{
+		Currency, ExistenceRequirement, ReservableCurrency, WithdrawReasons,
+	};
 	use frame_support::{dispatch::DispatchResultWithPostInfo, pallet_prelude::*};
 	use frame_system::pallet_prelude::*;
-	use frame_support::traits::{WithdrawReasons, ExistenceRequirement, Currency, ReservableCurrency};
-	use frame_support::sp_runtime::traits::Zero;
-	use crate::{BalanceOf, FundIndex, FundInfoOf, AccountIdOf};
 	use sp_runtime::traits::Saturating;
-
 
 	/// The pallet's configuration trait
 	#[pallet::config]
@@ -66,7 +61,6 @@ pub mod pallet {
 		type RetirementPeriod: Get<Self::BlockNumber>;
 	}
 
-
 	#[derive(Encode, Decode, Default, PartialEq, Eq)]
 	#[cfg_attr(feature = "std", derive(Debug))]
 	pub struct FundInfo<AccountId, Balance, BlockNumber> {
@@ -82,10 +76,10 @@ pub mod pallet {
 		pub goal: Balance,
 	}
 
-
 	#[pallet::storage]
 	#[pallet::getter(fn funds)]
-	pub(super) type Funds<T: Config>  = StorageMap<_, Blake2_128Concat, FundIndex, FundInfoOf<T>, OptionQuery>;
+	pub(super) type Funds<T: Config> =
+		StorageMap<_, Blake2_128Concat, FundIndex, FundInfoOf<T>, OptionQuery>;
 
 	#[pallet::storage]
 	#[pallet::getter(fn fund_count)]
@@ -161,13 +155,16 @@ pub mod pallet {
 			// use the stock `transfer`.
 			T::Currency::resolve_creating(&Self::fund_account_id(index), imb);
 
-			<Funds<T>>::insert(index, FundInfo {
-				beneficiary,
-				deposit,
-				raised: Zero::zero(),
-				end,
-				goal,
-			});
+			<Funds<T>>::insert(
+				index,
+				FundInfo {
+					beneficiary,
+					deposit,
+					raised: Zero::zero(),
+					end,
+					goal,
+				},
+			);
 
 			Self::deposit_event(Event::Created(index, now));
 			Ok(().into())
@@ -175,10 +172,17 @@ pub mod pallet {
 
 		/// Contribute funds to an existing fund
 		#[pallet::weight(10_000)]
-		pub fn contribute(origin: OriginFor<T>, index: FundIndex, value: BalanceOf<T>) -> DispatchResultWithPostInfo {
+		pub fn contribute(
+			origin: OriginFor<T>,
+			index: FundIndex,
+			value: BalanceOf<T>,
+		) -> DispatchResultWithPostInfo {
 			let who = ensure_signed(origin)?;
 
-			ensure!(value >= T::MinContribution::get(), Error::<T>::ContributionTooSmall);
+			ensure!(
+				value >= T::MinContribution::get(),
+				Error::<T>::ContributionTooSmall
+			);
 			let mut fund = Self::funds(index).ok_or(Error::<T>::InvalidIndex)?;
 
 			// Make sure crowdfund has not ended
@@ -190,7 +194,7 @@ pub mod pallet {
 				&who,
 				&Self::fund_account_id(index),
 				value,
-				ExistenceRequirement::AllowDeath
+				ExistenceRequirement::AllowDeath,
 			)?;
 			fund.raised += value;
 			Funds::<T>::insert(index, &fund);
@@ -216,12 +220,15 @@ pub mod pallet {
 			ensure!(balance > Zero::zero(), Error::<T>::NoContribution);
 
 			// Return funds to caller without charging a transfer fee
-			let _ = T::Currency::resolve_into_existing(&who, T::Currency::withdraw(
-				&Self::fund_account_id(index),
-				balance,
-				WithdrawReasons::TRANSFER,
-				ExistenceRequirement::AllowDeath
-			)?);
+			let _ = T::Currency::resolve_into_existing(
+				&who,
+				T::Currency::withdraw(
+					&Self::fund_account_id(index),
+					balance,
+					WithdrawReasons::TRANSFER,
+					ExistenceRequirement::AllowDeath,
+				)?,
+			);
 
 			// Update storage
 			Self::contribution_kill(index, &who);
@@ -243,17 +250,23 @@ pub mod pallet {
 
 			// Check that enough time has passed to remove from storage
 			let now = <frame_system::Module<T>>::block_number();
-			ensure!(now >= fund.end + T::RetirementPeriod::get(), Error::<T>::FundNotRetired);
+			ensure!(
+				now >= fund.end + T::RetirementPeriod::get(),
+				Error::<T>::FundNotRetired
+			);
 
 			let account = Self::fund_account_id(index);
 
 			// Dissolver collects the deposit and any remaining funds
-			let _ = T::Currency::resolve_creating(&reporter, T::Currency::withdraw(
-				&account,
-				fund.deposit + fund.raised,
-				WithdrawReasons::TRANSFER,
-				ExistenceRequirement::AllowDeath,
-			)?);
+			let _ = T::Currency::resolve_creating(
+				&reporter,
+				T::Currency::withdraw(
+					&account,
+					fund.deposit + fund.raised,
+					WithdrawReasons::TRANSFER,
+					ExistenceRequirement::AllowDeath,
+				)?,
+			);
 
 			// Remove the fund info from storage
 			<Funds<T>>::remove(index);
@@ -285,20 +298,26 @@ pub mod pallet {
 			let account = Self::fund_account_id(index);
 
 			// Beneficiary collects the contributed funds
-			let _ = T::Currency::resolve_creating(&fund.beneficiary, T::Currency::withdraw(
-				&account,
-				fund.raised,
-				WithdrawReasons::TRANSFER,
-				ExistenceRequirement::AllowDeath,
-			)?);
+			let _ = T::Currency::resolve_creating(
+				&fund.beneficiary,
+				T::Currency::withdraw(
+					&account,
+					fund.raised,
+					WithdrawReasons::TRANSFER,
+					ExistenceRequirement::AllowDeath,
+				)?,
+			);
 
 			// Caller collects the deposit
-			let _ = T::Currency::resolve_creating(&caller, T::Currency::withdraw(
-				&account,
-				fund.deposit,
-				WithdrawReasons::TRANSFER,
-				ExistenceRequirement::AllowDeath,
-			)?);
+			let _ = T::Currency::resolve_creating(
+				&caller,
+				T::Currency::withdraw(
+					&account,
+					fund.deposit,
+					WithdrawReasons::TRANSFER,
+					ExistenceRequirement::AllowDeath,
+				)?,
+			);
 
 			// Remove the fund info from storage
 			<Funds<T>>::remove(index);

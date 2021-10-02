@@ -10,10 +10,10 @@ pub mod pallet {
 	use frame_support::{dispatch::DispatchResultWithPostInfo, pallet_prelude::*};
 	use frame_system::pallet_prelude::*;
 
-// The pallet's configuration trait takes an instance as a type parameter. The instance type is
-// created by the `decl_storage!` macro below. Giving it a value of `DefaultInstance` allows us
-// to use the pallet in a runtime where only a single instance is desired without the extra syntax
-// that is otherwise needed to use instantiable pallets.
+	// The pallet's configuration trait takes an instance as a type parameter. The instance type is
+	// created by the `decl_storage!` macro below. Giving it a value of `DefaultInstance` allows us
+	// to use the pallet in a runtime where only a single instance is desired without the extra syntax
+	// that is otherwise needed to use instantiable pallets.
 	#[pallet::config]
 	pub trait Config: frame_system::Config {
 		/// The overarching event type.
@@ -21,7 +21,7 @@ pub mod pallet {
 	}
 
 	#[pallet::storage]
-	pub(super)type Caller<T: Config> = StorageValue<_, T::AccountId, ValueQuery>;
+	pub(super) type Caller<T: Config> = StorageValue<_, T::AccountId, ValueQuery>;
 
 	#[pallet::event]
 	#[pallet::metadata(T::AccountId = "AccountId")]
@@ -39,7 +39,6 @@ pub mod pallet {
 
 	#[pallet::call]
 	impl<T: Config> Pallet<T> {
-
 		/// The only dispatchable call, updates the single storage item,
 		/// and emits an event.
 		#[pallet::weight(10_000)]

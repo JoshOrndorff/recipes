@@ -122,7 +122,8 @@ fn increase_value_works() {
 		assert_ok!(StorageCache::set_copy(Origin::signed(1), 25));
 		assert_ok!(StorageCache::increase_value_no_cache(Origin::signed(1), 10));
 		// proof: x = 25, 2x + 10 = 60 qed
-		let expected_event1 = Event::storage_cache(storage_cache::Event::InefficientValueChange(60, 5));
+		let expected_event1 =
+			Event::storage_cache(storage_cache::Event::InefficientValueChange(60, 5));
 		assert!(System::events().iter().any(|a| a.event == expected_event1));
 
 		// Ensure the storage value has actually changed from the first call

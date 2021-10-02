@@ -7,15 +7,17 @@ pub use pallet::*;
 #[cfg(test)]
 mod tests;
 
-
 #[frame_support::pallet]
 pub mod pallet {
-	use frame_support::{dispatch::DispatchResultWithPostInfo, pallet_prelude::*,
-											traits::{Currency, ExistenceRequirement::AllowDeath, ReservableCurrency}};
+	use frame_support::{
+		dispatch::DispatchResultWithPostInfo,
+		pallet_prelude::*,
+		traits::{Currency, ExistenceRequirement::AllowDeath, ReservableCurrency},
+	};
 	use frame_system::pallet_prelude::*;
 
 	type BalanceOf<T> =
-	<<T as Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::Balance;
+		<<T as Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::Balance;
 
 	#[pallet::config]
 	pub trait Config: frame_system::Config {
@@ -47,7 +49,10 @@ pub mod pallet {
 	impl<T: Config> Pallet<T> {
 		/// Reserves the specified amount of funds from the caller
 		#[pallet::weight(10_000)]
-		pub fn reserve_funds(origin: OriginFor<T>, amount: BalanceOf<T>) -> DispatchResultWithPostInfo {
+		pub fn reserve_funds(
+			origin: OriginFor<T>,
+			amount: BalanceOf<T>,
+		) -> DispatchResultWithPostInfo {
 			let locker = ensure_signed(origin)?;
 
 			T::Currency::reserve(&locker, amount)
@@ -61,7 +66,10 @@ pub mod pallet {
 
 		/// Unreserves the specified amount of funds from the caller
 		#[pallet::weight(10_000)]
-		pub fn unreserve_funds(origin: OriginFor<T>, amount: BalanceOf<T>) -> DispatchResultWithPostInfo {
+		pub fn unreserve_funds(
+			origin: OriginFor<T>,
+			amount: BalanceOf<T>,
+		) -> DispatchResultWithPostInfo {
 			let unlocker = ensure_signed(origin)?;
 
 			T::Currency::unreserve(&unlocker, amount);
@@ -75,7 +83,11 @@ pub mod pallet {
 
 		/// Transfers funds. Essentially a wrapper around the Currency's own transfer method
 		#[pallet::weight(10_000)]
-		pub fn transfer_funds(origin: OriginFor<T>, dest: T::AccountId, amount: BalanceOf<T>) -> DispatchResultWithPostInfo {
+		pub fn transfer_funds(
+			origin: OriginFor<T>,
+			dest: T::AccountId,
+			amount: BalanceOf<T>,
+		) -> DispatchResultWithPostInfo {
 			let sender = ensure_signed(origin)?;
 
 			T::Currency::transfer(&sender, &dest, amount, AllowDeath)?;
@@ -93,7 +105,7 @@ pub mod pallet {
 			origin: OriginFor<T>,
 			to_punish: T::AccountId,
 			dest: T::AccountId,
-			collateral: BalanceOf<T>
+			collateral: BalanceOf<T>,
 		) -> DispatchResultWithPostInfo {
 			let _ = ensure_signed(origin)?; // dangerous because can be called with any signature (so dont do this in practice ever!)
 
@@ -103,7 +115,12 @@ pub mod pallet {
 			T::Currency::transfer(&to_punish, &dest, collateral - overdraft, AllowDeath)?;
 
 			let now = <frame_system::Module<T>>::block_number();
-			Self::deposit_event(Event::TransferFunds(to_punish, dest, collateral - overdraft, now));
+			Self::deposit_event(Event::TransferFunds(
+				to_punish,
+				dest,
+				collateral - overdraft,
+				now,
+			));
 
 			Ok(().into())
 		}

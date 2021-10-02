@@ -23,9 +23,8 @@ mod tests;
 pub mod pallet {
 	use frame_support::{dispatch::DispatchResultWithPostInfo, pallet_prelude::*};
 	use frame_system::pallet_prelude::*;
-	use substrate_fixed::types::U16F16;
 	use sp_arithmetic::{traits::Saturating, Permill};
-
+	use substrate_fixed::types::U16F16;
 
 	#[pallet::config]
 	pub trait Config: frame_system::Config {
@@ -33,28 +32,33 @@ pub mod pallet {
 		type Event: From<Event<Self>> + IsType<<Self as frame_system::Config>::Event>;
 	}
 
-
 	#[pallet::type_value]
-	pub(super) fn PermillAccumulatorDefaultValue<T: Config>() -> Permill { Permill::one() }
+	pub(super) fn PermillAccumulatorDefaultValue<T: Config>() -> Permill {
+		Permill::one()
+	}
 
 	#[pallet::storage]
 	#[pallet::getter(fn permill_value)]
-	pub(super) type PermillAccumulator<T: Config> = StorageValue<_, Permill, ValueQuery, PermillAccumulatorDefaultValue<T>>;
-
+	pub(super) type PermillAccumulator<T: Config> =
+		StorageValue<_, Permill, ValueQuery, PermillAccumulatorDefaultValue<T>>;
 
 	#[pallet::type_value]
-	pub(super) fn FixedAccumulatorDefaultValue<T: Config>() -> U16F16 { U16F16::from_num(1) }
+	pub(super) fn FixedAccumulatorDefaultValue<T: Config>() -> U16F16 {
+		U16F16::from_num(1)
+	}
 	#[pallet::storage]
 	#[pallet::getter(fn fixed_value)]
-	pub(super) type FixedAccumulator<T: Config> = StorageValue<_, U16F16, ValueQuery, FixedAccumulatorDefaultValue<T>>;
-
+	pub(super) type FixedAccumulator<T: Config> =
+		StorageValue<_, U16F16, ValueQuery, FixedAccumulatorDefaultValue<T>>;
 
 	#[pallet::type_value]
-	pub(super) fn ManualAccumulatorDefaultValue<T: Config>() -> u32 { 1 << 16 }
+	pub(super) fn ManualAccumulatorDefaultValue<T: Config>() -> u32 {
+		1 << 16
+	}
 	#[pallet::storage]
 	#[pallet::getter(fn manual_value)]
-	pub(super) type ManualAccumulator<T: Config> = StorageValue<_, u32, ValueQuery, ManualAccumulatorDefaultValue<T>>;
-
+	pub(super) type ManualAccumulator<T: Config> =
+		StorageValue<_, u32, ValueQuery, ManualAccumulatorDefaultValue<T>>;
 
 	#[pallet::hooks]
 	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {}
@@ -87,7 +91,10 @@ pub mod pallet {
 		/// Update the Permill accumulator implementation's value by multiplying it
 		/// by the new factor given in the extrinsic
 		#[pallet::weight(10_000)]
-		pub fn update_permill(origin: OriginFor<T>, new_factor: Permill) -> DispatchResultWithPostInfo {
+		pub fn update_permill(
+			origin: OriginFor<T>,
+			new_factor: Permill,
+		) -> DispatchResultWithPostInfo {
 			ensure_signed(origin)?;
 
 			let old_accumulated = Self::permill_value();
@@ -107,13 +114,17 @@ pub mod pallet {
 		/// Update the Substrate-fixed accumulator implementation's value by multiplying it
 		/// by the new factor given in the extrinsic
 		#[pallet::weight(10_000)]
-		pub fn update_fixed(origin: OriginFor<T>, new_factor: U16F16) -> DispatchResultWithPostInfo {
+		pub fn update_fixed(
+			origin: OriginFor<T>,
+			new_factor: U16F16,
+		) -> DispatchResultWithPostInfo {
 			ensure_signed(origin)?;
 
 			let old_accumulated = Self::fixed_value();
 
 			// Multiply, handling overflow
-			let new_product = old_accumulated.checked_mul(new_factor)
+			let new_product = old_accumulated
+				.checked_mul(new_factor)
 				.ok_or(Error::<T>::Overflow)?;
 
 			// Write the new value to storage
@@ -132,21 +143,21 @@ pub mod pallet {
 
 			// To ensure we don't overflow unnecessarily, the values are cast up to u64 before multiplying.
 			// This intermediate format has 48 integer positions and 16 fractional.
-			let old_accumulated : u64 = Self::manual_value() as u64;
-			let new_factor_u64 : u64 = new_factor as u64;
+			let old_accumulated: u64 = Self::manual_value() as u64;
+			let new_factor_u64: u64 = new_factor as u64;
 
 			// Perform the multiplication on the u64 values
 			// This intermediate format has 32 integer positions and 32 fractional.
-			let raw_product : u64 = old_accumulated * new_factor_u64;
+			let raw_product: u64 = old_accumulated * new_factor_u64;
 
 			// Right shift to restore the convention that 16 bits are fractional.
 			// This is a lossy conversion.
 			// This intermediate format has 48 integer positions and 16 fractional.
-			let shifted_product : u64 = raw_product >> 16;
+			let shifted_product: u64 = raw_product >> 16;
 
 			// Ensure that the product fits in the u32, and error if it doesn't
 			if shifted_product > (u32::max_value() as u64) {
-				return Err(Error::<T>::Overflow.into())
+				return Err(Error::<T>::Overflow.into());
 			}
 
 			let final_product = shifted_product as u32;

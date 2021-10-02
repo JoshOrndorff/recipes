@@ -100,7 +100,8 @@ fn new_test_ext_reserve_funds() {
 		// Lock half of 1's balance : (1, 10000) -> (1, 5000)
 		assert_ok!(ReservableCurrency::reserve_funds(Origin::signed(1), 5000));
 		// Test and see if we received a LockFunds event
-		let expected_event = Event::reservable_currency(reservable_currency::Event::LockFunds(1, 5000, 1));
+		let expected_event =
+			Event::reservable_currency(reservable_currency::Event::LockFunds(1, 5000, 1));
 
 		assert_eq!(System::events()[1].event, expected_event,);
 		// Test and see if (1, 5000) holds
@@ -115,13 +116,15 @@ fn new_test_ext_unreserve_funds() {
 	new_test_ext().execute_with(|| {
 		// Lock balance, test lock event, test free balance
 		assert_ok!(ReservableCurrency::reserve_funds(Origin::signed(1), 5000));
-		let lock_event = Event::reservable_currency(reservable_currency::Event::LockFunds(1, 5000, 1));
+		let lock_event =
+			Event::reservable_currency(reservable_currency::Event::LockFunds(1, 5000, 1));
 		assert!(System::events().iter().any(|a| a.event == lock_event));
 		assert_eq!(Balances::free_balance(&1), 5000);
 
 		// Unlock balance, test event, test free balance
 		assert_ok!(ReservableCurrency::unreserve_funds(Origin::signed(1), 5000));
-		let unlock_event = Event::reservable_currency(reservable_currency::Event::UnlockFunds(1, 5000, 1));
+		let unlock_event =
+			Event::reservable_currency(reservable_currency::Event::UnlockFunds(1, 5000, 1));
 		assert!(System::events().iter().any(|a| a.event == unlock_event));
 		assert_eq!(Balances::free_balance(&1), 10000);
 	})
@@ -136,7 +139,8 @@ fn new_test_ext_transfer_funds() {
 			2,
 			4000
 		));
-		let transfer_event = Event::reservable_currency(reservable_currency::Event::TransferFunds(1, 2, 4000, 1));
+		let transfer_event =
+			Event::reservable_currency(reservable_currency::Event::TransferFunds(1, 2, 4000, 1));
 		assert!(System::events().iter().any(|a| a.event == transfer_event));
 		assert_eq!(Balances::free_balance(&1), 6000);
 		assert_eq!(Balances::free_balance(&2), 15000);
@@ -150,7 +154,8 @@ fn new_test_ext_unreserve_and_transfer() {
 		assert_ok!(ReservableCurrency::reserve_funds(Origin::signed(1), 4000));
 		assert_eq!(Balances::free_balance(&1), 6000);
 		assert_eq!(Balances::reserved_balance(&1), 4000);
-		let reserve_event = Event::reservable_currency(reservable_currency::Event::LockFunds(1, 4000, 1));
+		let reserve_event =
+			Event::reservable_currency(reservable_currency::Event::LockFunds(1, 4000, 1));
 		assert!(System::events().iter().any(|a| a.event == reserve_event));
 
 		// Punish one, for a value of 6000 collateral. Because one only has 4000 collateral reserved
@@ -161,7 +166,8 @@ fn new_test_ext_unreserve_and_transfer() {
 			2,
 			6000
 		));
-		let transfer_event = Event::reservable_currency(reservable_currency::Event::TransferFunds(1, 2, 4000, 1));
+		let transfer_event =
+			Event::reservable_currency(reservable_currency::Event::TransferFunds(1, 2, 4000, 1));
 		assert!(System::events().iter().any(|a| a.event == transfer_event));
 		//Test if reserved::(1, 0) -> test if (1, 8000) -> test if (2, 13000)
 		assert_eq!(Balances::reserved_balance(&1), 0);

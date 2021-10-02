@@ -15,12 +15,12 @@ pub mod pallet {
 	use frame_support::{dispatch::DispatchResultWithPostInfo, pallet_prelude::*};
 	use frame_system::pallet_prelude::*;
 
-/// The pallet's configuration trait.
-/// Notice the explicit tight coupling to the `vec-set` pallet
-#[pallet::config]
-pub trait Config: frame_system::Config + vec_set::Config {
-	type Event: From<Event<Self>> + IsType<<Self as frame_system::Config>::Event>;
-}
+	/// The pallet's configuration trait.
+	/// Notice the explicit tight coupling to the `vec-set` pallet
+	#[pallet::config]
+	pub trait Config: frame_system::Config + vec_set::Config {
+		type Event: From<Event<Self>> + IsType<<Self as frame_system::Config>::Event>;
+	}
 
 	#[pallet::event]
 	#[pallet::metadata(T::AccountId = "AccountId")]
@@ -45,7 +45,6 @@ pub trait Config: frame_system::Config + vec_set::Config {
 
 	#[pallet::call]
 	impl<T: Config> Pallet<T> {
-
 		/// Checks whether the caller is a member of the set of account IDs provided by the `vec-set`
 		/// pallet. Emits an event if they are, and errors if not.
 		#[pallet::weight(10_000)]
@@ -56,7 +55,9 @@ pub trait Config: frame_system::Config + vec_set::Config {
 			let members = vec_set::Module::<T>::members();
 
 			// Check whether the caller is a member
-			members.binary_search(&caller).map_err(|_| Error::<T>::NotAMember)?;
+			members
+				.binary_search(&caller)
+				.map_err(|_| Error::<T>::NotAMember)?;
 
 			// If the previous call didn't error, then the caller is a member, so emit the event
 			Self::deposit_event(Event::IsAMember(caller));

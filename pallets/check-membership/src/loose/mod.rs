@@ -13,20 +13,20 @@ mod tests;
 
 #[frame_support::pallet]
 pub mod pallet {
+	use account_set::AccountSet;
 	use frame_support::{dispatch::DispatchResultWithPostInfo, pallet_prelude::*};
 	use frame_system::pallet_prelude::*;
-	use account_set::AccountSet;
 
 	/// The pallet's configuration trait
-/// Notice the loose coupling: any pallet that implements the `AccountSet` behavior works here.
+	/// Notice the loose coupling: any pallet that implements the `AccountSet` behavior works here.
 	#[pallet::config]
 	pub trait Config: frame_system::Config {
-	/// The ubiquitous event type
-	type Event: From<Event<Self>> + IsType<<Self as frame_system::Config>::Event>;
+		/// The ubiquitous event type
+		type Event: From<Event<Self>> + IsType<<Self as frame_system::Config>::Event>;
 
-	/// A type that will supply a set of members to check access control against
-	type MembershipSource: AccountSet<AccountId = Self::AccountId>;
-}
+		/// A type that will supply a set of members to check access control against
+		type MembershipSource: AccountSet<AccountId = Self::AccountId>;
+	}
 
 	#[pallet::event]
 	#[pallet::metadata(T::AccountId = "AccountId")]
@@ -51,7 +51,6 @@ pub mod pallet {
 
 	#[pallet::call]
 	impl<T: Config> Pallet<T> {
-
 		/// Checks whether the caller is a member of the set of account IDs provided by the
 		/// MembershipSource type. Emits an event if they are, and errors if not.
 		#[pallet::weight(10_000)]

@@ -55,19 +55,25 @@ pub mod pallet {
 
 	#[pallet::call]
 	impl<T: Config> Pallet<T> {
-
 		///  (Copy) inefficient way of updating value in storage
 		///
 		/// storage value -> storage_value * 2 + input_val
 		#[pallet::weight(10_000)]
-		pub fn increase_value_no_cache(origin: OriginFor<T>, some_val: u32) -> DispatchResultWithPostInfo {
+		pub fn increase_value_no_cache(
+			origin: OriginFor<T>,
+			some_val: u32,
+		) -> DispatchResultWithPostInfo {
 			let _ = ensure_signed(origin)?;
 			let original_call = <SomeCopyValue<T>>::get();
-			let some_calculation = original_call.checked_add(some_val).ok_or("addition overflowed1")?;
+			let some_calculation = original_call
+				.checked_add(some_val)
+				.ok_or("addition overflowed1")?;
 			// this next storage call is unnecessary and is wasteful
 			let unnecessary_call = <SomeCopyValue<T>>::get();
 			// should've just used `original_call` here because u32 is copy
-			let another_calculation = some_calculation.checked_add(unnecessary_call).ok_or("addition overflowed2")?;
+			let another_calculation = some_calculation
+				.checked_add(unnecessary_call)
+				.ok_or("addition overflowed2")?;
 			<SomeCopyValue<T>>::put(another_calculation);
 			let now = <frame_system::Module<T>>::block_number();
 			Self::deposit_event(Event::InefficientValueChange(another_calculation, now));
@@ -78,12 +84,19 @@ pub mod pallet {
 		///
 		/// storage value -> storage_value * 2 + input_val
 		#[pallet::weight(10_000)]
-		pub fn increase_value_w_copy(origin: OriginFor<T>, some_val: u32) -> DispatchResultWithPostInfo {
+		pub fn increase_value_w_copy(
+			origin: OriginFor<T>,
+			some_val: u32,
+		) -> DispatchResultWithPostInfo {
 			let _ = ensure_signed(origin)?;
 			let original_call = <SomeCopyValue<T>>::get();
-			let some_calculation = original_call.checked_add(some_val).ok_or("addition overflowed1")?;
+			let some_calculation = original_call
+				.checked_add(some_val)
+				.ok_or("addition overflowed1")?;
 			// uses the original_call because u32 is copy
-			let another_calculation = some_calculation.checked_add(original_call).ok_or("addition overflowed2")?;
+			let another_calculation = some_calculation
+				.checked_add(original_call)
+				.ok_or("addition overflowed2")?;
 			<SomeCopyValue<T>>::put(another_calculation);
 			let now = <frame_system::Module<T>>::block_number();
 			Self::deposit_event(Event::BetterValueChange(another_calculation, now));
@@ -102,8 +115,14 @@ pub mod pallet {
 			// only places a new account if
 			// (1) the existing account is not a member &&
 			// (2) the new account is a member
-			ensure!(!Self::is_member(&existing_king), "current king is a member so maintains priority");
-			ensure!(Self::is_member(&new_king), "new king is not a member so doesn't get priority");
+			ensure!(
+				!Self::is_member(&existing_king),
+				"current king is a member so maintains priority"
+			);
+			ensure!(
+				Self::is_member(&new_king),
+				"new king is not a member so doesn't get priority"
+			);
 
 			// BAD (unnecessary) storage call
 			let old_king = <KingMember<T>>::get();
@@ -128,8 +147,14 @@ pub mod pallet {
 			// only places a new account if
 			// (1) the existing account is not a member &&
 			// (2) the new account is a member
-			ensure!(!Self::is_member(&existing_king), "current king is a member so maintains priority");
-			ensure!(Self::is_member(&new_king), "new king is not a member so doesn't get priority");
+			ensure!(
+				!Self::is_member(&existing_king),
+				"current king is a member so maintains priority"
+			);
+			ensure!(
+				Self::is_member(&new_king),
+				"new king is not a member so doesn't get priority"
+			);
 
 			// <no (unnecessary) storage call here>
 			// place new king

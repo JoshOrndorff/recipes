@@ -1,7 +1,7 @@
 use crate::{self as charity, Config};
 use frame_support::{
 	assert_err, assert_ok, construct_runtime, parameter_types,
-	traits::{Currency, OnUnbalanced, GenesisBuild},
+	traits::{Currency, GenesisBuild, OnUnbalanced},
 };
 use frame_system::{self as system, EventRecord, Phase, RawOrigin};
 use pallet_balances;
@@ -11,8 +11,6 @@ use sp_runtime::{
 	testing::Header,
 	traits::{BlakeTwo256, IdentityLookup},
 };
-
-
 
 type UncheckedExtrinsic = frame_system::mocking::MockUncheckedExtrinsic<TestRuntime>;
 type Block = frame_system::mocking::MockBlock<TestRuntime>;
@@ -90,13 +88,12 @@ pub fn new_test_ext() -> sp_io::TestExternalities {
 	.assimilate_storage(&mut t)
 	.unwrap();
 
-/*	pallet_balances::GenesisConfig {}
-		.assimilate_storage::<TestRuntime>(&mut t)
-		.unwrap();*/
+	/*	pallet_balances::GenesisConfig {}
+	.assimilate_storage::<TestRuntime>(&mut t)
+	.unwrap();*/
 
 	let charity_config = charity::GenesisConfig::default();
-	GenesisBuild::<TestRuntime>::assimilate_storage(&charity_config, &mut t)
-		.unwrap();
+	GenesisBuild::<TestRuntime>::assimilate_storage(&charity_config, &mut t).unwrap();
 
 	let mut ext: sp_io::TestExternalities = t.into();
 	ext.execute_with(|| System::set_block_number(1));
@@ -107,8 +104,6 @@ pub fn new_test_ext() -> sp_io::TestExternalities {
 #[test]
 fn pot_min_balance_is_set() {
 	new_test_ext().execute_with(|| {
-		let pot = Charity::pot();
-		let bc =  Balances::minimum_balance();
 		assert_eq!(Charity::pot(), Balances::minimum_balance());
 	})
 }
@@ -137,7 +132,8 @@ fn donations_work() {
 		assert_eq!(Balances::free_balance(&1), original - donation);
 
 		// Check that the correct event is emitted
-		let expected_event = Event::charity(charity::Event::DonationReceived(1, donation, new_pot_total));
+		let expected_event =
+			Event::charity(charity::Event::DonationReceived(1, donation, new_pot_total));
 
 		assert_eq!(System::events()[1].event, expected_event,);
 	})

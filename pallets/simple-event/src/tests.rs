@@ -1,14 +1,13 @@
 use crate as simple_event;
+use frame_support::{assert_ok, parameter_types};
 use sp_core::H256;
-use frame_support::{assert_ok, parameter_types,
-};
 
 use sp_io::TestExternalities;
 
 use sp_runtime::{
-	traits::{BlakeTwo256, IdentityLookup}, testing::Header,
+	testing::Header,
+	traits::{BlakeTwo256, IdentityLookup},
 };
-
 
 use frame_system as system;
 use frame_system::{EventRecord, Phase};
@@ -61,7 +60,6 @@ impl system::Config for Test {
 impl simple_event::Config for Test {
 	type Event = Event;
 }
-
 
 struct ExternalityBuilder;
 

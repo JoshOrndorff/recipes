@@ -13,7 +13,6 @@ pub use pallet::*;
 #[cfg(test)]
 mod tests;
 
-
 #[frame_support::pallet]
 pub mod pallet {
 	use frame_support::{dispatch::DispatchResultWithPostInfo, pallet_prelude::*};
@@ -21,11 +20,11 @@ pub mod pallet {
 	use sp_std::vec::Vec;
 	type BufferIndex = u8;
 
-#[pallet::config]
-pub trait Config: frame_system::Config {
-	/// The overarching event type.
-	type Event: From<Event<Self>> + IsType<<Self as frame_system::Config>::Event>;
-}
+	#[pallet::config]
+	pub trait Config: frame_system::Config {
+		/// The overarching event type.
+		type Event: From<Event<Self>> + IsType<<Self as frame_system::Config>::Event>;
+	}
 
 	#[derive(Encode, Decode, Default, Clone, PartialEq, Eq)]
 	#[cfg_attr(feature = "std", derive(Debug))]
@@ -36,15 +35,18 @@ pub trait Config: frame_system::Config {
 
 	#[pallet::storage]
 	#[pallet::getter(fn get_value)]
-	pub(super) type BufferMap<T> = StorageMap<_, Blake2_128Concat,BufferIndex, ValueStruct,ValueQuery>;
-
+	pub(super) type BufferMap<T> =
+		StorageMap<_, Blake2_128Concat, BufferIndex, ValueStruct, ValueQuery>;
 
 	#[pallet::type_value]
-	pub(super) fn BufferIndexDefaultValue() -> (BufferIndex, BufferIndex) { (0, 0) }
+	pub(super) fn BufferIndexDefaultValue() -> (BufferIndex, BufferIndex) {
+		(0, 0)
+	}
 
 	#[pallet::storage]
 	#[pallet::getter(fn range)]
-	pub(super) type BufferRange<T: Config> = StorageValue<_,(BufferIndex, BufferIndex), ValueQuery, BufferIndexDefaultValue>;
+	pub(super) type BufferRange<T: Config> =
+		StorageValue<_, (BufferIndex, BufferIndex), ValueQuery, BufferIndexDefaultValue>;
 
 	#[pallet::event]
 	#[pallet::generate_deposit(pub (super) fn deposit_event)]
@@ -62,28 +64,35 @@ pub trait Config: frame_system::Config {
 
 	#[pallet::call]
 	impl<T: Config> Pallet<T> {
-
 		/// Add an item to the queue
 		#[pallet::weight(10_000)]
-		pub fn add_to_queue(origin: OriginFor<T>, integer: i32, boolean: bool) -> DispatchResultWithPostInfo {
+		pub fn add_to_queue(
+			origin: OriginFor<T>,
+			integer: i32,
+			boolean: bool,
+		) -> DispatchResultWithPostInfo {
 			// only a user can push into the queue
 			let _user = ensure_signed(origin)?;
 
 			let mut queue = Self::queue_transient();
-			queue.push(ValueStruct{ integer, boolean });
+			queue.push(ValueStruct { integer, boolean });
 
 			Ok(().into())
 		}
 
 		/// Add several items to the queue
 		#[pallet::weight(10_000)]
-		pub fn add_multiple(origin: OriginFor<T>, integers: Vec<i32>, boolean: bool) -> DispatchResultWithPostInfo {
+		pub fn add_multiple(
+			origin: OriginFor<T>,
+			integers: Vec<i32>,
+			boolean: bool,
+		) -> DispatchResultWithPostInfo {
 			// only a user can push into the queue
 			let _user = ensure_signed(origin)?;
 
 			let mut queue = Self::queue_transient();
 			for integer in integers {
-				queue.push(ValueStruct{ integer, boolean });
+				queue.push(ValueStruct { integer, boolean });
 			}
 
 			Ok(().into())
@@ -96,7 +105,7 @@ pub trait Config: frame_system::Config {
 			let _user = ensure_signed(origin)?;
 
 			let mut queue = Self::queue_transient();
-			if let Some(ValueStruct{ integer, boolean }) = queue.pop() {
+			if let Some(ValueStruct { integer, boolean }) = queue.pop() {
 				Self::deposit_event(Event::Popped(integer, boolean));
 			}
 

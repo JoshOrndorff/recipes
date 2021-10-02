@@ -33,15 +33,18 @@ pub mod pallet {
 
 	#[pallet::storage]
 	#[pallet::getter(fn get_balance)]
-	pub(super) type Balances<T: Config> = StorageMap<_, Blake2_128Concat, T::AccountId, u64, ValueQuery>;
-
+	pub(super) type Balances<T: Config> =
+		StorageMap<_, Blake2_128Concat, T::AccountId, u64, ValueQuery>;
 
 	#[pallet::type_value]
-	pub(super) fn TotalSupplyDefaultValue<T: Config>() -> u64 { 21000000 }
+	pub(super) fn TotalSupplyDefaultValue<T: Config>() -> u64 {
+		21000000
+	}
 
 	#[pallet::storage]
 	#[pallet::getter(fn total_supply)]
-	pub(super) type TotalSupply<T: Config> = StorageValue<_, u64,ValueQuery, TotalSupplyDefaultValue<T>>;
+	pub(super) type TotalSupply<T: Config> =
+		StorageValue<_, u64, ValueQuery, TotalSupplyDefaultValue<T>>;
 
 	#[pallet::storage]
 	#[pallet::getter(fn is_init)]
@@ -53,7 +56,6 @@ pub mod pallet {
 
 	#[pallet::hooks]
 	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {}
-
 
 	#[pallet::error]
 	pub enum Error<T> {
@@ -80,14 +82,22 @@ pub mod pallet {
 
 		/// Transfer tokens from one account to another
 		#[pallet::weight(10_000)]
-		pub fn transfer(_origin: OriginFor<T>, to: T::AccountId, value: u64) -> DispatchResultWithPostInfo {
+		pub fn transfer(
+			_origin: OriginFor<T>,
+			to: T::AccountId,
+			value: u64,
+		) -> DispatchResultWithPostInfo {
 			let sender = ensure_signed(_origin)?;
 			let sender_balance = Self::get_balance(&sender);
 			let receiver_balance = Self::get_balance(&to);
 
 			// Calculate new balances
-			let updated_from_balance = sender_balance.checked_sub(value).ok_or(<Error<T>>::InsufficientFunds)?;
-			let updated_to_balance = receiver_balance.checked_add(value).expect("Entire supply fits in u64; qed");
+			let updated_from_balance = sender_balance
+				.checked_sub(value)
+				.ok_or(<Error<T>>::InsufficientFunds)?;
+			let updated_to_balance = receiver_balance
+				.checked_add(value)
+				.expect("Entire supply fits in u64; qed");
 
 			// Write new balances to storage
 			<Balances<T>>::insert(&sender, updated_from_balance);

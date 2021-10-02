@@ -1,11 +1,9 @@
 //! Generating (insecure) randomness
 #![cfg_attr(not(feature = "std"), no_std)]
 
-
-use parity_scale_codec::Encode;
 pub use pallet::*;
+use parity_scale_codec::Encode;
 use sp_std::vec::Vec;
-
 
 #[cfg(test)]
 mod tests;
@@ -13,18 +11,18 @@ mod tests;
 #[frame_support::pallet]
 pub mod pallet {
 	use frame_support::{dispatch::DispatchResultWithPostInfo, pallet_prelude::*};
+	use frame_support::{sp_runtime::app_crypto::sp_core::H256, traits::Randomness};
 	use frame_system::pallet_prelude::*;
-	use frame_support::{traits::Randomness, sp_runtime::app_crypto::sp_core::H256};
 
 	#[pallet::config]
 	pub trait Config: frame_system::Config {
 		type Event: From<Event<Self>> + IsType<<Self as frame_system::Config>::Event>;
 
-	/// The pallet doesn't know what the source of randomness is; it can be anything that
-	/// implements the trait. When installing this pallet in a runtime, you
-	/// must make sure to give it a randomness source that suits its needs.
-	type RandomnessSource: Randomness<H256>;
-}
+		/// The pallet doesn't know what the source of randomness is; it can be anything that
+		/// implements the trait. When installing this pallet in a runtime, you
+		/// must make sure to give it a randomness source that suits its needs.
+		type RandomnessSource: Randomness<H256>;
+	}
 
 	#[pallet::event]
 	#[pallet::generate_deposit(pub (super) fn deposit_event)]
@@ -44,10 +42,8 @@ pub mod pallet {
 	#[pallet::hooks]
 	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {}
 
-
 	#[pallet::call]
 	impl<T: Config> Pallet<T> {
-
 		/// Grab a random seed and random value from the randomness collective flip pallet
 		#[pallet::weight(10_000)]
 		pub fn consume_randomness(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
