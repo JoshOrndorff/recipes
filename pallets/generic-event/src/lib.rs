@@ -2,9 +2,6 @@
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
-use frame_support::{decl_event, decl_module, dispatch::DispatchResult};
-use frame_system::ensure_signed;
-
 pub use pallet::*;
 
 #[cfg(test)]

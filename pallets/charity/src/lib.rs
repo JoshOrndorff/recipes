@@ -129,7 +129,7 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config> Module<T> {
+impl<T: Config> Pallet<T> {
 	/// The account ID that holds the Charity's funds
 	pub fn account_id() -> T::AccountId {
 		PALLET_ID.into_account()

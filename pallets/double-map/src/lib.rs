@@ -118,7 +118,7 @@ pub mod pallet {
 	}
 }
 
-	impl<T: Config> Module<T> {
+	impl<T: Config> Pallet<T> {
 		// for fast membership checks (see check-membership recipe for more details)
 		fn is_member(who: &T::AccountId) -> bool {
 			Self::all_members().contains(who)

@@ -2,12 +2,7 @@
 //! the concrete example of a ringbuffer queue
 
 #![cfg_attr(not(feature = "std"), no_std)]
-
-use codec::{Decode, Encode};
-use frame_support::{decl_event, decl_module, decl_storage, dispatch::DispatchResult};
-use frame_system::{self as system, ensure_signed};
 use sp_std::prelude::*;
-use frame_system::pallet_prelude::*;
 
 mod ringbuffer;
 
