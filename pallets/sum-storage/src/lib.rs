@@ -1,5 +1,5 @@
 #![cfg_attr(not(feature = "std"), no_std)]
-
+#![allow(clippy::unused_unit)]
 //! A simple pallet with two storage values. The pallet itself does not teach any new concepts.
 //! Rather we use this pallet as demonstration case as we demonstrate custom runtime APIs.
 //! This pallet supports a runtime API which will allow querying the runtime for the sum of
