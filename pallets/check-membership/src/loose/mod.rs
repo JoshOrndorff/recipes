@@ -6,6 +6,7 @@
 //! type in this pallet's configuration trait. Any type that implements the `AccountSet` trait can be
 //! used to supply the membership set.
 
+#![allow(clippy::unused_unit)]
 pub use pallet::*;
 
 #[cfg(test)]

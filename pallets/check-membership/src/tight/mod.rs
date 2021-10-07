@@ -5,6 +5,7 @@
 //! The list of approved members is provided by the `vec-set` pallet. In order for this pallet to be
 //! used, the `vec-set` pallet must also be present in the runtime.
 
+#![allow(clippy::unused_unit)]
 pub use pallet::*;
 
 #[cfg(test)]
