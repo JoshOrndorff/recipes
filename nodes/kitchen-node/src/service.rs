@@ -1,5 +1,5 @@
 //! Service and ServiceFactory implementation. Specialized wrapper over substrate service.
-
+#![allow(clippy::needless_borrow)]
 use runtime::{self, opaque::Block, RuntimeApi};
 use sc_client_api::RemoteBackend;
 use sc_consensus_manual_seal::InstantSealParams;
