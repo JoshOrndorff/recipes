@@ -19,7 +19,7 @@ construct_runtime!(
 		UncheckedExtrinsic = UncheckedExtrinsic,
 	{
 		System: frame_system::{Module, Call, Config, Storage, Event<T>},
-		FixedPoint: fixed_point::{Module, Call, Event},
+		FixedPoint: fixed_point::{Module, Call, Event<T>},
 	}
 );
 

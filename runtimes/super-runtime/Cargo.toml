@@ -33,27 +33,27 @@ pallet-timestamp = { version = '3.0', default-features = false }
 pallet-transaction-payment = { version = '3.0', default-features = false }
 
 # local packages
-basic-token = { path = "../../pallets/basic-token", default-features = false }
-charity = { path = "../../pallets/charity", default-features = false }
-check-membership = { path = "../../pallets/check-membership", default-features = false }
-compounding-interest = { path = "../../pallets/compounding-interest", default-features = false }
-constant-config = { path = "../../pallets/constant-config", default-features = false }
-default-instance = { path = "../../pallets/default-instance", default-features = false }
-double-map = { path = "../../pallets/double-map", default-features = false }
-fixed-point = { path = "../../pallets/fixed-point", default-features = false }
-generic-event = { path = "../../pallets/generic-event", default-features = false }
-hello-substrate = { path = "../../pallets/hello-substrate", default-features = false }
-last-caller = { path = "../../pallets/last-caller", default-features = false }
-map-set = { path = "../../pallets/map-set", default-features = false }
-randomness = { path = "../../pallets/randomness", default-features = false }
-reservable-currency = { path = "../../pallets/reservable-currency", default-features = false }
-ringbuffer-queue = { path = "../../pallets/ringbuffer-queue", default-features = false }
-simple-crowdfund = { path = "../../pallets/simple-crowdfund", default-features = false}
-simple-event = { path = "../../pallets/simple-event", default-features = false }
-simple-map = { path = "../../pallets/simple-map", default-features = false }
-storage-cache = { path = "../../pallets/storage-cache", default-features = false }
-struct-storage = { path = "../../pallets/struct-storage", default-features = false }
-vec-set = { path = "../../pallets/vec-set", default-features = false }
+ basic-token = { path = "../../pallets/basic-token", default-features = false }
+ charity = { path = "../../pallets/charity", default-features = false }
+ check-membership = { path = "../../pallets/check-membership", default-features = false }
+ compounding-interest = { path = "../../pallets/compounding-interest", default-features = false }
+ constant-config = { path = "../../pallets/constant-config", default-features = false }
+ default-instance = { path = "../../pallets/default-instance", default-features = false }
+ double-map = { path = "../../pallets/double-map", default-features = false }
+ fixed-point = { path = "../../pallets/fixed-point", default-features = false }
+ generic-event = { path = "../../pallets/generic-event", default-features = false }
+ hello-substrate = { path = "../../pallets/hello-substrate", default-features = false }
+ last-caller = { path = "../../pallets/last-caller", default-features = false }
+ map-set = { path = "../../pallets/map-set", default-features = false }
+ randomness = { path = "../../pallets/randomness", default-features = false }
+ reservable-currency = { path = "../../pallets/reservable-currency", default-features = false }
+ ringbuffer-queue = { path = "../../pallets/ringbuffer-queue", default-features = false }
+ simple-crowdfund = { path = "../../pallets/simple-crowdfund", default-features = false}
+ simple-event = { path = "../../pallets/simple-event", default-features = false }
+ simple-map = { path = "../../pallets/simple-map", default-features = false }
+ storage-cache = { path = "../../pallets/storage-cache", default-features = false }
+ struct-storage = { path = "../../pallets/struct-storage", default-features = false }
+ vec-set = { path = "../../pallets/vec-set", default-features = false }
 
 [build-dependencies]
 substrate-wasm-builder = "4.0.0"
@@ -76,12 +76,12 @@ std = [
 	"generic-event/std",
 	"hello-substrate/std",
 	"last-caller/std",
-	"map-set/std",
+	 "map-set/std",
 	"parity-scale-codec/std",
 	"pallet-randomness-collective-flip/std",
 	"randomness/std",
 	"reservable-currency/std",
-	"ringbuffer-queue/std",
+	 "ringbuffer-queue/std",
 	"serde",
 	"simple-crowdfund/std",
 	"simple-event/std",

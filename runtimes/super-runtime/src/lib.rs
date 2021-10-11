@@ -5,7 +5,7 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 // `construct_runtime!` does a lot of recursion and requires us to increase the limit to 256.
 #![recursion_limit = "256"]
-
+#![allow(clippy::from_over_into)]
 // Make the WASM binary available.
 #[cfg(feature = "std")]
 include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
@@ -249,7 +249,6 @@ impl check_membership_loose::Config for Runtime {
 	type MembershipSource = VecSet;
 	// type MembershipSource = MapSet;
 }
-
 impl check_membership_tight::Config for Runtime {
 	type Event = Event;
 }
@@ -260,9 +259,9 @@ impl default_instance::Config for Runtime {
 	type Event = Event;
 }
 
-impl default_instance::Config<default_instance::Instance2> for Runtime {
+/* impl default_instance::Config<default_instance::Instance2> for Runtime {
 	type Event = Event;
-}
+}*/
 
 impl double_map::Config for Runtime {
 	type Event = Event;
@@ -279,13 +278,13 @@ impl generic_event::Config for Runtime {
 impl hello_substrate::Config for Runtime {}
 
 // The following two configuration traits are for two different instances of the last-caller pallet
-impl last_caller::Config<last_caller::Instance1> for Runtime {
+impl last_caller::Config for Runtime {
 	type Event = Event;
 }
 
-impl last_caller::Config<last_caller::Instance2> for Runtime {
+/* impl last_caller::Config<last_caller::Instance2> for Runtime {
 	type Event = Event;
-}
+}*/
 
 impl map_set::Config for Runtime {
 	type Event = Event;
@@ -361,23 +360,22 @@ construct_runtime!(
 		CompoundingInterest: compounding_interest::{Module, Call, Storage, Event},
 		ConstantConfig: constant_config::{Module, Call, Storage, Event},
 		DefaultInstance1: default_instance::{Module, Call, Storage, Event<T>},
-		DefaultInstance2: default_instance::<Instance2>::{Module, Call, Storage, Event<T>},
+		//DefaultInstance2: default_instance::<Instance2>::{Module, Call, Storage, Event<T>},
 		DoubleMap: double_map::{Module, Call, Storage, Event<T>},
-		FixedPoint: fixed_point::{Module, Call, Storage, Event},
+		FixedPoint: fixed_point::{Module, Call, Storage, Event<T>},
 		HelloSubstrate: hello_substrate::{Module, Call},
 		GenericEvent: generic_event::{Module, Call, Event<T>},
-		LastCaller1: last_caller::<Instance1>::{Module, Call, Storage, Event<T>},
-		LastCaller2: last_caller::<Instance2>::{Module, Call, Storage, Event<T>},
+		LastCaller1: last_caller::{Module, Call, Storage, Event<T>},
 		MapSet: map_set::{Module, Call, Storage, Event<T>},
 		RingbufferQueue: ringbuffer_queue::{Module, Call, Storage, Event<T>},
-		RandomnessDemo: randomness::{Module, Call, Storage, Event},
+		RandomnessDemo: randomness::{Module, Call, Storage, Event<T>},
 		ReservableCurrency: reservable_currency::{Module, Call, Event<T>},
 		SimpleCrowdfund: simple_crowdfund::{Module, Call, Storage, Event<T>},
-		SimpleEvent: simple_event::{Module, Call, Event},
 		SimpleMap: simple_map::{Module, Call, Storage, Event<T>},
 		StorageCache: storage_cache::{Module, Call, Storage, Event<T>},
 		StructStorage: struct_storage::{Module, Call, Storage, Event<T>},
 		VecSet: vec_set::{Module, Call, Storage, Event<T>},
+		SimpleEvent: simple_event::{Module, Call, Storage, Event<T>},
 	}
 );
 

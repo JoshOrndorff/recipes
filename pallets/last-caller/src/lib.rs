@@ -1,55 +1,52 @@
 //! An example instantiable pallet (without default instance)
 
 #![cfg_attr(not(feature = "std"), no_std)]
+#![allow(clippy::unused_unit)]
+pub use pallet::*;
 
-use frame_support::{decl_event, decl_module, decl_storage, dispatch::DispatchResult};
-use frame_system::ensure_signed;
+#[frame_support::pallet]
+pub mod pallet {
+	use frame_support::{dispatch::DispatchResultWithPostInfo, pallet_prelude::*};
+	use frame_system::pallet_prelude::*;
 
-// The pallet's configuration trait takes an instance as a type parameter. The instance type is
-// created by the `decl_storage!` macro below.
-pub trait Config<I: Instance>: frame_system::Config {
-	// The ubiquitous event type's From bound needs updated to support the instance.
-	type Event: From<Event<Self, I>> + Into<<Self as frame_system::Config>::Event>;
-}
-
-// It is necessary for instantiable pallets to call `decl_storage!` even if no storage items
-// are used so the instance type is created.
-decl_storage! {
-	// The storage trait also takes the Instance parameter
-	trait Store for Module<T: Config<I>, I: Instance> as LastCaller {
-
-		// A single storage item that keeps track of
-		// which account last called its only dispatchable call.
-		Caller: T::AccountId;
+	// The pallet's configuration trait takes an instance as a type parameter. The instance type is
+	// created by the `decl_storage!` macro below.
+	#[pallet::config]
+	pub trait Config: frame_system::Config {
+		/// The overarching event type.
+		type Event: From<Event<Self>> + IsType<<Self as frame_system::Config>::Event>;
 	}
-}
 
-decl_event!(
-	// The enum trait also takes the Instance as a parameter
-	pub enum Event<T, I>
-	where
-		AccountId = <T as frame_system::Config>::AccountId,
-	{
-		Called(AccountId),
+	#[pallet::storage]
+	pub(super) type Caller<T: Config> = StorageValue<_, T::AccountId, ValueQuery>;
+
+	#[pallet::event]
+	#[pallet::metadata(T::AccountId = "AccountId")]
+	#[pallet::generate_deposit(pub (super) fn deposit_event)]
+	pub enum Event<T: Config> {
+		Called(T::AccountId),
 	}
-);
 
-decl_module! {
-	// The `Module` struct also takes the instance parameter.
-	pub struct Module<T: Config<I>, I: Instance> for enum Call where origin: T::Origin {
-		fn deposit_event() = default;
+	#[pallet::pallet]
+	#[pallet::generate_store(pub (super) trait Store)]
+	pub struct Pallet<T>(PhantomData<T>);
 
+	#[pallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {}
+
+	#[pallet::call]
+	impl<T: Config> Pallet<T> {
 		// The only dispatchable call, updates the single storage item,
 		// and emits an event.
-		#[weight = 10_000]
-		fn call(origin) -> DispatchResult {
+		#[pallet::weight(10_000)]
+		fn call(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
 			let caller = ensure_signed(origin)?;
 
 			// When writing to storage, we supply, not only a configuration T, but also an
 			// instance, I.
-			<Caller<T, I>>::put(&caller);
-			Self::deposit_event(RawEvent::Called(caller));
-			Ok(())
+			<Caller<T>>::put(&caller);
+			Self::deposit_event(Event::Called(caller));
+			Ok(().into())
 		}
 	}
 }

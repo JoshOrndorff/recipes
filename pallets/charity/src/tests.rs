@@ -1,7 +1,7 @@
-use crate::{self as charity, Config, RawEvent};
+use crate::{self as charity, Config};
 use frame_support::{
 	assert_err, assert_ok, construct_runtime, parameter_types,
-	traits::{Currency, OnUnbalanced},
+	traits::{Currency, GenesisBuild, OnUnbalanced},
 };
 use frame_system::{self as system, EventRecord, Phase, RawOrigin};
 use pallet_balances;
@@ -23,7 +23,7 @@ construct_runtime!(
 	{
 		System: frame_system::{Module, Call, Config, Storage, Event<T>},
 		Balances: pallet_balances::{Module, Call, Storage, Config<T>, Event<T>},
-		Charity: charity::{Module, Call, Storage, Event<T>},
+		Charity: charity::{Module, Call, Config, Storage, Event<T>},
 	}
 );
 
@@ -88,9 +88,12 @@ pub fn new_test_ext() -> sp_io::TestExternalities {
 	.assimilate_storage(&mut t)
 	.unwrap();
 
-	crate::GenesisConfig {}
-		.assimilate_storage::<TestRuntime>(&mut t)
-		.unwrap();
+	/*	pallet_balances::GenesisConfig {}
+	.assimilate_storage::<TestRuntime>(&mut t)
+	.unwrap();*/
+
+	let charity_config = charity::GenesisConfig::default();
+	GenesisBuild::<TestRuntime>::assimilate_storage(&charity_config, &mut t).unwrap();
 
 	let mut ext: sp_io::TestExternalities = t.into();
 	ext.execute_with(|| System::set_block_number(1));
@@ -129,7 +132,8 @@ fn donations_work() {
 		assert_eq!(Balances::free_balance(&1), original - donation);
 
 		// Check that the correct event is emitted
-		let expected_event = Event::charity(RawEvent::DonationReceived(1, donation, new_pot_total));
+		let expected_event =
+			Event::charity(charity::Event::DonationReceived(1, donation, new_pot_total));
 
 		assert_eq!(System::events()[1].event, expected_event,);
 	})
@@ -161,7 +165,7 @@ fn imbalances_work() {
 			System::events()[0],
 			EventRecord {
 				phase: Phase::Initialization,
-				event: Event::charity(RawEvent::ImbalanceAbsorbed(5, new_pot_total)),
+				event: Event::charity(charity::Event::ImbalanceAbsorbed(5, new_pot_total)),
 				topics: vec![],
 			},
 		);
@@ -193,8 +197,8 @@ fn allocating_works() {
 			.collect::<Vec<_>>();
 
 		let expected_events = vec![
-			RawEvent::DonationReceived(1, 10, 11),
-			RawEvent::FundsAllocated(2, 5, 6),
+			charity::Event::DonationReceived(1, 10, 11),
+			charity::Event::FundsAllocated(2, 5, 6),
 		];
 
 		assert_eq!(our_events, expected_events);

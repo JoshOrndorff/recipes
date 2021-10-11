@@ -38,3 +38,4 @@ members = [
 	"consensus/sha3pow",
 	"traits/account-set",
 ]
+librocksdb-sys = "6.17.3"

@@ -1,4 +1,4 @@
-use crate::tight::{self as check_membership, Config, Error, RawEvent};
+use crate::tight::{self as check_membership, Config, Error};
 use frame_support::{assert_noop, assert_ok, construct_runtime, parameter_types};
 use sp_core::H256;
 use sp_io::TestExternalities;
@@ -80,7 +80,7 @@ fn members_can_call() {
 
 		assert_ok!(CheckMembership::check_membership(Origin::signed(1)));
 
-		let expected_event = Event::check_membership(RawEvent::IsAMember(1));
+		let expected_event = Event::check_membership(check_membership::Event::IsAMember(1));
 
 		assert_eq!(System::events()[1].event, expected_event,);
 	})

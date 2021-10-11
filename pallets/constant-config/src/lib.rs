@@ -1,5 +1,5 @@
 #![cfg_attr(not(feature = "std"), no_std)]
-
+#![allow(clippy::unused_unit)]
 //! A pallet to demonstrate configurable pallet constants.
 //! This pallet has a single storage value that can be added to by calling the
 //! `add_value` extrinsic.
@@ -8,35 +8,35 @@
 //! The stored value is cleared (set to zero) at a regular interval which is specified
 //! as a configuration constant.
 
-use frame_support::{
-	decl_event, decl_module, decl_storage,
-	dispatch::{DispatchError, DispatchResult},
-	ensure,
-	traits::Get,
-};
-use frame_system::ensure_signed;
-use sp_runtime::traits::Zero;
+pub use pallet::*;
 
 #[cfg(test)]
 mod tests;
 
-pub trait Config: frame_system::Config {
-	type Event: From<Event> + Into<<Self as frame_system::Config>::Event>;
+#[frame_support::pallet]
+pub mod pallet {
+	use frame_support::dispatch::{DispatchErrorWithPostInfo, PostDispatchInfo};
+	use frame_support::{dispatch::DispatchResultWithPostInfo, pallet_prelude::*};
+	use frame_system::pallet_prelude::*;
+	use sp_runtime::traits::Zero;
 
-	/// Maximum amount added per invocation
-	type MaxAddend: Get<u32>;
+	#[pallet::config]
+	pub trait Config: frame_system::Config {
+		type Event: From<Event> + IsType<<Self as frame_system::Config>::Event>;
 
-	/// Frequency with which the stored value is deleted
-	type ClearFrequency: Get<Self::BlockNumber>;
-}
+		/// Maximum amount added per invocation
+		type MaxAddend: Get<u32>;
 
-decl_storage! {
-	trait Store for Module<T: Config> as ConfigurableConstants {
-		SingleValue get(fn single_value): u32;
+		/// Frequency with which the stored value is deleted
+		type ClearFrequency: Get<Self::BlockNumber>;
 	}
-}
 
-decl_event!(
+	#[pallet::storage]
+	#[pallet::getter(fn single_value)]
+	pub(super) type SingleValue<T: Config> = StorageValue<_, u32, ValueQuery>;
+
+	#[pallet::event]
+	#[pallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event {
 		/// The value has ben added to. The parameters are
 		/// ( initial amount, amount added, final amount)
@@ -44,50 +44,58 @@ decl_event!(
 		/// The value has been cleared. The parameter is the value before clearing.
 		Cleared(u32),
 	}
-);
 
-decl_module! {
-	pub struct Module<T: Config> for enum Call where origin: T::Origin {
-		fn deposit_event() = default;
+	#[pallet::pallet]
+	#[pallet::generate_store(pub(super) trait Store)]
+	pub struct Pallet<T>(PhantomData<T>);
 
-		const MaxAddend: u32 = T::MaxAddend::get();
+	#[pallet::hooks]
+	impl<T: Config> Hooks<T::BlockNumber> for Pallet<T> {
+		fn on_finalize(n: T::BlockNumber) {
+			if (n % T::ClearFrequency::get()).is_zero() {
+				let c_val = SingleValue::<T>::get();
+				SingleValue::<T>::put(0u32);
+				Self::deposit_event(Event::Cleared(c_val));
+			}
+		}
+	}
 
-		const ClearFrequency: T::BlockNumber = T::ClearFrequency::get();
-
+	#[pallet::call]
+	impl<T: Config> Pallet<T> {
 		/// Add to the stored value. The `val_to_add` parameter cannot exceed the specified manimum.
-		#[weight = 10_000]
-		fn add_value(origin, val_to_add: u32) -> DispatchResult {
+		#[pallet::weight(10_000)]
+		pub fn add_value(origin: OriginFor<T>, val_to_add: u32) -> DispatchResultWithPostInfo {
 			let _ = ensure_signed(origin)?;
-			ensure!(val_to_add <= T::MaxAddend::get(), "value must be <= maximum add amount constant");
+			ensure!(
+				val_to_add <= T::MaxAddend::get(),
+				"value must be <= maximum add amount constant"
+			);
 
 			// previous value got
-			let c_val = <SingleValue>::get();
+			let c_val = SingleValue::<T>::get();
 
 			// checks for overflow when new value added
 			let result = match c_val.checked_add(val_to_add) {
 				Some(r) => r,
-				None => return Err(DispatchError::Other("Addition overflowed")),
+				None => {
+					return Err(DispatchErrorWithPostInfo {
+						post_info: PostDispatchInfo::from(()),
+						error: DispatchError::Other("Addition overflowed"),
+					})
+				}
 			};
-			<SingleValue>::put(result);
+			SingleValue::<T>::put(result);
 			Self::deposit_event(Event::Added(c_val, val_to_add, result));
-			Ok(())
+			Ok(().into())
 		}
 
 		/// For testing purposes
 		/// Sets the stored value to a given value
-		#[weight = 10_000]
-		fn set_value(origin, value: u32) -> DispatchResult {
+		#[pallet::weight(10_000)]
+		pub fn set_value(origin: OriginFor<T>, value: u32) -> DispatchResultWithPostInfo {
 			let _ = ensure_signed(origin)?;
-			<SingleValue>::put(value);
-			Ok(())
-		}
-
-		fn on_finalize(n: T::BlockNumber) {
-			if (n % T::ClearFrequency::get()).is_zero() {
-				let c_val = <SingleValue>::get();
-				<SingleValue>::put(0u32);
-				Self::deposit_event(Event::Cleared(c_val));
-			}
+			SingleValue::<T>::put(value);
+			Ok(().into())
 		}
 	}
 }

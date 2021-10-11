@@ -7,24 +7,32 @@ repository = 'https://github.com/substrate-developer-hub/recipes'
 description = "A pallet that emits simple events that do not encapsulate generic data types"
 license = "GPL-3.0-or-later"
 
+[package.metadata.docs.rs]
+targets = ['x86_64-unknown-linux-gnu']
+
 [dependencies]
-parity-scale-codec = { version = "2.0", features = ["derive"], default-features = false }
-serde = { version = '1.0', default-features = false, features = ['derive'] }
+frame-support = { default-features = false, version = '3.0.0' }
+frame-system = { default-features = false, version = '3.0.0' }
 
 # Substrate packages
-frame-support = { version = '3.0', default-features = false }
-frame-system = { version = '3.0', default-features = false }
 sp-runtime = { version = '3.0', default-features = false }
 
+[dependencies.codec]
+default-features = false
+features = ['derive']
+package = 'parity-scale-codec'
+version = '2.0.0'
+
 [dev-dependencies]
-sp-core = '3.0'
-sp-io = '3.0'
+serde = { version = "1.0.119" }
+sp-core = { default-features = false, version = '3.0.0' }
+sp-io = { default-features = false, version = '3.0.0' }
+sp-runtime = { default-features = false, version = '3.0.0' }
 
 [features]
 default = ['std']
 std = [
 	'frame-support/std',
 	'frame-system/std',
-	'parity-scale-codec/std',
 	'sp-runtime/std',
 ]

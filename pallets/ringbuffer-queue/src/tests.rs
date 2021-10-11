@@ -1,4 +1,4 @@
-use crate::{self as ringbuffer_queue, Config, RawEvent, ValueStruct};
+use crate::{self as ringbuffer_queue, Config, ValueStruct};
 use frame_support::{assert_ok, construct_runtime, parameter_types};
 use sp_core::H256;
 use sp_io::TestExternalities;
@@ -118,7 +118,7 @@ fn pop_works() {
 		assert_ok!(RingBuffer::pop_from_queue(Origin::signed(1)));
 		assert_eq!(RingBuffer::range(), (1, 1));
 
-		let expected_event = Event::ringbuffer_queue(RawEvent::Popped(1, true));
+		let expected_event = Event::ringbuffer_queue(ringbuffer_queue::Event::Popped(1, true));
 
 		assert_eq!(System::events()[0].event, expected_event,);
 	})

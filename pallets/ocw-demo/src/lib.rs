@@ -1,6 +1,7 @@
 //! A demonstration of an offchain worker that sends onchain callbacks
 
 #![cfg_attr(not(feature = "std"), no_std)]
+#![allow(clippy::unused_unit)]
 
 #[cfg(test)]
 mod tests;
@@ -18,7 +19,7 @@ use frame_system::{
 		SignedPayload, Signer, SigningTypes, SubmitTransaction,
 	},
 };
-use sp_core::{crypto::KeyTypeId};
+use sp_core::crypto::KeyTypeId;
 use sp_io::offchain_index;
 use sp_runtime::{
 	offchain as rt_offchain,
@@ -295,10 +296,12 @@ impl<T: Config> Module<T> {
 		});
 	}
 
+	#[deny(clippy::clone_double_ref)]
 	fn derived_key(block_number: T::BlockNumber) -> Vec<u8> {
 		block_number.using_encoded(|encoded_bn| {
-			ONCHAIN_TX_KEY.clone().into_iter()
-				.chain(b"/".into_iter())
+			ONCHAIN_TX_KEY
+				.iter()
+				.chain(b"/".iter())
 				.chain(encoded_bn)
 				.copied()
 				.collect::<Vec<u8>>()
@@ -374,7 +377,7 @@ impl<T: Config> Module<T> {
 
 		// Deserializing JSON to struct, thanks to `serde` and `serde_derive`
 		let gh_info: GithubInfo =
-			serde_json::from_str(&resp_str).map_err(|_| <Error<T>>::HttpFetchingError)?;
+			serde_json::from_str(resp_str).map_err(|_| <Error<T>>::HttpFetchingError)?;
 		Ok(gh_info)
 	}
 
@@ -441,11 +444,11 @@ impl<T: Config> Module<T> {
 				return Err(<Error<T>>::OffchainSignedTxError);
 			}
 			// Transaction is sent successfully
-			return Ok(());
+			Ok(())
 		} else {
 			// The case result == `None`: no account is available for sending
 			debug::error!("No local account available");
-			return Err(<Error<T>>::NoLocalAcctForSigning);
+			Err(<Error<T>>::NoLocalAcctForSigning)
 		}
 	}
 
@@ -479,10 +482,10 @@ impl<T: Config> Module<T> {
 			},
 			Call::submit_number_unsigned_with_signed_payload,
 		) {
-			return res.map_err(|_| {
+			res.map_err(|_| {
 				debug::error!("Failed in offchain_unsigned_tx_signed_payload");
 				<Error<T>>::OffchainUnsignedTxSignedPayloadError
-			});
+			})
 		} else {
 			// The case of `None`: no account is available for sending
 			debug::error!("No local account available");
@@ -512,7 +515,7 @@ impl<T: Config> frame_support::unsigned::ValidateUnsigned for Module<T> {
 					return InvalidTransaction::BadProof.into();
 				}
 				valid_tx(b"submit_number_unsigned_with_signed_payload".to_vec())
-			},
+			}
 
 			_ => InvalidTransaction::Call.into(),
 		}
