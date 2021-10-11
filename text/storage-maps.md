@@ -90,6 +90,6 @@ let entry = <SimpleMap<T>>::take(&user);
 ```
 
 The rest of the API is documented in the rustdocs on the
-[`StorageMap` trait](https://substrate.dev/rustdocs/v3.0.0/frame_support/storage/trait.StorageMap.html). You do
+[`StorageMap` trait](https://substrate.dev/rustdocs/latest/frame_support/storage/trait.StorageMap.html). You do
 not need to explicitly `use` this trait because the `decl_storage!` macro will do it for you if you
 use a storage map.
