@@ -1,5 +1,3 @@
-## Attention: As of October 2021, the Substrate Recipes has become an archived resource that is currently no longer actively being maintained. Although we encourage members of the community to continue maintaining it for their own usage, we recommend using the [Substrate How-to Guides](https://docs.substrate.io/how-to-guides) instead, where you can expect new and up-to-date guides going forward.
-
 # <a href="https://substrate.dev/recipes">Substrate Recipes</a> 🍴😋🍴
 
 ![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fsubstrate-developer-hub%2Frecipes%2Fbadge%3Fref%3Dmaster&style=flat)
