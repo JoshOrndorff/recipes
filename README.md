@@ -1,4 +1,4 @@
-# <a href="https://substrate.dev/recipes">Substrate Recipes</a> 🍴😋🍴
+# <a href="https://substrate.recipes">Substrate Recipes</a> 🍴😋🍴
 
 ![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fsubstrate-developer-hub%2Frecipes%2Fbadge%3Fref%3Dmaster&style=flat)
 <!-- markdown-link-check-disable-next-line -->
@@ -10,13 +10,13 @@ _A Hands-On Cookbook for Aspiring Blockchain Chefs_
 ## Get Started
 
 Ready to roll up your sleeves and cook some blockchain? Read the book online at
-[substrate.dev/recipes](https://substrate.dev/recipes) 😋
+[substrate.recipes](https://substrate.recipes) 😋
 
 ## Repository Structure
 
 There are five primary directories in this repository:
 
--   **Text**: Source of [the book](https://substrate.dev/recipes) written in markdown. This text
+-   **Text**: Source of [the book](https://substrate.recipes) written in markdown. This text
     describes the code in the other three directories.
 -   **Pallets**: Pallets for use in FRAME-based runtimes.
 -   **Runtimes**: Runtimes for use in Substrate nodes.
