@@ -6,3 +6,5 @@ src = "text"
 title = "Substrate Recipes"
 description = "A Hands-On Cookbook for Aspiring Blockchain Chefs"
 
+[output.html]
+cname = "substrate.recipes"
