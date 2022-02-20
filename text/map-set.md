@@ -34,15 +34,13 @@ a recipe specifically about [using storage maps](./storage-maps.md). The storage
 track its size internally, so we introduce a second storage value for this purpose.
 
 ```rust, ignore
-decl_storage! {
-	trait Store for Module<T: Config> as VecMap {
-		// The set of all members.
-		Members get(fn members): map hasher(blake2_128_concat) T::AccountId => ();
-		// The total number of members stored in the map.
-		// Because the map does not store its size, we must store it separately
-		MemberCount: u32;
-	}
-}
+#[pallet::storage]
+#[pallet::getter(fn members)]
+pub(super) type Members<T: Config> =
+  StorageMap<_, Blake2_128Concat, T::AccountId, (), ValueQuery>;
+
+#[pallet::storage]
+pub(super) type MemberCount<T> = StorageValue<_, u32, ValueQuery>;
 ```
 
 The _value_ stored in the map is `()` because we only care about the keys.
@@ -54,23 +52,33 @@ not already a member and the membership limit has not been reached. We check for
 conditions first, and then insert the new member only after we are sure it is safe to do so.
 
 ```rust, ignore
-fn add_member(origin) -> DispatchResult {
-	let new_member = ensure_signed(origin)?;
+#[pallet::call]
+impl<T: Config> Pallet<T> {
+  /// Adds a member to the membership set
+  #[pallet::weight(10_000)]
+  pub fn add_member(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
+    let new_member = ensure_signed(origin)?;
 
-	let member_count = MemberCount::get();
-	ensure!(member_count < MAX_MEMBERS, Error::<T>::MembershipLimitReached);
+    let member_count = MemberCount::<T>::get();
+    ensure!(
+      member_count < MAX_MEMBERS,
+      Error::<T>::MembershipLimitReached
+    );
 
-	// We don't want to add duplicate members, so we check whether the potential new
-	// member is already present in the list. Because the membership is stored as a hash
-	// map this check is constant time O(1)
-	ensure!(!Members::<T>::contains_key(&new_member), Error::<T>::AlreadyMember);
+    // We don't want to add duplicate members, so we check whether the potential new
+    // member is already present in the list. Because the membership is stored as a hash
+    // map this check is constant time O(1)
+    ensure!(
+      !Members::<T>::contains_key(&new_member),
+      Error::<T>::AlreadyMember
+    );
 
-	// Insert the new member and emit the event
-	Members::<T>::insert(&new_member, ());
-	MemberCount::put(member_count + 1); // overflow check not necessary because of maximum
-	Self::deposit_event(RawEvent::MemberAdded(new_member));
-	Ok(())
-}
+    // Insert the new member and emit the event
+    Members::<T>::insert(&new_member, ());
+    MemberCount::<T>::put(member_count + 1); // overflow check not necessary because of maximum
+    Self::deposit_event(Event::MemberAdded(new_member));
+    Ok(().into())
+  }
 ```
 
 When we successfully add a new member, we also manually update the size of the set.
@@ -82,15 +90,26 @@ present, there is no work to be done. If the caller is present, we simply remove
 size of the set.
 
 ```rust, ignore
-fn remove_member(origin) -> DispatchResult {
-	let old_member = ensure_signed(origin)?;
+#[pallet::call]
+impl<T: Config> Pallet<T> {
 
-	ensure!(Members::<T>::contains_key(&old_member), Error::<T>::NotMember);
+  # -- snip --
 
-	Members::<T>::remove(&old_member);
-	MemberCount::mutate(|v| *v -= 1);
-	Self::deposit_event(RawEvent::MemberRemoved(old_member));
-	Ok(())
+  /// Removes a member.
+  #[pallet::weight(10_000)]
+  pub fn remove_member(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
+    let old_member = ensure_signed(origin)?;
+
+    ensure!(
+      Members::<T>::contains_key(&old_member),
+      Error::<T>::NotMember
+    );
+
+    Members::<T>::remove(&old_member);
+    MemberCount::<T>::mutate(|v| *v -= 1);
+    Self::deposit_event(Event::MemberRemoved(old_member));
+    Ok(().into())
+  }
 }
 ```
 
