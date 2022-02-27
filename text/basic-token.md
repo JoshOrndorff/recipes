@@ -27,15 +27,20 @@ The next two storage items set the total supply of the token and keep track of w
 been initialized yet.
 
 ```rust, ignore
-decl_storage! {
-	trait Store for Module<T: Config> as Token {
-		pub Balances get(get_balance): map hasher(blake2_128_concat) T::AccountId => u64;
+#[pallet::storage]
+#[pallet::getter(fn get_balance)]
+pub(super) type Balances<T: Config> =
+  StorageMap<_, Blake2_128Concat, T::AccountId, u64, ValueQuery>;
 
-		pub TotalSupply get(total_supply): u64 = 21000000;
-
-		Init get(is_init): bool;
-	}
+#[pallet::type_value]
+pub(super) fn TotalSupplyDefaultValue<T: Config>() -> u64 {
+  21000000
 }
+
+#[pallet::storage]
+#[pallet::getter(fn total_supply)]
+pub(super) type TotalSupply<T: Config> =
+  StorageValue<_, u64, ValueQuery, TotalSupplyDefaultValue<T>>;
 ```
 
 Because users can influence the keys in our storage map, we've chosen the `blake2_128_concat` hasher
@@ -47,25 +52,22 @@ The pallet defines events and errors for common lifecycle events such as success
 transfers, and successful and failed initialization.
 
 ```rust, ignore
-decl_event!(
-	pub enum Event<T>
-	where
-		AccountId = <T as frame_system::Config>::AccountId,
-	{
-		/// Token was initialized by user
-		Initialized(AccountId),
-		/// Tokens successfully transferred between users
-		Transfer(AccountId, AccountId, u64), // (from, to, value)
-	}
-);
+#[pallet::event]
+#[pallet::metadata(T::AccountId = "AccountId")]
+#[pallet::generate_deposit(pub (super) fn deposit_event)]
+pub enum Event<T: Config> {
+  /// Token was initialized by user
+  Initialized(T::AccountId),
+  /// Tokens successfully transferred between users
+  Transfer(T::AccountId, T::AccountId, u64), // (from, to, value)
+}
 
-decl_error! {
-	pub enum Error for Module<T: Config> {
-		/// Attempted to initialize the token after it had already been initialized.
-		AlreadyInitialized,
-		/// Attempted to transfer more funds than were available
-		InsufficientFunds,
-	}
+#[pallet::error]
+pub enum Error<T> {
+  /// Attempted to initialize the token after it had already been initialized.
+  AlreadyInitialized,
+  /// Attempted to transfer more funds than were available
+  InsufficientFunds,
 }
 ```
 
@@ -78,15 +80,20 @@ funds. The total supply is hard-coded in the pallet in a fairly naive way: It is
 default value in the `decl_storage!` block.
 
 ```rust ignore
-fn init(origin) -> DispatchResult {
-	let sender = ensure_signed(origin)?;
-	ensure!(!Self::is_init(), <Error<T>>::AlreadyInitialized);
+#[pallet::call]
+impl<T: Config> Pallet<T> {
+  /// Initialize the token
+  /// transfers the total_supply amout to the caller
+  #[pallet::weight(10_000)]
+  pub fn init(_origin: OriginFor<T>) -> DispatchResultWithPostInfo {
+    let sender = ensure_signed(_origin)?;
+    ensure!(!Self::is_init(), <Error<T>>::AlreadyInitialized);
 
-	<Balances<T>>::insert(sender, Self::total_supply());
+    <Balances<T>>::insert(sender, Self::total_supply());
 
-	Init::put(true);
-	Ok(())
-}
+    Init::<T>::put(true);
+    Ok(().into())
+  }
 ```
 
 As usual, we first check for preconditions. In this case that means making sure that the token is
@@ -102,21 +109,31 @@ check whether the token has been initialized. If it has not, nobody has any fund
 will simply fail with `InsufficientFunds`.
 
 ```rust, ignore
-fn transfer(_origin, to: T::AccountId, value: u64) -> DispatchResult {
-	let sender = ensure_signed(_origin)?;
-	let sender_balance = Self::get_balance(&sender);
-	let receiver_balance = Self::get_balance(&to);
+/// Transfer tokens from one account to another
+#[pallet::weight(10_000)]
+pub fn transfer(
+  _origin: OriginFor<T>,
+  to: T::AccountId,
+  value: u64,
+) -> DispatchResultWithPostInfo {
+  let sender = ensure_signed(_origin)?;
+  let sender_balance = Self::get_balance(&sender);
+  let receiver_balance = Self::get_balance(&to);
 
-	// Calculate new balances
-	let updated_from_balance = sender_balance.checked_sub(value).ok_or(<Error<T>>::InsufficientFunds)?;
-	let updated_to_balance = receiver_balance.checked_add(value).expect("Entire supply fits in u64; qed");
+  // Calculate new balances
+  let updated_from_balance = sender_balance
+    .checked_sub(value)
+    .ok_or(<Error<T>>::InsufficientFunds)?;
+  let updated_to_balance = receiver_balance
+    .checked_add(value)
+    .expect("Entire supply fits in u64; qed");
 
-	// Write new balances to storage
-	<Balances<T>>::insert(&sender, updated_from_balance);
-	<Balances<T>>::insert(&to, updated_to_balance);
+  // Write new balances to storage
+  <Balances<T>>::insert(&sender, updated_from_balance);
+  <Balances<T>>::insert(&to, updated_to_balance);
 
-	Self::deposit_event(RawEvent::Transfer(sender, to, value));
-	Ok(())
+  Self::deposit_event(Event::Transfer(sender, to, value));
+  Ok(().into())
 }
 ```
 
