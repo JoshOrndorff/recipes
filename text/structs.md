@@ -48,9 +48,9 @@ definition.
 ```rust, ignore
 #[derive(Encode, Decode, Clone, Default, RuntimeDebug)]
 pub struct InnerThing<Hash, Balance> {
-	number: u32,
-	hash: Hash,
-	balance: Balance,
+  pub number: u32,
+  pub hash: Hash,
+  pub balance: Balance,
 }
 ```
 
@@ -74,30 +74,40 @@ as when you don't. Whether to include the type alias is a matter of style and ta
 generally preferred when the entire type exceeds the preferred line length.
 
 ```rust, ignore
-decl_storage! {
-	trait Store for Module<T: Config> as NestedStructs {
-		InnerThingsByNumbers get(fn inner_things_by_numbers):
-			map hasher(blake2_128_concat) u32 => InnerThingOf<T>;
-		SuperThingsBySuperNumbers get(fn super_things_by_super_numbers):
-			map hasher(blake2_256) u32 => SuperThing<T::Hash, T::Balance>;
-	}
-}
+#[pallet::storage]
+#[pallet::getter(fn inner_things_by_numbers)]
+pub(super) type InnerThingsByNumbers<T> =
+  StorageMap<_, Blake2_128Concat, u32, InnerThingOf<T>, ValueQuery>;
+
+#[pallet::storage]
+#[pallet::getter(fn super_things_by_super_numbers)]
+pub(super) type SuperThingsBySuperNumbers<T: Config> =
+  StorageMap<_, Blake2_128Concat, u32, SuperThing<T::Hash, T::Balance>, ValueQuery>;
 ```
 
 Interacting with the storage maps is now exactly as it was when we didn't use any custom structs
 
 ```rust, ignore
-fn insert_inner_thing(origin, number: u32, hash: T::Hash, balance: T::Balance) -> DispatchResult {
-	let _ = ensure_signed(origin)?;
-	let thing = InnerThing {
-					number,
-					hash,
-					balance,
-				};
-	<InnerThingsByNumbers<T>>::insert(number, thing);
-	Self::deposit_event(RawEvent::NewInnerThing(number, hash, balance));
-	Ok(())
-}
+#[pallet::call]
+impl<T: Config> Pallet<T> {
+  /// Stores an `InnerThing` struct in the storage map
+  #[pallet::weight(10_000)]
+  pub fn insert_inner_thing(
+    origin: OriginFor<T>,
+    number: u32,
+    hash: T::Hash,
+    balance: T::Balance,
+  ) -> DispatchResultWithPostInfo {
+    let _ = ensure_signed(origin)?;
+    let thing = InnerThing {
+      number,
+      hash,
+      balance,
+    };
+    <InnerThingsByNumbers<T>>::insert(number, thing);
+    Self::deposit_event(Event::NewInnerThing(number, hash, balance));
+    Ok(().into())
+  }
 ```
 
 ## Nested Structs
