@@ -33,10 +33,10 @@ just copy it and move on.
 
 ```rust, ignore
 #[pallet::config]
-	pub trait Config: frame_system::Config {
-		/// Because this pallet emits events, it depends on the runtime's definition of an event.
-		type Event: From<Event<Self>> + IsType<<Self as frame_system::Config>::Event>;
-	}
+pub trait Config: frame_system::Config {
+	/// Because this pallet emits events, it depends on the runtime's definition of an event.
+	type Event: From<Event<Self>> + IsType<<Self as frame_system::Config>::Event>;
+}
 ```
 
 Next we have to add a line of the `#[pallet::generate_deposit(pub(super) fn deposit_event)]` macro which generates the `deposit_event`
@@ -45,13 +45,13 @@ recognize this syntax because it is unique to this macro. Just copy it each time
 
 ```rust, ignore
 #[pallet::event]
-	#[pallet::metadata(T::AccountId = "AccountId")]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
-	pub enum Event<T: Config> {
-		/// Event documentation should end with an array that provides descriptive names for event
-		/// parameters. [something, who]
-		EmitInput(u32),
-	}
+#[pallet::metadata(T::AccountId = "AccountId")]
+#[pallet::generate_deposit(pub(super) fn deposit_event)]
+pub enum Event<T: Config> {
+	/// Event documentation should end with an array that provides descriptive names for event
+	/// parameters. [something, who]
+	EmitInput(u32),
+}
 ```
 
 ## Declaring Events
@@ -82,10 +82,10 @@ Sometimes, events might contain types from the pallet's Configuration Trait. In 
 specify additional syntax:
 
 ```rust, ignore
-	#[pallet::event]
-	pub enum Event<T: Config> {
-		EmitInput(u32),
-	}
+#[pallet::event]
+pub enum Event<T: Config> {
+	EmitInput(u32),
+}
 ```
 
 This example also demonstrates how the `where` clause can be used to specify type aliasing for more
