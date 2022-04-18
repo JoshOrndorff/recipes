@@ -31,42 +31,42 @@ pub trait Config: frame_system::Config {
 ```
 
 In order to make these constants and their values appear in the runtime metadata, it is necessary to
-declare them with the `const` syntax in the `decl_module!` block. Usually constants are declared at
+declare them with the `const` syntax. Usually constants are declared at
 the top of this block, right after `fn deposit_event`.
 
 ```rust, ignore
-decl_module! {
-	pub struct Module<T: Config> for enum Call where origin: T::Origin {
-		fn deposit_event() = default;
+#[pallet::config]
+pub trait Config: frame_system::Config {
+	type Event: From<Event> + IsType<<Self as frame_system::Config>::Event>;
 
-		const MaxAddend: u32 = T::MaxAddend::get();
+	/// Maximum amount added per invocation
+	type MaxAddend: Get<u32>;
 
-		const ClearFrequency: T::BlockNumber = T::ClearFrequency::get();
-
-		// --snip--
-	}
+	/// Frequency with which the stored value is deleted
+	type ClearFrequency: Get<Self::BlockNumber>;
 }
 ```
 
 This example manipulates a single value in storage declared as `SingleValue`.
 
 ```rust, ignore
-decl_storage! {
-	trait Store for Module<T: Config> as Example {
-		SingleValue get(fn single_value): u32;
-	}
-}
+#[pallet::storage]
+#[pallet::getter(fn single_value)]
+pub(super) type SingleValue<T: Config> = StorageValue<_, u32, ValueQuery>;
 ```
 
 `SingleValue` is set to `0` every `ClearFrequency` number of blocks in the `on_finalize` function
 that runs at the end of blocks execution.
 
 ```rust, ignore
-fn on_finalize(n: T::BlockNumber) {
-	if (n % T::ClearFrequency::get()).is_zero() {
-		let c_val = <SingleValue>::get();
-		<SingleValue>::put(0u32);
-		Self::deposit_event(Event::Cleared(c_val));
+#[pallet::hooks]
+impl<T: Config> Hooks<T::BlockNumber> for Pallet<T> {
+	fn on_finalize(n: T::BlockNumber) {
+		if (n % T::ClearFrequency::get()).is_zero() {
+			let c_val = SingleValue::<T>::get();
+			SingleValue::<T>::put(0u32);
+			Self::deposit_event(Event::Cleared(c_val));
+		}
 	}
 }
 ```
@@ -77,21 +77,30 @@ larger request into multiple smaller requests to overcome the `MaxAddend`_, but 
 handled appropriately.
 
 ```rust, ignore
-fn add_value(origin, val_to_add: u32) -> DispatchResult {
+#[pallet::weight(10_000)]
+pub fn add_value(origin: OriginFor<T>, val_to_add: u32) -> DispatchResultWithPostInfo {
 	let _ = ensure_signed(origin)?;
-	ensure!(val_to_add <= T::MaxAddend::get(), "value must be <= maximum add amount constant");
+	ensure!(
+		val_to_add <= T::MaxAddend::get(),
+		"value must be <= maximum add amount constant"
+	);
 
 	// previous value got
-	let c_val = <SingleValue>::get();
+	let c_val = SingleValue::<T>::get();
 
 	// checks for overflow when new value added
 	let result = match c_val.checked_add(val_to_add) {
 		Some(r) => r,
-		None => return Err(DispatchError::Other("Addition overflowed")),
+		None => {
+			return Err(DispatchErrorWithPostInfo {
+				post_info: PostDispatchInfo::from(()),
+				error: DispatchError::Other("Addition overflowed"),
+			})
+		}
 	};
-	<SingleValue>::put(result);
+	SingleValue::<T>::put(result);
 	Self::deposit_event(Event::Added(c_val, val_to_add, result));
-	Ok(())
+	Ok(().into())
 }
 ```
 
@@ -113,9 +122,14 @@ parameter_types! {
 	pub const ClearFrequency: u32 = 10;
 }
 
-impl constant_config::Config for Runtime {
-	type Event = Event;
-	type MaxAddend = MaxAddend;
-	type ClearFrequency = ClearFrequency;
+#[pallet::config]
+pub trait Config: frame_system::Config {
+	type Event: From<Event> + IsType<<Self as frame_system::Config>::Event>;
+
+	/// Maximum amount added per invocation
+	type MaxAddend: Get<u32>;
+
+	/// Frequency with which the stored value is deleted
+	type ClearFrequency: Get<Self::BlockNumber>;
 }
 ```
