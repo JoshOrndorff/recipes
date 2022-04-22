@@ -16,17 +16,26 @@ subset maintain an associated identifier type, this can be done in a clean way w
 ```rust, ignore
 pub type GroupIndex = u32; // this is Encode (which is necessary for double_map)
 
-decl_storage! {
-	trait Store for Module<T: Config> as Dmap {
-		/// Member score (double map)
-		MemberScore get(fn member_score):
-			double_map hasher(blake2_128_concat) GroupIndex, hasher(blake2_128_concat) T::AccountId => u32;
-		/// Get group ID for member
-		GroupMembership get(fn group_membership): map hasher(blake2_128_concat) T::AccountId => GroupIndex;
-		/// For fast membership checks, see check-membership recipe for more details
-		AllMembers get(fn all_members): Vec<T::AccountId>;
-	}
-}
+#[pallet::storage]
+#[pallet::getter(fn member_score)]
+pub(super) type MemberScore<T: Config> = StorageDoubleMap<
+	_,
+	Blake2_128Concat,
+	GroupIndex,
+	Blake2_128Concat,
+	T::AccountId,
+	u32,
+	ValueQuery,
+>;
+
+#[pallet::storage]
+#[pallet::getter(fn group_membership)]
+pub(super) type GroupMembership<T: Config> =
+		StorageMap<_, Blake2_128Concat, T::AccountId, GroupIndex, ValueQuery>;
+
+#[pallet::storage]
+#[pallet::getter(fn all_members)]
+pub(super) type AllMembers<T: Config> = StorageValue<_, Vec<T::AccountId>, ValueQuery>;
 ```
 
 For the purposes of this example, store the scores of each member in a map that associates this
@@ -34,17 +43,24 @@ For the purposes of this example, store the scores of each member in a map that 
 allows for efficient removal of all values associated with a specific `GroupIndex` identifier.
 
 ```rust, ignore
-fn remove_group_score(origin, group: GroupIndex) -> DispatchResult {
-	let member = ensure_signed(origin)?;
+#[pallet::weight(10_000)]
+pub fn remove_group_score(
+	origin: OriginFor<T>,
+	group: GroupIndex,
+	) -> DispatchResultWithPostInfo {
+		let member = ensure_signed(origin)?;
 
-	let group_id = <GroupMembership<T>>::get(member);
-	// check that the member is in the group
-	ensure!(group_id == group, "member isn't in the group, can't remove it");
+		let group_id = <GroupMembership<T>>::get(member);
+		// check that the member is in the group
+		ensure!(
+			group_id == group,
+			"member isn't in the group, can't remove it"
+		);
 
-	// remove all group members from MemberScore at once
-	<MemberScore<T>>::remove_prefix(&group_id);
+		// remove all group members from MemberScore at once
+		<MemberScore<T>>::remove_prefix(&group_id);
 
-	Self::deposit_event(RawEvent::RemoveGroup(group_id));
-	Ok(())
+		Self::deposit_event(Event::RemoveGroup(group_id));
+		Ok(().into())
 }
 ```
