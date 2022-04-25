@@ -34,12 +34,9 @@ is ordered and may contain duplicates. Because the `Vec` provides more functiona
 needs, we are able to build a set from the `Vec`. We declare our single storage item as so
 
 ```rust, ignore
-decl_storage! {
-	trait Store for Module<T: Config> as VecSet {
-		// The set of all members. Stored as a single vec
-		Members get(fn members): Vec<T::AccountId>;
-	}
-}
+#[pallet::storage]
+#[pallet::getter(fn members)]
+pub(super) type Members<T: Config> = StorageValue<_, Vec<T::AccountId>, ValueQuery>;
 ```
 
 In order to use the `Vec` successfully as a set, we will need to manually ensure that no duplicate
@@ -55,25 +52,29 @@ conditions first, and then insert the new member only after we are sure it is sa
 an example of the mnemonic idiom, "**verify first write last**".
 
 ```rust, ignore
-pub fn add_member(origin) -> DispatchResult {
+#[pallet::weight(10_000)]
+pub fn add_member(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
 	let new_member = ensure_signed(origin)?;
 
 	let mut members = Members::<T>::get();
-	ensure!(members.len() < MAX_MEMBERS, Error::<T>::MembershipLimitReached);
+	ensure!(
+		members.len() < MAX_MEMBERS,
+		Error::<T>::MembershipLimitReached
+		);
 
-	// We don't want to add duplicate members, so we check whether the potential new
-	// member is already present in the list. Because the list is always ordered, we can
-	// leverage the binary search which makes this check O(log n).
-	match members.binary_search(&new_member) {
-		// If the search succeeds, the caller is already a member, so just return
-		Ok(_) => Err(Error::<T>::AlreadyMember.into()),
-		// If the search fails, the caller is not a member and we learned the index where
-		// they should be inserted
-		Err(index) => {
-			members.insert(index, new_member.clone());
-			Members::<T>::put(members);
-			Self::deposit_event(RawEvent::MemberAdded(new_member));
-			Ok(())
+		// We don't want to add duplicate members, so we check whether the potential new
+		// member is already present in the list. Because the list is always ordered, we can
+		// leverage the binary search which makes this check O(log n).
+		match members.binary_search(&new_member) {
+			// If the search succeeds, the caller is already a member, so just return
+			Ok(_) => Err(Error::<T>::AlreadyMember.into()),
+			// If the search fails, the caller is not a member and we learned the index where
+			// they should be inserted
+			Err(index) => {
+				members.insert(index, new_member.clone());
+				Members::<T>::put(members);
+				Self::deposit_event(Event::MemberAdded(new_member));
+				Ok(().into())
 		}
 	}
 }
@@ -91,20 +92,21 @@ present, there is no work to be done. If the caller is present, the search algor
 index, and she can be removed.
 
 ```rust, ignore
-fn remove_member(origin) -> DispatchResult {
+#[pallet::weight(10_000)]
+pub fn remove_member(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
 	let old_member = ensure_signed(origin)?;
 
 	let mut members = Members::<T>::get();
 
-	// We have to find out where, in the sorted vec the member is, if anywhere.
+	// We have to find out if the member exists in the sorted vec, and, if so, where.
 	match members.binary_search(&old_member) {
 		// If the search succeeds, the caller is a member, so remove her
 		Ok(index) => {
 			members.remove(index);
 			Members::<T>::put(members);
-			Self::deposit_event(RawEvent::MemberRemoved(old_member));
-			Ok(())
-		},
+			Self::deposit_event(Event::MemberRemoved(old_member));
+			Ok(().into())
+		}
 		// If the search fails, the caller is not a member, so just return
 		Err(_) => Err(Error::<T>::NotMember.into()),
 	}
