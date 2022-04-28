@@ -78,7 +78,8 @@ Calling the randomness source from Rust code is straightforward. Our `consume_ra
 demonstrates consuming the raw random seed as well as a context-augmented random value. Try submitting the same extrinsic twice in the same block. The raw seed should be the same each time.
 
 ```rust, ignore
-fn consume_randomness(origin) -> DispatchResult {
+#[pallet::weight(10_000)]
+pub fn consume_randomness(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
 	let _ = ensure_signed(origin)?;
 
 	// Using a subject is recommended to prevent accidental re-use of the seed
@@ -89,8 +90,7 @@ fn consume_randomness(origin) -> DispatchResult {
 	let random_result = T::RandomnessSource::random(&subject);
 
 	Self::deposit_event(Event::RandomnessConsumed(random_seed, random_result));
-	Ok(())
-}
+	Ok(().into())
 }
 ```
 
