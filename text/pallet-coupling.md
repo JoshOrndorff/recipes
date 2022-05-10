@@ -47,18 +47,19 @@ The loosely coupled variant looks like this.
 ```rust, ignore
 /// Checks whether the caller is a member of the set of Account Ids provided by the
 /// MembershipSource type. Emits an event if they are, and errors if not.
-fn check_membership(origin) -> DispatchResult {
+#[pallet::weight(10_000)]
+pub fn check_membership(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
 	let caller = ensure_signed(origin)?;
 
-	// Get the members from the vec-set pallet
+	// Get the members from the `vec-set` pallet
 	let members = T::MembershipSource::accounts();
 
 	// Check whether the caller is a member
 	ensure!(members.contains(&caller), Error::<T>::NotAMember);
 
 	// If the previous call didn't error, then the caller is a member, so emit the event
-	Self::deposit_event(RawEvent::IsAMember(caller));
-	Ok(())
+	Self::deposit_event(Event::IsAMember(caller));
+	Ok(().into())
 }
 ```
 
