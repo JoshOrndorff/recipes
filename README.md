@@ -9,8 +9,7 @@ _A Hands-On Cookbook for Aspiring Blockchain Chefs_
 
 ## Get Started
 
-Ready to roll up your sleeves and cook some blockchain? Read the book online at
-[substrate.recipes](https://substrate.recipes) 😋
+Ready to roll up your sleeves and cook some blockchain? 😋
 
 ## Repository Structure
 
