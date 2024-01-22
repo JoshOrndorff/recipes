@@ -58,16 +58,18 @@ The first and perhaps more familiar way is through charitable donations. Donatio
 through a standard `donate` extrinsic which accepts the amount to be donated as a parameter.
 
 ```rust, ignore
-fn donate(
-		origin,
-		amount: BalanceOf<T>
-) -> DispatchResult {
+#[pallet::call]
+impl<T: Config> Pallet<T> {
+	/// Donate some funds to the charity
+	#[pallet::weight(10_000)]
+	pub fn donate(origin: OriginFor<T>, amount: BalanceOf<T>) -> DispatchResultWithPostInfo {
 		let donor = ensure_signed(origin)?;
 
-		let _ = T::Currency::transfer(&donor, &Self::account_id(), amount, AllowDeath);
+		T::Currency::transfer(&donor, &Self::account_id(), amount, AllowDeath)
+			.map_err(|_| DispatchError::Other("Can't make donation"))?;
 
-		Self::deposit_event(RawEvent::DonationReceived(donor, amount, Self::pot()));
-		Ok(())
+			Self::deposit_event(Event::DonationReceived(donor, amount, Self::pot()));
+			Ok(().into())
 }
 ```
 

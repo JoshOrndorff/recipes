@@ -28,10 +28,10 @@ crowdfund pallet will depend on a notion of
 [configuration constants](./constants.md).
 
 ```rust, ignore
-/// The pallet's configuration trait
+#[pallet::config]
 pub trait Config: frame_system::Config {
 	/// The ubiquious Event type
-	type Event: From<Event<Self>> + Into<<Self as frame_system::Config>::Event>;
+	type Event: From<Event<Self>> + IsType<<Self as frame_system::Config>::Event>;
 
 	/// The currency in which the crowdfunds will be denominated
 	type Currency: ReservableCurrency<Self::AccountId>;
@@ -57,16 +57,16 @@ Our pallet introduces a custom struct that is used to store the metadata about e
 #[derive(Encode, Decode, Default, PartialEq, Eq)]
 #[cfg_attr(feature = "std", derive(Debug))]
 pub struct FundInfo<AccountId, Balance, BlockNumber> {
-	/// The account that will recieve the funds if the campaign is successful
-	beneficiary: AccountId,
+	/// The account that will receive the funds if the campaign is successful
+	pub beneficiary: AccountId,
 	/// The amount of deposit placed
-	deposit: Balance,
+	pub deposit: Balance,
 	/// The total amount raised
-	raised: Balance,
+	pub raised: Balance,
 	/// Block number after which funding must have succeeded
-	end: BlockNumber,
+	pub end: BlockNumber,
 	/// Upper bound on `raised`
-	goal: Balance,
+	pub goal: Balance,
 }
 ```
 
@@ -87,19 +87,13 @@ The pallet has two storage items declared the usual way using `decl_storage!`. T
 index that tracks the number of funds, and the second is a mapping from index to `FundInfo`.
 
 ```rust, ignore
-decl_storage! {
-	trait Store for Module<T: Config> as ChildTrie {
-		/// Info on all of the funds.
-		Funds get(fn funds):
-			map hasher(blake2_128_concat) FundIndex => Option<FundInfoOf<T>>;
+#[pallet::storage]
+#[pallet::getter(fn funds)]
+pub(super) type Funds<T: Config> = StorageMap<_, Blake2_128Concat, FundIndex, FundInfoOf<T>, OptionQuery>;
 
-		/// The total number of funds that have so far been allocated.
-		FundCount get(fn fund_count): FundIndex;
-
-		// Additional information is stored in a child trie. See the helper
-		// functions in the impl<T: Config> Module<T> block below
-	}
-}
+#[pallet::storage]
+#[pallet::getter(fn fund_count)]
+pub(super) type FundCount<T: Config> = StorageValue<_, FundIndex, ValueQuery>;
 ```
 
 This pallet also stores the data about which users have contributed and how many funds they
@@ -175,8 +169,8 @@ these cleanup methods before each other.
 /// Dispense a payment to the beneficiary of a successful crowdfund.
 /// The beneficiary receives the contributed funds and the caller receives
 /// the deposit as a reward to incentivize clearing settled crowdfunds out of storage.
-#[weight = 10_000]
-fn dispense(origin, index: FundIndex) {
+#[pallet::weight(10_000)]
+pub fn dispense(origin: OriginFor<T>, index: FundIndex) -> DispatchResultWithPostInfo {
 	let caller = ensure_signed(origin)?;
 
 	let fund = Self::funds(index).ok_or(Error::<T>::InvalidIndex)?;
@@ -192,20 +186,36 @@ fn dispense(origin, index: FundIndex) {
 	let account = Self::fund_account_id(index);
 
 	// Beneficiary collects the contributed funds
-	let _ = T::Currency::resolve_creating(&fund.beneficiary, T::Currency::withdraw(
-		&account,
-		fund.raised,
-		WithdrawReasons::from(WithdrawReason::Transfer),
-		ExistenceRequirement::AllowDeath,
-	)?);
+	let _ = T::Currency::resolve_creating(
+		&fund.beneficiary,
+		T::Currency::withdraw(
+			&account,
+			fund.raised,
+			WithdrawReasons::TRANSFER,
+			ExistenceRequirement::AllowDeath,
+		)?,
+	);
 
 	// Caller collects the deposit
-	let _ = T::Currency::resolve_creating(&caller, T::Currency::withdraw(
-		&account,
-		fund.deposit,
-		WithdrawReasons::from(WithdrawReason::Transfer),
-		ExistenceRequirement::AllowDeath,
-	)?);
+	let _ = T::Currency::resolve_creating(
+		&caller,
+		T::Currency::withdraw(
+			&account,
+			fund.deposit,
+			WithdrawReasons::TRANSFER,
+			ExistenceRequirement::AllowDeath,
+		)?,
+	);
+
+	// Remove the fund info from storage
+	<Funds<T>>::remove(index);
+	// Remove all the contributor info from storage in a single write.
+	// This is possible thanks to the use of a child tree.
+	Self::crowdfund_kill(index);
+
+	Self::deposit_event(Event::Dispensed(index, now, caller));
+	Ok(().into())
+}
 ```
 
 This pallet also uses the Currency

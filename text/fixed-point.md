@@ -68,21 +68,26 @@ trait provides a handy function for getting the identity value which we use to s
 storage value to `1`.
 
 ```rust, ignore
-decl_storage! {
-	trait Store for Module<T: Config> as Example {
-		// --snip--
-
-		/// Permill accumulator, value starts at 1 (multiplicative identity)
-		PermillAccumulator get(fn permill_value): Permill = Permill::one();
-	}
+#[pallet::type_value]
+pub(super) fn PermillAccumulatorDefaultValue<T: Config>() -> Permill {
+	Permill::one()
 }
+
+#[pallet::storage]
+#[pallet::getter(fn permill_value)]
+pub(super) type PermillAccumulator<T: Config> =
+	StorageValue<_, Permill, ValueQuery, PermillAccumulatorDefaultValue<T>>;
 ```
 
 The only extrinsic for this Permill accumulator is the one that allows users to submit new `Permill`
 values to get multiplied into the accumulator.
 
 ```rust, ignore
-fn update_permill(origin, new_factor: Permill) -> DispatchResult {
+#[pallet::weight(10_000)]
+pub fn update_permill(
+	origin: OriginFor<T>,
+	new_factor: Permill,
+) -> DispatchResultWithPostInfo {
 	ensure_signed(origin)?;
 
 	let old_accumulated = Self::permill_value();
@@ -92,11 +97,11 @@ fn update_permill(origin, new_factor: Permill) -> DispatchResult {
 	let new_product = old_accumulated.saturating_mul(new_factor);
 
 	// Write the new value to storage
-	PermillAccumulator::put(new_product);
+	PermillAccumulator::<T>::put(new_product);
 
 	// Emit event
 	Self::deposit_event(Event::PermillUpdated(new_factor, new_product));
-	Ok(())
+	Ok(().into())
 }
 ```
 
@@ -127,35 +132,41 @@ fixed-point arithmetic, like ours does, it is advisable to keep your data in sub
 > implements the parity scale codec.
 
 ```rust, ignore
-decl_storage! {
-	trait Store for Module<T: Config> as Example {
-		// --snip--
-
-		/// Substrate-fixed accumulator, value starts at 1 (multiplicative identity)
-		FixedAccumulator get(fn fixed_value): U16F16 = U16F16::from_num(1);
-	}
+#[pallet::type_value]
+pub(super) fn FixedAccumulatorDefaultValue<T: Config>() -> U16F16 {
+	U16F16::from_num(1)
 }
+
+#[pallet::storage]
+#[pallet::getter(fn fixed_value)]
+pub(super) type FixedAccumulator<T: Config> =
+	StorageValue<_, U16F16, ValueQuery, FixedAccumulatorDefaultValue<T>>;
 ```
 
 Next we implement the extrinsic that allows users to update the accumulator by multiplying in a new
 value.
 
 ```rust, ignore
-fn update_fixed(origin, new_factor: U16F16) -> DispatchResult {
+#[pallet::weight(10_000)]
+pub fn update_fixed(
+	origin: OriginFor<T>,
+	new_factor: U16F16,
+) -> DispatchResultWithPostInfo {
 	ensure_signed(origin)?;
 
 	let old_accumulated = Self::fixed_value();
 
 	// Multiply, handling overflow
-	let new_product = old_accumulated.checked_mul(new_factor)
+	let new_product = old_accumulated
+		.checked_mul(new_factor)
 		.ok_or(Error::<T>::Overflow)?;
 
 	// Write the new value to storage
-	FixedAccumulator::put(new_product);
+	FixedAccumulator::<T>::put(new_product);
 
 	// Emit event
 	Self::deposit_event(Event::FixedUpdated(new_factor, new_product));
-	Ok(())
+	Ok(().into())
 }
 ```
 
@@ -209,14 +220,14 @@ the `1` in the far right place value. But because we're treating this `u32` spec
 shift that bit to the middle just left of the imaginary radix point.
 
 ```rust, ignore
-decl_storage! {
-	trait Store for Module<T: Config> as Example {
-		// --snip--
-
-		/// Manual accumulator, value starts at 1 (multiplicative identity)
-		ManualAccumulator get(fn manual_value): u32 = 1 << 16;
-	}
+#[pallet::type_value]
+pub(super) fn ManualAccumulatorDefaultValue<T: Config>() -> u32 {
+	1 << 16
 }
+#[pallet::storage]
+#[pallet::getter(fn manual_value)]
+pub(super) type ManualAccumulator<T: Config> =
+	StorageValue<_, u32, ValueQuery, ManualAccumulatorDefaultValue<T>>;
 ```
 
 The extrinsic to multiply a new factor into the accumulator follows the same general flow as in the
@@ -226,34 +237,37 @@ held in `u64` variables. This is because when you multiply two 32-bit numbers, y
 as much as 64 bits in the product.
 
 ```rust, ignore
-fn update_manual(origin, new_factor: u32) -> DispatchResult {
+#[pallet::weight(10_000)]
+pub fn update_manual(origin: OriginFor<T>, new_factor: u32) -> DispatchResultWithPostInfo {
 	ensure_signed(origin)?;
 
 	// To ensure we don't overflow unnecessarily, the values are cast up to u64 before multiplying.
 	// This intermediate format has 48 integer positions and 16 fractional.
-	let old_accumulated : u64 = Self::manual_value() as u64;
-	let new_factor_u64 : u64 = new_factor as u64;
+	let old_accumulated: u64 = Self::manual_value() as u64;
+	let new_factor_u64: u64 = new_factor as u64;
 
 	// Perform the multiplication on the u64 values
 	// This intermediate format has 32 integer positions and 32 fractional.
-	let raw_product : u64 = old_accumulated * new_factor_u64;
+	let raw_product: u64 = old_accumulated * new_factor_u64;
 
 	// Right shift to restore the convention that 16 bits are fractional.
 	// This is a lossy conversion.
 	// This intermediate format has 48 integer positions and 16 fractional.
-	let shifted_product : u64 = raw_product >> 16;
+	let shifted_product: u64 = raw_product >> 16;
 
 	// Ensure that the product fits in the u32, and error if it doesn't
 	if shifted_product > (u32::max_value() as u64) {
-		return Err(Error::<T>::Overflow.into())
+		return Err(Error::<T>::Overflow.into());
 	}
 
+	let final_product = shifted_product as u32;
+
 	// Write the new value to storage
-	ManualAccumulator::put(shifted_product as u32);
+	ManualAccumulator::<T>::put(final_product);
 
 	// Emit event
-	Self::deposit_event(Event::ManualUpdated(new_factor, shifted_product as u32));
-	Ok(())
+	Self::deposit_event(Event::ManualUpdated(new_factor, final_product));
+	Ok(().into())
 }
 ```
 
@@ -296,14 +310,9 @@ fixed-point- and interest-related topics, this pallet does not actually interfac
 Instead we just allow anyone to "deposit" or "withdraw" funds with no source or destination.
 
 ```rust, ignore
-decl_storage! {
-	trait Store for Module<T: Config> as Example {
-		// --snip--
-
-		/// Balance for the discrete interest account
-		DiscreteAccount get(fn discrete_account): u64;
-	}
-}
+#[pallet::storage]
+#[pallet::getter(fn discrete_account)]
+	pub(super) type DiscreteAccount<T: Config> = StorageValue<_, u64, ValueQuery>;
 ```
 
 There are two extrinsics associated with the discrete interest account. The `deposit_discrete`
@@ -311,17 +320,21 @@ extrinsic is shown here, and the `withdraw_discrete` extrinsic is nearly identic
 the kitchen.
 
 ```rust, ignore
-fn deposit_discrete(origin, val_to_add: u64) -> DispatchResult {
+#[pallet::weight(10_000)]
+pub fn deposit_discrete(
+	origin: OriginFor<T>,
+	val_to_add: u64,
+) -> DispatchResultWithPostInfo {
 	ensure_signed(origin)?;
 
-	let old_value = DiscreteAccount::get();
+	let old_value = DiscreteAccount::<T>::get();
 
 	// Update storage for discrete account
-	DiscreteAccount::put(old_value + val_to_add);
+	DiscreteAccount::<T>::put(old_value + val_to_add);
 
 	// Emit event
 	Self::deposit_event(Event::DepositedDiscrete(val_to_add));
-	Ok(())
+	Ok(().into())
 }
 ```
 
@@ -332,25 +345,27 @@ Because the interest is paid discretely every ten blocks it can be handled indep
 and withdrawals. The interest calculation happens automatically in the `on_finalize` block.
 
 ```rust, ignore
-fn on_finalize(n: T::BlockNumber) {
-	// Apply newly-accrued discrete interest every ten blocks
-	if (n % 10.into()).is_zero() {
+#[pallet::hooks]
+impl<T: Config> Hooks<T::BlockNumber> for Pallet<T> {
+	fn on_finalize(n: T::BlockNumber) {
+		// Apply newly-accrued discrete interest every ten blocks
+		if (n % 10u32.into()).is_zero() {
+			// Calculate interest Interest = principal * rate * time
+			// We can use the `*` operator for multiplying a `Percent` by a u64
+			// because `Percent` implements the trait Mul<u64>
+			let interest = Self::discrete_interest_rate() * DiscreteAccount::<T>::get() * 10;
 
-		// Calculate interest Interest = principal * rate * time
-		// We can use the `*` operator for multiplying a `Percent` by a u64
-		// because `Percent` implements the trait Mul<u64>
-		let interest = Self::discrete_interest_rate() * DiscreteAccount::get() * 10;
+			// The following line, although similar, does not work because
+			// u64 does not implement the trait Mul<Percent>
+			// let interest = DiscreteAccount::get() * Self::discrete_interest_rate() * 10;
 
-		// The following line, although similar, does not work because
-		// u64 does not implement the trait Mul<Percent>
-		// let interest = DiscreteAccount::get() * Self::discrete_interest_rate() * 10;
+			// Update the balance
+			let old_balance = DiscreteAccount::<T>::get();
+			DiscreteAccount::<T>::put(old_balance + interest);
 
-		// Update the balance
-		let old_balance = DiscreteAccount::get();
-		DiscreteAccount::put(old_balance + interest);
-
-		// Emit the event
-		Self::deposit_event(Event::DiscreteInterestApplied(interest));
+			// Emit the event
+			Self::deposit_event(Event::DiscreteInterestApplied(interest));
+		}
 	}
 }
 ```
@@ -397,37 +412,32 @@ that requires using signed types.
 With the struct to represent the account's state defined, we can initialize the storage value.
 
 ```rust, ignore
-decl_storage! {
-	trait Store for Module<T: Config> as Example {
-		// --snip--
-
-		/// Balance for the continuously compounded account
-		ContinuousAccount get(fn balance_compound): ContinuousAccountData<T::BlockNumber>;
-	}
-}
+#[pallet::storage]
+#[pallet::getter(fn balance_compound)]
+pub(super) type ContinuousAccount<T: Config> =
+	StorageValue<_, ContinuousAccountData<T::BlockNumber>, ValueQuery>;
 ```
 
 As before, there are two relevant extrinsics, `deposit_continuous` and `withdraw_continuous`. They
 are nearly identical so we'll only show one.
 
 ```rust, ignore
-fn deposit_continuous(origin, val_to_add: u64) -> DispatchResult {
+#[pallet::weight(10_000)]
+fn deposit_continuous(origin: OriginFor<T>, val_to_add: u64) -> DispatchResultWithPostInfo {
 	ensure_signed(origin)?;
 
-	let current_block = system::Module::<T>::block_number();
+	let current_block = frame_system::Module::<T>::block_number();
 	let old_value = Self::value_of_continuous_account(&current_block);
 
 	// Update storage for compounding account
-	ContinuousAccount::<T>::put(
-		ContinuousAccountData {
-			principal: old_value + I32F32::from_num(val_to_add),
-			deposit_date: current_block,
-		}
-	);
+	ContinuousAccount::<T>::put(ContinuousAccountData {
+		principal: old_value + I32F32::from_num(val_to_add),
+		deposit_date: current_block,
+	});
 
 	// Emit event
 	Self::deposit_event(Event::DepositedContinuous(val_to_add));
-	Ok(())
+	Ok(().into())
 }
 ```
 

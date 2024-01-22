@@ -87,30 +87,38 @@ To lock or unlock some quantity of funds, it is sufficient to invoke `reserve` a
 respectively
 
 ```rust, ignore
-pub fn reserve_funds(origin, amount: BalanceOf<T>) -> DispatchResult {
-	let locker = ensure_signed(origin)?;
+#[pallet::weight(10_000)]
+pub fn reserve_funds(
+	origin: OriginFor<T>,
+	amount: BalanceOf<T>,
+	) -> DispatchResultWithPostInfo {
+		let locker = ensure_signed(origin)?;
 
-	T::Currency::reserve(&locker, amount)
+		T::Currency::reserve(&locker, amount)
 			.map_err(|_| "locker can't afford to lock the amount requested")?;
 
-	let now = <frame_system::Module<T>>::block_number();
+		let now = <frame_system::Module<T>>::block_number();
 
-	Self::deposit_event(RawEvent::LockFunds(locker, amount, now));
-	Ok(())
+		Self::deposit_event(Event::LockFunds(locker, amount, now));
+		Ok(().into())
 }
 ```
 
 ```rust, ignore
-pub fn unreserve_funds(origin, amount: BalanceOf<T>) -> DispatchResult {
-	let unlocker = ensure_signed(origin)?;
+#[pallet::weight(10_000)]
+pub fn unreserve_funds(
+	origin: OriginFor<T>,
+	amount: BalanceOf<T>,
+	) -> DispatchResultWithPostInfo {
+		let unlocker = ensure_signed(origin)?;
 
-	T::Currency::unreserve(&unlocker, amount);
-	// ReservableCurrency::unreserve does not fail (it will lock up as much as amount)
+		T::Currency::unreserve(&unlocker, amount);
+		// ReservableCurrency::unreserve does not fail (it will lock up as much as amount)
 
-	let now = <frame_system::Module<T>>::block_number();
+		let now = <frame_system::Module<T>>::block_number();
 
-	Self::deposit_event(RawEvent::UnlockFunds(unlocker, amount, now));
-	Ok(())
+		Self::deposit_event(Event::UnlockFunds(unlocker, amount, now));
+		Ok(().into())
 }
 ```
 
@@ -137,7 +145,8 @@ By using this `EXAMPLE_ID`, it is straightforward to define logic within the run
 locking, unlocking, and extending existing locks.
 
 ```rust, ignore
-fn lock_capital(origin, amount: BalanceOf<T>) -> DispatchResult {
+#[pallet::weight(10_000)]
+fn lock_capital(origin, amount: BalanceOf<T>) -> DispatchResultWithPostInfo {
 	let user = ensure_signed(origin)?;
 
 	T::Currency::set_lock(
@@ -148,7 +157,7 @@ fn lock_capital(origin, amount: BalanceOf<T>) -> DispatchResult {
 	);
 
 	Self::deposit_event(RawEvent::Locked(user, amount));
-	Ok(())
+	Ok(().into())
 }
 ```
 
@@ -164,6 +173,7 @@ To manage this supply adjustment, the
 often used. An example might look something like
 
 ```rust, ignore
+#[weight = 10_000]
 pub fn reward_funds(origin, to_reward: T::AccountId, reward: BalanceOf<T>) {
 	let _ = ensure_signed(origin)?;
 

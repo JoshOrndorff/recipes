@@ -33,8 +33,10 @@ you don't recognize this feature of Rust yet, don't worry; it is the same every 
 just copy it and move on.
 
 ```rust, ignore
+#[pallet::config]
 pub trait Config: frame_system::Config {
-	type Event: From<Event> + Into<<Self as frame_system::Config>::Event>;
+	/// Because this pallet emits events, it depends on the runtime's definition of an event.
+	type Event: From<Event<Self>> + IsType<<Self as frame_system::Config>::Event>;
 }
 ```
 
@@ -68,11 +70,14 @@ pallets respectively.
 The simplest example of an event uses the following syntax
 
 ```rust, ignore
-decl_event!(
-	pub enum Event {
-		EmitInput(u32),
-	}
-);
+#[pallet::event]
+#[pallet::metadata(T::AccountId = "AccountId")]
+#[pallet::generate_deposit(pub(super) fn deposit_event)]
+pub enum Event<T: Config> {
+	/// Event documentation should end with an array that provides descriptive names for event
+	/// parameters. [something, who]
+	EmitInput(u32),
+}
 ```
 
 ### Events with Generic Types
@@ -82,11 +87,13 @@ events might contain types from the pallet's Configuration Trait. In this case, 
 specify additional syntax
 
 ```rust, ignore
-decl_event!(
-	pub enum Event<T> where AccountId = <T as frame_system::Config>::AccountId {
-		EmitInput(AccountId, u32),
-	}
-);
+#[pallet::event]
+#[pallet::metadata(T::AccountId = "AccountId")]
+#[pallet::generate_deposit(pub (super) fn deposit_event)]
+pub enum Event<T: Config> {
+	/// Some input was sent
+	EmitInput(T::AccountId, u32),
+}
 ```
 
 This example also demonstrates how the `where` clause can be used to specify type aliasing for more

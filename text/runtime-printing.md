@@ -92,17 +92,18 @@ the recipes pallets, we will simply use the default weight as we have done here.
 Let's take a closer look at our dispatchable call.
 
 ```rust, ignore
-pub fn say_hello(origin) -> DispatchResult {
+#[pallet::weight(10_000)]
+pub fn say_hello(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
 	// Ensure that the caller is a regular keypair account
 	let caller = ensure_signed(origin)?;
 
 	// Print a message
 	print("Hello World");
-	// Inspecting variables
+	// Inspecting a variable as well
 	debug::info!("Request sent by: {:?}", caller);
 
 	// Indicate that this call succeeded
-	Ok(())
+	Ok(().into())
 }
 ```
 

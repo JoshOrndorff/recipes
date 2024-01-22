@@ -17,11 +17,10 @@ to store a mapping from keys to values, similar to Rust's own
 We declare a single storage map with the following syntax:
 
 ```rust, ignore
-decl_storage! {
-	trait Store for Module<T: Config> as SimpleMap {
-		SimpleMap get(fn simple_map): map hasher(blake2_128_concat) T::AccountId => u32;
-	}
-}
+#[pallet::storage]
+#[pallet::getter(fn simple_map)]
+	pub(super) type SimpleMap<T: Config> =
+	StorageMap<_, Blake2_128Concat, T::AccountId, u32, ValueQuery>;
 ```
 
 Much of this should look familiar to you from storage values. Reading the line from left to right we

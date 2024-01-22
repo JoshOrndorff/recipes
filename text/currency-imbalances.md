@@ -17,6 +17,7 @@ amount of funds to said specific account.
 ## Slash funds
 
 ```rust, ignore
+#[weight = 10_000]
 pub fn slash_funds(origin, to_punish: T::AccountId, collateral: BalanceOf<T>) {
     let _ = ensure_signed(origin)?;
 
@@ -31,8 +32,8 @@ pub fn slash_funds(origin, to_punish: T::AccountId, collateral: BalanceOf<T>) {
 ## Reward funds
 
 ```rust, ignore
+#[weight = 10_000]
 pub fn reward_funds(origin, to_reward: T::AccountId, reward: BalanceOf<T>) {
-
     let _ = ensure_signed(origin)?;
 
     let mut total_imbalance = <PositiveImbalanceOf<T>>::zero();

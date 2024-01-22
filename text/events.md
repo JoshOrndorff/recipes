@@ -32,31 +32,32 @@ you don't recognize this feature of Rust yet, don't worry; it is the same every 
 just copy it and move on.
 
 ```rust, ignore
+#[pallet::config]
 pub trait Config: frame_system::Config {
-	type Event: From<Event> + Into<<Self as frame_system::Config>::Event>;
+	/// Because this pallet emits events, it depends on the runtime's definition of an event.
+	type Event: From<Event<Self>> + IsType<<Self as frame_system::Config>::Event>;
 }
 ```
 
-Next we have to add a line inside of the `decl_module!` macro which generates the `deposit_event`
+Next we have to add a line of the `#[pallet::generate_deposit(pub(super) fn deposit_event)]` macro which generates the `deposit_event`
 function we'll use later when emitting our events. Even experienced Rust programmers will not
 recognize this syntax because it is unique to this macro. Just copy it each time.
 
 ```rust, ignore
-decl_module! {
-	pub struct Module<T: Config> for enum Call where origin: T::Origin {
-
-		// This line is new
-		fn deposit_event() = default;
-
-		// --snip--
-	}
+#[pallet::event]
+#[pallet::metadata(T::AccountId = "AccountId")]
+#[pallet::generate_deposit(pub(super) fn deposit_event)]
+pub enum Event<T: Config> {
+	/// Event documentation should end with an array that provides descriptive names for event
+	/// parameters. [something, who]
+	EmitInput(u32),
 }
 ```
 
 ## Declaring Events
 
 To declare an event, use the
-[`decl_event!` macro](https://substrate.dev/rustdocs/v3.0.0/frame_support/macro.decl_event.html). Like any rust
+[`#[pallet::event]` macro](https://substrate.dev/rustdocs/v3.0.0/frame_support/macro.decl_event.html). Like any rust
 enum, Events have names and can optionally carry data with them. The syntax is slightly different
 depending on whether the events carry data of primitive types, or generic types from the pallet's
 configuration trait. These two techniques are demonstrated in the `simple-event` and `generic-event`
@@ -67,11 +68,12 @@ pallets respectively.
 The simplest example of an event uses the following syntax
 
 ```rust, ignore
-decl_event!(
-	pub enum Event {
-		EmitInput(u32),
-	}
-);
+#[pallet::event]
+#[pallet::metadata(u32 = "Metadata")]
+pub enum Event<T: Config> {
+    /// Set a value.
+    ValueSet(u32, T::AccountId),
+}
 ```
 
 ### Events with Generic Types
@@ -80,11 +82,10 @@ Sometimes, events might contain types from the pallet's Configuration Trait. In 
 specify additional syntax:
 
 ```rust, ignore
-decl_event!(
-	pub enum Event<T> where AccountId = <T as frame_system::Config>::AccountId {
-		EmitInput(AccountId, u32),
-	}
-);
+#[pallet::event]
+pub enum Event<T: Config> {
+	EmitInput(u32),
+}
 ```
 
 This example also demonstrates how the `where` clause can be used to specify type aliasing for more
@@ -111,7 +112,7 @@ The syntax for `deposit_event` now takes the `RawEvent` type because it is gener
 configuration trait.
 
 ```rust, ignore
-Self::deposit_event(RawEvent::EmitInput(user, new_number));
+#[pallet::generate_deposit(pub(super) fn deposit_event)]
 ```
 
 ## Constructing the Runtime
