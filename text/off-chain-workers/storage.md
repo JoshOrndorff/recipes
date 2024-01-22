@@ -116,5 +116,5 @@ the storage.
 
 ## Reference
 
-- [`StorageValueRef` API doc](https://substrate.dev/rustdocs/v3.0.0/sp_runtime/offchain/storage/struct.StorageValueRef.html)
+- [`StorageValueRef` API doc]([https://substrate.dev/rustdocs/v3.0.0/sp_runtime/offchain/storage/struct.StorageValueRef.html](https://docs.rs/sp-runtime/latest/sp_runtime/offchain/storage/struct.StorageValueRef.html))
 - [`example-offchain-worker` pallet in Substrate repo](https://github.com/paritytech/substrate/tree/master/frame/example-offchain-worker)
