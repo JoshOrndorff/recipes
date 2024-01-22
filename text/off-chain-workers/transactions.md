@@ -66,7 +66,7 @@ Running the `kitchen-node` you will see log messages similar to the following:
 First, pay attention the line `⛓  Native runtime: ocw-runtime-1 (ocw-runtime-1.tx1.au1)`
 to ensure we are running the kitchen-node with the `ocw-runtime`.
 
-Other than that, you will realized the chain is just sitting idled. This is because currently off-chain
+Other than that, you will have realized that the chain is just sitting idled. This is because currently off-chain
 worker is only run after a block is imported. Our kitchen node is configured to use
 [instant-seal consensus](../kitchen-node.md), meaning that we need to send a transaction to trigger a
 block to be imported.
